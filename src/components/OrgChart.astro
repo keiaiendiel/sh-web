@@ -1,75 +1,91 @@
 ---
 /*
- * Organizační struktura - 3 layers, 60° connectors.
- * Inline SVG, currentColor, zero JS.
+ * Organizační struktura - minimal typographic diagram.
+ * Three numbered rows, each listing the bodies within that tier.
+ * Pure HTML + CSS; no SVG wrangling. Zero JS.
  */
+const tiers = [
+  {
+    n: '01',
+    label: 'Kolektivní orgány',
+    note: 'Rozhodují konsensem.',
+    items: ['Členský sněm', 'Všečlenské zasedání', 'Orgán pro nábor a příspěvky', 'Projektová rada'],
+  },
+  {
+    n: '02',
+    label: 'Statutární orgán',
+    note: 'Zastupuje spolek navenek.',
+    items: ['Představenstvo', 'Předseda', 'Místopředseda'],
+  },
+  {
+    n: '03',
+    label: 'Autonomní projekty',
+    note: 'Decentralizovaná výkonná úroveň.',
+    items: ['Výletná', 'Gas Town', 'Kreativní prostory', 'Metro Farm', 'Junktown', 'a další'],
+  },
+];
 ---
-<figure class="osa-orgchart" aria-describedby="orgchart-caption">
-  <svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="orgchart-title">
-    <title id="orgchart-title">Organizační struktura OSA</title>
-    <g stroke="currentColor" stroke-width="1.5" fill="none">
-      <!-- layer 1: collective bodies -->
-      <rect x="50"  y="20"  width="220" height="70" />
-      <rect x="300" y="20"  width="220" height="70" />
-      <rect x="550" y="20"  width="200" height="70" />
-      <!-- layer 2: statutory body -->
-      <rect x="270" y="180" width="280" height="70" />
-      <!-- layer 3: autonomous projects -->
-      <rect x="40"  y="330" width="180" height="70" />
-      <rect x="250" y="330" width="180" height="70" />
-      <rect x="460" y="330" width="180" height="70" />
-      <rect x="670" y="330" width="90"  height="70" />
-
-      <!-- 60° connectors (slope = tan 60 = 1.732) -->
-      <!-- layer 1 → 2 -->
-      <line x1="410" y1="90"  x2="410" y2="180" />
-      <line x1="160" y1="90"  x2="290" y2="180" stroke-dasharray="3,4" />
-      <line x1="650" y1="90"  x2="530" y2="180" stroke-dasharray="3,4" />
-      <!-- layer 2 → 3 -->
-      <line x1="410" y1="250" x2="130" y2="330" />
-      <line x1="410" y1="250" x2="340" y2="330" />
-      <line x1="410" y1="250" x2="550" y2="330" />
-      <line x1="410" y1="250" x2="715" y2="330" />
-    </g>
-    <g font-family="var(--font-sans)" fill="currentColor" font-size="14" font-weight="600" text-anchor="middle">
-      <text x="160" y="60">Členský sněm</text>
-      <text x="410" y="60">Orgán pro nábor</text>
-      <text x="650" y="60">Projektová rada</text>
-      <text x="410" y="222">Představenstvo</text>
-    </g>
-    <g font-family="var(--font-sans)" fill="currentColor" font-size="13" text-anchor="middle" font-weight="500">
-      <text x="130" y="370">Kreativní prostory</text>
-      <text x="340" y="370">Výletná</text>
-      <text x="550" y="370">Gas Town</text>
-      <text x="715" y="370">a další</text>
-    </g>
-    <g font-family="var(--font-mono)" fill="currentColor" font-size="10" text-anchor="start" opacity="0.6">
-      <text x="58" y="40">01 · KOLEKTIVNÍ ORGÁNY</text>
-      <text x="278" y="200">02 · STATUTÁRNÍ ORGÁN</text>
-      <text x="48" y="350">03 · AUTONOMNÍ PROJEKTY</text>
-    </g>
-  </svg>
-  <figcaption id="orgchart-caption" class="osa-orgchart__cap osa-mono">
-    Strukturní schéma. Plné čáry značí ustavené vztahy, čárkované poradní role.
-  </figcaption>
-</figure>
+<section class="osa-org">
+  {tiers.map(t => (
+    <div class="osa-org__row">
+      <div class="osa-org__left">
+        <span class="osa-mono osa-org__n">{t.n}</span>
+        <div>
+          <h3 class="osa-h3 osa-org__label">{t.label}</h3>
+          <p class="osa-body-sm osa-org__note">{t.note}</p>
+        </div>
+      </div>
+      <ul class="osa-org__items" role="list">
+        {t.items.map(i => <li class="osa-org__item">{i}</li>)}
+      </ul>
+    </div>
+  ))}
+</section>
 
 <style>
-  .osa-orgchart {
-    margin: 0;
-    padding: var(--space-5);
-    border: 1px solid var(--rule);
-    background: var(--bg);
+  .osa-org {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .osa-org__row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-6);
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--rule);
+  }
+  .osa-org__row:first-child { border-top: 0; }
+  @media (max-width: 720px) {
+    .osa-org__row { grid-template-columns: 1fr; gap: var(--space-4); }
+  }
+
+  .osa-org__left {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: var(--space-3);
+    align-items: baseline;
+  }
+  .osa-org__n     { color: var(--fg-muted); font-size: var(--text-xs); letter-spacing: var(--tracking-wider); }
+  .osa-org__label { margin: 0; }
+  .osa-org__note  { margin: var(--space-1) 0 0; color: var(--fg-muted); }
+
+  .osa-org__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0;
+    align-content: start;
+    align-self: start;
+  }
+  .osa-org__item {
+    padding: var(--space-3) var(--space-4);
+    border-left: 1px solid var(--rule);
+    font: 600 var(--text-md) / var(--lh-snug) var(--font-sans);
+    letter-spacing: var(--tracking-tight);
     color: var(--fg);
   }
-  .osa-orgchart svg {
-    width: 100%;
-    height: auto;
-    max-width: 800px;
-  }
-  .osa-orgchart__cap {
-    margin: var(--space-3) 0 0;
-    color: var(--fg-muted);
-    font-size: var(--text-xs);
+  .osa-org__item:first-child { border-left: 0; }
+  @media (max-width: 720px) {
+    .osa-org__item { border-left: 0; border-top: 1px solid var(--border-muted); padding-inline: 0; }
+    .osa-org__item:first-child { border-top: 0; }
   }
 </style>

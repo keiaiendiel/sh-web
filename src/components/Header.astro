@@ -1,6 +1,4 @@
 ---
-import OsaGlyph from './OsaGlyph.astro';
-
 const nav = [
   { href: '/',            label: 'Úvod' },
   { href: '/o-spolku/',   label: 'O spolku' },
@@ -15,8 +13,8 @@ const isActive = (href: string) =>
 <header class="osa-header">
   <div class="container-wide osa-header__inner">
     <a href="/" class="osa-header__brand" aria-label="Občanské sdružení Alternativa II - domů">
-      <OsaGlyph size="28px" />
-      <span class="osa-header__brand-wordmark">Alternativa II</span>
+      <img src="/logo/OSA-Logo-Black.svg" alt="" aria-hidden="true" class="osa-header__logo osa-header__logo--light" />
+      <img src="/logo/OSA-Logo-White.svg" alt="" aria-hidden="true" class="osa-header__logo osa-header__logo--dark" />
     </a>
 
     <nav class="osa-header__nav" aria-label="Hlavní navigace">
@@ -35,24 +33,31 @@ const isActive = (href: string) =>
   .osa-header {
     position: sticky; top: 0; z-index: 20;
     background: var(--bg);
+    color: var(--fg);
   }
   .osa-header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-6);
-    padding: 22px var(--gutter);
+    padding: 18px var(--gutter);
   }
   .osa-header__brand {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
     color: var(--fg);
+    line-height: 0;
   }
-  .osa-header__brand-wordmark {
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    letter-spacing: var(--tracking-wide);
+  .osa-header__logo {
+    display: block;
+    width: 40px;
+    height: 40px;
   }
+  /* swap logo by theme: light header shows Black; dark parent surfaces show White */
+  .osa-header__logo--dark  { display: none; }
+  .osa-dark .osa-header__logo--light { display: none; }
+  .osa-dark .osa-header__logo--dark  { display: block; }
+
   .osa-header__nav {
     display: flex;
     gap: var(--space-6);
@@ -74,5 +79,6 @@ const isActive = (href: string) =>
   }
   @media (max-width: 720px) {
     .osa-header__nav { display: none; }
+    .osa-header__logo { width: 32px; height: 32px; }
   }
 </style>

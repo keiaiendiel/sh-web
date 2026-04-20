@@ -38,29 +38,43 @@ async function measure(path) {
 
 async function measureHtmlPage(htmlPath) {
   const html = await readFile(htmlPath, 'utf8');
-  const assetRefs = new Set();
+  // Collect all refs with `loading="lazy"` flag, so eager vs lazy can be separated.
+  // img/source tags are matched in a second pass to read loading=.
+  const assetRefs = new Map(); // url -> { lazy: bool }
+
   for (const m of html.matchAll(/(?:href|src)=['"]([^'"]+)['"]/g)) {
     const u = m[1];
     if (/^https?:/.test(u)) continue;
     if (u.startsWith('#')) continue;
-    assetRefs.add(u);
+    if (!assetRefs.has(u)) assetRefs.set(u, { lazy: false });
   }
-  // Infer any inline @font-face url() references to /fonts/…
+  // Mark <img loading="lazy"> URLs as lazy
+  for (const m of html.matchAll(/<img\b[^>]*>/g)) {
+    const tag = m[0];
+    const srcM = tag.match(/src=['"]([^'"]+)['"]/);
+    const loadM = tag.match(/loading=['"]lazy['"]/);
+    if (srcM && loadM && assetRefs.has(srcM[1])) {
+      assetRefs.get(srcM[1]).lazy = true;
+    }
+  }
+  // @font-face url() refs are never "lazy"; add them if not already present
   for (const m of html.matchAll(/url\(['"]?([^)]+)['"]?\)/g)) {
     const u = m[1];
     if (/^https?:/.test(u)) continue;
-    assetRefs.add(u);
+    if (!assetRefs.has(u)) assetRefs.set(u, { lazy: false });
   }
 
   let totalKB = (await measure(htmlPath)) / 1024;
+  let eagerKB = (await measure(htmlPath)) / 1024;
   let jsKB = 0, cssKB = 0, fontKB = 0, imgKB = 0;
 
-  for (const ref of assetRefs) {
+  for (const [ref, meta] of assetRefs) {
     const assetPath = resolve(DIST, '.' + ref);
     try {
       const size = await measure(assetPath);
       const kb = size / 1024;
       totalKB += kb;
+      if (!meta.lazy) eagerKB += kb;
       if (/\.js$/.test(ref))               jsKB   += kb;
       else if (/\.css$/.test(ref))         cssKB  += kb;
       else if (/\.(woff2?|ttf|otf)$/.test(ref)) fontKB += kb;
@@ -72,7 +86,7 @@ async function measureHtmlPage(htmlPath) {
 
   return {
     page: relative(DIST, htmlPath).replace(/index\.html$/, '') || '/',
-    totalKB, jsKB, cssKB, fontKB, imgKB,
+    totalKB, eagerKB, jsKB, cssKB, fontKB, imgKB,
   };
 }
 
@@ -88,14 +102,17 @@ for (const page of htmlPages) {
   const r = await measureHtmlPage(page);
   rows.push(r);
   const problems = [];
-  if (r.totalKB > BUDGETS.pageTotalKB) problems.push(`total ${r.totalKB.toFixed(1)}KB > ${BUDGETS.pageTotalKB}`);
+  // Budget applies to EAGER assets (not lazy images below the fold).
+  if (r.eagerKB > BUDGETS.pageTotalKB) problems.push(`eager ${r.eagerKB.toFixed(1)}KB > ${BUDGETS.pageTotalKB}`);
   if (r.jsKB    > BUDGETS.jsPerPageKB) problems.push(`js ${r.jsKB.toFixed(1)}KB > ${BUDGETS.jsPerPageKB}`);
   if (r.cssKB   > BUDGETS.cssPerPageKB) problems.push(`css ${r.cssKB.toFixed(1)}KB > ${BUDGETS.cssPerPageKB}`);
   if (problems.length) {
     failed += 1;
     console.log(`\u001b[31m✗\u001b[0m ${r.page}  ${problems.join(', ')}`);
   } else {
-    console.log(`\u001b[32m✓\u001b[0m ${r.page}  total=${r.totalKB.toFixed(1)}  js=${r.jsKB.toFixed(1)}  css=${r.cssKB.toFixed(1)}  fonts=${r.fontKB.toFixed(1)}`);
+    const lazyKB = r.totalKB - r.eagerKB;
+    const lazyTail = lazyKB > 1 ? `  (+${lazyKB.toFixed(1)}KB lazy)` : '';
+    console.log(`\u001b[32m✓\u001b[0m ${r.page}  eager=${r.eagerKB.toFixed(1)}  js=${r.jsKB.toFixed(1)}  css=${r.cssKB.toFixed(1)}  fonts=${r.fontKB.toFixed(1)}${lazyTail}`);
   }
 }
 

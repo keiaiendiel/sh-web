@@ -1,5 +1,4 @@
 ---
-import OsaGlyph from './OsaGlyph.astro';
 import SVGPattern from './SVGPattern.astro';
 const year = new Date().getFullYear();
 ---
@@ -8,7 +7,7 @@ const year = new Date().getFullYear();
     <div class="container-wide osa-footer__inner">
       <div class="osa-footer__top">
         <div class="osa-footer__brandcol">
-          <span class="osa-footer__mark" aria-hidden="true"><OsaGlyph size="40px" /></span>
+          <img src="/logo/OSA-Logo-White.svg" alt="OSA" class="osa-footer__logo" />
           <p class="osa-footer__motto">Pomáháme tvořit…</p>
         </div>
 
@@ -68,7 +67,7 @@ const year = new Date().getFullYear();
     align-items: start;
   }
   .osa-footer__brandcol { display: grid; gap: var(--space-4); }
-  .osa-footer__mark     { display: inline-block; color: var(--fg); }
+  .osa-footer__logo     { display: block; width: 72px; height: 72px; }
   .osa-footer__motto    {
     font-family: var(--font-sans);
     font-weight: 500;

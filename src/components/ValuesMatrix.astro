@@ -1,20 +1,17 @@
 ---
 import { getCollection } from 'astro:content';
 
-interface Props { expanded?: boolean; }
-const { expanded = false } = Astro.props;
+interface Props { expanded?: boolean; dark?: boolean; }
+const { expanded = false, dark = false } = Astro.props;
 
 const values = (await getCollection('values'))
   .sort((a, b) => a.data.order - b.data.order);
 ---
-<section class="osa-values section">
+<section class:list={['osa-values', 'section', { 'osa-dark': dark }]}>
   <div class="container-wide">
     <header class="osa-values__head">
       <span class="osa-eyebrow">§ 16 hodnot</span>
       <h2 class="osa-h2 osa-values__title">Hodnoty spolku jsou axiomy, nikoli aspirace.</h2>
-      <p class="osa-body osa-values__lede">
-        Každé rozhodnutí spolkových orgánů se o ně musí opřít. Najeďte na hodnotu pro kanonický výklad.
-      </p>
     </header>
     <ul
       class:list={['osa-values__grid', { 'osa-values__grid--expanded': expanded }]}
@@ -38,7 +35,6 @@ const values = (await getCollection('values'))
     margin: 0 0 var(--space-7);
   }
   .osa-values__title { margin: 0; }
-  .osa-values__lede  { margin: 0; color: var(--fg-muted); }
 
   .osa-values__grid {
     display: grid;
@@ -59,25 +55,30 @@ const values = (await getCollection('values'))
     grid-template-rows: auto auto 0fr;
     gap: var(--space-2);
     transition: grid-template-rows var(--dur-base) var(--ease-standard),
-                background var(--dur-fast) linear;
+                background var(--dur-fast) linear,
+                color var(--dur-fast) linear;
     background: var(--bg);
+    color: var(--fg);
   }
   .osa-values__cell:hover,
   .osa-values__cell:focus-within,
   .osa-values__grid--expanded .osa-values__cell {
     grid-template-rows: auto auto 1fr;
+    background: var(--fg);
+    color: var(--bg);
   }
-  .osa-values__num   { color: var(--fg-subtle); font-size: var(--text-xs); }
+  .osa-values__num   { font-size: var(--text-xs); opacity: 0.55; }
   .osa-values__name  {
     font: 600 var(--text-md) / var(--lh-snug) var(--font-sans);
     letter-spacing: var(--tracking-tight);
-    color: var(--fg);
+    color: inherit;
     text-wrap: balance;
   }
   .osa-values__gloss {
     overflow: hidden;
     font-size: var(--text-sm);
     line-height: var(--lh-normal);
-    color: var(--fg-muted);
+    color: inherit;
+    opacity: 0.82;
   }
 </style>

@@ -3,18 +3,18 @@ import OsaGlyph from './OsaGlyph.astro';
 import SVGPattern from './SVGPattern.astro';
 ---
 <section class="osa-hero osa-dark">
-  <SVGPattern variant="dark" opacity={0.18}>
+  <SVGPattern variant="dark" opacity={0.16}>
     <div class="container-wide osa-hero__inner">
       <div class="osa-hero__eyebrow osa-eyebrow">
         <OsaGlyph size="13px" />
-        <span>Nezávislý spolek, od roku 2006</span>
+        <span>Občanské sdružení Alternativa II, z.s.</span>
       </div>
       <h1 class="osa-hero__h1">
-        Občanské sdružení Alternativa II, z.s. je platforma pro autonomní kulturní, sportovní a společenské projekty.
+        Obnovujeme chátrající památky, stavíme zkušebny a dílny, zakládáme komunitní zahrady a kulturní centra.
         <span class="osa-hero__motto">Pomáháme tvořit…</span>
       </h1>
       <p class="osa-hero__strapline">
-        Bez státních dotací. Dobrovolnickou prací a metodou DIY.
+        Platforma pro desítky autonomních projektů. Bez státních dotací, dobrovolnickou prací a metodou DIY.
       </p>
     </div>
   </SVGPattern>
@@ -29,10 +29,10 @@ import SVGPattern from './SVGPattern.astro';
     color: var(--fg);
   }
   .osa-hero__inner {
-    padding: clamp(var(--space-8), 12vw, var(--space-10)) var(--gutter) var(--space-9);
+    padding: clamp(var(--space-8), 10vw, var(--space-10)) var(--gutter) var(--space-9);
     display: grid;
-    gap: var(--space-6);
-    max-width: 980px;
+    gap: var(--space-5);
+    max-width: 1280px;
     margin: 0 auto;
   }
   .osa-hero__eyebrow {
@@ -42,25 +42,27 @@ import SVGPattern from './SVGPattern.astro';
   .osa-hero__h1 {
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: clamp(2.25rem, 5vw + 0.5rem, var(--text-5xl));
-    line-height: var(--lh-snug);
+    font-size: clamp(2rem, 3.6vw + 0.75rem, 3.5rem);
+    line-height: 1.14;
     letter-spacing: var(--tracking-tight);
     color: var(--fg);
     margin: 0;
     text-wrap: balance;
+    max-width: 24ch;
   }
   .osa-hero__motto {
     display: block;
     color: var(--fg-muted);
     margin-top: var(--space-4);
     font-weight: 500;
+    font-size: clamp(1.5rem, 2.2vw + 0.5rem, 2.25rem);
   }
   .osa-hero__strapline {
     font-family: var(--font-sans);
     font-weight: 500;
     font-size: var(--text-lg);
     color: var(--fg-muted);
-    max-width: 48ch;
+    max-width: 54ch;
     margin: 0;
   }
 </style>

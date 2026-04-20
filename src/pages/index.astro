@@ -7,6 +7,8 @@ import Rozcestnik from '../components/Rozcestnik.astro';
 import ValuesMatrix from '../components/ValuesMatrix.astro';
 import ManifestoStrip from '../components/ManifestoStrip.astro';
 import InvestmentHero from '../components/InvestmentHero.astro';
+import Gallery from '../components/Gallery.astro';
+import GraphicHeader from '../components/GraphicHeader.astro';
 ---
 <Base
   title="Občanské sdružení Alternativa II, z.s."
@@ -14,9 +16,14 @@ import InvestmentHero from '../components/InvestmentHero.astro';
   <Header />
   <main>
     <Hero />
+    <GraphicHeader n={3} variant="light" height="sm" />
     <Rozcestnik />
-    <ValuesMatrix />
+    <GraphicHeader n={5} variant="dark"  height="sm" />
+    <ValuesMatrix dark={true} />
+    <GraphicHeader n={1} variant="light" height="sm" />
     <ManifestoStrip />
+    <Gallery />
+    <GraphicHeader n={2} variant="dark"  height="sm" />
     <InvestmentHero />
   </main>
   <Footer />

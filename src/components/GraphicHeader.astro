@@ -1,0 +1,50 @@
+---
+/*
+ * GraphicHeader - full-bleed strip using one of the OSA graphic assets.
+ * Assets live in /public/graphics/graphic-asset-header_{1..6}.svg.
+ * Supports light (black on white) and dark (white on black) inversion.
+ */
+interface Props {
+  /** Which asset 1..6 */
+  n?: 1 | 2 | 3 | 4 | 5 | 6;
+  /** Surface variant */
+  variant?: 'light' | 'dark';
+  /** Height preset */
+  height?: 'xs' | 'sm' | 'md';
+  /** Extra class */
+  class?: string;
+}
+const { n = 1, variant = 'light', height = 'md', class: className } = Astro.props;
+const src = `/graphics/graphic-asset-header_${n}.svg`;
+---
+<div class:list={['osa-graphic-header', `osa-graphic-header--${variant}`, `osa-graphic-header--${height}`, className]} aria-hidden="true">
+  <img src={src} alt="" class="osa-graphic-header__img" loading="lazy" decoding="async" />
+</div>
+
+<style>
+  .osa-graphic-header {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .osa-graphic-header--dark  { background: var(--k-100); color: var(--k-0); }
+  .osa-graphic-header--light { background: var(--k-0);   color: var(--k-100); }
+
+  .osa-graphic-header--xs { height: 48px; }
+  .osa-graphic-header--sm { height: 72px; }
+  .osa-graphic-header--md { height: 108px; }
+
+  .osa-graphic-header__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left center;
+    /* Recolor black-on-white SVGs to match currentColor on dark variant */
+  }
+  .osa-graphic-header--dark .osa-graphic-header__img {
+    filter: invert(1);
+  }
+</style>

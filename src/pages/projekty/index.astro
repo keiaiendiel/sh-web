@@ -5,11 +5,10 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import FilterBar from '../../components/FilterBar.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import GraphicHeader from '../../components/GraphicHeader.astro';
 
 const all = await getCollection('subProjects', e => e.data.status !== 'draft');
 const sorted = all.sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
-const featured = sorted.filter(p => p.data.featured);
-const rest     = sorted.filter(p => !p.data.featured);
 ---
 <Base title="Projekty - Občanské sdružení Alternativa II">
   <Header />
@@ -23,27 +22,6 @@ const rest     = sorted.filter(p => !p.data.featured);
             Každý si vede vlastní prostor, web, členskou základnu a hospodaření. Spolek poskytuje právní a organizační zázemí.
           </p>
         </header>
-
-        {featured.length > 0 && (
-          <section class="osa-projekty__featured" aria-labelledby="featured-heading">
-            <h2 id="featured-heading" class="osa-eyebrow osa-projekty__sub">Klíčové projekty spolku</h2>
-            <ul class="osa-projekty__featured-grid" role="list">
-              {featured.map(p => (
-                <li><ProjectCard
-                  slug={p.id}
-                  name={p.data.name}
-                  description={p.data.description}
-                  accent={p.data.accent}
-                  relationship={p.data.relationship}
-                  status={p.data.status}
-                  topic={p.data.topic}
-                  external_url={p.data.external_url}
-                  featured={true}
-                /></li>
-              ))}
-            </ul>
-          </section>
-        )}
 
         <FilterBar />
 
@@ -64,6 +42,7 @@ const rest     = sorted.filter(p => !p.data.featured);
         </ul>
       </div>
     </section>
+    <GraphicHeader n={4} variant="dark" height="sm" />
   </main>
   <Footer />
 </Base>
@@ -77,19 +56,6 @@ const rest     = sorted.filter(p => !p.data.featured);
   }
   .osa-projekty__title { margin: 0; }
   .osa-projekty__lede  { margin: 0; color: var(--fg-muted); }
-  .osa-projekty__sub   { color: var(--fg-muted); display: block; margin: 0 0 var(--space-4); }
-
-  .osa-projekty__featured {
-    margin-bottom: var(--space-8);
-  }
-  .osa-projekty__featured-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 0;
-    border-top: 1px solid var(--rule);
-    border-left: 1px solid var(--rule);
-  }
-
   .osa-projekty__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

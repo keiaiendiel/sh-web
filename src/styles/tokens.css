@@ -71,9 +71,11 @@
 }
 
 :root {
-  /* ---------- Font stacks ---------- */
+  /* ---------- Font stacks ----------
+     OSA's brand is sans-only on web. Serif removed per client guidance:
+     Atyp / Space Grotesk handles headings, body, and longform. */
   --font-sans:     'Space Grotesk', 'Atyp Text', system-ui, -apple-system, Segoe UI, sans-serif;
-  --font-serif:    'Source Serif 4', 'Source Serif', Georgia, 'Times New Roman', serif;
+  --font-serif:    'Space Grotesk', 'Atyp Text', system-ui, sans-serif;
   --font-special:  'Atyp Special', 'Space Grotesk', system-ui, sans-serif;
   --font-mono:     'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
