@@ -1,0 +1,293 @@
+/* =============================================================================
+   OSA — Občanské Sdružení Alternativa
+   Colors & Type foundations
+   =============================================================================
+   Source of truth: Logomanual_OSA_V2.pdf (in assets/docs/)
+   Brand is strictly monochromatic; 8 accent colors are RESERVED for sub-project
+   identities (VPD, Kreativní Prostory, Městský Inkubátor, AlterMedia, etc).
+============================================================================= */
+
+/* ---------- Typefaces ----------------------------------------------------- */
+
+/* Google Fonts import for Space Grotesk (Atyp Text substitute) + Source Serif 4
+   NOTE: @import must precede @font-face (PostCSS requirement). */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap');
+
+/* Primary text family: ATYP TEXT
+   The spec calls for Atyp Text Semibold (headings) and Medium (body).
+   We do NOT have that file — only Atyp Text SPECIAL (a companion font
+   containing custom glyphs like the OSA mark). So in this kit we substitute
+   the base family with Space Grotesk, which has similar proportions and a
+   geometric-humanist feel. Replace when the real Atyp Text licence files
+   are provided. */
+
+@font-face {
+  font-family: 'Atyp Special';
+  src: url('/fonts/AtypText-Special-Medium.otf') format('opentype');
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Atyp Special';
+  src: url('/fonts/AtypText-Special-Bold.otf') format('opentype');
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Atyp Special';
+  src: url('/fonts/AtypText-Special-Italic.otf') format('opentype');
+  font-weight: 400 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- Font stacks ---------- */
+  --font-sans:     'Space Grotesk', 'Atyp Text', system-ui, -apple-system, Segoe UI, sans-serif;
+  --font-serif:    'Source Serif 4', 'Source Serif', Georgia, 'Times New Roman', serif;
+  --font-special:  'Atyp Special', 'Space Grotesk', system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---------- Monochromatic palette (parent brand) ----------
+     From manual §1.10. Grayscale is used at K0, K10, K30, K50, K70, K90, K100. */
+  --k-0:    #ffffff;
+  --k-10:   #e6e6e6;
+  --k-30:   #bebebe;
+  --k-50:   #969696;
+  --k-70:   #787878;
+  --k-90:   #3c3c3c;
+  --k-100:  #000000;
+
+  /* ---------- Project accent palette (sub-projects only) ----------
+     8 colors derived from the Czech tricolor (manual §2.4). Reserved for
+     sub-project identities — do NOT use for the parent OSA brand. */
+  --c-red:      #d0342c;   /* tricolor red */
+  --c-coral:    #e86a5a;
+  --c-mustard:  #c79a3a;
+  --c-olive:    #6c7a3d;
+  --c-forest:   #2f5233;
+  --c-teal:     #2c6d7a;
+  --c-blue:     #11457e;   /* tricolor blue */
+  --c-plum:     #5a2a5f;
+
+  /* ---------- Semantic surface tokens ---------- */
+  --fg:            var(--k-100);
+  --fg-muted:      var(--k-70);
+  --fg-subtle:     var(--k-50);
+  --fg-inverse:    var(--k-0);
+
+  --bg:            var(--k-0);
+  --bg-elevated:   var(--k-0);
+  --bg-muted:      var(--k-10);
+  --bg-inverse:    var(--k-100);
+  --bg-inverse-2:  var(--k-90);   /* slightly softer than pure black */
+
+  --border:        var(--k-100);
+  --border-muted:  var(--k-30);
+  --rule:          var(--k-100);  /* hairline rules — 1px solid black */
+
+  /* ---------- Type scale (rem assumes 16px root) ----------
+     Anchored to the manual's body recommendation (9–12pt body, 1:1.33 lh).
+     Modular scale, step 1.25. */
+  --text-2xs: 0.6875rem;   /* 11px */
+  --text-xs:  0.75rem;     /* 12px */
+  --text-sm:  0.875rem;    /* 14px */
+  --text-md:  1rem;        /* 16px — default body */
+  --text-lg:  1.125rem;    /* 18px */
+  --text-xl:  1.375rem;    /* 22px */
+  --text-2xl: 1.75rem;     /* 28px */
+  --text-3xl: 2.25rem;     /* 36px */
+  --text-4xl: 3rem;        /* 48px */
+  --text-5xl: 4.25rem;     /* 68px */
+  --text-6xl: 6rem;        /* 96px */
+
+  --lh-tight:   1.00;
+  --lh-snug:    1.10;
+  --lh-normal:  1.35;
+  --lh-relaxed: 1.5;
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.02em;
+  --tracking-wider:  0.08em;   /* eyebrows / labels */
+
+  /* ---------- Spacing ---------- */
+  --space-0:   0;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   24px;
+  --space-6:   32px;
+  --space-7:   48px;
+  --space-8:   64px;
+  --space-9:   96px;
+  --space-10:  128px;
+
+  /* ---------- Radii ----------
+     OSA is resolutely sharp: 0 is the default. Only use --radius-sm in UI
+     contexts where zero feels unusable (form controls on web). */
+  --radius-0:  0;
+  --radius-sm: 2px;
+
+  /* ---------- Borders & rules ---------- */
+  --border-hair:   1px solid var(--rule);
+  --border-rule:   2px solid var(--rule);    /* section rule (like under logotype) */
+  --border-bold:   4px solid var(--rule);
+
+  /* ---------- Elevation ----------
+     Shadows are RARELY used in OSA's print-first identity.
+     On web UI surfaces keep them barely perceptible. */
+  --shadow-none: none;
+  --shadow-sm:   0 1px 0 rgba(0,0,0,0.08);
+  --shadow-md:   0 2px 8px rgba(0,0,0,0.10);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.12);
+
+  /* ---------- Geometry ---------- */
+  --skew-osa: 30deg;   /* 60° slant on one side of the trapezoid glyph */
+
+  /* ---------- Motion ---------- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-accel:    cubic-bezier(0.4, 0, 1, 1);
+  --ease-decel:    cubic-bezier(0, 0, 0.2, 1);
+  --dur-fast:   120ms;
+  --dur-base:   200ms;
+  --dur-slow:   360ms;
+
+  /* ---------- Layout ---------- */
+  --container:      1200px;
+  --container-wide: 1440px;
+  --gutter:         24px;
+}
+
+/* =============================================================================
+   Semantic type styles
+   Apply via utility classes or @extend-like composition in component CSS.
+============================================================================= */
+
+.osa-display,
+.osa-h0 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(3rem, 6vw + 1rem, var(--text-6xl));
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+  text-wrap: balance;
+}
+
+.osa-h1 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-4xl);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+  text-wrap: balance;
+}
+
+.osa-h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-3xl);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+  text-wrap: balance;
+}
+
+.osa-h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-2xl);
+  line-height: var(--lh-snug);
+  color: var(--fg);
+  text-wrap: balance;
+}
+
+.osa-h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-xl);
+  line-height: var(--lh-snug);
+  color: var(--fg);
+}
+
+.osa-eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.osa-body {
+  font-family: var(--font-sans);
+  font-weight: 500;                     /* Atyp Text Medium */
+  font-size: var(--text-md);
+  line-height: var(--lh-normal);
+  color: var(--fg);
+  text-wrap: pretty;
+}
+
+.osa-body-sm {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  line-height: var(--lh-normal);
+  color: var(--fg);
+}
+
+.osa-longform {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--text-md);
+  line-height: var(--lh-relaxed);
+  color: var(--fg);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.osa-caption {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--tracking-wide);
+  color: var(--fg-muted);
+}
+
+.osa-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ---------- Base element styles (opt-in) ---------------------------------- */
+
+.osa-reset a  { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.osa-reset a:hover { opacity: 0.6; }
+
+/* ---------- Dark section helper ------------------------------------------- */
+
+.osa-dark {
+  --fg: var(--k-0);
+  --fg-muted: var(--k-30);
+  --fg-subtle: var(--k-50);
+  --bg: var(--k-100);
+  --bg-elevated: var(--k-90);
+  --bg-muted: var(--k-90);
+  --border: var(--k-0);
+  --border-muted: var(--k-70);
+  --rule: var(--k-0);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* ---------- Repeating line-pattern backgrounds ----------
+   NOTE: Web build replaces pozadi JPGs with the <SVGPattern /> component
+   (see src/components/SVGPattern.astro in Phase 1). */

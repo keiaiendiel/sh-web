@@ -1,17 +1,12 @@
 ---
-
+import Base from '../layouts/Base.astro';
+import OsaGlyph from '../components/OsaGlyph.astro';
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base title="OSA — v pohybu">
+  <main style="padding: var(--space-9); display: grid; gap: var(--space-6); justify-items: start; max-width: 920px; margin-inline: auto;">
+    <OsaGlyph size="4rem" />
+    <h1 class="osa-h1">OSA, v pohybu</h1>
+    <p class="osa-body">Scaffolding ověřen. Tokeny připojeny. Atyp Special a Space Grotesk načteny.</p>
+    <p class="osa-eyebrow">Fáze 0 hotova</p>
+  </main>
+</Base>
