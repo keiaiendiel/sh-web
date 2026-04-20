@@ -135,23 +135,51 @@ import InlineCTA from '../../components/InlineCTA.astro';
       </SVGPattern>
     </section>
 
-    <section class="section">
-      <div class="container">
+    <section class="section osa-vpd__call" id="zamer-vpd1">
+      <div class="container-wide">
         <header class="osa-sub-head" data-reveal>
-          <span class="osa-eyebrow">Aktuálně</span>
-          <h2>Záměr VPD1: Horní kasárna Klecany.</h2>
+          <span class="osa-eyebrow">Aktuálně · Záměr VPD1</span>
+          <h2 class="osa-h1">Hledáme strategického partnera pro revitalizaci <span class="osa-draft">83&nbsp;327&nbsp;m²</span> na prahu metropole.</h2>
         </header>
-        <div class="osa-longform" data-reveal>
-          <p>
-            Nejambicióznější záměr VPD je revitalizace rozlehlého areálu Horních kasáren Klecany, 12&nbsp;km od centra Prahy. 83&nbsp;327&nbsp;m² plochy v plném souladu s platným územním plánem. Spolek má na areál smluvně zajištěné právo odkupu, užívání a stavby do roku 2039, kupní cenu 82&nbsp;% znalecké hodnoty.
-          </p>
-          <p>
-            Pilotní krok je Startovací hub: 331 jednotek 1+kk, investice řádu 285&nbsp;mil.&nbsp;Kč. Hledáme strategického partnera, který místo spekulativního zhodnocení přistoupí na model zachovávající veřejný charakter areálu.
-          </p>
-        </div>
-        <div class="osa-vpd__ctas" data-reveal>
-          <InlineCTA href="/#investment-vpd">Přehled investičních parametrů</InlineCTA>
-          <InlineCTA href="mailto:marek.semerad@osa2.cz?subject=Z%C3%A1m%C4%9Br%20VPD1%20Klecany">Kontaktovat představenstvo</InlineCTA>
+        <div class="osa-vpd__call-grid">
+          <div class="osa-vpd__call-text osa-longform" data-reveal>
+            <p>
+              Nejambicióznější záměr VPD je revitalizace rozlehlého areálu Horních kasáren Klecany, 12&nbsp;km od centra Prahy. Od opuštěných kasáren k živé městské čtvrti. Záměr plně v souladu s platným územním plánem, okamžitá realizace.
+            </p>
+            <dl class="osa-vpd__metrics">
+              <div>
+                <dt class="osa-eyebrow">Lokalita</dt>
+                <dd><span class="osa-draft">Horní kasárna Klecany, 12&nbsp;km od centra Prahy</span></dd>
+              </div>
+              <div>
+                <dt class="osa-eyebrow">Potenciál</dt>
+                <dd><span class="osa-draft">10+&nbsp;mld.&nbsp;Kč hrubý zisk, 88&nbsp;946&nbsp;m² ČPP nových bytů, cca 1&nbsp;572&nbsp;bytů</span></dd>
+              </div>
+              <div>
+                <dt class="osa-eyebrow">Práva</dt>
+                <dd><span class="osa-draft">Smluvně do roku 2039 (právo odkupu, užívání, stavby); kupní cena na úrovni 82&nbsp;% znalecké hodnoty</span></dd>
+              </div>
+              <div>
+                <dt class="osa-eyebrow">Krok 1 · Startovací hub</dt>
+                <dd><span class="osa-draft">331&nbsp;jednotek 1+kk, investice cca 285&nbsp;mil.&nbsp;Kč, ROI 141&nbsp;%, IRR 78&nbsp;%</span></dd>
+              </div>
+            </dl>
+            <div class="osa-vpd__ctas">
+              <a class="btn btn--primary" href="/assets/docs/Zamer_VPD1_zakladni_souhrn.pdf" aria-disabled="true">Podklady k záměru (PDF)</a>
+              <a class="btn btn--ghost" href="mailto:marek.semerad@osa2.cz?subject=Z%C3%A1m%C4%9Br%20VPD1%20Klecany" aria-disabled="true">Kontaktovat představenstvo</a>
+            </div>
+            <p class="osa-vpd__notice osa-mono">
+              Tento blok je v režimu DRAFT a nebude zveřejněn, dokud nebudou finanční údaje schváleny představenstvem.
+            </p>
+          </div>
+          <aside class="osa-vpd__schematic" aria-hidden="true">
+            <div class="osa-vpd__schematic-grid">
+              {Array.from({ length: 28 }).map(() => <span></span>)}
+            </div>
+            <p class="osa-mono osa-vpd__schematic-cap">
+              Schematický pohled na areál · <span class="osa-draft">12&nbsp;km od centra Prahy</span>
+            </p>
+          </aside>
         </div>
       </div>
     </section>
@@ -285,7 +313,75 @@ import InlineCTA from '../../components/InlineCTA.astro';
     padding: 0 4px;
   }
 
-  .osa-vpd__ctas { display: flex; flex-wrap: wrap; gap: var(--space-5); margin-top: var(--space-4); }
+  /* Investment call section */
+  .osa-vpd__call-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+  @media (max-width: 860px) { .osa-vpd__call-grid { grid-template-columns: 1fr; } }
+  .osa-vpd__call-text { display: grid; gap: var(--space-4); }
+  .osa-vpd__metrics {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .osa-vpd__metrics > div {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--space-4);
+  }
+  .osa-vpd__metrics dt { color: var(--fg-muted); }
+  .osa-vpd__metrics dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: var(--lh-normal);
+  }
+  .osa-vpd__ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  .osa-vpd__notice {
+    padding: var(--space-3) var(--space-4);
+    background: var(--k-10);
+    color: var(--k-90);
+    border-left: 2px solid var(--fg);
+    margin: 0;
+  }
+  .osa-draft {
+    background: color-mix(in oklab, var(--c-mustard) 28%, transparent);
+    padding: 0 4px;
+  }
+  .osa-vpd__schematic {
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--rule);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--bg);
+  }
+  .osa-vpd__schematic-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    flex: 1;
+    background: var(--rule);
+  }
+  .osa-vpd__schematic-grid > span {
+    background: var(--bg);
+    aspect-ratio: 1 / 1;
+  }
+  .osa-vpd__schematic-grid > span:nth-child(3n) {
+    background: linear-gradient(60deg, var(--bg) 48%, var(--fg) 49%, var(--fg) 51%, var(--bg) 52%);
+  }
+  .osa-vpd__schematic-cap {
+    color: var(--fg-muted);
+    font-size: var(--text-2xs);
+    margin: var(--space-3) 0 0;
+  }
 
   .osa-vpd__linked-grid {
     display: grid;

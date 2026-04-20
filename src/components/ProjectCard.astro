@@ -44,7 +44,7 @@ if (relationship === 'pilotni' && !isPaused) tags.push('Pilotní');
   data-filterable={filterable ? '' : undefined}
   data-status={status}
   data-topic={topic}>
-  <div class="project-card__head">
+  <div class="project-card__top">
     <span class="project-card__tags osa-eyebrow">
       {tags.map((t, i) => (
         <>
@@ -53,12 +53,10 @@ if (relationship === 'pilotni' && !isPaused) tags.push('Pilotní');
         </>
       ))}
     </span>
-  </div>
-  <div class="project-card__body">
     <h3 class="project-card__title">{name}</h3>
-    <p class="project-card__desc">{description}</p>
   </div>
-  <div class="project-card__foot">
+  <div class="project-card__bottom">
+    <p class="project-card__desc">{description}</p>
     <span class="project-card__link">
       <span class="project-card__chevron" aria-hidden="true"></span>
       <span>
@@ -74,13 +72,16 @@ if (relationship === 'pilotni' && !isPaused) tags.push('Pilotní');
   /* Clean typographic card. Title solid, description light gray. Hover
      animates a soft inversion using a black panel that wipes up from the
      bottom via clip-path, no layout shift, title stays in place. */
+  /* Layout contract: tag+name pinned to top, description+link pinned to bottom,
+     variable whitespace is the single flexible element in between. */
   .project-card {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    justify-content: space-between;
+    gap: var(--space-6);
     padding: var(--space-5);
-    min-height: 240px;
+    min-height: 260px;
     border-right: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
     background: var(--bg);
@@ -105,11 +106,10 @@ if (relationship === 'pilotni' && !isPaused) tags.push('Pilotní');
   }
   .project-card > * { position: relative; z-index: 1; }
 
-  .project-card__head {
-    display: flex;
+  .project-card__top,
+  .project-card__bottom {
+    display: grid;
     gap: var(--space-3);
-    flex-wrap: wrap;
-    align-items: flex-start;
   }
   .project-card__tags {
     font-size: var(--text-2xs);
@@ -118,7 +118,6 @@ if (relationship === 'pilotni' && !isPaused) tags.push('Pilotní');
     transition: color 280ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .project-card__tagsep { opacity: 0.6; }
-  .project-card__body { margin-top: auto; display: grid; gap: var(--space-2); }
   .project-card__title {
     font-family: var(--font-sans);
     font-weight: 600;
@@ -138,7 +137,6 @@ if (relationship === 'pilotni' && !isPaused) tags.push('Pilotní');
     margin: 0;
     transition: color 280ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .project-card__foot { display: flex; align-items: center; }
 
   /* Hover: title + tags become white; description stays light gray. */
   .project-card:hover .project-card__title,

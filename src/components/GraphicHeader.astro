@@ -1,10 +1,9 @@
 ---
 /*
- * GraphicHeader - thin tile-repeated band of one OSA graphic asset.
+ * GraphicHeader - full-bleed strip using one of the OSA graphic assets.
  * Assets in /public/graphics/graphic-asset-header_{1..6}.svg.
- * Tiles horizontally so the motif reads as a pattern rather than full-bleed
- * decoration. Height presets stay under 40px so the asset never dominates
- * the section it separates.
+ * Two sizes: 'strip' (64 px, a divider between sections) and 'band' (108 px,
+ * a heavier marker). Light / dark variants match the surrounding section.
  */
 interface Props {
   /** Which asset 1..6 */
@@ -12,42 +11,37 @@ interface Props {
   /** Surface variant */
   variant?: 'light' | 'dark';
   /** Height preset */
-  height?: 'xs' | 'sm' | 'md';
-  /** Horizontal flip - duplicates the motif mirrored for a symmetrical band */
-  mirror?: boolean;
+  size?: 'strip' | 'band';
   /** Extra class */
   class?: string;
 }
-const { n = 1, variant = 'light', height = 'sm', mirror = false, class: className } = Astro.props;
+const { n = 1, variant = 'light', size = 'strip', class: className } = Astro.props;
 const src = `/graphics/graphic-asset-header_${n}.svg`;
 ---
-<div
-  class:list={['osa-gh', `osa-gh--${variant}`, `osa-gh--${height}`, { 'osa-gh--mirror': mirror }, className]}
-  style={`--gh-bg: url(${src});`}
-  aria-hidden="true">
+<div class:list={['osa-gh', `osa-gh--${variant}`, `osa-gh--${size}`, className]} aria-hidden="true">
+  <img src={src} alt="" class="osa-gh__img" loading="lazy" decoding="async" />
 </div>
 
 <style>
   .osa-gh {
     display: block;
     width: 100%;
-    background-image: var(--gh-bg);
-    background-repeat: repeat-x;
-    background-position: left center;
-    /* Default asset is black-on-transparent; base surface decides the color. */
+    overflow: hidden;
+    line-height: 0;
   }
-  .osa-gh--light { background-color: var(--k-0);   }
-  .osa-gh--dark  { background-color: var(--k-100); filter: invert(1); }
+  .osa-gh--light { background: var(--k-0);   }
+  .osa-gh--dark  { background: var(--k-100); }
 
-  .osa-gh--xs { height: 20px; background-size: auto 14px; }
-  .osa-gh--sm { height: 28px; background-size: auto 18px; }
-  .osa-gh--md { height: 40px; background-size: auto 24px; }
+  .osa-gh--strip { height: 64px; }
+  .osa-gh--band  { height: 108px; }
 
-  .osa-gh--mirror {
-    /* Duplicate the motif mirrored by sitting two bands on top of each other */
-    background-image: var(--gh-bg), var(--gh-bg);
-    background-size: auto 14px, auto 14px;
-    background-position: left center, right center;
-    transform: scaleX(1);
+  .osa-gh__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left center;
   }
+  /* Black-on-transparent SVGs invert on dark surfaces so they render white. */
+  .osa-gh--dark .osa-gh__img { filter: invert(1); }
 </style>
