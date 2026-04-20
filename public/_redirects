@@ -1,0 +1,16 @@
+# Cloudflare Pages / Netlify _redirects
+#
+# Placeholder for the full alternativa2.info -> osa2.cz migration map.
+# Plan open question 2 tracks the full 14-day SEO preservation plan.
+#
+# Example rules (uncomment once domains are connected):
+#
+# /kdo-jsme.html            /o-spolku/         301
+# /nase-spolkove-projekty.html  /projekty/     301
+# /spolupracujte.html       /zapojte-se/       301
+# /clenstvi.html            /zapojte-se/       301
+# /kontakty.html            /kontakty/         301
+# /galerie.html             /projekty/         301
+#
+# Catch-all falls back to homepage:
+# /*                        /                  301

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://osa2.cz/sitemap-index.xml
