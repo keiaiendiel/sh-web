@@ -1,0 +1,68 @@
+---
+/*
+ * Metodologie strip — three pillars.
+ * Plan section 3.1 "Metodologie strip", ≤ 80 slov total.
+ */
+const pillars = [
+  { n: '01', title: 'Dobrovolnická práce členů',
+    body: 'Odborná i manuální práce bez finanční kompenzace.' },
+  { n: '02', title: 'Metoda DIY',
+    body: 'Minimalizace provozních i investičních nákladů vlastníma rukama.' },
+  { n: '03', title: 'Vlastní hospodářská činnost',
+    body: 'Členské příspěvky a služby na živnostenské bázi. Státní dotace odmítáme.' },
+];
+---
+<section class="osa-manifesto">
+  <div class="container-wide osa-manifesto__inner">
+    <header class="osa-manifesto__head">
+      <span class="osa-eyebrow">Ekonomický model</span>
+      <h2 class="osa-h1 osa-manifesto__title">Tři pilíře soběstačnosti.</h2>
+    </header>
+    <ol class="osa-manifesto__list">
+      {pillars.map((p, i, arr) => (
+        <li
+          class="osa-manifesto__item"
+          data-first={i === 0 ? '' : undefined}
+          data-last={i === arr.length - 1 ? '' : undefined}>
+          <span class="osa-mono osa-manifesto__num">{p.n}</span>
+          <div>
+            <h3 class="osa-h3 osa-manifesto__itemtitle">{p.title}</h3>
+            <p class="osa-body osa-manifesto__itembody">{p.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .osa-manifesto {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .osa-manifesto__inner {
+    padding: var(--space-9) var(--gutter);
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .osa-manifesto__inner { grid-template-columns: 1fr; }
+  }
+  .osa-manifesto__head { display: grid; gap: var(--space-3); }
+  .osa-manifesto__title { margin: 0; }
+
+  .osa-manifesto__list { display: grid; }
+  .osa-manifesto__item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--rule);
+  }
+  .osa-manifesto__item[data-last] { border-bottom: 1px solid var(--rule); }
+  .osa-manifesto__num { font-weight: 600; color: var(--fg); }
+  .osa-manifesto__itemtitle { margin: 0 0 var(--space-1); }
+  .osa-manifesto__itembody  { margin: 0; color: var(--fg-muted); }
+</style>

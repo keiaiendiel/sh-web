@@ -1,0 +1,115 @@
+---
+interface Props {
+  slug: string;
+  name: string;
+  description: string;
+  accent: 'red' | 'coral' | 'mustard' | 'olive' | 'forest' | 'teal' | 'blue' | 'plum';
+  relationship: 'autonomni' | 'pilotni' | 've-spanku';
+  external_url?: string;
+  featured?: boolean;
+}
+const { name, description, accent, relationship, external_url, featured = false } = Astro.props;
+
+const relationshipLabel: Record<Props['relationship'], string> = {
+  autonomni:   'Autonomní projekt',
+  pilotni:     'Pilotní projekt',
+  've-spanku': 'Ve spánku',
+};
+const accentVar = `var(--c-${accent})`;
+const href = external_url ?? '#';
+const isExternal = !!external_url;
+---
+<a
+  href={href}
+  class:list={['project-card', { 'project-card--featured': featured }]}
+  style={`--card-accent:${accentVar}`}
+  rel={isExternal ? 'noopener' : undefined}
+  target={isExternal ? '_blank' : undefined}>
+  <div class="project-card__head">
+    <span class="project-card__relationship osa-eyebrow">{relationshipLabel[relationship]}</span>
+  </div>
+  <div class="project-card__body">
+    <h3 class="project-card__title">{name}</h3>
+    <p class="project-card__desc">{description}</p>
+  </div>
+  <div class="project-card__foot">
+    {external_url && (
+      <span class="project-card__link">
+        <span class="project-card__chevron" aria-hidden="true"></span>
+        <span>{new URL(external_url).hostname.replace(/^www\./, '')}</span>
+      </span>
+    )}
+  </div>
+</a>
+
+<style>
+  .project-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    min-height: 220px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    border-top: 0;
+    border-left: 0;
+    background: var(--bg);
+    color: var(--fg);
+    text-decoration: none;
+  }
+  .project-card--featured { min-height: 280px; grid-column: span 2; }
+  .project-card:hover,
+  .project-card:focus-visible {
+    --card-border: var(--card-accent);
+  }
+  .project-card__head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .project-card__relationship {
+    color: var(--fg-muted);
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+  }
+  .project-card__body { margin-top: auto; display: grid; gap: var(--space-2); }
+  .project-card__title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-2xl);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--fg);
+    margin: 0;
+    transition: color var(--dur-fast) linear;
+  }
+  .project-card__desc {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    line-height: var(--lh-normal);
+    color: var(--fg-muted);
+    margin: 0;
+  }
+  .project-card:hover .project-card__title,
+  .project-card:focus-visible .project-card__title {
+    color: var(--card-accent);
+  }
+  .project-card__foot { display: flex; align-items: center; }
+  .project-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .project-card__chevron {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    background: currentColor;
+  }
+  /* hover reveal accent border handled via motion.css .project-card rule */
+</style>

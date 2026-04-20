@@ -1,9 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-import react from '@astrojs/react';
-
-// https://astro.build/config
+// NOTE: @astrojs/react was scaffolded but removed here to keep dist clean.
+// Add back with `pnpm astro add react` if we need a client island that
+// truly requires React components (e.g., a complex form).
 export default defineConfig({
-  integrations: [react()]
+  site: 'https://osa2.cz',
+  trailingSlash: 'always',
+  output: 'static',
+  compressHTML: true,
 });

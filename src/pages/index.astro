@@ -1,12 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
-import OsaGlyph from '../components/OsaGlyph.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import Rozcestnik from '../components/Rozcestnik.astro';
+import ValuesMatrix from '../components/ValuesMatrix.astro';
+import ManifestoStrip from '../components/ManifestoStrip.astro';
+import InvestmentHero from '../components/InvestmentHero.astro';
 ---
-<Base title="OSA — v pohybu">
-  <main style="padding: var(--space-9); display: grid; gap: var(--space-6); justify-items: start; max-width: 920px; margin-inline: auto;">
-    <OsaGlyph size="4rem" />
-    <h1 class="osa-h1">OSA, v pohybu</h1>
-    <p class="osa-body">Scaffolding ověřen. Tokeny připojeny. Atyp Special a Space Grotesk načteny.</p>
-    <p class="osa-eyebrow">Fáze 0 hotova</p>
+<Base
+  title="Občanské sdružení Alternativa II, z.s."
+  description="Platforma pro autonomní kulturní, sportovní a společenské projekty. Bez státních dotací, metodou DIY.">
+  <Header />
+  <main>
+    <Hero />
+    <Rozcestnik />
+    <ValuesMatrix />
+    <ManifestoStrip />
+    <InvestmentHero />
   </main>
+  <Footer />
 </Base>

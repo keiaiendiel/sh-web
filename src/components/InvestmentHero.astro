@@ -1,0 +1,164 @@
+---
+/*
+ * Aktuálně: Záměr VPD1 — Investment Call
+ * Plan section 3.1, decision D1 in build plan.
+ *
+ * Draft mode: every financial claim is wrapped in a <span class="draft" data-review="pending">.
+ * CTAs are disabled (aria-disabled="true") until the client confirms the copy.
+ *
+ * To activate this block for production:
+ *   1. Confirm each draft figure with Marek Semerád.
+ *   2. Remove each <span class="draft"> wrapper (keep the inner value).
+ *   3. Remove aria-disabled from the two CTA anchors.
+ *   4. Wire the PDF to an actual file in /assets/docs/.
+ */
+interface Props { confirmed?: boolean; }
+const { confirmed = false } = Astro.props;
+
+const draftAttr = confirmed ? { class: '' } : { class: 'draft', 'data-review': 'pending' };
+---
+<section class="osa-ih section" aria-labelledby="ih-title">
+  <div class="container-wide osa-ih__grid">
+    <div class="osa-ih__copy">
+      <span class="osa-eyebrow">Aktuálně · Záměr VPD1</span>
+      <h2 id="ih-title" class="osa-h1 osa-ih__title">
+        Hledáme strategického partnera pro revitalizaci
+        <span {...draftAttr}>83 327 m²</span>
+        na prahu metropole.
+      </h2>
+      <p class="osa-body osa-ih__lede">
+        Od opuštěných kasáren k živé městské čtvrti. Záměr plně v souladu s platným územním plánem.
+      </p>
+      <dl class="osa-ih__metrics">
+        <div>
+          <dt class="osa-eyebrow">Lokalita</dt>
+          <dd><span {...draftAttr}>Horní kasárna Klecany, 12 km od centra Prahy</span></dd>
+        </div>
+        <div>
+          <dt class="osa-eyebrow">Potenciál</dt>
+          <dd><span {...draftAttr}>10+ mld. Kč hrubý zisk, 88 946 m² ČPP nových bytů, cca 1 572 bytů</span></dd>
+        </div>
+        <div>
+          <dt class="osa-eyebrow">Práva</dt>
+          <dd><span {...draftAttr}>Smluvně do roku 2039 (právo odkupu, užívání, stavby); kupní cena na úrovni 82 % znalecké hodnoty</span></dd>
+        </div>
+        <div>
+          <dt class="osa-eyebrow">Krok 1 · Startovací hub</dt>
+          <dd><span {...draftAttr}>331 jednotek 1+kk, investice cca 285 mil. Kč, ROI 141 %, IRR 78 %</span></dd>
+        </div>
+      </dl>
+      <div class="osa-ih__ctas">
+        <a
+          class="btn btn--primary"
+          href="/assets/docs/Zamer_VPD1_zakladni_souhrn.pdf"
+          aria-disabled={!confirmed}>Podklady k záměru (PDF)</a>
+        <a
+          class="btn btn--ghost"
+          href="https://vepde.com/"
+          target="_blank"
+          rel="noopener"
+          aria-disabled={!confirmed}>O Veřejně prospěšném developerovi</a>
+      </div>
+      {!confirmed && (
+        <p class="osa-ih__notice osa-mono" role="note">
+          Tento blok je v režimu DRAFT a nebude zveřejněn, dokud nebudou finanční údaje schváleny představenstvem.
+        </p>
+      )}
+    </div>
+
+    <aside class="osa-ih__chart" aria-hidden="true">
+      <div class="osa-ih__chart-grid">
+        {Array.from({ length: 28 }).map(() => <span></span>)}
+      </div>
+      <p class="osa-mono osa-ih__chart-cap">
+        Schematický pohled na areál · <span {...draftAttr}>12 km od centra Prahy</span>
+      </p>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .osa-ih {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .osa-ih__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-7);
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .osa-ih__grid { grid-template-columns: 1fr; }
+  }
+  .osa-ih__copy   { display: grid; gap: var(--space-5); }
+  .osa-ih__title  { margin: 0; }
+  .osa-ih__lede   { margin: 0; color: var(--fg-muted); max-width: 56ch; }
+  .osa-ih__metrics {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .osa-ih__metrics > div {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--space-4);
+  }
+  .osa-ih__metrics dt { color: var(--fg-muted); }
+  .osa-ih__metrics dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--fg);
+    line-height: var(--lh-normal);
+  }
+  .osa-ih__ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+  .osa-ih__notice {
+    padding: var(--space-3) var(--space-4);
+    background: var(--k-10);
+    color: var(--k-90);
+    border-left: 2px solid var(--fg);
+    margin: 0;
+  }
+
+  /* draft flag: visible outline so reviewers can spot values that need confirmation */
+  .draft {
+    background: color-mix(in oklab, var(--c-mustard) 22%, transparent);
+    box-shadow: inset 0 -2px 0 var(--c-mustard);
+    padding: 0 2px;
+  }
+
+  .osa-ih__chart {
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--rule);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--bg);
+  }
+  .osa-ih__chart-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    flex: 1;
+    background: var(--rule);
+  }
+  .osa-ih__chart-grid > span {
+    background: var(--bg);
+    aspect-ratio: 1 / 1;
+  }
+  /* a few cells use a diagonal motif to hint architecture */
+  .osa-ih__chart-grid > span:nth-child(3n) {
+    background: linear-gradient(60deg, var(--bg) 48%, var(--fg) 49%, var(--fg) 51%, var(--bg) 52%);
+  }
+  .osa-ih__chart-cap {
+    color: var(--fg-muted);
+    font-size: var(--text-2xs);
+    margin: var(--space-3) 0 0;
+  }
+</style>

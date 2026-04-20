@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "osa-web-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
+      "port": 4321,
+      "cwd": "/Users/kindl/Work/_2026/02 OSA/11 WWW/osa-web"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+---
+import OsaGlyph from './OsaGlyph.astro';
+import SVGPattern from './SVGPattern.astro';
+const year = new Date().getFullYear();
+---
+<footer class="osa-footer osa-dark">
+  <SVGPattern variant="dark" opacity={0.14}>
+    <div class="container-wide osa-footer__inner">
+      <div class="osa-footer__top">
+        <div class="osa-footer__brandcol">
+          <span class="osa-footer__mark" aria-hidden="true"><OsaGlyph size="40px" /></span>
+          <p class="osa-footer__motto">Pomáháme tvořit…</p>
+        </div>
+
+        <div class="osa-footer__col">
+          <div class="osa-eyebrow osa-footer__label">Navigace</div>
+          <ul class="osa-footer__links">
+            <li><a href="/">Úvod</a></li>
+            <li><a href="/o-spolku/">O spolku</a></li>
+            <li><a href="/projekty/">Projekty</a></li>
+            <li><a href="/zapojte-se/">Zapojte se</a></li>
+            <li><a href="/kontakty/">Kontakty</a></li>
+          </ul>
+        </div>
+
+        <div class="osa-footer__col">
+          <div class="osa-eyebrow osa-footer__label">Kontakt</div>
+          <address class="osa-footer__body">
+            <a href="mailto:info@osa2.cz">info@osa2.cz</a><br />
+            <a href="tel:+420777786476">+420 777 786 476</a><br />
+            Terronská 894/56<br />
+            160 00 Praha 6
+          </address>
+        </div>
+
+        <div class="osa-footer__col">
+          <div class="osa-eyebrow osa-footer__label">Právní údaje</div>
+          <p class="osa-footer__body osa-mono">
+            IČ 270 26 345<br />
+            DIČ CZ 270 26 345<br />
+            Spis. zn. L 16540
+          </p>
+        </div>
+      </div>
+
+      <div class="rule rule--rev osa-footer__sep" role="presentation"></div>
+
+      <p class="osa-footer__legal osa-mono">
+        © {year} Občanské sdružení Alternativa II, z.s.
+      </p>
+    </div>
+  </SVGPattern>
+</footer>
+
+<style>
+  .osa-footer {
+    --fg: var(--k-0);
+    --fg-muted: var(--k-30);
+    --bg: var(--k-100);
+    color: var(--fg);
+    background: var(--bg);
+  }
+  .osa-footer__inner    { padding: var(--space-9) var(--gutter) var(--space-6); }
+  .osa-footer__top      {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+  .osa-footer__brandcol { display: grid; gap: var(--space-4); }
+  .osa-footer__mark     { display: inline-block; color: var(--fg); }
+  .osa-footer__motto    {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-lg);
+    color: var(--fg);
+    margin: 0;
+  }
+  .osa-footer__label    { color: var(--fg-muted); margin-bottom: var(--space-3); }
+  .osa-footer__body,
+  .osa-footer__body a   { color: var(--fg); font-style: normal; font-size: var(--text-sm); line-height: var(--lh-relaxed); }
+  .osa-footer__links    { display: grid; gap: var(--space-2); font-size: var(--text-sm); }
+  .osa-footer__sep      { margin: var(--space-7) 0 var(--space-4); opacity: 0.4; }
+  .osa-footer__legal    { color: var(--fg-muted); font-size: var(--text-xs); margin: 0; }
+  @media (max-width: 960px) {
+    .osa-footer__top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .osa-footer__top { grid-template-columns: 1fr; gap: var(--space-6); }
+  }
+</style>

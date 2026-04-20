@@ -1,0 +1,78 @@
+---
+import OsaGlyph from './OsaGlyph.astro';
+
+const nav = [
+  { href: '/',            label: 'Úvod' },
+  { href: '/o-spolku/',   label: 'O spolku' },
+  { href: '/projekty/',   label: 'Projekty' },
+  { href: '/zapojte-se/', label: 'Zapojte se' },
+  { href: '/kontakty/',   label: 'Kontakty' },
+];
+const current = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? current === '/' : current.startsWith(href);
+---
+<header class="osa-header">
+  <div class="container-wide osa-header__inner">
+    <a href="/" class="osa-header__brand" aria-label="Občanské sdružení Alternativa II — domů">
+      <OsaGlyph size="28px" />
+      <span class="osa-header__brand-wordmark">Alternativa II</span>
+    </a>
+
+    <nav class="osa-header__nav" aria-label="Hlavní navigace">
+      {nav.map(n => (
+        <a
+          href={n.href}
+          class="osa-header__link"
+          aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+      ))}
+    </nav>
+  </div>
+  <div class="rule" role="presentation"></div>
+</header>
+
+<style>
+  .osa-header {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--bg);
+  }
+  .osa-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding: 22px var(--gutter);
+  }
+  .osa-header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--fg);
+  }
+  .osa-header__brand-wordmark {
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wide);
+  }
+  .osa-header__nav {
+    display: flex;
+    gap: var(--space-6);
+  }
+  .osa-header__link {
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg-muted);
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+    transition: color var(--dur-fast) linear, border-color var(--dur-fast) linear;
+  }
+  .osa-header__link[aria-current='page'] {
+    color: var(--fg);
+    border-bottom-color: var(--fg);
+  }
+  .osa-header__link:hover {
+    opacity: 1;
+    color: var(--fg);
+  }
+  @media (max-width: 720px) {
+    .osa-header__nav { display: none; }
+  }
+</style>

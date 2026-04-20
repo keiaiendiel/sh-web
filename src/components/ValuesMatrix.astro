@@ -1,0 +1,106 @@
+---
+/*
+ * 4×4 matrix of OSA's 16 axiomatic values. Hover/focus shows the canonical
+ * one-line gloss (from stanovy § 16). Phase 2 will wire this to a content
+ * collection; Phase 1 hardcodes.
+ */
+interface Props { expanded?: boolean; }
+const { expanded = false } = Astro.props;
+
+const values: { name: string; gloss: string }[] = [
+  { name: 'aktivita',         gloss: 'Vědomý, činorodý přístup k životu, projektům a rozhodování.' },
+  { name: 'autonomie',        gloss: 'Samostatné rozhodování jedinců a částí organizace před centralizací.' },
+  { name: 'akceschopnost',    gloss: 'Schopnost konat v reálném čase, bez čekání na souhlas shora.' },
+  { name: 'antifašismus',     gloss: 'Odmítnutí autoritářských ideologií, xenofobie a rasismu.' },
+  { name: 'dobrovolnost',     gloss: 'Všechna spolupráce je dobrovolná, žádné členství není vynuceno.' },
+  { name: 'zodpovědnost',     gloss: 'Každý odpovídá za důsledky svého jednání vůči spolku i jeho okolí.' },
+  { name: 'slušnost',         gloss: 'Vzájemná úcta, věcná komunikace, dodržování dohod.' },
+  { name: 'spolupráce',       gloss: 'Kolektivní práce nad individuální soutěží.' },
+  { name: 'soběstačnost',     gloss: 'Opora o vlastní zdroje, dovednosti a infrastrukturu.' },
+  { name: 'konsensus',        gloss: 'Rozhodování dohodou všech zúčastněných, ne hlasováním většiny.' },
+  { name: 'otevřenost',       gloss: 'Transparentní vnitřní fungování, přístupnost pro nové členy.' },
+  { name: 'odpuštění',        gloss: 'Prostor pro chybu a nápravu, nikoli trvalé vyloučení.' },
+  { name: 'pacifikace',       gloss: 'Snižování napětí, nenásilná řešení konfliktů.' },
+  { name: 'pozitivní přístup', gloss: 'Hledání východisek a řešení před pouhou kritikou.' },
+  { name: 'sociálně šetrný přístup k lidem',          gloss: 'Ochrana jedinců před podmínkami, které brání jejich rozvoji.' },
+  { name: 'ekologicky šetrný přístup k životnímu prostředí', gloss: 'Racionální ochrana ekosystémů a trvalá udržitelnost.' },
+];
+---
+<section class="osa-values section">
+  <div class="container-wide">
+    <header class="osa-values__head">
+      <span class="osa-eyebrow">§ 16 hodnot</span>
+      <h2 class="osa-h2 osa-values__title">Hodnoty spolku jsou axiomy, nikoli aspirace.</h2>
+      <p class="osa-body osa-values__lede">
+        Každé rozhodnutí spolkových orgánů se o ně musí opřít. Najeďte na hodnotu pro kanonický výklad.
+      </p>
+    </header>
+    <ul
+      class:list={['osa-values__grid', { 'osa-values__grid--expanded': expanded }]}
+      role="list">
+      {values.map((v, i) => (
+        <li class="osa-values__cell">
+          <span class="osa-values__num osa-mono">{String(i + 1).padStart(2, '0')}</span>
+          <span class="osa-values__name">{v.name}</span>
+          <span class="osa-values__gloss">{v.gloss}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .osa-values__head {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 64ch;
+    margin: 0 0 var(--space-7);
+  }
+  .osa-values__title { margin: 0; }
+  .osa-values__lede  { margin: 0; color: var(--fg-muted); }
+
+  .osa-values__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+  @media (max-width: 960px) { .osa-values__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .osa-values__grid { grid-template-columns: 1fr; } }
+
+  .osa-values__cell {
+    position: relative;
+    padding: var(--space-5);
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-rows: auto auto 0fr;
+    gap: var(--space-2);
+    transition: grid-template-rows var(--dur-base) var(--ease-standard),
+                background var(--dur-fast) linear;
+    background: var(--bg);
+  }
+  .osa-values__cell:hover,
+  .osa-values__cell:focus-within,
+  .osa-values__grid--expanded .osa-values__cell {
+    grid-template-rows: auto auto 1fr;
+  }
+  .osa-values__num {
+    color: var(--fg-subtle);
+    font-size: var(--text-xs);
+  }
+  .osa-values__name {
+    font: 600 var(--text-md) / var(--lh-snug) var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    color: var(--fg);
+    text-transform: none;
+    text-wrap: balance;
+  }
+  .osa-values__gloss {
+    overflow: hidden;
+    font-size: var(--text-sm);
+    line-height: var(--lh-normal);
+    color: var(--fg-muted);
+  }
+</style>
