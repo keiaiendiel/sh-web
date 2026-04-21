@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
+import { withBase } from '../utils/url';
 
 const all = await getCollection('subProjects', entry =>
   entry.data.status !== 'draft' && entry.data.status !== 've-spanku',
@@ -8,6 +9,8 @@ const all = await getCollection('subProjects', entry =>
 const projects = all
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
   .slice(0, 12);
+// First 6 projects show on mobile; the rest fold behind a CTA.
+const MOBILE_LIMIT = 6;
 ---
 <section class="osa-rozcestnik section">
   <div class="container-wide">
@@ -20,7 +23,11 @@ const projects = all
     </header>
     <ul class="osa-rozcestnik__grid" role="list">
       {projects.map((p, i) => (
-        <li data-reveal data-reveal-delay={String((i % 3) + 1)}><ProjectCard
+        <li
+          data-reveal
+          data-reveal-delay={String((i % 3) + 1)}
+          class:list={[{ 'osa-rozcestnik__overflow': i >= MOBILE_LIMIT }]}
+        ><ProjectCard
           slug={p.id}
           name={p.data.name}
           description={p.data.description}
@@ -32,6 +39,9 @@ const projects = all
         /></li>
       ))}
     </ul>
+    <div class="osa-rozcestnik__more" data-reveal>
+      <a class="btn" href={withBase('/projekty/')} data-wipe>Ostatní projekty</a>
+    </div>
   </div>
 </section>
 
@@ -54,4 +64,21 @@ const projects = all
   }
   .osa-rozcestnik__grid > li { display: flex; }
   .osa-rozcestnik__grid > li > * { flex: 1; }
+  /* Below-the-fold "Ostatní projekty" CTA is shown only on mobile where
+     the card grid is folded. On desktop the grid already shows everything,
+     so the CTA would be redundant. */
+  .osa-rozcestnik__more {
+    display: none;
+    margin: var(--space-6) 0 0;
+    justify-content: flex-start;
+  }
+  @media (max-width: 720px) {
+    /* Hide the overflow tail (items beyond the first 6) and surface the
+       "Ostatní projekty" link instead. Keeps the landing page calm on
+       a phone without hiding anything structurally from crawlers.
+       Specificity note: `.grid > li { display: flex }` above outranks a
+       bare `.overflow { display: none }`, so we anchor both classes here. */
+    .osa-rozcestnik__grid > li.osa-rozcestnik__overflow { display: none; }
+    .osa-rozcestnik__more { display: flex; }
+  }
 </style>

@@ -89,7 +89,11 @@
             }
             obs.unobserve(e.target);
           });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+          // threshold 0 + positive bottom rootMargin fires the reveal as
+          // soon as the element edge approaches the viewport bottom, not
+          // after it's already inside. Prevents the "animation fires late"
+          // feel on short mobile viewports during fast scrolling.
+        }, { threshold: 0, rootMargin: '0px 0px 15% 0px' });
         document.querySelectorAll('[data-reveal], [data-reveal-words]').forEach(function (el) {
           obs.observe(el);
         });

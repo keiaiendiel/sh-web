@@ -1,8 +1,8 @@
 ---
 /*
- * Aktuálně: Záměr VPD1 - Investment Call.
+ * Aktuálně: Záměr VPD - Investment Call.
  *
- * Landing teaser for the VPD1 investment call. Every financial figure still
+ * Landing teaser for the VPD investment call. Every financial figure still
  * sits inside a mustard .draft wrapper: numbers on this surface have not been
  * signed off by Marek Semerád yet, so the wash makes it obvious which values
  * are provisional.
@@ -18,9 +18,12 @@
  *     reduced-motion users see the final value without the animation.
  *
  * The block carries a SINGLE CTA that links into the matching aktualita
- * (src/content/aktuality/vpd1-hledame-strategickeho-partnera.mdx). The
+ * (src/content/aktuality/vpd-hledame-strategickeho-partnera.mdx). The
  * article is where the full narrative lives. This section's job on the
  * landing is to plant the claim and route the reader into the long-form piece.
+ *
+ * `hideVpdLink` prop: when the component is embedded on /projekty/vpd/
+ * itself, the "O VPD" CTA would self-link, so it is suppressed.
  *
  * To activate for a public launch:
  *   1. Confirm each .draft figure with Marek Semerád. Reconcile with the
@@ -31,12 +34,14 @@
  *      points into the canonical article.
  */
 import { withBase } from '../utils/url';
-const articleHref = withBase('/aktuality/vpd1-hledame-strategickeho-partnera/');
+interface Props { hideVpdLink?: boolean; }
+const { hideVpdLink = false } = Astro.props;
+const articleHref = withBase('/aktuality/vpd-hledame-strategickeho-partnera/');
 ---
 <section class="osa-ih section" aria-labelledby="ih-title">
   <div class="container-wide osa-ih__grid">
-    <div class="osa-ih__copy">
-      <span class="osa-eyebrow" data-reveal>Aktuálně · Záměr VPD1</span>
+    <header class="osa-ih__header">
+      <span class="osa-eyebrow" data-reveal>Aktuálně · Záměr VPD</span>
       <h2 id="ih-title" class="osa-h1 osa-ih__title" data-reveal>
         Hledáme strategického partnera pro revitalizaci
         <span class="draft" data-review="pending"><span data-count-to="83327" data-count-format="int">83&nbsp;327</span>&nbsp;m²</span>
@@ -45,29 +50,7 @@ const articleHref = withBase('/aktuality/vpd1-hledame-strategickeho-partnera/');
       <p class="osa-body osa-ih__lede" data-reveal data-reveal-delay="1">
         Od opuštěných kasáren k živé městské čtvrti. Záměr plně v souladu s platným územním plánem.
       </p>
-      <dl class="osa-ih__metrics">
-        <div data-reveal data-reveal-delay="1">
-          <dt class="osa-eyebrow">Lokalita</dt>
-          <dd><span class="draft" data-review="pending">Horní kasárna Klecany, <span data-count-to="12" data-count-format="int">12</span>&nbsp;km od centra Prahy</span></dd>
-        </div>
-        <div data-reveal data-reveal-delay="2">
-          <dt class="osa-eyebrow">Potenciál</dt>
-          <dd><span class="draft" data-review="pending"><span data-count-to="10" data-count-format="int">10</span>+&nbsp;mld.&nbsp;Kč hrubý zisk, <span data-count-to="88946" data-count-format="int">88&nbsp;946</span>&nbsp;m² ČPP nových bytů, cca <span data-count-to="1572" data-count-format="int">1&nbsp;572</span>&nbsp;bytů</span></dd>
-        </div>
-        <div data-reveal data-reveal-delay="3">
-          <dt class="osa-eyebrow">Práva</dt>
-          <dd><span class="draft" data-review="pending">Smluvně do roku 2039 (právo odkupu, užívání, stavby); kupní cena na úrovni <span data-count-to="82" data-count-format="percent">82&nbsp;%</span> znalecké hodnoty</span></dd>
-        </div>
-        <div data-reveal data-reveal-delay="3">
-          <dt class="osa-eyebrow">Krok 1 · Startovací hub</dt>
-          <dd><span class="draft" data-review="pending"><span data-count-to="331" data-count-format="int">331</span>&nbsp;jednotek 1+kk, investice cca <span data-count-to="285" data-count-format="money-mkc">285&nbsp;mil.&nbsp;Kč</span>, ROI <span data-count-to="141" data-count-format="percent">141&nbsp;%</span>, IRR <span data-count-to="78" data-count-format="percent">78&nbsp;%</span></span></dd>
-        </div>
-      </dl>
-      <div class="osa-ih__ctas" data-reveal data-reveal-delay="3">
-        <a class="btn btn--primary" href={articleHref}>Celý článek</a>
-        <a class="btn btn--ghost" href={withBase('/projekty/vpd/')}>O Veřejně prospěšném developerovi</a>
-      </div>
-    </div>
+    </header>
 
     <aside class="osa-ih__chart" aria-hidden="true" data-reveal data-reveal-delay="2">
       <div class="osa-ih__chart-grid">
@@ -77,6 +60,32 @@ const articleHref = withBase('/aktuality/vpd1-hledame-strategickeho-partnera/');
         Schematický pohled na areál · <span class="draft" data-review="pending"><span data-count-to="12" data-count-format="int">12</span>&nbsp;km od centra Prahy</span>
       </p>
     </aside>
+
+    <dl class="osa-ih__metrics">
+      <div data-reveal data-reveal-delay="1">
+        <dt class="osa-eyebrow">Lokalita</dt>
+        <dd><span class="draft" data-review="pending">Horní kasárna Klecany, <span data-count-to="12" data-count-format="int">12</span>&nbsp;km od centra Prahy</span></dd>
+      </div>
+      <div data-reveal data-reveal-delay="2">
+        <dt class="osa-eyebrow">Potenciál</dt>
+        <dd><span class="draft" data-review="pending"><span data-count-to="10" data-count-format="int">10</span>+&nbsp;mld.&nbsp;Kč hrubý zisk, <span data-count-to="88946" data-count-format="int">88&nbsp;946</span>&nbsp;m² ČPP nových bytů, cca <span data-count-to="1572" data-count-format="int">1&nbsp;572</span>&nbsp;bytů</span></dd>
+      </div>
+      <div data-reveal data-reveal-delay="3">
+        <dt class="osa-eyebrow">Práva</dt>
+        <dd><span class="draft" data-review="pending">Smluvně do roku 2039 (právo odkupu, užívání, stavby); kupní cena na úrovni <span data-count-to="82" data-count-format="percent">82&nbsp;%</span> znalecké hodnoty</span></dd>
+      </div>
+      <div data-reveal data-reveal-delay="3">
+        <dt class="osa-eyebrow">Krok 1 · Startovací hub</dt>
+        <dd><span class="draft" data-review="pending"><span data-count-to="331" data-count-format="int">331</span>&nbsp;jednotek 1+kk, investice cca <span data-count-to="285" data-count-format="money-mkc">285&nbsp;mil.&nbsp;Kč</span>, ROI <span data-count-to="141" data-count-format="percent">141&nbsp;%</span>, IRR <span data-count-to="78" data-count-format="percent">78&nbsp;%</span></span></dd>
+    </div>
+    </dl>
+
+    <div class="osa-ih__ctas" data-reveal data-reveal-delay="3">
+      <a class="btn btn--primary" href={articleHref}>Celý článek</a>
+      {!hideVpdLink && (
+        <a class="btn btn--ghost" href={withBase('/projekty/vpd/')}>O VPD</a>
+      )}
+    </div>
   </div>
 </section>
 
@@ -88,13 +97,30 @@ const articleHref = withBase('/aktuality/vpd1-hledame-strategickeho-partnera/');
   .osa-ih__grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
-    gap: var(--space-7);
-    align-items: center;
+    grid-template-areas:
+      "header  chart"
+      "metrics chart"
+      "ctas    chart";
+    column-gap: var(--space-7);
+    row-gap: var(--space-5);
+    align-items: start;
   }
+  .osa-ih__header  { grid-area: header; display: grid; gap: var(--space-4); align-self: start; }
+  .osa-ih__chart   { grid-area: chart; align-self: center; }
+  .osa-ih__metrics { grid-area: metrics; }
+  .osa-ih__ctas    { grid-area: ctas; }
   @media (max-width: 860px) {
-    .osa-ih__grid { grid-template-columns: 1fr; }
+    /* Mobile order per client: heading, sub, chart, metrics, CTAs. */
+    .osa-ih__grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "header"
+        "chart"
+        "metrics"
+        "ctas";
+      row-gap: var(--space-5);
+    }
   }
-  .osa-ih__copy   { display: grid; gap: var(--space-5); }
   .osa-ih__title  { margin: 0; }
   .osa-ih__lede   { margin: 0; color: var(--fg-muted); max-width: 56ch; }
   .osa-ih__metrics {
@@ -119,6 +145,15 @@ const articleHref = withBase('/aktuality/vpd1-hledame-strategickeho-partnera/');
     line-height: var(--lh-normal);
   }
   .osa-ih__ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  @media (max-width: 560px) {
+    /* Tight metrics + flexible CTA wrap on small screens. The dt column
+       collapses above the dd so the numbers stay on their own lines. */
+    .osa-ih__metrics > div {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    .osa-ih__metrics dd { font-size: var(--text-xs); }
+  }
 
   /* draft flag: mustard wash highlighting values awaiting confirmation. No underline. */
   .draft {

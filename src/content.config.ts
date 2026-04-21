@@ -117,6 +117,10 @@ const aktuality = defineCollection({
     author: z.string().optional(),
     tags: z.array(z.string()).optional(),
     draft: z.boolean().optional().default(false),
+    // Optional inline gallery: additional images from the Google Doc body
+    // (every image after the first). Rendered at the bottom of the article
+    // using the Gallery component. Populated automatically by the Drive sync.
+    gallery: z.array(z.string().startsWith('/')).optional(),
   }),
 });
 

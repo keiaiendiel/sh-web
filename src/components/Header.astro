@@ -31,9 +31,78 @@ const isActive = (path: string) => {
           aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
       ))}
     </nav>
+
+    <button
+      class="osa-header__burger"
+      type="button"
+      aria-label="Otevřít menu"
+      aria-controls="osa-mobile-nav"
+      aria-expanded="false">
+      <span class="osa-header__burger-box" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
   </div>
   <div class="rule" role="presentation"></div>
+
+  <div id="osa-mobile-nav" class="osa-mobile-nav" role="dialog" aria-modal="true" aria-label="Hlavní navigace" hidden>
+    <nav class="osa-mobile-nav__inner">
+      {nav.map(n => (
+        <a
+          href={withBase(n.path)}
+          class="osa-mobile-nav__link"
+          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
+      ))}
+    </nav>
+  </div>
 </header>
+
+<script is:inline>
+  (function () {
+    var btn = document.querySelector('.osa-header__burger');
+    var panel = document.getElementById('osa-mobile-nav');
+    if (!btn || !panel) return;
+
+    var firstLink = function () { return panel.querySelector('a'); };
+
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+      if (open) {
+        panel.hidden = false;
+        // defer add of 'open' class so the transition runs
+        requestAnimationFrame(function () { panel.classList.add('open'); });
+        document.documentElement.classList.add('osa-nav-lock');
+        var f = firstLink();
+        if (f) f.focus();
+      } else {
+        panel.classList.remove('open');
+        document.documentElement.classList.remove('osa-nav-lock');
+        // wait for transition before hiding, so screen readers still announce close
+        setTimeout(function () {
+          if (btn.getAttribute('aria-expanded') === 'false') panel.hidden = true;
+        }, 280);
+        btn.focus();
+      }
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // ESC closes
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') setOpen(false);
+    });
+
+    // Click on a link inside the panel closes it (nav happens anyway).
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setOpen(false);
+    });
+  }());
+</script>
 
 <style>
   .osa-header {
@@ -89,8 +158,111 @@ const isActive = (path: string) => {
     opacity: 1;
     color: var(--fg);
   }
+
+  /* ---------- Burger toggle ------------------------------------------------
+     Hidden on desktop; on mobile it replaces the horizontal nav. Three
+     hairlines morph to an X when the panel opens. 32x32 hit target. */
+  .osa-header__burger {
+    display: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+  }
+  .osa-header__burger-box {
+    display: grid;
+    gap: 5px;
+    width: 20px;
+    margin: 0 auto;
+  }
+  .osa-header__burger-box > span {
+    display: block;
+    height: 1.5px;
+    background: currentColor;
+    transition:
+      transform 240ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+      opacity 160ms linear;
+    transform-origin: 50% 50%;
+  }
+  .osa-header__burger[aria-expanded='true'] .osa-header__burger-box > span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  .osa-header__burger[aria-expanded='true'] .osa-header__burger-box > span:nth-child(2) {
+    opacity: 0;
+  }
+  .osa-header__burger[aria-expanded='true'] .osa-header__burger-box > span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+  .osa-header__burger:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Mobile drawer -----------------------------------------------
+     Full-viewport overlay below the header row. Type-scale matches the
+     editorial voice of the rest of the site: large, weighted links stacked
+     with hairline dividers. Black scope so the panel reads confidently. */
+  .osa-mobile-nav {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    z-index: 19;
+    background: var(--k-100);
+    color: var(--k-0);
+    padding: calc(56px + var(--space-6)) var(--gutter) var(--space-7);
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity 220ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+      transform 260ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
+  }
+  .osa-mobile-nav.open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .osa-mobile-nav__inner {
+    display: grid;
+    gap: 0;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .osa-mobile-nav__link {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-2xl);
+    letter-spacing: var(--tracking-tight);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    color: var(--k-0);
+    text-decoration: none;
+    display: block;
+  }
+  .osa-mobile-nav__link[aria-current='page'] { opacity: 0.55; }
+  .osa-mobile-nav__link:hover,
+  .osa-mobile-nav__link:focus-visible { opacity: 0.7; }
+
+  /* When the drawer is open, lock the underlying page. */
+  :global(html.osa-nav-lock),
+  :global(html.osa-nav-lock body) { overflow: hidden; }
+
   @media (max-width: 720px) {
     .osa-header__nav { display: none; }
+    .osa-header__burger { display: inline-flex; align-items: center; justify-content: center; }
     .osa-header__logo { width: 24px; height: 24px; }
+  }
+
+  @media (min-width: 721px) {
+    /* Defensive: drawer should never appear on desktop even if state leaks. */
+    .osa-mobile-nav { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .osa-mobile-nav,
+    .osa-header__burger-box > span { transition: none; }
   }
 </style>

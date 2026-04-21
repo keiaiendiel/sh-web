@@ -98,12 +98,14 @@ const { images = defaultImages } = Astro.props;
     clip-path: inset(0 0 100% 0);
   }
 
+  /* Colour by default (client direction); hover only nudges zoom + a hint
+     of extra saturation. Earlier monochrome-at-rest treatment was dropped. */
   .osa-gallery__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: grayscale(1) contrast(1.02);
+    filter: saturate(0.95) contrast(1.02);
     transition:
       transform 620ms var(--ease-expo, cubic-bezier(0.16, 1, 0.3, 1)),
       filter 520ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
@@ -111,7 +113,7 @@ const { images = defaultImages } = Astro.props;
   .osa-gallery__cell:hover .osa-gallery__img,
   .osa-gallery__cell:focus-within .osa-gallery__img {
     transform: scale(1.04);
-    filter: grayscale(0) contrast(1.02) saturate(1.05);
+    filter: saturate(1.08) contrast(1.04);
   }
 
   /* ---------- Mobile filmstrip --------

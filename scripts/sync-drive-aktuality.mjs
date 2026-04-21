@@ -289,13 +289,15 @@ async function exportMarkdown(drive, fileId) {
 }
 
 /**
- * Find the first inline image referenced in a Doc's Markdown export and
- * download it. Drive doesn't expose the raw image URL from `files.export`
- * for markdown, so we use the Docs API to walk the body.
+ * Walk the Doc body and collect every inline image URI in order of
+ * appearance. The first one becomes the hero; the rest form an inline
+ * gallery rendered below the article body. Drive doesn't expose raw image
+ * URLs via `files.export`, so the Docs API walk is mandatory.
  */
-async function firstInlineImage(docs, fileId) {
+async function allInlineImages(docs, fileId) {
   const res = await docs.documents.get({ documentId: fileId });
   const body = res.data.body?.content ?? [];
+  const uris = [];
   for (const block of body) {
     const elems = block.paragraph?.elements ?? [];
     for (const el of elems) {
@@ -304,10 +306,10 @@ async function firstInlineImage(docs, fileId) {
       const objId = embed.inlineObjectId;
       const obj = res.data.inlineObjects?.[objId];
       const contentUri = obj?.inlineObjectProperties?.embeddedObject?.imageProperties?.contentUri;
-      if (contentUri) return contentUri;
+      if (contentUri) uris.push(contentUri);
     }
   }
-  return null;
+  return uris;
 }
 
 /**
@@ -453,13 +455,28 @@ async function main() {
       // draft here - an `!` in the Doc ships straight through.
 
       let heroRelative = meta.hero ?? `/images/aktuality/${slug}.jpg`;
+      const gallery = [];
       if (!meta.hero) {
         try {
-          const imageUri = await firstInlineImage(docs, file.id);
-          if (imageUri) {
-            const outPath = resolve(IMAGES_DIR, `${slug}.jpg`);
-            await downloadAndResizeImage(imageUri, outPath);
+          const imageUris = await allInlineImages(docs, file.id);
+          if (imageUris.length > 0) {
+            // First image: hero. Remaining images form the inline gallery.
+            const heroPath = resolve(IMAGES_DIR, `${slug}.jpg`);
+            await downloadAndResizeImage(imageUris[0], heroPath);
             heroRelative = `/images/aktuality/${slug}.jpg`;
+            for (let i = 1; i < imageUris.length; i++) {
+              const name = `${slug}-${i + 1}.jpg`;
+              const outPath = resolve(IMAGES_DIR, name);
+              try {
+                await downloadAndResizeImage(imageUris[i], outPath);
+                gallery.push(`/images/aktuality/${name}`);
+              } catch (err) {
+                console.warn(`"${file.name}": gallery image #${i + 1} failed: ${err.message}`);
+              }
+            }
+            if (gallery.length > 0) {
+              console.log(`  gallery: ${gallery.length} additional image(s)`);
+            }
           } else {
             console.warn(`"${file.name}": no inline image found, keeping placeholder path.`);
           }
@@ -508,6 +525,7 @@ async function main() {
           ? meta.tags.split(',').map((t) => t.trim()).filter(Boolean)
           : undefined,
         draft: forceDraft || meta.draft === 'true',
+        gallery: gallery.length > 0 ? gallery : undefined,
       });
 
       const mdx = `${fm}\n\n${body.trim()}\n`;

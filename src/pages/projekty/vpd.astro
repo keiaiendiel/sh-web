@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import SVGPattern from '../../components/SVGPattern.astro';
 import InlineCTA from '../../components/InlineCTA.astro';
+import InvestmentHero from '../../components/InvestmentHero.astro';
 import { withBase } from '../../utils/url';
 ---
 <Base
@@ -135,51 +136,13 @@ import { withBase } from '../../utils/url';
       </SVGPattern>
     </section>
 
-    <section class="section osa-vpd__call" id="zamer-vpd1">
-      <div class="osa-vpd__wrap">
-        <header class="osa-sub-head" data-reveal>
-          <span class="osa-eyebrow">Aktuálně · Záměr VPD1</span>
-          <h2 class="osa-h1">Hledáme strategického partnera pro revitalizaci <span class="osa-draft">83&nbsp;327&nbsp;m²</span> na prahu metropole.</h2>
-        </header>
-        <div class="osa-vpd__call-grid">
-          <div class="osa-vpd__call-text osa-longform" data-reveal>
-            <p>
-              Nejambicióznější záměr VPD je revitalizace rozlehlého areálu Horních kasáren Klecany, 12&nbsp;km od centra Prahy. Od opuštěných kasáren k živé městské čtvrti. Záměr plně v souladu s platným územním plánem, okamžitá realizace.
-            </p>
-            <dl class="osa-vpd__metrics">
-              <div>
-                <dt class="osa-eyebrow">Lokalita</dt>
-                <dd><span class="osa-draft">Horní kasárna Klecany, 12&nbsp;km od centra Prahy</span></dd>
-              </div>
-              <div>
-                <dt class="osa-eyebrow">Potenciál</dt>
-                <dd><span class="osa-draft">10+&nbsp;mld.&nbsp;Kč hrubý zisk, 88&nbsp;946&nbsp;m² ČPP nových bytů, cca 1&nbsp;572&nbsp;bytů</span></dd>
-              </div>
-              <div>
-                <dt class="osa-eyebrow">Práva</dt>
-                <dd><span class="osa-draft">Smluvně do roku 2039 (právo odkupu, užívání, stavby); kupní cena na úrovni 82&nbsp;% znalecké hodnoty</span></dd>
-              </div>
-              <div>
-                <dt class="osa-eyebrow">Krok 1 · Startovací hub</dt>
-                <dd><span class="osa-draft">331&nbsp;jednotek 1+kk, investice cca 285&nbsp;mil.&nbsp;Kč, ROI 141&nbsp;%, IRR 78&nbsp;%</span></dd>
-              </div>
-            </dl>
-            <div class="osa-vpd__ctas">
-              <a class="btn btn--primary" href={withBase('/assets/docs/Zamer_VPD1_zakladni_souhrn.pdf')} aria-disabled="true" data-wipe>Podklady k záměru (PDF)</a>
-              <a class="btn btn--ghost" href="mailto:marek.semerad@osa2.cz?subject=Z%C3%A1m%C4%9Br%20VPD1%20Klecany" aria-disabled="true" data-wipe>Kontaktovat představenstvo</a>
-            </div>
-          </div>
-          <aside class="osa-vpd__schematic" aria-hidden="true">
-            <div class="osa-vpd__schematic-grid">
-              {Array.from({ length: 28 }).map(() => <span></span>)}
-            </div>
-            <p class="osa-mono osa-vpd__schematic-cap">
-              Schematický pohled na areál · <span class="osa-draft">12&nbsp;km od centra Prahy</span>
-            </p>
-          </aside>
-        </div>
-      </div>
-    </section>
+    {/*
+      Reused InvestmentHero banner, same component as on landing. The
+      `hideVpdLink` prop suppresses the "O VPD" CTA so we don't self-link;
+      only "Celý článek" → aktualita detail remains.
+    */}
+    <InvestmentHero hideVpdLink={true} />
+
 
     <section class="section--tight osa-vpd__linked">
       <div class="osa-vpd__wrap">

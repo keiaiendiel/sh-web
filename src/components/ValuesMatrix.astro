@@ -65,7 +65,7 @@ const values = (await getCollection('values'))
     border-left: 1px solid var(--rule);
   }
   @media (max-width: 960px) { .osa-values__grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .osa-values__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .osa-values__grid { grid-template-columns: 1fr; } }
 
   .osa-values__cell {
     position: relative;
@@ -89,9 +89,10 @@ const values = (await getCollection('values'))
     outline-offset: -2px;
   }
 
-  /* Hover / focus (interactive mode): full black-invert reveal */
+  /* Hover / focus (interactive mode): full black-invert reveal.
+     `:focus` (not `:focus-visible`) lets tap on mobile expand the cell. */
   .osa-values__cell:hover,
-  .osa-values__cell:focus-visible {
+  .osa-values__cell:focus {
     grid-template-rows: auto auto 1fr;
     background: var(--fg);
     color: var(--bg);
@@ -175,6 +176,50 @@ const values = (await getCollection('values'))
   }
   /* In fully-expanded mode, hide the "+" since there's no toggle */
   .osa-values__grid--expanded .osa-values__plus { display: none; }
+
+  /*
+   * Mobile compact strip: one-line layout `01  [name]  +` that expands to
+   * reveal the gloss only on tap/focus. Must sit AFTER the base cell rules
+   * so it reliably overrides min-height, padding and the three-row template.
+   */
+  @media (max-width: 560px) {
+    .osa-values__cell {
+      min-height: 0;
+      padding: var(--space-3) var(--space-4);
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: auto 0fr;
+      gap: var(--space-3);
+      align-items: center;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .osa-values__cell .osa-values__num,
+    .osa-values__cell .osa-values__name { grid-row: 1; }
+    .osa-values__num  { grid-column: 1; }
+    .osa-values__name {
+      grid-column: 2;
+      font-size: var(--text-sm);
+      line-height: var(--lh-tight);
+    }
+    .osa-values__gloss {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      font-size: var(--text-xs);
+    }
+    .osa-values__plus {
+      position: static;
+      grid-column: 3;
+      grid-row: 1;
+      transform: none;
+      align-self: center;
+    }
+    .osa-values__cell:hover,
+    .osa-values__cell:focus {
+      grid-template-rows: auto 1fr;
+    }
+    .osa-values__cell:hover .osa-values__gloss,
+    .osa-values__cell:focus .osa-values__gloss { padding-top: var(--space-2); }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .osa-values__cell { transition: background 0ms, color 0ms; }

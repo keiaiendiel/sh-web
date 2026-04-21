@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import Gallery from '../../components/Gallery.astro';
 import { withBase } from '../../utils/url';
 
 export async function getStaticPaths() {
@@ -128,6 +129,10 @@ const articleJsonLd = {
         </div>
       </section>
     </article>
+
+    {entry.data.gallery && entry.data.gallery.length > 0 && (
+      <Gallery images={entry.data.gallery.map((src) => ({ src, alt: '' }))} />
+    )}
 
     {related.length > 0 && (
       <section class="section osa-article__related-section">

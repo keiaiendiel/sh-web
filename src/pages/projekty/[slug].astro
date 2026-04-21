@@ -28,7 +28,8 @@ const accentVar = `var(--c-${entry.data.accent})`;
             {entry.data.relationship === 'pilotni'     && 'Pilotní projekt'}
             {entry.data.relationship === 've-spanku'   && 'Ve spánku'}
           </span>
-          <h1 class="osa-h1 osa-project__title" style={`color:${accentVar}`}>{entry.data.name}</h1>
+          <span class="osa-project__accent" aria-hidden="true"></span>
+          <h1 class="osa-h1 osa-project__title">{entry.data.name}</h1>
           <p class="osa-body osa-project__desc">{entry.data.description}</p>
           <p class="osa-mono osa-project__note">Vlastní doména projektu je v přípravě.</p>
         </header>
@@ -76,7 +77,15 @@ const accentVar = `var(--c-${entry.data.accent})`;
   }
   .osa-project__head { display: grid; gap: var(--space-4); }
   .osa-project__tag  { color: var(--fg-muted); }
-  .osa-project__title { margin: 0; }
+  /* Small accent bar above the heading. The project's colour appears here
+     as a brand mark, not on the heading text itself. */
+  .osa-project__accent {
+    display: block;
+    width: 56px;
+    height: 3px;
+    background: var(--theme-accent);
+  }
+  .osa-project__title { margin: 0; color: var(--fg); }
   .osa-project__desc  { margin: 0; max-width: 56ch; font-size: var(--text-lg); }
   .osa-project__note  { margin: 0; color: var(--fg-muted); font-size: var(--text-xs); }
 

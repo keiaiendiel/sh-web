@@ -155,55 +155,30 @@ Když PR dorazí a vypadá rozumně:
 3. **Smaž** MDX: lokálně `rm src/content/aktuality/test-sync-smoke.mdx` + `public/images/aktuality/test-sync-smoke.*` → commit → push.
 4. **Smaž** testovací Google Doc v Drive (jinak při příštím syncu zase vyskočí PR).
 
-## Fáze 5 — Apps Script v klientově účtu (~10 min)
+## Fáze 5 — Apps Script (skip)
 
-Tohle nastavuje `triggerSync()` funkci, která z Drive posílá signál do GitHubu. Dokud to neuděláš, publikuje se jen přes 30min cron fallback (funguje, ale je pomalé).
-
-**Kdo tohle dělá:** ideálně Marek pod jeho Google účtem, aby Google OAuth auth flow byl navázaný na něj. Pro testování to můžeš udělat pod sebou; cut over na Markův účet pak znamená: smazat Apps Script project u tebe, opakovat pod Markem.
-
-Plný postup (čti spolu s kódem): [APPS_SCRIPT.md](./APPS_SCRIPT.md) §3. Zkrácený:
-
-1. Ve sdílené složce `OSA Aktuality`: **+ New** → **More** → **Google Apps Script**.
-2. Smaž default `myFunction()` a vlož kód z `APPS_SCRIPT.md` §3 (`function triggerSync() { ... }`).
-3. Vlevo ikona ozubeného kola → **Project Settings** → sekce **Script Properties**:
-   - `GITHUB_PAT`: vygeneruj fine-grained token na https://github.com/settings/tokens?type=beta se scope `Contents: Read/Write` pro repo `keiaiendiel/osa-web`, expiraci nastav na 365 dní a napiš si do kalendáře reminder na rotaci.
-   - `REPO`: `keiaiendiel/osa-web`
-4. V editoru `Code.gs` → **Run** → **triggerSync**. Google požádá o oprávnění (Drive + UrlFetch); schval.
-5. Pokud v logu (**View** → **Executions**) vidíš `Dispatch OK`, je hotovo.
-6. Vlevo ikona budíku → **Add Trigger**:
-   - Function to run: `triggerSync`
-   - Event source: **Time-driven**
-   - Type: **Minutes timer**
-   - Every 30 minutes
-   - Save
+Apps Script by přidal tlačítko "Publikovat teď" v Drive, které signál pošle okamžitě. Protože cron běží každých 30 min a to je pro OSA více než dost, tahle fáze se neinstaluje. Pokud by v budoucnu bylo potřeba publikovat rychleji než za půl hodiny, postup najdeš v `APPS_SCRIPT.md` §3.
 
 ## Fáze 6 — End-to-end s reálným obsahem (~10 min)
 
 1. Napiš (ideálně Marek, ale můžeš i ty pro test) krátký skutečný článek do sdílené Drive složky podle [TEMPLATE_ARTICLE.md](./TEMPLATE_ARTICLE.md) nebo šablony [templates/sablona-clanku.docx](./templates/sablona-clanku.docx).
-2. Počkej 30 minut **nebo** v Apps Script editoru **Run** → **triggerSync**.
+2. Buď počkej 30 min na cron, nebo v repu spusť `gh workflow run sync-aktuality.yml --repo keiaiendiel/osa-web` pro okamžitý běh.
 3. PR přijde na GitHub. Merge → Pages rebuildnou → článek je na `https://keiaiendiel.github.io/osa-web/aktuality/<slug>/`.
-4. Otevři live URL. Zkontroluj hero obrázek (monochrome na hover v ArticleCard grid, barevný na detail page), lead, body, metadata.
+4. Otevři live URL. Zkontroluj hero, lead, body, metadata, případně galerii pod článkem, pokud Doc obsahoval víc obrázků.
 
 ## Fáze 7 — Chaos test (volitelné, ~5 min)
 
-Ověř, že failure modes z `APPS_SCRIPT.md` troubleshooting sekce opravdu dělají to, co tam stojí:
-
-- **Em-dash v textu** → editorial lint spadne → PR job je červený. Oprav v Docs → další sync projde.
-- **Žádný obrázek v Docs** → podle rozhodnutí z Fáze 0: buď spadne `No inline image found`, nebo projde s fallback SVG placeholderem.
-- **Idempotence** → `triggerSync` dvakrát po sobě bez změny obsahu. Druhý běh končí `No content changes; nothing to commit.`
+- **Žádný obrázek v Docs** → pipeline napíše MDX s placeholder path; článek bude mít rozbitý hero. Oprav doplněním obrázku v Docs nebo ručně uprav frontmatter v PR.
+- **Idempotence** → trigger dvakrát po sobě bez změny obsahu → druhý běh končí `No content changes; nothing to commit.` bez otevření PR.
 - **`draft: true`** v Docs properties → MDX se synchne, stránka se na webu neukáže (filtr v `src/pages/aktuality/index.astro` ji vynechá).
+- **Validace frontmatter** (title pod 10 znaků, lead pod 40 znaků): sync ho automaticky přepne na `draft: true` a zaloguje konkrétní důvody. Oprav v Docs a znovu sync.
+- **Víc obrázků v jednom Docs** → první obrázek se stane hero, ostatní se uloží jako `<slug>-2.jpg`, `<slug>-3.jpg`, ... a v článku se vykreslí galerie na spodu (stejný layout jako galerie na landing page).
 
 ## Jak to celé vypnout
 
-Kdybys chtěl pipeline dočasně vypnout:
-
-- **Marek (klient):** Apps Script editor → menu **Triggers** (ikona budíku) → pause nebo delete triggeru.
-- **Kindl:** GitHub repo Settings → **Actions** → **Workflows** → `sync-aktuality.yml` → **⋯ menu** → **Disable workflow**. MDX soubory v repu zůstanou.
-
-Znovu zapnutí: revert předchozího kroku. Nic se neztratí.
+- GitHub repo Settings → **Actions** → **Workflows** → `sync-aktuality.yml` → **⋯ menu** → **Disable workflow**. MDX soubory v repu zůstanou. Revert: Enable.
 
 ## Co monitorovat po spuštění
 
-- První týden: občas mrkni na `gh run list --workflow=sync-aktuality.yml --repo keiaiendiel/osa-web`. Cron běží každých 30 min; failed runs dostanou oba oznámení v GitHub web UI.
-- Apps Script má vlastní quota limity (https://developers.google.com/apps-script/guides/services/quotas). UrlFetch 20 000/den je víc než dost; Apps Script runtime 6 min na execution je pro `triggerSync` jedno krátké POST volání.
-- GitHub Actions free tier pro public repo: unlimited minut. Nic tě tady neomezí.
+- První týden: občas mrkni na `gh run list --workflow=sync-aktuality.yml --repo keiaiendiel/osa-web`. Cron běží každých 30 min; failed runs vidíš v Actions UI.
+- GitHub Actions free tier pro public repo je unlimited minut. Nic tě tady neomezí.

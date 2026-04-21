@@ -86,7 +86,15 @@ const year = new Date().getFullYear();
   @media (max-width: 960px) {
     .osa-footer__top { grid-template-columns: 1fr 1fr; }
   }
+  /* Stay on two columns even on narrow phones per client direction.
+     Brand + motto column stacks above the three meta columns, which
+     share the two-column grid. */
   @media (max-width: 560px) {
-    .osa-footer__top { grid-template-columns: 1fr; gap: var(--space-6); }
+    .osa-footer__top {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+    }
+    .osa-footer__brandcol { grid-column: 1 / -1; }
+    .osa-footer__inner { padding: var(--space-7) var(--gutter) var(--space-5); }
   }
 </style>
