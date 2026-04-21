@@ -134,6 +134,20 @@ const values = (await getCollection('values'))
     color: var(--bg);
   }
 
+  /* Desktop hover: restores the original "peek on hover" affordance from
+     pre-accordion days. Tap-only mobile (<=560px) keeps the is-open-only
+     behaviour below; here hover is an additive preview that doesn't alter
+     the JS-managed is-open state. Also guarded by pointer:fine so a
+     stylus/touch device that emulates hover doesn't trigger sticky state. */
+  @media (min-width: 561px) and (hover: hover) and (pointer: fine) {
+    .osa-values__cell:hover,
+    .osa-values__cell:focus-visible {
+      grid-template-rows: auto auto 1fr;
+      background: var(--fg);
+      color: var(--bg);
+    }
+  }
+
   .osa-values__num {
     font-family: var(--font-sans);
     font-weight: 500;
