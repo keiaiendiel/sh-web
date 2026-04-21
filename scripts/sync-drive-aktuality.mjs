@@ -213,7 +213,13 @@ function normalize(input) {
  * operator (!=, !x) counts. If it matches, caller flips draft:true.
  */
 function bodyContainsBang(body) {
-  return /[^`<>]![^=]/.test(body);
+  // Strip Markdown image syntax ![alt](url) and ![alt][ref] before checking;
+  // those `!` are syntactic, not prose. Also strip fenced code blocks.
+  const stripped = body
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    .replace(/!\[[^\]]*\]\[[^\]]*\]/g, '');
+  return /[^`<>]![^=]/.test(stripped);
 }
 
 // --- Slug + date helpers ------------------------------------------------

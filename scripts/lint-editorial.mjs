@@ -40,8 +40,9 @@ const rules = [
     pattern: /!/g,
     msg: 'Exclamation mark is banned in body copy. Allowed only in HTML attrs and code.',
     exempt: /(alt=|aria-label=|title=|<!--|<!DOCTYPE|<\/?script|<\/?style|important|\.important|content=|placeholder=|!\s*important|condition!|exception!)/i,
-    // also skip lines that contain JS operators like !x, !!x, !=
-    lineExempt: (line) => /!=|![a-zA-Z_$]|![ ]?\(/.test(line),
+    // also skip lines that contain JS operators like !x, !!x, !=,
+    // and Markdown image syntax ![alt](url) or ![alt][ref].
+    lineExempt: (line) => /!=|![a-zA-Z_$]|![ ]?\(|!\[/.test(line),
   },
   {
     id: 'ellipsis-outside-motto',
