@@ -137,9 +137,9 @@ function normalize(input) {
   // Also handle direct-style images with data URLs; regular external
   // http(s) image URLs pass through untouched.
   out = out
-    .replace(/!\[[^\]]*\]\[[^\]]*\]/g, '')                 // ref-style refs
-    .replace(/^\[[^\]]+\]:\s*data:[^\n]*\n?/gim, '')       // data: URL defs
-    .replace(/!\[[^\]]*\]\(data:[^)]*\)/g, '');            // inline data-URL imgs
+    .replace(/!\[[^\]]*\]\[[^\]]*\]/g, '')                    // ref-style refs
+    .replace(/^\[[^\]]+\]:\s*<?data:[^\n>]*>?\n?/gim, '')     // data: URL defs (with optional <> autolink wrapper)
+    .replace(/!\[[^\]]*\]\(<?data:[^)>]*>?\)/g, '');          // inline data-URL imgs
 
   // ---- Inline HTML wrappers --------------------------------------------
   // Docs markdown export sometimes wraps coloured, custom-font, or
