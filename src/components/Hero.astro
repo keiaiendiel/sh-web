@@ -5,17 +5,21 @@ import SVGPattern from './SVGPattern.astro';
 <section class="osa-hero osa-dark">
   <SVGPattern variant="dark" opacity={0.16}>
     <div class="container-wide osa-hero__inner">
-      <div class="osa-hero__eyebrow osa-eyebrow">
+      <div class="osa-hero__eyebrow osa-eyebrow" data-reveal>
         <OsaGlyph size="13px" />
         <span>Občanské sdružení Alternativa II, z.s.</span>
       </div>
       <h1 class="osa-hero__h1">
-        Obnovujeme chátrající památky, stavíme zkušebny a dílny, zakládáme komunitní zahrady a kulturní centra.
-        <span class="osa-hero__motto">Pomáháme tvořit…</span>
+        <span
+          class="osa-hero__h1-main"
+          data-reveal-words
+          data-reveal-words-delay="200"
+          data-reveal-words-step="40">Obnovujeme chátrající památky, stavíme zkušebny a dílny, zakládáme komunitní zahrady a kulturní centra.</span>
       </h1>
-      <p class="osa-hero__strapline">
-        Platforma pro desítky autonomních projektů. Bez státních dotací, dobrovolnickou prací a metodou DIY.
+      <p class="osa-hero__strapline" data-reveal style="transition-delay: 900ms">
+        Platforma pro desítky autonomních projektů. Pomáháme tvořit bez státních dotací, dobrovolnickou prací a metodou DIY.
       </p>
+      <div class="osa-hero__rule" aria-hidden="true" data-reveal style="transition-delay: 1100ms"></div>
     </div>
   </SVGPattern>
 </section>
@@ -27,13 +31,21 @@ import SVGPattern from './SVGPattern.astro';
     --bg: var(--k-100);
     background: var(--bg);
     color: var(--fg);
+    position: relative;
+    isolation: isolate;
   }
   .osa-hero__inner {
-    padding: clamp(var(--space-8), 10vw, var(--space-10)) var(--gutter) var(--space-9);
+    /* Shared dark-hero shape across Úvod / O spolku / Projekty / Aktuality detail /
+       VPD. Padding is applied per-property so .container-wide's horizontal gutter
+       (padding: 0 var(--gutter)) is preserved - a shorthand like
+       `padding: X 0 Y` would reset the horizontal side to 0 and break layout on
+       narrow viewports. The max-width override that was here (1280 px) was
+       removed so container-wide's 1440 px tier governs uniformly across all
+       landing sections. */
+    padding-top: clamp(var(--space-7), 8vw, var(--space-9));
+    padding-bottom: var(--space-9);
     display: grid;
     gap: var(--space-5);
-    max-width: 1280px;
-    margin: 0 auto;
   }
   .osa-hero__eyebrow {
     display: inline-flex; align-items: center; gap: var(--space-2);
@@ -42,20 +54,16 @@ import SVGPattern from './SVGPattern.astro';
   .osa-hero__h1 {
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: clamp(2rem, 3.6vw + 0.75rem, 3.5rem);
-    line-height: 1.14;
+    font-size: clamp(2rem, 3.8vw + 0.75rem, 4rem);
+    line-height: 1.06;
     letter-spacing: var(--tracking-tight);
     color: var(--fg);
     margin: 0;
-    text-wrap: balance;
-    max-width: 24ch;
+    max-width: 22ch;
   }
-  .osa-hero__motto {
+  .osa-hero__h1-main {
     display: block;
-    color: var(--fg-muted);
-    margin-top: var(--space-4);
-    font-weight: 500;
-    font-size: clamp(1.5rem, 2.2vw + 0.5rem, 2.25rem);
+    text-wrap: balance;
   }
   .osa-hero__strapline {
     font-family: var(--font-sans);
@@ -64,5 +72,19 @@ import SVGPattern from './SVGPattern.astro';
     color: var(--fg-muted);
     max-width: 54ch;
     margin: 0;
+  }
+  .osa-hero__rule {
+    height: 1px;
+    background: var(--fg-muted);
+    width: 64px;
+    margin-top: var(--space-2);
+    transform-origin: left;
+  }
+  /* Reveal override: rule scales from 0 width instead of y-offset. */
+  [data-reveal].osa-hero__rule { transform: scaleX(0); }
+  [data-reveal].osa-hero__rule.shown { transform: scaleX(1); opacity: 1; }
+
+  @media (max-width: 720px) {
+    .osa-hero__h1 { max-width: 18ch; }
   }
 </style>

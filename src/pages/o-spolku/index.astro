@@ -6,25 +6,32 @@ import OrgChart from '../../components/OrgChart.astro';
 import ValuesMatrix from '../../components/ValuesMatrix.astro';
 import DocumentList from '../../components/DocumentList.astro';
 import InlineCTA from '../../components/InlineCTA.astro';
+import SVGPattern from '../../components/SVGPattern.astro';
 ---
 <Base title="O spolku - Občanské sdružení Alternativa II, z.s.">
-  <Header />
+  <Header variant="dark" />
   <main>
-    <section class="section">
-      <div class="container-wide osa-about__head-wrap">
-        <header class="osa-about__head">
-          <span class="osa-eyebrow">O spolku</span>
-          <h1 class="osa-h1 osa-about__title">Ideologický a právní kořen spolku.</h1>
-          <p class="osa-body osa-about__lede">
+    <section class="osa-about__hero osa-dark">
+      <SVGPattern variant="dark" opacity={0.14}>
+        <div class="container-wide osa-about__hero-inner">
+          <nav aria-label="Drobečková navigace" class="osa-about__crumbs osa-eyebrow">
+            <a href="/">Úvod</a> <span aria-hidden="true">·</span>
+            <span aria-current="page">O spolku</span>
+          </nav>
+          <h1 class="osa-about__h1" data-reveal>
+            Ideologický a právní kořen spolku.
+            <span class="osa-about__h1-sub">Platforma, která nic neprovozuje; rámec, bez kterého by projekty nemohly růst.</span>
+          </h1>
+          <p class="osa-about__lede" data-reveal data-reveal-delay="1">
             OSA II je zapsaný spolek založený v roce 2006 dvanácti studenty jako nezávislá, projektově orientovaná organizace. Od té doby kolem spolku vyrostlo téměř dvacet autonomních projektů, od komunitních zahrad přes kulturní památky až po LARP festivaly.
           </p>
-        </header>
-      </div>
+        </div>
+      </SVGPattern>
     </section>
 
     <section class="section section--tight osa-about__narrative">
-      <div class="container">
-        <div class="osa-about__kdojsme osa-longform">
+      <div class="container-wide">
+        <div class="osa-about__kdojsme osa-longform" data-reveal>
           <p>
             Spolek funguje jako platforma. Sám přímo nic neprovozuje. Zajišťuje společný právní rámec, zázemí a konsensuální rozhodování; výkonnou činnost provádějí autonomní projekty, které si vedou vlastní členskou základnu, hospodaření i programovou linii.
           </p>
@@ -40,23 +47,25 @@ import InlineCTA from '../../components/InlineCTA.astro';
 
     <section class="section">
       <div class="container-wide">
-        <header class="osa-about__sub-head">
+        <header class="osa-about__sub-head" data-reveal>
           <span class="osa-eyebrow">Organizační struktura</span>
           <h2 class="osa-h2">Tři úrovně, decentralizovaná výkonná část.</h2>
         </header>
-        <OrgChart />
+        <div data-reveal>
+          <OrgChart />
+        </div>
       </div>
     </section>
 
-    <ValuesMatrix expanded={true} />
+    <ValuesMatrix dark={true} />
 
     <section class="section osa-about__metod">
-      <div class="container">
-        <header class="osa-about__sub-head">
+      <div class="container-wide">
+        <header class="osa-about__sub-head" data-reveal>
           <span class="osa-eyebrow">Metodologie a hospodaření</span>
           <h2 class="osa-h2">Proč odmítáme státní dotace.</h2>
         </header>
-        <div class="osa-longform osa-about__metod-body">
+        <div class="osa-longform osa-about__metod-body" data-reveal>
           <p>
             Hospodaření spolku stojí na třech pilířích: dobrovolnická práce, metoda DIY a vlastní hospodářská činnost.
           </p>
@@ -67,7 +76,7 @@ import InlineCTA from '../../components/InlineCTA.astro';
             Nezávislost na veřejných zdrojích považujeme za nezbytnou podmínku vlastní autonomie a rozhodovací pružnosti.
           </p>
         </div>
-        <div class="osa-about__metod-ctas">
+        <div class="osa-about__metod-ctas" data-reveal>
           <InlineCTA href="/o-spolku/metodologie/">Celý text o metodologii DIY</InlineCTA>
           <InlineCTA href="/o-spolku/historie/">Historie spolku od roku 2006</InlineCTA>
         </div>
@@ -75,12 +84,14 @@ import InlineCTA from '../../components/InlineCTA.astro';
     </section>
 
     <section class="section">
-      <div class="container">
-        <header class="osa-about__sub-head">
+      <div class="container-wide">
+        <header class="osa-about__sub-head" data-reveal>
           <span class="osa-eyebrow">Spolkové dokumenty</span>
           <h2 class="osa-h2">Stanovy, výroční zprávy, šablony smluv.</h2>
         </header>
-        <DocumentList />
+        <div data-reveal>
+          <DocumentList />
+        </div>
       </div>
     </section>
   </main>
@@ -88,14 +99,54 @@ import InlineCTA from '../../components/InlineCTA.astro';
 </Base>
 
 <style>
-  .osa-about__head-wrap { padding-bottom: var(--space-4); }
-  .osa-about__head {
-    display: grid;
-    gap: var(--space-3);
-    max-width: 72ch;
+  /* Dark hero: same shape as landing/VPD so the three pages share one silhouette. */
+  .osa-about__hero {
+    border-bottom: 1px solid var(--rule);
   }
-  .osa-about__title { margin: 0; }
-  .osa-about__lede  { margin: 0; color: var(--fg-muted); font-size: var(--text-lg); }
+  .osa-about__hero-inner {
+    /* Vertical padding is applied per-property so the horizontal
+       gutter from .container-wide is preserved (padding shorthand
+       would otherwise reset it to 0 and the content would fall off
+       the viewport edge). The whole page uses container-wide (1440px)
+       to match landing and /projekty. */
+    padding-top: clamp(var(--space-7), 8vw, var(--space-9));
+    padding-bottom: var(--space-9);
+    display: grid;
+    gap: var(--space-5);
+  }
+  .osa-about__crumbs {
+    display: flex; gap: var(--space-2); flex-wrap: wrap;
+    color: var(--fg-muted);
+  }
+  .osa-about__crumbs a { text-decoration: underline; text-underline-offset: 3px; }
+  .osa-about__crumbs [aria-current] { color: var(--fg); }
+
+  .osa-about__h1 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(2.25rem, 5vw + 0.5rem, 4rem);
+    line-height: 1.05;
+    letter-spacing: var(--tracking-tight);
+    color: var(--fg);
+    margin: 0;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .osa-about__h1-sub {
+    display: block;
+    color: var(--fg-muted);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 1.8vw + 0.5rem, 1.75rem);
+    margin-top: var(--space-3);
+    max-width: 28ch;
+  }
+  .osa-about__lede {
+    margin: 0;
+    color: var(--fg-muted);
+    font-size: var(--text-lg);
+    max-width: 62ch;
+  }
+
   .osa-about__sub-head {
     display: grid;
     gap: var(--space-2);

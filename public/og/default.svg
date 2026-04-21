@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- OSA II generic OG card: Swiss restraint, monochrome parent brand. -->
+  <rect width="1200" height="630" fill="#000" />
+
+  <!-- Top hairline + eyebrow -->
+  <line x1="96" y1="112" x2="1104" y2="112" stroke="#ffffff" stroke-opacity="0.24" stroke-width="1" />
+  <text x="96" y="96" font-family="Helvetica, Arial, sans-serif" font-weight="500" font-size="18" fill="#ffffff" fill-opacity="0.64" letter-spacing="3" text-transform="uppercase">OSA II  ·  OSA2.CZ</text>
+
+  <!-- Main title -->
+  <text x="96" y="330" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="156" fill="#ffffff" letter-spacing="-4">OSA II</text>
+
+  <!-- Lede -->
+  <text x="96" y="400" font-family="Helvetica, Arial, sans-serif" font-weight="500" font-size="34" fill="#ffffff" fill-opacity="0.80">
+    Občanské sdružení Alternativa II, z.s.
+  </text>
+
+  <!-- Bottom rule + strapline -->
+  <line x1="96" y1="490" x2="380" y2="490" stroke="#ffffff" stroke-width="2" />
+  <text x="96" y="548" font-family="Helvetica, Arial, sans-serif" font-weight="500" font-size="28" fill="#ffffff">
+    Pomáháme tvořit
+  </text>
+</svg>

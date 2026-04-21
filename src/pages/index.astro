@@ -6,23 +6,23 @@ import Hero from '../components/Hero.astro';
 import Rozcestnik from '../components/Rozcestnik.astro';
 import ValuesMatrix from '../components/ValuesMatrix.astro';
 import ManifestoStrip from '../components/ManifestoStrip.astro';
-import InvestmentHero from '../components/InvestmentHero.astro';
+import AktualitaSpotlight from '../components/AktualitaSpotlight.astro';
 import Gallery from '../components/Gallery.astro';
 import GraphicHeader from '../components/GraphicHeader.astro';
 ---
 <Base
   title="Občanské sdružení Alternativa II, z.s."
   description="Platforma pro autonomní kulturní, sportovní a společenské projekty. Bez státních dotací, metodou DIY.">
-  <Header />
+  <Header variant="dark" />
   <main>
     <Hero />
     <Rozcestnik />
     <GraphicHeader n={3} variant="dark" size="strip" />
     <ValuesMatrix dark={true} />
-    <GraphicHeader n={1} variant="light" size="strip" />
+    <GraphicHeader n={1} variant="dark" size="strip" />
     <ManifestoStrip />
     <Gallery />
-    <InvestmentHero />
+    <AktualitaSpotlight />
   </main>
   <Footer />
 </Base>

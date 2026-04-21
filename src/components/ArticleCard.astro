@@ -1,0 +1,255 @@
+---
+import OsaGlyph from './OsaGlyph.astro';
+
+interface Props {
+  slug: string;
+  title: string;
+  lead: string;
+  date: Date;
+  hero: string;
+  hero_alt?: string;
+  author?: string;
+  tags?: string[];
+}
+
+const { slug, title, lead, date, hero, hero_alt, author, tags } = Astro.props;
+
+const dateFormatter = new Intl.DateTimeFormat('cs-CZ', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+const isoDate = date.toISOString().slice(0, 10);
+const humanDate = dateFormatter.format(date);
+
+// Eyebrow: date + (optional) first tag
+const firstTag = tags && tags.length > 0 ? tags[0] : undefined;
+const href = `/aktuality/${slug}/`;
+
+/**
+ * Truncate the lead to ~140 characters at a word boundary and append an
+ * explicit "..." suffix. We prefer literal three dots over the native
+ * `-webkit-line-clamp` ellipsis because:
+ *   - the clamp character is U+2026, which the editorial rulebook
+ *     reserves for the hero motto
+ *   - clamp rendering depends on exact line length and can produce odd
+ *     breaks where the last visible word is half-cut off
+ *   - explicit truncation at a word boundary is deterministic and the
+ *     three dots always render on the same baseline as the body
+ */
+function truncate(text: string, maxChars = 140): string {
+  if (text.length <= maxChars) return text;
+  const slice = text.slice(0, maxChars);
+  const lastSpace = slice.lastIndexOf(' ');
+  // Prefer cutting at the last whitespace if it's reasonably far in
+  const cut = lastSpace > maxChars * 0.6 ? lastSpace : maxChars;
+  return slice.slice(0, cut).replace(/[,;:.\s]+$/, '') + '...';
+}
+const displayLead = truncate(lead);
+---
+<a
+  href={href}
+  class="article-card osa-nolink"
+  aria-label={`${title}. ${humanDate}.`}>
+  <div class="article-card__hero" aria-hidden={hero_alt ? undefined : 'true'}>
+    <img src={hero} alt={hero_alt ?? ''} loading="lazy" decoding="async" />
+  </div>
+  <div class="article-card__top">
+    <div class="article-card__eyebrow">
+      <time datetime={isoDate}>{humanDate}</time>
+      {firstTag && (
+        <>
+          <span class="article-card__sep" aria-hidden="true"> · </span>
+          <span>{firstTag}</span>
+        </>
+      )}
+    </div>
+    <div class="article-card__rule" aria-hidden="true"></div>
+    <h3 class="article-card__title">{title}</h3>
+    <p class="article-card__lead">{displayLead}</p>
+  </div>
+  <div class="article-card__bottom">
+    <div class="article-card__rule article-card__rule--accent" aria-hidden="true"></div>
+    <div class="article-card__meta">
+      <OsaGlyph size="11px" />
+      <span class="article-card__metaname">{author ?? 'OSA II'}</span>
+      <span class="article-card__arrow" aria-hidden="true">→</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  /* Swiss editorial card for Aktuality.
+     Mirrors ProjectCard's top/bottom labeled-row pattern. Unlike the Gallery
+     (monochrome-at-rest, color-on-hover), Aktuality hero images are full
+     colour at rest; editorial photography is information, not decoration,
+     so muting it reads as "not important" rather than "intentional". On
+     hover the image scales 1.03 and lifts contrast very slightly as a
+     micro-affordance. Lead flips k-50 → fg; bottom hairline grows 1→2px. */
+
+  .article-card {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    min-height: 440px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg);
+    color: var(--fg);
+    text-decoration: none;
+    isolation: isolate;
+  }
+
+  /* ---------- Hero ---------- */
+  .article-card__hero {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--k-5);
+  }
+  .article-card__hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Full colour at rest. A very gentle saturation pull-down (0.92) keeps
+       the default state from competing with the accented gallery strip
+       while still reading unmistakably as a colour photograph. */
+    filter: saturate(0.92);
+    transform: scale(1);
+    transition:
+      filter var(--dur-wipe, 280ms) var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+      transform var(--dur-wipe, 280ms) var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
+  }
+  .article-card:hover .article-card__hero img,
+  .article-card:focus-visible .article-card__hero img {
+    filter: saturate(1.05);
+    transform: scale(1.03);
+  }
+
+  /* ---------- Top + bottom zones ---------- */
+  .article-card__top,
+  .article-card__bottom {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  /* ---------- Eyebrow ---------- */
+  .article-card__eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--fg);
+    line-height: var(--lh-tight);
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+  .article-card__eyebrow time { color: var(--fg); }
+  .article-card__sep {
+    color: var(--fg-muted);
+    margin: 0 0.25em;
+  }
+
+  /* ---------- Hairlines ---------- */
+  .article-card__rule {
+    height: 1px;
+    background: var(--fg);
+    width: 100%;
+  }
+  .article-card__rule--accent {
+    background: var(--fg);
+    transition:
+      height var(--dur-wipe, 280ms) var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
+  }
+  .article-card:hover .article-card__rule--accent,
+  .article-card:focus-visible .article-card__rule--accent {
+    height: 2px;
+  }
+
+  /* ---------- Title + lead ---------- */
+  .article-card__title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-xl);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--fg);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .article-card__lead {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    line-height: var(--lh-normal);
+    color: var(--k-50);
+    margin: 0;
+    max-width: 42ch;
+    transition: color var(--dur-wipe, 280ms) var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
+    /* Truncation handled in component script via word-boundary + "..." suffix.
+       No CSS clamp: keeps the ellipsis character deterministic (three ASCII
+       dots, not U+2026) and avoids mid-word cuts that the native clamp
+       produces at awkward widths. */
+  }
+  .article-card:hover .article-card__lead,
+  .article-card:focus-visible .article-card__lead {
+    color: var(--fg);
+  }
+
+  /* ---------- Meta row ---------- */
+  .article-card__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wide);
+    color: var(--fg);
+    line-height: 1;
+  }
+  .article-card__metaname {
+    color: var(--fg-muted);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .article-card__arrow {
+    display: inline-block;
+    flex-shrink: 0;
+    font-weight: 500;
+    color: var(--fg);
+    transition: transform var(--dur-base) var(--ease-standard);
+  }
+  .article-card:hover .article-card__arrow,
+  .article-card:focus-visible .article-card__arrow {
+    transform: translateX(3px);
+  }
+
+  /* ---------- Focus ---------- */
+  .article-card:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: -2px;
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .article-card__hero img,
+    .article-card__rule--accent,
+    .article-card__arrow,
+    .article-card__lead { transition: none; }
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 560px) {
+    .article-card {
+      min-height: 380px;
+      padding: var(--space-4);
+    }
+    .article-card__title { font-size: var(--text-lg); }
+  }
+</style>

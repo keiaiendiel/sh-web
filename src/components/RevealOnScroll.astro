@@ -1,28 +1,160 @@
 ---
 /*
- * RevealOnScroll - mounts one IntersectionObserver that toggles `.shown` on
- * any element marked [data-reveal]. Uses expo-out easing (portfolio feel).
- * Zero dependencies. Respects prefers-reduced-motion.
+ * RevealOnScroll: one central observer that handles:
  *
- * Mount once, globally, inside Base.astro's <body>.
+ *   [data-reveal]            Existing: fade + translateY on element entry.
+ *                            Optional [data-reveal-delay="1|2|3"] for stagger.
+ *
+ *   [data-reveal-words]      NEW: splits the element's text into word spans
+ *                            and fades each in with a 40ms stagger, expo-out,
+ *                            0.4em y-offset. Used for hero H1.
+ *
+ *   [data-count-to="N"]      NEW: on first viewport entry, animates displayed
+ *                            number from 0 → N over --dur-count (1200ms).
+ *                            Supports Czech-style thousand separator (U+00A0).
+ *                            Attribute 'data-count-format' accepts:
+ *                              "int" (default), "percent", "money-mkc"
+ *
+ *   [data-wipe]              NEW: directional-hover origin detection. Adds
+ *                            data-wipe-from="top|right|bottom|left" on
+ *                            mouseenter based on closest edge. Cleared on
+ *                            mouseleave.
+ *
+ * All respect prefers-reduced-motion (no transforms, no staggered timing,
+ * counters jump to final, wipes remain CSS-only).
+ *
+ * Single mount in Base.astro <body>.
  */
 ---
 <script is:inline>
   (function () {
     if (typeof window === 'undefined') return;
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.querySelectorAll('[data-reveal]').forEach(function (el) { el.classList.add('shown'); });
-      return;
-    }
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('shown');
-          obs.unobserve(e.target);
-        }
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var ready = function (fn) {
+      if (document.readyState !== 'loading') fn();
+      else document.addEventListener('DOMContentLoaded', fn);
+    };
+
+    ready(function () {
+      // ---------- 1. Split [data-reveal-words] before observing ---------------
+      document.querySelectorAll('[data-reveal-words]').forEach(function (el) {
+        if (el.dataset.split === 'done') return;
+        var nodes = [];
+        // Walk childNodes; preserve <br> and other inline markup as-is.
+        el.childNodes.forEach(function (node) {
+          if (node.nodeType === 3) {
+            var parts = node.textContent.split(/(\s+)/);
+            parts.forEach(function (p) {
+              if (p.length === 0) return;
+              if (/^\s+$/.test(p)) {
+                nodes.push(document.createTextNode(p));
+              } else {
+                var span = document.createElement('span');
+                span.className = 'reveal-word';
+                span.textContent = p;
+                nodes.push(span);
+              }
+            });
+          } else {
+            nodes.push(node.cloneNode(true));
+          }
+        });
+        el.innerHTML = '';
+        nodes.forEach(function (n) { el.appendChild(n); });
+        el.dataset.split = 'done';
       });
-    }, { threshold: 0, rootMargin: '0px 0px -80px 0px' });
-    document.querySelectorAll('[data-reveal]').forEach(function (el) { obs.observe(el); });
+
+      // ---------- 2. Reveal observer (handles both data-reveal + words) ------
+      if (reduced) {
+        document.querySelectorAll('[data-reveal]').forEach(function (el) { el.classList.add('shown'); });
+        document.querySelectorAll('[data-reveal-words]').forEach(function (el) {
+          el.querySelectorAll('.reveal-word').forEach(function (w) { w.classList.add('shown'); });
+        });
+      } else {
+        var obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            if (e.target.matches('[data-reveal]')) {
+              e.target.classList.add('shown');
+            }
+            if (e.target.matches('[data-reveal-words]')) {
+              var words = e.target.querySelectorAll('.reveal-word');
+              var baseDelay = parseInt(e.target.dataset.revealWordsDelay || '0', 10);
+              var step = parseInt(e.target.dataset.revealWordsStep || '40', 10);
+              words.forEach(function (w, i) {
+                w.style.transitionDelay = (baseDelay + i * step) + 'ms';
+                w.classList.add('shown');
+              });
+            }
+            obs.unobserve(e.target);
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('[data-reveal], [data-reveal-words]').forEach(function (el) {
+          obs.observe(el);
+        });
+      }
+
+      // ---------- 3. Counter roll-up -----------------------------------------
+      var formatters = {
+        'int':      function (v) { return Math.round(v).toLocaleString('cs-CZ').replace(/ /g, '\u00A0'); },
+        'percent':  function (v) { return Math.round(v) + '\u00A0%'; },
+        'money-mkc':function (v) { return Math.round(v).toLocaleString('cs-CZ').replace(/ /g, '\u00A0') + '\u00A0mil.\u00A0Kč'; }
+      };
+      var countEls = document.querySelectorAll('[data-count-to]');
+      if (countEls.length > 0) {
+        if (reduced) {
+          countEls.forEach(function (el) {
+            var target = parseFloat(el.dataset.countTo);
+            var fmt = formatters[el.dataset.countFormat] || formatters['int'];
+            el.textContent = fmt(target);
+          });
+        } else {
+          var countObs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              var el = e.target;
+              var target = parseFloat(el.dataset.countTo);
+              var dur = parseInt(el.dataset.countDur || '1200', 10);
+              var fmt = formatters[el.dataset.countFormat] || formatters['int'];
+              var start = performance.now();
+              var easeExpo = function (t) { return 1 - Math.pow(1 - t, 4); };
+              var tick = function (now) {
+                var t = Math.min(1, (now - start) / dur);
+                el.textContent = fmt(target * easeExpo(t));
+                if (t < 1) requestAnimationFrame(tick);
+              };
+              requestAnimationFrame(tick);
+              countObs.unobserve(el);
+            });
+          }, { threshold: 0.5 });
+          countEls.forEach(function (el) { countObs.observe(el); });
+        }
+      }
+
+      // ---------- 4. Directional hover (mouseenter → data-wipe-from) ---------
+      var wipeEls = document.querySelectorAll('[data-wipe]');
+      wipeEls.forEach(function (el) {
+        el.addEventListener('mouseenter', function (e) {
+          var r = el.getBoundingClientRect();
+          var x = e.clientX - r.left;
+          var y = e.clientY - r.top;
+          var dL = x, dR = r.width - x, dT = y, dB = r.height - y;
+          var m = Math.min(dL, dR, dT, dB);
+          var from = m === dL ? 'left' : m === dR ? 'right' : m === dT ? 'top' : 'bottom';
+          el.setAttribute('data-wipe-from', from);
+        });
+        el.addEventListener('mouseleave', function () {
+          el.removeAttribute('data-wipe-from');
+        });
+        el.addEventListener('focus', function () {
+          if (!el.hasAttribute('data-wipe-from')) el.setAttribute('data-wipe-from', 'left');
+        });
+        el.addEventListener('blur', function () {
+          el.removeAttribute('data-wipe-from');
+        });
+      });
+    });
   }());
 </script>
 
@@ -31,8 +163,8 @@
     opacity: 0;
     transform: translateY(24px);
     transition:
-      opacity 620ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+      opacity var(--dur-reveal) var(--ease-expo),
+      transform var(--dur-reveal) var(--ease-expo);
     will-change: opacity, transform;
   }
   [data-reveal].shown {
@@ -45,5 +177,6 @@
 
   @media (prefers-reduced-motion: reduce) {
     [data-reveal] { opacity: 1; transform: none; transition: none; }
+    .reveal-word { opacity: 1 !important; transform: none !important; transition: none !important; }
   }
 </style>

@@ -3,12 +3,75 @@ import '../styles/tokens.css';
 import '../styles/kit.css';
 import '../styles/motion.css';
 import RevealOnScroll from '../components/RevealOnScroll.astro';
+import { getEntry } from 'astro:content';
 
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
 }
-const { title, description = 'Občanské sdružení Alternativa II, z.s.' } = Astro.props;
+
+const {
+  title,
+  description = 'Občanské sdružení Alternativa II, z.s.',
+  ogImage = '/og/default.png',
+  ogType = 'website',
+} = Astro.props;
+
+// Canonical URL: derived from Astro.site + current pathname.
+// Astro.site is set in astro.config.mjs to https://osa2.cz.
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://osa2.cz';
+const canonical = `${siteUrl}${Astro.url.pathname}`;
+const ogImageAbs = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+
+// Organization JSON-LD from content collection. Falls back to hardcoded
+// defaults if the entry is missing (shouldnt happen, Zod validates on build).
+const orgEntry = await getEntry('org', 'identity');
+const org = orgEntry?.data;
+const orgJsonLd = org
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'NGO',
+      name: org.name,
+      alternateName: org.abbreviations,
+      url: siteUrl,
+      logo: `${siteUrl}/logo/OSA-Logo-Black.svg`,
+      foundingDate: org.founded,
+      email: org.email,
+      telephone: org.phone,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Terronská 894/56',
+        addressLocality: 'Praha 6 - Bubeneč',
+        postalCode: '160 00',
+        addressCountry: 'CZ',
+      },
+      taxID: org.dic,
+      vatID: org.dic,
+      identifier: {
+        '@type': 'PropertyValue',
+        name: 'IČO',
+        value: org.ico.replace(/\s/g, ''),
+      },
+      member: [
+        {
+          '@type': 'Person',
+          name: org.predseda.name,
+          jobTitle: 'Předseda',
+          email: org.predseda.email,
+          telephone: org.predseda.phone,
+        },
+        {
+          '@type': 'Person',
+          name: org.mistopredseda.name,
+          jobTitle: 'Místopředseda',
+          email: org.mistopredseda.email,
+          telephone: org.mistopredseda.phone,
+        },
+      ],
+    }
+  : null;
 ---
 <!doctype html>
 <html lang="cs">
@@ -17,10 +80,45 @@ const { title, description = 'Občanské sdružení Alternativa II, z.s.' } = As
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+
+    {/* Open Graph */}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:site_name" content="OSA II" />
+    <meta property="og:locale" content="cs_CZ" />
+
+    {/* Twitter Card */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbs} />
+
+    {/* Canonical + favicons + manifest */}
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.ico" sizes="16x16 32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    {/* Sitemap hint for some crawlers */}
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
     <title>{title}</title>
+
+    {/* Structured data: Organization (site-wide) */}
+    {orgJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+    )}
+
+    {/* Fallback for JS-off readers: the reveal system hides the
+        word-reveal host element until the script splits the text. If
+        the script never runs, the element must stay visible. */}
+    <noscript>
+      <style>{`[data-reveal-words]:not([data-split="done"]) { opacity: 1 !important; }`}</style>
+    </noscript>
   </head>
   <body class="osa-body">
     <slot />

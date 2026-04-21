@@ -9,15 +9,15 @@ import DocumentList from '../../components/DocumentList.astro';
   <main>
     <section class="section">
       <div class="container">
-        <header class="osa-docs__head">
+        <header class="osa-docs__head" data-reveal>
           <span class="osa-eyebrow">O spolku · Dokumenty</span>
           <h1 class="osa-h1 osa-docs__title">Stanovy, výroční zprávy, šablony smluv.</h1>
           <p class="osa-body osa-docs__lede">
             Všechny dokumenty jsou volně ke stažení. Tištěné verze jsou k dispozici na adrese kanceláře představenstva.
           </p>
         </header>
-        <DocumentList />
-        <details class="osa-docs__raw">
+        <div data-reveal data-reveal-delay="1"><DocumentList /></div>
+        <details class="osa-docs__raw" data-reveal>
           <summary class="osa-eyebrow osa-docs__summary">Stanovy v textové podobě</summary>
           <article class="osa-longform osa-docs__longtext">
             <h2>§ 1 Název a sídlo spolku</h2>

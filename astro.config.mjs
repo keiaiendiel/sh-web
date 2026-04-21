@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 
 // NOTE: @astrojs/react was scaffolded but removed here to keep dist clean.
 // Add back with `pnpm astro add react` if we need a client island that
@@ -11,5 +12,12 @@ export default defineConfig({
   trailingSlash: 'always',
   output: 'static',
   compressHTML: true,
-  integrations: [mdx()],
+  integrations: [
+    mdx(),
+    sitemap({
+      changefreq: 'monthly',
+      priority: 0.7,
+      filter: (page) => !page.includes('/404'),
+    }),
+  ],
 });

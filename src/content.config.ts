@@ -76,6 +76,7 @@ const org = defineCollection({
     dic: z.string(),
     datova_schranka: z.string(),
     spisova_znacka: z.string(),
+    founded: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     seat_address: z.string(),
     office_address: z.string(),
     email: z.string().email(),
@@ -99,4 +100,24 @@ const dokumenty = defineCollection({
   }),
 });
 
-export const collections = { subProjects, values, pillars, org, dokumenty };
+/*
+ * Aktuality: self-service editorial channel.
+ * Placeholder MDX lives in src/content/aktuality/ during the pre-launch phase;
+ * the Google Drive sync pipeline (see docs/APPS_SCRIPT.md, scripts/sync-drive-aktuality.mjs)
+ * writes new entries here and opens PRs via GitHub repository_dispatch.
+ */
+const aktuality = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: './src/content/aktuality' }),
+  schema: z.object({
+    title: z.string().min(10).max(120),
+    lead: z.string().min(40).max(240),
+    date: z.coerce.date(),
+    hero: z.string().startsWith('/'),
+    hero_alt: z.string().min(3).max(180).optional(),
+    author: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    draft: z.boolean().optional().default(false),
+  }),
+});
+
+export const collections = { subProjects, values, pillars, org, dokumenty, aktuality };

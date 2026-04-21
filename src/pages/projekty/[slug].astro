@@ -21,8 +21,8 @@ const accentVar = `var(--c-${entry.data.accent})`;
   <Header />
   <main class="osa-project">
     <section class="section">
-      <div class="container-wide osa-project__grid">
-        <header class="osa-project__head" style={`--theme-accent:${accentVar}`}>
+      <div class="container osa-project__grid">
+        <header class="osa-project__head" data-reveal style={`--theme-accent:${accentVar}`}>
           <span class="osa-eyebrow osa-project__tag">
             {entry.data.relationship === 'autonomni'   && 'Autonomní projekt'}
             {entry.data.relationship === 'pilotni'     && 'Pilotní projekt'}
@@ -32,7 +32,7 @@ const accentVar = `var(--c-${entry.data.accent})`;
           <p class="osa-body osa-project__desc">{entry.data.description}</p>
           <p class="osa-mono osa-project__note">Vlastní doména projektu je v přípravě.</p>
         </header>
-        <aside class="osa-project__sidebar">
+        <aside class="osa-project__sidebar" data-reveal data-reveal-delay="1">
           <dl class="osa-project__meta">
             <div>
               <dt class="osa-eyebrow">Stav</dt>
@@ -54,7 +54,7 @@ const accentVar = `var(--c-${entry.data.accent})`;
               </div>
             )}
           </dl>
-          <a class="btn" href="mailto:info@osa2.cz?subject=Zájem o projekt {entry.data.name}">
+          <a class="btn" href="mailto:info@osa2.cz?subject=Zájem o projekt {entry.data.name}" data-wipe>
             Zeptat se na projekt
           </a>
         </aside>

@@ -1,28 +1,42 @@
 ---
 import { getCollection } from 'astro:content';
 
-interface Props { expanded?: boolean; dark?: boolean; }
-const { expanded = false, dark = false } = Astro.props;
+interface Props {
+  expanded?: boolean;
+  dark?: boolean;
+  /**
+   * When true, the matrix uses the narrower `container` (1200px) so its
+   * left/right edges line up with body-copy sections on pages like
+   * /o-spolku/ where text blocks define the page's baseline margin.
+   * Default (false) keeps the wider `container-wide` (1440px) that
+   * matches the landing page's full-bleed rhythm.
+   */
+  narrow?: boolean;
+}
+const { expanded = false, dark = false, narrow = false } = Astro.props;
 
 const values = (await getCollection('values'))
   .sort((a, b) => a.data.order - b.data.order);
 ---
 <section class:list={['osa-values', 'section', { 'osa-dark': dark }]}>
-  <div class="container-wide">
+  <div class:list={[narrow ? 'container' : 'container-wide']}>
     <header class="osa-values__head" data-reveal>
       <span class="osa-eyebrow">§ 16 hodnot</span>
       <h2 class="osa-h2 osa-values__title">Hodnoty spolku jsou axiomy, nikoli aspirace.</h2>
     </header>
     <ul
       class:list={['osa-values__grid', { 'osa-values__grid--expanded': expanded }]}
-      role="list"
-      data-reveal
-      data-reveal-delay="1">
-      {values.map(v => (
-        <li class="osa-values__cell">
-          <span class="osa-values__num osa-mono">{String(v.data.order).padStart(2, '0')}</span>
+      role="list">
+      {values.map((v, i) => (
+        <li
+          class="osa-values__cell"
+          tabindex={expanded ? undefined : '0'}
+          data-reveal
+          data-reveal-delay={String((i % 3) + 1)}>
+          <span class="osa-values__num">{String(v.data.order).padStart(2, '0')}</span>
           <span class="osa-values__name">{v.data.name}</span>
           <span class="osa-values__gloss">{v.data.gloss}</span>
+          <span class="osa-values__plus" aria-hidden="true"></span>
         </li>
       ))}
     </ul>
@@ -30,6 +44,11 @@ const values = (await getCollection('values'))
 </section>
 
 <style>
+  /* Swiss 4×4 value grid. At rest: number + name visible, hairline rule beneath,
+     small "+" affordance top-right signals hover reveal. On hover/focus: cell
+     inverts to black/white, gloss slides open via grid-template-rows transition,
+     "+" rotates to "×" as a subtle state marker. */
+
   .osa-values__head {
     display: grid;
     gap: var(--space-3);
@@ -55,32 +74,110 @@ const values = (await getCollection('values'))
     border-bottom: 1px solid var(--rule);
     display: grid;
     grid-template-rows: auto auto 0fr;
-    gap: var(--space-2);
-    transition: grid-template-rows var(--dur-base) var(--ease-standard),
-                background var(--dur-fast) linear,
-                color var(--dur-fast) linear;
+    gap: var(--space-3);
+    min-height: 150px;
     background: var(--bg);
     color: var(--fg);
+    cursor: help;
+    transition:
+      grid-template-rows 320ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+      background 200ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+      color 200ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
   }
+  .osa-values__cell:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: -2px;
+  }
+
+  /* Hover / focus (interactive mode): full black-invert reveal */
   .osa-values__cell:hover,
-  .osa-values__cell:focus-within,
-  .osa-values__grid--expanded .osa-values__cell {
+  .osa-values__cell:focus-visible {
     grid-template-rows: auto auto 1fr;
     background: var(--fg);
     color: var(--bg);
   }
-  .osa-values__num   { font-size: var(--text-xs); opacity: 0.55; }
-  .osa-values__name  {
-    font: 600 var(--text-md) / var(--lh-snug) var(--font-sans);
+
+  /* Expanded mode (e.g. /o-spolku): show gloss statically, no invert. */
+  .osa-values__grid--expanded .osa-values__cell {
+    grid-template-rows: auto auto 1fr;
+    cursor: default;
+  }
+
+  /* Number: small, subdued */
+  .osa-values__num {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    opacity: 0.55;
+    color: inherit;
+  }
+
+  /* Name: primary element of the cell */
+  .osa-values__name {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-lg);
+    line-height: var(--lh-snug);
     letter-spacing: var(--tracking-tight);
     color: inherit;
     text-wrap: balance;
   }
+
+  /* Gloss: hidden via 0fr row; inherits inverted color on hover */
   .osa-values__gloss {
     overflow: hidden;
+    font-family: var(--font-sans);
+    font-weight: 500;
     font-size: var(--text-sm);
     line-height: var(--lh-normal);
     color: inherit;
     opacity: 0.82;
+  }
+
+  /* "+" affordance top-right: rotates to "×" on hover */
+  .osa-values__plus {
+    position: absolute;
+    top: var(--space-5);
+    right: var(--space-5);
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    color: inherit;
+    transition: transform 320ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
+  }
+  .osa-values__plus::before,
+  .osa-values__plus::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+    transition: opacity 200ms linear;
+  }
+  /* Horizontal stroke */
+  .osa-values__plus::before {
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    transform: translateY(-50%);
+  }
+  /* Vertical stroke */
+  .osa-values__plus::after {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    transform: translateX(-50%);
+  }
+  .osa-values__cell:hover .osa-values__plus,
+  .osa-values__cell:focus-visible .osa-values__plus {
+    transform: rotate(45deg);
+  }
+  /* In fully-expanded mode, hide the "+" since there's no toggle */
+  .osa-values__grid--expanded .osa-values__plus { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .osa-values__cell { transition: background 0ms, color 0ms; }
+    .osa-values__plus { transition: none; }
   }
 </style>

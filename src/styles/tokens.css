@@ -178,27 +178,31 @@
 .osa-h1 {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: var(--text-4xl);
+  font-size: clamp(2rem, 4vw + 1rem, var(--text-4xl));
   line-height: var(--lh-snug);
   letter-spacing: var(--tracking-tight);
   color: var(--fg);
   text-wrap: balance;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 .osa-h2 {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: var(--text-3xl);
+  font-size: clamp(1.75rem, 3vw + 0.75rem, var(--text-3xl));
   line-height: var(--lh-snug);
   letter-spacing: var(--tracking-tight);
   color: var(--fg);
   text-wrap: balance;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 .osa-h3 {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: var(--text-2xl);
+  font-size: clamp(1.5rem, 2vw + 0.75rem, var(--text-2xl));
   line-height: var(--lh-snug);
   color: var(--fg);
   text-wrap: balance;

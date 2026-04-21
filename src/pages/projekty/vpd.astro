@@ -8,13 +8,13 @@ import InlineCTA from '../../components/InlineCTA.astro';
 <Base
   title="Veřejně prospěšný developer (VPD) - autonomní projekt OSA"
   description="Metodika revitalizace brownfieldů bez dotací. Alternativa komerčnímu developmentu. Iniciativa OSA II.">
-  <Header />
+  <Header variant="dark" />
 
   <main class="osa-vpd">
 
     <section class="osa-vpd__hero osa-dark">
       <SVGPattern variant="dark" opacity={0.14}>
-        <div class="container-wide osa-vpd__hero-inner">
+        <div class="osa-vpd__hero-inner">
           <nav aria-label="Drobečková navigace" class="osa-vpd__crumbs osa-eyebrow">
             <a href="/">Úvod</a> <span aria-hidden="true">·</span>
             <a href="/projekty/">Projekty</a> <span aria-hidden="true">·</span>
@@ -32,7 +32,7 @@ import InlineCTA from '../../components/InlineCTA.astro';
     </section>
 
     <section class="osa-vpd__stats section--tight">
-      <div class="container-wide">
+      <div class="osa-vpd__wrap">
         <dl class="osa-vpd__stat-grid" data-reveal>
           <div>
             <dt class="osa-eyebrow">Vznik</dt>
@@ -57,7 +57,7 @@ import InlineCTA from '../../components/InlineCTA.astro';
     </section>
 
     <section class="section">
-      <div class="container">
+      <div class="osa-vpd__wrap">
         <div class="osa-vpd__body osa-longform">
 
           <header class="osa-sub-head" data-reveal>
@@ -70,17 +70,16 @@ import InlineCTA from '../../components/InlineCTA.astro';
           <p data-reveal>
             VPD je odpověď. Nabízí metodiku obnovy, ve které ekonomická návratnost není jediným měřítkem úspěchu. Zhodnocený prostor zůstává přístupný veřejnosti, má smysluplnou náplň a buduje lokální komunitu. Nepotřebuje k tomu státní dotace, pouze konsensuální vlastníky, dobrovolníky a trpělivost.
           </p>
-
-          <header class="osa-sub-head" data-reveal>
-            <span class="osa-eyebrow">Jak</span>
-            <h2>Tři stavební kameny metodiky.</h2>
-          </header>
         </div>
       </div>
     </section>
 
     <section class="section--tight">
-      <div class="container-wide">
+      <div class="osa-vpd__wrap">
+        <header class="osa-sub-head osa-vpd__pillars-head" data-reveal>
+          <span class="osa-eyebrow">Jak</span>
+          <h2>Tři stavební kameny metodiky.</h2>
+        </header>
         <ol class="osa-vpd__pillars" data-reveal>
           <li>
             <span class="osa-mono osa-vpd__pillar-n">01</span>
@@ -109,7 +108,7 @@ import InlineCTA from '../../components/InlineCTA.astro';
 
     <section class="section osa-vpd__case osa-dark">
       <SVGPattern variant="dark" opacity={0.12}>
-        <div class="container">
+        <div class="osa-vpd__wrap">
           <header class="osa-sub-head" data-reveal>
             <span class="osa-eyebrow">Případová studie</span>
             <h2>Výletná: vzor a zároveň limit VPD.</h2>
@@ -136,7 +135,7 @@ import InlineCTA from '../../components/InlineCTA.astro';
     </section>
 
     <section class="section osa-vpd__call" id="zamer-vpd1">
-      <div class="container-wide">
+      <div class="osa-vpd__wrap">
         <header class="osa-sub-head" data-reveal>
           <span class="osa-eyebrow">Aktuálně · Záměr VPD1</span>
           <h2 class="osa-h1">Hledáme strategického partnera pro revitalizaci <span class="osa-draft">83&nbsp;327&nbsp;m²</span> na prahu metropole.</h2>
@@ -165,12 +164,9 @@ import InlineCTA from '../../components/InlineCTA.astro';
               </div>
             </dl>
             <div class="osa-vpd__ctas">
-              <a class="btn btn--primary" href="/assets/docs/Zamer_VPD1_zakladni_souhrn.pdf" aria-disabled="true">Podklady k záměru (PDF)</a>
-              <a class="btn btn--ghost" href="mailto:marek.semerad@osa2.cz?subject=Z%C3%A1m%C4%9Br%20VPD1%20Klecany" aria-disabled="true">Kontaktovat představenstvo</a>
+              <a class="btn btn--primary" href="/assets/docs/Zamer_VPD1_zakladni_souhrn.pdf" aria-disabled="true" data-wipe>Podklady k záměru (PDF)</a>
+              <a class="btn btn--ghost" href="mailto:marek.semerad@osa2.cz?subject=Z%C3%A1m%C4%9Br%20VPD1%20Klecany" aria-disabled="true" data-wipe>Kontaktovat představenstvo</a>
             </div>
-            <p class="osa-vpd__notice osa-mono">
-              Tento blok je v režimu DRAFT a nebude zveřejněn, dokud nebudou finanční údaje schváleny představenstvem.
-            </p>
           </div>
           <aside class="osa-vpd__schematic" aria-hidden="true">
             <div class="osa-vpd__schematic-grid">
@@ -185,8 +181,8 @@ import InlineCTA from '../../components/InlineCTA.astro';
     </section>
 
     <section class="section--tight osa-vpd__linked">
-      <div class="container-wide">
-        <div class="osa-vpd__linked-grid">
+      <div class="osa-vpd__wrap">
+        <div class="osa-vpd__linked-grid" data-reveal>
           <div>
             <span class="osa-eyebrow">Související projekty</span>
             <h3 class="osa-h3">Městský inkubátor CZ</h3>
@@ -212,13 +208,21 @@ import InlineCTA from '../../components/InlineCTA.astro';
 </Base>
 
 <style>
+  /* Shared container for every VPD section: keeps the left/right edge consistent. */
+  .osa-vpd__wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    width: 100%;
+  }
+
   .osa-vpd__hero { border-bottom: 1px solid var(--rule); }
   .osa-vpd__hero-inner {
-    padding: var(--space-8) var(--gutter) var(--space-9);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(var(--space-7), 8vw, var(--space-9)) var(--gutter) var(--space-9);
     display: grid;
     gap: var(--space-5);
-    max-width: 980px;
-    margin: 0 auto;
   }
   .osa-vpd__crumbs {
     display: flex; gap: var(--space-2); flex-wrap: wrap;
@@ -270,6 +274,8 @@ import InlineCTA from '../../components/InlineCTA.astro';
   @media (max-width: 720px) { .osa-vpd__stat-grid > div { border-right: 0; border-bottom: 1px solid var(--rule); } .osa-vpd__stat-grid > div:last-child { border-bottom: 0; } }
 
   .osa-vpd__body > * + * { margin-top: var(--space-4); }
+
+  .osa-vpd__pillars-head { margin-bottom: var(--space-5); }
 
   .osa-vpd__pillars {
     display: grid;
@@ -335,6 +341,12 @@ import InlineCTA from '../../components/InlineCTA.astro';
     grid-template-columns: 160px 1fr;
     gap: var(--space-4);
   }
+  @media (max-width: 600px) {
+    .osa-vpd__metrics > div {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
   .osa-vpd__metrics dt { color: var(--fg-muted); }
   .osa-vpd__metrics dd {
     margin: 0;
@@ -343,13 +355,6 @@ import InlineCTA from '../../components/InlineCTA.astro';
     line-height: var(--lh-normal);
   }
   .osa-vpd__ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
-  .osa-vpd__notice {
-    padding: var(--space-3) var(--space-4);
-    background: var(--k-10);
-    color: var(--k-90);
-    border-left: 2px solid var(--fg);
-    margin: 0;
-  }
   .osa-draft {
     background: color-mix(in oklab, var(--c-mustard) 28%, transparent);
     padding: 0 4px;

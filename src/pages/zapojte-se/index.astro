@@ -9,7 +9,7 @@ import SectionBlock from '../../components/SectionBlock.astro';
   <main>
     <section class="section">
       <div class="container">
-        <header class="osa-join__head">
+        <header class="osa-join__head" data-reveal>
           <span class="osa-eyebrow">Zapojte se</span>
           <h1 class="osa-h1 osa-join__title">Čtyři způsoby spolupráce se spolkem.</h1>
           <p class="osa-body osa-join__lede">
@@ -17,7 +17,7 @@ import SectionBlock from '../../components/SectionBlock.astro';
           </p>
         </header>
 
-        <div class="osa-join__sections">
+        <div class="osa-join__sections" data-reveal data-reveal-delay="1">
           <SectionBlock
             eyebrow="01"
             heading="Členství"
@@ -71,7 +71,7 @@ import SectionBlock from '../../components/SectionBlock.astro';
           </SectionBlock>
         </div>
 
-        <aside class="osa-join__note">
+        <aside class="osa-join__note" data-reveal>
           <span class="osa-eyebrow">Kreditní systém OSA II</span>
           <p class="osa-body">
             Kreditní systém OSA II je spolkový nástroj pro evidenci a nenárokové odměňování dobrovolnické práce. Zajišťuje spravedlivé přerozdělování výnosů z hospodářské činnosti mezi členy, kteří se na nich prací podíleli. Systém je v přípravě.
@@ -88,14 +88,25 @@ import SectionBlock from '../../components/SectionBlock.astro';
   .osa-join__title { margin: 0; }
   .osa-join__lede  { margin: 0; color: var(--fg-muted); }
   .osa-join__sections { display: grid; }
+  /* Editorial aside. Previously used `bg-muted` as a gray fill which
+     read as "disabled/footnote" rather than "read this, it matters."
+     Swapped to transparent background + a single top hairline so the
+     block feels like a deliberate editorial aside on the page, same
+     register as a longform pull-quote. Eyebrow stays for the label,
+     body text stays in full foreground colour. */
   .osa-join__note {
     margin-top: var(--space-8);
-    padding: var(--space-5);
-    border: 1px solid var(--rule);
-    background: var(--bg-muted);
+    padding: var(--space-5) 0 0;
+    border-top: 1px solid var(--fg);
+    background: transparent;
     display: grid;
     gap: var(--space-3);
     max-width: 72ch;
+    color: var(--fg);
   }
-  .osa-join__note p { margin: 0; }
+  .osa-join__note .osa-eyebrow { color: var(--fg); }
+  .osa-join__note p {
+    margin: 0;
+    color: var(--fg);
+  }
 </style>

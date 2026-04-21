@@ -1,0 +1,361 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('aktuality', e => !e.data.draft);
+  return entries.map(e => ({ params: { slug: e.id }, props: { entry: e, all: entries } }));
+}
+
+const { entry, all } = Astro.props;
+const { Content } = await render(entry);
+
+const dateFormatter = new Intl.DateTimeFormat('cs-CZ', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+const humanDate = dateFormatter.format(entry.data.date);
+const isoDate = entry.data.date.toISOString().slice(0, 10);
+
+// Related: up to 3 other articles, most recent first.
+const related = all
+  .filter((a) => a.id !== entry.id)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+// Article JSON-LD.
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://osa2.cz';
+const articleUrl = `${siteUrl}/aktuality/${entry.id}/`;
+const heroAbs = entry.data.hero.startsWith('http')
+  ? entry.data.hero
+  : `${siteUrl}${entry.data.hero}`;
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: entry.data.title,
+  description: entry.data.lead,
+  image: heroAbs,
+  datePublished: entry.data.date.toISOString(),
+  author: {
+    '@type': 'Organization',
+    name: entry.data.author ?? 'Občanské sdružení Alternativa II, z.s.',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Občanské sdružení Alternativa II, z.s.',
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/logo/OSA-Logo-Black.svg`,
+    },
+  },
+  mainEntityOfPage: articleUrl,
+};
+---
+<Base
+  title={`${entry.data.title} - Aktuality OSA II`}
+  description={entry.data.lead}
+  ogImage={entry.data.hero}
+  ogType="article">
+  <Header variant="dark" />
+  <main class="osa-article">
+    <article>
+      {/*
+       * Dark hero frame, same pattern as /projekty/vpd/ and /o-spolku/:
+       *   - Header variant="dark" fuses into this section via the shared
+       *     osa-dark scope; the header's bottom hairline is hidden.
+       *   - Hero image is used as a darkened background (aria-hidden img at
+       *     position:absolute, inset:0) so the cerny frame never feels empty
+       *     when a photo is present. A linear-gradient scrim keeps type
+       *     readable regardless of how bright the source photo is.
+       *   - Layout is narrow tier (.container, 1200px) with split padding
+       *     so .container's horizontal gutter survives. Crumbs + eyebrow +
+       *     H1 + lead are left-aligned, matching VPD.
+       */}
+      <section class="osa-article__hero osa-dark" aria-labelledby="article-title">
+        <img
+          class="osa-article__hero-bg"
+          src={entry.data.hero}
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+          decoding="async"
+        />
+        <div class="osa-article__hero-scrim" aria-hidden="true"></div>
+        <div class="container osa-article__hero-inner" data-reveal>
+          <nav class="osa-article__crumbs" aria-label="Drobečková navigace">
+            <a href="/aktuality/">Aktuality</a>
+            <span aria-hidden="true"> / </span>
+            <span>{entry.data.title}</span>
+          </nav>
+          <div class="osa-article__eyebrow">
+            <time datetime={isoDate}>{humanDate}</time>
+            {entry.data.author && (
+              <>
+                <span class="osa-article__sep" aria-hidden="true"> · </span>
+                <span>{entry.data.author}</span>
+              </>
+            )}
+          </div>
+          <h1 id="article-title" class="osa-h1 osa-article__title">{entry.data.title}</h1>
+          <p class="osa-body osa-article__lead">{entry.data.lead}</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="osa-article__body" data-reveal>
+            <Content />
+          </div>
+
+          {entry.data.tags && entry.data.tags.length > 0 && (
+            <div class="osa-article__tags" aria-label="Štítky">
+              {entry.data.tags.map((t) => (
+                <span class="osa-tag">{t}</span>
+              ))}
+            </div>
+          )}
+
+          <div class="osa-article__back">
+            <a href="/aktuality/" class="osa-article__back-link">
+              <span aria-hidden="true">←</span> Zpět na aktuality
+            </a>
+          </div>
+        </div>
+      </section>
+    </article>
+
+    {related.length > 0 && (
+      <section class="section osa-article__related-section">
+        <div class="container">
+          <header class="osa-article__related-head" data-reveal>
+            <span class="osa-eyebrow">Čtěte dále</span>
+            <h2 class="osa-h3 osa-article__related-title">Další aktuality</h2>
+          </header>
+          <ul class="osa-article__related-grid" role="list">
+            {related.map((a, i) => (
+              <li data-reveal data-reveal-delay={String((i % 3) + 1)}><ArticleCard
+                slug={a.id}
+                title={a.data.title}
+                lead={a.data.lead}
+                date={a.data.date}
+                hero={a.data.hero}
+                hero_alt={a.data.hero_alt}
+                author={a.data.author}
+                tags={a.data.tags}
+              /></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+  </main>
+  <Footer />
+  {/* Article JSON-LD: search engines read this regardless of position in the document. */}
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} is:inline />
+</Base>
+
+<style>
+  /* ---------- Hero: dark frame with optional darkened photo ----------
+   *
+   * Sizing contract: matches the dark heroes on /o-spolku/ and
+   * /projekty/vpd/ so the landing, o-spolku, projekty and aktuality
+   * detail all feel like the same family. The padding tokens are:
+   *   padding-top: clamp(var(--space-7), 8vw, var(--space-9));
+   *   padding-bottom: var(--space-9);
+   * Split top/bottom intentionally - a padding shorthand of the form
+   * `padding: X 0 Y` would zero out .container's horizontal gutter
+   * and break the left alignment on narrow viewports.
+   */
+
+  .osa-article__hero {
+    position: relative;
+    background: #0d0d0d;
+    color: #fff;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .osa-article__hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Darken the photo so the monochrome title reads cleanly. Brightness
+     * cut to ~0.45 handles even bright daylight shots; saturation cut
+     * keeps the palette in the parent brand's K0-K100 register. */
+    filter: brightness(0.45) saturate(0.85);
+    z-index: 0;
+  }
+  .osa-article__hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.55) 50%,
+      rgba(0, 0, 0, 0.75) 100%
+    );
+    z-index: 1;
+  }
+  .osa-article__hero-inner {
+    position: relative;
+    z-index: 2;
+    padding-top: clamp(var(--space-7), 8vw, var(--space-9));
+    padding-bottom: var(--space-9);
+    display: grid;
+    gap: var(--space-3);
+    max-width: 68ch;
+  }
+
+  .osa-article__crumbs {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    color: rgba(255, 255, 255, 0.68);
+    margin-bottom: var(--space-2);
+  }
+  .osa-article__crumbs a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.68);
+    border-bottom: 1px solid transparent;
+    transition: color var(--dur-fast) linear, border-color var(--dur-fast) linear;
+  }
+  .osa-article__crumbs a:hover {
+    color: #fff;
+    border-bottom-color: #fff;
+  }
+
+  .osa-article__eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .osa-article__eyebrow time { color: #fff; }
+  .osa-article__sep { color: rgba(255, 255, 255, 0.55); margin: 0 0.25em; }
+
+  .osa-article__title {
+    margin: 0;
+    text-wrap: balance;
+    color: #fff;
+  }
+  .osa-article__lead {
+    margin: 0;
+    max-width: 58ch;
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  /* ---------- Body ---------- */
+
+  .osa-article__body {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-lg);
+    line-height: var(--lh-relaxed);
+    max-width: 62ch;
+  }
+  .osa-article__body :global(h2) {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-2xl);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-tight);
+    margin: var(--space-6) 0 var(--space-3);
+  }
+  .osa-article__body :global(h3) {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-xl);
+    margin: var(--space-5) 0 var(--space-2);
+  }
+  .osa-article__body :global(p) { margin: 0 0 var(--space-4); }
+  .osa-article__body :global(em) { color: var(--fg-muted); }
+  .osa-article__body :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .osa-article__body :global(ul),
+  .osa-article__body :global(ol) {
+    margin: 0 0 var(--space-4);
+    padding-left: var(--space-5);
+    list-style: disc;
+  }
+  .osa-article__body :global(li) { margin: 0 0 var(--space-2); }
+
+  .osa-article__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-6) 0 0;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--rule);
+    max-width: 62ch;
+  }
+  .osa-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid var(--rule);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .osa-article__back {
+    margin-top: var(--space-7);
+    max-width: 62ch;
+  }
+  .osa-article__back-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    color: var(--fg);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 4px;
+    transition: border-color var(--dur-fast) linear;
+  }
+  .osa-article__back-link:hover { border-bottom-color: var(--fg); }
+
+  /* ---------- Related ---------- */
+
+  .osa-article__related-section {
+    border-top: 1px solid var(--rule);
+  }
+  .osa-article__related-head {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-6);
+  }
+  .osa-article__related-title { margin: 0; }
+  .osa-article__related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+  .osa-article__related-grid > li { display: flex; }
+  .osa-article__related-grid > li > * { flex: 1; }
+
+  /* ---------- Reduced motion ---------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    .osa-article__crumbs a,
+    .osa-article__back-link { transition: none; }
+  }
+</style>

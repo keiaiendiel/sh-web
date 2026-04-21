@@ -18,9 +18,9 @@ const projects = all
         Projekty si vedou vlastní prostory, weby a členskou základnu. Spolek jim poskytuje právní a organizační zázemí.
       </p>
     </header>
-    <ul class="osa-rozcestnik__grid" role="list" data-reveal data-reveal-delay="1">
-      {projects.map(p => (
-        <li><ProjectCard
+    <ul class="osa-rozcestnik__grid" role="list">
+      {projects.map((p, i) => (
+        <li data-reveal data-reveal-delay={String((i % 3) + 1)}><ProjectCard
           slug={p.id}
           name={p.data.name}
           description={p.data.description}

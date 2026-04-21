@@ -1,8 +1,11 @@
 ---
+interface Props { variant?: 'light' | 'dark'; }
+const { variant = 'light' } = Astro.props;
 const nav = [
   { href: '/',            label: 'Úvod' },
   { href: '/o-spolku/',   label: 'O spolku' },
   { href: '/projekty/',   label: 'Projekty' },
+  { href: '/aktuality/',  label: 'Aktuality' },
   { href: '/zapojte-se/', label: 'Zapojte se' },
   { href: '/kontakty/',   label: 'Kontakty' },
 ];
@@ -10,7 +13,7 @@ const current = Astro.url.pathname;
 const isActive = (href: string) =>
   href === '/' ? current === '/' : current.startsWith(href);
 ---
-<header class="osa-header">
+<header class:list={['osa-header', { 'osa-dark': variant === 'dark' }]}>
   <div class="container-wide osa-header__inner">
     <a href="/" class="osa-header__brand" aria-label="Občanské sdružení Alternativa II - domů">
       <img src="/logo/OSA-Logo-Black.svg" alt="" aria-hidden="true" class="osa-header__logo osa-header__logo--light" />
@@ -35,6 +38,12 @@ const isActive = (href: string) =>
     background: var(--bg);
     color: var(--fg);
   }
+  .osa-header.osa-dark {
+    background: var(--bg);
+    color: var(--fg);
+  }
+  /* Hide the hairline rule when the header merges into a dark hero: the hero's own edge is enough. */
+  .osa-header.osa-dark .rule { display: none; }
   .osa-header__inner {
     display: flex;
     align-items: center;

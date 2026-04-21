@@ -11,11 +11,11 @@ const { title, eyebrow } = Astro.props;
   <main class="osa-longform-page">
     <section class="section">
       <div class="container">
-        <header class="osa-longform-page__head">
+        <header class="osa-longform-page__head" data-reveal>
           {eyebrow && <span class="osa-eyebrow">{eyebrow}</span>}
           <h1 class="osa-h1 osa-longform-page__title">{title}</h1>
         </header>
-        <article class="osa-longform osa-longform-page__body">
+        <article class="osa-longform osa-longform-page__body" data-reveal data-reveal-delay="1">
           <slot />
         </article>
       </div>
@@ -56,10 +56,10 @@ const { title, eyebrow } = Astro.props;
   .osa-longform-page__body :global(p) { margin: 0 0 var(--space-4); }
   .osa-longform-page__body :global(a) { text-decoration: underline; text-underline-offset: 3px; }
   .osa-longform-page__body :global(aside) {
-    padding: var(--space-4);
-    border-left: 2px solid var(--rule);
-    background: var(--bg-muted);
-    margin: var(--space-5) 0;
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin: var(--space-6) 0;
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     color: var(--fg-muted);

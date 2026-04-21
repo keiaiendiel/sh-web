@@ -1,0 +1,90 @@
+name: Sync Aktuality from Drive
+
+# Triggers:
+#   - repository_dispatch from Apps Script running in the client's Google account
+#   - manual (workflow_dispatch) for debugging
+#   - scheduled fallback (every 30 min) so nothing gets stuck if the dispatch fails
+#
+# The workflow writes any new or updated MDX to src/content/aktuality/
+# and opens a PR via peter-evans/create-pull-request. PRs are never pushed
+# straight to main; a human (Marek, Kindl) reviews and merges.
+
+on:
+  repository_dispatch:
+    types: [sync-aktuality]
+  workflow_dispatch: {}
+  schedule:
+    - cron: '*/30 * * * *'
+
+concurrency:
+  group: sync-aktuality
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install sync-only dependencies
+        # googleapis and sharp are only needed by the sync pipeline and are
+        # intentionally kept out of the site's package.json so the build stays lean.
+        run: pnpm add --save-dev googleapis@^144 sharp@^0.33 --ignore-workspace-root-check
+
+      - name: Run sync
+        env:
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
+        run: node scripts/sync-drive-aktuality.mjs
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet src/content/aktuality/ public/images/aktuality/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify build still passes
+        if: steps.diff.outputs.changed == 'true'
+        run: pnpm build
+
+      - name: Run editorial lint on new content
+        if: steps.diff.outputs.changed == 'true'
+        run: pnpm lint:editorial
+
+      - name: Open PR with synced aktuality
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "content(aktuality): sync from Google Drive"
+          title: "Aktuality: synced from Drive"
+          body: |
+            Automatic PR from the Drive sync pipeline.
+
+            Review the diff in `src/content/aktuality/` and `public/images/aktuality/`,
+            then merge. Cloudflare Pages rebuilds on merge.
+
+            Trigger: `${{ github.event_name }}`
+          branch: aktuality/sync
+          delete-branch: true
+          labels: aktuality, automated
+
+      - name: No-op summary
+        if: steps.diff.outputs.changed == 'false'
+        run: echo "No content changes; nothing to commit."

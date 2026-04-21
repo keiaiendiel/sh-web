@@ -1,35 +1,191 @@
-/* OSA motion vocabulary. Plan section 5.4, motion rules 1, 2, 4, 9.
-   All rules honor prefers-reduced-motion via the Base layout reset. */
+/* =============================================================================
+   OSA motion vocabulary
+   Print-first editorial with restrained kinetism.
+   All rules respect prefers-reduced-motion (Base.astro global reset + local guards).
+============================================================================= */
 
-/* Rule 1: Link hover fade - 120ms linear. Only on plain anchors, not .btn. */
+/* ---------- Motion tokens (extend tokens.css) ----------------------------- */
+:root {
+  /* Signature expo-out (portfolio feel). Use for entrances, reveals, card accents. */
+  --ease-expo:     cubic-bezier(0.16, 1, 0.3, 1);
+  /* Tight out-quart — for short state changes that should not overshoot. */
+  --ease-quart:    cubic-bezier(0.25, 1, 0.5, 1);
+  /* Swift linear — for opacity-only hover fades. */
+  --ease-linear:   linear;
+
+  --dur-hair:   80ms;     /* press inset commit */
+  --dur-reveal: 620ms;    /* section entrance */
+  --dur-wipe:   280ms;    /* directional wipe */
+  --dur-count:  1200ms;   /* counter roll-up */
+}
+
+/* ---------- Link hover fade (Rule 1: Plan §5.4) --------------------------- */
 a:not(.btn):not(.osa-nolink) {
-  transition: opacity var(--dur-fast) linear;
+  transition: opacity var(--dur-fast) var(--ease-linear);
 }
 a:not(.btn):not(.osa-nolink):hover {
   opacity: 0.6;
 }
 
-/* Rule 2: Button inversion - 200ms standard ease, already in .btn transition. */
+/* ---------- Buttons: wipe-from-edge hover + active press ------------------
+   Buttons animate background via a clip-path inset that expands from the mouse
+   entry edge. On :active they show a 1px inset for --dur-hair (80ms) before
+   committing the hover-invert — feels mechanical, not squishy. */
 
-/* Rule 4: Project card accent reveal - monochrome → accent border + title. */
-.project-card {
-  --card-border: var(--fg);
-  border: 1px solid var(--card-border);
-  transition: border-color var(--dur-fast) linear;
+.btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: transparent !important; /* fill comes from ::after wipe */
+  transition:
+    color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-hair) var(--ease-quart);
 }
-.project-card:hover,
-.project-card:focus-within {
-  --card-border: var(--card-accent, var(--fg));
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  z-index: -1;
+  clip-path: inset(100% 0 0 0); /* default resting: hidden above */
+  transition: clip-path var(--dur-wipe) var(--ease-quart);
+  pointer-events: none;
 }
-.project-card:hover .project-card__title,
-.project-card:focus-within .project-card__title {
-  color: var(--card-accent, var(--fg));
-  transition: color var(--dur-fast) linear;
+/* Directional wipes — origin set by data-wipe-from on mouseenter. */
+.btn[data-wipe-from="top"]::after    { clip-path: inset(100% 0 0 0); }
+.btn[data-wipe-from="right"]::after  { clip-path: inset(0 0 0 100%); }
+.btn[data-wipe-from="bottom"]::after { clip-path: inset(0 0 100% 0); }
+.btn[data-wipe-from="left"]::after   { clip-path: inset(0 100% 0 0); }
+
+.btn:hover::after,
+.btn:focus-visible::after {
+  clip-path: inset(0 0 0 0);
+}
+.btn:hover {
+  color: var(--bg);
 }
 
-/* Rule 9: Keyboard focus - instant, 2px outline. */
+/* Primary: inverse at rest, transparent on hover via inverse ::after */
+.btn--primary::after { background: var(--fg); clip-path: inset(0 0 0 0); }
+.btn--primary { color: var(--bg); }
+.btn--primary[data-wipe-from="top"]::after    { clip-path: inset(0 0 0 0); }
+.btn--primary[data-wipe-from="right"]::after  { clip-path: inset(0 0 0 0); }
+.btn--primary[data-wipe-from="bottom"]::after { clip-path: inset(0 0 0 0); }
+.btn--primary[data-wipe-from="left"]::after   { clip-path: inset(0 0 0 0); }
+.btn--primary:hover::after { clip-path: inset(100% 0 0 0); }
+.btn--primary:hover { color: var(--fg); }
+
+/* Inverse: white fill on dark surfaces, transparent on hover */
+.btn--inverse::after { background: var(--bg); clip-path: inset(0 0 0 0); }
+.btn--inverse { color: var(--fg); }
+.btn--inverse[data-wipe-from]::after { clip-path: inset(0 0 0 0); }
+.btn--inverse:hover::after { clip-path: inset(100% 0 0 0); }
+.btn--inverse:hover { color: var(--bg); }
+
+/* Ghost: keep current behaviour, no wipe */
+.btn--ghost::after { display: none; }
+.btn--ghost:hover  { color: var(--fg); opacity: 0.55; }
+
+/* Active: 1px inset press. Separate from hover. */
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* ---------- Directional wipe for cards ----------------------------------- */
+.has-wipe {
+  position: relative;
+  isolation: isolate;
+}
+.has-wipe > .wipe-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  pointer-events: none;
+  z-index: 0;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path var(--dur-wipe) var(--ease-quart);
+}
+.has-wipe[data-wipe-from="top"]    > .wipe-fill { clip-path: inset(100% 0 0 0); }
+.has-wipe[data-wipe-from="right"]  > .wipe-fill { clip-path: inset(0 0 0 100%); }
+.has-wipe[data-wipe-from="bottom"] > .wipe-fill { clip-path: inset(0 0 100% 0); }
+.has-wipe[data-wipe-from="left"]   > .wipe-fill { clip-path: inset(0 100% 0 0); }
+.has-wipe:hover > .wipe-fill,
+.has-wipe:focus-within > .wipe-fill {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ---------- Focus: 2px outline with 40ms overshoot ----------------------- */
 :focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 2px;
-  transition: none;
+  /* No transition on outline itself — instant. Overshoot is a keyframe. */
+  animation: focus-overshoot 240ms var(--ease-quart);
+  animation-iteration-count: 1;
+}
+@keyframes focus-overshoot {
+  0%   { outline-width: 0;   outline-offset: 0; }
+  40%  { outline-width: 3px; outline-offset: 3px; }
+  100% { outline-width: 2px; outline-offset: 2px; }
+}
+
+/* ---------- Reveal: base sequence (word-by-word) -------------------------
+   Two-phase hide:
+
+   Phase 1 — host element: [data-reveal-words] hidden until the JS split
+   pass rewrites the text into .reveal-word children (RevealOnScroll
+   flips data-split="done"). Without this, a slow reload shows the
+   unbroken h1 text for ~1-2 frames before the word spans replace it,
+   producing a visible glitch right before the stagger animation starts.
+
+   Phase 2 — individual words: each .reveal-word starts invisible and
+   lifts in when the IntersectionObserver adds .shown.
+
+   Fallbacks: <noscript> override at the bottom of this block keeps the
+   text visible when JS fails; prefers-reduced-motion disables both
+   phases so low-vision / motion-sensitive users never see a blank. */
+[data-reveal-words]:not([data-split="done"]) {
+  opacity: 0;
+}
+.reveal-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.4em);
+  transition:
+    opacity var(--dur-reveal) var(--ease-expo),
+    transform var(--dur-reveal) var(--ease-expo);
+  will-change: opacity, transform;
+}
+.reveal-word.shown {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Counter roll-up: visual anchor --------------------------------
+   Values are set inline via data-count-to; number fades + slides up briefly. */
+[data-count-to] {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Reduced motion: last word on all animations ------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .btn::after,
+  .has-wipe > .wipe-fill {
+    transition: none;
+  }
+  :focus-visible {
+    animation: none;
+  }
+  [data-reveal-words]:not([data-split="done"]) {
+    opacity: 1;
+  }
+  .reveal-word {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .btn:active {
+    transform: none;
+  }
 }
