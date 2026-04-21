@@ -334,7 +334,31 @@ async function main() {
 
   const files = await listDocs(drive, folderId);
   if (files.length === 0) {
-    console.log('Drive folder is empty; nothing to sync.');
+    // Diagnostic: if SA filter returned no Docs, we want to know why. Three
+    // likely causes: folder ACL denies SA, folder ID points somewhere wrong,
+    // or the folder is genuinely empty. Fetch folder metadata + list of ALL
+    // children (any mimeType) so the log shows which case we hit.
+    try {
+      const meta = await drive.files.get({
+        fileId: folderId,
+        fields: 'id, name, mimeType, owners(emailAddress, displayName)',
+        supportsAllDrives: true,
+      });
+      console.log(`Folder metadata: ${JSON.stringify(meta.data)}`);
+    } catch (err) {
+      console.log(`Cannot read folder metadata: ${err.message}. SA likely has no access.`);
+    }
+    const all = await drive.files.list({
+      q: `'${folderId}' in parents and trashed = false`,
+      fields: 'files(id, name, mimeType)',
+      pageSize: 50,
+      supportsAllDrives: true,
+      includeItemsFromAllDrives: true,
+    });
+    const children = all.data.files ?? [];
+    console.log(`All children (any mimeType): ${children.length}`);
+    for (const c of children) console.log(`  - ${c.name} [${c.mimeType}]`);
+    console.log('Drive folder is empty (no Google Docs with matching filter); nothing to sync.');
     return;
   }
 
