@@ -15,10 +15,17 @@ pnpm-debug.log*
 
 # environment variables
 .env
+.env.local
 .env.production
+
+# Claude Code local harness config (allowlists, per-machine overrides)
+.claude/settings.local.json
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# Drive sync transient state (scripts/sync-drive-aktuality.mjs)
+.sync-summary.json
