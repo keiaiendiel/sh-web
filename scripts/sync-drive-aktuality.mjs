@@ -384,10 +384,9 @@ async function main() {
       const rawMd = await exportMarkdown(drive, file.id);
       const body = normalize(rawMd);
 
-      if (bodyContainsBang(body)) {
-        console.warn(`"${file.name}" contains ! in body; marking as draft.`);
-        meta.draft = 'true';
-      }
+      // Exclamation marks used to auto-flip the doc to draft:true. The
+      // lint rule was lifted (client's call), so we also drop the auto-
+      // draft here - an `!` in the Doc ships straight through.
 
       let heroRelative = meta.hero ?? `/images/aktuality/${slug}.jpg`;
       if (!meta.hero) {

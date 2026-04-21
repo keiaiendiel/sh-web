@@ -24,26 +24,9 @@ const SCAN = [
 ];
 
 const rules = [
-  {
-    id: 'em-dash',
-    pattern: /—/g,
-    msg: 'Em dash (—) is banned. Use " - " (hyphen spaces) or a comma.',
-  },
-  {
-    id: 'en-dash',
-    pattern: /–/g,
-    msg: 'En dash (–) is banned. Use " - " (hyphen spaces) or a comma.',
-    exempt: /unicode-range:\s*U\+/,
-  },
-  {
-    id: 'exclamation',
-    pattern: /!/g,
-    msg: 'Exclamation mark is banned in body copy. Allowed only in HTML attrs and code.',
-    exempt: /(alt=|aria-label=|title=|<!--|<!DOCTYPE|<\/?script|<\/?style|important|\.important|content=|placeholder=|!\s*important|condition!|exception!)/i,
-    // also skip lines that contain JS operators like !x, !!x, !=,
-    // and Markdown image syntax ![alt](url) or ![alt][ref].
-    lineExempt: (line) => /!=|![a-zA-Z_$]|![ ]?\(|!\[/.test(line),
-  },
+  // Typographic rules (em-dash, en-dash, exclamation) were previously hard
+  // bans. Client decision: authors of individual articles own that call.
+  // Semantic rules below still enforce voice (passive, legalese, hype).
   {
     id: 'ellipsis-outside-motto',
     pattern: /…/g,
