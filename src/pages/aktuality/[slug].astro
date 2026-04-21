@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import { withBase } from '../../utils/url';
 
 export async function getStaticPaths() {
   const entries = await getCollection('aktuality', e => !e.data.draft);
@@ -29,10 +30,10 @@ const related = all
 
 // Article JSON-LD.
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://osa2.cz';
-const articleUrl = `${siteUrl}/aktuality/${entry.id}/`;
+const articleUrl = `${siteUrl}${withBase(`/aktuality/${entry.id}/`)}`;
 const heroAbs = entry.data.hero.startsWith('http')
   ? entry.data.hero
-  : `${siteUrl}${entry.data.hero}`;
+  : `${siteUrl}${withBase(entry.data.hero)}`;
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -49,7 +50,7 @@ const articleJsonLd = {
     name: 'Občanské sdružení Alternativa II, z.s.',
     logo: {
       '@type': 'ImageObject',
-      url: `${siteUrl}/logo/OSA-Logo-Black.svg`,
+      url: `${siteUrl}${withBase('/logo/OSA-Logo-Black.svg')}`,
     },
   },
   mainEntityOfPage: articleUrl,
@@ -78,7 +79,7 @@ const articleJsonLd = {
       <section class="osa-article__hero osa-dark" aria-labelledby="article-title">
         <img
           class="osa-article__hero-bg"
-          src={entry.data.hero}
+          src={withBase(entry.data.hero)}
           alt=""
           aria-hidden="true"
           loading="eager"
@@ -87,7 +88,7 @@ const articleJsonLd = {
         <div class="osa-article__hero-scrim" aria-hidden="true"></div>
         <div class="container osa-article__hero-inner" data-reveal>
           <nav class="osa-article__crumbs" aria-label="Drobečková navigace">
-            <a href="/aktuality/">Aktuality</a>
+            <a href={withBase('/aktuality/')}>Aktuality</a>
             <span aria-hidden="true"> / </span>
             <span>{entry.data.title}</span>
           </nav>
@@ -120,7 +121,7 @@ const articleJsonLd = {
           )}
 
           <div class="osa-article__back">
-            <a href="/aktuality/" class="osa-article__back-link">
+            <a href={withBase('/aktuality/')} class="osa-article__back-link">
               <span aria-hidden="true">←</span> Zpět na aktuality
             </a>
           </div>

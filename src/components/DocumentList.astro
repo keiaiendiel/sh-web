@@ -1,12 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
+import { withBase } from '../utils/url';
 const docs = (await getCollection('dokumenty'))
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
 ---
 <ul class="osa-doclist" role="list">
   {docs.map(d => (
     <li class="osa-doclist__item">
-      <a class="osa-doclist__link" href={d.data.file_path}>
+      <a class="osa-doclist__link" href={withBase(d.data.file_path)}>
         <span class="osa-doclist__chevron" aria-hidden="true"></span>
         <span class="osa-doclist__title">{d.data.title}</span>
       </a>

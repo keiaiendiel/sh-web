@@ -1,5 +1,6 @@
 ---
 import OsaGlyph from './OsaGlyph.astro';
+import { withBase } from '../utils/url';
 
 interface Props {
   slug: string;
@@ -29,7 +30,7 @@ const topicLabel: Record<NonNullable<Props['topic']>, string> = {
   larp:        'LARP',
 };
 
-const href = external_url ?? `/projekty/${slug}/`;
+const href = external_url ?? withBase(`/projekty/${slug}/`);
 const isExternal = !!external_url;
 const isPaused = status === 've-spanku' || relationship === 've-spanku';
 const isPilot = relationship === 'pilotni' && !isPaused;

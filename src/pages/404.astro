@@ -2,12 +2,13 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { withBase } from '../utils/url';
 
 const suggestions = [
-  { href: '/',            label: 'Úvodní strana' },
-  { href: '/projekty/',   label: 'Projekty' },
-  { href: '/o-spolku/',   label: 'O spolku' },
-  { href: '/kontakty/',   label: 'Kontakty' },
+  { href: withBase('/'),            label: 'Úvodní strana' },
+  { href: withBase('/projekty/'),   label: 'Projekty' },
+  { href: withBase('/o-spolku/'),   label: 'O spolku' },
+  { href: withBase('/kontakty/'),   label: 'Kontakty' },
 ];
 ---
 <Base

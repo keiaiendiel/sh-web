@@ -15,8 +15,9 @@ interface Props {
   /** Extra class */
   class?: string;
 }
+import { withBase } from '../utils/url';
 const { n = 1, variant = 'light', size = 'strip', class: className } = Astro.props;
-const src = `/graphics/graphic-asset-header_${n}.svg`;
+const src = withBase(`/graphics/graphic-asset-header_${n}.svg`);
 ---
 <div class:list={['osa-gh', `osa-gh--${variant}`, `osa-gh--${size}`, className]} aria-hidden="true">
   <img src={src} alt="" class="osa-gh__img" loading="lazy" decoding="async" />

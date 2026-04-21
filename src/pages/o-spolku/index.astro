@@ -7,6 +7,7 @@ import ValuesMatrix from '../../components/ValuesMatrix.astro';
 import DocumentList from '../../components/DocumentList.astro';
 import InlineCTA from '../../components/InlineCTA.astro';
 import SVGPattern from '../../components/SVGPattern.astro';
+import { withBase } from '../../utils/url';
 ---
 <Base title="O spolku - Občanské sdružení Alternativa II, z.s.">
   <Header variant="dark" />
@@ -15,7 +16,7 @@ import SVGPattern from '../../components/SVGPattern.astro';
       <SVGPattern variant="dark" opacity={0.14}>
         <div class="container-wide osa-about__hero-inner">
           <nav aria-label="Drobečková navigace" class="osa-about__crumbs osa-eyebrow">
-            <a href="/">Úvod</a> <span aria-hidden="true">·</span>
+            <a href={withBase('/')}>Úvod</a> <span aria-hidden="true">·</span>
             <span aria-current="page">O spolku</span>
           </nav>
           <h1 class="osa-about__h1" data-reveal>
@@ -77,8 +78,8 @@ import SVGPattern from '../../components/SVGPattern.astro';
           </p>
         </div>
         <div class="osa-about__metod-ctas" data-reveal>
-          <InlineCTA href="/o-spolku/metodologie/">Celý text o metodologii DIY</InlineCTA>
-          <InlineCTA href="/o-spolku/historie/">Historie spolku od roku 2006</InlineCTA>
+          <InlineCTA href={withBase('/o-spolku/metodologie/')}>Celý text o metodologii DIY</InlineCTA>
+          <InlineCTA href={withBase('/o-spolku/historie/')}>Historie spolku od roku 2006</InlineCTA>
         </div>
       </div>
     </section>

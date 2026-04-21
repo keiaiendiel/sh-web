@@ -4,6 +4,7 @@ import '../styles/kit.css';
 import '../styles/motion.css';
 import RevealOnScroll from '../components/RevealOnScroll.astro';
 import { getEntry } from 'astro:content';
+import { withBase } from '../utils/url';
 
 interface Props {
   title: string;
@@ -23,7 +24,7 @@ const {
 // Astro.site is set in astro.config.mjs to https://osa2.cz.
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://osa2.cz';
 const canonical = `${siteUrl}${Astro.url.pathname}`;
-const ogImageAbs = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+const ogImageAbs = ogImage.startsWith('http') ? ogImage : `${siteUrl}${withBase(ogImage)}`;
 
 // Organization JSON-LD from content collection. Falls back to hardcoded
 // defaults if the entry is missing (shouldnt happen, Zod validates on build).
@@ -35,8 +36,8 @@ const orgJsonLd = org
       '@type': 'NGO',
       name: org.name,
       alternateName: org.abbreviations,
-      url: siteUrl,
-      logo: `${siteUrl}/logo/OSA-Logo-Black.svg`,
+      url: `${siteUrl}${withBase('/')}`,
+      logo: `${siteUrl}${withBase('/logo/OSA-Logo-Black.svg')}`,
       foundingDate: org.founded,
       email: org.email,
       telephone: org.phone,
@@ -98,13 +99,13 @@ const orgJsonLd = org
 
     {/* Canonical + favicons + manifest */}
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" sizes="16x16 32x32" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="alternate icon" href={withBase('/favicon.ico')} sizes="16x16 32x32" />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <link rel="manifest" href={withBase('/manifest.webmanifest')} />
 
     {/* Sitemap hint for some crawlers */}
-    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link rel="sitemap" type="application/xml" href={withBase('/sitemap-index.xml')} />
 
     <title>{title}</title>
 

@@ -1,31 +1,34 @@
 ---
+import { withBase } from '../utils/url';
 interface Props { variant?: 'light' | 'dark'; }
 const { variant = 'light' } = Astro.props;
 const nav = [
-  { href: '/',            label: 'Úvod' },
-  { href: '/o-spolku/',   label: 'O spolku' },
-  { href: '/projekty/',   label: 'Projekty' },
-  { href: '/aktuality/',  label: 'Aktuality' },
-  { href: '/zapojte-se/', label: 'Zapojte se' },
-  { href: '/kontakty/',   label: 'Kontakty' },
+  { path: '/',            label: 'Úvod' },
+  { path: '/o-spolku/',   label: 'O spolku' },
+  { path: '/projekty/',   label: 'Projekty' },
+  { path: '/aktuality/',  label: 'Aktuality' },
+  { path: '/zapojte-se/', label: 'Zapojte se' },
+  { path: '/kontakty/',   label: 'Kontakty' },
 ];
 const current = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === '/' ? current === '/' : current.startsWith(href);
+const isActive = (path: string) => {
+  const full = withBase(path);
+  return path === '/' ? current === full : current.startsWith(full);
+};
 ---
 <header class:list={['osa-header', { 'osa-dark': variant === 'dark' }]}>
   <div class="container-wide osa-header__inner">
-    <a href="/" class="osa-header__brand" aria-label="Občanské sdružení Alternativa II - domů">
-      <img src="/logo/OSA-Logo-Black.svg" alt="" aria-hidden="true" class="osa-header__logo osa-header__logo--light" />
-      <img src="/logo/OSA-Logo-White.svg" alt="" aria-hidden="true" class="osa-header__logo osa-header__logo--dark" />
+    <a href={withBase('/')} class="osa-header__brand" aria-label="Občanské sdružení Alternativa II - domů">
+      <img src={withBase('/logo/OSA-Logo-Black.svg')} alt="" aria-hidden="true" class="osa-header__logo osa-header__logo--light" />
+      <img src={withBase('/logo/OSA-Logo-White.svg')} alt="" aria-hidden="true" class="osa-header__logo osa-header__logo--dark" />
     </a>
 
     <nav class="osa-header__nav" aria-label="Hlavní navigace">
       {nav.map(n => (
         <a
-          href={n.href}
+          href={withBase(n.path)}
           class="osa-header__link"
-          aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
       ))}
     </nav>
   </div>

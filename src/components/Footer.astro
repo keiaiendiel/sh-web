@@ -1,5 +1,6 @@
 ---
 import SVGPattern from './SVGPattern.astro';
+import { withBase } from '../utils/url';
 const year = new Date().getFullYear();
 ---
 <footer class="osa-footer osa-dark">
@@ -7,18 +8,18 @@ const year = new Date().getFullYear();
     <div class="container-wide osa-footer__inner">
       <div class="osa-footer__top">
         <div class="osa-footer__brandcol">
-          <img src="/logo/OSA-Logo-White-Full.svg" alt="Občanské sdružení Alternativa II" class="osa-footer__logo" />
+          <img src={withBase('/logo/OSA-Logo-White-Full.svg')} alt="Občanské sdružení Alternativa II" class="osa-footer__logo" />
           <p class="osa-footer__motto">Pomáháme tvořit…</p>
         </div>
 
         <div class="osa-footer__col">
           <div class="osa-eyebrow osa-footer__label">Navigace</div>
           <ul class="osa-footer__links">
-            <li><a href="/">Úvod</a></li>
-            <li><a href="/o-spolku/">O spolku</a></li>
-            <li><a href="/projekty/">Projekty</a></li>
-            <li><a href="/zapojte-se/">Zapojte se</a></li>
-            <li><a href="/kontakty/">Kontakty</a></li>
+            <li><a href={withBase('/')}>Úvod</a></li>
+            <li><a href={withBase('/o-spolku/')}>O spolku</a></li>
+            <li><a href={withBase('/projekty/')}>Projekty</a></li>
+            <li><a href={withBase('/zapojte-se/')}>Zapojte se</a></li>
+            <li><a href={withBase('/kontakty/')}>Kontakty</a></li>
           </ul>
         </div>
 

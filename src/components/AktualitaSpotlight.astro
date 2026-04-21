@@ -8,6 +8,7 @@
  * to /aktuality/.
  */
 import { getCollection } from 'astro:content';
+import { withBase } from '../utils/url';
 
 const all = await getCollection('aktuality', e => !e.data.draft);
 const sorted = all.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -22,7 +23,7 @@ const dateFormatter = new Intl.DateTimeFormat('cs-CZ', {
 // Guarded rendering: if the collection is empty (should not happen in
 // production, but Storybook and test fixtures might have it), we still want
 // the component to short-circuit cleanly instead of throwing.
-const href = latest ? `/aktuality/${latest.id}/` : '/aktuality/';
+const href = latest ? withBase(`/aktuality/${latest.id}/`) : withBase('/aktuality/');
 const humanDate = latest ? dateFormatter.format(latest.data.date) : '';
 const isoDate = latest ? latest.data.date.toISOString().slice(0, 10) : '';
 const firstTag = latest?.data.tags?.[0];
@@ -37,7 +38,7 @@ const firstTag = latest?.data.tags?.[0];
 
       <a class="osa-spotlight__card osa-nolink" href={href} aria-labelledby="spotlight-title">
         <div class="osa-spotlight__media" aria-hidden={latest.data.hero_alt ? undefined : 'true'}>
-          <img src={latest.data.hero} alt={latest.data.hero_alt ?? ''} loading="lazy" decoding="async" />
+          <img src={withBase(latest.data.hero)} alt={latest.data.hero_alt ?? ''} loading="lazy" decoding="async" />
         </div>
         <div class="osa-spotlight__body">
           <div class="osa-spotlight__eyebrow">
@@ -59,7 +60,7 @@ const firstTag = latest?.data.tags?.[0];
       </a>
 
       <div class="osa-spotlight__more" data-reveal data-reveal-delay="2">
-        <a class="btn" href="/aktuality/" data-wipe>Další aktuality</a>
+        <a class="btn" href={withBase('/aktuality/')} data-wipe>Další aktuality</a>
       </div>
     </div>
   </section>
