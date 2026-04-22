@@ -23,7 +23,7 @@ import { withBase } from '../../utils/url';
 const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
 ---
 <Base
-  title="Záměr VPD — Horní kasárna Klecany · investiční příležitost"
+  title="Záměr VPD · Horní kasárna Klecany · investiční příležitost"
   description="Revitalizace areálu 83 327 m² na prahu metropole. Investment call na první developerskou fázi: 331 jednotek 1+kk, IRR 59 %, potenciál 10+ mld. Kč."
   ogImage="/images/zamer-vpd/hub-market-evening.jpg">
   <Header variant="dark" />
@@ -55,7 +55,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
         <span class="osa-eyebrow osa-zvpd__kicker" data-reveal>
           Investment call · VPD Klecany s.r.o.
         </span>
-        <h1 id="zvpd-title" class="osa-zvpd__h1" data-reveal>
+        <h1 id="zvpd-title" class="osa-zvpd__h1" data-reveal-words data-reveal-words-step="50">
           Horní kasárna Klecany.
           <span class="osa-zvpd__h1-sub">Revitalizace areálu 83&nbsp;327&nbsp;m² na prahu metropole.</span>
         </h1>
@@ -88,7 +88,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
             <span class="osa-eyebrow">Kapitola 01</span>
             <h2 id="ch1-title" class="osa-h2 osa-zvpd__chapter-title">Příležitost</h2>
             <p class="osa-body osa-zvpd__chapter-lede">
-              Jedinečný pozemek na dosah Prahy se smluvně zajištěnými právy, kupní cenou pod tržní hodnotou a okamžitě realizovatelnou první fází — bez potřeby změny územního plánu.
+              Jedinečný pozemek na dosah Prahy. Smluvně zajištěná práva, kupní cena pod tržní hodnotou a okamžitě realizovatelná první fáze bez potřeby změny územního plánu.
             </p>
           </div>
         </div>
@@ -118,7 +118,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
             </div>
             <div>
               <dt>Kupní cena</dt>
-              <dd><span class="draft"><span class="osa-figs">438,6&nbsp;mil.&nbsp;Kč</span> — 82&nbsp;% znalecké hodnoty</span><br /><small>znalecký odhad <span class="draft"><span class="osa-figs">536,2&nbsp;mil.&nbsp;Kč</span></span></small></dd>
+              <dd><span class="draft"><span class="osa-figs">438,6&nbsp;mil.&nbsp;Kč</span>, tj. 82&nbsp;% znalecké hodnoty</span><br /><small>znalecký odhad <span class="draft"><span class="osa-figs">536,2&nbsp;mil.&nbsp;Kč</span></span></small></dd>
             </div>
             <div>
               <dt>Práva</dt>
@@ -158,7 +158,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
               <span class="osa-eyebrow">Kapitola 02</span>
               <h2 id="ch2-title" class="osa-h2 osa-zvpd__chapter-title">Plán</h2>
               <p class="osa-body osa-zvpd__chapter-lede">
-                Dva kroky k transformaci areálu. První fáze — Startovací hub — využívá stávající budovy a je realizovatelná okamžitě. Druhá fáze — Nová čtvrť — přichází po uzavření plánovací smlouvy s obcí a staví na platném územním plánu.
+                Dva kroky k transformaci areálu. První fáze Startovací hub využívá stávající budovy a je realizovatelná okamžitě. Druhá fáze Nová čtvrť přichází po uzavření plánovací smlouvy s obcí a navazuje na platný územní plán.
               </p>
             </div>
           </div>
@@ -171,7 +171,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
                 <span class="osa-mono osa-zvpd__phase-dates"><span class="draft">06/2026 → 10/2028</span></span>
               </header>
               <p class="osa-zvpd__phase-lede">
-                Komplexní rekonstrukce 7 stávajících budov na 331 jednotek 1+kk s komunitním a coworkingovým zázemím. V souladu se současným územním plánem — okamžitě realizovatelné.
+                Rekonstrukce 7 stávajících budov na 331 jednotek 1+kk s komunitním a coworkingovým zázemím. Plně v souladu se současným územním plánem, okamžitě realizovatelné.
               </p>
               <dl class="osa-zvpd__phase-metrics">
                 <div><dt>HPP</dt><dd class="osa-mono">10&nbsp;144&nbsp;m²</dd></div>
@@ -249,7 +249,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
         </figure>
         <figure class="osa-zvpd__zoom" data-reveal data-reveal-delay="1">
           <button type="button" class="osa-zvpd__zoom-btn" data-lightbox-src={img('hub-market-evening.jpg')} data-lightbox-alt="Stejná tržnice za soumraku.">
-            <img src={img('hub-market-evening.jpg')} alt="Stejná tržnice za soumraku — osvětlené interiéry prosvítají skrz okna." loading="lazy" decoding="async" />
+            <img src={img('hub-market-evening.jpg')} alt="Stejná tržnice za soumraku, osvětlené interiéry prosvítají skrz okna." loading="lazy" decoding="async" />
           </button>
         </figure>
         <figure class="osa-zvpd__zoom" data-reveal data-reveal-delay="2">
@@ -283,22 +283,22 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
         <div class="osa-zvpd__finance" data-reveal data-reveal-delay="1">
           <div class="osa-zvpd__finance-card">
             <span class="osa-eyebrow">CAPEX 1.&nbsp;fáze</span>
-            <strong class="osa-zvpd__finance-num">≈&nbsp;285</strong>
+            <strong class="osa-zvpd__finance-num">≈&nbsp;<span data-count-to="285" data-count-format="int">285</span></strong>
             <span class="osa-zvpd__finance-unit">mil. Kč</span>
           </div>
           <div class="osa-zvpd__finance-card">
             <span class="osa-eyebrow">Gross Dev. Profit</span>
-            <strong class="osa-zvpd__finance-num">421</strong>
+            <strong class="osa-zvpd__finance-num"><span data-count-to="421" data-count-format="int">421</span></strong>
             <span class="osa-zvpd__finance-unit">mil. Kč · S1 (1.&nbsp;fáze)</span>
           </div>
           <div class="osa-zvpd__finance-card">
             <span class="osa-eyebrow">Project IRR</span>
-            <strong class="osa-zvpd__finance-num">59&nbsp;%</strong>
+            <strong class="osa-zvpd__finance-num"><span data-count-to="59" data-count-format="percent">59&nbsp;%</span></strong>
             <span class="osa-zvpd__finance-unit">za 2,53 roku</span>
           </div>
           <div class="osa-zvpd__finance-card">
             <span class="osa-eyebrow">Project ROI</span>
-            <strong class="osa-zvpd__finance-num">151&nbsp;%</strong>
+            <strong class="osa-zvpd__finance-num"><span data-count-to="151" data-count-format="percent">151&nbsp;%</span></strong>
             <span class="osa-zvpd__finance-unit">S1 (base)</span>
           </div>
         </div>
@@ -334,7 +334,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
             </tbody>
           </table>
           <p class="osa-zvpd__areal-note">
-            <span aria-hidden="true">*</span> Stavební náklady k roku 2032 při inflaci&nbsp;5&nbsp;%&nbsp;p.&nbsp;a. Hodnoty v&nbsp;<span class="draft">mustard poli</span> jsou odhadní — před zveřejněním se potvrdí s&nbsp;představenstvem VPD Klecany s.&nbsp;r.&nbsp;o.
+            <span aria-hidden="true">*</span> Stavební náklady k&nbsp;roku 2032 při inflaci&nbsp;5&nbsp;%&nbsp;p.&nbsp;a. Hodnoty v&nbsp;<span class="draft">mustard poli</span> jsou odhadní; před zveřejněním se potvrdí s&nbsp;představenstvem VPD Klecany s.&nbsp;r.&nbsp;o.
           </p>
         </div>
 
@@ -395,7 +395,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
           </figure>
         </div>
         <p class="osa-zvpd__students-note">
-          Studentské práce vznikly jako inspirace — finální podoba čtvrti se vybírá architektonickou soutěží po uzavření plánovací smlouvy s obcí.
+          Studentské práce vznikly jako inspirace. Finální podoba čtvrti se vybírá architektonickou soutěží po uzavření plánovací smlouvy s obcí.
         </p>
       </div>
     </section>
@@ -447,7 +447,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
           <aside class="osa-zvpd__methodology-note" data-reveal data-reveal-delay="3">
             <span class="osa-eyebrow">Kontext · Veřejně prospěšný developer</span>
             <p class="osa-body">
-              Záměr staví na metodice, kterou spolek OSA&nbsp;II rozvíjí od roku 2020 — dobrovolnická síť, hodnotově orientovaní partneři a spolková právní záštita. Horní kasárna jsou první aplikací této metodiky v&nbsp;měřítku celého areálu.
+              Záměr staví na metodice, kterou spolek OSA&nbsp;II rozvíjí od roku 2020: dobrovolnická síť, hodnotově orientovaní partneři a spolková právní záštita. Horní kasárna jsou první aplikací této metodiky v&nbsp;měřítku celého areálu.
             </p>
           </aside>
         </div>
@@ -627,7 +627,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
     grid-template-columns: auto 1fr;
     gap: var(--space-6);
     align-items: start;
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-7);
     max-width: 1200px;
   }
   .osa-zvpd__chapter-mark {
@@ -641,9 +641,13 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
   }
   .osa-zvpd__chapter-title { margin: var(--space-2) 0 var(--space-4); max-width: 22ch; }
   .osa-zvpd__chapter-lede { margin: 0; color: var(--fg-muted); max-width: 64ch; font-size: var(--text-lg); }
+  /* Mobile: drop the oversized numeric mark; the "Kapitola 0X" eyebrow
+     carries the wayfinding cue with much less vertical cost. */
   @media (max-width: 720px) {
-    .osa-zvpd__chapter-head { grid-template-columns: 1fr; gap: var(--space-3); }
-    .osa-zvpd__chapter-mark { font-size: clamp(3rem, 14vw, 4.5rem); }
+    .osa-zvpd__chapter-head { grid-template-columns: 1fr; gap: var(--space-3); margin-bottom: var(--space-5); }
+    .osa-zvpd__chapter-mark { display: none; }
+    .osa-zvpd__chapter-title { margin: var(--space-1) 0 var(--space-3); }
+    .osa-zvpd__chapter-lede { font-size: var(--text-md); }
   }
 
   /* -------------------- OPPORTUNITY TABLE -------------------- */
@@ -665,10 +669,15 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
     display: grid;
     grid-template-columns: 130px 1fr;
     gap: var(--space-4);
-    padding: var(--space-4) 0;
+    padding: var(--space-4) var(--space-3);
+    margin: 0 calc(-1 * var(--space-3));
     border-top: 1px solid var(--rule);
+    transition: background var(--dur-fast) var(--ease-standard);
   }
   .osa-zvpd__opp-table > div:last-child { border-bottom: 1px solid var(--rule); }
+  @media (hover: hover) and (pointer: fine) {
+    .osa-zvpd__opp-table > div:hover { background: color-mix(in oklab, var(--fg) 5%, transparent); }
+  }
   .osa-zvpd__opp-table dt {
     font-family: var(--font-sans);
     font-weight: 600;
@@ -687,7 +696,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
   .osa-zvpd__fullbleed img {
     display: block;
     width: 100%;
-    height: clamp(280px, 45vh, 520px);
+    height: clamp(220px, 42vh, 520px);
     object-fit: cover;
   }
 
@@ -696,7 +705,7 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-6);
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-7);
   }
   @media (max-width: 860px) {
     .osa-zvpd__phases { grid-template-columns: 1fr; }
@@ -736,9 +745,14 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
     grid-template-columns: 1fr auto;
     align-items: baseline;
     gap: var(--space-3);
-    padding: var(--space-3) 0;
+    padding: var(--space-3) var(--space-2);
+    margin: 0 calc(-1 * var(--space-2));
     border-top: 1px solid rgba(255,255,255,0.12);
     font-size: var(--text-sm);
+    transition: background var(--dur-fast) var(--ease-standard);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .osa-zvpd__phase-metrics > div:hover { background: rgba(255,255,255,0.05); }
   }
   .osa-zvpd__phase-metrics > div:nth-child(-n+2) { border-top: 0; }
   .osa-zvpd__phase-metrics > div:nth-child(odd) { padding-right: var(--space-4); }
@@ -763,7 +777,10 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
   }
   .osa-zvpd__phase-target .osa-eyebrow { color: var(--fg); }
 
-  /* -------------------- TIMELINE -------------------- */
+  /* -------------------- TIMELINE --------------------
+     Bars sit inside a striped "track" — diagonal hatching mirrors the
+     SVGPattern on the chapter background, so the timeline reads as part
+     of the same surface rather than a detached widget. */
   .osa-zvpd__timeline {
     position: relative;
     display: grid;
@@ -782,6 +799,14 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
   .osa-zvpd__timeline-bars {
     position: relative;
     height: 44px;
+    background:
+      repeating-linear-gradient(
+        60deg,
+        transparent 0,
+        transparent 9px,
+        rgba(255,255,255,0.12) 9px,
+        rgba(255,255,255,0.12) 10px
+      );
   }
   .osa-zvpd__timeline-bar {
     position: absolute;
@@ -806,8 +831,12 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
     .osa-zvpd__timeline-bar { font-size: 10px; padding: 0 6px; }
   }
 
-  /* -------------------- PHOTO STRIP -------------------- */
-  .osa-zvpd__photostrip { padding: var(--space-8) 0; background: var(--bg); }
+  /* -------------------- PHOTO STRIP --------------------
+     Desktop: 2-column grid. Mobile: horizontal scroll-snap slider so the
+     strip doesn't stack into a long tower of thumbnails. Swipe-native,
+     no JS. The container-wide head stays, but the grid itself escapes
+     the container on mobile so the first slide aligns with the gutter. */
+  .osa-zvpd__photostrip { padding: var(--space-7) 0; background: var(--bg); }
   .osa-zvpd__photostrip-head { margin-bottom: var(--space-6); max-width: 820px; display: grid; gap: var(--space-2); }
   .osa-zvpd__photostrip-grid {
     display: grid;
@@ -823,34 +852,57 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
     display: block;
   }
   @media (max-width: 720px) {
-    .osa-zvpd__photostrip-grid { grid-template-columns: 1fr; }
+    .osa-zvpd__photostrip-grid {
+      display: flex;
+      grid-template-columns: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 8px;
+      padding: 0 var(--gutter) var(--space-3);
+      scroll-padding-left: var(--gutter);
+      scrollbar-width: thin;
+      scrollbar-color: var(--fg-muted) transparent;
+    }
+    .osa-zvpd__photostrip-grid > figure {
+      flex: 0 0 85%;
+      scroll-snap-align: start;
+    }
   }
 
-  /* -------------------- FINANCE CARDS -------------------- */
+  /* -------------------- FINANCE CARDS --------------------
+     Tighter padding so four numbers fit in a single row at ~900px and
+     stay 2×2 all the way down to phone widths (no 1-col collapse — the
+     cards carry so little text that a single stack leaves the numbers
+     floating alone with too much vertical cost). */
   .osa-zvpd__finance {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0;
     border-top: 1px solid var(--rule);
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-7);
   }
   .osa-zvpd__finance-card {
-    padding: var(--space-6) var(--space-5);
+    padding: var(--space-5) var(--space-4);
     border-right: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
     display: grid;
     gap: var(--space-2);
     align-content: start;
+    transition: background var(--dur-fast) var(--ease-standard);
   }
   .osa-zvpd__finance-card:last-child { border-right: 0; }
+  @media (hover: hover) and (pointer: fine) {
+    .osa-zvpd__finance-card:hover { background: color-mix(in oklab, var(--fg) 4%, transparent); }
+  }
   .osa-zvpd__finance-num {
     font-family: var(--font-sans);
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
     font-weight: 600;
     line-height: 1;
     letter-spacing: var(--tracking-tight);
     color: var(--fg);
-    margin-top: var(--space-2);
+    margin-top: var(--space-1);
     font-variant-numeric: tabular-nums lining-nums;
   }
   .osa-zvpd__finance-unit {
@@ -858,8 +910,15 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
     font-size: var(--text-xs);
     font-variant-numeric: tabular-nums lining-nums;
   }
-  @media (max-width: 860px) { .osa-zvpd__finance { grid-template-columns: repeat(2, 1fr); } .osa-zvpd__finance-card:nth-child(2) { border-right: 0; } }
-  @media (max-width: 480px) { .osa-zvpd__finance { grid-template-columns: 1fr; } .osa-zvpd__finance-card { border-right: 0; } }
+  @media (max-width: 860px) {
+    .osa-zvpd__finance { grid-template-columns: repeat(2, 1fr); }
+    .osa-zvpd__finance-card { padding: var(--space-4) var(--space-3); }
+    .osa-zvpd__finance-card:nth-child(2) { border-right: 0; }
+  }
+  @media (max-width: 480px) {
+    .osa-zvpd__finance-card { padding: var(--space-3); }
+    .osa-zvpd__finance-num { font-size: 1.5rem; }
+  }
 
   /* -------------------- AREAL TABLE -------------------- */
   .osa-zvpd__areal-wrap { margin-bottom: var(--space-7); }
@@ -886,6 +945,10 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
     border-top: 1px solid var(--rule);
   }
   .osa-zvpd__areal tbody th { font-weight: 600; color: var(--fg); }
+  .osa-zvpd__areal tbody tr { transition: background var(--dur-fast) var(--ease-standard); }
+  @media (hover: hover) and (pointer: fine) {
+    .osa-zvpd__areal tbody tr:hover { background: color-mix(in oklab, var(--fg) 5%, transparent); }
+  }
   .osa-zvpd__areal-note { color: var(--fg-muted); font-size: var(--text-xs); margin: var(--space-4) 0 0; max-width: 80ch; }
   @media (max-width: 720px) {
     .osa-zvpd__areal thead { display: none; }
@@ -902,7 +965,10 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
   }
   .osa-zvpd__cf p { margin: var(--space-3) 0 0; color: var(--fg); }
 
-  /* -------------------- STUDENTS GALLERY -------------------- */
+  /* -------------------- STUDENTS GALLERY --------------------
+     Desktop: 3-up grid. Mobile: scroll-snap slider mirroring the
+     photostrip so the page doesn't grow three screens taller for a
+     sub-section. */
   .osa-zvpd__students {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -918,7 +984,25 @@ const img = (name: string) => withBase(`/images/zamer-vpd/${name}`);
   }
   .osa-zvpd__students figcaption { color: var(--fg-muted); font-size: var(--text-xs); padding: var(--space-2) 2px 0; font-variant-numeric: tabular-nums lining-nums; }
   .osa-zvpd__students-note { color: var(--fg-muted); font-size: var(--text-xs); margin: var(--space-5) 0 0; max-width: 80ch; }
-  @media (max-width: 720px) { .osa-zvpd__students { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) {
+    .osa-zvpd__students {
+      display: flex;
+      grid-template-columns: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 8px;
+      margin: 0 calc(-1 * var(--gutter));
+      padding: 0 var(--gutter) var(--space-3);
+      scroll-padding-left: var(--gutter);
+      scrollbar-width: thin;
+      scrollbar-color: var(--fg-muted) transparent;
+    }
+    .osa-zvpd__students > figure {
+      flex: 0 0 85%;
+      scroll-snap-align: start;
+    }
+  }
 
   /* -------------------- METHODOLOGY NOTE (inside ch05 footer) --------------------
      Small contextual footnote at the very bottom of "Další kroky". Sits below
