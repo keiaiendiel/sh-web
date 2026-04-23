@@ -177,14 +177,22 @@ const articleHref = withBase('/zamer-vpd/');
   }
   .osa-ih__chart-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
     gap: 1px;
     flex: 1;
+    min-width: 0;
+    min-height: 0;
     background: var(--rule);
   }
+  /* Cells fill their grid tracks; no aspect-ratio — tracks are already
+     evenly divided within the 4:3 frame, and aspect-ratio on cells would
+     derive their height from width and force min-width, pushing the grid
+     past its container on some viewports. */
   .osa-ih__chart-grid > span {
     background: var(--bg);
-    aspect-ratio: 1 / 1;
+    min-width: 0;
+    min-height: 0;
   }
   /* a few cells use a diagonal motif to hint architecture */
   .osa-ih__chart-grid > span:nth-child(3n) {
