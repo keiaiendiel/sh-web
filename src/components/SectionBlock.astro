@@ -8,10 +8,7 @@ interface Props {
 const { eyebrow, heading, ctaHref, ctaLabel } = Astro.props;
 ---
 <section class="osa-section-block" data-reveal>
-  <header class="osa-section-block__head">
-    {eyebrow && <span class="osa-eyebrow osa-section-block__eyebrow">{eyebrow}</span>}
-    <span class="osa-section-block__rule" aria-hidden="true"></span>
-  </header>
+  {eyebrow && <span class="osa-section-block__mark" aria-hidden="true">{eyebrow}</span>}
   <div class="osa-section-block__content">
     <h3 class="osa-h3 osa-section-block__heading">{heading}</h3>
     <div class="osa-section-block__body osa-body">
@@ -29,35 +26,29 @@ const { eyebrow, heading, ctaHref, ctaLabel } = Astro.props;
 </section>
 
 <style>
+  /* Numbered editorial section. Mirrors the VPD chapter-head pattern: the
+     step number is a big sans numeral (not a small eyebrow), heading and
+     body flow in the right column. On mobile the number keeps its place
+     above the heading but shrinks so it doesn't dominate the viewport. */
   .osa-section-block {
     display: grid;
-    grid-template-columns: minmax(80px, 120px) 1fr;
-    column-gap: var(--space-7);
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-6);
     padding: var(--space-7) 0 var(--space-6);
     border-top: 1px solid var(--rule);
     align-items: start;
   }
   .osa-section-block:last-of-type { border-bottom: 1px solid var(--rule); }
 
-  .osa-section-block__head {
-    position: sticky;
-    top: var(--space-5);
-    display: grid;
-    gap: var(--space-3);
-    align-self: start;
-  }
-  .osa-section-block__eyebrow {
-    color: var(--fg);
-    font-family: var(--font-mono);
-    font-size: var(--text-md);
-    letter-spacing: var(--tracking-wide);
+  .osa-section-block__mark {
+    font-family: var(--font-sans);
     font-weight: 600;
-  }
-  .osa-section-block__rule {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--fg);
+    font-size: clamp(2.8rem, 7.2vw, 4.8rem);
+    line-height: 0.9;
+    color: var(--fg);
+    letter-spacing: -0.02em;
+    margin: 0;
+    min-width: 3ch;
   }
 
   .osa-section-block__content {
@@ -77,19 +68,26 @@ const { eyebrow, heading, ctaHref, ctaLabel } = Astro.props;
   .osa-section-block__body :global(p:last-child) { margin-bottom: 0; }
   .osa-section-block__foot { margin-top: var(--space-1); }
 
-  @media (max-width: 960px) {
+  /* Mobile: the big numeral is information-bloat on a narrow viewport, so
+     it collapses to an eyebrow-style label above the heading — same move
+     VPD chapters make (where the label swaps to "Kapitola 0X"). Here we
+     just restyle the existing span so the prop API stays minimal. */
+  @media (max-width: 720px) {
     .osa-section-block {
       grid-template-columns: 1fr;
-      row-gap: var(--space-3);
+      row-gap: var(--space-2);
       padding: var(--space-6) 0 var(--space-5);
     }
-    .osa-section-block__head {
-      position: static;
-      grid-template-columns: auto 1fr;
-      align-items: center;
-      gap: var(--space-3);
+    .osa-section-block__mark {
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: var(--text-2xs);
+      letter-spacing: var(--tracking-wider);
+      line-height: var(--lh-tight);
+      text-transform: uppercase;
+      color: var(--fg);
+      min-width: 0;
     }
-    .osa-section-block__rule { width: 40px; }
   }
 
   .osa-inline-cta {
