@@ -6,7 +6,7 @@ import OrgChart from '../../components/OrgChart.astro';
 import ValuesMatrix from '../../components/ValuesMatrix.astro';
 import DocumentList from '../../components/DocumentList.astro';
 import InlineCTA from '../../components/InlineCTA.astro';
-import SectionBlock from '../../components/SectionBlock.astro';
+import Gallery from '../../components/Gallery.astro';
 import { withBase } from '../../utils/url';
 ---
 <Base title="O spolku - Občanské sdružení Alternativa II, z.s.">
@@ -30,6 +30,11 @@ import { withBase } from '../../utils/url';
       </div>
     </section>
 
+    {/* ===== NARRATIVE + KLÍČOVÁ ČÍSLA =====
+         Two-column: long-form paragraphs left, compact VPD-style datalist
+         right. Stack under 900 px. Numbers consciously kept to four
+         meaningful figures — independence, longevity, reach, shared
+         value base. */}
     <section class="section section--tight osa-about__narrative">
       <div class="container-wide osa-about__narrative-grid">
         <div class="osa-about__kdojsme osa-longform" data-reveal>
@@ -44,55 +49,79 @@ import { withBase } from '../../utils/url';
           </p>
         </div>
         <aside class="osa-about__stats" data-reveal data-reveal-delay="1" aria-label="Spolek v číslech">
-          <dl class="osa-stats">
-            <div class="osa-stats__item">
-              <dt class="osa-stats__label">Od založení</dt>
-              <dd class="osa-stats__figure">20 let</dd>
-              <p class="osa-stats__note">Registrace u MV ČR 14. 3. 2006.</p>
+          <dl class="osa-about__numbers">
+            <div>
+              <dt>Založeno</dt>
+              <dd><span class="osa-figs">2006</span><br /><small>před 20 lety, registrace u MV ČR</small></dd>
             </div>
-            <div class="osa-stats__item">
-              <dt class="osa-stats__label">Zakládajících členů&nbsp;/ dnes projektů</dt>
-              <dd class="osa-stats__figure">12 → 17</dd>
-              <p class="osa-stats__note">Od dvanácti studentů k sedmnácti autonomním projektům.</p>
+            <div>
+              <dt>Autonomních projektů</dt>
+              <dd><span class="osa-figs">20+</span><br /><small>včetně klubů a decentralizovaných výkonných složek</small></dd>
             </div>
-            <div class="osa-stats__item">
-              <dt class="osa-stats__label">Pilíře hospodaření</dt>
-              <dd class="osa-stats__figure">3</dd>
-              <p class="osa-stats__note">Dobrovolnická práce, metoda DIY, vlastní hospodářská činnost.</p>
+            <div>
+              <dt>Oblastí činnosti</dt>
+              <dd><span class="osa-figs">8</span><br /><small>urbanismus, kultura, sport, média, vzdělávání, tvorba, komunita, LARP</small></dd>
             </div>
-            <div class="osa-stats__item">
-              <dt class="osa-stats__label">Ze státních dotací</dt>
-              <dd class="osa-stats__figure">0 Kč</dd>
-              <p class="osa-stats__note">Nezávislost na veřejných zdrojích je podmínka autonomie.</p>
+            <div>
+              <dt>Ze státních dotací</dt>
+              <dd><span class="osa-figs">0&nbsp;Kč</span><br /><small>nezávislost na veřejných zdrojích je podmínka autonomie</small></dd>
             </div>
           </dl>
         </aside>
       </div>
     </section>
 
+    {/* ===== VIZE · POSLÁNÍ · SMYSL =====
+         Bespoke chapter-head layout matching the VPD investor page
+         (big "01" numeric mark + small sub-head above the heading +
+         body lede). Mobile drops the big mark and the sub-head
+         alone carries the wayfinding. */}
     <section class="section osa-about__vize">
       <div class="container-wide">
         <header class="osa-about__sub-head" data-reveal>
           <span class="osa-eyebrow">Vize, poslání, smysl</span>
           <h2 class="osa-h2">Proč spolek existuje.</h2>
         </header>
-        <div class="osa-about__vize-body">
-          <SectionBlock eyebrow="01" heading="Vize. Čeho chceme dosáhnout.">
-            <p>Moderní, prosperující a hodnotově orientovaná společnost. Každý jedinec v ní má zázemí a podmínky pro plnohodnotnou a všestrannou seberealizaci.</p>
-          </SectionBlock>
-          <SectionBlock eyebrow="02" heading="Poslání. Jak toho chceme dosáhnout.">
-            <p>Podporujeme seberealizaci, aktivní bytí, vědu, kulturu, sport, tělovýchovu, vzdělávání, volný čas, humanitární aktivity, občanskou angažovanost i sociálně a ekologicky šetrné podnikání.</p>
-          </SectionBlock>
-          <SectionBlock eyebrow="03" heading="Smysl. Proč to děláme.">
-            <p>Rozvinuté zájmy, hodnoty a aktivity jednotlivce jsou předpokladem rozvinuté společnosti. Osobní štěstí a obecné blaho rostou spolu. Proto stavíme zázemí, kde se co nejvíce lidí může plnohodnotně rozvíjet.</p>
-          </SectionBlock>
+
+        <div class="osa-about__chapter" data-reveal>
+          <span class="osa-about__chapter-mark" aria-hidden="true">01</span>
+          <div>
+            <span class="osa-eyebrow">Čeho chceme dosáhnout</span>
+            <h3 class="osa-h3 osa-about__chapter-title">Vize</h3>
+            <p class="osa-body osa-about__chapter-body">
+              Moderní, prosperující a hodnotově orientovaná společnost. Každý jedinec v ní má zázemí a podmínky pro plnohodnotnou a všestrannou seberealizaci.
+            </p>
+          </div>
         </div>
-        <figure class="osa-about__pull" data-reveal>
-          <blockquote class="osa-about__quote">Naděje není přesvědčení, že něco dobře dopadne, ale jistota, že něco má smysl — bez ohledu na to, jak to dopadne.</blockquote>
-          <figcaption class="osa-about__quote-attr">Václav Havel</figcaption>
-        </figure>
+
+        <div class="osa-about__chapter" data-reveal>
+          <span class="osa-about__chapter-mark" aria-hidden="true">02</span>
+          <div>
+            <span class="osa-eyebrow">Jak toho chceme dosáhnout</span>
+            <h3 class="osa-h3 osa-about__chapter-title">Poslání</h3>
+            <p class="osa-body osa-about__chapter-body">
+              Podporujeme seberealizaci, aktivní bytí, vědu, kulturu, sport, tělovýchovu, vzdělávání, volný čas, humanitární aktivity, občanskou angažovanost i sociálně a ekologicky šetrné podnikání.
+            </p>
+          </div>
+        </div>
+
+        <div class="osa-about__chapter" data-reveal>
+          <span class="osa-about__chapter-mark" aria-hidden="true">03</span>
+          <div>
+            <span class="osa-eyebrow">Proč to děláme</span>
+            <h3 class="osa-h3 osa-about__chapter-title">Smysl</h3>
+            <p class="osa-body osa-about__chapter-body">
+              Rozvinuté zájmy, hodnoty a aktivity jednotlivce jsou předpokladem rozvinuté společnosti. Osobní štěstí a obecné blaho rostou spolu. Proto stavíme zázemí, kde se co nejvíce lidí může plnohodnotně rozvíjet.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
+
+    {/* Values come before the org chart so the page reads ideology →
+         structure: axioms establish what the spolek is about, org chart
+         then shows how it's arranged around those axioms. */}
+    <ValuesMatrix dark={true} />
 
     <section class="section">
       <div class="container-wide">
@@ -105,8 +134,6 @@ import { withBase } from '../../utils/url';
         </div>
       </div>
     </section>
-
-    <ValuesMatrix dark={true} />
 
     <section class="section osa-about__metod">
       <div class="container-wide">
@@ -143,6 +170,8 @@ import { withBase } from '../../utils/url';
         </div>
       </div>
     </section>
+
+    <Gallery title="Z činností spolku." />
   </main>
   <Footer />
 </Base>
@@ -170,11 +199,6 @@ import { withBase } from '../../utils/url';
   }
   .osa-about__hero-inner { position: relative; z-index: 1; }
   .osa-about__hero-inner {
-    /* Vertical padding is applied per-property so the horizontal
-       gutter from .container-wide is preserved (padding shorthand
-       would otherwise reset it to 0 and the content would fall off
-       the viewport edge). The whole page uses container-wide (1440px)
-       to match landing and /projekty. */
     padding-top: clamp(var(--space-7), 8vw, var(--space-9));
     padding-bottom: var(--space-9);
     display: grid;
@@ -213,49 +237,45 @@ import { withBase } from '../../utils/url';
     max-width: 62ch;
   }
 
-  /* Two-column narrative: long-form paragraphs left, datalist right.
-     Collapses to single column below ~900 px so the stats stack below
-     the prose instead of squeezing into a cramped sidebar. */
+  /* ---------- Narrative + compact datalist ---------- */
   .osa-about__narrative-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
     gap: var(--space-8);
     align-items: start;
   }
   .osa-about__stats { margin: 0; }
-  .osa-stats {
+  .osa-about__numbers {
     display: grid;
-    gap: var(--space-5);
+    gap: 0;
     margin: 0;
   }
-  .osa-stats__item {
+  .osa-about__numbers > div {
     display: grid;
-    gap: var(--space-1);
+    grid-template-columns: 140px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
     border-top: 1px solid var(--rule);
-    padding-top: var(--space-3);
   }
-  .osa-stats__label {
-    font-family: var(--font-sans);
-    font-size: var(--text-2xs);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
-    color: var(--fg-muted);
-    margin: 0;
-  }
-  .osa-stats__figure {
+  .osa-about__numbers > div:last-child { border-bottom: 1px solid var(--rule); }
+  .osa-about__numbers dt {
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: clamp(2rem, 3.4vw, 2.75rem);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--fg);
-    margin: 0;
-  }
-  .osa-stats__note {
     font-size: var(--text-sm);
+    color: var(--fg);
+    align-self: start;
+  }
+  .osa-about__numbers dd {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--fg);
+    line-height: var(--lh-normal);
+  }
+  .osa-about__numbers dd small {
+    display: block;
     color: var(--fg-muted);
-    margin: var(--space-1) 0 0;
-    max-width: 30ch;
+    font-size: var(--text-xs);
+    margin-top: 2px;
   }
   @media (max-width: 900px) {
     .osa-about__narrative-grid {
@@ -263,30 +283,46 @@ import { withBase } from '../../utils/url';
       gap: var(--space-6);
     }
   }
+  @media (max-width: 560px) {
+    .osa-about__numbers > div { grid-template-columns: 1fr; gap: var(--space-2); }
+  }
 
-  /* Vize / poslání / smysl block. Uses SectionBlock under the hood so
-     the 01/02/03 chapter-mark vocabulary matches /zapojte-se/. */
-  .osa-about__vize-body { margin-top: 0; }
-  .osa-about__pull {
-    margin: var(--space-8) 0 0;
-    padding: var(--space-6) 0 0;
-    max-width: 72ch;
+  /* ---------- Vize / poslání / smysl — VPD chapter-head vocabulary ---------- */
+  .osa-about__chapter {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-6);
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
   }
-  .osa-about__quote {
+  .osa-about__chapter:last-of-type { border-bottom: 1px solid var(--rule); }
+  .osa-about__chapter-mark {
     font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
-    line-height: var(--lh-snug);
-    letter-spacing: var(--tracking-tight);
+    font-weight: 600;
+    font-size: clamp(2.8rem, 7.2vw, 4.8rem);
+    line-height: 0.9;
     color: var(--fg);
-    margin: 0;
+    letter-spacing: -0.02em;
+    min-width: 3ch;
   }
-  .osa-about__quote-attr {
-    margin-top: var(--space-3);
-    font-size: var(--text-2xs);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
-    color: var(--fg-muted);
+  .osa-about__chapter-title {
+    margin: var(--space-1) 0 var(--space-2);
+    font-weight: 600;
+  }
+  .osa-about__chapter-body {
+    margin: 0;
+    max-width: 64ch;
+  }
+  @media (max-width: 720px) {
+    .osa-about__chapter {
+      grid-template-columns: 1fr;
+      column-gap: 0;
+      row-gap: var(--space-2);
+      padding: var(--space-5) 0;
+    }
+    .osa-about__chapter-mark { display: none; }
+    .osa-about__chapter-title { font-size: var(--text-2xl); }
   }
 
   .osa-about__sub-head {
