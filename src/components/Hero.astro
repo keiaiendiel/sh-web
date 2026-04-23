@@ -1,5 +1,6 @@
 ---
 import OsaGlyph from './OsaGlyph.astro';
+import InlineCTA from './InlineCTA.astro';
 import { withBase } from '../utils/url';
 ---
 <section
@@ -21,6 +22,9 @@ import { withBase } from '../utils/url';
       Platforma pro desítky autonomních projektů. Pomáháme tvořit bez státních dotací, dobrovolnickou prací a metodou DIY.
     </p>
     <div class="osa-hero__rule" aria-hidden="true" data-reveal style="transition-delay: 1100ms"></div>
+    <div class="osa-hero__cta" data-reveal style="transition-delay: 1250ms">
+      <InlineCTA href={withBase('/o-spolku/')}>Více o spolku</InlineCTA>
+    </div>
   </div>
 </section>
 
@@ -96,6 +100,7 @@ import { withBase } from '../utils/url';
     margin-top: var(--space-2);
     transform-origin: left;
   }
+  .osa-hero__cta { margin-top: var(--space-2); }
   /* Reveal override: rule scales from 0 width instead of y-offset. */
   [data-reveal].osa-hero__rule { transform: scaleX(0); }
   [data-reveal].osa-hero__rule.shown { transform: scaleX(1); opacity: 1; }

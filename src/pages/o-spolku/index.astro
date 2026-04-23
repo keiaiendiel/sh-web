@@ -6,6 +6,7 @@ import OrgChart from '../../components/OrgChart.astro';
 import ValuesMatrix from '../../components/ValuesMatrix.astro';
 import DocumentList from '../../components/DocumentList.astro';
 import InlineCTA from '../../components/InlineCTA.astro';
+import SectionBlock from '../../components/SectionBlock.astro';
 import { withBase } from '../../utils/url';
 ---
 <Base title="O spolku - Občanské sdružení Alternativa II, z.s.">
@@ -30,7 +31,7 @@ import { withBase } from '../../utils/url';
     </section>
 
     <section class="section section--tight osa-about__narrative">
-      <div class="container-wide">
+      <div class="container-wide osa-about__narrative-grid">
         <div class="osa-about__kdojsme osa-longform" data-reveal>
           <p>
             Spolek funguje jako platforma. Sám přímo nic neprovozuje. Zajišťuje společný právní rámec, zázemí a konsensuální rozhodování; výkonnou činnost provádějí autonomní projekty, které si vedou vlastní členskou základnu, hospodaření i programovou linii.
@@ -42,6 +43,54 @@ import { withBase } from '../../utils/url';
             Nejvyšším orgánem je Členský sněm. Statutárním orgánem je Představenstvo. Výkonnou úroveň tvoří autonomní projekty a kluby. O strategických rozhodnutích rozhoduje spolek konsensem.
           </p>
         </div>
+        <aside class="osa-about__stats" data-reveal data-reveal-delay="1" aria-label="Spolek v číslech">
+          <dl class="osa-stats">
+            <div class="osa-stats__item">
+              <dt class="osa-stats__label">Od založení</dt>
+              <dd class="osa-stats__figure">20 let</dd>
+              <p class="osa-stats__note">Registrace u MV ČR 14. 3. 2006.</p>
+            </div>
+            <div class="osa-stats__item">
+              <dt class="osa-stats__label">Zakládajících členů&nbsp;/ dnes projektů</dt>
+              <dd class="osa-stats__figure">12 → 17</dd>
+              <p class="osa-stats__note">Od dvanácti studentů k sedmnácti autonomním projektům.</p>
+            </div>
+            <div class="osa-stats__item">
+              <dt class="osa-stats__label">Pilíře hospodaření</dt>
+              <dd class="osa-stats__figure">3</dd>
+              <p class="osa-stats__note">Dobrovolnická práce, metoda DIY, vlastní hospodářská činnost.</p>
+            </div>
+            <div class="osa-stats__item">
+              <dt class="osa-stats__label">Ze státních dotací</dt>
+              <dd class="osa-stats__figure">0 Kč</dd>
+              <p class="osa-stats__note">Nezávislost na veřejných zdrojích je podmínka autonomie.</p>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section osa-about__vize">
+      <div class="container-wide">
+        <header class="osa-about__sub-head" data-reveal>
+          <span class="osa-eyebrow">Vize, poslání, smysl</span>
+          <h2 class="osa-h2">Proč spolek existuje.</h2>
+        </header>
+        <div class="osa-about__vize-body">
+          <SectionBlock eyebrow="01" heading="Vize. Čeho chceme dosáhnout.">
+            <p>Moderní, prosperující a hodnotově orientovaná společnost. Každý jedinec v ní má zázemí a podmínky pro plnohodnotnou a všestrannou seberealizaci.</p>
+          </SectionBlock>
+          <SectionBlock eyebrow="02" heading="Poslání. Jak toho chceme dosáhnout.">
+            <p>Podporujeme seberealizaci, aktivní bytí, vědu, kulturu, sport, tělovýchovu, vzdělávání, volný čas, humanitární aktivity, občanskou angažovanost i sociálně a ekologicky šetrné podnikání.</p>
+          </SectionBlock>
+          <SectionBlock eyebrow="03" heading="Smysl. Proč to děláme.">
+            <p>Rozvinuté zájmy, hodnoty a aktivity jednotlivce jsou předpokladem rozvinuté společnosti. Osobní štěstí a obecné blaho rostou spolu. Proto stavíme zázemí, kde se co nejvíce lidí může plnohodnotně rozvíjet.</p>
+          </SectionBlock>
+        </div>
+        <figure class="osa-about__pull" data-reveal>
+          <blockquote class="osa-about__quote">Naděje není přesvědčení, že něco dobře dopadne, ale jistota, že něco má smysl — bez ohledu na to, jak to dopadne.</blockquote>
+          <figcaption class="osa-about__quote-attr">Václav Havel</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -162,6 +211,82 @@ import { withBase } from '../../utils/url';
     color: var(--fg-muted);
     font-size: var(--text-lg);
     max-width: 62ch;
+  }
+
+  /* Two-column narrative: long-form paragraphs left, datalist right.
+     Collapses to single column below ~900 px so the stats stack below
+     the prose instead of squeezing into a cramped sidebar. */
+  .osa-about__narrative-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+    gap: var(--space-8);
+    align-items: start;
+  }
+  .osa-about__stats { margin: 0; }
+  .osa-stats {
+    display: grid;
+    gap: var(--space-5);
+    margin: 0;
+  }
+  .osa-stats__item {
+    display: grid;
+    gap: var(--space-1);
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-3);
+  }
+  .osa-stats__label {
+    font-family: var(--font-sans);
+    font-size: var(--text-2xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    color: var(--fg-muted);
+    margin: 0;
+  }
+  .osa-stats__figure {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(2rem, 3.4vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin: 0;
+  }
+  .osa-stats__note {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    margin: var(--space-1) 0 0;
+    max-width: 30ch;
+  }
+  @media (max-width: 900px) {
+    .osa-about__narrative-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+
+  /* Vize / poslání / smysl block. Uses SectionBlock under the hood so
+     the 01/02/03 chapter-mark vocabulary matches /zapojte-se/. */
+  .osa-about__vize-body { margin-top: 0; }
+  .osa-about__pull {
+    margin: var(--space-8) 0 0;
+    padding: var(--space-6) 0 0;
+    max-width: 72ch;
+  }
+  .osa-about__quote {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--fg);
+    margin: 0;
+  }
+  .osa-about__quote-attr {
+    margin-top: var(--space-3);
+    font-size: var(--text-2xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    color: var(--fg-muted);
   }
 
   .osa-about__sub-head {
