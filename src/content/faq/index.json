@@ -1,0 +1,74 @@
+{
+  "q1": {
+    "audience": "project",
+    "question": "Co přesně je Startovací Hub a co bude dál?",
+    "answer": "Startovací Hub je první obyvatelná etapa záměru VPD1, který má z areálu horních kasáren v Klecanech postupně dotvořit obytnou a produktivní vrstvu s potenciálem 1500+ bytových jednotek. Hub je menší provozní celek, kterým chceme co nejdřív přivést areál do reálného fungování. Po Hubu pokračujeme v dalších etapách VPD1.",
+    "order": 1
+  },
+  "q2": {
+    "audience": "project",
+    "question": "Kdo za projektem stojí?",
+    "answer": "Záměr běží pod hlavičkou VPD (Veřejně Prospěšný Developer), což je projekt v rámci OSA — Občanské sdružení Alternativa II, z.s. OSA je nezisková platforma fungující bez veřejných dotací, na členských příspěvcích a vlastní činnosti. Detail najdete na osa2.cz.",
+    "order": 2
+  },
+  "q3": {
+    "audience": "project",
+    "question": "Kdy Hub otevírá?",
+    "answer": "Cílově ve čtvrtém kvartálu 2026 nebo v prvním kvartálu 2027. Reálné datum potvrdíme, jakmile budou hotové tři věci: kapitálová struktura, provozní připravenost areálu a právní rámec provozu. Aktuální stav najdete v sekci O projektu.",
+    "order": 3
+  },
+  "q4": {
+    "audience": "project",
+    "question": "V jaké fázi je projekt teď?",
+    "answer": "Máme dokončený investiční záměr, definované scénáře pro investory a navrženou provozní strukturu pro Hub. Sbíráme nezávazný zájem od rezidentů a investorů, paralelně dolaďujeme právní rámec a provozní přípravu.",
+    "order": 4
+  },
+  "q5": {
+    "audience": "resident",
+    "question": "Je vyplnění formuláře k něčemu zavazující?",
+    "answer": "Není. Formulář není rezervace ani pořadník na konkrétní místo. Říkáte nám jen orientačně, za jakých podmínek by pro vás Hub dával smysl, abychom mohli reálně připravit nabídku.",
+    "order": 5
+  },
+  "q6": {
+    "audience": "resident",
+    "question": "Kolik bude pobyt stát?",
+    "answer": "Cenová pásma ladíme podle reálné poptávky a podle finální podoby provozu. Orientačně: kapsle nejlevněji, jednolůžkový pokoj nejdráž, sdílený pokoj a klidnější uzavíratelné místo někde mezi. Konkrétní rozsahy jsou v formuláři. Cena vždy zahrnuje základní služby.",
+    "order": 6
+  },
+  "q7": {
+    "audience": "resident",
+    "question": "Co znamená stipendijní režim, work-trade nebo rezident-tvůrce?",
+    "answer": "Stipendium je popsaný výběr pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Work-trade je výměna konkrétní práce (provoz, správa, komunitní servis) za zvýhodněné bydlení. Rezident-tvůrce je role pro tvůrce, kteří přinášejí program nebo kulturní vrstvu. Detail je v tooltipech přímo ve formuláři.",
+    "order": 7
+  },
+  "q8": {
+    "audience": "resident",
+    "question": "Jak je to s délkou pobytu a flexibilitou?",
+    "answer": "Hub je dimenzovaný na různě dlouhé pobyty: krátkodobé v kapslích, dlouhodobější v pokojích. V formuláři vybíráte orientační délku; konkrétní smluvní podmínky budeme dolaďovat podle toho, co lidem nejvíc dává smysl.",
+    "order": 8
+  },
+  "q9": {
+    "audience": "investor",
+    "question": "Jaký je dnes právní rámec investice?",
+    "answer": "Záměr finalizujeme přes některý z definovaných právních vehiklů: Družstvo, Fond Kvalifikovaných Investorů VPD nebo Bytové Družstvo VPD. Konkrétní strukturu volíme podle velikosti vstupu a podle zákonných možností. Detail řešíme v individuální komunikaci po vyplnění formuláře.",
+    "order": 9
+  },
+  "q10": {
+    "audience": "investor",
+    "question": "Co jsou scénáře S1-S5 a jak se mezi nimi rozhodnout?",
+    "answer": "Scénáře pokrývají rozsah od konzervativní po optimistickou variantu vývoje záměru, plus dvě varianty pro různé délky závazku. Konzervativní scénář počítá s pomalejším náběhem a nižším výnosem, optimistický s rychlejším otevřením a vyšším výnosem. Konkrétní volba závisí na vašem horizontu a toleranci k riziku. Doporučujeme prohlédnout si všechny scénáře v kalkulátoru a probrat výběr individuálně.",
+    "order": 10
+  },
+  "q11": {
+    "audience": "investor",
+    "question": "Jak je projekt zajištěný? Co když se zpozdí?",
+    "answer": "Zpoždění při povolování a ve výstavbě je u záměru tohoto typu reálné riziko. Scénáře jsou modelované tak, aby zachycovaly variantu základního i opožděného průběhu. Pokud se záměr zásadně posune, dáme vám vědět dřív, než to ovlivní vaši pozici.",
+    "order": 11
+  },
+  "q12": {
+    "audience": "legal",
+    "question": "Je formulář pro investory zavazující?",
+    "answer": "Není. Vyplněním nevstupujete do investice, nesvazujete se s konkrétní částkou ani neobdržíte alokaci. Posíláte nám rámcový signál o vašem zájmu a my vás zařadíme do okruhu, se kterým komunikujeme detail po dokončení právní struktury.",
+    "order": 12
+  }
+}
