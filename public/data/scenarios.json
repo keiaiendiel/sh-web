@@ -1,0 +1,55 @@
+{
+  "scenarios": [
+    {
+      "id": "S1",
+      "name": "Konzervativní",
+      "description": "Pomalejší náběh, opatrný odhad. Pro investory s nižší tolerancí k riziku.",
+      "termYears": 5,
+      "nominalYieldPct": 4.5,
+      "multiplier": 1.20,
+      "breakevenMonthsOffset": 48,
+      "keyAssumption": "Otevření Hubu Q1 2027, plné obsazení Q4 2027."
+    },
+    {
+      "id": "S2",
+      "name": "Základní",
+      "description": "Středový scénář, který odpovídá současnému plánu záměru.",
+      "termYears": 5,
+      "nominalYieldPct": 6.1,
+      "multiplier": 1.30,
+      "breakevenMonthsOffset": 42,
+      "keyAssumption": "Otevření Hubu Q4 2026, plné obsazení Q3 2027."
+    },
+    {
+      "id": "S3",
+      "name": "Optimistický",
+      "description": "Rychlejší otevření a vyšší obsazenost než plán.",
+      "termYears": 5,
+      "nominalYieldPct": 7.8,
+      "multiplier": 1.42,
+      "breakevenMonthsOffset": 36,
+      "keyAssumption": "Otevření Q3 2026, vysoká poptávka po krátkodobém ubytování."
+    },
+    {
+      "id": "S4",
+      "name": "Krátký závazek (3 roky)",
+      "description": "Varianta pro investory s kratším horizontem.",
+      "termYears": 3,
+      "nominalYieldPct": 5.0,
+      "multiplier": 1.16,
+      "breakevenMonthsOffset": 30,
+      "keyAssumption": "Výplata principálu na konci 36. měsíce."
+    },
+    {
+      "id": "S5",
+      "name": "Dlouhý závazek (10 let)",
+      "description": "Stabilizační scénář s vyšším výnosem za delší závazek.",
+      "termYears": 10,
+      "nominalYieldPct": 6.8,
+      "multiplier": 1.95,
+      "breakevenMonthsOffset": 60,
+      "keyAssumption": "Plný výnos po dokončení dalších etap VPD1."
+    }
+  ],
+  "_disclaimer": "Hodnoty v kalkulátoru jsou aktuálně ilustrativní; reálné scénáře doplníme po dokončení právní struktury."
+}
