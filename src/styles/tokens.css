@@ -14,28 +14,26 @@
  * Source: /Users/kindl/Work/_2026/02 OSA/00 Branding/00 Font/AtypText-Special-*.otf
  * Subsetted to Latin-Extended + Czech diacritics via pyftsubset, WOFF2.
  * Carries the -OSA- ligature glyphs; used for headings, body, and buttons.
- * All fonts self-hosted in /public/fonts/.
- *
- * NOTE: The '/osa-web/' prefix below is coupled to `base` in astro.config.mjs.
- * When DNS cuts over to osa2.cz (base removed), find-replace '/osa-web/' with '/'.
+ * All fonts self-hosted in /public/fonts/ and served from the site root
+ * (subdomain deploy at klecany.osa2.cz, no base path).
  */
 @font-face {
   font-family: 'Atyp Special';
-  src: url('/osa-web/fonts/AtypText-Special-Medium.woff2') format('woff2');
+  src: url('/fonts/AtypText-Special-Medium.woff2') format('woff2');
   font-weight: 400 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Atyp Special';
-  src: url('/osa-web/fonts/AtypText-Special-Bold.woff2') format('woff2');
+  src: url('/fonts/AtypText-Special-Bold.woff2') format('woff2');
   font-weight: 600 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Atyp Special';
-  src: url('/osa-web/fonts/AtypText-Special-Italic.woff2') format('woff2');
+  src: url('/fonts/AtypText-Special-Italic.woff2') format('woff2');
   font-weight: 400 500;
   font-style: italic;
   font-display: swap;
