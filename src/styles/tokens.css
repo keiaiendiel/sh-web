@@ -62,6 +62,8 @@
      8 colors derived from the Czech tricolor (manual §2.4). Reserved for
      sub-project identities - do NOT use for the parent OSA brand. */
   --c-red:      #d0342c;   /* tricolor red */
+  --accent: var(--c-red);
+  --accent-on: #ffffff; /* foreground used on accent fills */
   --c-coral:    #e86a5a;
   --c-mustard:  #c79a3a;
   --c-olive:    #6c7a3d;
