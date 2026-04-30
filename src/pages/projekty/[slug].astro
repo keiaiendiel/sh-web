@@ -52,7 +52,7 @@ const statusLabel = (s: string) =>
       <p class="pjd-cta__lede">Pokud Hub vidíte jako reálnou možnost bydlení, vyplňte před-rezervaci. Na otázky k jednotlivým provozům odpovíme e-mailem.</p>
       <div class="pjd-cta__btns">
         <a class="pjd-cta__btn pjd-cta__btn--primary" href={withBase('/rezervace/')}>Vyplnit před-rezervaci →</a>
-        <a class="pjd-cta__btn pjd-cta__btn--ghost" href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>
+        <a class="pjd-cta__btn pjd-cta__btn--ghost" href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>
       </div>
     </div>
   </section>
@@ -178,29 +178,56 @@ const statusLabel = (s: string) =>
     display: flex; gap: 12px;
     justify-content: center; flex-wrap: wrap;
   }
+  /* Detail-page CTAs — wipe pattern. Primary plum retracts on hover;
+     ghost is black outline that fills on hover. */
   .pjd-cta__btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: inline-flex; align-items: center; gap: 8px;
     padding: 14px 24px;
     border-radius: var(--radius-input);
     font-weight: 600; font-size: 15px;
     text-decoration: none;
-    transition:
-      transform var(--dur-base) var(--ease-decel),
-      box-shadow var(--dur-base) var(--ease-decel),
-      background var(--dur-base) var(--ease-decel);
+    transition: color 280ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .pjd-cta__btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transition: clip-path 380ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .pjd-cta__btn--primary {
-    background: var(--accent); color: var(--accent-on);
+    color: #fff;
     border: 1px solid var(--accent);
   }
-  .pjd-cta__btn--primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(90, 42, 95, 0.32);
+  .pjd-cta__btn--primary::after {
+    background: var(--accent);
+    clip-path: inset(0 0 0 0);
+  }
+  .pjd-cta__btn--primary:hover,
+  .pjd-cta__btn--primary:focus-visible { color: var(--accent); }
+  .pjd-cta__btn--primary:hover::after,
+  .pjd-cta__btn--primary:focus-visible::after {
+    clip-path: inset(100% 0 0 0);
   }
   .pjd-cta__btn--ghost {
     color: var(--k-100);
-    border: 1px solid var(--k-30);
-    background: var(--bg);
+    border: 1px solid var(--k-100);
   }
-  .pjd-cta__btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .pjd-cta__btn--ghost::after {
+    background: var(--k-100);
+    clip-path: inset(100% 0 0 0);
+  }
+  .pjd-cta__btn--ghost:hover,
+  .pjd-cta__btn--ghost:focus-visible { color: #fff; }
+  .pjd-cta__btn--ghost:hover::after,
+  .pjd-cta__btn--ghost:focus-visible::after {
+    clip-path: inset(0 0 0 0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pjd-cta__btn,
+    .pjd-cta__btn::after { transition: none; }
+  }
 </style>

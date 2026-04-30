@@ -446,29 +446,44 @@ const social = [
   }
 
   /* Submit */
+  /* Submit — primary plum, wipe retract on hover. */
   .rsv-form__submit {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     margin-top: 24px;
     padding: 16px 32px;
-    background: var(--accent);
-    color: var(--accent-on);
+    background: transparent;
+    color: #fff;
     border: 1px solid var(--accent);
     border-radius: var(--radius-input);
     font: 600 16px / 1 var(--font-sans);
     cursor: pointer;
     justify-self: start;
-    transition:
-      transform var(--dur-base) var(--ease-decel),
-      box-shadow var(--dur-base) var(--ease-decel);
+    transition: color 280ms cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .rsv-form__submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 32px rgba(90, 42, 95, 0.40);
+  .rsv-form__submit::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    z-index: -1;
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 380ms cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .rsv-form__submit:active { transform: translateY(0); }
-  .rsv-form__submit:disabled { opacity: 0.55; cursor: default; transform: none; box-shadow: none; }
+  .rsv-form__submit:hover,
+  .rsv-form__submit:focus-visible { color: var(--accent); }
+  .rsv-form__submit:hover::after,
+  .rsv-form__submit:focus-visible::after { clip-path: inset(100% 0 0 0); }
+  .rsv-form__submit:disabled { opacity: 0.55; cursor: default; }
+  .rsv-form__submit:disabled::after { clip-path: inset(0 0 0 0); }
   .rsv-form__submit:focus-visible {
     outline: 3px solid var(--accent-soft);
     outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rsv-form__submit,
+    .rsv-form__submit::after { transition: none; }
   }
 
   /* Success panel */

@@ -515,9 +515,9 @@ const zigzag = [
     color: rgba(255,255,255,0.88);
     margin: 0;
   }
-  /* Hero CTA — osa-web wipe pattern. Plum fills the button at rest;
-     on hover the fill retracts upward via clip-path, leaving white
-     border + white text on the dark hero. */
+  /* Hero CTA — outline at rest, white wipe fills from bottom on hover.
+     Pattern A (outline → fill): default white border + white text;
+     on hover the white fill rises from the bottom, text turns black. */
   .hub-hero__cta {
     position: relative;
     isolation: isolate;
@@ -532,27 +532,30 @@ const zigzag = [
     font: 600 17px / 1 var(--font-sans);
     text-decoration: none;
     margin-top: 8px;
-    transition: color var(--dur-fast) var(--ease-decel);
+    transition: color 280ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .hub-hero__cta::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: var(--accent);
+    background: #fff;
     z-index: -1;
-    clip-path: inset(0 0 0 0);
+    clip-path: inset(100% 0 0 0);
     transition: clip-path 380ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .hub-hero__cta:hover::after,
   .hub-hero__cta:focus-visible::after {
-    clip-path: inset(100% 0 0 0);
+    clip-path: inset(0 0 0 0);
   }
+  .hub-hero__cta:hover,
+  .hub-hero__cta:focus-visible { color: var(--k-100); }
   .hub-hero__cta:focus-visible {
     outline: 2px solid #fff;
     outline-offset: 3px;
   }
   .hub-hero__cta:active { transform: translateY(1px); }
   @media (prefers-reduced-motion: reduce) {
+    .hub-hero__cta,
     .hub-hero__cta::after { transition: none; }
   }
   @media (max-width: 720px) {
@@ -818,7 +821,12 @@ const zigzag = [
     margin: 0;
     max-width: 48ch;
   }
+  /* Dual CTA buttons — wipe pattern. Primary (plum) is filled at rest
+     and retracts on hover. Secondary (black outline) fills on hover. */
   .hub-cta-card__btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: inline-flex; align-items: center; gap: 8px;
     justify-self: start;
     margin-top: 8px;
@@ -826,29 +834,50 @@ const zigzag = [
     border-radius: var(--radius-input);
     font: 600 15px / 1 var(--font-sans);
     text-decoration: none;
-    transition:
-      transform var(--dur-base) var(--ease-decel),
-      background var(--dur-base) var(--ease-decel),
-      color var(--dur-base) var(--ease-decel),
-      box-shadow var(--dur-base) var(--ease-decel);
+    transition: color 280ms cubic-bezier(0.65, 0, 0.35, 1);
   }
+  .hub-cta-card__btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transition: clip-path 380ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* Primary: plum filled at rest → plum stroke + plum text on hover. */
   .hub-cta-card__btn--primary {
-    background: var(--accent);
-    color: var(--accent-on);
+    background: transparent;
+    color: #fff;
     border: 1px solid var(--accent);
   }
-  .hub-cta-card__btn--primary:hover {
-    background: transparent;
-    color: var(--accent);
+  .hub-cta-card__btn--primary::after {
+    background: var(--accent);
+    clip-path: inset(0 0 0 0);
   }
+  .hub-cta-card__btn--primary:hover,
+  .hub-cta-card__btn--primary:focus-visible { color: var(--accent); }
+  .hub-cta-card__btn--primary:hover::after,
+  .hub-cta-card__btn--primary:focus-visible::after {
+    clip-path: inset(100% 0 0 0);
+  }
+  /* Secondary: black outline at rest → black fill + white text on hover. */
   .hub-cta-card__btn--secondary {
     background: transparent;
     color: var(--k-100);
     border: 1px solid var(--k-100);
   }
-  .hub-cta-card__btn--secondary:hover {
+  .hub-cta-card__btn--secondary::after {
     background: var(--k-100);
-    color: var(--bg);
+    clip-path: inset(100% 0 0 0);
+  }
+  .hub-cta-card__btn--secondary:hover,
+  .hub-cta-card__btn--secondary:focus-visible { color: #fff; }
+  .hub-cta-card__btn--secondary:hover::after,
+  .hub-cta-card__btn--secondary:focus-visible::after {
+    clip-path: inset(0 0 0 0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hub-cta-card__btn,
+    .hub-cta-card__btn::after { transition: none; }
   }
 
   /* PROJECTS TEASER */

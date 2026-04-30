@@ -643,24 +643,38 @@ const lastUpdated = '2026-04-30';
     color: var(--k-90);
     margin: 0;
   }
+  /* O areálu CTA — primary plum, wipe retract on hover. */
   .op-cta__btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: inline-flex; align-items: center; gap: 8px;
     justify-self: center;
     margin-top: 12px;
     padding: 14px 28px;
-    background: var(--accent);
-    color: var(--accent-on);
+    background: transparent;
+    color: #fff;
     border: 1px solid var(--accent);
     border-radius: var(--radius-input);
     font-weight: 600; font-size: 16px;
     text-decoration: none;
-    transition:
-      transform var(--dur-base) var(--ease-decel),
-      box-shadow var(--dur-base) var(--ease-decel);
+    transition: color 280ms cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .op-cta__btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(90, 42, 95, 0.32);
+  .op-cta__btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    z-index: -1;
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 380ms cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .op-cta__btn:active { transform: translateY(0); }
+  .op-cta__btn:hover,
+  .op-cta__btn:focus-visible { color: var(--accent); }
+  .op-cta__btn:hover::after,
+  .op-cta__btn:focus-visible::after { clip-path: inset(100% 0 0 0); }
+  @media (prefers-reduced-motion: reduce) {
+    .op-cta__btn,
+    .op-cta__btn::after { transition: none; }
+  }
 </style>
