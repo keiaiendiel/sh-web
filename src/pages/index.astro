@@ -953,8 +953,14 @@ const zigzag = [
   }
   .hub-map-strip__address a:hover { text-decoration: underline; }
 
-  /* Leaflet brand overrides — shared between landing + /o-arealu/. */
-  :global(.leaflet-container) { background: var(--k-05); font-family: var(--font-sans); }
+  /* Leaflet brand overrides — shared between landing + /o-arealu/.
+     z-index 0 forces the map to create its own stacking context so its
+     internal panes (200–800) don't escape above the sticky header (30). */
+  :global(.leaflet-container) {
+    background: var(--k-05);
+    font-family: var(--font-sans);
+    z-index: 0;
+  }
   :global(.leaflet-control-attribution) {
     background: rgba(255, 255, 255, 0.92) !important;
     color: var(--k-70) !important;

@@ -52,18 +52,7 @@ const buildingLabel = (id: string) => {
         </a>
       ))}
     </div>
-    <p class="pj-foot-note">Hub se rozrůstá. Další provozy a iniciativy doplníme, jakmile budou konkrétně definované. Pro dotazy nebo zapojení napište na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.</p>
-  </section>
-
-  <section class="pj-map-teaser">
-    <header class="pj-map-teaser__head">
-      <span class="osa-eyebrow">Mapa areálu</span>
-      <h2 class="pj-map-teaser__heading">Kde co bude.</h2>
-      <p class="pj-map-teaser__lede">Hub jádro (růžová: A1–A6 + C) drží 16 000 m² ploch s ~331 jednotkami 1+kk. Sdílené zázemí (modrá: B, E, F, S, T, V, bazén, vstupní park) zabírá 18 000 m² v rámci celkového rozvojového území 82 000 m².</p>
-    </header>
-    <figure class="pj-map-teaser__media">
-      <img src={withBase('/images/hub/masterplan.jpg')} alt="Schéma areálu Horních kasáren — Hub jádro a Hub zázemí v rámci rozvojového území." loading="lazy" />
-    </figure>
+    <p class="pj-foot-note">Hub se rozrůstá. Další provozy a iniciativy doplníme, jakmile budou konkrétně definované. Pro dotazy nebo zapojení napište na <a href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>.</p>
   </section>
 </Base>
 
@@ -195,25 +184,8 @@ const buildingLabel = (id: string) => {
   .pj-foot-note a { color: var(--accent); }
   .pj-foot-note a:hover { text-decoration: underline; }
 
-  /* MAP TEASER -- masterplan strip below the cards. */
-  .pj-map-teaser {
-    padding: clamp(48px, 7vw, 96px) var(--gutter) clamp(64px, 10vw, 112px);
-    max-width: var(--container-wide); margin: 0 auto;
-    border-top: 1px solid var(--k-20);
-  }
-  .pj-map-teaser__head {
-    margin-bottom: 32px;
-    max-width: 760px;
-  }
-  .pj-map-teaser__heading {
-    font-family: var(--font-sans);
-    font-size: clamp(28px, 3vw, 40px);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: var(--tracking-tight);
-    margin: 8px 0 16px;
-    text-wrap: balance;
-  }
+  /* (legacy map-teaser styles kept harmless — selector unused after the
+     section was removed; skipping the rest below.) */
   .pj-map-teaser__lede {
     font-size: clamp(16px, 1.35vw, 18px);
     line-height: 1.65;
