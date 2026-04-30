@@ -1,12 +1,12 @@
 # sh-web — Startovací Hub Klecany
 
-Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr by VPD under OSA II, z.s. Deploys to `klecany.osa2.cz`.
+Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr by VPD under OSA II, z.s. Deploys to `startovacihub.cz`.
 
 ## Stack
 
 - Astro 6.1.8, static output, Czech-only.
 - Atyp Text/Special, K10–K90 monochrome + tricolor red accent (`--c-red: #d0342c` exposed as `--accent`).
-- MDX content collections (`subProjects`, `faq`, `org`) plus `public/data/scenarios.json` for the calculator.
+- MDX content collections (`subProjects`, `faq`, `org`).
 - Vanilla CSS, no client framework, no React island.
 - `sharp` for image migration only.
 
@@ -24,12 +24,11 @@ Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr
 
 ## Pages
 
-`/` Landing · `/obyvatele/` Resident · `/investori/` Investor · `/projekty/` Programme cards · `/o-projektu/` Place + timeline · `/faq/` FAQ · plus `/projekty/<slug>/` stub detail pages.
+`/` Landing · `/obyvatele/` Resident pre-reservation funnel · `/projekty/` Programme cards · `/o-projektu/` Place + timeline · `/faq/` FAQ · plus `/projekty/<slug>/` stub detail pages.
 
 ## Deferred to a programmer
 
-- Form submission backend (resident + investor forms). Both currently `console.log` and show a static success state.
-- Calculator math binding to the live VPD1 Excel; currently uses placeholder per-scenario rates in `public/data/scenarios.json` with a draft disclaimer.
+- Form submission backend for the resident pre-reservation form. Currently `console.log` with a static success state.
 - Analytics, cookie consent, admin.
 
 ## Operator credit
