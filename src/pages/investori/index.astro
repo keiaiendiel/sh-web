@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Calculator from '../../components/Calculator.astro';
+import InvestorForm from '../../components/InvestorForm.astro';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -51,6 +52,10 @@ const { scenarios, _disclaimer } = JSON.parse(await readFile(scenariosPath, 'utf
   </section>
 
   <Calculator />
+
+  <section class="hub-section">
+    <InvestorForm />
+  </section>
 </Base>
 
 <style>
