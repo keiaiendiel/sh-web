@@ -51,9 +51,18 @@ import { withBase } from '../../utils/url';
     <p>V Hubu sdílíte kuchyň, sociální zázemí (koupelny, sprchy, pračky), společné obytné prostory s místem k práci a tichý prostor ke studiu. Kapacita je dimenzovaná tak, aby se v špičce neustavovaly fronty, a uspořádání odráží to, že někteří rezidenti potřebují klid a soukromí, jiní spíš společnost a program. Provoz funguje s jednoduchými pravidly, na kterých se shodne komunita: kouření venku, hosté po dohodě, klidové hodiny, podíl na úklidu sdílených ploch. Detail pravidel a způsob, jak se k nim postavit, popíšeme až poté, co bude jasné, kdo a v jakém režimu Hub obývá.</p>
   </section>
 
-  <section class="hub-section" id="formular">
-    <h2 class="hub-section__heading">Vyplňte nezávaznou před-rezervaci</h2>
-    <ResidentForm />
+  <section class="hub-section hub-prereg" id="formular">
+    <div class="hub-prereg__grid">
+      <header class="hub-prereg__head">
+        <span class="osa-eyebrow hub-prereg__eyebrow">Před-rezervace</span>
+        <h2 class="hub-section__heading">Před-rezervujte si místo.</h2>
+        <p class="hub-prereg__lede">Vyplnění není závazné. Pomáhá nám připravit nabídku pro lidi, kteří mají reálný zájem.</p>
+        <p class="hub-prereg__meta">Žádná smlouva, žádná platba. Když se z vašich preferencí složí konkrétní nabídka, ozveme se.</p>
+      </header>
+      <div class="hub-prereg__form">
+        <ResidentForm />
+      </div>
+    </div>
   </section>
 </Base>
 
@@ -76,4 +85,28 @@ import { withBase } from '../../utils/url';
   .hub-foot-note { font-size: 14px; color: var(--k-70, #4a4a4a); margin: 16px 0 0; max-width: 720px; }
 
   .hub-section--prose p { font-size: 17px; line-height: 1.65; max-width: 720px; color: var(--k-90); margin: 0 0 16px; }
+
+  /* PRE-RESERVATION SECTION -- 2-col on desktop (head left, form right), stacked on mobile. */
+  .hub-prereg__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: 64px;
+    align-items: start;
+  }
+  .hub-prereg__head { position: sticky; top: 96px; }
+  .hub-prereg__eyebrow { color: var(--k-60); display: inline-block; margin-bottom: 12px; }
+  .hub-prereg__lede {
+    font-size: 18px; line-height: 1.55;
+    color: var(--k-90); margin: 16px 0 16px; max-width: 36ch;
+  }
+  .hub-prereg__meta {
+    font-size: 14px; line-height: 1.55;
+    color: var(--k-70); margin: 0; max-width: 36ch;
+    padding-top: 16px; border-top: 1px solid var(--k-10);
+  }
+  .hub-prereg__form { max-width: 720px; }
+  @media (max-width: 960px) {
+    .hub-prereg__grid { grid-template-columns: 1fr; gap: 32px; }
+    .hub-prereg__head { position: static; }
+  }
 </style>
