@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = await getCollection('subProjects');
+  return all.map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+<Base title={`${project.data.name} — Startovací Hub Klecany`} description={project.data.role}>
+  <section class="hub-page-hero">
+    <h1>{project.data.name}</h1>
+    <p class="hub-lead">{project.data.role}</p>
+  </section>
+  <section class="hub-section hub-prose">
+    <Content />
+  </section>
+</Base>
+
+<style>
+  .hub-page-hero { padding: 96px 24px 48px; max-width: 1440px; margin: 0 auto; }
+  .hub-page-hero h1 { font-size: clamp(40px, 5vw, 80px); font-weight: 700; margin: 0 0 24px; letter-spacing: -0.02em; }
+  .hub-lead { font-size: 20px; line-height: 1.5; max-width: 720px; color: var(--k-90); margin: 0; }
+  .hub-section { padding: 64px 24px; max-width: 1440px; margin: 0 auto; }
+  .hub-prose { max-width: 720px; }
+  .hub-prose :global(p) { font-size: 17px; line-height: 1.65; margin: 0 0 16px; color: var(--k-90); }
+  .hub-prose :global(a) { color: var(--accent); }
+</style>
