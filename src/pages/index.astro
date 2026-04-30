@@ -1,67 +1,128 @@
 ---
 import Base from '../layouts/Base.astro';
 import { withBase } from '../utils/url';
-import Gallery from '../components/Gallery.astro';
 import { getCollection, getEntry } from 'astro:content';
 
 const subProjects = (await getCollection('subProjects')).sort((a, b) => a.data.order - b.data.order);
 const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
+
+// Editorial zigzag: 6 alternating image+caption rows. The first row stays
+// eager (above-the-fold weight); the rest lazy-load.
+const zigzag = [
+  {
+    dir: 'ltr',
+    src: withBase('/images/hub/exterior/hub-courtyard-trees.jpg'),
+    alt: 'Vnitřní dvůr s trávníkem a břízami.',
+    eyebrow: 'Exteriér',
+    title: 'Vnitřní dvůr.',
+    body: 'Stromy, dlažba, lavice. Sdílený zelený prostor mezi sedmi rekonstruovanými budovami.',
+    eager: true,
+  },
+  {
+    dir: 'rtl',
+    src: withBase('/images/hub/interior/interior-01.jpg'),
+    alt: 'Privátní mikropokoj s dřevěným nábytkem.',
+    eyebrow: 'Interiér',
+    title: 'Klidný pokoj.',
+    body: 'Privátní mikropokoj s dveřmi, vlastním stolkem a sdíleným sociálním zázemím.',
+  },
+  {
+    dir: 'ltr',
+    src: withBase('/images/hub/exterior/hub-renovated-building.jpg'),
+    alt: 'Zrekonstruovaná bílá budova v duchu původních kasáren.',
+    eyebrow: 'Exteriér',
+    title: 'Zrekonstruovaná budova.',
+    body: 'Bílá fasáda v duchu původních kasáren, přestavěné interiéry uvnitř.',
+  },
+  {
+    dir: 'rtl',
+    src: withBase('/images/hub/interior/hub-market-evening.jpg'),
+    alt: 'Tržnice za soumraku, osvětlené interiéry prosvítají skrz okna.',
+    eyebrow: 'Interiér',
+    title: 'Tržnice za soumraku.',
+    body: 'Komunitní prostor s gastro a programem, otevřený rezidentům i sousedům.',
+  },
+  {
+    dir: 'ltr',
+    src: withBase('/images/hub/exterior/hub-street-sunset.jpg'),
+    alt: 'Ulice areálu za západu slunce.',
+    eyebrow: 'Exteriér',
+    title: 'Areál za západu slunce.',
+    body: 'Ulice mezi budovami, dlážděná průchody k tržnici a coworkingu.',
+  },
+  {
+    dir: 'rtl',
+    src: withBase('/images/hub/interior/interior-04.jpg'),
+    alt: 'Sdílená společná místnost se světlým nábytkem.',
+    eyebrow: 'Interiér',
+    title: 'Sdílené prostory.',
+    body: 'Společná kuchyň, čítárna, tichý prostor pro práci.',
+  },
+];
 ---
 <Base
-  title="Startovací Hub Klecany"
+  title="Startovací hub"
   description="Startovací bydlení s komunitním a coworkingovým zázemím v areálu horních kasáren, deset minut od Prahy. Přijímáme nezávazné před-rezervace."
   headerVariant="dark"
   ogImage={withBase('/og/default.png')}
 >
-  <section class="hub-hero" style={`background-image: url('${heroImage}');`}>
+  <section class="hub-hero osa-dark">
+    <img class="hub-hero__bg" src={heroImage} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="hub-hero__scrim" aria-hidden="true"></div>
     <div class="hub-hero__inner">
-      <h1 class="hub-hero__title">Startovací Hub Klecany</h1>
-      <p class="hub-hero__sub">Nájemní bydlení s komunitním a coworkingovým zázemím v areálu horních kasáren, deset minut od Prahy. Přijímáme nezávazné před-rezervace.</p>
+      <span class="osa-eyebrow hub-hero__kicker">Areál horních kasáren · Klecany</span>
+      <h1 class="hub-hero__title">
+        Startovací hub.
+        <span class="hub-hero__title-sub">Nájemní bydlení blízko Prahy s komunitním a coworkingovým zázemím.</span>
+      </h1>
+      <p class="hub-hero__lede">Přijímáme nezávazné před-rezervace. Cílová skupina: pracující studenti, mladí kreativci a začínající podnikatelé, kteří hledají startovní bydlení na prahu metropole.</p>
     </div>
   </section>
 
-  <section class="hub-paths">
-    <div class="hub-paths__single">
-      <a class="hub-path-card hub-path-card--primary" href={withBase('/obyvatele/')}>
-        <h2>Chci tu bydlet</h2>
-        <p>Sdílené bydlení, kapsle, klidnější uzavíratelná místa, jednolůžkové pokoje, nebo stipendijní režim. Otevřeli jsme nezávazné před-rezervace.</p>
-        <span class="hub-path-card__cta">Vyplnit před-rezervaci →</span>
-      </a>
+  <section class="hub-cta-strip">
+    <div class="hub-cta-strip__inner">
+      <span class="osa-eyebrow hub-cta-strip__kicker">Chci tu bydlet</span>
+      <p class="hub-cta-strip__lede">Sdílené bydlení, kapsle, klidnější uzavíratelná místa, jednolůžkové pokoje, nebo stipendijní režim. Otevřeli jsme nezávazné před-rezervace.</p>
+      <a class="hub-cta-strip__btn" href={withBase('/obyvatele/')}>Vyplnit před-rezervaci →</a>
     </div>
   </section>
 
-  <section class="hub-section hub-prose">
-    <p>Startovací Hub je obyvatelná část areálu, kterou rozjedeme jako první. Nájemní bydlení v různých formátech: levné kapsle pro krátkodobé pobyty, klidnější uzavíratelná místa pro delší stay, jednolůžkové i sdílené pokoje. K tomu sdílené sociální zázemí, společná kuchyň, prostor pro práci a tichý prostor pro studium.</p>
-    <p>Hub kombinuje různé režimy: platící rezidenti, stipendijní místa pro lidi, kteří by se sem jinak nedostali, a komunitní rovinu se sdílenou kuchyní, coworkingem a tichým prostorem. To je kombinace, která v okolí Prahy chybí.</p>
-    <p>Záměr nekončí u Hubu. Areál horních kasáren má potenciál na 1500+ bytových jednotek a postupné dotvoření celé městské vrstvy v souladu s cíli VPD. Hub je první krok, ze kterého rosteme.</p>
+  <section class="hub-section hub-concept">
+    <header class="osa-sub-head">
+      <span class="osa-eyebrow">Koncept</span>
+      <h2 class="hub-section__heading">Startovní bydlení s komunitou a programem.</h2>
+    </header>
+    <div class="hub-concept__body">
+      <p>Startovací hub je obyvatelná část záměru, kterou rozjedeme jako první. Sedm původních objektů areálu se rekonstruuje na 331 jednotek 1+kk; dvory a parter se vzájemně propojují veřejně přístupným prostorem. Vznikne tržnice, coworkingové zázemí a malá kulturní scéna pro nájemníky i sousedy.</p>
+      <p>Cílová skupina je široká: mladí kreativci, živnostníci, podnikatelé a studenti, kteří potřebují startovní bydlení blízko Prahy s dostupnou cenou a aktivním komunitním kontextem. Pronájem na živnostenské bázi, žádné dotace, žádný spekulativní mezivlastník.</p>
+    </div>
+  </section>
+
+  <section class="hub-zigzag">
+    <header class="osa-sub-head hub-zigzag__head">
+      <span class="osa-eyebrow">Vizualizace</span>
+      <h2 class="hub-section__heading">Jak to bude vypadat.</h2>
+    </header>
+    {zigzag.map((row) => (
+      <div class:list={['hub-zigzag__row', `hub-zigzag__row--${row.dir}`]}>
+        <figure class="hub-zigzag__media">
+          <img src={row.src} alt={row.alt} loading={row.eager ? 'eager' : 'lazy'} decoding="async" />
+        </figure>
+        <div class="hub-zigzag__copy">
+          <span class="osa-eyebrow">{row.eyebrow}</span>
+          <h3>{row.title}</h3>
+          <p>{row.body}</p>
+        </div>
+      </div>
+    ))}
   </section>
 
   <section class="hub-section">
-    <h2 class="hub-section__heading">Vizualizace záměru</h2>
-    <h3 class="hub-section__subheading">Exteriér</h3>
-    <Gallery title={null} images={[
-      withBase('/images/hub/exterior/hub-courtyard-trees.jpg'),
-      withBase('/images/hub/exterior/hub-courtyard-night.jpg'),
-      withBase('/images/hub/exterior/hub-renovated-building.jpg'),
-      withBase('/images/hub/exterior/hub-street-daytime.jpg'),
-      withBase('/images/hub/exterior/hub-street-sunset.jpg'),
-      withBase('/images/hub/exterior/exterior-01.jpg'),
-      withBase('/images/hub/exterior/exterior-02.jpg'),
-    ]} />
-    <h3 class="hub-section__subheading">Interiér / společné prostory</h3>
-    <Gallery title={null} images={[
-      withBase('/images/hub/interior/hub-market-evening.jpg'),
-      withBase('/images/hub/interior/hub-market-daytime.jpg'),
-      withBase('/images/hub/interior/hub-market-people.jpg'),
-      withBase('/images/hub/interior/interior-01.jpg'),
-      withBase('/images/hub/interior/interior-02.jpg'),
-      withBase('/images/hub/interior/interior-03.jpg'),
-    ]} />
-  </section>
-
-  <section class="hub-section">
-    <h2 class="hub-section__heading">Co Hub obsahuje</h2>
-    <p class="hub-section__intro">Hub není jeden objekt. Skládá se z propojených provozů, které vznikají postupně.</p>
+    <header class="osa-sub-head">
+      <span class="osa-eyebrow">Provozy</span>
+      <h2 class="hub-section__heading">Jak se Hub rozrůstá.</h2>
+    </header>
+    <p class="hub-section__intro">Hub se nerozjede naráz. Skládá se z propojených provozů, které vznikají postupně — některé v aktivní přípravě, jiné teprve dolaďujeme.</p>
     <div class="hub-projects-teaser">
       {subProjects.map((p) => (
         <a class="hub-teaser-card" href={withBase(`/projekty/${p.id}/`)}>
@@ -81,7 +142,10 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
   <section class="hub-section hub-place">
     <div class="hub-place__grid">
       <div>
-        <h2 class="hub-section__heading">Kde to je</h2>
+        <header class="osa-sub-head">
+          <span class="osa-eyebrow">Místo</span>
+          <h2 class="hub-section__heading">Kde to je.</h2>
+        </header>
         <p>Areál horní kasárny Klecany leží severně od Prahy, 12 km od centra. Areál je na trase plánované tramvajové linky z Kobylis a na navrhované cyklostezce do Prahy. Detail dopravy, rozlohy a smluvních práv najdete v sekci O projektu.</p>
         <a class="hub-place__cta" href={withBase('/o-projektu/#misto')}>O místě a kontextu →</a>
       </div>
@@ -97,7 +161,10 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
   </section>
 
   <section class="hub-section">
-    <h2 class="hub-section__heading">Časté otázky</h2>
+    <header class="osa-sub-head">
+      <span class="osa-eyebrow">FAQ</span>
+      <h2 class="hub-section__heading">Časté otázky.</h2>
+    </header>
     {await Promise.all(['q1', 'q5', 'q7'].map(async (id) => {
       const entry = await getEntry('faq', id);
       return entry ? (
@@ -109,30 +176,117 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
     }))}
     <p class="hub-faq-mini__more"><a href={withBase('/faq/')}>Všechny otázky →</a></p>
   </section>
+
+  <section class="hub-investor-out">
+    <div class="hub-investor-out__inner">
+      <p class="hub-investor-out__lede">Nezajímá vás bydlení, ale investice do záměru?</p>
+      <a class="hub-investor-out__cta" href="https://keiaiendiel.github.io/vpd-web/vpd1/" rel="noopener">Záměr VPD1 →</a>
+    </div>
+  </section>
 </Base>
 
 <style>
-  .hub-hero { min-height: 80vh; background-size: cover; background-position: center; color: #fff; display: flex; align-items: flex-end; padding: 96px 24px 64px; position: relative; }
-  .hub-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 100%); pointer-events: none; }
-  .hub-hero__inner { position: relative; z-index: 1; max-width: 1440px; margin: 0 auto; width: 100%; }
-  .hub-hero__title { font-size: clamp(48px, 6vw, 100px); font-weight: 700; line-height: 1.05; margin: 0 0 16px; letter-spacing: -0.02em; }
-  .hub-hero__sub { font-size: clamp(18px, 1.6vw, 26px); max-width: 640px; line-height: 1.4; opacity: 0.92; margin: 0; }
-  .hub-paths { padding: 96px 24px; max-width: 1440px; margin: 0 auto; }
-  .hub-paths__single { max-width: 640px; margin: 0 auto; }
-  .hub-path-card { display: block; padding: 40px 32px; border: 1px solid var(--k-30); text-decoration: none; color: inherit; transition: border-color 200ms cubic-bezier(0.16,1,0.3,1); }
-  .hub-path-card:hover { border-color: var(--accent); }
-  .hub-path-card h2 { font-size: 32px; margin: 0 0 12px; }
-  .hub-path-card p { color: var(--k-70); margin: 0 0 24px; }
-  .hub-path-card__cta { color: var(--accent); font-weight: 600; }
-  .hub-path-card--primary { border-width: 2px; }
+  /* HERO -- full-bleed <img> + scrim, content above. Replaces background-image
+     so lint:weight measures the eager hero JPG. */
+  .hub-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(440px, 80vh, 720px);
+    display: flex;
+    align-items: flex-end;
+    background: var(--k-100);
+    color: #fff;
+  }
+  .hub-hero__bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; filter: brightness(0.55) saturate(0.9); z-index: 1;
+  }
+  .hub-hero__scrim {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+  .hub-hero__inner {
+    position: relative; z-index: 3;
+    padding: 96px 24px 72px;
+    max-width: 1440px; margin: 0 auto; width: 100%;
+  }
+  .hub-hero__kicker { display: block; margin-bottom: 24px; color: rgba(255,255,255,0.75); }
+  .hub-hero__title {
+    font-family: var(--font-sans); font-weight: 600;
+    font-size: clamp(40px, 5.5vw, 84px);
+    line-height: 1.04; letter-spacing: -0.02em;
+    margin: 0 0 24px; max-width: 22ch;
+  }
+  .hub-hero__title-sub {
+    display: block; font-size: clamp(18px, 1.8vw, 24px);
+    font-weight: 500; margin-top: 16px;
+    color: rgba(255,255,255,0.78); max-width: 36ch; line-height: 1.3;
+  }
+  .hub-hero__lede {
+    font-size: clamp(15px, 1.2vw, 18px); line-height: 1.55;
+    max-width: 56ch; color: rgba(255,255,255,0.85); margin: 0;
+  }
 
+  /* PRIMARY CTA STRIP -- centered, eyebrow + lede + button. */
+  .hub-cta-strip { padding: 80px 24px; max-width: 1440px; margin: 0 auto; }
+  .hub-cta-strip__inner {
+    max-width: 640px; margin: 0 auto; text-align: center;
+    display: grid; gap: 16px; padding: 48px 32px;
+    border: 1px solid var(--k-30);
+  }
+  .hub-cta-strip__kicker { color: var(--k-70); }
+  .hub-cta-strip__lede { font-size: 17px; line-height: 1.55; color: var(--k-90); margin: 0; }
+  .hub-cta-strip__btn {
+    display: inline-block; justify-self: center;
+    margin-top: 16px; padding: 14px 28px;
+    background: var(--accent); color: var(--accent-on);
+    font-weight: 600; font-size: 16px; text-decoration: none;
+    border: 1px solid var(--accent);
+    transition: transform 200ms cubic-bezier(0.16,1,0.3,1), box-shadow 200ms;
+  }
+  .hub-cta-strip__btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(208, 52, 44, 0.25); }
+  .hub-cta-strip__btn:active { transform: translateY(0); }
+
+  /* SECTION SHELL */
   .hub-section { padding: 80px 24px; max-width: 1440px; margin: 0 auto; }
-  .hub-section__heading { font-size: clamp(28px, 3vw, 48px); font-weight: 700; margin: 0 0 32px; letter-spacing: -0.01em; }
-  .hub-section__subheading { font-size: 18px; font-weight: 600; margin: 24px 0 12px; opacity: 0.7; }
-  .hub-prose { max-width: 720px; }
-  .hub-prose p { font-size: 18px; line-height: 1.65; margin: 0 0 18px; color: var(--k-90, #1a1a1a); }
+  .hub-section__heading { font-size: clamp(28px, 3vw, 48px); font-weight: 700; margin: 0; letter-spacing: -0.01em; line-height: 1.1; }
+  .hub-section__intro { font-size: 18px; color: var(--k-70, #4a4a4a); margin: 0 0 32px; max-width: 720px; line-height: 1.55; }
 
-  .hub-section__intro { font-size: 18px; color: var(--k-70, #4a4a4a); margin: -16px 0 32px; max-width: 720px; line-height: 1.55; }
+  /* CONCEPT -- editorial 2-paragraph block. */
+  .hub-concept__body { max-width: 720px; }
+  .hub-concept__body p { font-size: 18px; line-height: 1.65; margin: 0 0 18px; color: var(--k-90, #1a1a1a); }
+  .hub-concept__body p:last-child { margin-bottom: 0; }
+
+  /* ZIGZAG -- 6 rows, alternating ltr / rtl. */
+  .hub-zigzag { padding: 64px 24px 96px; max-width: 1440px; margin: 0 auto; }
+  .hub-zigzag__head { margin-bottom: 32px; }
+  .hub-zigzag__row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 48px; align-items: center;
+    padding: 32px 0;
+  }
+  .hub-zigzag__row--rtl .hub-zigzag__media { order: 2; }
+  .hub-zigzag__row--rtl .hub-zigzag__copy { order: 1; }
+  .hub-zigzag__media { margin: 0; }
+  .hub-zigzag__media img {
+    width: 100%; height: auto;
+    aspect-ratio: 4/3; object-fit: cover; display: block;
+  }
+  .hub-zigzag__copy { max-width: 480px; }
+  .hub-zigzag__copy .osa-eyebrow { display: inline-block; color: var(--k-60); margin-bottom: 8px; }
+  .hub-zigzag__copy h3 {
+    font-size: clamp(24px, 2.4vw, 36px); font-weight: 700;
+    margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.1;
+  }
+  .hub-zigzag__copy p { font-size: 17px; line-height: 1.65; color: var(--k-90); margin: 0; }
+  @media (max-width: 720px) {
+    .hub-zigzag__row { grid-template-columns: 1fr; gap: 16px; padding: 24px 0; }
+    .hub-zigzag__row--rtl .hub-zigzag__media { order: 1; }
+    .hub-zigzag__row--rtl .hub-zigzag__copy { order: 2; }
+  }
+
+  /* PROJECTS TEASER */
   .hub-projects-teaser { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
   @media (max-width: 960px) { .hub-projects-teaser { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 600px) { .hub-projects-teaser { grid-template-columns: 1fr; } }
@@ -143,17 +297,22 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
   .hub-teaser-card__cta { font-size: 13px; color: var(--accent); font-weight: 600; }
   .hub-teaser-card--more { background: var(--k-05, #f6f6f6); }
 
+  /* PLACE */
   .hub-place__grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px; align-items: center; }
   @media (max-width: 720px) { .hub-place__grid { grid-template-columns: 1fr; } }
-  .hub-place p { font-size: 17px; line-height: 1.65; max-width: 540px; margin: 0 0 24px; color: var(--k-90); }
+  .hub-place p { font-size: 17px; line-height: 1.65; max-width: 540px; margin: 16px 0 24px; color: var(--k-90); }
   .hub-place__cta { color: var(--accent); font-weight: 600; text-decoration: none; }
   .hub-place__cta:hover { text-decoration: underline; }
   .hub-place__map img { width: 100%; height: auto; border: 1px solid var(--k-20, #d4d4d4); display: block; }
   .hub-place__map figcaption { font-size: 13px; color: var(--k-60, #6a6a6a); margin-top: 8px; }
 
+  /* STATUS */
   .hub-status p { font-size: 16px; line-height: 1.65; max-width: 880px; padding: 24px 28px; background: var(--k-05, #f6f6f6); border-left: 3px solid var(--accent); margin: 0; }
 
-  .hub-faq-mini { padding: 16px 0; border-bottom: 1px solid var(--k-20, #d4d4d4); }
+  /* FAQ MINI */
+  .hub-faq-mini { padding: 16px 0; border-bottom: 1px solid var(--k-20, #d4d4d4); margin-top: 32px; }
+  .hub-faq-mini:first-of-type { margin-top: 32px; }
+  .hub-faq-mini + .hub-faq-mini { margin-top: 0; }
   .hub-faq-mini summary { font-weight: 600; cursor: pointer; padding: 8px 0; list-style: none; font-size: 17px; }
   .hub-faq-mini summary::-webkit-details-marker { display: none; }
   .hub-faq-mini summary::before { content: '+'; display: inline-block; margin-right: 12px; transition: transform 200ms; }
@@ -161,4 +320,16 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
   .hub-faq-mini p { padding: 0 0 8px 24px; line-height: 1.6; color: var(--k-80, #2a2a2a); }
   .hub-faq-mini__more { margin: 24px 0 0; }
   .hub-faq-mini__more a { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+  /* INVESTOR EXIT CTA -- single bottom strip. */
+  .hub-investor-out { padding: 64px 24px; background: var(--k-05, #f6f6f6); }
+  .hub-investor-out__inner { max-width: 720px; margin: 0 auto; text-align: center; }
+  .hub-investor-out__lede { font-size: 18px; color: var(--k-90); margin: 0 0 16px; line-height: 1.5; }
+  .hub-investor-out__cta {
+    display: inline-block; padding: 12px 24px;
+    border: 1px solid var(--k-100); color: var(--k-100);
+    text-decoration: none; font-weight: 600;
+    transition: background 200ms cubic-bezier(0.16,1,0.3,1), color 200ms;
+  }
+  .hub-investor-out__cta:hover { background: var(--k-100); color: var(--bg, #fff); }
 </style>
