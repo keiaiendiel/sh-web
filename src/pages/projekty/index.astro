@@ -24,7 +24,7 @@ const buildingLabel = (id: string) => {
   headerVariant="dark"
 >
   <section class="pj-hero osa-dark">
-    <img class="pj-hero__bg" src={withBase('/images/hub/exterior/hub-courtyard-night.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <img class="pj-hero__bg" src={withBase('/images/hub/masterplan.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
     <div class="pj-hero__scrim" aria-hidden="true"></div>
     <div class="pj-hero__inner">
       <span class="osa-eyebrow pj-hero__eyebrow">Provozy</span>
@@ -82,8 +82,9 @@ const buildingLabel = (id: string) => {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: brightness(0.45) saturate(0.92);
+    filter: invert(1) brightness(0.38) saturate(0.4);
     z-index: 1;
+    object-position: center 25%;
   }
   .pj-hero__scrim {
     position: absolute; inset: 0; z-index: 2;

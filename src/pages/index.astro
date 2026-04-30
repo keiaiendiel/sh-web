@@ -470,19 +470,22 @@ const zigzag = [
     margin-top: 8px;
   }
   .hub-hero__cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 32px rgba(90, 42, 95, 0.45);
-    background: var(--c-plum);
+    background: transparent;
+    color: var(--accent);
+    border-color: var(--accent);
   }
   .hub-hero__cta:active { transform: translateY(0); }
   @media (prefers-reduced-motion: reduce) {
     .hub-hero__cta { transition: none; }
     .hub-hero__cta:hover { transform: none; }
   }
+  @media (max-width: 720px) {
+    .hub-hero__kicker-out { display: none; }
+  }
 
   /* SECTION SHELL */
   .hub-section {
-    padding: clamp(64px, 8vw, 96px) var(--gutter);
+    padding: clamp(48px, 6vw, 72px) var(--gutter);
     max-width: var(--container-wide);
     margin: 0 auto;
   }
@@ -549,7 +552,7 @@ const zigzag = [
   /* CLAIMS 2x2 -- four parallel claims with a thin cross divider in the middle.
      Achieved via per-cell border-right / border-bottom on the relevant cells. */
   .hub-claims-section {
-    padding: clamp(48px, 7vw, 80px) var(--gutter);
+    padding: clamp(40px, 5vw, 64px) var(--gutter);
     max-width: var(--container-wide); margin: 0 auto;
   }
   .hub-claims {
@@ -595,6 +598,7 @@ const zigzag = [
   }
   @media (max-width: 720px) {
     .hub-claims { grid-template-columns: 1fr; }
+    .hub-claims__item { padding: 24px 20px; }
     .hub-claims__item:nth-child(1),
     .hub-claims__item:nth-child(2),
     .hub-claims__item:nth-child(3) {
@@ -608,7 +612,7 @@ const zigzag = [
      copy and image stay vertically centered to each other. Reveal-on-
      scroll fade-in for delight. */
   .hub-zigzag {
-    padding: clamp(56px, 7vw, 96px) var(--gutter) clamp(96px, 12vw, 160px);
+    padding: clamp(48px, 6vw, 72px) var(--gutter) clamp(56px, 7vw, 96px);
     max-width: var(--container-wide); margin: 0 auto;
   }
   .hub-zigzag__head { margin-bottom: clamp(40px, 6vw, 72px); }
@@ -694,7 +698,7 @@ const zigzag = [
   /* CTA PAIR -- two side-by-side cards: residents (plum, prominent) and
      investors (subtle outline). Both stick to the brand line aesthetic. */
   .hub-cta-pair {
-    padding: clamp(48px, 6vw, 80px) var(--gutter);
+    padding: clamp(40px, 5vw, 64px) var(--gutter);
     max-width: var(--container-wide); margin: 0 auto;
   }
   .hub-cta-pair__grid {
@@ -710,6 +714,16 @@ const zigzag = [
     border: 1px solid var(--k-30);
     background: var(--bg);
     color: var(--k-100);
+    transition: box-shadow var(--dur-base) var(--ease-decel),
+                border-color var(--dur-base) var(--ease-decel);
+  }
+  .hub-cta-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-color: var(--k-50);
+  }
+  .hub-cta-card--primary:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(90, 42, 95, 0.12);
   }
   .hub-cta-card--primary {
     border: 2px solid var(--accent);
@@ -748,8 +762,8 @@ const zigzag = [
     border: 1px solid var(--accent);
   }
   .hub-cta-card__btn--primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(90, 42, 95, 0.35);
+    background: transparent;
+    color: var(--accent);
   }
   .hub-cta-card__btn--secondary {
     background: transparent;
