@@ -63,6 +63,57 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
       withBase('/images/hub/interior/interior-03.jpg'),
     ]} />
   </section>
+
+  <section class="hub-section">
+    <h2 class="hub-section__heading">Co Hub obsahuje</h2>
+    <p class="hub-section__intro">Hub není jeden objekt. Skládá se z propojených provozů, které vznikají postupně.</p>
+    <div class="hub-projects-teaser">
+      {subProjects.map((p) => (
+        <a class="hub-teaser-card" href={withBase(`/projekty/${p.id}/`)}>
+          <h3>{p.data.name}</h3>
+          <p>{p.data.role}</p>
+          <span class="hub-teaser-card__cta">Detail →</span>
+        </a>
+      ))}
+      <a class="hub-teaser-card hub-teaser-card--more" href={withBase('/projekty/')}>
+        <h3>Další projekty</h3>
+        <p>Hub se rozrůstá. Podívejte se na všechny provozy.</p>
+        <span class="hub-teaser-card__cta">Projekty →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="hub-section hub-place">
+    <div class="hub-place__grid">
+      <div>
+        <h2 class="hub-section__heading">Kde to je</h2>
+        <p>Areál horní kasárny Klecany leží severně od Prahy, 12 km od centra. Areál je na trase plánované tramvajové linky z Kobylis a na navrhované cyklostezce do Prahy. Detail dopravy, rozlohy a smluvních práv najdete v sekci O projektu.</p>
+        <a class="hub-place__cta" href={withBase('/o-projektu/#misto')}>O místě a kontextu →</a>
+      </div>
+      <figure class="hub-place__map">
+        <img src={withBase('/images/hub/masterplan.jpg')} alt="Masterplan areálu horních kasáren Klecany." loading="lazy" />
+        <figcaption>Areál horních kasáren — masterplan.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="hub-section hub-status">
+    <p>Aktuální stav: záměr je v pokročilé přípravné fázi. Pracujeme s konkrétním areálem v Klecanech, máme dokončený investiční záměr, definované scénáře pro investory a navrženou provozní strukturu pro Hub. Zatím sbíráme nezávazný zájem od potenciálních obyvatel a investorů; reálný start první etapy proběhne, jakmile budou potvrzeny tři podmínky: kapitálová struktura, provozní připravenost areálu a právní rámec provozu.</p>
+  </section>
+
+  <section class="hub-section">
+    <h2 class="hub-section__heading">Časté otázky</h2>
+    {await Promise.all(['q1', 'q5', 'q9'].map(async (id) => {
+      const entry = await getEntry('faq', id);
+      return entry ? (
+        <details class="hub-faq-mini">
+          <summary>{entry.data.question}</summary>
+          <p>{entry.data.answer}</p>
+        </details>
+      ) : null;
+    }))}
+    <p class="hub-faq-mini__more"><a href={withBase('/faq/')}>Všechny otázky →</a></p>
+  </section>
 </Base>
 
 <style>
@@ -85,4 +136,34 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
   .hub-section__subheading { font-size: 18px; font-weight: 600; margin: 24px 0 12px; opacity: 0.7; }
   .hub-prose { max-width: 720px; }
   .hub-prose p { font-size: 18px; line-height: 1.65; margin: 0 0 18px; color: var(--k-90, #1a1a1a); }
+
+  .hub-section__intro { font-size: 18px; color: var(--k-70, #4a4a4a); margin: -16px 0 32px; max-width: 720px; line-height: 1.55; }
+  .hub-projects-teaser { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 960px) { .hub-projects-teaser { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .hub-projects-teaser { grid-template-columns: 1fr; } }
+  .hub-teaser-card { display: block; padding: 24px 20px; border: 1px solid var(--k-30); text-decoration: none; color: inherit; transition: border-color 200ms cubic-bezier(0.16,1,0.3,1); }
+  .hub-teaser-card:hover { border-color: var(--accent); }
+  .hub-teaser-card h3 { font-size: 18px; margin: 0 0 8px; }
+  .hub-teaser-card p { font-size: 14px; line-height: 1.5; color: var(--k-70, #4a4a4a); margin: 0 0 12px; }
+  .hub-teaser-card__cta { font-size: 13px; color: var(--accent); font-weight: 600; }
+  .hub-teaser-card--more { background: var(--k-05, #f6f6f6); }
+
+  .hub-place__grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px; align-items: center; }
+  @media (max-width: 720px) { .hub-place__grid { grid-template-columns: 1fr; } }
+  .hub-place p { font-size: 17px; line-height: 1.65; max-width: 540px; margin: 0 0 24px; color: var(--k-90); }
+  .hub-place__cta { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .hub-place__cta:hover { text-decoration: underline; }
+  .hub-place__map img { width: 100%; height: auto; border: 1px solid var(--k-20, #d4d4d4); display: block; }
+  .hub-place__map figcaption { font-size: 13px; color: var(--k-60, #6a6a6a); margin-top: 8px; }
+
+  .hub-status p { font-size: 16px; line-height: 1.65; max-width: 880px; padding: 24px 28px; background: var(--k-05, #f6f6f6); border-left: 3px solid var(--accent); margin: 0; }
+
+  .hub-faq-mini { padding: 16px 0; border-bottom: 1px solid var(--k-20, #d4d4d4); }
+  .hub-faq-mini summary { font-weight: 600; cursor: pointer; padding: 8px 0; list-style: none; font-size: 17px; }
+  .hub-faq-mini summary::-webkit-details-marker { display: none; }
+  .hub-faq-mini summary::before { content: '+'; display: inline-block; margin-right: 12px; transition: transform 200ms; }
+  .hub-faq-mini[open] summary::before { transform: rotate(45deg); }
+  .hub-faq-mini p { padding: 0 0 8px 24px; line-height: 1.6; color: var(--k-80, #2a2a2a); }
+  .hub-faq-mini__more { margin: 24px 0 0; }
+  .hub-faq-mini__more a { color: var(--accent); font-weight: 600; text-decoration: none; }
 </style>
