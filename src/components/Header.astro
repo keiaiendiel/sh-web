@@ -7,13 +7,9 @@ interface Props {
 const { variant = 'light' } = Astro.props;
 ---
 <header class:list={['hub-header', `hub-header--${variant}`]}>
-  <div class="hub-header__strip">
-    <a href="https://osa2.cz/" class="hub-header__strip-link">Provozuje OSA II, z.s.</a>
-  </div>
   <div class="hub-header__bar">
-    <a class="hub-header__brand" href={withBase('/')} aria-label="Startovací Hub Klecany — domů">
-      <span class="hub-header__brand-mark">SH</span>
-      <span class="hub-header__brand-sub">Startovací Hub · Klecany</span>
+    <a class="hub-header__brand" href={withBase('/')} aria-label="Startovací hub — domů">
+      <span class="hub-header__brand-mark">Startovací hub</span>
     </a>
     <button class="hub-header__burger" type="button" aria-controls="hub-drawer" aria-expanded="false" aria-label="Otevřít menu">
       <span></span><span></span>
@@ -40,15 +36,16 @@ const { variant = 'light' } = Astro.props;
 <style>
   .hub-header { position: sticky; top: 0; z-index: 40; background: var(--bg, #fff); border-bottom: 1px solid var(--k-10, #ececec); }
   .hub-header--dark { background: var(--k-100, #000); color: var(--bg, #fff); border-bottom-color: transparent; }
-  .hub-header__strip { padding: 6px 24px; font-size: 12px; letter-spacing: var(--tracking-tight, 0.01em); border-bottom: 1px solid var(--k-10); }
-  .hub-header--dark .hub-header__strip { border-bottom-color: rgba(255,255,255,0.08); }
-  .hub-header__strip-link { color: inherit; text-decoration: none; opacity: 0.7; }
-  .hub-header__strip-link:hover { opacity: 1; text-decoration: underline; }
-  .hub-header__bar { display: flex; align-items: center; gap: 24px; padding: 14px 24px; max-width: 1440px; margin: 0 auto; }
-  .hub-header__brand { display: inline-flex; align-items: baseline; gap: 12px; text-decoration: none; color: inherit; z-index: 2; }
-  .hub-header__brand-mark { font-family: var(--font-sans); font-weight: 700; font-size: 20px; letter-spacing: 0.02em; }
-  .hub-header__brand-sub { font-size: 13px; opacity: 0.65; }
-  .hub-header__nav { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+  .hub-header__bar { display: flex; align-items: center; gap: 24px; padding: 18px 24px; max-width: 1440px; margin: 0 auto; }
+  .hub-header__brand { display: inline-flex; align-items: center; text-decoration: none; color: inherit; z-index: 2; }
+  .hub-header__brand-mark {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(20px, 2.4vw, 26px);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .hub-header__nav { margin-left: auto; display: flex; align-items: center; gap: 24px; }
   .hub-header__nav a { color: inherit; text-decoration: none; font-size: 14px; }
   .hub-header__nav a:hover { text-decoration: underline; }
   .hub-header__burger { display: none; background: none; border: 0; padding: 8px; cursor: pointer; }
@@ -56,6 +53,7 @@ const { variant = 'light' } = Astro.props;
   @media (max-width: 720px) {
     .hub-header__nav { display: none; }
     .hub-header__burger { display: block; margin-left: auto; z-index: 2; }
+    .hub-header__brand-mark { font-size: 20px; }
   }
   .hub-drawer[hidden] { display: none; }
   .hub-drawer { position: fixed; inset: 0; background: var(--k-100, #000); color: var(--bg, #fff); display: grid; place-items: center; z-index: 30; }
