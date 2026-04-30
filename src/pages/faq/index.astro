@@ -6,10 +6,8 @@ const all = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.or
 const labels: Record<string, string> = {
   project: 'O projektu',
   resident: 'Pro obyvatele',
-  investor: 'Pro investory',
-  legal: 'Právní',
 };
-const groups = (['project', 'resident', 'investor', 'legal'] as const).map((aud) => ({
+const groups = (['project', 'resident'] as const).map((aud) => ({
   aud,
   label: labels[aud],
   items: all.filter((q) => q.data.audience === aud),
@@ -17,7 +15,7 @@ const groups = (['project', 'resident', 'investor', 'legal'] as const).map((aud)
 ---
 <Base
   title="FAQ — Startovací Hub Klecany"
-  description="Odpovědi na nejčastější otázky o projektu, bydlení, investování a právním rámci."
+  description="Odpovědi na nejčastější otázky o projektu a bydlení v Hubu."
   headerVariant="light"
 >
   <section class="hub-page-hero">
