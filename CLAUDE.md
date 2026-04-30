@@ -68,7 +68,7 @@ sh-web/
 │   │   ├── sub_projects/<5 mdx>  # Hub programme cards
 │   │   ├── faq/index.json        # 12 keyed Q&As
 │   │   └── org/identity.json     # OSA legal identity
-│   ├── components/               # Header, Footer, Base*, VpdLogomark, Tooltip, Gallery, Calculator, ResidentForm, InvestorForm, ProjectCard, GraphicHeader, InlineCTA, RevealOnScroll, SVGPattern
+│   ├── components/               # Header, Footer, Tooltip, Gallery, Calculator, ResidentForm, InvestorForm, RevealOnScroll (8 focused files)
 │   ├── layouts/Base.astro        # html/head with title/desc/OG/JSON-LD; mounts Header + slot + Footer + RevealOnScroll
 │   ├── pages/
 │   │   ├── index.astro           # Landing
@@ -91,7 +91,6 @@ sh-web/
 - **Per-sub-project thumbnails on /projekty/ are placeholder boxes.** When real renders arrive, drop them in and update the relevant subProjects MDX `thumbnail` frontmatter.
 - **Forms `console.log` payloads.** Backend wiring (validation, anti-spam, autoresponse, storage) is the next step before public launch.
 - **`hub-hero` background-image not measured by `lint:weight`.** The eager budget walks `<img>` and `@font-face url()` — inline `style="background-image: url(...)"` slips past it. The Landing hero JPG is ~400 KB and DOES paint on first load. Two options when this matters: (a) teach the linter to walk inline styles; (b) move the hero to an `<img>` with `decoding="async"` covering the section.
-- **Some K-tokens missing from `tokens.css`.** Pages reference `--k-05`, `--k-20`, `--k-60`, `--k-80` with hex fallbacks; the unscoped tokens scale (`--k-0`, `--k-10`, `--k-30`, `--k-50`, `--k-70`, `--k-90`, `--k-100`) doesn't include them. Fallbacks render fine; for token-system purity, define the missing values in `tokens.css`.
 - **Author identity warning on git commits.** Each commit emits "Your name and email address were configured automatically based on your username and hostname" because the repo has no committed `user.email`. Set `git config --global user.email` once if you want consistent attribution.
 - **Backup branch.** `backup/osa-web-pre-hub-redesign` carries the OSA-parent state and any uncommitted WIP that existed when this redesign started. Keep it until the Hub site is in production for at least one cycle, then delete.
 
