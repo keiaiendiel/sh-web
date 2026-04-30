@@ -3,6 +3,8 @@ import '../styles/tokens.css';
 import '../styles/kit.css';
 import '../styles/motion.css';
 import RevealOnScroll from '../components/RevealOnScroll.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import { getEntry } from 'astro:content';
 import { withBase } from '../utils/url';
 
@@ -11,66 +13,82 @@ interface Props {
   description?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
+  headerVariant?: 'light' | 'dark';
+  showRoleChip?: boolean;
+  activeRole?: 'resident' | 'investor' | null;
 }
 
 const {
   title,
-  description = 'Občanské sdružení Alternativa II, z.s.',
-  ogImage = '/og/default.png',
+  description = 'První etapa záměru VPD1: dostupné sdílené bydlení v areálu horních kasáren, deset minut od Prahy.',
+  ogImage = withBase('/og/default.png'),
   ogType = 'website',
+  headerVariant = 'light',
+  showRoleChip = false,
+  activeRole = null,
 } = Astro.props;
 
 // Canonical URL: derived from Astro.site + current pathname.
-// Astro.site is set in astro.config.mjs to https://osa2.cz.
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://osa2.cz';
+// Astro.site is set in astro.config.mjs to https://klecany.osa2.cz.
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://klecany.osa2.cz';
 const canonical = `${siteUrl}${Astro.url.pathname}`;
-const ogImageAbs = ogImage.startsWith('http') ? ogImage : `${siteUrl}${withBase(ogImage)}`;
+const ogImageAbs = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage.startsWith('/') ? ogImage : withBase(ogImage)}`;
 
-// Organization JSON-LD from content collection. Falls back to hardcoded
-// defaults if the entry is missing (shouldnt happen, Zod validates on build).
+// Organization JSON-LD from content collection. The Hub site represents
+// the Startovací Hub Klecany project; the operating org (OSA II, z.s.) is
+// referenced as parentOrganization. Falls back to hardcoded defaults if
+// the entry is missing (shouldnt happen, Zod validates on build).
 const orgEntry = await getEntry('org', 'identity');
 const org = orgEntry?.data;
 const orgJsonLd = org
   ? {
       '@context': 'https://schema.org',
-      '@type': 'NGO',
-      name: org.name,
-      alternateName: org.abbreviations,
+      '@type': 'Organization',
+      name: 'Startovací Hub Klecany',
       url: `${siteUrl}${withBase('/')}`,
-      logo: `${siteUrl}${withBase('/logo/OSA-Logo-Black.svg')}`,
-      foundingDate: org.founded,
-      email: org.email,
-      telephone: org.phone,
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: 'Terronská 894/56',
-        addressLocality: 'Praha 6 - Bubeneč',
-        postalCode: '160 00',
-        addressCountry: 'CZ',
+      subjectOf: {
+        '@type': 'WebPage',
+        url: 'https://osa2.cz/zamer-vpd/',
       },
-      taxID: org.dic,
-      vatID: org.dic,
-      identifier: {
-        '@type': 'PropertyValue',
-        name: 'IČO',
-        value: org.ico.replace(/\s/g, ''),
+      parentOrganization: {
+        '@type': 'NGO',
+        name: org.name,
+        alternateName: org.abbreviations,
+        url: 'https://osa2.cz',
+        foundingDate: org.founded,
+        email: org.email,
+        telephone: org.phone,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Terronská 894/56',
+          addressLocality: 'Praha 6 - Bubeneč',
+          postalCode: '160 00',
+          addressCountry: 'CZ',
+        },
+        taxID: org.dic,
+        vatID: org.dic,
+        identifier: {
+          '@type': 'PropertyValue',
+          name: 'IČO',
+          value: org.ico.replace(/\s/g, ''),
+        },
+        member: [
+          {
+            '@type': 'Person',
+            name: org.predseda.name,
+            jobTitle: 'Předseda',
+            email: org.predseda.email,
+            telephone: org.predseda.phone,
+          },
+          {
+            '@type': 'Person',
+            name: org.mistopredseda.name,
+            jobTitle: 'Místopředseda',
+            email: org.mistopredseda.email,
+            telephone: org.mistopredseda.phone,
+          },
+        ],
       },
-      member: [
-        {
-          '@type': 'Person',
-          name: org.predseda.name,
-          jobTitle: 'Předseda',
-          email: org.predseda.email,
-          telephone: org.predseda.phone,
-        },
-        {
-          '@type': 'Person',
-          name: org.mistopredseda.name,
-          jobTitle: 'Místopředseda',
-          email: org.mistopredseda.email,
-          telephone: org.mistopredseda.phone,
-        },
-      ],
     }
   : null;
 ---
@@ -88,7 +106,7 @@ const orgJsonLd = org
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageAbs} />
-    <meta property="og:site_name" content="OSA II" />
+    <meta property="og:site_name" content="Startovací Hub Klecany" />
     <meta property="og:locale" content="cs_CZ" />
 
     {/* Twitter Card */}
@@ -122,7 +140,9 @@ const orgJsonLd = org
     </noscript>
   </head>
   <body class="osa-body">
+    <Header variant={headerVariant} showRoleChip={showRoleChip} activeRole={activeRole} />
     <slot />
+    <Footer />
     <RevealOnScroll />
 
     {/*
