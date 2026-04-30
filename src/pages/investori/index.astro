@@ -1,9 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Calculator from '../../components/Calculator.astro';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const scenariosPath = path.resolve(import.meta.dirname, '../../../public/data/scenarios.json');
+const scenariosPath = path.resolve(process.cwd(), 'public/data/scenarios.json');
 const { scenarios, _disclaimer } = JSON.parse(await readFile(scenariosPath, 'utf8'));
 ---
 <Base
@@ -48,6 +49,8 @@ const { scenarios, _disclaimer } = JSON.parse(await readFile(scenariosPath, 'utf
     </div>
     <p class="hub-disclaimer">{_disclaimer}</p>
   </section>
+
+  <Calculator />
 </Base>
 
 <style>
