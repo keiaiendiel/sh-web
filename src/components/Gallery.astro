@@ -26,18 +26,7 @@ interface Props {
   title?: string | null;
 }
 
-const defaultImages: Image[] = [
-  { src: '/images/474156246_1114489417070378_2341453958952153769_n.jpg' },
-  { src: '/images/474471670_1114489410403712_957261942198756524_n.jpg' },
-  { src: '/images/484066885_1034307245393403_8313211835074985229_n.jpg' },
-  { src: '/images/104085418_3071753449537682_3735031019996797978_n.jpg' },
-  { src: '/images/482961798_1034307312060063_7263597780288843545_n.jpg' },
-  { src: '/images/83622937_3071752986204395_5087212010441728965_n.jpg' },
-  { src: '/images/104082964_3071753366204357_6028419542031153786_n.jpg' },
-  { src: '/images/482988216_1034307212060073_6494869551613273029_n.jpg' },
-];
-
-const { images: rawImages = defaultImages, title = 'Z provozu spolkových prostorů.' } = Astro.props;
+const { images: rawImages = [] as Array<Image | string>, title = null as string | null } = Astro.props;
 const images: Image[] = rawImages.map((it) => (typeof it === 'string' ? { src: it } : it));
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');

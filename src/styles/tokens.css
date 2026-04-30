@@ -49,12 +49,19 @@
   --font-mono:     'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* ---------- Monochromatic palette (parent brand) ----------
-     From manual §1.10. Grayscale is used at K0, K10, K30, K50, K70, K90, K100. */
+     From manual §1.10. K0 / K10 / K30 / K50 / K70 / K90 / K100 are the
+     primary scale; K05 / K20 / K60 / K80 are interleaved rungs added for
+     Hub-page surface tones (subtle backgrounds, hairline borders, muted
+     captions) so component CSS doesn't depend on hex fallbacks. */
   --k-0:    #ffffff;
+  --k-05:   #f6f6f6;
   --k-10:   #e6e6e6;
+  --k-20:   #d4d4d4;
   --k-30:   #bebebe;
   --k-50:   #969696;
+  --k-60:   #878787;
   --k-70:   #787878;
+  --k-80:   #585858;
   --k-90:   #3c3c3c;
   --k-100:  #000000;
 
