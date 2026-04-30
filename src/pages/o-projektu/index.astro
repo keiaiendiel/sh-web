@@ -1,0 +1,123 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+
+const lastUpdated = new Date().toLocaleDateString('cs-CZ');
+---
+<Base
+  title="O projektu — Startovací Hub Klecany"
+  description="Místo, kontext a časová osa záměru. Areál horních kasáren v Klecanech, dopravní napojení na Prahu, šestietapový rozvoj."
+  headerVariant="light"
+>
+  <section class="hub-page-hero">
+    <h1>O projektu</h1>
+    <p>Místo, kontext a časová osa záměru.</p>
+  </section>
+
+  <section class="hub-section" id="misto">
+    <h2>Klecany</h2>
+    <p>Areál horních kasáren leží na severu od Prahy, 12 km od centra. Je to bývalý vojenský areál o rozloze 83&nbsp;327&nbsp;m², z toho 77&nbsp;210&nbsp;m² zastavitelných v souladu se současným územním plánem. Smluvně máme zajištěná práva odkupu, užívání a stavby do roku 2039. Areál je na trase plánované tramvajové linky z Kobylis do Klecan a na navrhované cyklostezky do Prahy.</p>
+
+    <dl class="hub-fact-table">
+      <div>
+        <dt>Lokace</dt>
+        <dd>Klecany, 12&nbsp;km od centra Prahy, na trase plánované tramvaje z Kobylis</dd>
+      </div>
+      <div>
+        <dt>Rozloha</dt>
+        <dd>83&nbsp;327&nbsp;m² celkem, z toho 77&nbsp;210&nbsp;m² zastavitelných (SM)</dd>
+      </div>
+      <div>
+        <dt>Práva</dt>
+        <dd>Smluvně zajištěná do roku 2039: odkup, užívání, stavba</dd>
+      </div>
+      <div>
+        <dt>Doprava dnes</dt>
+        <dd>Příměstská linka PID, ~25&nbsp;minut do Kobylisy</dd>
+      </div>
+      <div>
+        <dt>Doprava výhled</dt>
+        <dd>Plánovaná tramvaj z Kobylis, cyklostezka do Prahy</dd>
+      </div>
+      <div>
+        <dt>Cenové prostředí</dt>
+        <dd>Klecanská alej jako referenční developerský projekt v okolí</dd>
+      </div>
+    </dl>
+
+    <figure class="hub-masterplan">
+      <img src={withBase('/images/hub/masterplan.jpg')} alt="Masterplan areálu horních kasáren Klecany s vyznačeným Hub jádrem (cca 16 000 m²) a zázemím (cca 18 000 m²)." loading="lazy" />
+      <figcaption>Areál horních kasáren — Hub jádro a zázemí v rámci 82&nbsp;000&nbsp;m² celku.</figcaption>
+    </figure>
+
+    <h3>Doprava a dostupnost</h3>
+    <p>Klecany jsou napojené na pražskou hromadnou dopravu příměstskou linkou PID, která jezdí v běžné špičce každých 15–20 minut do stanice Kobylisy. Cesta zabere zhruba 25 minut. Záměr Praha-Klecany počítá s prodloužením tramvajové linky z Kobylis do Klecan; po realizaci se cesta zkrátí na zhruba polovinu. Pro cyklisty existuje navrhovaná cyklostezka, která areál spojuje s pravým břehem Vltavy a s pražskou cyklostezkovou sítí.</p>
+
+    <h3>Okolí a služby</h3>
+    <p>V pěší dostupnosti od areálu jsou základní služby (potraviny, lékárna, pošta), škola, zdravotní středisko, dvě kavárny a hospoda. V Klecanech funguje dětské hřiště, sportoviště, knihovna a kulturní dům. Do pěti kilometrů je dostupný supermarket, koupaliště Vltava, řada hospůdek na pravém břehu a nedaleký zámek Veltrusy. Pro lidi, kteří chtějí bydlet blízko Prahy bez pražských nájmů, jde o reálný kompromis: nejste odříznutí od služeb, ale zároveň nejste v rušném městě.</p>
+
+    <div class="hub-place-photos">
+      <img src={withBase('/images/hub/exterior/exterior-01.jpg')} alt="Areál horních kasáren — pohled 1." loading="lazy" />
+      <img src={withBase('/images/hub/exterior/exterior-05.jpg')} alt="Areál horních kasáren — pohled 2." loading="lazy" />
+      <img src={withBase('/images/hub/exterior/exterior-10.jpg')} alt="Areál horních kasáren — pohled 3." loading="lazy" />
+      <img src={withBase('/images/hub/exterior/hub-renovated-building.jpg')} alt="Vizualizace zrekonstruované budovy." loading="lazy" />
+    </div>
+  </section>
+
+  <section class="hub-section" id="casova-osa">
+    <h2>Časová osa</h2>
+    <p>Záměr postupuje šesti etapami. Reálné termíny se mohou posouvat — držíme je transparentně.</p>
+
+    <ol class="hub-timeline">
+      <li class="is-done"><time>2024</time> <strong>Identifikace areálu</strong> <span class="hub-status-tag">hotovo</span></li>
+      <li class="is-done"><time>2025 – H1 2026</time> <strong>Příprava záměru a investiční model</strong> <span class="hub-status-tag">hotovo</span></li>
+      <li class="is-next"><time>06/2026</time> <strong>Zahájení rekonstrukcí</strong> <span class="hub-status-tag">další</span></li>
+      <li class="is-next"><time>2027</time> <strong>Hrubá stavba a interiéry</strong> <span class="hub-status-tag">další</span></li>
+      <li class="is-next"><time>10/2028</time> <strong>Spuštění provozu (cílově)</strong> <span class="hub-status-tag">další</span></li>
+      <li class="is-future"><time>2027+</time> <strong>Další etapy VPD1</strong> <span class="hub-status-tag">další</span></li>
+    </ol>
+
+    <p class="hub-foot-note">Poslední aktualizace stránky: <time>{lastUpdated}</time>.</p>
+  </section>
+</Base>
+
+<style>
+  .hub-page-hero { padding: 96px 24px 32px; max-width: 1440px; margin: 0 auto; }
+  .hub-page-hero h1 { font-size: clamp(40px, 5vw, 80px); font-weight: 700; margin: 0 0 16px; letter-spacing: -0.02em; }
+  .hub-page-hero p { font-size: 18px; color: var(--k-70, #4a4a4a); margin: 0; }
+
+  .hub-section { padding: 48px 24px; max-width: 1440px; margin: 0 auto; }
+  .hub-section h2 { font-size: clamp(28px, 3vw, 44px); font-weight: 700; margin: 0 0 16px; letter-spacing: -0.01em; }
+  .hub-section h3 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; }
+  .hub-section p { font-size: 17px; line-height: 1.65; max-width: 720px; color: var(--k-90); margin: 0 0 16px; }
+
+  .hub-fact-table { display: grid; gap: 0; margin: 24px 0; max-width: 880px; border-top: 1px solid var(--k-20, #d4d4d4); }
+  .hub-fact-table div { display: grid; grid-template-columns: 220px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--k-20, #d4d4d4); }
+  .hub-fact-table dt { font-weight: 600; color: var(--k-70, #4a4a4a); margin: 0; }
+  .hub-fact-table dd { margin: 0; line-height: 1.55; }
+  @media (max-width: 600px) { .hub-fact-table div { grid-template-columns: 1fr; gap: 4px; } }
+
+  .hub-masterplan { margin: 32px 0; }
+  .hub-masterplan img { width: 100%; height: auto; display: block; border: 1px solid var(--k-20, #d4d4d4); }
+  .hub-masterplan figcaption { font-size: 13px; color: var(--k-60, #6a6a6a); margin-top: 8px; }
+
+  .hub-place-photos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 24px 0; }
+  @media (max-width: 720px) { .hub-place-photos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .hub-place-photos img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+
+  .hub-timeline { list-style: none; padding: 0; margin: 32px 0; max-width: 720px; display: grid; gap: 16px; }
+  .hub-timeline li { display: grid; grid-template-columns: 140px 1fr auto; gap: 16px; padding: 16px; border: 1px solid var(--k-20, #d4d4d4); align-items: center; }
+  .hub-timeline li.is-done { background: var(--k-05, #f6f6f6); }
+  .hub-timeline li.is-next { border-left: 3px solid var(--accent); padding-left: 13px; }
+  .hub-timeline time { font-weight: 700; font-size: 14px; letter-spacing: 0.02em; }
+  .hub-timeline strong { font-weight: 600; }
+  .hub-status-tag { font-size: 12px; padding: 4px 8px; border-radius: 999px; background: var(--k-10, #ececec); color: var(--k-70, #4a4a4a); letter-spacing: 0.05em; text-transform: uppercase; }
+  .hub-timeline li.is-done .hub-status-tag { background: var(--k-90); color: #fff; }
+  .hub-timeline li.is-next .hub-status-tag { background: var(--accent); color: var(--accent-on); }
+  @media (max-width: 600px) {
+    .hub-timeline li { grid-template-columns: 1fr; gap: 4px; }
+    .hub-timeline li.is-next { padding-left: 16px; border-left: 0; border-top: 3px solid var(--accent); }
+  }
+
+  .hub-foot-note { font-size: 13px; color: var(--k-70, #4a4a4a); margin: 24px 0 0; }
+</style>
