@@ -1,100 +1,42 @@
 ---
-import SVGPattern from './SVGPattern.astro';
-import { withBase } from '../utils/url';
-const year = new Date().getFullYear();
+import { getEntry } from 'astro:content';
+const orgEntry = await getEntry('org', 'identity');
+const org = orgEntry?.data;
 ---
-<footer class="osa-footer osa-dark">
-  <SVGPattern variant="dark" opacity={0.14}>
-    <div class="container-wide osa-footer__inner">
-      <div class="osa-footer__top">
-        <div class="osa-footer__brandcol">
-          <img src={withBase('/logo/OSA-Logo-White-Full.svg')} alt="Občanské sdružení Alternativa II" class="osa-footer__logo" />
-          <p class="osa-footer__motto">Pomáháme tvořit…</p>
-        </div>
-
-        <div class="osa-footer__col">
-          <div class="osa-eyebrow osa-footer__label">Navigace</div>
-          <ul class="osa-footer__links">
-            <li><a href={withBase('/')}>Úvod</a></li>
-            <li><a href={withBase('/o-spolku/')}>O spolku</a></li>
-            <li><a href={withBase('/projekty/')}>Projekty</a></li>
-            <li><a href={withBase('/zapojte-se/')}>Zapojte se</a></li>
-            <li><a href={withBase('/kontakty/')}>Kontakty</a></li>
-          </ul>
-        </div>
-
-        <div class="osa-footer__col">
-          <div class="osa-eyebrow osa-footer__label">Kontakt</div>
-          <address class="osa-footer__body">
-            <a href="mailto:info@osa2.cz">info@osa2.cz</a><br />
-            <a href="tel:+420777786476">+420 777 786 476</a><br />
-            Terronská 894/56<br />
-            160 00 Praha 6
-          </address>
-        </div>
-
-        <div class="osa-footer__col">
-          <div class="osa-eyebrow osa-footer__label">Právní údaje</div>
-          <p class="osa-footer__body osa-mono">
-            IČ 270 26 345<br />
-            DIČ CZ 270 26 345<br />
-            Spis. zn. L 16540
-          </p>
-        </div>
-      </div>
-
-      <div class="rule rule--rev osa-footer__sep" role="presentation"></div>
-
-      <p class="osa-footer__legal osa-mono">
-        © {year} Občanské sdružení Alternativa II, z.s.
+<footer class="hub-footer">
+  <div class="hub-footer__inner">
+    <div class="hub-footer__col">
+      <p class="hub-footer__brand">Startovací Hub Klecany</p>
+      <p class="hub-footer__tagline">Záměr vede VPD pod hlavičkou OSA II, z.s.</p>
+      <p class="hub-footer__parents">
+        <a href="https://osa2.cz">osa2.cz</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://osa2.cz/zamer-vpd/">osa2.cz/zamer-vpd</a>
       </p>
     </div>
-  </SVGPattern>
+    <div class="hub-footer__col">
+      <p class="hub-footer__label">Kontakt</p>
+      <p>{org?.predseda?.name ?? 'Marek Semerád'}, předseda OSA II, z.s.</p>
+      <p><a href={`mailto:${org?.email ?? 'vpd@osa2.cz'}`}>{org?.email ?? 'vpd@osa2.cz'}</a></p>
+    </div>
+    <div class="hub-footer__col">
+      <p class="hub-footer__label">Právní</p>
+      <p>OSA II, z.s. · IČO {org?.ico ?? '—'}</p>
+      <p class="hub-footer__legal">Údaje o ochraně osobních údajů doplníme s nasazením formulářů.</p>
+    </div>
+  </div>
 </footer>
 
 <style>
-  .osa-footer {
-    --fg: var(--k-0);
-    --fg-muted: var(--k-30);
-    --bg: var(--k-100);
-    color: var(--fg);
-    background: var(--bg);
-  }
-  .osa-footer__inner    { padding: var(--space-9) var(--gutter) var(--space-6); }
-  .osa-footer__top      {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1fr;
-    gap: var(--space-7);
-    align-items: start;
-  }
-  .osa-footer__brandcol { display: grid; gap: var(--space-4); }
-  .osa-footer__logo     { display: block; width: 100%; max-width: 160px; height: auto; }
-  @media (max-width: 960px) { .osa-footer__logo { max-width: 140px; } }
-  .osa-footer__motto    {
-    font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: var(--text-lg);
-    color: var(--fg);
-    margin: 0;
-  }
-  .osa-footer__label    { color: var(--fg-muted); margin-bottom: var(--space-3); }
-  .osa-footer__body,
-  .osa-footer__body a   { color: var(--fg); font-style: normal; font-size: var(--text-sm); line-height: var(--lh-relaxed); }
-  .osa-footer__links    { display: grid; gap: var(--space-2); font-size: var(--text-sm); }
-  .osa-footer__sep      { margin: var(--space-7) 0 var(--space-4); opacity: 0.4; }
-  .osa-footer__legal    { color: var(--fg-muted); font-size: var(--text-xs); margin: 0; }
-  @media (max-width: 960px) {
-    .osa-footer__top { grid-template-columns: 1fr 1fr; }
-  }
-  /* Stay on two columns even on narrow phones per client direction.
-     Brand + motto column stacks above the three meta columns, which
-     share the two-column grid. */
-  @media (max-width: 560px) {
-    .osa-footer__top {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-5);
-    }
-    .osa-footer__brandcol { grid-column: 1 / -1; }
-    .osa-footer__inner { padding: var(--space-7) var(--gutter) var(--space-5); }
+  .hub-footer { background: var(--k-100, #000); color: var(--bg, #fff); padding: 64px 24px; }
+  .hub-footer__inner { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; max-width: 1440px; margin: 0 auto; }
+  .hub-footer__brand { font-weight: 700; font-size: 18px; margin-bottom: 4px; }
+  .hub-footer__tagline { opacity: 0.7; font-size: 14px; margin-bottom: 12px; }
+  .hub-footer__parents a { color: inherit; }
+  .hub-footer__label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.55; margin-bottom: 8px; }
+  .hub-footer__legal { font-size: 12px; opacity: 0.5; margin-top: 8px; }
+  .hub-footer__col p { margin: 0 0 4px; line-height: 1.5; }
+  @media (max-width: 720px) {
+    .hub-footer__inner { grid-template-columns: 1fr; gap: 24px; }
   }
 </style>
