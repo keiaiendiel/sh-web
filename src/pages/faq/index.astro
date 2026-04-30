@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const all = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.order);
+const labels: Record<string, string> = {
+  project: 'O projektu',
+  resident: 'Pro obyvatele',
+  investor: 'Pro investory',
+  legal: 'Právní',
+};
+const groups = (['project', 'resident', 'investor', 'legal'] as const).map((aud) => ({
+  aud,
+  label: labels[aud],
+  items: all.filter((q) => q.data.audience === aud),
+}));
+---
+<Base
+  title="FAQ — Startovací Hub Klecany"
+  description="Odpovědi na nejčastější otázky o projektu, bydlení, investování a právním rámci."
+  headerVariant="light"
+>
+  <section class="hub-page-hero">
+    <h1>FAQ</h1>
+    <p class="hub-lead">Otázky, které dostáváme nejčastěji. Pokud něco chybí, ozvěte se na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.</p>
+  </section>
+
+  <section class="hub-section hub-faq">
+    <div class="hub-faq__tabs" role="tablist">
+      <button class="is-active" data-aud="all" role="tab" aria-selected="true">Vše</button>
+      {groups.map((g) => (
+        <button data-aud={g.aud} role="tab" aria-selected="false">{g.label}</button>
+      ))}
+    </div>
+
+    {groups.map((g) => (
+      <div class="hub-faq__group" data-group={g.aud}>
+        <h2>{g.label}</h2>
+        {g.items.map((q) => (
+          <details class="hub-faq__item">
+            <summary>{q.data.question}</summary>
+            <p>{q.data.answer}</p>
+          </details>
+        ))}
+      </div>
+    ))}
+  </section>
+</Base>
+
+<style>
+  .hub-page-hero { padding: 96px 24px 32px; max-width: 1440px; margin: 0 auto; }
+  .hub-page-hero h1 { font-size: clamp(40px, 5vw, 80px); font-weight: 700; margin: 0 0 16px; letter-spacing: -0.02em; }
+  .hub-lead { font-size: 18px; color: var(--k-70, #4a4a4a); margin: 0; max-width: 720px; }
+  .hub-lead a { color: var(--accent); }
+
+  .hub-section { padding: 32px 24px 96px; max-width: 1200px; margin: 0 auto; }
+
+  .hub-faq__tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 32px; padding: 0 0 16px; border-bottom: 1px solid var(--k-20, #d4d4d4); }
+  .hub-faq__tabs button { padding: 8px 16px; border: 1px solid var(--k-30, #c8c8c8); background: transparent; border-radius: 999px; font: inherit; font-size: 14px; cursor: pointer; transition: all 200ms cubic-bezier(0.16,1,0.3,1); }
+  .hub-faq__tabs button.is-active { background: var(--k-100, #000); color: var(--bg, #fff); border-color: var(--k-100, #000); }
+
+  .hub-faq__group { margin: 32px 0; }
+  .hub-faq__group h2 { font-size: 22px; font-weight: 700; margin: 0 0 16px; letter-spacing: -0.01em; color: var(--k-70, #4a4a4a); }
+
+  .hub-faq__item { padding: 16px 0; border-bottom: 1px solid var(--k-20, #d4d4d4); }
+  .hub-faq__item summary { font-weight: 600; font-size: 17px; cursor: pointer; padding: 8px 0; list-style: none; line-height: 1.5; display: flex; align-items: flex-start; gap: 12px; }
+  .hub-faq__item summary::-webkit-details-marker { display: none; }
+  .hub-faq__item summary::before { content: '+'; flex-shrink: 0; transition: transform 200ms cubic-bezier(0.16,1,0.3,1); display: inline-block; width: 18px; text-align: center; }
+  .hub-faq__item[open] summary::before { transform: rotate(45deg); }
+  .hub-faq__item p { padding: 0 0 8px 30px; line-height: 1.65; color: var(--k-90); margin: 0; max-width: 880px; }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.hub-faq__tabs button');
+    const groups = document.querySelectorAll('.hub-faq__group');
+    tabs.forEach((t) => t.addEventListener('click', () => {
+      tabs.forEach((b) => { b.classList.remove('is-active'); b.setAttribute('aria-selected', 'false'); });
+      t.classList.add('is-active'); t.setAttribute('aria-selected', 'true');
+      const aud = t.dataset.aud;
+      groups.forEach((g) => g.hidden = !(aud === 'all' || g.dataset.group === aud));
+    }));
+  });
+</script>
