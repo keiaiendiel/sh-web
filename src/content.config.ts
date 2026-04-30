@@ -1,8 +1,6 @@
 /*
  * Astro 6 Content Collections for the Startovací Hub.
  * Three collections: subProjects (Hub programme cards), faq, org (OSA identity).
- * Calculator scenarios live in a static JSON file at public/data/, not a collection,
- * so the inline calculator script can fetch it directly.
  */
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
@@ -20,7 +18,7 @@ const subProjects = defineCollection({
   }),
 });
 
-const faqAudienceEnum = z.enum(['project', 'resident', 'investor', 'legal']);
+const faqAudienceEnum = z.enum(['project', 'resident']);
 
 const faq = defineCollection({
   loader: file('./src/content/faq/index.json'),

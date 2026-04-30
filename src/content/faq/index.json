@@ -20,13 +20,13 @@
   "q4": {
     "audience": "project",
     "question": "V jaké fázi je projekt teď?",
-    "answer": "Máme dokončený investiční záměr, definované scénáře pro investory a navrženou provozní strukturu pro Hub. Sbíráme nezávazný zájem od rezidentů a investorů, paralelně dolaďujeme právní rámec a provozní přípravu.",
+    "answer": "Máme dokončený investiční záměr a navrženou provozní strukturu pro Hub. Přijímáme nezávazné před-rezervace od lidí, kteří mají reálný zájem o bydlení. Paralelně dolaďujeme právní rámec a provozní přípravu.",
     "order": 4
   },
   "q5": {
     "audience": "resident",
-    "question": "Je vyplnění formuláře k něčemu zavazující?",
-    "answer": "Není. Formulář není rezervace ani pořadník na konkrétní místo. Říkáte nám jen orientačně, za jakých podmínek by pro vás Hub dával smysl, abychom mohli reálně připravit nabídku.",
+    "question": "Je vyplnění před-rezervace zavazující?",
+    "answer": "Není. Před-rezervace není smlouva ani závazek. Říkáte nám orientačně, za jakých podmínek by pro vás Hub dával smysl, a my si vás zapíšeme do okruhu, se kterým komunikujeme detail nabídky. Můžete kdykoli odstoupit.",
     "order": 5
   },
   "q6": {
@@ -37,38 +37,14 @@
   },
   "q7": {
     "audience": "resident",
-    "question": "Co znamená stipendijní režim, work-trade nebo rezident-tvůrce?",
-    "answer": "Stipendium je popsaný výběr pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Work-trade je výměna konkrétní práce (provoz, správa, komunitní servis) za zvýhodněné bydlení. Rezident-tvůrce je role pro tvůrce, kteří přinášejí program nebo kulturní vrstvu. Detail je v tooltipech přímo ve formuláři.",
+    "question": "Co znamená pobytové stipendium?",
+    "answer": "Stipendium je popsaný výběr pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Není to slevový kód, je to popsaný výběr na základě záměru či projektu, který v Hubu chcete rozjet. V před-rezervačním formuláři máte možnost o stipendium požádat.",
     "order": 7
   },
   "q8": {
     "audience": "resident",
     "question": "Jak je to s délkou pobytu a flexibilitou?",
-    "answer": "Hub je dimenzovaný na různě dlouhé pobyty: krátkodobé v kapslích, dlouhodobější v pokojích. V formuláři vybíráte orientační délku; konkrétní smluvní podmínky budeme dolaďovat podle toho, co lidem nejvíc dává smysl.",
+    "answer": "Hub je dimenzovaný na různě dlouhé pobyty: krátkodobé v kapslích, dlouhodobější v pokojích. Ve formuláři vybíráte orientační délku (1 měsíc / 1 rok / 5 let nebo jinou) a možnost prodloužit. Konkrétní smluvní podmínky budeme dolaďovat podle toho, co lidem nejvíc dává smysl.",
     "order": 8
-  },
-  "q9": {
-    "audience": "investor",
-    "question": "Jaký je dnes právní rámec investice?",
-    "answer": "Záměr finalizujeme přes některý z definovaných právních vehiklů: Družstvo, Fond Kvalifikovaných Investorů VPD nebo Bytové Družstvo VPD. Konkrétní strukturu volíme podle velikosti vstupu a podle zákonných možností. Detail řešíme v individuální komunikaci po vyplnění formuláře.",
-    "order": 9
-  },
-  "q10": {
-    "audience": "investor",
-    "question": "Co jsou scénáře S1-S5 a jak se mezi nimi rozhodnout?",
-    "answer": "Scénáře pokrývají rozsah od konzervativní po optimistickou variantu vývoje záměru, plus dvě varianty pro různé délky závazku. Konzervativní scénář počítá s pomalejším náběhem a nižším výnosem, optimistický s rychlejším otevřením a vyšším výnosem. Konkrétní volba závisí na vašem horizontu a toleranci k riziku. Doporučujeme prohlédnout si všechny scénáře v kalkulátoru a probrat výběr individuálně.",
-    "order": 10
-  },
-  "q11": {
-    "audience": "investor",
-    "question": "Jak je projekt zajištěný? Co když se zpozdí?",
-    "answer": "Zpoždění při povolování a ve výstavbě je u záměru tohoto typu reálné riziko. Scénáře jsou modelované tak, aby zachycovaly variantu základního i opožděného průběhu. Pokud se záměr zásadně posune, dáme vám vědět dřív, než to ovlivní vaši pozici.",
-    "order": 11
-  },
-  "q12": {
-    "audience": "legal",
-    "question": "Je formulář pro investory zavazující?",
-    "answer": "Není. Vyplněním nevstupujete do investice, nesvazujete se s konkrétní částkou ani neobdržíte alokaci. Posíláte nám rámcový signál o vašem zájmu a my vás zařadíme do okruhu, se kterým komunikujeme detail po dokončení právní struktury.",
-    "order": 12
   }
 }
