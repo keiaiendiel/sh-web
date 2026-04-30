@@ -14,23 +14,19 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   headerVariant?: 'light' | 'dark';
-  showRoleChip?: boolean;
-  activeRole?: 'resident' | 'investor' | null;
 }
 
 const {
   title,
-  description = 'První etapa záměru VPD1: dostupné sdílené bydlení v areálu horních kasáren, deset minut od Prahy.',
+  description = 'Startovací bydlení s komunitním a coworkingovým zázemím v areálu horních kasáren v Klecanech, deset minut od Prahy. Přijímáme nezávazné před-rezervace.',
   ogImage = withBase('/og/default.png'),
   ogType = 'website',
   headerVariant = 'light',
-  showRoleChip = false,
-  activeRole = null,
 } = Astro.props;
 
 // Canonical URL: derived from Astro.site + current pathname.
-// Astro.site is set in astro.config.mjs to https://klecany.osa2.cz.
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://klecany.osa2.cz';
+// Astro.site is set in astro.config.mjs to https://startovacihub.cz.
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://startovacihub.cz';
 const canonical = `${siteUrl}${Astro.url.pathname}`;
 const ogImageAbs = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage.startsWith('/') ? ogImage : withBase(ogImage)}`;
 
@@ -140,7 +136,7 @@ const orgJsonLd = org
     </noscript>
   </head>
   <body class="osa-body">
-    <Header variant={headerVariant} showRoleChip={showRoleChip} activeRole={activeRole} />
+    <Header variant={headerVariant} />
     <slot />
     <Footer />
     <RevealOnScroll />

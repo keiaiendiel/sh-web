@@ -3,20 +3,16 @@ import { withBase } from '../utils/url';
 
 interface Props {
   variant?: 'light' | 'dark';
-  /** When true (on /obyvatele/ and /investori/), show the role-switcher chip */
-  showRoleChip?: boolean;
-  /** Active role for the chip, or null on other pages */
-  activeRole?: 'resident' | 'investor' | null;
 }
-const { variant = 'light', showRoleChip = false, activeRole = null } = Astro.props;
+const { variant = 'light' } = Astro.props;
 ---
-<header class:list={['hub-header', `hub-header--${variant}`]} data-role-chip={showRoleChip ? 'on' : 'off'}>
+<header class:list={['hub-header', `hub-header--${variant}`]}>
   <div class="hub-header__strip">
-    <a href="https://osa2.cz/zamer-vpd/" class="hub-header__strip-link">část záměru OSA → VPD → VPD1</a>
+    <a href="https://osa2.cz/" class="hub-header__strip-link">Provozuje OSA II, z.s.</a>
   </div>
   <div class="hub-header__bar">
     <a class="hub-header__brand" href={withBase('/')} aria-label="Startovací Hub Klecany — domů">
-      <span class="hub-header__brand-mark">VPD</span>
+      <span class="hub-header__brand-mark">SH</span>
       <span class="hub-header__brand-sub">Startovací Hub · Klecany</span>
     </a>
     <button class="hub-header__burger" type="button" aria-controls="hub-drawer" aria-expanded="false" aria-label="Otevřít menu">
@@ -24,28 +20,19 @@ const { variant = 'light', showRoleChip = false, activeRole = null } = Astro.pro
     </button>
     <nav class="hub-header__nav" aria-label="Hlavní menu">
       <a href={withBase('/obyvatele/')}>Pro obyvatele</a>
-      <a href={withBase('/investori/')}>Pro investory</a>
       <a href={withBase('/projekty/')}>Projekty</a>
       <a href={withBase('/o-projektu/')}>O projektu</a>
       <a href={withBase('/faq/')}>FAQ</a>
-      {showRoleChip && (
-        <span class="hub-header__chip-slot">
-          <a href={withBase('/obyvatele/')} class:list={['hub-chip', activeRole === 'resident' && 'is-active']}>Jdu bydlet</a>
-          <a href={withBase('/investori/')} class:list={['hub-chip', activeRole === 'investor' && 'is-active']}>Jdu investovat</a>
-        </span>
-      )}
     </nav>
   </div>
 
   <div class="hub-drawer" id="hub-drawer" hidden>
     <nav class="hub-drawer__nav" aria-label="Mobilní menu">
       <a href={withBase('/obyvatele/')}>Pro obyvatele</a>
-      <a href={withBase('/investori/')}>Pro investory</a>
       <a href={withBase('/projekty/')}>Projekty</a>
       <a href={withBase('/o-projektu/')}>O projektu</a>
       <a href={withBase('/faq/')}>FAQ</a>
       <a href="https://osa2.cz" class="hub-drawer__parent">osa2.cz</a>
-      <a href="https://osa2.cz/zamer-vpd/" class="hub-drawer__parent">osa2.cz/zamer-vpd</a>
     </nav>
   </div>
 </header>
@@ -64,9 +51,6 @@ const { variant = 'light', showRoleChip = false, activeRole = null } = Astro.pro
   .hub-header__nav { margin-left: auto; display: flex; align-items: center; gap: 20px; }
   .hub-header__nav a { color: inherit; text-decoration: none; font-size: 14px; }
   .hub-header__nav a:hover { text-decoration: underline; }
-  .hub-header__chip-slot { display: inline-flex; gap: 8px; margin-left: 16px; padding-left: 16px; border-left: 1px solid var(--k-10); }
-  .hub-chip { padding: 6px 10px; border: 1px solid var(--k-30); border-radius: 999px; font-size: 13px; }
-  .hub-chip.is-active { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
   .hub-header__burger { display: none; background: none; border: 0; padding: 8px; cursor: pointer; }
   .hub-header__burger span { display: block; width: 22px; height: 2px; background: currentColor; margin: 4px 0; }
   @media (max-width: 720px) {

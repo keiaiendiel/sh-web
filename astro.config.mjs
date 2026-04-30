@@ -3,10 +3,10 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
-// Startovací Hub Klecany — sub-site of OSA at klecany.osa2.cz.
-// Subdomain deploy: no base path, so withBase() helper is a no-op.
+// Startovací Hub Klecany — operated by OSA II, z.s. at startovacihub.cz.
+// Standalone domain deploy: no base path, so withBase() helper is a no-op.
 export default defineConfig({
-  site: 'https://klecany.osa2.cz',
+  site: 'https://startovacihub.cz',
   trailingSlash: 'always',
   output: 'static',
   compressHTML: true,
