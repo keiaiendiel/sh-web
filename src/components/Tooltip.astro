@@ -1,0 +1,40 @@
+---
+interface Props {
+  label: string;
+  content: string;
+}
+const { label, content } = Astro.props;
+const id = `tt-${Math.random().toString(36).slice(2, 9)}`;
+---
+<span class="hub-tt" data-tt>
+  <button type="button" class="hub-tt__trigger" aria-describedby={id} aria-label={`Vysvětlit: ${label}`}>?</button>
+  <span class="hub-tt__bubble" id={id} role="tooltip">{content}</span>
+</span>
+
+<style>
+  .hub-tt { position: relative; display: inline-block; margin-left: 6px; }
+  .hub-tt__trigger { width: 18px; height: 18px; border-radius: 999px; border: 1px solid var(--k-30); background: transparent; font-size: 11px; cursor: pointer; line-height: 1; }
+  .hub-tt__bubble { position: absolute; top: calc(100% + 6px); left: 0; min-width: 240px; max-width: 320px; padding: 12px 14px; background: var(--k-100); color: var(--bg); font-size: 13px; line-height: 1.45; border-radius: 4px; box-shadow: 0 6px 24px rgba(0,0,0,0.18); display: none; z-index: 5; }
+  .hub-tt[data-open='true'] .hub-tt__bubble { display: block; }
+  @media (hover: hover) and (pointer: fine) {
+    .hub-tt:hover .hub-tt__bubble { display: block; }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-tt]').forEach((tt) => {
+      const trigger = tt.querySelector('.hub-tt__trigger');
+      trigger.addEventListener('click', () => {
+        const isOpen = tt.dataset.open === 'true';
+        document.querySelectorAll('[data-tt]').forEach((other) => other.dataset.open = 'false');
+        tt.dataset.open = isOpen ? 'false' : 'true';
+      });
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('[data-tt]')) {
+        document.querySelectorAll('[data-tt]').forEach((tt) => tt.dataset.open = 'false');
+      }
+    });
+  });
+</script>
