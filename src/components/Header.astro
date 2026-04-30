@@ -1,298 +1,98 @@
 ---
 import { withBase } from '../utils/url';
-interface Props { variant?: 'light' | 'dark'; }
-const { variant = 'light' } = Astro.props;
-const nav = [
-  { path: '/',            label: 'Úvod' },
-  { path: '/o-spolku/',   label: 'O spolku' },
-  { path: '/projekty/',   label: 'Projekty' },
-  { path: '/aktuality/',  label: 'Aktuality' },
-  { path: '/zapojte-se/', label: 'Zapojte se' },
-  { path: '/kontakty/',   label: 'Kontakty' },
-];
-const current = Astro.url.pathname;
-const isActive = (path: string) => {
-  const full = withBase(path);
-  return path === '/' ? current === full : current.startsWith(full);
-};
+
+interface Props {
+  variant?: 'light' | 'dark';
+  /** When true (on /obyvatele/ and /investori/), show the role-switcher chip */
+  showRoleChip?: boolean;
+  /** Active role for the chip, or null on other pages */
+  activeRole?: 'resident' | 'investor' | null;
+}
+const { variant = 'light', showRoleChip = false, activeRole = null } = Astro.props;
 ---
-<header class:list={['osa-header', { 'osa-dark': variant === 'dark' }]}>
-  <div class="container-wide osa-header__inner">
-    <a href={withBase('/')} class="osa-header__brand" aria-label="Občanské sdružení Alternativa II - domů">
-      {/*
-       * width/height attributes pin the intrinsic size so the image never
-       * flashes at the SVG's fallback 300×75 while CSS is still loading.
-       * The actual rendered size comes from .osa-header__logo (height
-       * 18px desktop / 16px mobile); these attrs just reserve the box.
-       */}
-      <img src={withBase('/logo/OSA-Wordmark-Black.svg')} alt="" aria-hidden="true" width="72" height="18" class="osa-header__logo osa-header__logo--light" />
-      <img src={withBase('/logo/OSA-Wordmark-White.svg')} alt="" aria-hidden="true" width="72" height="18" class="osa-header__logo osa-header__logo--dark" />
-    </a>
-
-    <nav class="osa-header__nav" aria-label="Hlavní navigace">
-      {nav.map(n => (
-        <a
-          href={withBase(n.path)}
-          class="osa-header__link"
-          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
-      ))}
-    </nav>
-
-    <button
-      class="osa-header__burger"
-      type="button"
-      aria-label="Otevřít menu"
-      aria-controls="osa-mobile-nav"
-      aria-expanded="false">
-      <span class="osa-header__burger-box" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-    </button>
+<header class:list={['hub-header', `hub-header--${variant}`]} data-role-chip={showRoleChip ? 'on' : 'off'}>
+  <div class="hub-header__strip">
+    <a href="https://osa2.cz/zamer-vpd/" class="hub-header__strip-link">část záměru OSA → VPD → VPD1</a>
   </div>
-  <div class="rule" role="presentation"></div>
+  <div class="hub-header__bar">
+    <a class="hub-header__brand" href={withBase('/')} aria-label="Startovací Hub Klecany — domů">
+      <span class="hub-header__brand-mark">VPD</span>
+      <span class="hub-header__brand-sub">Startovací Hub · Klecany</span>
+    </a>
+    <button class="hub-header__burger" type="button" aria-controls="hub-drawer" aria-expanded="false" aria-label="Otevřít menu">
+      <span></span><span></span>
+    </button>
+    <nav class="hub-header__nav" aria-label="Hlavní menu">
+      <a href={withBase('/obyvatele/')}>Pro obyvatele</a>
+      <a href={withBase('/investori/')}>Pro investory</a>
+      <a href={withBase('/projekty/')}>Projekty</a>
+      <a href={withBase('/o-projektu/')}>O projektu</a>
+      <a href={withBase('/faq/')}>FAQ</a>
+      {showRoleChip && (
+        <span class="hub-header__chip-slot">
+          <a href={withBase('/obyvatele/')} class:list={['hub-chip', activeRole === 'resident' && 'is-active']}>Jdu bydlet</a>
+          <a href={withBase('/investori/')} class:list={['hub-chip', activeRole === 'investor' && 'is-active']}>Jdu investovat</a>
+        </span>
+      )}
+    </nav>
+  </div>
 
-  <div id="osa-mobile-nav" class="osa-mobile-nav" role="dialog" aria-modal="true" aria-label="Hlavní navigace" hidden>
-    <nav class="osa-mobile-nav__inner">
-      {nav.map(n => (
-        <a
-          href={withBase(n.path)}
-          class="osa-mobile-nav__link"
-          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
-      ))}
+  <div class="hub-drawer" id="hub-drawer" hidden>
+    <nav class="hub-drawer__nav" aria-label="Mobilní menu">
+      <a href={withBase('/obyvatele/')}>Pro obyvatele</a>
+      <a href={withBase('/investori/')}>Pro investory</a>
+      <a href={withBase('/projekty/')}>Projekty</a>
+      <a href={withBase('/o-projektu/')}>O projektu</a>
+      <a href={withBase('/faq/')}>FAQ</a>
+      <a href="https://osa2.cz" class="hub-drawer__parent">osa2.cz</a>
+      <a href="https://osa2.cz/zamer-vpd/" class="hub-drawer__parent">osa2.cz/zamer-vpd</a>
     </nav>
   </div>
 </header>
 
-<script is:inline>
-  (function () {
-    var btn = document.querySelector('.osa-header__burger');
-    var panel = document.getElementById('osa-mobile-nav');
-    if (!btn || !panel) return;
-
-    function setOpen(open) {
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      btn.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
-      if (open) {
-        panel.hidden = false;
-        requestAnimationFrame(function () { panel.classList.add('open'); });
-        document.documentElement.classList.add('osa-nav-lock');
-        // Intentionally no auto-focus: on mouse/touch the focus ring around
-        // the first link reads as noise. Keyboard users still tab in via
-        // natural order from the burger.
-      } else {
-        panel.classList.remove('open');
-        document.documentElement.classList.remove('osa-nav-lock');
-        // wait for transition before hiding, so screen readers still announce close
-        setTimeout(function () {
-          if (btn.getAttribute('aria-expanded') === 'false') panel.hidden = true;
-        }, 280);
-      }
-    }
-
-    btn.addEventListener('click', function () {
-      setOpen(btn.getAttribute('aria-expanded') !== 'true');
-    });
-
-    // ESC closes
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') setOpen(false);
-    });
-
-    // Click on a link inside the panel closes it (nav happens anyway).
-    panel.addEventListener('click', function (e) {
-      if (e.target.closest('a')) setOpen(false);
-    });
-  }());
-</script>
-
 <style>
-  .osa-header {
-    position: sticky; top: 0; z-index: 30;
-    background: var(--bg);
-    color: var(--fg);
-  }
-  .osa-header.osa-dark {
-    background: var(--bg);
-    color: var(--fg);
-  }
-  /* When the mobile drawer is open, keep the header row (logo + burger)
-     pinned above the drawer so the reader can close it or tap the logo.
-     Uses the same dark scope as the drawer so the colours blend. */
-  :global(html.osa-nav-lock) .osa-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--k-100);
-    color: var(--k-0);
-    z-index: 30;
-  }
-  /* Swap in the white logo variant while the drawer is open. */
-  :global(html.osa-nav-lock) .osa-header__logo--light { display: none; }
-  :global(html.osa-nav-lock) .osa-header__logo--dark  { display: block; }
-  /* Hairline under the header would fight the drawer, keep it off. */
-  :global(html.osa-nav-lock) .osa-header .rule { display: none; }
-  /* Hide the hairline rule when the header merges into a dark hero: the hero's own edge is enough. */
-  .osa-header.osa-dark .rule { display: none; }
-  .osa-header__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-6);
-    padding: 12px var(--gutter);
-  }
-  .osa-header__brand {
-    display: inline-flex;
-    align-items: center;
-    color: var(--fg);
-    line-height: 0;
-    /* Sit above the mobile drawer (z-index 19) within <header>'s own
-       stacking context; otherwise the drawer paints over logo + burger. */
-    position: relative;
-    z-index: 25;
-  }
-  .osa-header__logo {
-    /* Wordmark: glyph + "OSA" lettering. Source viewBox is 2048×512 (4:1),
-       so we size by height and let width follow. A touch smaller than the
-       previous square glyph to sit optically in the header bar. */
-    display: block;
-    height: 18px;
-    width: auto;
-  }
-  /* swap logo by theme: light header shows Black; dark parent surfaces show White */
-  .osa-header__logo--dark  { display: none; }
-  .osa-dark .osa-header__logo--light { display: none; }
-  .osa-dark .osa-header__logo--dark  { display: block; }
-
-  .osa-header__nav {
-    display: flex;
-    gap: var(--space-6);
-  }
-  .osa-header__link {
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: var(--fg-muted);
-    padding: 6px 0;
-    border-bottom: 1px solid transparent;
-    transition: color var(--dur-fast) linear, border-color var(--dur-fast) linear;
-  }
-  .osa-header__link[aria-current='page'] {
-    color: var(--fg);
-    border-bottom-color: var(--fg);
-  }
-  .osa-header__link:hover {
-    opacity: 1;
-    color: var(--fg);
-  }
-
-  /* ---------- Burger toggle ------------------------------------------------
-     Hidden on desktop; on mobile it replaces the horizontal nav. Three
-     hairlines morph to an X when the panel opens. 32x32 hit target. */
-  .osa-header__burger {
-    display: none;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    margin: 0;
-    background: transparent;
-    border: 0;
-    color: inherit;
-    cursor: pointer;
-    /* Same rationale as .osa-header__brand — stay above the drawer. */
-    position: relative;
-    z-index: 25;
-  }
-  .osa-header__burger-box {
-    display: grid;
-    gap: 5px;
-    width: 20px;
-    margin: 0 auto;
-  }
-  .osa-header__burger-box > span {
-    display: block;
-    height: 1.5px;
-    background: currentColor;
-    transition:
-      transform 240ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1)),
-      opacity 160ms linear;
-    transform-origin: 50% 50%;
-  }
-  .osa-header__burger[aria-expanded='true'] .osa-header__burger-box > span:nth-child(1) {
-    transform: translateY(6.5px) rotate(45deg);
-  }
-  .osa-header__burger[aria-expanded='true'] .osa-header__burger-box > span:nth-child(2) {
-    opacity: 0;
-  }
-  .osa-header__burger[aria-expanded='true'] .osa-header__burger-box > span:nth-child(3) {
-    transform: translateY(-6.5px) rotate(-45deg);
-  }
-  .osa-header__burger:focus-visible {
-    outline: 2px solid var(--fg);
-    outline-offset: 2px;
-  }
-
-  /* ---------- Mobile drawer -----------------------------------------------
-     Full-viewport overlay below the header row. Type-scale matches the
-     editorial voice of the rest of the site: large, weighted links stacked
-     with hairline dividers. Black scope so the panel reads confidently. */
-  .osa-mobile-nav {
-    position: fixed;
-    inset: 0;
-    top: 0;
-    z-index: 19;
-    background: var(--k-100);
-    color: var(--k-0);
-    padding: calc(56px + var(--space-6)) var(--gutter) var(--space-7);
-    overflow-y: auto;
-    opacity: 0;
-    transform: translateY(-8px);
-    transition:
-      opacity 220ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1)),
-      transform 260ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
-  }
-  .osa-mobile-nav.open {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .osa-mobile-nav__inner {
-    display: grid;
-    gap: 0;
-    max-width: 640px;
-    margin: 0 auto;
-  }
-  .osa-mobile-nav__link {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: var(--text-2xl);
-    letter-spacing: var(--tracking-tight);
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-    color: var(--k-0);
-    text-decoration: none;
-    display: block;
-  }
-  .osa-mobile-nav__link[aria-current='page'] { opacity: 0.55; }
-  .osa-mobile-nav__link:hover,
-  .osa-mobile-nav__link:focus-visible { opacity: 0.7; }
-
-  /* When the drawer is open, lock the underlying page. */
-  :global(html.osa-nav-lock),
-  :global(html.osa-nav-lock body) { overflow: hidden; }
-
+  .hub-header { position: sticky; top: 0; z-index: 40; background: var(--bg, #fff); border-bottom: 1px solid var(--k-10, #ececec); }
+  .hub-header--dark { background: var(--k-100, #000); color: var(--bg, #fff); border-bottom-color: transparent; }
+  .hub-header__strip { padding: 6px 24px; font-size: 12px; letter-spacing: var(--tracking-tight, 0.01em); border-bottom: 1px solid var(--k-10); }
+  .hub-header--dark .hub-header__strip { border-bottom-color: rgba(255,255,255,0.08); }
+  .hub-header__strip-link { color: inherit; text-decoration: none; opacity: 0.7; }
+  .hub-header__strip-link:hover { opacity: 1; text-decoration: underline; }
+  .hub-header__bar { display: flex; align-items: center; gap: 24px; padding: 14px 24px; max-width: 1440px; margin: 0 auto; }
+  .hub-header__brand { display: inline-flex; align-items: baseline; gap: 12px; text-decoration: none; color: inherit; z-index: 2; }
+  .hub-header__brand-mark { font-family: var(--font-sans); font-weight: 700; font-size: 20px; letter-spacing: 0.02em; }
+  .hub-header__brand-sub { font-size: 13px; opacity: 0.65; }
+  .hub-header__nav { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+  .hub-header__nav a { color: inherit; text-decoration: none; font-size: 14px; }
+  .hub-header__nav a:hover { text-decoration: underline; }
+  .hub-header__chip-slot { display: inline-flex; gap: 8px; margin-left: 16px; padding-left: 16px; border-left: 1px solid var(--k-10); }
+  .hub-chip { padding: 6px 10px; border: 1px solid var(--k-30); border-radius: 999px; font-size: 13px; }
+  .hub-chip.is-active { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
+  .hub-header__burger { display: none; background: none; border: 0; padding: 8px; cursor: pointer; }
+  .hub-header__burger span { display: block; width: 22px; height: 2px; background: currentColor; margin: 4px 0; }
   @media (max-width: 720px) {
-    .osa-header__nav { display: none; }
-    .osa-header__burger { display: inline-flex; align-items: center; justify-content: center; }
-    .osa-header__logo { height: 16px; width: auto; }
+    .hub-header__nav { display: none; }
+    .hub-header__burger { display: block; margin-left: auto; z-index: 2; }
   }
-
-  @media (min-width: 721px) {
-    /* Defensive: drawer should never appear on desktop even if state leaks. */
-    .osa-mobile-nav { display: none; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .osa-mobile-nav,
-    .osa-header__burger-box > span { transition: none; }
-  }
+  .hub-drawer[hidden] { display: none; }
+  .hub-drawer { position: fixed; inset: 0; background: var(--k-100, #000); color: var(--bg, #fff); display: grid; place-items: center; z-index: 30; }
+  .hub-drawer__nav { display: grid; gap: 24px; font-size: 22px; }
+  .hub-drawer__nav a { color: inherit; text-decoration: none; }
+  .hub-drawer__parent { font-size: 14px; opacity: 0.6; }
+  :global(html.osa-nav-lock) { overflow: hidden; }
 </style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const burger = document.querySelector('.hub-header__burger');
+    const drawer = document.getElementById('hub-drawer');
+    if (!burger || !drawer) return;
+    function toggle(open) {
+      drawer.hidden = !open;
+      burger.setAttribute('aria-expanded', String(open));
+      document.documentElement.classList.toggle('osa-nav-lock', open);
+    }
+    burger.addEventListener('click', () => toggle(drawer.hidden));
+    drawer.addEventListener('click', (e) => { if (e.target === drawer) toggle(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !drawer.hidden) toggle(false); });
+  });
+</script>
