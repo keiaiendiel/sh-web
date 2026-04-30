@@ -34,6 +34,35 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
       </a>
     </div>
   </section>
+
+  <section class="hub-section hub-prose">
+    <p>Startovací Hub je obyvatelná část areálu, kterou rozjedeme jako první. Sdílené bydlení v různých formátech: levné kapsle pro krátkodobé pobyty, klidnější uzavíratelná místa pro delší stay, jednolůžkové i sdílené pokoje. K tomu sdílené sociální zázemí, společná kuchyň, prostor pro práci a tichý prostor pro studium.</p>
+    <p>Hub je zároveň prostředí, ve kterém testujeme, jak fungují různé role: platící rezident, stipendijní místo pro lidi, kteří by se sem jinak nedostali, work-trade pro správu provozu, rezident-tvůrce pro program a kulturní vrstvu. To je kombinace, která v okolí Prahy chybí.</p>
+    <p>Záměr nekončí u Hubu. Areál horních kasáren má potenciál na 1500+ bytových jednotek a postupné dotvoření celé městské vrstvy v souladu s cíli VPD. Hub je první krok, ze kterého rosteme.</p>
+  </section>
+
+  <section class="hub-section">
+    <h2 class="hub-section__heading">Vizualizace záměru</h2>
+    <h3 class="hub-section__subheading">Exteriér</h3>
+    <Gallery title={null} images={[
+      withBase('/images/hub/exterior/hub-courtyard-trees.jpg'),
+      withBase('/images/hub/exterior/hub-courtyard-night.jpg'),
+      withBase('/images/hub/exterior/hub-renovated-building.jpg'),
+      withBase('/images/hub/exterior/hub-street-daytime.jpg'),
+      withBase('/images/hub/exterior/hub-street-sunset.jpg'),
+      withBase('/images/hub/exterior/exterior-01.jpg'),
+      withBase('/images/hub/exterior/exterior-02.jpg'),
+    ]} />
+    <h3 class="hub-section__subheading">Interiér / společné prostory</h3>
+    <Gallery title={null} images={[
+      withBase('/images/hub/interior/hub-market-evening.jpg'),
+      withBase('/images/hub/interior/hub-market-daytime.jpg'),
+      withBase('/images/hub/interior/hub-market-people.jpg'),
+      withBase('/images/hub/interior/interior-01.jpg'),
+      withBase('/images/hub/interior/interior-02.jpg'),
+      withBase('/images/hub/interior/interior-03.jpg'),
+    ]} />
+  </section>
 </Base>
 
 <style>
@@ -50,4 +79,10 @@ const heroImage = withBase('/images/hub/exterior/hub-courtyard-trees.jpg');
   .hub-path-card h2 { font-size: 32px; margin: 0 0 12px; }
   .hub-path-card p { color: var(--k-70); margin: 0 0 24px; }
   .hub-path-card__cta { color: var(--accent); font-weight: 600; }
+
+  .hub-section { padding: 80px 24px; max-width: 1440px; margin: 0 auto; }
+  .hub-section__heading { font-size: clamp(28px, 3vw, 48px); font-weight: 700; margin: 0 0 32px; letter-spacing: -0.01em; }
+  .hub-section__subheading { font-size: 18px; font-weight: 600; margin: 24px 0 12px; opacity: 0.7; }
+  .hub-prose { max-width: 720px; }
+  .hub-prose p { font-size: 18px; line-height: 1.65; margin: 0 0 18px; color: var(--k-90, #1a1a1a); }
 </style>

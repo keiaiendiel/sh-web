@@ -8,7 +8,15 @@
 import { withBase } from '../utils/url';
 interface Image { src: string; alt?: string; }
 interface Props {
-  images?: Image[];
+  /**
+   * Accepts either an array of Image objects ({ src, alt? }) for richer
+   * captions, or a plain string[] of image paths. Strings are normalized
+   * to { src } internally so the rest of the component is unchanged.
+   * Paths in either form may be raw `/images/...` paths OR already wrapped
+   * by withBase() — withBase strips a leading base it already sees, so it
+   * is idempotent and safe either way.
+   */
+  images?: Array<Image | string>;
   /**
    * When null, hides the big H2 under the eyebrow. Useful when the gallery
    * is embedded inside a longer article (the article already owns the page
@@ -29,7 +37,16 @@ const defaultImages: Image[] = [
   { src: '/images/482988216_1034307212060073_6494869551613273029_n.jpg' },
 ];
 
-const { images = defaultImages, title = 'Z provozu spolkových prostorů.' } = Astro.props;
+const { images: rawImages = defaultImages, title = 'Z provozu spolkových prostorů.' } = Astro.props;
+const images: Image[] = rawImages.map((it) => (typeof it === 'string' ? { src: it } : it));
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+function srcWithBase(s: string): string {
+  // Idempotent: if the path already starts with the configured base, return as-is;
+  // otherwise wrap. Lets callers pass either raw `/images/...` or pre-wrapped paths.
+  if (BASE && s.startsWith(BASE + '/')) return s;
+  return withBase(s);
+}
 ---
 <section class="osa-gallery section--loose">
   <div class="container-wide">
@@ -46,12 +63,12 @@ const { images = defaultImages, title = 'Z provozu spolkových prostorů.' } = A
           <button
             type="button"
             class="osa-gallery__trigger"
-            data-lightbox-src={withBase(img.src)}
+            data-lightbox-src={srcWithBase(img.src)}
             data-lightbox-alt={img.alt ?? ''}
             data-lightbox-index={String(i)}
             aria-label={img.alt ? `Zobrazit fotografii: ${img.alt}` : `Zobrazit fotografii ${i + 1}`}>
             <img
-              src={withBase(img.src)}
+              src={srcWithBase(img.src)}
               alt={img.alt ?? ''}
               loading="lazy"
               decoding="async"
