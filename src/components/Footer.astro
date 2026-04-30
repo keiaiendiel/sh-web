@@ -18,6 +18,7 @@ const org = orgEntry?.data;
       <p class="hub-footer__label">Kontakt</p>
       <p>{org?.predseda?.name ?? 'Marek Semerád'}, předseda OSA II, z.s.</p>
       <p><a href={`mailto:${org?.email ?? 'vpd@osa2.cz'}`}>{org?.email ?? 'vpd@osa2.cz'}</a></p>
+      <p class="hub-footer__investor">Investoři: <a href="https://keiaiendiel.github.io/vpd-web/vpd1/" rel="noopener">záměr VPD1 →</a></p>
     </div>
     <div class="hub-footer__col">
       <p class="hub-footer__label">Právní</p>
@@ -36,6 +37,9 @@ const org = orgEntry?.data;
   .hub-footer__label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.55; margin-bottom: 8px; }
   .hub-footer__legal { font-size: 12px; opacity: 0.5; margin-top: 8px; }
   .hub-footer__col p { margin: 0 0 4px; line-height: 1.5; }
+  .hub-footer__investor { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 12px !important; }
+  .hub-footer__investor a { color: rgba(255,255,255,0.85); text-decoration: underline; }
+  .hub-footer__investor a:hover { color: var(--bg); }
   @media (max-width: 720px) {
     .hub-footer__inner { grid-template-columns: 1fr; gap: 24px; }
   }

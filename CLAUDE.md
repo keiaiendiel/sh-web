@@ -19,18 +19,19 @@ The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárn
 | Client JS | Tiny inline `<script is:inline>` islands per component (header drawer, form submit, FAQ tabs). No bundle. |
 | Deploy | Standalone domain `startovacihub.cz`. `astro.config.mjs` sets `site` accordingly; no `base` path. |
 
-## Current state (2026-04-29, post residents-only pivot)
+## Current state (2026-04-29, post residents-only pivot, post visual redesign pass)
 
 - 11 pages build cleanly: 404, /, /obyvatele/, /projekty/, /projekty/<5 stub slugs>/, /o-projektu/, /faq/. (Was 12 — /investori/ removed.)
 - All Czech copy locked per the spec. Editorial linter green. Per-page eager-weight budget green.
 - Resident pre-reservation form at /obyvatele/#formular: count of 1+kk units, planned move-in month, lease length (1m / 1y / 5y / other), extension right (none / N times / indefinite), stipend opt-in with conditional intent + about-me textareas, contact block, consent checkbox. `console.log`s payload on submit and shows a static success message. Backend wiring deferred to a programmer.
 - Hub renders migrated to `public/images/hub/{exterior,interior}/` (42 jpegs total, max edge 1600 px) plus `masterplan.jpg`. Re-run `pnpm migrate:images` if you change source files.
+- Visual redesign pass (2026-04-29). Header collapsed to a single "Startovací hub" logotype mark (sentence case; the prior "Provozuje OSA II" top strip and the SH/Klecany two-line construction were dropped; OSA II reference still lives in footer + JSON-LD). Landing rebuilt to a tighter editorial flow: full-bleed `<img>` hero with scrim (replaces the prior `style="background-image:..."` so the hero LCP image is measurable by lint:weight), centered primary CTA strip, two-paragraph concept block, six-row alternating zigzag gallery (Vizualizace · Jak to bude vypadat), "Jak se Hub rozrůstá" provoz cards, "Kde to je", status strip, FAQ teaser, and a single investor exit CTA pointing at vpd-web/vpd1. Pre-reservation form at /obyvatele/#formular wrapped in a 2-col editorial shell (sticky head left, form right; stacks below 960 px) and the form itself gets numbered step legends, large radio/checkbox hit targets with hover/check/focus states, focus rings on inputs, hover-lift submit, animated stipend reveal, and a stronger dark success panel. Footer adds an "Investoři: záměr VPD1 →" pointer in the kontakt column.
 
 ## Design decisions worth knowing
 
 **Brand red.** `--c-red: #d0342c` (tricolor red, OSA design system). Exposed as `--accent` in tokens.css so components reference the role, not the colour name.
 
-**Header.** `Header.astro` takes a single `variant: 'light' | 'dark'` prop. Landing uses `dark` to fuse with the dark hero; everywhere else is `light`. The brand row reads "SH · Startovací Hub · Klecany"; the top strip is a plain "Provozuje OSA II, z.s." link to osa2.cz. The mobile drawer locks page scroll via `osa-nav-lock` class on `<html>`. Nav is four items: Pro obyvatele / Projekty / O projektu / FAQ. (Role-switcher chip and "Pro investory" link were removed in the residents-only pivot.)
+**Header.** `Header.astro` takes a single `variant: 'light' | 'dark'` prop. Landing uses `dark` to fuse with the dark hero; everywhere else is `light`. The brand row is a single "Startovací hub" logotype mark in sentence case (Atyp Special 600, `clamp(20px, 2.4vw, 26px)`, `letter-spacing: -0.01em`). No top strip. The mobile drawer locks page scroll via `osa-nav-lock` class on `<html>`. Nav is four items: Pro obyvatele / Projekty / O projektu / FAQ. (Role-switcher chip and "Pro investory" link were removed in the residents-only pivot. The "Provozuje OSA II, z.s." top strip was dropped in the visual redesign pass — OSA II is still referenced in the footer and JSON-LD parentOrganization.)
 
 **Footer reads `org` collection.** `Footer.astro` calls `getEntry('org', 'identity')` to render Marek Semerád's name + `vpd@osa2.cz`. The `org/identity.json` carries OSA II legal identifiers (IČO, DIČ etc.) that drive the JSON-LD on every page.
 
@@ -84,7 +85,7 @@ sh-web/
 - **Per-format room schematics (Kapsle, Sdílený pokoj) are stand-in interior renders.** Replace when operator supplies real schematics.
 - **Per-sub-project thumbnails on /projekty/ are placeholder boxes.** When real renders arrive, drop them in and update the relevant subProjects MDX `thumbnail` frontmatter.
 - **Pre-reservation form `console.log`s payload.** Backend wiring (validation, anti-spam, autoresponse, storage) is the next step before public launch.
-- **`hub-hero` background-image not measured by `lint:weight`.** The eager budget walks `<img>` and `@font-face url()` — inline `style="background-image: url(...)"` slips past it. The Landing hero JPG is ~400 KB and DOES paint on first load. Two options when this matters: (a) teach the linter to walk inline styles; (b) move the hero to an `<img>` with `decoding="async"` covering the section.
+- **`lint:weight` doesn't see the hero image because of the base path.** The hero is now an `<img>` (visual redesign pass), so it's discoverable by the linter, but the script tries to resolve `/sh-web/images/...` against `dist/sh-web/...` and `dist/` is flat (`dist/images/...`). The eager budget therefore reports inflated headroom — actual hero JPG is 400 KB. Either teach the linter to strip the configured base prefix, or wait for the DNS flip when `base` becomes `/`.
 - **Author identity warning on git commits.** Each commit emits "Your name and email address were configured automatically based on your username and hostname" because the repo has no committed `user.email`. Set `git config --global user.email` once if you want consistent attribution.
 - **Backup branch.** `backup/osa-web-pre-hub-redesign` carries the OSA-parent state and any uncommitted WIP that existed when this redesign started. Keep it until the Hub site is in production for at least one cycle, then delete.
 
