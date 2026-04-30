@@ -19,21 +19,21 @@
  */
 @font-face {
   font-family: 'Atyp Special';
-  src: url('/fonts/AtypText-Special-Medium.woff2') format('woff2');
+  src: url('/sh-web/fonts/AtypText-Special-Medium.woff2') format('woff2');
   font-weight: 400 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Atyp Special';
-  src: url('/fonts/AtypText-Special-Bold.woff2') format('woff2');
+  src: url('/sh-web/fonts/AtypText-Special-Bold.woff2') format('woff2');
   font-weight: 600 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Atyp Special';
-  src: url('/fonts/AtypText-Special-Italic.woff2') format('woff2');
+  src: url('/sh-web/fonts/AtypText-Special-Italic.woff2') format('woff2');
   font-weight: 400 500;
   font-style: italic;
   font-display: swap;
