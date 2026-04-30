@@ -4,9 +4,9 @@ Operational handoff for the next agent or human colleague working on the Startov
 
 ## What this is
 
-Static site for **Startovací Hub Klecany**, run by OSA II, z.s. Lives in `sh-web/`, deploys to `startovacihub.cz`. Redesigned 2026-04-29 from the prior osa-web parent codebase per `docs/superpowers/plans/2026-04-29-startovaci-hub-redesign.md`. On 2026-04-29 the scope was narrowed further: the investor surface was dropped and the site was repointed to its own domain; the remaining funnel is a residents-only pre-reservation form.
+Static site for **Startovací Hub Klecany**, run by OSA II, z.s. Repo at [github.com/keiaiendiel/sh-web](https://github.com/keiaiendiel/sh-web). Currently deployed to GitHub Pages at **https://keiaiendiel.github.io/sh-web/** for public preview; will move to **startovacihub.cz** when DNS is cut over. Redesigned 2026-04-29 from the prior osa-web parent codebase per `docs/superpowers/plans/2026-04-29-startovaci-hub-redesign.md`. Two follow-up pivots on 2026-04-29 / 30: (a) **residents-only pivot** — the investor surface (page, calculator, scenarios, dedicated form, 4 FAQ entries) was dropped; (b) **visual redesign pass** — landing rebuilt as editorial zigzag, header collapsed to a single logotype, form polished, single investor exit CTA pointing at vpd-web/vpd1.
 
-The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárny Klecany). It is run as a project under OSA's umbrella; the Hub site funnels future residents into the pre-reservation form, and shows the project credibly via masterplan + interior + exterior renders. Investor communication has moved off-site (handled directly by OSA / VPD via `vpd@osa2.cz`).
+The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárny Klecany). It is run as a project under OSA's umbrella; the Hub site funnels future residents into the pre-reservation form, and shows the project credibly via masterplan + interior + exterior renders. Investors get one exit-CTA at the bottom of the landing + a footer pointer; the actual investor surface lives on the sibling vpd-web at [keiaiendiel.github.io/vpd-web/vpd1/](https://keiaiendiel.github.io/vpd-web/vpd1/) (eventually `vepde.com`).
 
 ## Stack snapshot
 
@@ -17,7 +17,7 @@ The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárn
 | Styling | Vanilla CSS with tokens in `src/styles/` |
 | Fonts | Self-hosted Atyp Special WOFF2 in `public/fonts/` |
 | Client JS | Tiny inline `<script is:inline>` islands per component (header drawer, form submit, FAQ tabs). No bundle. |
-| Deploy | Standalone domain `startovacihub.cz`. `astro.config.mjs` sets `site` accordingly; no `base` path. |
+| Deploy | GitHub Pages at `keiaiendiel.github.io/sh-web/`. `astro.config.mjs` has `site: 'https://keiaiendiel.github.io'` + `base: '/sh-web/'`. CI: `.github/workflows/deploy-pages.yml` runs on push to master (lint:editorial + build + lint:weight, then `actions/deploy-pages@v4`). When DNS to `startovacihub.cz` cuts over, flip `site` to `https://startovacihub.cz`, drop the `base` line, and find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css` (one line). |
 
 ## Current state (2026-04-29, post residents-only pivot, post visual redesign pass)
 
@@ -33,7 +33,11 @@ The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárn
 
 **Header.** `Header.astro` takes a single `variant: 'light' | 'dark'` prop. Landing uses `dark` to fuse with the dark hero; everywhere else is `light`. The brand row is a single "Startovací hub" logotype mark in sentence case (Atyp Special 600, `clamp(20px, 2.4vw, 26px)`, `letter-spacing: -0.01em`). No top strip. The mobile drawer locks page scroll via `osa-nav-lock` class on `<html>`. Nav is four items: Pro obyvatele / Projekty / O projektu / FAQ. (Role-switcher chip and "Pro investory" link were removed in the residents-only pivot. The "Provozuje OSA II, z.s." top strip was dropped in the visual redesign pass — OSA II is still referenced in the footer and JSON-LD parentOrganization.)
 
-**Footer reads `org` collection.** `Footer.astro` calls `getEntry('org', 'identity')` to render Marek Semerád's name + `vpd@osa2.cz`. The `org/identity.json` carries OSA II legal identifiers (IČO, DIČ etc.) that drive the JSON-LD on every page.
+**Footer reads `org` collection.** `Footer.astro` calls `getEntry('org', 'identity')` to render Marek Semerád's name + `vpd@osa2.cz`. The `org/identity.json` carries OSA II legal identifiers (IČO, DIČ etc.) that drive the JSON-LD on every page. Footer also carries the investor pointer line: `Investoři: záměr VPD1 →` linking to vpd-web/vpd1/.
+
+**Investor exit CTA.** Single block at the bottom of the landing (above the footer): `Nezajímá vás bydlení, ale investice do záměru? → Záměr VPD1 →` linking to https://keiaiendiel.github.io/vpd-web/vpd1/. The `/investori/` route, calculator, scenarios JSON, and dedicated investor form were all deleted in the residents-only pivot. The single exit CTA + footer pointer are the only investor-facing surface that remains; everything else lives on vpd-web.
+
+**Landing zigzag.** Editorial 6-row alternating ltr/rtl layout under the eyebrow `Vizualizace · Jak to bude vypadat.`. Each row is a `<figure>` + copy block with a per-image caption (Exteriér / Interiér + role + one-sentence description). Replaces the prior dual-Gallery exterior+interior grid.
 
 **Tooltip.** Component is retained even though the current resident form does not use it; small footprint, may be reused on a future detail page.
 
@@ -47,7 +51,10 @@ The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárn
 
 ```
 sh-web/
-├── astro.config.mjs              # site=startovacihub.cz, no base
+├── astro.config.mjs              # site=keiaiendiel.github.io, base=/sh-web/ (transitional)
+├── .github/workflows/
+│   ├── ci.yml                    # PR + push: lint + build + dist artifact
+│   └── deploy-pages.yml          # push to master: lint + build + actions/deploy-pages@v4
 ├── public/
 │   ├── fonts/*.woff2             # Atyp Special Medium, Bold, Italic
 │   ├── images/hub/{exterior,interior,masterplan.jpg}
@@ -68,26 +75,29 @@ sh-web/
 │   ├── components/               # Header, Footer, Tooltip, Gallery, ResidentForm, RevealOnScroll (6 files)
 │   ├── layouts/Base.astro        # html/head with title/desc/OG/JSON-LD; mounts Header + slot + Footer + RevealOnScroll
 │   ├── pages/
-│   │   ├── index.astro           # Landing (residents-only single CTA)
+│   │   ├── index.astro           # Landing (residents-only, zigzag layout, investor exit CTA)
 │   │   ├── obyvatele/index.astro # Resident pre-reservation funnel
 │   │   ├── projekty/{index, [slug]}.astro
 │   │   ├── o-projektu/index.astro
 │   │   ├── faq/index.astro
 │   │   └── 404.astro
 │   ├── styles/                   # tokens.css, kit.css, motion.css
-│   └── utils/url.ts              # withBase() helper (no-op when base='/')
+│   └── utils/url.ts              # withBase() — prefixes /sh-web/ until DNS flip
 └── docs/superpowers/plans/...    # implementation plan, kept for reference
 ```
 
 ## Open loops / known issues
 
+- **Transitional GH Pages base path.** Site lives at `keiaiendiel.github.io/sh-web/` so `astro.config.mjs` carries `base: '/sh-web/'` and `tokens.css` font URLs are `/sh-web/fonts/...`. When DNS to `startovacihub.cz` is ready: change `site` to `https://startovacihub.cz`, delete the `base` line, find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css`. `withBase()` becomes a no-op automatically.
+- **Sticky header stays dark on scroll.** Landing uses `headerVariant="dark"` to fuse with the dark hero. The header stays dark even after the user scrolls past the hero. Acceptable but worth flagging — switch to a scroll-driven variant flip if it reads wrong.
 - **Place section uses no real OSM map.** The masterplan replaces it for now (`public/images/hub/masterplan.jpg`). If the operator wants a tiled map at /o-projektu/#misto, drop a static OSM screenshot at `public/images/hub/place/map.jpg` and update the figure in `src/pages/o-projektu/index.astro`.
 - **Per-format room schematics (Kapsle, Sdílený pokoj) are stand-in interior renders.** Replace when operator supplies real schematics.
 - **Per-sub-project thumbnails on /projekty/ are placeholder boxes.** When real renders arrive, drop them in and update the relevant subProjects MDX `thumbnail` frontmatter.
 - **Pre-reservation form `console.log`s payload.** Backend wiring (validation, anti-spam, autoresponse, storage) is the next step before public launch.
-- **`lint:weight` doesn't see the hero image because of the base path.** The hero is now an `<img>` (visual redesign pass), so it's discoverable by the linter, but the script tries to resolve `/sh-web/images/...` against `dist/sh-web/...` and `dist/` is flat (`dist/images/...`). The eager budget therefore reports inflated headroom — actual hero JPG is 400 KB. Either teach the linter to strip the configured base prefix, or wait for the DNS flip when `base` becomes `/`.
+- **`lint:weight` doesn't see the hero image because of the base path.** The hero is an `<img>` (so the linter's `<img>` walker should pick it up), but the script tries to resolve `/sh-web/images/...` against `dist/sh-web/...` and `dist/` is flat (`dist/images/...`). The eager budget therefore reports inflated headroom — actual hero JPG is ~400 KB. Either teach the linter to strip the configured base prefix, or wait for the DNS flip when `base` becomes `/`.
 - **Author identity warning on git commits.** Each commit emits "Your name and email address were configured automatically based on your username and hostname" because the repo has no committed `user.email`. Set `git config --global user.email` once if you want consistent attribution.
-- **Backup branch.** `backup/osa-web-pre-hub-redesign` carries the OSA-parent state and any uncommitted WIP that existed when this redesign started. Keep it until the Hub site is in production for at least one cycle, then delete.
+- **Backup branch.** `backup/osa-web-pre-hub-redesign` is **local only** (not pushed to GitHub) and carries the OSA-parent state plus any uncommitted WIP that existed when this redesign started. Keep it until the Hub site is in production for at least one cycle, then delete locally.
+- **`feat/startovaci-hub` branch on GitHub.** Pushed alongside master for history; identical to master after the fast-forward merge. Safe to delete on the GitHub side once you don't need the per-task commit log as a separate branch.
 
 ## Running the project
 
@@ -111,12 +121,12 @@ Active rules in `scripts/lint-editorial.mjs`: no passive voice (`je realizováno
 - Místopředseda: Štěpán Říha.
 - Legal identifiers + bank accounts: `src/content/org/identity.json`.
 
-## Deploy checklist (before public launch)
+## Deploy checklist (before public launch on startovacihub.cz)
 
 1. **Drop final OSM map** at `public/images/hub/place/map.jpg` if /o-projektu/#misto should carry one in addition to the masterplan.
 2. **Replace per-format room schematics** (Kapsle, Sdílený pokoj) and per-sub-project thumbnails when operator delivers them.
 3. **Wire pre-reservation form backend.** The form currently `console.log`s payloads; a programmer needs to add a serverless endpoint, validation, anti-spam, autoresponses, and storage.
-4. **Configure DNS for startovacihub.cz** and choose a deploy target (Cloudflare Pages, Netlify, GitHub Pages with custom domain — all work for a static Astro site).
+4. **Cut DNS over to startovacihub.cz.** Either custom-domain on GitHub Pages (drop a `CNAME` file in `public/` with `startovacihub.cz`, configure DNS A/AAAA records to GH Pages, enable HTTPS in repo settings) or migrate to Cloudflare Pages / Netlify. After DNS: flip `astro.config.mjs` to `site: 'https://startovacihub.cz'` + remove `base`, find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css`. One commit, GH Pages auto-redeploys.
 5. **Analytics decision** — Plausible or GoatCounter if anything; out of scope for v1.
 
-The repo builds and lints clean on every commit; nothing on the technical side blocks launch beyond the deferred items above.
+The repo builds, lints, and auto-deploys on every push to master; nothing on the technical side blocks launch beyond the deferred items above. Live preview: https://keiaiendiel.github.io/sh-web/.
