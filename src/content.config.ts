@@ -7,7 +7,7 @@
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 
-const subProjectStatusEnum = z.enum(['v-priprave', 'pripravujeme', 'realizujeme']);
+const subProjectStatusEnum = z.enum(['v-priprave', 'realizujeme']);
 
 const subProjects = defineCollection({
   loader: glob({ pattern: '*.mdx', base: './src/content/sub_projects' }),
