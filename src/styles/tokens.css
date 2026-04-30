@@ -69,8 +69,6 @@
      8 colors derived from the Czech tricolor (manual §2.4). Reserved for
      sub-project identities - do NOT use for the parent OSA brand. */
   --c-red:      #d0342c;   /* tricolor red */
-  --accent: var(--c-red);
-  --accent-on: #ffffff; /* foreground used on accent fills */
   --c-coral:    #e86a5a;
   --c-mustard:  #c79a3a;
   --c-olive:    #6c7a3d;
@@ -78,6 +76,11 @@
   --c-teal:     #2c6d7a;
   --c-blue:     #11457e;   /* tricolor blue */
   --c-plum:     #5a2a5f;
+
+  /* Hub accent: plum (resident-facing sub-identity) */
+  --accent:      var(--c-plum);
+  --accent-on:   #ffffff;
+  --accent-soft: rgba(90, 42, 95, 0.12);   /* focus rings, subtle washes */
 
   /* ---------- Semantic surface tokens ---------- */
   --fg:            var(--k-100);
@@ -136,8 +139,9 @@
   /* ---------- Radii ----------
      OSA is resolutely sharp: 0 is the default. Only use --radius-sm in UI
      contexts where zero feels unusable (form controls on web). */
-  --radius-0:  0;
-  --radius-sm: 2px;
+  --radius-0:     0;
+  --radius-sm:    2px;
+  --radius-input: 4px;        /* form fields, CTA buttons, pill radios, teaser cards */
 
   /* ---------- Borders & rules ---------- */
   --border-hair:   1px solid var(--rule);

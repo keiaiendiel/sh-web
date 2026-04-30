@@ -1,257 +1,586 @@
 ---
+/*
+ * ResidentForm — pre-reservation flow.
+ *
+ * Structure follows the research spec in
+ * /12 Startovaci Hub/research/Optimal form and calculator.docx
+ * with two practical adjustments per the redesign brief:
+ *   • Step 0 keeps "počet jednotek 1+kk" + "termín nastěhování" side-by-side.
+ *   • Step 2b carries a single optional checkbox for renewal right.
+ *
+ * Backend wiring deferred (per CLAUDE.md). Submit = console.log + success state.
+ */
+
+const roles = [
+  { v: 'paying',     label: 'Platící rezident' },
+  { v: 'stipend',    label: 'Stipendium' },
+  { v: 'work-trade', label: 'Work-trade / správce' },
+  { v: 'creator',    label: 'Rezident-tvůrce' },
+  { v: 'unsure',     label: 'Ještě nevím, rozhodne cena a podmínky' },
+];
+
+const stay = [
+  { v: '1-3m',   label: '1–3 měsíce' },
+  { v: '3-6m',   label: '3–6 měsíců' },
+  { v: '6-12m',  label: '6–12 měsíců' },
+  { v: '12m+',   label: '12 a více měsíců' },
+  { v: 'unsure', label: 'Ještě nevím' },
+];
+
+const budget = [
+  { v: '0-4k',    label: 'Do 4 000 Kč' },
+  { v: '4-6k',    label: '4 001–6 000' },
+  { v: '6-8k',    label: '6 001–8 000' },
+  { v: '8-10k',   label: '8 001–10 000' },
+  { v: '10-12k',  label: '10 001–12 000' },
+  { v: '12k+',    label: 'Více než 12 000' },
+  { v: 'stipend', label: 'Jen stipendijní režim' },
+];
+
+const place = [
+  { v: 'capsule',  label: 'Kapsle / nejlevnější lůžko' },
+  { v: 'private',  label: 'Klidnější uzavíratelné místo' },
+  { v: 'single',   label: 'Jednolůžkový pokoj' },
+  { v: 'shared',   label: 'Sdílený pokoj' },
+  { v: 'price',    label: 'Rozhodne cena' },
+];
+
+const prague = [
+  { v: 'daily',    label: 'Denně v pracovní dny' },
+  { v: '2-3w',     label: '2–3× týdně' },
+  { v: 'weekly',   label: '1× týdně nebo méně' },
+  { v: 'not',      label: 'Praha pro mě není hlavní důvod' },
+];
+
+const priorities = [
+  { v: 'price',        label: 'Co nejnižší cena' },
+  { v: 'access',       label: 'Rychlá dostupnost do Prahy' },
+  { v: 'flexible',     label: 'Krátký a flexibilní pobyt' },
+  { v: 'quiet',        label: 'Klid na práci nebo studium' },
+  { v: 'community',    label: 'Komunita a společné prostory' },
+  { v: 'fairness',     label: 'Férová pravidla a smysl projektu' },
+  { v: 'contribute',   label: 'Možnost přispět jinak než penězi' },
+];
+
+const social = [
+  { v: 'quiet',     label: 'Spíš klid a soukromí' },
+  { v: 'between',   label: 'Něco mezi' },
+  { v: 'community', label: 'Spíš komunita' },
+];
 ---
-<form class="hub-form hub-form--resident" data-form="resident" novalidate>
-  <fieldset class="hub-form__group">
+<form class="rsv-form" data-form="resident" novalidate>
+
+  <fieldset class="rsv-form__step">
     <legend>
-      <span class="hub-form__eyebrow">Krok 1</span>
-      <span class="hub-form__legend">Mám zájem o nezávaznou před-rezervaci</span>
+      <span class="rsv-form__num">01</span>
+      <span class="rsv-form__heading">Praktické vstupy</span>
+      <span class="rsv-form__hint">Orientační čísla. Můžete je kdykoliv upřesnit.</span>
     </legend>
-    <div class="hub-form__inputs">
-      <label class="hub-form__field">
-        <span class="hub-form__field-label">Počet jednotek 1+kk</span>
+    <div class="rsv-form__grid-2">
+      <label class="rsv-form__field">
+        <span class="rsv-form__label">Počet jednotek 1+kk</span>
         <input type="number" name="units" min="1" max="50" value="1" required inputmode="numeric" />
       </label>
-      <label class="hub-form__field">
-        <span class="hub-form__field-label">Termín nastěhování</span>
-        <input type="month" name="moveInMonth" required />
+      <label class="rsv-form__field">
+        <span class="rsv-form__label">Orientační termín nastěhování</span>
+        <input type="month" name="moveIn" required />
       </label>
     </div>
   </fieldset>
 
-  <fieldset class="hub-form__group">
+  <fieldset class="rsv-form__step">
     <legend>
-      <span class="hub-form__eyebrow">Krok 2</span>
-      <span class="hub-form__legend">Doba nájmu</span>
+      <span class="rsv-form__num">02</span>
+      <span class="rsv-form__heading">Jakou roli v Hubu hledáte?</span>
+      <span class="rsv-form__hint">Vyberte cestu, která je vám dnes nejbližší. Hub je dimenzovaný pro každou z nich.</span>
     </legend>
-    <div class="hub-form__choices">
-      <label><input type="radio" name="duration" value="1m" required /> <span>1 měsíc</span></label>
-      <label><input type="radio" name="duration" value="1y" /> <span>1 rok</span></label>
-      <label><input type="radio" name="duration" value="5y" /> <span>5 let</span></label>
-      <label class="hub-form__row">
-        <input type="radio" name="duration" value="other" />
-        <span>Jiná délka</span>
-        <input type="text" name="durationOther" placeholder="např. 6 měsíců" class="hub-form__inline" />
-      </label>
+    <div class="rsv-form__pills">
+      {roles.map((r) => (
+        <label class="rsv-form__pill">
+          <input type="radio" name="role" value={r.v} required />
+          <span>{r.label}</span>
+        </label>
+      ))}
     </div>
   </fieldset>
 
-  <fieldset class="hub-form__group">
+  <fieldset class="rsv-form__step">
     <legend>
-      <span class="hub-form__eyebrow">Krok 3</span>
-      <span class="hub-form__legend">Právo prodloužit nájem</span>
+      <span class="rsv-form__num">03</span>
+      <span class="rsv-form__heading">Jak dlouho byste chtěl(a) v Hubu zůstat?</span>
+      <span class="rsv-form__hint">Vyberte nejpravděpodobnější variantu.</span>
     </legend>
-    <div class="hub-form__choices">
-      <label><input type="radio" name="extension" value="none" required /> <span>Bez prodloužení</span></label>
-      <label class="hub-form__row">
-        <input type="radio" name="extension" value="finite" />
-        <span>Možnost prodloužit</span>
-        <input type="number" name="extensionTimes" min="1" max="20" placeholder="3" class="hub-form__inline-num" />
-        <span>krát na stejnou dobu</span>
-      </label>
-      <label><input type="radio" name="extension" value="indefinite" /> <span>Možnost prodlužovat opakovaně bez omezení</span></label>
+    <div class="rsv-form__pills">
+      {stay.map((s) => (
+        <label class="rsv-form__pill">
+          <input type="radio" name="stay" value={s.v} required />
+          <span>{s.label}</span>
+        </label>
+      ))}
     </div>
+    <label class="rsv-form__check rsv-form__check--inline">
+      <input type="checkbox" name="renewal" />
+      <span>Chtěl(a) bych mít možnost prodlužovat nájem opakovaně.</span>
+    </label>
   </fieldset>
 
-  <fieldset class="hub-form__group">
+  <fieldset class="rsv-form__step">
     <legend>
-      <span class="hub-form__eyebrow">Krok 4</span>
-      <span class="hub-form__legend">Pobytové stipendium</span>
+      <span class="rsv-form__num">04</span>
+      <span class="rsv-form__heading">Jaký rozpočet byste měl(a) reálně k dispozici?</span>
+      <span class="rsv-form__hint">Včetně základních služeb. Cenu schválně neukazujeme — ladíme ji podle reálné poptávky.</span>
     </legend>
-    <p class="hub-form__hint">Stipendijní režim je pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Není to slevový kód, je to popsaný výběr.</p>
-    <div class="hub-form__choices">
-      <label><input type="radio" name="stipend" value="no" required /> <span>Nemám zájem o stipendium</span></label>
-      <label><input type="radio" name="stipend" value="yes" /> <span>Mám zájem o stipendium</span></label>
+    <div class="rsv-form__pills rsv-form__pills--with-suffix">
+      {budget.map((b) => (
+        <label class="rsv-form__pill">
+          <input type="radio" name="budget" value={b.v} required />
+          <span>{b.label}{b.v !== 'stipend' && b.v !== '0-4k' ? ' Kč' : ''}{b.v === '0-4k' ? '' : ''}</span>
+        </label>
+      ))}
     </div>
   </fieldset>
 
-  <fieldset class="hub-form__group hub-form__stipend" data-stipend="yes" hidden>
+  <fieldset class="rsv-form__step">
     <legend>
-      <span class="hub-form__eyebrow">Krok 5</span>
-      <span class="hub-form__legend">Záměr nebo projekt v Hubu</span>
+      <span class="rsv-form__num">05</span>
+      <span class="rsv-form__heading">O jaký typ místa byste měl(a) největší zájem?</span>
+      <span class="rsv-form__hint">Nejde o rezervaci konkrétního pokoje, jen o vaši první preferenci.</span>
     </legend>
-    <div class="hub-form__inputs">
-      <label class="hub-form__textarea-label">
-        <span class="hub-form__field-label">Co byste rád(a) ve Startovacím Hubu rozjel(a)?</span>
-        <textarea name="stipendIntent" rows="4" minlength="40" maxlength="500" placeholder="Studium, výzkum, pilotní projekt, kulturní program, vlastní podnikání."></textarea>
-      </label>
-      <label class="hub-form__textarea-label">
-        <span class="hub-form__field-label">Něco o vás</span>
-        <textarea name="stipendAbout" rows="4" minlength="40" maxlength="500" placeholder="Pár vět o vašem příběhu a o tom, proč by stipendium dávalo smysl."></textarea>
-      </label>
+    <div class="rsv-form__pills">
+      {place.map((p) => (
+        <label class="rsv-form__pill">
+          <input type="radio" name="place" value={p.v} required />
+          <span>{p.label}</span>
+        </label>
+      ))}
     </div>
   </fieldset>
 
-  <fieldset class="hub-form__group">
+  <fieldset class="rsv-form__step">
     <legend>
-      <span class="hub-form__eyebrow">Krok 6</span>
-      <span class="hub-form__legend">Kontakt</span>
+      <span class="rsv-form__num">06</span>
+      <span class="rsv-form__heading">Jak často potřebujete být v Praze?</span>
+      <span class="rsv-form__hint">Pomáhá nám posoudit reálnou použitelnost lokality.</span>
     </legend>
-    <div class="hub-form__inputs">
-      <label class="hub-form__field">
-        <span class="hub-form__field-label">Jméno a příjmení</span>
-        <input type="text" name="name" required minlength="2" />
-      </label>
-      <label class="hub-form__field">
-        <span class="hub-form__field-label">E-mail</span>
-        <input type="email" name="email" required />
-      </label>
-      <label class="hub-form__field">
-        <span class="hub-form__field-label">Telefon (volitelné)</span>
-        <input type="tel" name="phone" />
-      </label>
-      <label class="hub-form__check"><input type="checkbox" name="consent" required /> <span>Souhlasím se zasláním informací k nabídce.</span></label>
+    <div class="rsv-form__pills">
+      {prague.map((p) => (
+        <label class="rsv-form__pill">
+          <input type="radio" name="prague" value={p.v} required />
+          <span>{p.label}</span>
+        </label>
+      ))}
     </div>
   </fieldset>
 
-  <button type="submit" class="hub-form__submit">Odeslat nezávaznou před-rezervaci</button>
+  <fieldset class="rsv-form__step">
+    <legend>
+      <span class="rsv-form__num">07</span>
+      <span class="rsv-form__heading">Co bude při rozhodování nejdůležitější?</span>
+      <span class="rsv-form__hint">Vyberte nejvýš dvě priority.</span>
+    </legend>
+    <div class="rsv-form__pills" data-max="2">
+      {priorities.map((p) => (
+        <label class="rsv-form__pill">
+          <input type="checkbox" name="priorities" value={p.v} />
+          <span>{p.label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
 
-  <output class="hub-form__success" hidden>
-    Děkujeme. Zapsali jsme vaši nezávaznou před-rezervaci. Není to smlouva. Ozveme se vám, jakmile budeme mít konkrétní nabídku odpovídající vašim preferencím.
+  <fieldset class="rsv-form__step">
+    <legend>
+      <span class="rsv-form__num">08</span>
+      <span class="rsv-form__heading">Jak blízko si přejete mít společný život v Hubu?</span>
+      <span class="rsv-form__hint">Stačí jedna odpověď.</span>
+    </legend>
+    <div class="rsv-form__pills">
+      {social.map((s) => (
+        <label class="rsv-form__pill">
+          <input type="radio" name="social" value={s.v} required />
+          <span>{s.label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <fieldset class="rsv-form__step rsv-form__branch" data-branch hidden>
+    <legend>
+      <span class="rsv-form__num">09</span>
+      <span class="rsv-form__heading" data-branch-heading>Něco navíc</span>
+      <span class="rsv-form__hint" data-branch-hint>Vyplňte stručně, neformálně.</span>
+    </legend>
+    <div class="rsv-form__inputs">
+      <label class="rsv-form__field">
+        <span class="rsv-form__label" data-branch-label-1>Co byste rád(a) v Hubu rozjel(a)?</span>
+        <textarea name="branchIntent" rows="4" minlength="40" maxlength="500"></textarea>
+      </label>
+      <label class="rsv-form__field">
+        <span class="rsv-form__label">Pár vět o vás</span>
+        <textarea name="branchAbout" rows="4" minlength="40" maxlength="500" placeholder="Životní situace, co vás na Hubu chytlo, proč právě teď."></textarea>
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset class="rsv-form__step">
+    <legend>
+      <span class="rsv-form__num">10</span>
+      <span class="rsv-form__heading">Kam vám máme poslat další informace?</span>
+      <span class="rsv-form__hint">Posíláme jen průběžný stav projektu a zprávu, jakmile budeme mít konkrétní nabídku.</span>
+    </legend>
+    <div class="rsv-form__grid-2">
+      <label class="rsv-form__field">
+        <span class="rsv-form__label">Jméno a příjmení</span>
+        <input type="text" name="name" required minlength="2" autocomplete="name" />
+      </label>
+      <label class="rsv-form__field">
+        <span class="rsv-form__label">E-mail</span>
+        <input type="email" name="email" required autocomplete="email" />
+      </label>
+    </div>
+    <label class="rsv-form__field rsv-form__field--phone">
+      <span class="rsv-form__label">Telefon (volitelné)</span>
+      <input type="tel" name="phone" autocomplete="tel" inputmode="tel" />
+    </label>
+    <label class="rsv-form__check">
+      <input type="checkbox" name="consent" required />
+      <span>Souhlasím se zasláním informací k tomuto záměru na uvedený e-mail.</span>
+    </label>
+  </fieldset>
+
+  <button type="submit" class="rsv-form__submit">Zapsat nezávazný zájem →</button>
+
+  <output class="rsv-form__success" hidden>
+    <span class="rsv-form__success-eyebrow">Hotovo</span>
+    <h3>Zapsali jsme váš nezávazný zájem.</h3>
+    <p>Není to rezervace ani pořadník. Jakmile budeme mít konkrétní nabídku odpovídající vašim preferencím, ozveme se.</p>
   </output>
 </form>
 
 <style>
-  .hub-form { display: grid; gap: 0; }
-  .hub-form__group {
-    border: 0; padding: 28px 0; margin: 0;
-    display: grid; gap: 16px;
+  .rsv-form {
+    display: grid; gap: 0;
+    font-family: var(--font-sans);
+  }
+
+  .rsv-form__step {
+    border: 0; padding: 40px 0 32px; margin: 0;
+    display: grid; gap: 20px;
     border-bottom: 1px solid var(--k-10);
   }
-  .hub-form__group:last-of-type { border-bottom: 0; }
-  .hub-form__group legend {
-    display: flex; flex-direction: column; gap: 6px;
-    padding: 0; margin: 0 0 4px;
+  .rsv-form__step:first-of-type { padding-top: 0; }
+  .rsv-form__step:last-of-type { border-bottom: 0; }
+
+  .rsv-form__step legend {
+    display: grid; gap: 6px;
+    padding: 0; margin: 0;
+    grid-template-columns: minmax(0, 1fr);
   }
-  .hub-form__eyebrow {
-    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--k-60); font-weight: 600;
+  .rsv-form__num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    margin-top: 8px;
   }
-  .hub-form__legend {
-    font-size: 18px; font-weight: 600; line-height: 1.3;
+  .rsv-form__heading {
+    font-size: clamp(18px, 1.6vw, 22px);
+    font-weight: 600;
+    line-height: 1.3;
     color: var(--k-100);
   }
+  .rsv-form__hint {
+    font-size: 14px; line-height: 1.55;
+    color: var(--k-70);
+    max-width: 64ch;
+  }
 
-  .hub-form__inputs { display: grid; gap: 16px; }
-  .hub-form__choices { display: grid; gap: 4px; }
+  /* Pills (radio + checkbox row) */
+  .rsv-form__pills {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .rsv-form__pill { position: relative; margin: 0; }
+  .rsv-form__pill input {
+    position: absolute; opacity: 0; pointer-events: none;
+    width: 0; height: 0;
+  }
+  .rsv-form__pill span {
+    display: inline-block;
+    padding: 11px 18px;
+    border: 1px solid var(--k-30);
+    border-radius: var(--radius-input);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--k-90);
+    background: var(--bg);
+    cursor: pointer;
+    user-select: none;
+    transition:
+      border-color var(--dur-base) var(--ease-decel),
+      background var(--dur-base) var(--ease-decel),
+      color var(--dur-base) var(--ease-decel),
+      transform var(--dur-fast) var(--ease-decel);
+  }
+  .rsv-form__pill:hover span { border-color: var(--accent); color: var(--k-100); }
+  .rsv-form__pill input:checked + span {
+    background: var(--accent);
+    color: var(--accent-on);
+    border-color: var(--accent);
+  }
+  .rsv-form__pill input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .rsv-form__pill input:checked:active + span,
+  .rsv-form__pill input:active + span { transform: scale(0.97); }
 
-  .hub-form label {
+  /* Two-column grids */
+  .rsv-form__grid-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  @media (max-width: 640px) {
+    .rsv-form__grid-2 { grid-template-columns: 1fr; }
+  }
+
+  .rsv-form__inputs { display: grid; gap: 16px; }
+
+  /* Field (input/textarea wrapper) */
+  .rsv-form__field {
+    display: grid; gap: 6px;
+  }
+  .rsv-form__label {
+    font-size: 13px; font-weight: 500;
+    color: var(--k-90);
+    letter-spacing: 0.01em;
+  }
+  .rsv-form input[type='text'],
+  .rsv-form input[type='email'],
+  .rsv-form input[type='tel'],
+  .rsv-form input[type='number'],
+  .rsv-form input[type='month'],
+  .rsv-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--k-30);
+    border-radius: var(--radius-input);
+    font: 500 15px / 1.4 var(--font-sans);
+    background: var(--bg);
+    color: inherit;
+    box-sizing: border-box;
+    transition:
+      border-color var(--dur-base) var(--ease-decel),
+      box-shadow var(--dur-base) var(--ease-decel);
+  }
+  .rsv-form input:focus,
+  .rsv-form textarea:focus {
+    outline: 0;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  /* Calmer month picker — strip the Chrome date picker chrome and tint
+     the indicator so it matches the brand. */
+  .rsv-form input[type='month'] {
+    appearance: none;
+    -webkit-appearance: none;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    color: var(--k-90);
+  }
+  .rsv-form input[type='month']::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.55;
+    filter: grayscale(1);
+    padding: 4px;
+    transition: opacity var(--dur-fast) linear;
+  }
+  .rsv-form input[type='month']:hover::-webkit-calendar-picker-indicator { opacity: 0.85; }
+  .rsv-form input[type='month']::-webkit-datetime-edit-fields-wrapper { padding: 0; }
+  .rsv-form input[type='month']::-webkit-datetime-edit { padding: 0; }
+  .rsv-form input[type='month']:not(:focus):invalid {
+    color: var(--k-60);
+  }
+  .rsv-form textarea {
+    resize: vertical;
+    min-height: 110px;
+    font-family: var(--font-sans);
+  }
+
+  /* Phone field — narrower on desktop */
+  .rsv-form__field--phone { max-width: 320px; }
+  @media (max-width: 640px) {
+    .rsv-form__field--phone { max-width: none; }
+  }
+
+  /* Single checkbox (renewal, consent) */
+  .rsv-form__check {
     display: flex; align-items: flex-start; gap: 12px;
-    padding: 10px 12px; cursor: pointer;
-    border: 1px solid transparent;
-    transition: background 150ms cubic-bezier(0.16,1,0.3,1), border-color 150ms;
-    border-radius: 4px; line-height: 1.5;
+    padding: 8px 0;
+    cursor: pointer;
+    line-height: 1.5;
   }
-  .hub-form__choices label:hover { background: var(--k-05); }
-  .hub-form input[type='radio'],
-  .hub-form input[type='checkbox'] {
-    margin-top: 2px; accent-color: var(--accent);
-    width: 18px; height: 18px; flex-shrink: 0;
+  .rsv-form__check--inline { padding-top: 4px; }
+  .rsv-form__check input[type='checkbox'] {
+    width: 18px; height: 18px;
+    margin: 2px 0 0 0;
+    accent-color: var(--accent);
+    flex-shrink: 0;
   }
-  .hub-form__choices label:has(input:checked) { background: var(--k-05); border-color: var(--k-30); }
-  .hub-form__choices label:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rsv-form__check span {
+    font-size: 14px; color: var(--k-90);
+  }
+  .rsv-form__check input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 
-  .hub-form__field { flex-direction: column; align-items: stretch; gap: 8px; padding: 4px 0; cursor: default; }
-  .hub-form__field:hover { background: transparent; }
-  .hub-form__field-label { font-weight: 500; font-size: 13px; color: var(--k-90); letter-spacing: 0.01em; }
-  .hub-form__textarea-label { flex-direction: column; align-items: stretch; gap: 8px; padding: 4px 0; cursor: default; }
-  .hub-form__textarea-label:hover { background: transparent; }
-
-  .hub-form__row { flex-wrap: wrap; align-items: center; }
-  .hub-form input[type='text'],
-  .hub-form input[type='email'],
-  .hub-form input[type='tel'],
-  .hub-form input[type='number'],
-  .hub-form input[type='month'],
-  .hub-form textarea {
-    width: 100%; padding: 12px 14px;
-    border: 1px solid var(--k-30); border-radius: 4px;
-    font: inherit; box-sizing: border-box;
-    background: var(--bg, #fff); color: inherit;
-    transition: border-color 150ms cubic-bezier(0.16,1,0.3,1);
+  /* Branch reveal */
+  .rsv-form__branch[hidden] { display: none; }
+  .rsv-form__branch:not([hidden]) {
+    animation: rsv-form-reveal 320ms var(--ease-decel) both;
   }
-  .hub-form input:focus,
-  .hub-form textarea:focus {
-    border-color: var(--accent); outline: 0;
-    box-shadow: 0 0 0 3px rgba(208, 52, 44, 0.12);
-  }
-  .hub-form input[name='units'],
-  .hub-form input[name='moveInMonth'] { max-width: 280px; }
-  .hub-form input.hub-form__inline { display: inline-block; width: auto; max-width: 200px; }
-  .hub-form input.hub-form__inline-num { display: inline-block; width: 80px; flex: 0 0 80px; }
-  .hub-form textarea { resize: vertical; min-height: 110px; }
-
-  .hub-form__hint {
-    font-size: 13px; color: var(--k-70);
-    margin: 0; max-width: 720px; line-height: 1.55;
-  }
-  .hub-form__check { gap: 12px; align-items: flex-start; padding: 8px 12px; border-radius: 4px; }
-  .hub-form__check:hover { background: var(--k-05); }
-
-  .hub-form__submit {
-    margin-top: 16px;
-    padding: 16px 32px;
-    background: var(--accent); color: var(--accent-on);
-    border: 0; border-radius: 4px;
-    font-weight: 600; font-size: 16px;
-    cursor: pointer; justify-self: start;
-    transition: transform 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms;
-  }
-  .hub-form__submit:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(208, 52, 44, 0.25);
-  }
-  .hub-form__submit:active { transform: translateY(0); }
-  .hub-form__submit:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
-
-  .hub-form__success {
-    margin-top: 16px;
-    padding: 24px 28px;
-    background: var(--k-100); color: var(--bg);
-    border-left: 4px solid var(--accent);
-    font-size: 17px; line-height: 1.55;
-    display: block;
-  }
-  .hub-form__success[hidden] { display: none; }
-
-  .hub-form__stipend[hidden] { display: none; }
-  .hub-form__stipend {
-    animation: hub-form-reveal 280ms cubic-bezier(0.16,1,0.3,1) both;
-  }
-  @keyframes hub-form-reveal {
-    from { opacity: 0; transform: translateY(-8px); }
+  @keyframes rsv-form-reveal {
+    from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  @media (max-width: 640px) {
-    .hub-form__group { padding: 24px 0; }
-    .hub-form__legend { font-size: 17px; }
-    .hub-form input[name='units'],
-    .hub-form input[name='moveInMonth'] { max-width: none; }
-    .hub-form__submit { width: 100%; justify-self: stretch; }
+  /* Submit */
+  .rsv-form__submit {
+    margin-top: 24px;
+    padding: 16px 32px;
+    background: var(--accent);
+    color: var(--accent-on);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-input);
+    font: 600 16px / 1 var(--font-sans);
+    cursor: pointer;
+    justify-self: start;
+    transition:
+      transform var(--dur-base) var(--ease-decel),
+      box-shadow var(--dur-base) var(--ease-decel);
+  }
+  .rsv-form__submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(90, 42, 95, 0.40);
+  }
+  .rsv-form__submit:active { transform: translateY(0); }
+  .rsv-form__submit:disabled { opacity: 0.55; cursor: default; transform: none; box-shadow: none; }
+  .rsv-form__submit:focus-visible {
+    outline: 3px solid var(--accent-soft);
+    outline-offset: 2px;
+  }
+
+  /* Success panel */
+  .rsv-form__success {
+    margin-top: 24px;
+    padding: 32px 28px;
+    background: var(--k-100);
+    color: var(--bg);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-input);
+    display: grid; gap: 8px;
+  }
+  .rsv-form__success[hidden] { display: none; }
+  .rsv-form__success-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px; letter-spacing: 0.06em;
+    color: var(--accent-on);
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+  .rsv-form__success h3 {
+    font-size: 22px; font-weight: 600;
+    line-height: 1.3; margin: 0;
+  }
+  .rsv-form__success p {
+    font-size: 15px; line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+    margin: 0; max-width: 56ch;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rsv-form__pill span,
+    .rsv-form input,
+    .rsv-form textarea,
+    .rsv-form__submit,
+    .rsv-form__branch { transition: none; animation: none; }
   }
 </style>
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-form="resident"]').forEach((form) => {
-      // Reveal stipend follow-up when "yes" is selected.
-      form.addEventListener('change', (e) => {
-        if (e.target.name !== 'stipend') return;
-        const value = e.target.value;
-        form.querySelectorAll('[data-stipend]').forEach((b) => {
-          b.hidden = b.dataset.stipend !== value;
+      // Max-2 enforcement on priorities (uncheck the oldest if user picks a third)
+      const priorityBoxes = form.querySelectorAll('input[name="priorities"]');
+      let priorityOrder = [];
+      priorityBoxes.forEach((box) => {
+        box.addEventListener('change', () => {
+          if (box.checked) {
+            priorityOrder.push(box);
+            if (priorityOrder.length > 2) {
+              const oldest = priorityOrder.shift();
+              oldest.checked = false;
+            }
+          } else {
+            priorityOrder = priorityOrder.filter((b) => b !== box);
+          }
         });
       });
-      // Static success state on submit.
+
+      // Role branching: show step 09 only for stipend / work-trade / creator,
+      // and tweak the heading + first label for context.
+      const branchRoles = {
+        stipend: {
+          heading: 'Proč pro vás dává stipendium smysl právě teď?',
+          hint: 'Životní situace stačí stručně. Nepotřebujeme dlouhé vysvětlování.',
+          label1: 'V čem si představujete přínos pro Hub?',
+        },
+        'work-trade': {
+          heading: 'Co umíte nabídnout výměnou za zvýhodněné bydlení?',
+          hint: 'Napište 1–3 konkrétní činnosti a odhad hodin týdně.',
+          label1: 'S čím byste uměl(a) reálně pomoct?',
+        },
+        creator: {
+          heading: 'Co byste do Hubu přinesl(a) jako tvůrce?',
+          hint: 'Obor, forma výstupu, případně odkaz na ukázku v textu níže.',
+          label1: 'Co tvoříte a co byste v Hubu rozjel(a)?',
+        },
+      };
+      const branch = form.querySelector('[data-branch]');
+      const branchHeading = form.querySelector('[data-branch-heading]');
+      const branchHint = form.querySelector('[data-branch-hint]');
+      const branchLabel1 = form.querySelector('[data-branch-label-1]');
+      const branchTextareas = branch ? branch.querySelectorAll('textarea') : [];
+
+      form.addEventListener('change', (e) => {
+        if (e.target.name !== 'role') return;
+        const cfg = branchRoles[e.target.value];
+        if (cfg) {
+          branch.hidden = false;
+          if (branchHeading) branchHeading.textContent = cfg.heading;
+          if (branchHint) branchHint.textContent = cfg.hint;
+          if (branchLabel1) branchLabel1.textContent = cfg.label1;
+          branchTextareas.forEach((t) => t.required = true);
+        } else {
+          branch.hidden = true;
+          branchTextareas.forEach((t) => { t.required = false; t.value = ''; });
+        }
+      });
+
+      // Submit: console.log payload + static success state.
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(form));
+        // priorities is multi-checkbox; collect all selected values
+        data.priorities = Array.from(form.querySelectorAll('input[name="priorities"]:checked')).map((b) => b.value);
         // eslint-disable-next-line no-console
         console.log('[pre-reservation payload]', data);
-        const success = form.querySelector('.hub-form__success');
+        const success = form.querySelector('.rsv-form__success');
         if (success) success.hidden = false;
         const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
+        success?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     });
   });

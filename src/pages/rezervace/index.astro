@@ -1,0 +1,274 @@
+---
+import Base from '../../layouts/Base.astro';
+import ResidentForm from '../../components/ResidentForm.astro';
+import { getEntry } from 'astro:content';
+import { withBase } from '../../utils/url';
+
+const faqIds = ['q5', 'q7', 'q8'] as const;
+const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
+---
+<Base
+  title="Rezervace — Startovací Hub Klecany"
+  description="Před-rezervujte si místo v Hubu. Vyplnění není závazné, jen nám řekne, za jakých podmínek by pro vás bydlení dávalo smysl. Ozveme se, jakmile budeme mít odpovídající nabídku."
+  headerVariant="dark"
+>
+  <section class="rsv-hero osa-dark">
+    <img class="rsv-hero__bg" src={withBase('/images/hub/exterior/hub-courtyard-night.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="rsv-hero__scrim" aria-hidden="true"></div>
+    <div class="rsv-hero__inner">
+      <span class="osa-eyebrow rsv-hero__eyebrow">Před-rezervace</span>
+      <h1 class="rsv-hero__title">Před-rezervujte si místo.</h1>
+      <p class="rsv-hero__lede">Řekněte nám, za jakých podmínek by pro vás Hub dával smysl. Nejde o smlouvu ani závazek — pomáháte nám tvarovat nabídku podle reálné poptávky.</p>
+    </div>
+  </section>
+
+  <section class="rsv-meta">
+    <ul class="rsv-meta__list">
+      <li><strong>Žádná platba.</strong> Vyplnění je zdarma a nezávazné.</li>
+      <li><strong>Žádný pořadník.</strong> Zapisujeme zájem, ne kapacitu.</li>
+      <li><strong>Krátké.</strong> Vyplnění zabere pár minut.</li>
+    </ul>
+  </section>
+
+  <section class="rsv-form-shell" id="formular">
+    <ResidentForm />
+  </section>
+
+  <section class="rsv-status">
+    <div class="rsv-status__inner">
+      <span class="osa-eyebrow rsv-status__eyebrow">Aktuální stav</span>
+      <p>Vyplněním formuláře nám říkáte, za jakých podmínek by pro vás Hub dával smysl. Nejde o smlouvu, neúčtujeme nic. Reálný start první etapy proběhne, jakmile budou potvrzeny tři věci: kapitálová struktura, provozní připravenost areálu a právní rámec provozu.</p>
+    </div>
+  </section>
+
+  <section class="rsv-aftermath">
+    <header class="osa-sub-head">
+      <span class="osa-eyebrow">Co se stane po odeslání</span>
+      <h2 class="rsv-aftermath__heading">Tři kroky, žádný papír.</h2>
+    </header>
+    <ol class="rsv-steps">
+      <li>
+        <span class="rsv-steps__num">01</span>
+        <h3>Zapíšeme váš zájem</h3>
+        <p>Vaše odpovědi jdou do okruhu, podle kterého ladíme finální nabídku jednotek a režimů.</p>
+      </li>
+      <li>
+        <span class="rsv-steps__num">02</span>
+        <h3>Ozveme se s detailem</h3>
+        <p>Až budeme mít konkrétní jednotku, cenu a termín, který odpovídá vašim preferencím, napíšeme vám e-mailem.</p>
+      </li>
+      <li>
+        <span class="rsv-steps__num">03</span>
+        <h3>Smlouvu řešíme až nakonec</h3>
+        <p>Žádný závazek nevzniká dokud spolu reálně nepodepíšeme smlouvu o budoucí smlouvě. Do té chvíle je vše nezávazné.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="rsv-faq">
+    <header class="osa-sub-head">
+      <span class="osa-eyebrow">Časté otázky</span>
+      <h2 class="rsv-faq__heading">Co se mě jako budoucího rezidenta nejvíc týká?</h2>
+    </header>
+    {faqEntries.map((entry) => entry && (
+      <details class="rsv-faq__item">
+        <summary>{entry.data.question}</summary>
+        <p>{entry.data.answer}</p>
+      </details>
+    ))}
+    <p class="rsv-faq__more">
+      <a href={withBase('/faq/')}>Všechny otázky →</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .rsv-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(320px, 46vh, 440px);
+    display: flex;
+    align-items: flex-end;
+    background: var(--k-100);
+    color: #fff;
+    overflow: hidden;
+  }
+  .rsv-hero__bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.42) saturate(0.92);
+    z-index: 1;
+  }
+  .rsv-hero__scrim {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.18) 38%, rgba(0,0,0,0.65) 100%);
+    pointer-events: none;
+  }
+  .rsv-hero__inner {
+    position: relative; z-index: 3;
+    padding: clamp(56px, 9vw, 96px) var(--gutter) clamp(40px, 6vw, 72px);
+    max-width: var(--container-wide); margin: 0 auto; width: 100%;
+  }
+  .rsv-hero__inner > * { max-width: 720px; }
+  .rsv-hero__eyebrow { color: rgba(255,255,255,0.78); display: inline-block; margin-bottom: 14px; }
+  .rsv-hero__title {
+    font-family: var(--font-sans);
+    font-size: clamp(36px, 5.5vw, 64px);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  .rsv-hero__lede {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.55;
+    color: rgba(255,255,255,0.88);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  /* Meta strip below hero — three short bullets. */
+  .rsv-meta {
+    padding: clamp(24px, 4vw, 40px) var(--gutter);
+    max-width: var(--container-wide); margin: 0 auto;
+    border-bottom: 1px solid var(--k-20);
+  }
+  .rsv-meta__list {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0; margin: 0; padding: 0;
+    list-style: none;
+  }
+  .rsv-meta__list li {
+    padding: 12px 20px;
+    font-size: 14px; line-height: 1.5; color: var(--k-90);
+    border-right: 1px solid var(--k-20);
+  }
+  .rsv-meta__list li:first-child { padding-left: 0; }
+  .rsv-meta__list li:last-child  { padding-right: 0; border-right: 0; }
+  .rsv-meta__list li strong { display: block; color: var(--k-100); margin-bottom: 4px; }
+  @media (max-width: 720px) {
+    .rsv-meta__list { grid-template-columns: 1fr; }
+    .rsv-meta__list li {
+      border-right: 0;
+      border-bottom: 1px solid var(--k-20);
+      padding: 10px 0;
+    }
+    .rsv-meta__list li:last-child { padding-bottom: 0; border-bottom: 0; }
+  }
+
+  .rsv-form-shell {
+    padding: 0 var(--gutter) clamp(48px, 7vw, 80px);
+    max-width: 880px; margin: clamp(32px, 5vw, 64px) auto 0;
+  }
+  .rsv-form-shell :global(.rsv-form) {
+    padding: clamp(32px, 5vw, 56px) clamp(28px, 4vw, 48px);
+    border: 1px solid var(--k-20);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.02),
+      0 12px 32px rgba(0, 0, 0, 0.06),
+      0 36px 80px rgba(90, 42, 95, 0.04);
+  }
+
+  /* Status — disclaimer block sitting between form and aftermath. */
+  .rsv-status {
+    padding: 0 var(--gutter) clamp(48px, 7vw, 80px);
+    max-width: var(--container-wide); margin: 0 auto;
+  }
+  .rsv-status__inner {
+    max-width: 760px; margin: 0 auto;
+    padding: 24px 28px;
+    background: var(--k-05);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-input) var(--radius-input) 0;
+  }
+  .rsv-status__eyebrow {
+    color: var(--accent);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .rsv-status__inner p {
+    font-size: 15px; line-height: 1.65;
+    color: var(--k-90);
+    margin: 0;
+    max-width: 64ch;
+  }
+
+  .rsv-aftermath, .rsv-faq {
+    padding: clamp(48px, 7vw, 80px) var(--gutter);
+    max-width: var(--container-wide); margin: 0 auto;
+  }
+  .osa-sub-head { margin-bottom: 32px; }
+  .osa-sub-head .osa-eyebrow { color: var(--k-60); display: block; margin-bottom: 8px; }
+  .rsv-aftermath__heading,
+  .rsv-faq__heading {
+    font-family: var(--font-sans);
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .rsv-steps {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 720px) { .rsv-steps { grid-template-columns: 1fr; } }
+  .rsv-steps li {
+    padding: 24px;
+    border: 1px solid var(--k-20);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+  }
+  .rsv-steps__num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .rsv-steps li h3 {
+    font-size: 18px; font-weight: 600; margin: 0 0 8px;
+    line-height: 1.3;
+  }
+  .rsv-steps li p {
+    font-size: 14px; line-height: 1.55; color: var(--k-80); margin: 0;
+  }
+
+  .rsv-faq__item {
+    border-bottom: 1px solid var(--k-20);
+    padding: 4px 0;
+  }
+  .rsv-faq__item summary {
+    font-weight: 600; cursor: pointer;
+    padding: 16px 0; list-style: none;
+    font-size: 17px; line-height: 1.4;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .rsv-faq__item summary::-webkit-details-marker { display: none; }
+  .rsv-faq__item summary::before {
+    content: '+'; display: inline-block;
+    width: 16px; text-align: center;
+    color: var(--accent);
+    transition: transform 200ms var(--ease-decel);
+  }
+  .rsv-faq__item[open] summary::before { transform: rotate(45deg); }
+  .rsv-faq__item p {
+    padding: 0 0 16px 28px;
+    font-size: 15px; line-height: 1.6; color: var(--k-80);
+    margin: 0; max-width: 64ch;
+  }
+  .rsv-faq__more { margin-top: 32px; }
+  .rsv-faq__more a {
+    color: var(--accent); font-weight: 600;
+    text-decoration: none;
+  }
+  .rsv-faq__more a:hover { text-decoration: underline; }
+</style>

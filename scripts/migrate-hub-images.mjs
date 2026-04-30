@@ -16,9 +16,11 @@ const srcVpd   = path.resolve(repoRoot, '../vpd-web/public/images/zamer-vpd');
 const outRoot  = path.resolve(repoRoot, 'public/images/hub');
 const outExt   = path.join(outRoot, 'exterior');
 const outInt   = path.join(outRoot, 'interior');
+const outHero  = path.join(outRoot, 'hero');
 
 await fs.mkdir(outExt, { recursive: true });
 await fs.mkdir(outInt, { recursive: true });
+await fs.mkdir(outHero, { recursive: true });
 
 async function optimize(inFile, outFile, { maxEdge = 1600, quality = 80 } = {}) {
   await sharp(inFile)
@@ -66,6 +68,31 @@ const vpdNames = [
 ];
 for (const [name, dir] of vpdNames) {
   await optimize(path.join(srcVpd, name), path.join(dir, name));
+}
+
+console.log('Hero (selected → public/images/hub/hero/sh-{1..4}.jpg):');
+for (let n = 1; n <= 4; n++) {
+  const inFile  = path.join(srcRaw, 'selected', `sh-${n}.jpeg`);
+  const outFile = path.join(outHero, `sh-${n}.jpg`);
+  await optimize(inFile, outFile);
+}
+
+console.log('Named extras (kapsle / cowork / trznice / sport):');
+const named = [
+  ['kapsle.jpg',           outInt],
+  ['cowork.jpeg',          outExt],
+  ['trznice-pivovar.jpeg', outExt],
+  ['sport.jpeg',           outExt],
+];
+for (const [name, dir] of named) {
+  const inFile  = path.join(srcRaw, name);
+  const slug    = name.replace(/\.jpeg$/i, '.jpg');
+  const outFile = path.join(dir, slug);
+  try {
+    await optimize(inFile, outFile);
+  } catch (e) {
+    console.log(`  skip ${name}: ${e.message}`);
+  }
 }
 
 console.log('Done.');

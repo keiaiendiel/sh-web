@@ -4,66 +4,227 @@ import { withBase } from '../../utils/url';
 import { getCollection } from 'astro:content';
 
 const cards = (await getCollection('subProjects')).sort((a, b) => a.data.order - b.data.order);
+
+// ID → building label for the card eyebrow.
+const buildingLabel = (id: string) => {
+  switch (id) {
+    case 'komunitni-centrum':  return 'Objekt B';
+    case 'coworking-centrum':  return 'Přízemí budovy C';
+    case 'komunitni-pivovar':  return 'Objekt B';
+    case 'bytove-druzstvo':    return 'Vlastnické vehikl';
+    case 'sauna-bazen':        return 'Objekty D + E';
+    case 'sportoviste-park':   return 'Park před objektem B';
+    default:                   return 'Areál';
+  }
+};
 ---
 <Base
-  title="Projekty Startovacího Hubu"
-  description="Komunitní centrum, coworking, pivovar, bytové družstvo, tržnice a další provozy."
+  title="Provozy Startovacího Hubu"
+  description="Komunitní centrum, coworking, pivovar, sauna a bazén, park, bytové družstvo. Hub se rozrůstá postupně — sdílené provozy, které dělají z areálu fungující celek."
+  headerVariant="dark"
 >
-  <section class="hub-page-hero">
-    <h1>Projekty Startovacího Hubu</h1>
-    <p class="hub-lead">Startovací Hub Klecany se skládá z propojených provozů. Některé jsou v aktivní přípravě, jiné teprve dolaďujeme. Tady je přehled toho, co Hub obsahuje a kam se rozrůstá.</p>
+  <section class="pj-hero osa-dark">
+    <img class="pj-hero__bg" src={withBase('/images/hub/exterior/hub-courtyard-night.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="pj-hero__scrim" aria-hidden="true"></div>
+    <div class="pj-hero__inner">
+      <span class="osa-eyebrow pj-hero__eyebrow">Provozy</span>
+      <h1 class="pj-hero__title">Hub se rozrůstá postupně.</h1>
+      <p class="pj-hero__lede">Komunitní centrum, coworking, pivovar, sauna a bazén, park, bytové družstvo. Některé provozy už dolaďujeme, jiné teprve definujeme. Tady je aktuální mapa toho, co Hub bude obsahovat.</p>
+    </div>
   </section>
 
-  <section class="hub-section">
-    <div class="hub-projects-grid">
+  <section class="pj-grid-section">
+    <div class="pj-grid">
       {cards.map((p) => (
-        <a class="hub-project-card" href={withBase(`/projekty/${p.id}/`)}>
-          <div class="hub-project-card__thumb" aria-hidden="true">
+        <a class="pj-card" href={withBase(`/projekty/${p.id}/`)}>
+          <div class="pj-card__thumb" aria-hidden="true">
             {p.data.thumbnail
-              ? <img src={p.data.thumbnail} alt="" loading="lazy" width="600" height="450" />
-              : <span class="hub-project-card__todo">Vizualizaci doplníme.</span>
+              ? <img src={p.data.thumbnail} alt="" loading="lazy" />
+              : <span class="pj-card__placeholder">Vizualizace v přípravě</span>
             }
           </div>
-          <h2>{p.data.name}</h2>
-          <p>{p.data.role}</p>
-          <span class="hub-project-card__status">V přípravě</span>
+          <div class="pj-card__body">
+            <span class="osa-eyebrow pj-card__building">{buildingLabel(p.id)}</span>
+            <h2 class="pj-card__name">{p.data.name}</h2>
+            <p class="pj-card__role">{p.data.role}</p>
+            <span class="pj-card__cta">Detail →</span>
+          </div>
         </a>
       ))}
-      <div class="hub-project-card hub-project-card--placeholder">
-        <div class="hub-project-card__thumb" aria-hidden="true">
-          <span class="hub-project-card__todo">+</span>
-        </div>
-        <h2>Další projekty</h2>
-        <p>Hub se rozrůstá. Další provozy a iniciativy doplníme, jakmile budou konkrétně definované.</p>
-        <span class="hub-project-card__status hub-project-card__status--soft">Bude doplněno</span>
-      </div>
     </div>
-    <p class="hub-foot-note">Pokud vás zajímá konkrétní projekt nebo byste se rád(a) zapojil(a), ozvěte se na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.</p>
+    <p class="pj-foot-note">Hub se rozrůstá. Další provozy a iniciativy doplníme, jakmile budou konkrétně definované. Pro dotazy nebo zapojení napište na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.</p>
+  </section>
+
+  <section class="pj-map-teaser">
+    <header class="pj-map-teaser__head">
+      <span class="osa-eyebrow">Mapa areálu</span>
+      <h2 class="pj-map-teaser__heading">Kde co bude.</h2>
+      <p class="pj-map-teaser__lede">Hub jádro (růžová: A1–A6 + C) drží 16 000 m² ploch s ~331 jednotkami 1+kk. Sdílené zázemí (modrá: B, E, F, S, T, V, bazén, vstupní park) zabírá 18 000 m² v rámci celkového rozvojového území 82 000 m².</p>
+    </header>
+    <figure class="pj-map-teaser__media">
+      <img src={withBase('/images/hub/masterplan.jpg')} alt="Schéma areálu Horních kasáren — Hub jádro a Hub zázemí v rámci rozvojového území." loading="lazy" />
+    </figure>
   </section>
 </Base>
 
 <style>
-  .hub-page-hero { padding: 96px 24px 48px; max-width: 1440px; margin: 0 auto; }
-  .hub-page-hero h1 { font-size: clamp(40px, 5vw, 80px); font-weight: 700; margin: 0 0 24px; letter-spacing: -0.02em; }
-  .hub-lead { font-size: 20px; line-height: 1.5; max-width: 720px; color: var(--k-90); margin: 0; }
+  .pj-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(360px, 50vh, 480px);
+    display: flex;
+    align-items: flex-end;
+    background: var(--k-100);
+    color: #fff;
+    overflow: hidden;
+  }
+  .pj-hero__bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.45) saturate(0.92);
+    z-index: 1;
+  }
+  .pj-hero__scrim {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.18) 38%, rgba(0,0,0,0.65) 100%);
+    pointer-events: none;
+  }
+  .pj-hero__inner {
+    position: relative; z-index: 3;
+    padding: clamp(56px, 9vw, 96px) var(--gutter) clamp(40px, 6vw, 72px);
+    max-width: var(--container-wide); margin: 0 auto; width: 100%;
+  }
+  .pj-hero__inner > * { max-width: 760px; }
+  .pj-hero__eyebrow { color: rgba(255,255,255,0.78); display: inline-block; margin-bottom: 14px; }
+  .pj-hero__title {
+    font-family: var(--font-sans);
+    font-size: clamp(36px, 5.5vw, 64px);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  .pj-hero__lede {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.55;
+    color: rgba(255,255,255,0.88);
+    margin: 0;
+    max-width: 56ch;
+  }
 
-  .hub-section { padding: 64px 24px; max-width: 1440px; margin: 0 auto; }
+  .pj-grid-section {
+    padding: clamp(32px, 5vw, 64px) var(--gutter) clamp(64px, 10vw, 96px);
+    max-width: var(--container-wide); margin: 0 auto;
+  }
+  .pj-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 960px) { .pj-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .pj-grid { grid-template-columns: 1fr; } }
 
-  .hub-projects-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-  @media (max-width: 960px) { .hub-projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 600px) { .hub-projects-grid { grid-template-columns: 1fr; } }
+  .pj-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border: 1px solid var(--k-20);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition:
+      border-color var(--dur-base) var(--ease-decel),
+      transform var(--dur-base) var(--ease-decel);
+  }
+  .pj-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .pj-card__thumb {
+    aspect-ratio: 4/3;
+    background: var(--k-05);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .pj-card__thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .pj-card__placeholder {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--k-60);
+  }
+  .pj-card__body {
+    display: grid; gap: 8px;
+    padding: 20px 22px 22px;
+  }
+  .pj-card__building { color: var(--accent); display: block; }
+  .pj-card__name {
+    font-family: var(--font-sans);
+    font-size: 19px; font-weight: 600;
+    margin: 4px 0 0;
+    line-height: 1.25;
+    letter-spacing: var(--tracking-tight);
+  }
+  .pj-card__role {
+    font-size: 14px; line-height: 1.55;
+    color: var(--k-80); margin: 0;
+  }
+  .pj-card__cta {
+    margin-top: 8px;
+    font-size: 13px; font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
 
-  .hub-project-card { display: grid; gap: 12px; padding: 0; text-decoration: none; color: inherit; border: 1px solid var(--k-30); transition: border-color 200ms cubic-bezier(0.16,1,0.3,1); }
-  a.hub-project-card:hover { border-color: var(--accent); }
-  .hub-project-card__thumb { aspect-ratio: 4/3; background: var(--k-05, #f6f6f6); display: grid; place-items: center; overflow: hidden; }
-  .hub-project-card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .hub-project-card__todo { font-size: 12px; color: var(--k-60, #6a6a6a); letter-spacing: 0.05em; }
-  .hub-project-card h2 { font-size: 18px; margin: 0; padding: 0 16px; }
-  .hub-project-card p { font-size: 14px; line-height: 1.55; color: var(--k-70, #4a4a4a); margin: 0; padding: 0 16px; }
-  .hub-project-card__status { font-size: 12px; color: var(--accent); font-weight: 600; letter-spacing: 0.05em; padding: 0 16px 16px; }
-  .hub-project-card__status--soft { color: var(--k-60, #6a6a6a); }
-  .hub-project-card--placeholder { background: var(--k-05, #f6f6f6); border-style: dashed; }
+  .pj-foot-note {
+    margin: 40px 0 0;
+    font-size: 14px; line-height: 1.55;
+    color: var(--k-70);
+    max-width: 720px;
+  }
+  .pj-foot-note a { color: var(--accent); }
+  .pj-foot-note a:hover { text-decoration: underline; }
 
-  .hub-foot-note { margin: 40px 0 0; font-size: 14px; color: var(--k-70, #4a4a4a); }
-  .hub-foot-note a { color: var(--accent); }
+  /* MAP TEASER -- masterplan strip below the cards. */
+  .pj-map-teaser {
+    padding: clamp(48px, 7vw, 96px) var(--gutter) clamp(64px, 10vw, 112px);
+    max-width: var(--container-wide); margin: 0 auto;
+    border-top: 1px solid var(--k-20);
+  }
+  .pj-map-teaser__head {
+    margin-bottom: 32px;
+    max-width: 760px;
+  }
+  .pj-map-teaser__heading {
+    font-family: var(--font-sans);
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: var(--tracking-tight);
+    margin: 8px 0 16px;
+    text-wrap: balance;
+  }
+  .pj-map-teaser__lede {
+    font-size: clamp(16px, 1.35vw, 18px);
+    line-height: 1.65;
+    color: var(--k-90);
+    margin: 0;
+    max-width: 64ch;
+  }
+  .pj-map-teaser__media { margin: 0; }
+  .pj-map-teaser__media img {
+    width: 100%; height: auto;
+    border: 1px solid var(--k-20);
+    border-radius: var(--radius-input);
+    display: block;
+  }
 </style>

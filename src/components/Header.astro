@@ -1,80 +1,316 @@
 ---
 import { withBase } from '../utils/url';
+import OsaGlyph from './OsaGlyph.astro';
 
 interface Props {
   variant?: 'light' | 'dark';
 }
 const { variant = 'light' } = Astro.props;
----
-<header class:list={['hub-header', `hub-header--${variant}`]}>
-  <div class="hub-header__bar">
-    <a class="hub-header__brand" href={withBase('/')} aria-label="Startovací hub — domů">
-      <span class="hub-header__brand-mark">Startovací hub</span>
-    </a>
-    <button class="hub-header__burger" type="button" aria-controls="hub-drawer" aria-expanded="false" aria-label="Otevřít menu">
-      <span></span><span></span>
-    </button>
-    <nav class="hub-header__nav" aria-label="Hlavní menu">
-      <a href={withBase('/obyvatele/')}>Pro obyvatele</a>
-      <a href={withBase('/projekty/')}>Projekty</a>
-      <a href={withBase('/o-projektu/')}>O projektu</a>
-      <a href={withBase('/faq/')}>FAQ</a>
-    </nav>
-  </div>
 
-  <div class="hub-drawer" id="hub-drawer" hidden>
-    <nav class="hub-drawer__nav" aria-label="Mobilní menu">
-      <a href={withBase('/obyvatele/')}>Pro obyvatele</a>
-      <a href={withBase('/projekty/')}>Projekty</a>
-      <a href={withBase('/o-projektu/')}>O projektu</a>
-      <a href={withBase('/faq/')}>FAQ</a>
-      <a href="https://osa2.cz" class="hub-drawer__parent">osa2.cz</a>
+const nav = [
+  { path: '/projekty/',   label: 'Projekty' },
+  { path: '/o-arealu/',   label: 'O areálu' },
+  { path: '/faq/',        label: 'FAQ' },
+];
+
+const current = Astro.url.pathname;
+const isActive = (path: string) => {
+  const full = withBase(path);
+  return path === '/' ? current === full : current.startsWith(full);
+};
+const reservationActive = isActive('/rezervace/');
+---
+<header class:list={['hub-header', { 'hub-header--dark': variant === 'dark' }]}>
+  <div class="hub-header__bar">
+    <a href={withBase('/')} class="hub-header__brand" aria-label="Startovací Hub — domů">
+      <span class="hub-header__glyph" aria-hidden="true"><OsaGlyph size="14px" /></span>
+      <span class="hub-header__wordmark">Startovací Hub</span>
+    </a>
+
+    <nav class="hub-header__nav" aria-label="Hlavní navigace">
+      {nav.map((n) => (
+        <a
+          href={withBase(n.path)}
+          class="hub-header__link"
+          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
+      ))}
+      <a
+        href={withBase('/rezervace/')}
+        class="hub-header__cta"
+        aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
+    </nav>
+
+    <button
+      class="hub-header__burger"
+      type="button"
+      aria-controls="hub-drawer"
+      aria-expanded="false"
+      aria-label="Otevřít menu">
+      <span class="hub-header__burger-box" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+  </div>
+  <div class="hub-header__rule" role="presentation"></div>
+
+  <div id="hub-drawer" class="hub-drawer" role="dialog" aria-modal="true" aria-label="Hlavní navigace" hidden>
+    <nav class="hub-drawer__nav" aria-label="Mobilní navigace">
+      {nav.map((n) => (
+        <a
+          href={withBase(n.path)}
+          class="hub-drawer__link"
+          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
+      ))}
+      <a
+        href={withBase('/rezervace/')}
+        class="hub-drawer__link hub-drawer__link--cta"
+        aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
     </nav>
   </div>
 </header>
 
+<script is:inline>
+  (function () {
+    var btn = document.querySelector('.hub-header__burger');
+    var panel = document.getElementById('hub-drawer');
+    if (!btn || !panel) return;
+
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+      if (open) {
+        panel.hidden = false;
+        requestAnimationFrame(function () { panel.classList.add('open'); });
+        document.documentElement.classList.add('osa-nav-lock');
+      } else {
+        panel.classList.remove('open');
+        document.documentElement.classList.remove('osa-nav-lock');
+        setTimeout(function () {
+          if (btn.getAttribute('aria-expanded') === 'false') panel.hidden = true;
+        }, 280);
+      }
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') setOpen(false);
+    });
+
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setOpen(false);
+    });
+  }());
+</script>
+
 <style>
-  .hub-header { position: sticky; top: 0; z-index: 40; background: var(--bg, #fff); border-bottom: 1px solid var(--k-10, #ececec); }
-  .hub-header--dark { background: var(--k-100, #000); color: var(--bg, #fff); border-bottom-color: transparent; }
-  .hub-header__bar { display: flex; align-items: center; gap: 24px; padding: 18px 24px; max-width: 1440px; margin: 0 auto; }
-  .hub-header__brand { display: inline-flex; align-items: center; text-decoration: none; color: inherit; z-index: 2; }
-  .hub-header__brand-mark {
+  .hub-header {
+    position: sticky; top: 0; z-index: 30;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .hub-header--dark {
+    background: var(--k-100);
+    color: var(--k-0);
+  }
+  :global(html.osa-nav-lock) .hub-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--k-100);
+    color: var(--k-0);
+    z-index: 30;
+  }
+  :global(html.osa-nav-lock) .hub-header .hub-header__rule { display: none; }
+  .hub-header--dark .hub-header__rule { display: none; }
+  .hub-header__rule {
+    height: 1px;
+    background: var(--k-10);
+  }
+
+  .hub-header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding: 14px var(--gutter);
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+
+  /* Brand: glyph + wordmark inline */
+  .hub-header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: inherit;
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: clamp(20px, 2.4vw, 26px);
-    letter-spacing: -0.01em;
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-tight);
     line-height: 1;
+    text-decoration: none;
+    position: relative;
+    z-index: 35;
   }
-  .hub-header__nav { margin-left: auto; display: flex; align-items: center; gap: 24px; }
-  .hub-header__nav a { color: inherit; text-decoration: none; font-size: 14px; }
-  .hub-header__nav a:hover { text-decoration: underline; }
-  .hub-header__burger { display: none; background: none; border: 0; padding: 8px; cursor: pointer; }
-  .hub-header__burger span { display: block; width: 22px; height: 2px; background: currentColor; margin: 4px 0; }
+  .hub-header__glyph    { display: inline-flex; line-height: 0; }
+  .hub-header__wordmark { white-space: nowrap; }
+
+  .hub-header__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .hub-header__link {
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg-muted);
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+    text-decoration: none;
+    transition: color var(--dur-fast) linear, border-color var(--dur-fast) linear;
+  }
+  .hub-header__link[aria-current='page'] {
+    color: inherit;
+    border-bottom-color: currentColor;
+  }
+  .hub-header__link:hover {
+    color: inherit;
+  }
+
+  /* CTA pill — Rezervace */
+  .hub-header__cta {
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: inherit;
+    padding: 8px 16px;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition:
+      background var(--dur-base) var(--ease-decel),
+      color var(--dur-base) var(--ease-decel),
+      border-color var(--dur-base) var(--ease-decel);
+  }
+  .hub-header__cta:hover,
+  .hub-header__cta:focus-visible {
+    background: var(--accent);
+    color: var(--accent-on);
+    border-color: var(--accent);
+    outline: none;
+  }
+  .hub-header__cta[aria-current='page'] {
+    background: var(--accent);
+    color: var(--accent-on);
+    border-color: var(--accent);
+  }
+
+  /* Burger */
+  .hub-header__burger {
+    display: none;
+    width: 32px; height: 32px;
+    padding: 0; margin: 0;
+    background: transparent; border: 0;
+    color: inherit;
+    cursor: pointer;
+    position: relative;
+    z-index: 35;
+  }
+  .hub-header__burger-box {
+    display: grid;
+    gap: 5px;
+    width: 20px;
+    margin: 0 auto;
+  }
+  .hub-header__burger-box > span {
+    display: block;
+    height: 1.5px;
+    background: currentColor;
+    transition:
+      transform 240ms cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 160ms linear;
+    transform-origin: 50% 50%;
+  }
+  .hub-header__burger[aria-expanded='true'] .hub-header__burger-box > span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  .hub-header__burger[aria-expanded='true'] .hub-header__burger-box > span:nth-child(2) {
+    opacity: 0;
+  }
+  .hub-header__burger[aria-expanded='true'] .hub-header__burger-box > span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+  .hub-header__burger:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  /* Mobile drawer */
+  .hub-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    background: var(--k-100);
+    color: var(--k-0);
+    padding: calc(56px + var(--space-6)) var(--gutter) var(--space-7);
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity 220ms cubic-bezier(0.25, 1, 0.5, 1),
+      transform 260ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .hub-drawer.open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .hub-drawer__nav {
+    display: grid;
+    gap: 0;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .hub-drawer__link {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-2xl);
+    letter-spacing: var(--tracking-tight);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    color: var(--k-0);
+    text-decoration: none;
+    display: block;
+  }
+  .hub-drawer__link[aria-current='page'] { opacity: 0.55; }
+  .hub-drawer__link--cta {
+    margin-top: var(--space-4);
+    color: var(--accent-on);
+    background: var(--accent);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-input);
+    border-bottom: 0;
+    font-weight: 700;
+  }
+
+  :global(html.osa-nav-lock),
+  :global(html.osa-nav-lock body) { overflow: hidden; }
+
   @media (max-width: 720px) {
     .hub-header__nav { display: none; }
-    .hub-header__burger { display: block; margin-left: auto; z-index: 2; }
-    .hub-header__brand-mark { font-size: 20px; }
-  }
-  .hub-drawer[hidden] { display: none; }
-  .hub-drawer { position: fixed; inset: 0; background: var(--k-100, #000); color: var(--bg, #fff); display: grid; place-items: center; z-index: 30; }
-  .hub-drawer__nav { display: grid; gap: 24px; font-size: 22px; }
-  .hub-drawer__nav a { color: inherit; text-decoration: none; }
-  .hub-drawer__parent { font-size: 14px; opacity: 0.6; }
-  :global(html.osa-nav-lock) { overflow: hidden; }
-</style>
-
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    const burger = document.querySelector('.hub-header__burger');
-    const drawer = document.getElementById('hub-drawer');
-    if (!burger || !drawer) return;
-    function toggle(open) {
-      drawer.hidden = !open;
-      burger.setAttribute('aria-expanded', String(open));
-      document.documentElement.classList.toggle('osa-nav-lock', open);
+    .hub-header__burger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
-    burger.addEventListener('click', () => toggle(drawer.hidden));
-    drawer.addEventListener('click', (e) => { if (e.target === drawer) toggle(false); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !drawer.hidden) toggle(false); });
-  });
-</script>
+    .hub-header__brand { font-size: var(--text-xs); gap: var(--space-1); }
+  }
+
+  @media (min-width: 721px) {
+    .hub-drawer { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hub-drawer,
+    .hub-header__burger-box > span,
+    .hub-header__cta { transition: none; }
+  }
+</style>

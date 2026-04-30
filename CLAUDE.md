@@ -4,9 +4,9 @@ Operational handoff for the next agent or human colleague working on the Startov
 
 ## What this is
 
-Static site for **Startovací Hub Klecany**, run by OSA II, z.s. Repo at [github.com/keiaiendiel/sh-web](https://github.com/keiaiendiel/sh-web). Currently deployed to GitHub Pages at **https://keiaiendiel.github.io/sh-web/** for public preview; will move to **startovacihub.cz** when DNS is cut over. Redesigned 2026-04-29 from the prior osa-web parent codebase per `docs/superpowers/plans/2026-04-29-startovaci-hub-redesign.md`. Two follow-up pivots on 2026-04-29 / 30: (a) **residents-only pivot** — the investor surface (page, calculator, scenarios, dedicated form, 4 FAQ entries) was dropped; (b) **visual redesign pass** — landing rebuilt as editorial zigzag, header collapsed to a single logotype, form polished, single investor exit CTA pointing at vpd-web/vpd1.
+Static site for **Startovací Hub Klecany**, run by OSA II, z.s. Repo at [github.com/keiaiendiel/sh-web](https://github.com/keiaiendiel/sh-web). Currently deployed to GitHub Pages at **https://keiaiendiel.github.io/sh-web/**; will move to **startovacihub.cz** when DNS is cut over.
 
-The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárny Klecany). It is run as a project under OSA's umbrella; the Hub site funnels future residents into the pre-reservation form, and shows the project credibly via masterplan + interior + exterior renders. Investors get one exit-CTA at the bottom of the landing + a footer pointer; the actual investor surface lives on the sibling vpd-web at [keiaiendiel.github.io/vpd-web/vpd1/](https://keiaiendiel.github.io/vpd-web/vpd1/) (eventually `vepde.com`).
+The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárny Klecany). The Hub site funnels future residents into the pre-reservation form on `/rezervace/`. Investors get a single secondary CTA on the landing (paired with the residents CTA) + a footer pointer; the actual investor surface lives on the sibling vpd-web at [keiaiendiel.github.io/vpd-web/vpd1/](https://keiaiendiel.github.io/vpd-web/vpd1/) (eventually `vepde.com`).
 
 ## Stack snapshot
 
@@ -14,101 +14,204 @@ The Hub is the first phase of the VPD1 záměr (revitalization of horní kasárn
 |---|---|
 | Framework | Astro 6.1.8, static output |
 | Content | Astro Content Collections (MDX + JSON), Zod-validated |
-| Styling | Vanilla CSS with tokens in `src/styles/` |
+| Styling | Vanilla CSS with tokens in `src/styles/`. **Plum accent `#5A2A5F`**, light radii (`--radius-input: 4px`) for inputs/CTA/cards |
 | Fonts | Self-hosted Atyp Special WOFF2 in `public/fonts/` |
-| Client JS | Tiny inline `<script is:inline>` islands per component (header drawer, form submit, FAQ tabs). No bundle. |
-| Deploy | GitHub Pages at `keiaiendiel.github.io/sh-web/`. `astro.config.mjs` has `site: 'https://keiaiendiel.github.io'` + `base: '/sh-web/'`. CI: `.github/workflows/deploy-pages.yml` runs on push to master (lint:editorial + build + lint:weight, then `actions/deploy-pages@v4`). When DNS to `startovacihub.cz` cuts over, flip `site` to `https://startovacihub.cz`, drop the `base` line, and find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css` (one line). |
+| Client JS | Tiny inline `<script is:inline>` islands per component (header drawer, form submit, FAQ tabs, lightbox, Leaflet map) — no bundle |
+| Map | Leaflet 1.9.4 (CDN unpkg) + CARTO Voyager tiles, only on `/o-arealu/` |
+| Deploy | GitHub Pages at `keiaiendiel.github.io/sh-web/`. `astro.config.mjs` has `site: 'https://keiaiendiel.github.io'` + `base: '/sh-web/'`. CI: `.github/workflows/deploy-pages.yml` runs lint:editorial + build + lint:weight on push to master, then `actions/deploy-pages@v4`. |
 
-## Current state (2026-04-29, post residents-only pivot, post visual redesign pass)
+## Pages (12)
 
-- 11 pages build cleanly: 404, /, /obyvatele/, /projekty/, /projekty/<5 stub slugs>/, /o-projektu/, /faq/. (Was 12 — /investori/ removed.)
-- All Czech copy locked per the spec. Editorial linter green. Per-page eager-weight budget green.
-- Resident pre-reservation form at /obyvatele/#formular: count of 1+kk units, planned move-in month, lease length (1m / 1y / 5y / other), extension right (none / N times / indefinite), stipend opt-in with conditional intent + about-me textareas, contact block, consent checkbox. `console.log`s payload on submit and shows a static success message. Backend wiring deferred to a programmer.
-- Hub renders migrated to `public/images/hub/{exterior,interior}/` (42 jpegs total, max edge 1600 px) plus `masterplan.jpg`. Re-run `pnpm migrate:images` if you change source files.
-- Visual redesign pass (2026-04-29). Header collapsed to a single "Startovací hub" logotype mark (sentence case; the prior "Provozuje OSA II" top strip and the SH/Klecany two-line construction were dropped; OSA II reference still lives in footer + JSON-LD). Landing rebuilt to a tighter editorial flow: full-bleed `<img>` hero with scrim (replaces the prior `style="background-image:..."` so the hero LCP image is measurable by lint:weight), centered primary CTA strip, two-paragraph concept block, six-row alternating zigzag gallery (Vizualizace · Jak to bude vypadat), "Jak se Hub rozrůstá" provoz cards, "Kde to je", status strip, FAQ teaser, and a single investor exit CTA pointing at vpd-web/vpd1. Pre-reservation form at /obyvatele/#formular wrapped in a 2-col editorial shell (sticky head left, form right; stacks below 960 px) and the form itself gets numbered step legends, large radio/checkbox hit targets with hover/check/focus states, focus rings on inputs, hover-lift submit, animated stipend reveal, and a stronger dark success panel. Footer adds an "Investoři: záměr VPD1 →" pointer in the kontakt column.
+`/` Landing · `/rezervace/` standalone reservation page · `/projekty/` provoz cards index · `/projekty/<slug>/` × 6 (komunitni-centrum, coworking-centrum, komunitni-pivovar, bytove-druzstvo, sauna-bazen, sportoviste-park) · `/o-arealu/` data-first chapter layout · `/faq/` audience-tabbed · `/404`.
+
+## Current state (post 2026-04-30 redesign + 2 polish rounds)
+
+All 12 pages build cleanly. Lint:editorial + lint:weight + lint:links all green. Reality-checked against **PDF "Zadávací dokumentace OSA228 z 2.9.2025"** — copy now references real claims (~331 jednotek 1+kk in budovách A1–A6 + C, ~6 700 m² ČPP, sdílené zázemí v objektech B/C/D/E + park, tramvajová zastávka Výzkumný ústav I. s vydaným stavebním povolením, vize z diplomových prací ČVUT).
+
+### Layout per page
+
+**Landing (`/`):**
+- Hero — 4-image slide carousel (sh-1..4 from `public/images/hub/hero/`). 20 s loop, 5 s per frame, 1 s cross-overlap. `animation-delay: -1s` on image 0 starts it already on-screen. `prefers-reduced-motion` freezes on sh-1.
+- Hero kicker row carries "Areál horních kasáren · Klecany" (left) and "Záměr VPD1 →" (right, exit-link). The row has `max-width: clamp(320px, 48vw, 660px)` so the right kicker lines up with the end of the H1's "Startovací hub." text, not the viewport edge.
+- "Co Hub nabídne" — 4 format cards (Kapsle / Klidnější / Jednolůžkový / Sdílený). Kapsle uses real photo (`kapsle.jpg`); other three use migrated indoor renders.
+- 4-claim 2×2 grid (Koncept / Pro koho / Sdílené prostory / Stipendium) with a thin cross divider in the middle (achieved via per-cell border-right + border-bottom on the first 3 cells).
+- Vizualizace zigzag — 5 alternating ltr/rtl rows, slight overlap (`margin-top: clamp(-100px, -5vw, -40px)` on rows 2–5), `align-items: center`. **IntersectionObserver reveal-on-scroll**: rows fade up + opacity 0→1 over 700 ms when they enter the viewport. Image hover scales 1.015. Each image is wrapped in a `<button data-lightbox-open>` — clicking opens a fullscreen lightbox.
+- **Lightbox** (`#hub-lightbox`): fullscreen overlay, ESC closes, click outside closes, ← / → arrow keys + buttons navigate, counter "1 / 5", caption shows row eyebrow + title.
+- **Dual CTA pair**: left card is the residents banner ("Chci tu bydlet" — 2 px plum border, white bg, plum CTA pill), right card is the investor exit ("Investice do záměru" — 1 px K30 outline, white bg, black outline CTA → vpd-web/vpd1).
+- "Jak se Hub rozrůstá" — 3-col teaser grid keyed off the `subProjects` collection.
+- "Místo / Kde to je" — masterplan on the right, copy on the left, link to `/o-arealu/#misto`.
+- FAQ teaser (3 questions q1/q5/q7) + link to `/faq/`.
+
+**`/rezervace/`:**
+- Dark image hero (hub-courtyard-night.jpg) with eyebrow "PŘED-REZERVACE", H1 "Před-rezervujte si místo.", lede.
+- Meta strip below hero (Žádná platba / Žádný pořadník / Krátké), 3-col with internal vertical dividers.
+- Form shell (`.rsv-form-shell`): outer `max-width: 880px`, the inner `<form>` has 1 px K20 border, 4 px radius, layered box-shadow (subtle multi-layer + plum tint at the deepest layer).
+- Form: 8-question research-spec flow + role-branch reveal + contact + consent.
+- Status pull-quote ("Aktuální stav" — what happens after submit) sits between form and the 3-step "Co se stane po odeslání".
+- Mini-FAQ at the bottom (q5/q7/q8 — resident audience).
+
+**`/o-arealu/`:**
+- Dark image hero (hub-street-sunset.jpg) with eyebrow "O areálu", title "Místo, čas a kontext."
+- Three chapters (vpd-web style): **01 Klecany · 12 km od Prahy** (8-row fact table + masterplan figure), **02 Časová osa** (6-stamp timeline), **03 Co stojí za Hubem** (OSA II identity, Marek Semerád, ČVUT diplomky, financial framing).
+- **Map banner under chapter 01**: full-width Leaflet map (CARTO Voyager tiles, plum SVG marker at 50.17430 / 14.40824, custom popup with Horní kasárna Klecany + Dolní Kasárna 250 67 + Mapy.com link). Address line below the map carries the same data in plain text. Wheel-zoom is disabled until the user clicks/focuses the map (so it doesn't hijack page scroll).
+
+**`/projekty/`:**
+- Dark image hero (hub-courtyard-night.jpg) with title "Hub se rozrůstá postupně.".
+- 3-col grid of 6 sub-project cards. Each card carries a building-eyebrow ("Objekt B" / "Přízemí budovy C" / "Objekty D + E" / "Park před objektem B" / "Vlastnické vehiklum") + name + role + status pill.
+- Below cards: **Mapa areálu / Kde co bude** section with `2D-MAP.jpeg` (masterplan) and 16 000 / 18 000 / 82 000 m² breakdown.
+
+**`/projekty/<slug>/`** (6 pages):
+- Same dark-image hero pattern (no per-slug image yet — uses landing aesthetic).
+- Back link → "Všechny provozy", building eyebrow, name, role, status pill.
+- MDX body (Co to bude / Pro koho / Stav).
+- Dual-button CTA panel at the bottom: primary = `/rezervace/`, ghost = `mailto:vpd@osa2.cz`.
+
+**`/faq/`:**
+- Dark image hero (hub-courtyard-trees.jpg) with eyebrow "ČASTÉ OTÁZKY", H1 "FAQ", lede with mailto.
+- Audience tabs: "Vše" / "O projektu" / "Pro obyvatele" — active tab is plum-filled.
+- `<details>` accordion items.
+
+### Sub-page hero pattern (shared aesthetic)
+
+All non-landing pages use the same dark image hero pattern (different per-page selectors `.sp-hero` / `.rsv-hero` / `.op-hero` / `.pj-hero` / `.pjd-hero`):
+
+- `min-height: clamp(320px, 46vh, 440px)`, `display: flex; align-items: flex-end`.
+- Background: full-bleed `<img>` with `filter: brightness(0.42) saturate(0.92)`.
+- Scrim: vertical gradient `rgba(0,0,0,0.30)` → `rgba(0,0,0,0.65)`.
+- Inner padding: `clamp(56px, 9vw, 96px) gutter clamp(40px, 6vw, 72px)`, max-width 760 px.
+- Eyebrow: `rgba(255,255,255,0.78)`. H1: `clamp(36px, 5.5vw, 64px)`. Lede: white-ish.
+
+Keep new sub-pages on this pattern.
 
 ## Design decisions worth knowing
 
-**Brand red.** `--c-red: #d0342c` (tricolor red, OSA design system). Exposed as `--accent` in tokens.css so components reference the role, not the colour name.
+**Plum accent.** `--c-plum: #5A2A5F` (one of the 8 OSA tricolor accent colors) is the Hub sub-identity. Consumed everywhere via `--accent`. `--accent-soft: rgba(90, 42, 95, 0.12)` for focus rings. CTA hover shadows use `rgba(90, 42, 95, 0.30–0.45)`.
 
-**Header.** `Header.astro` takes a single `variant: 'light' | 'dark'` prop. Landing uses `dark` to fuse with the dark hero; everywhere else is `light`. The brand row is a single "Startovací hub" logotype mark in sentence case (Atyp Special 600, `clamp(20px, 2.4vw, 26px)`, `letter-spacing: -0.01em`). No top strip. The mobile drawer locks page scroll via `osa-nav-lock` class on `<html>`. Nav is four items: Pro obyvatele / Projekty / O projektu / FAQ. (Role-switcher chip and "Pro investory" link were removed in the residents-only pivot. The "Provozuje OSA II, z.s." top strip was dropped in the visual redesign pass — OSA II is still referenced in the footer and JSON-LD parentOrganization.)
+**Light radii.** `--radius-input: 4px` is the only departure from OSA's strict-zero radii system. Applied to: form fields (input / textarea / pill radia), CTA buttons, teaser cards, info boxes. Big sections, page hairlines, brand surfaces still use `0`.
 
-**Footer reads `org` collection.** `Footer.astro` calls `getEntry('org', 'identity')` to render Marek Semerád's name + `vpd@osa2.cz`. The `org/identity.json` carries OSA II legal identifiers (IČO, DIČ etc.) that drive the JSON-LD on every page. Footer also carries the investor pointer line: `Investoři: záměr VPD1 →` linking to vpd-web/vpd1/.
+**Header.** `Header.astro` takes `variant: 'light' | 'dark'`. All hero pages (`/`, `/rezervace/`, `/o-arealu/`, `/projekty/`, `/faq/`, `/projekty/<slug>/`) use `dark` to fuse with the dark hero. Brand row is `<OsaGlyph size="14px">` + `<span class="hub-header__wordmark">Startovací Hub</span>` in inline-flex. Nav: `Projekty` / `O areálu` / `FAQ` + `Rezervace` (CTA pill, plum hover/active fill). Mobile drawer locks page scroll via `osa-nav-lock` class on `<html>`.
 
-**Investor exit CTA.** Single block at the bottom of the landing (above the footer): `Nezajímá vás bydlení, ale investice do záměru? → Záměr VPD1 →` linking to https://keiaiendiel.github.io/vpd-web/vpd1/. The `/investori/` route, calculator, scenarios JSON, and dedicated investor form were all deleted in the residents-only pivot. The single exit CTA + footer pointer are the only investor-facing surface that remains; everything else lives on vpd-web.
+**Landing CTA pair.** Two side-by-side cards replace the prior single Chci-tu-bydlet banner + investor-out strip. Left card has 2 px plum border (residents emphasis); right card has 1 px K30 outline (subtle investor exit). No SVG pattern background — kept clean per the brief. Stacks 1-col on mobile.
 
-**Landing zigzag.** Editorial 6-row alternating ltr/rtl layout under the eyebrow `Vizualizace · Jak to bude vypadat.`. Each row is a `<figure>` + copy block with a per-image caption (Exteriér / Interiér + role + one-sentence description). Replaces the prior dual-Gallery exterior+interior grid.
+**Zigzag lightbox.** The `<button data-lightbox-open>` wrappers on every zigzag image collect into an array at DOM-ready, then click → open a fullscreen overlay (`#hub-lightbox`). The script handles ESC/click-outside close, ← / → keyboard navigation, counter, and caption (sourced from each row's eyebrow + h3). Pure inline JS — no library.
 
-**Tooltip.** Component is retained even though the current resident form does not use it; small footprint, may be reused on a future detail page.
+**Leaflet map (`/o-arealu/`).** Loads Leaflet 1.9.4 from unpkg via `<link>` + `<script src>`, then a small inline script initialises `#op-map` centred on `[50.17430, 14.40824]`, drops a plum SVG marker, and shows a styled popup with the address ("Horní kasárna Klecany — Dolní Kasárna 250 67 Klecany" + Mapy.com link). CARTO Voyager (light-no-labels) tiles are used to keep the map clean and brand-friendly. Wheel-zoom is disabled until the user clicks the map (avoids page-scroll hijack). Brand overrides on `.leaflet-control-attribution`, `.leaflet-control-zoom`, `.op-map-popup-wrap` are scoped via `:global()`.
+
+**Footer reads `org` collection.** `Footer.astro` calls `getEntry('org', 'identity')` to render Marek Semerád + `vpd@osa2.cz`. `org/identity.json` carries OSA II legal identifiers that drive JSON-LD on every page.
 
 **Editorial linter v8 state.** Em-dashes, en-dashes, and `!` are allowed in body. Voice rules (passive, marketing-hype, legalese) still enforced. Ellipsis is reserved for the locked motto only — placeholders in form `placeholder` attributes need to use `.` instead. Linter rules live in `scripts/lint-editorial.mjs`.
 
-**FAQ tabs.** `<details>` items are progressive enhancement — open/close works without JS. The audience tabs use a small inline script to toggle `g.hidden` on each `[data-group]`. The "Vše" tab is `data-aud='all'`. Two audiences live now: `project` and `resident` (investor + legal removed with the pivot).
-
-**Image migration script.** `scripts/migrate-hub-images.mjs` is one-shot: reads from `../../12 Startovaci Hub/image/` (raw photos in indoor/ + outdoor/) and `../vpd-web/public/images/zamer-vpd/` (already-optimized hub-* renders), downsamples via sharp to 1600 px max edge at q80 (masterplan: 1800 px), writes to `public/images/hub/{exterior,interior,masterplan.jpg}`. Re-run with `pnpm migrate:images` if source files change.
+**FAQ tabs.** `<details>` items are progressive enhancement — open/close works without JS. The audience tabs use a small inline script to toggle `g.hidden` on each `[data-group]`. Two audiences live now: `project` and `resident`.
 
 ## Repo layout
 
 ```
 sh-web/
 ├── astro.config.mjs              # site=keiaiendiel.github.io, base=/sh-web/ (transitional)
+├── .claude/launch.json           # Preview server config (sh-web on port 4322)
 ├── .github/workflows/
 │   ├── ci.yml                    # PR + push: lint + build + dist artifact
 │   └── deploy-pages.yml          # push to master: lint + build + actions/deploy-pages@v4
 ├── public/
 │   ├── fonts/*.woff2             # Atyp Special Medium, Bold, Italic
-│   ├── images/hub/{exterior,interior,masterplan.jpg}
-│   ├── og/default.{svg,png}      # placeholder OG card
+│   ├── images/hub/{exterior,interior,hero,masterplan.jpg}
+│   ├── og/default.{svg,png}
 │   ├── favicon.svg, apple-touch-icon.png, manifest.webmanifest
 │   ├── robots.txt
 ├── scripts/
 │   ├── lint-editorial.mjs        # voice/style lint
 │   ├── lint-links.mjs            # external-URL HEAD check
 │   ├── lint-weight.mjs           # per-page eager budget
-│   └── migrate-hub-images.mjs    # one-shot image migration
+│   └── migrate-hub-images.mjs    # one-shot image migration (incl. selected/, kapsle, cowork, trznice, sport)
 ├── src/
 │   ├── content.config.ts         # subProjects, faq, org collections
 │   ├── content/
-│   │   ├── sub_projects/<5 mdx>  # Hub programme cards
+│   │   ├── sub_projects/         # 6 mdx: komunitni-centrum, coworking-centrum,
+│   │   │                         # komunitni-pivovar, bytove-druzstvo,
+│   │   │                         # sauna-bazen, sportoviste-park
 │   │   ├── faq/index.json        # 8 keyed Q&As (q1..q8: 4 project + 4 resident)
 │   │   └── org/identity.json     # OSA legal identity
-│   ├── components/               # Header, Footer, Tooltip, Gallery, ResidentForm, RevealOnScroll (6 files)
+│   ├── components/               # Header, OsaGlyph, Footer, Tooltip, Gallery,
+│   │                             # ResidentForm, RevealOnScroll, SVGPattern (8 files)
 │   ├── layouts/Base.astro        # html/head with title/desc/OG/JSON-LD; mounts Header + slot + Footer + RevealOnScroll
 │   ├── pages/
-│   │   ├── index.astro           # Landing (residents-only, zigzag layout, investor exit CTA)
-│   │   ├── obyvatele/index.astro # Resident pre-reservation funnel
+│   │   ├── index.astro           # Landing
+│   │   ├── rezervace/index.astro # Reservation page
 │   │   ├── projekty/{index, [slug]}.astro
-│   │   ├── o-projektu/index.astro
+│   │   ├── o-arealu/index.astro  # was /o-projektu/ pre 2026-04-30 polish
 │   │   ├── faq/index.astro
 │   │   └── 404.astro
 │   ├── styles/                   # tokens.css, kit.css, motion.css
 │   └── utils/url.ts              # withBase() — prefixes /sh-web/ until DNS flip
-└── docs/superpowers/plans/...    # implementation plan, kept for reference
+└── docs/superpowers/plans/...    # implementation plans, kept for reference
 ```
+
+## Running the project locally
+
+```bash
+pnpm install         # once (after clone)
+pnpm dev             # http://localhost:4321 (or 4322 if launched via .claude/launch.json sh-web config)
+pnpm build           # writes to dist/
+pnpm preview         # serves dist/ — useful before deploy
+```
+
+### Live preview from inside Claude Code
+
+The repo carries `.claude/launch.json` so the agent can spin up the dev server via the `mcp__Claude_Preview__preview_start` tool with `name: "sh-web"`. It binds to port 4322 (separate from any sibling project's 4321) and reuses across sessions if already running.
+
+## Lints
+
+```bash
+pnpm lint            # editorial + links
+pnpm lint:editorial  # voice/style lint over src/content/**/*.mdx and page bodies
+pnpm lint:links      # HEAD-check external URLs (none configured currently)
+pnpm lint:weight     # per-page eager-weight budget against dist/
+```
+
+All three must pass. `lint:editorial` is the strictest — it forbids passive voice, marketing hype, legalese, and ellipsis (except in the locked motto). The deploy-pages workflow runs all three on every push to master.
+
+## Image migration
+
+```bash
+pnpm migrate:images
+```
+
+Reads from `../../12 Startovaci Hub/image/` (sibling content folder) and pulls in raw photos, hero `selected/sh-{1..4}.jpeg`, and named extras (`kapsle.jpg`, `cowork.jpeg`, `trznice-pivovar.jpeg`, `sport.jpeg`). Sharp resizes to max-edge 1600 px at q80 (masterplan: 1800 px). Output goes to `public/images/hub/{exterior,interior,hero,masterplan.jpg}`.
+
+Re-run any time source files change.
+
+## Pushing to GitHub
+
+The `master` branch is the deploy branch — every push triggers `.github/workflows/deploy-pages.yml` which lints, builds, and deploys to GitHub Pages.
+
+```bash
+git status                                    # always inspect first
+git add <specific files>                      # never `git add -A` blindly
+git commit -m "feat(hub): describe what+why"  # use conventional-commit prefixes
+git push origin master                        # deploys automatically
+```
+
+Recent commits use prefixes `feat(hub):`, `docs(hub):`, `fix(hub):`, `ci(hub):`. Match this for consistency.
+
+If your changes haven't been reviewed locally:
+
+```bash
+pnpm build && pnpm lint:editorial && pnpm lint:weight   # match CI
+pnpm dev                                                # verify visually
+```
+
+The deploy takes ~2 minutes from push to live. Watch the action at [github.com/keiaiendiel/sh-web/actions](https://github.com/keiaiendiel/sh-web/actions).
 
 ## Open loops / known issues
 
 - **Transitional GH Pages base path.** Site lives at `keiaiendiel.github.io/sh-web/` so `astro.config.mjs` carries `base: '/sh-web/'` and `tokens.css` font URLs are `/sh-web/fonts/...`. When DNS to `startovacihub.cz` is ready: change `site` to `https://startovacihub.cz`, delete the `base` line, find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css`. `withBase()` becomes a no-op automatically.
-- **Sticky header stays dark on scroll.** Landing uses `headerVariant="dark"` to fuse with the dark hero. The header stays dark even after the user scrolls past the hero. Acceptable but worth flagging — switch to a scroll-driven variant flip if it reads wrong.
-- **Place section uses no real OSM map.** The masterplan replaces it for now (`public/images/hub/masterplan.jpg`). If the operator wants a tiled map at /o-projektu/#misto, drop a static OSM screenshot at `public/images/hub/place/map.jpg` and update the figure in `src/pages/o-projektu/index.astro`.
-- **Per-format room schematics (Kapsle, Sdílený pokoj) are stand-in interior renders.** Replace when operator supplies real schematics.
-- **Per-sub-project thumbnails on /projekty/ are placeholder boxes.** When real renders arrive, drop them in and update the relevant subProjects MDX `thumbnail` frontmatter.
+- **Sticky header stays dark on scroll** on hero pages (variant `dark` to fuse with hero). Acceptable but worth flagging — switch to a scroll-driven variant flip if it reads wrong.
+- **Per-format room schematics on the landing's "Co Hub nabídne"** still use migrated stand-in interior renders (apart from Kapsle, which now has a real photo). Replace when the operator supplies real schematics for the other three.
+- **Per-sub-project thumbnails on /projekty/** are a mix of placeholder boxes and real photos (Komunitní Centrum / Coworking Centrum / Sportoviště + park have a `thumbnail` field; the rest still show "Vizualizace v přípravě"). Drop assets into `public/images/hub/...` and add `thumbnail: "/sh-web/images/hub/..."` to the relevant MDX frontmatter.
 - **Pre-reservation form `console.log`s payload.** Backend wiring (validation, anti-spam, autoresponse, storage) is the next step before public launch.
-- **`lint:weight` doesn't see the hero image because of the base path.** The hero is an `<img>` (so the linter's `<img>` walker should pick it up), but the script tries to resolve `/sh-web/images/...` against `dist/sh-web/...` and `dist/` is flat (`dist/images/...`). The eager budget therefore reports inflated headroom — actual hero JPG is ~400 KB. Either teach the linter to strip the configured base prefix, or wait for the DNS flip when `base` becomes `/`.
-- **Author identity warning on git commits.** Each commit emits "Your name and email address were configured automatically based on your username and hostname" because the repo has no committed `user.email`. Set `git config --global user.email` once if you want consistent attribution.
-- **Backup branch.** `backup/osa-web-pre-hub-redesign` is **local only** (not pushed to GitHub) and carries the OSA-parent state plus any uncommitted WIP that existed when this redesign started. Keep it until the Hub site is in production for at least one cycle, then delete locally.
-- **`feat/startovaci-hub` branch on GitHub.** Pushed alongside master for history; identical to master after the fast-forward merge. Safe to delete on the GitHub side once you don't need the per-task commit log as a separate branch.
-
-## Running the project
-
-```bash
-pnpm install         # once
-pnpm dev             # http://localhost:4321
-pnpm build           # writes to dist/
-pnpm preview         # serves dist/
-pnpm lint            # editorial + links
-pnpm lint:weight     # per-page budget check against dist/
-```
+- **`lint:weight` doesn't see the hero image because of the base path.** The hero is `<img>` (so the linter's walker should pick it up), but the script tries to resolve `/sh-web/images/...` against `dist/sh-web/...` and `dist/` is flat (`dist/images/...`). Either teach the linter to strip the configured base prefix, or wait for the DNS flip when `base` becomes `/`.
+- **Leaflet loaded from CDN (unpkg).** No local fallback; if unpkg goes down the map falls back to an empty `<div>`. Acceptable for v1; consider self-hosting if stability becomes a concern.
+- **Backup branch.** `backup/osa-web-pre-hub-redesign` is **local only** and carries the OSA-parent state plus uncommitted WIP that existed when the redesign started. Keep it until the Hub site has been in production for at least one cycle.
 
 ## Editorial rulebook
 
@@ -123,10 +226,9 @@ Active rules in `scripts/lint-editorial.mjs`: no passive voice (`je realizováno
 
 ## Deploy checklist (before public launch on startovacihub.cz)
 
-1. **Drop final OSM map** at `public/images/hub/place/map.jpg` if /o-projektu/#misto should carry one in addition to the masterplan.
-2. **Replace per-format room schematics** (Kapsle, Sdílený pokoj) and per-sub-project thumbnails when operator delivers them.
-3. **Wire pre-reservation form backend.** The form currently `console.log`s payloads; a programmer needs to add a serverless endpoint, validation, anti-spam, autoresponses, and storage.
-4. **Cut DNS over to startovacihub.cz.** Either custom-domain on GitHub Pages (drop a `CNAME` file in `public/` with `startovacihub.cz`, configure DNS A/AAAA records to GH Pages, enable HTTPS in repo settings) or migrate to Cloudflare Pages / Netlify. After DNS: flip `astro.config.mjs` to `site: 'https://startovacihub.cz'` + remove `base`, find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css`. One commit, GH Pages auto-redeploys.
-5. **Analytics decision** — Plausible or GoatCounter if anything; out of scope for v1.
+1. **Replace per-format room schematics** (Klidnější / Jednolůžkový / Sdílený) on the landing and per-sub-project thumbnails on /projekty/ when the operator delivers them.
+2. **Wire pre-reservation form backend.** The form currently `console.log`s payloads with the 8-question shape (role, stay, renewal, budget, place, prague-frequency, priorities array, social, branch fields, contact). A programmer needs to add a serverless endpoint, validation, anti-spam, autoresponses, and storage.
+3. **Cut DNS over to startovacihub.cz.** Either custom-domain on GitHub Pages (drop a `CNAME` file in `public/` with `startovacihub.cz`, configure DNS A/AAAA records to GH Pages, enable HTTPS in repo settings) or migrate to Cloudflare Pages / Netlify. After DNS: flip `astro.config.mjs` to `site: 'https://startovacihub.cz'` + remove `base`, find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css`. One commit, GH Pages auto-redeploys.
+4. **Analytics decision** — Plausible or GoatCounter if anything; out of scope for v1.
 
 The repo builds, lints, and auto-deploys on every push to master; nothing on the technical side blocks launch beyond the deferred items above. Live preview: https://keiaiendiel.github.io/sh-web/.
