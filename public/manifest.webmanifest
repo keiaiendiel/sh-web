@@ -1,0 +1,11 @@
+{
+  "name": "Startovací Hub Klecany",
+  "short_name": "Hub Klecany",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#d0342c",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
