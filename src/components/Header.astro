@@ -164,19 +164,23 @@ const reservationActive = isActive('/rezervace/');
   }
   .hub-header__link {
     font: 600 var(--text-sm) / 1 var(--font-sans);
+    /* Light variant: muted body grey. Dark variant overrides below to a
+       softened white so nav legibly contrasts the black bar without
+       competing with the active page indicator. */
     color: var(--fg-muted);
     padding: 6px 0;
     border-bottom: 1px solid transparent;
     text-decoration: none;
     transition: color var(--dur-fast) linear, border-color var(--dur-fast) linear;
   }
+  .hub-header--dark .hub-header__link { color: rgba(255, 255, 255, 0.78); }
   .hub-header__link[aria-current='page'] {
     color: inherit;
     border-bottom-color: currentColor;
   }
-  .hub-header__link:hover {
-    color: inherit;
-  }
+  .hub-header__link:hover { color: inherit; }
+  .hub-header--dark .hub-header__link:hover,
+  .hub-header--dark .hub-header__link[aria-current='page'] { color: #fff; }
 
   /* CTA pill — Rezervace.
      Wipe pattern: outline at rest; fill rises from bottom on hover.
@@ -201,7 +205,10 @@ const reservationActive = isActive('/rezervace/');
     inset: 0;
     z-index: -1;
     clip-path: inset(100% 0 0 0);
-    transition: clip-path 220ms cubic-bezier(0.65, 0, 0.35, 1);
+    /* 160ms (down from 220) so the mid-flight half-filled state — which
+       reads as grey when the white wipe is at ~50% over the dark hero —
+       is too short to perceive as a stable colour. */
+    transition: clip-path 160ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .hub-header__cta:hover::after,
   .hub-header__cta:focus-visible::after,
