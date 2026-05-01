@@ -179,9 +179,10 @@ const reservationActive = isActive('/rezervace/');
   }
 
   /* CTA pill — Rezervace.
-     Wipe pattern: outline at rest, fill rises from bottom on hover.
-     Inherits currentColor (white in dark variant, black in light), so
-     the fill matches the variant-appropriate text color and inverts. */
+     Wipe pattern: outline at rest; fill rises from bottom on hover.
+     Fill is hardcoded per variant (NOT currentColor — currentColor
+     transitions with text color, so the fill would chase the text
+     and the button would render solid-on-solid invisible). */
   .hub-header__cta {
     position: relative;
     isolation: isolate;
@@ -192,28 +193,31 @@ const reservationActive = isActive('/rezervace/');
     border: 1px solid currentColor;
     border-radius: var(--radius-input);
     text-decoration: none;
-    transition: color 280ms cubic-bezier(0.65, 0, 0.35, 1);
+    transition: color 160ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .hub-header__cta::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: currentColor;
     z-index: -1;
     clip-path: inset(100% 0 0 0);
-    transition: clip-path 380ms cubic-bezier(0.65, 0, 0.35, 1);
+    transition: clip-path 220ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .hub-header__cta:hover::after,
   .hub-header__cta:focus-visible::after,
   .hub-header__cta[aria-current='page']::after {
     clip-path: inset(0 0 0 0);
   }
+  /* Dark variant — fill white, text inverts to black on hover. */
+  .hub-header--dark .hub-header__cta::after { background: #fff; }
   .hub-header--dark .hub-header__cta:hover,
   .hub-header--dark .hub-header__cta:focus-visible,
   .hub-header--dark .hub-header__cta[aria-current='page'] {
     color: var(--k-100);
     outline: none;
   }
+  /* Light variant — fill black, text inverts to white on hover. */
+  .hub-header:not(.hub-header--dark) .hub-header__cta::after { background: var(--k-100); }
   .hub-header:not(.hub-header--dark) .hub-header__cta:hover,
   .hub-header:not(.hub-header--dark) .hub-header__cta:focus-visible,
   .hub-header:not(.hub-header--dark) .hub-header__cta[aria-current='page'] {
@@ -324,7 +328,7 @@ const reservationActive = isActive('/rezervace/');
     background: var(--accent);
     z-index: -1;
     clip-path: inset(0 0 0 0);
-    transition: clip-path 380ms cubic-bezier(0.65, 0, 0.35, 1);
+    transition: clip-path 220ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .hub-drawer__link--cta:hover,
   .hub-drawer__link--cta:focus-visible { color: var(--accent); }
