@@ -248,7 +248,16 @@ const social = [
     </label>
   </fieldset>
 
-  <button type="submit" class="rsv-form__submit">Zapsat nezávazný zájem →</button>
+  <button type="submit" class="rsv-form__submit" data-submit>
+    <span class="rsv-form__submit-label">Zapsat nezávazný zájem →</span>
+    <span class="rsv-form__submit-overlay" aria-hidden="true">
+      <span class="rsv-form__submit-spinner"></span>
+    </span>
+    <span class="rsv-form__submit-overlay rsv-form__submit-check" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 10 18 20 6" /></svg>
+      <span>Hotovo</span>
+    </span>
+  </button>
 
   <output class="rsv-form__success" hidden>
     <span class="rsv-form__success-eyebrow">Hotovo</span>
@@ -291,7 +300,7 @@ const social = [
   }
   .rsv-form__hint {
     font-size: 14px; line-height: 1.55;
-    color: var(--k-70);
+    color: var(--fg-muted);
     max-width: 64ch;
   }
 
@@ -307,12 +316,12 @@ const social = [
   .rsv-form__pill span {
     display: inline-block;
     padding: 11px 18px;
-    border: 1px solid var(--k-30);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     font-size: 14px;
     font-weight: 500;
     line-height: 1.2;
-    color: var(--k-90);
+    color: var(--fg);
     background: var(--bg);
     cursor: pointer;
     user-select: none;
@@ -351,7 +360,7 @@ const social = [
   }
   .rsv-form__label {
     font-size: 13px; font-weight: 500;
-    color: var(--k-90);
+    color: var(--fg);
     letter-spacing: 0.01em;
   }
   .rsv-form input[type='text'],
@@ -362,7 +371,7 @@ const social = [
   .rsv-form textarea {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid var(--k-30);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     font: 500 15px / 1.4 var(--font-sans);
     background: var(--bg);
@@ -385,7 +394,7 @@ const social = [
     -webkit-appearance: none;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
-    color: var(--k-90);
+    color: var(--fg);
   }
   .rsv-form input[type='month']::-webkit-calendar-picker-indicator {
     cursor: pointer;
@@ -398,7 +407,7 @@ const social = [
   .rsv-form input[type='month']::-webkit-datetime-edit-fields-wrapper { padding: 0; }
   .rsv-form input[type='month']::-webkit-datetime-edit { padding: 0; }
   .rsv-form input[type='month']:not(:focus):invalid {
-    color: var(--k-60);
+    color: var(--fg-subtle);
   }
   .rsv-form textarea {
     resize: vertical;
@@ -427,7 +436,7 @@ const social = [
     flex-shrink: 0;
   }
   .rsv-form__check span {
-    font-size: 14px; color: var(--k-90);
+    font-size: 14px; color: var(--fg);
   }
   .rsv-form__check input:focus-visible {
     outline: 2px solid var(--accent);
@@ -475,8 +484,61 @@ const social = [
   .rsv-form__submit:focus-visible { color: var(--accent); }
   .rsv-form__submit:hover::after,
   .rsv-form__submit:focus-visible::after { clip-path: inset(100% 0 0 0); }
-  .rsv-form__submit:disabled { opacity: 0.55; cursor: default; }
+  .rsv-form__submit:disabled { cursor: default; }
   .rsv-form__submit:disabled::after { clip-path: inset(0 0 0 0); }
+
+  /* 3-state submit morph: label → spinner → check.
+     The label sits in normal flow; spinner and check overlays absolutely
+     fill the button so morph transitions never affect layout. */
+  .rsv-form__submit-label {
+    display: inline-flex;
+    transition: opacity 180ms cubic-bezier(0.32, 0.72, 0, 1),
+                transform 180ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .rsv-form__submit-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    opacity: 0; transform: translateY(4px);
+    pointer-events: none;
+    transition: opacity 180ms cubic-bezier(0.32, 0.72, 0, 1),
+                transform 180ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .rsv-form__submit-spinner {
+    width: 16px; height: 16px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    box-sizing: border-box;
+    animation: rsv-spin 720ms linear infinite;
+    animation-play-state: paused;
+  }
+  .rsv-form__submit.is-loading .rsv-form__submit-label { opacity: 0; transform: translateY(-4px); }
+  .rsv-form__submit.is-loading .rsv-form__submit-overlay:not(.rsv-form__submit-check) {
+    opacity: 1; transform: none;
+  }
+  .rsv-form__submit.is-loading .rsv-form__submit-spinner { animation-play-state: running; }
+  .rsv-form__submit.is-success .rsv-form__submit-label { opacity: 0; }
+  .rsv-form__submit.is-success .rsv-form__submit-overlay:not(.rsv-form__submit-check) { opacity: 0; }
+  .rsv-form__submit.is-success .rsv-form__submit-check { opacity: 1; transform: none; }
+  .rsv-form__submit-check svg {
+    /* Stroke draws from 0 to full when .is-success is added. dasharray
+       length matches the polyline path (~30 units in viewBox). */
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    transition: stroke-dashoffset 360ms cubic-bezier(0.16, 1, 0.3, 1) 80ms;
+  }
+  .rsv-form__submit.is-success .rsv-form__submit-check svg {
+    stroke-dashoffset: 0;
+  }
+  @keyframes rsv-spin { to { transform: rotate(360deg); } }
+  @keyframes rsv-success-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rsv-form__submit-spinner { animation: none; }
+    .rsv-form__submit-check svg { transition: none; stroke-dashoffset: 0; }
+  }
   .rsv-form__submit:focus-visible {
     outline: 3px solid var(--accent-soft);
     outline-offset: 2px;
@@ -524,8 +586,10 @@ const social = [
 </style>
 
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('astro:page-load', () => {
     document.querySelectorAll('[data-form="resident"]').forEach((form) => {
+      if (form.dataset.formBound === '1') return;
+      form.dataset.formBound = '1';
       // Max-2 enforcement on priorities (uncheck the oldest if user picks a third)
       const priorityBoxes = form.querySelectorAll('input[name="priorities"]');
       let priorityOrder = [];
@@ -583,19 +647,36 @@ const social = [
         }
       });
 
-      // Submit: console.log payload + static success state.
+      // Submit: console.log payload + 3-state morph (label → spinner → check)
+      // → static success panel. Backend wiring is still TODO; the visual
+      // contract is in place so the eventual fetch() drop-in keeps the same
+      // is-loading / is-success choreography.
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(form));
-        // priorities is multi-checkbox; collect all selected values
         data.priorities = Array.from(form.querySelectorAll('input[name="priorities"]:checked')).map((b) => b.value);
         // eslint-disable-next-line no-console
         console.log('[pre-reservation payload]', data);
+
+        const submitBtn = form.querySelector('[data-submit]');
         const success = form.querySelector('.rsv-form__success');
-        if (success) success.hidden = false;
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) submitBtn.disabled = true;
-        success?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (!submitBtn) return;
+
+        submitBtn.disabled = true;
+        submitBtn.classList.add('is-loading');
+
+        // Stand-in for network round-trip — replace with actual fetch().
+        setTimeout(() => {
+          submitBtn.classList.remove('is-loading');
+          submitBtn.classList.add('is-success');
+          if (success) {
+            success.hidden = false;
+            success.style.animation = 'rsv-success-in 520ms cubic-bezier(0.16,1,0.3,1) both';
+          }
+          setTimeout(() => {
+            success?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 120);
+        }, 720);
       });
     });
   });

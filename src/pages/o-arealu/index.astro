@@ -318,7 +318,7 @@ const lastUpdated = '2026-04-30';
     padding: clamp(64px, 8vw, 96px) var(--gutter);
     max-width: var(--container-wide);
     margin: 0 auto;
-    border-top: 1px solid var(--k-20);
+    border-top: 1px solid var(--border-muted);
   }
   .op-chapter__head {
     display: grid;
@@ -359,7 +359,7 @@ const lastUpdated = '2026-04-30';
   .op-chapter__body > p {
     font-size: clamp(16px, 1.4vw, 18px);
     line-height: 1.65;
-    color: var(--k-90);
+    color: var(--fg);
     max-width: 64ch;
     margin: 0 0 16px;
   }
@@ -379,26 +379,26 @@ const lastUpdated = '2026-04-30';
   .op-fact-table {
     display: grid; gap: 0;
     margin: 24px 0 32px;
-    border-top: 1px solid var(--k-20);
+    border-top: 1px solid var(--border-muted);
   }
   .op-fact-table > div {
     display: grid;
     grid-template-columns: 220px 1fr;
     gap: 16px;
     padding: 14px 0;
-    border-bottom: 1px solid var(--k-20);
+    border-bottom: 1px solid var(--border-muted);
     align-items: baseline;
   }
   .op-fact-table dt {
     font-weight: 600;
-    color: var(--k-70);
+    color: var(--fg-muted);
     font-size: 14px;
     margin: 0;
   }
   .op-fact-table dd {
     margin: 0;
     line-height: 1.55;
-    color: var(--k-90);
+    color: var(--fg);
   }
   @media (max-width: 600px) {
     .op-fact-table > div { grid-template-columns: 1fr; gap: 4px; }
@@ -409,14 +409,30 @@ const lastUpdated = '2026-04-30';
     margin: 32px 0;
     max-width: 100%;
   }
+  /* Subtle scroll-driven parallax on the interactive map frame. Modern
+     CSS scroll-driven animations (Chromium 115+); silently no-op elsewhere
+     so the map is just static, no JS fallback needed. */
+  .op-map-banner__frame {
+    animation: op-map-nudge linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+    will-change: transform;
+  }
+  @keyframes op-map-nudge {
+    from { transform: translate3d(0,  16px, 0); }
+    to   { transform: translate3d(0, -16px, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .op-map-banner__frame { animation: none; transform: none; }
+  }
   .op-map img {
     width: 100%; height: auto; display: block;
-    border: 1px solid var(--k-20);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
   }
   .op-map figcaption {
     font-size: 13px;
-    color: var(--k-60);
+    color: var(--fg-subtle);
     margin-top: 8px;
     line-height: 1.5;
   }
@@ -441,7 +457,7 @@ const lastUpdated = '2026-04-30';
   .op-map-banner {
     padding: clamp(48px, 7vw, 80px) var(--gutter) clamp(56px, 8vw, 96px);
     max-width: var(--container-wide); margin: 0 auto;
-    border-top: 1px solid var(--k-20);
+    border-top: 1px solid var(--border-muted);
   }
   .op-map-banner__head {
     margin-bottom: 24px;
@@ -459,7 +475,7 @@ const lastUpdated = '2026-04-30';
   .op-map-banner__head p {
     font-size: clamp(15px, 1.3vw, 17px);
     line-height: 1.6;
-    color: var(--k-90);
+    color: var(--fg);
     margin: 0;
     max-width: 60ch;
   }
@@ -467,7 +483,7 @@ const lastUpdated = '2026-04-30';
     position: relative;
     width: 100%;
     height: clamp(360px, 50vh, 520px);
-    border: 1px solid var(--k-20);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     overflow: hidden;
     background: var(--k-05);
@@ -475,7 +491,7 @@ const lastUpdated = '2026-04-30';
   .op-map-banner__address {
     margin: 16px 0 0;
     font-size: 14px; line-height: 1.55;
-    color: var(--k-80);
+    color: var(--fg-muted);
   }
   .op-map-banner__address strong {
     color: var(--k-100);
@@ -498,16 +514,16 @@ const lastUpdated = '2026-04-30';
   }
   :global(.leaflet-control-attribution) {
     background: rgba(255, 255, 255, 0.92) !important;
-    color: var(--k-70) !important;
+    color: var(--fg-muted) !important;
     font-size: 10px !important;
-    border-top: 1px solid var(--k-20) !important;
+    border-top: 1px solid var(--border-muted) !important;
     padding: 2px 8px !important;
   }
-  :global(.leaflet-control-attribution a) { color: var(--k-90) !important; }
+  :global(.leaflet-control-attribution a) { color: var(--fg) !important; }
   :global(.leaflet-control-zoom a) {
     background: var(--bg) !important;
-    color: var(--k-80) !important;
-    border-color: var(--k-30) !important;
+    color: var(--fg-muted) !important;
+    border-color: var(--border-muted) !important;
     font-family: var(--font-sans);
   }
   :global(.leaflet-control-zoom a:hover) {
@@ -532,7 +548,7 @@ const lastUpdated = '2026-04-30';
     min-width: 200px;
   }
   :global(.op-map-popup-wrap .leaflet-popup-close-button) {
-    color: var(--k-60) !important;
+    color: var(--fg-subtle) !important;
     padding: 6px 8px 0 0 !important;
   }
   :global(.op-map-popup-wrap .leaflet-popup-close-button:hover) {
@@ -552,7 +568,7 @@ const lastUpdated = '2026-04-30';
     letter-spacing: 0.02em;
   }
   :global(.op-map-popup span) {
-    color: var(--k-80);
+    color: var(--fg-muted);
     font-size: 12px;
   }
   :global(.op-map-popup .op-map-popup__cta) {
@@ -566,22 +582,22 @@ const lastUpdated = '2026-04-30';
     list-style: none;
     padding: 0; margin: 32px 0 0;
     display: grid; gap: 0;
-    border-top: 1px solid var(--k-20);
+    border-top: 1px solid var(--border-muted);
   }
   .op-timeline li {
     display: grid;
     grid-template-columns: 160px 1fr;
     gap: 24px;
     padding: 18px 0;
-    border-bottom: 1px solid var(--k-20);
+    border-bottom: 1px solid var(--border-muted);
     align-items: center;
   }
   .op-timeline li.is-next {
     border-left: 3px solid var(--accent);
     padding-left: 16px;
   }
-  .op-timeline li.is-done { color: var(--k-70); }
-  .op-timeline li.is-future { color: var(--k-70); border-left: 3px solid var(--k-30); padding-left: 16px; }
+  .op-timeline li.is-done { color: var(--fg-muted); }
+  .op-timeline li.is-future { color: var(--fg-muted); border-left: 3px solid var(--border-muted); padding-left: 16px; }
   .op-timeline time {
     font-family: var(--font-mono);
     font-size: 13px;
@@ -598,7 +614,7 @@ const lastUpdated = '2026-04-30';
     color: var(--k-100);
   }
   .op-timeline li.is-done strong,
-  .op-timeline li.is-future strong { color: var(--k-90); }
+  .op-timeline li.is-future strong { color: var(--fg); }
   .op-status {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -607,19 +623,19 @@ const lastUpdated = '2026-04-30';
     padding: 4px 10px;
     border-radius: 999px;
     background: var(--k-10);
-    color: var(--k-70);
+    color: var(--fg-muted);
   }
   .op-timeline li.is-done .op-status { background: var(--k-90); color: #fff; }
   .op-timeline li.is-next .op-status { background: var(--accent); color: var(--accent-on); }
   @media (max-width: 600px) {
     .op-timeline li { grid-template-columns: 1fr; gap: 4px; }
     .op-timeline li.is-next { border-left: 0; padding-left: 0; border-top: 3px solid var(--accent); padding-top: 16px; }
-    .op-timeline li.is-future { border-left: 0; padding-left: 0; border-top: 3px solid var(--k-30); padding-top: 16px; }
+    .op-timeline li.is-future { border-left: 0; padding-left: 0; border-top: 3px solid var(--border-muted); padding-top: 16px; }
   }
 
   .op-foot-note {
     font-size: 13px;
-    color: var(--k-70);
+    color: var(--fg-muted);
     margin: 24px 0 0;
   }
 
@@ -627,20 +643,20 @@ const lastUpdated = '2026-04-30';
   .op-cta {
     padding: clamp(48px, 6vw, 80px) var(--gutter);
     max-width: var(--container-wide); margin: 0 auto;
-    border-top: 1px solid var(--k-20);
+    border-top: 1px solid var(--border-muted);
   }
   .op-cta__inner {
     max-width: 640px; margin: 0 auto; text-align: center;
     display: grid; gap: 16px;
     padding: clamp(32px, 4vw, 48px);
-    border: 1px solid var(--k-30);
+    border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
   }
   .op-cta__kicker { color: var(--accent); }
   .op-cta__lede {
     font-size: clamp(16px, 1.35vw, 18px);
     line-height: 1.55;
-    color: var(--k-90);
+    color: var(--fg);
     margin: 0;
   }
   /* O areálu CTA — primary plum, wipe retract on hover. */

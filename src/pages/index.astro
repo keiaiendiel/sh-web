@@ -480,6 +480,24 @@ const zigzag = [
     max-width: var(--container-wide); margin: 0 auto; width: 100%;
     display: grid; gap: clamp(24px, 3vw, 36px);
   }
+  /* Entrance cascade — each hero child lifts and fades in with a 90ms step.
+     Runs once per element instantiation (fresh on cold load AND after every
+     view-transition arrival, since main is replaced). Reduced-motion below
+     skips the keyframes entirely. */
+  .hub-hero__inner > * {
+    animation: hub-hero-enter 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hub-hero__inner > *:nth-child(1) { animation-delay:  60ms; }
+  .hub-hero__inner > *:nth-child(2) { animation-delay: 150ms; }
+  .hub-hero__inner > *:nth-child(3) { animation-delay: 240ms; }
+  .hub-hero__inner > *:nth-child(4) { animation-delay: 330ms; }
+  @keyframes hub-hero-enter {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hub-hero__inner > * { animation: none; }
+  }
   .hub-hero__kicker-row {
     display: flex; align-items: baseline; justify-content: space-between;
     gap: 24px; flex-wrap: wrap;
@@ -579,13 +597,13 @@ const zigzag = [
   }
   .hub-section__intro {
     font-size: 18px;
-    color: var(--k-70);
+    color: var(--fg-muted);
     margin: 0 0 32px;
     max-width: 720px;
     line-height: 1.55;
   }
   .osa-sub-head { margin-bottom: 32px; }
-  .osa-sub-head .osa-eyebrow { color: var(--k-60); display: block; margin-bottom: 8px; }
+  .osa-sub-head .osa-eyebrow { color: var(--fg-subtle); display: block; margin-bottom: 8px; }
 
   /* FORMATS GRID -- 4-up cards under hero (migrated from /obyvatele/). */
   .hub-formats__grid {
@@ -596,7 +614,7 @@ const zigzag = [
   @media (max-width: 560px) { .hub-formats__grid { grid-template-columns: 1fr; } }
   .hub-format-card {
     display: grid; gap: 12px;
-    border: 1px solid var(--k-20);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     background: var(--bg);
     padding: 0 0 20px;
@@ -619,12 +637,12 @@ const zigzag = [
   }
   .hub-format-card p {
     font-size: 14px; line-height: 1.55;
-    color: var(--k-80); margin: 0 20px;
+    color: var(--fg-muted); margin: 0 20px;
   }
   .hub-formats__note {
     margin-top: 32px;
     font-size: 14px; line-height: 1.55;
-    color: var(--k-70);
+    color: var(--fg-muted);
     max-width: 880px;
   }
 
@@ -637,7 +655,7 @@ const zigzag = [
   .hub-claims {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border: 1px solid var(--k-20);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     overflow: hidden;
     background: var(--bg);
@@ -649,14 +667,14 @@ const zigzag = [
   }
   /* Internal cross dividers — only on items that need a right or bottom rule. */
   .hub-claims__item:nth-child(1) {
-    border-right: 1px solid var(--k-20);
-    border-bottom: 1px solid var(--k-20);
+    border-right: 1px solid var(--border-muted);
+    border-bottom: 1px solid var(--border-muted);
   }
   .hub-claims__item:nth-child(2) {
-    border-bottom: 1px solid var(--k-20);
+    border-bottom: 1px solid var(--border-muted);
   }
   .hub-claims__item:nth-child(3) {
-    border-right: 1px solid var(--k-20);
+    border-right: 1px solid var(--border-muted);
   }
   .hub-claims__eyebrow { color: var(--accent); }
   .hub-claims__title {
@@ -671,7 +689,7 @@ const zigzag = [
   .hub-claims__body {
     font-size: 15px;
     line-height: 1.6;
-    color: var(--k-80);
+    color: var(--fg-muted);
     margin: 0;
     max-width: 42ch;
   }
@@ -682,7 +700,7 @@ const zigzag = [
     .hub-claims__item:nth-child(2),
     .hub-claims__item:nth-child(3) {
       border-right: 0;
-      border-bottom: 1px solid var(--k-20);
+      border-bottom: 1px solid var(--border-muted);
     }
   }
 
@@ -757,7 +775,7 @@ const zigzag = [
   .hub-zigzag__copy p {
     font-size: clamp(15px, 1.25vw, 17px);
     line-height: 1.6;
-    color: var(--k-90);
+    color: var(--fg);
     margin: 0;
   }
   @media (max-width: 720px) {
@@ -790,7 +808,7 @@ const zigzag = [
   .hub-cta-card {
     border-radius: var(--radius-input);
     overflow: hidden;
-    border: 1px solid var(--k-30);
+    border: 1px solid var(--accent-rule);
     background: var(--bg);
     color: var(--k-100);
     transition: box-shadow var(--dur-base) var(--ease-decel),
@@ -798,7 +816,7 @@ const zigzag = [
   }
   .hub-cta-card:hover {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border-color: var(--k-50);
+    border-color: var(--fg-subtle);
   }
   .hub-cta-card--primary:hover {
     border-color: var(--accent);
@@ -813,11 +831,11 @@ const zigzag = [
     padding: clamp(32px, 5vw, 48px);
   }
   .hub-cta-card__kicker { color: var(--accent); }
-  .hub-cta-card--secondary .hub-cta-card__kicker { color: var(--k-60); }
+  .hub-cta-card--secondary .hub-cta-card__kicker { color: var(--fg-subtle); }
   .hub-cta-card__lede {
     font-size: clamp(15px, 1.3vw, 17px);
     line-height: 1.55;
-    color: var(--k-90);
+    color: var(--fg);
     margin: 0;
     max-width: 48ch;
   }
@@ -889,14 +907,14 @@ const zigzag = [
   @media (max-width: 600px) { .hub-projects-teaser { grid-template-columns: 1fr; } }
   .hub-teaser-card {
     display: block; padding: 24px 20px;
-    border: 1px solid var(--k-30);
+    border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
     text-decoration: none; color: inherit;
     transition: border-color var(--dur-base) var(--ease-decel);
   }
   .hub-teaser-card:hover { border-color: var(--accent); }
   .hub-teaser-card h3 { font-size: 18px; margin: 0 0 8px; }
-  .hub-teaser-card p { font-size: 14px; line-height: 1.5; color: var(--k-70); margin: 0 0 12px; }
+  .hub-teaser-card p { font-size: 14px; line-height: 1.5; color: var(--fg-muted); margin: 0 0 12px; }
   .hub-teaser-card__cta { font-size: 13px; color: var(--accent); font-weight: 600; }
   .hub-teaser-card--more { background: var(--k-05); }
 
@@ -909,7 +927,7 @@ const zigzag = [
   .hub-place p {
     font-size: clamp(16px, 1.35vw, 18px); line-height: 1.65;
     max-width: 540px; margin: 16px 0 24px;
-    color: var(--k-90);
+    color: var(--fg);
   }
   .hub-place__cta {
     color: var(--accent); font-weight: 600;
@@ -918,19 +936,19 @@ const zigzag = [
   .hub-place__cta:hover { text-decoration: underline; }
   .hub-place__map img {
     width: 100%; height: auto;
-    border: 1px solid var(--k-20);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     display: block;
   }
   .hub-place__map figcaption {
-    font-size: 13px; color: var(--k-60);
+    font-size: 13px; color: var(--fg-subtle);
     margin-top: 8px;
   }
 
   /* FAQ MINI */
   .hub-faq-mini {
     padding: 4px 0;
-    border-bottom: 1px solid var(--k-20);
+    border-bottom: 1px solid var(--border-muted);
   }
   .hub-faq-mini summary {
     font-weight: 600; cursor: pointer;
@@ -948,7 +966,7 @@ const zigzag = [
   .hub-faq-mini[open] summary::before { transform: rotate(45deg); }
   .hub-faq-mini p {
     padding: 0 0 16px 28px;
-    line-height: 1.6; color: var(--k-80);
+    line-height: 1.6; color: var(--fg-muted);
     margin: 0;
   }
   .hub-faq-mini__more { margin: 32px 0 0; }
@@ -979,14 +997,14 @@ const zigzag = [
     position: relative;
     width: 100%;
     height: clamp(320px, 44vh, 460px);
-    border: 1px solid var(--k-20);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     overflow: hidden;
     background: var(--k-05);
   }
   .hub-map-strip__address {
     margin: 16px 0 0;
-    font-size: 14px; line-height: 1.55; color: var(--k-80);
+    font-size: 14px; line-height: 1.55; color: var(--fg-muted);
   }
   .hub-map-strip__address strong { color: var(--k-100); font-weight: 600; }
   .hub-map-strip__address a {
@@ -1005,15 +1023,15 @@ const zigzag = [
   }
   :global(.leaflet-control-attribution) {
     background: rgba(255, 255, 255, 0.92) !important;
-    color: var(--k-70) !important;
+    color: var(--fg-muted) !important;
     font-size: 10px !important;
-    border-top: 1px solid var(--k-20) !important;
+    border-top: 1px solid var(--border-muted) !important;
     padding: 2px 8px !important;
   }
-  :global(.leaflet-control-attribution a) { color: var(--k-90) !important; }
+  :global(.leaflet-control-attribution a) { color: var(--fg) !important; }
   :global(.leaflet-control-zoom a) {
-    background: var(--bg) !important; color: var(--k-80) !important;
-    border-color: var(--k-30) !important; font-family: var(--font-sans);
+    background: var(--bg) !important; color: var(--fg-muted) !important;
+    border-color: var(--border-muted) !important; font-family: var(--font-sans);
   }
   :global(.leaflet-control-zoom a:hover) {
     background: var(--accent) !important; color: #fff !important;
@@ -1027,7 +1045,7 @@ const zigzag = [
   }
   :global(.op-map-popup-wrap .leaflet-popup-tip) { background: var(--bg); border: 1px solid var(--accent); }
   :global(.op-map-popup-wrap .leaflet-popup-content) { margin: 0; width: auto !important; min-width: 200px; }
-  :global(.op-map-popup-wrap .leaflet-popup-close-button) { color: var(--k-60) !important; padding: 6px 8px 0 0 !important; }
+  :global(.op-map-popup-wrap .leaflet-popup-close-button) { color: var(--fg-subtle) !important; padding: 6px 8px 0 0 !important; }
   :global(.op-map-popup-wrap .leaflet-popup-close-button:hover) { color: var(--accent) !important; }
   :global(.op-map-popup) {
     display: grid; gap: 4px;
@@ -1037,7 +1055,7 @@ const zigzag = [
     text-decoration: none; cursor: pointer;
   }
   :global(.op-map-popup strong) { font-weight: 600; color: var(--k-100); letter-spacing: 0.02em; }
-  :global(.op-map-popup span) { color: var(--k-80); font-size: 12px; }
+  :global(.op-map-popup span) { color: var(--fg-muted); font-size: 12px; }
   :global(.op-map-popup .op-map-popup__cta) { color: var(--accent); font-weight: 600; margin-top: 4px; }
 
   /* LIGHTBOX -- fullscreen overlay; ESC + arrow-key navigation. */

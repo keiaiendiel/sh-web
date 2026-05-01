@@ -37,7 +37,7 @@ const buildingLabel = (id: string) => {
     <div class="pj-grid">
       {cards.map((p) => (
         <a class="pj-card" href={withBase(`/projekty/${p.id}/`)}>
-          <div class="pj-card__thumb" aria-hidden="true">
+          <div class="pj-card__thumb" aria-hidden="true" data-img-reveal>
             {p.data.thumbnail
               ? <img src={p.data.thumbnail} alt="" loading="lazy" />
               : <span class="pj-card__placeholder">Vizualizace v přípravě</span>
@@ -119,7 +119,7 @@ const buildingLabel = (id: string) => {
   .pj-card {
     display: grid;
     grid-template-rows: auto 1fr;
-    border: 1px solid var(--k-20);
+    border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
     background: var(--bg);
     text-decoration: none;
@@ -150,7 +150,7 @@ const buildingLabel = (id: string) => {
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--k-60);
+    color: var(--fg-subtle);
   }
   .pj-card__body {
     display: grid; gap: 8px;
@@ -166,7 +166,7 @@ const buildingLabel = (id: string) => {
   }
   .pj-card__role {
     font-size: 14px; line-height: 1.55;
-    color: var(--k-80); margin: 0;
+    color: var(--fg-muted); margin: 0;
   }
   .pj-card__cta {
     margin-top: 8px;
@@ -178,7 +178,7 @@ const buildingLabel = (id: string) => {
   .pj-foot-note {
     margin: 40px 0 0;
     font-size: 14px; line-height: 1.55;
-    color: var(--k-70);
+    color: var(--fg-muted);
     max-width: 720px;
   }
   .pj-foot-note a { color: var(--accent); }
@@ -189,14 +189,14 @@ const buildingLabel = (id: string) => {
   .pj-map-teaser__lede {
     font-size: clamp(16px, 1.35vw, 18px);
     line-height: 1.65;
-    color: var(--k-90);
+    color: var(--fg);
     margin: 0;
     max-width: 64ch;
   }
   .pj-map-teaser__media { margin: 0; }
   .pj-map-teaser__media img {
     width: 100%; height: auto;
-    border: 1px solid var(--k-20);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     display: block;
   }

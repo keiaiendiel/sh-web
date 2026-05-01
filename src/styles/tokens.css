@@ -56,6 +56,8 @@
   --k-0:    #ffffff;
   --k-05:   #f6f6f6;
   --k-10:   #e6e6e6;
+  --k-15:   #dddddd;   /* hairline rung — between k-10 and k-20, replaces
+                          k-30 as the default soft rule across components */
   --k-20:   #d4d4d4;
   --k-30:   #bebebe;
   --k-50:   #969696;
@@ -81,21 +83,26 @@
   --accent:      var(--c-plum);
   --accent-on:   #ffffff;
   --accent-soft: rgba(90, 42, 95, 0.12);   /* focus rings, subtle washes */
+  --accent-rule: rgba(90, 42, 95, 0.22);   /* plum-tinted hairline — replaces
+                                              k-15 on Hub-surface cards & tags */
 
-  /* ---------- Semantic surface tokens ---------- */
+  /* ---------- Semantic surface tokens ----------
+     One muted role for body copy (k-80), one for captions/eyebrows (k-60),
+     one soft hairline (k-15). Components MUST consume these, never raw
+     --k-XX values, so the grey palette stays disciplined as the site grows. */
   --fg:            var(--k-100);
-  --fg-muted:      var(--k-70);
-  --fg-subtle:     var(--k-50);
+  --fg-muted:      var(--k-80);   /* secondary copy, body inside dark cards */
+  --fg-subtle:     var(--k-60);   /* eyebrows, captions, meta */
   --fg-inverse:    var(--k-0);
 
   --bg:            var(--k-0);
   --bg-elevated:   var(--k-0);
-  --bg-muted:      var(--k-10);
+  --bg-muted:      var(--k-05);
   --bg-inverse:    var(--k-100);
   --bg-inverse-2:  var(--k-90);   /* slightly softer than pure black */
 
   --border:        var(--k-100);
-  --border-muted:  var(--k-30);
+  --border-muted:  var(--k-15);   /* default hairline — feels lighter than k-30 */
   --rule:          var(--k-100);  /* hairline rules - 1px solid black */
 
   /* ---------- Type scale (rem assumes 16px root) ----------

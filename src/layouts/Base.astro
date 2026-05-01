@@ -5,6 +5,7 @@ import '../styles/motion.css';
 import RevealOnScroll from '../components/RevealOnScroll.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
 import { getEntry } from 'astro:content';
 import { withBase } from '../utils/url';
 
@@ -121,6 +122,8 @@ const orgJsonLd = org
     {/* Sitemap hint for some crawlers */}
     <link rel="sitemap" type="application/xml" href={withBase('/sitemap-index.xml')} />
 
+    <ClientRouter />
+
     <title>{title}</title>
 
     {/* Structured data: Organization (site-wide) */}
@@ -136,9 +139,9 @@ const orgJsonLd = org
     </noscript>
   </head>
   <body class="osa-body">
-    <Header variant={headerVariant} />
-    <slot />
-    <Footer />
+    <Header variant={headerVariant} transition:persist />
+    <main transition:animate="fade"><slot /></main>
+    <Footer transition:persist />
     <RevealOnScroll />
 
     {/*
@@ -169,11 +172,9 @@ const orgJsonLd = org
             n.nodeValue = n.nodeValue.replace(RE, '$1$2\u00A0');
           }
         }
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', run);
-        } else {
-          run();
-        }
+        // astro:page-load fires on initial load AND after every view transition,
+        // so a single binding handles both cold loads and SPA navs.
+        document.addEventListener('astro:page-load', run);
       }());
     </script>
   </body>
@@ -186,6 +187,24 @@ const orgJsonLd = org
   ul, ol { margin: 0; padding: 0; list-style: none; }
   img, svg { display: block; max-width: 100%; }
   button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+  /* Plum text-selection — Hub's reserved sub-identity, applied site-wide
+     because the entire site IS the Hub. One free brand cue. */
+  ::selection { background: var(--accent); color: var(--accent-on); }
+
+  /* Hub eyebrows are plum, not grey. Promotes the accent without breaking
+     the parent OSA monochrome rule (eyebrows are a Hub-only construct). */
+  .hub-section__head .osa-eyebrow,
+  .hub-section__intro .osa-eyebrow,
+  .osa-sub-head .osa-eyebrow,
+  .osa-page-head .osa-eyebrow,
+  .hub-hero__eyebrow {
+    color: var(--accent);
+  }
+  /* Inverse surfaces (dark hero, dark CTA bands) keep eyebrows readable. */
+  .osa-dark .osa-eyebrow,
+  .hub-header--dark .osa-eyebrow { color: var(--k-30); }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
   }

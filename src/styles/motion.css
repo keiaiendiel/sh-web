@@ -115,14 +115,18 @@ a:not(.btn):not(.osa-nolink):hover {
   clip-path: inset(0 0 0 0);
 }
 
-/* ---------- Focus: 2px outline with 40ms overshoot ----------------------- */
+/* ---------- Focus: 2px plum outline with 40ms overshoot ----------------- */
+/* The whole site is the Hub (resident-facing sub-identity), so plum is the
+   correct focus colour. Inverse on dark surfaces uses --fg via local override. */
 :focus-visible {
-  outline: 2px solid var(--fg);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   /* No transition on outline itself — instant. Overshoot is a keyframe. */
   animation: focus-overshoot 240ms var(--ease-quart);
   animation-iteration-count: 1;
 }
+.osa-dark :focus-visible,
+.hub-header--dark :focus-visible { outline-color: var(--k-0); }
 @keyframes focus-overshoot {
   0%   { outline-width: 0;   outline-offset: 0; }
   40%  { outline-width: 3px; outline-offset: 3px; }

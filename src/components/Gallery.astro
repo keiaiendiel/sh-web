@@ -87,8 +87,10 @@ function srcWithBase(s: string): string {
 
 <script is:inline>
   (function () {
-    document.addEventListener('DOMContentLoaded', function () {
+    function init() {
       document.querySelectorAll('.osa-gallery').forEach(function (gallery) {
+        if (gallery.dataset.galleryBound === '1') return;
+        gallery.dataset.galleryBound = '1';
         var triggers = [].slice.call(gallery.querySelectorAll('.osa-gallery__trigger'));
         var lb       = gallery.querySelector('.osa-lightbox');
         if (triggers.length === 0 || !lb) return;
@@ -142,7 +144,8 @@ function srcWithBase(s: string): string {
           else if (e.key === 'ArrowRight') render(index + 1);
         });
       });
-    });
+    }
+    document.addEventListener('astro:page-load', init);
   }());
 </script>
 
