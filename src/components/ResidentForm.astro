@@ -92,7 +92,7 @@ const social = [
     <legend>
       <span class="rsv-form__num">02</span>
       <span class="rsv-form__heading">Jakou roli v Hubu hledáte?</span>
-      <span class="rsv-form__hint">Vyberte cestu, která je vám dnes nejbližší. Hub je dimenzovaný pro každou z nich.</span>
+      <span class="rsv-form__hint">Vyberte cestu, která je vám dnes nejbližší. Hub počítá s každou z nich rovnocenně.</span>
     </legend>
     <div class="rsv-form__pills">
       {roles.map((r) => (
@@ -128,7 +128,7 @@ const social = [
     <legend>
       <span class="rsv-form__num">04</span>
       <span class="rsv-form__heading">Jaký rozpočet byste měl(a) reálně k dispozici?</span>
-      <span class="rsv-form__hint">Včetně základních služeb. Cenu schválně neukazujeme — ladíme ji podle reálné poptávky.</span>
+      <span class="rsv-form__hint">Včetně základních služeb. Konkrétní cenu zatím nezveřejňujeme — nastavujeme ji podle skutečné poptávky.</span>
     </legend>
     <div class="rsv-form__pills rsv-form__pills--with-suffix">
       {budget.map((b) => (
@@ -160,7 +160,7 @@ const social = [
     <legend>
       <span class="rsv-form__num">06</span>
       <span class="rsv-form__heading">Jak často potřebujete být v Praze?</span>
-      <span class="rsv-form__hint">Pomáhá nám posoudit reálnou použitelnost lokality.</span>
+      <span class="rsv-form__hint">Pomáhá nám posoudit, jestli pro vás bude dojezdová doba do Prahy únosná.</span>
     </legend>
     <div class="rsv-form__pills">
       {prague.map((p) => (
@@ -191,7 +191,7 @@ const social = [
   <fieldset class="rsv-form__step">
     <legend>
       <span class="rsv-form__num">08</span>
-      <span class="rsv-form__heading">Jak blízko si přejete mít společný život v Hubu?</span>
+      <span class="rsv-form__heading">Kolik společného života v Hubu byste chtěl(a)?</span>
       <span class="rsv-form__hint">Stačí jedna odpověď.</span>
     </legend>
     <div class="rsv-form__pills">
@@ -262,7 +262,8 @@ const social = [
   <output class="rsv-form__success" hidden>
     <span class="rsv-form__success-eyebrow">Hotovo</span>
     <h3>Zapsali jsme váš nezávazný zájem.</h3>
-    <p>Není to rezervace ani pořadník. Jakmile budeme mít konkrétní nabídku odpovídající vašim preferencím, ozveme se.</p>
+    <p>Není to rezervace, není to pořadník a není to slib přidělené jednotky. Jakmile budeme mít konkrétní nabídku, která bude odpovídat vašim odpovědím, ozveme se vám e-mailem.</p>
+    <p>Pokud jste vybral(a) stipendium, work-trade nebo roli rezidenta-tvůrce, můžeme se vám případně doptat na detail.</p>
   </output>
 </form>
 

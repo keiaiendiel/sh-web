@@ -16,7 +16,7 @@ const buildingLabel = (id: string) => {
     case 'komunitni-centrum':  return 'Objekt B';
     case 'coworking-centrum':  return 'Přízemí budovy C';
     case 'komunitni-pivovar':  return 'Objekt B';
-    case 'bytove-druzstvo':    return 'Vlastnické vehikl';
+    case 'bytove-druzstvo':    return 'Vlastnické družstvo';
     case 'sauna-bazen':        return 'Objekty D + E';
     case 'sportoviste-park':   return 'Park před objektem B';
     default:                   return 'Areál';
@@ -49,9 +49,9 @@ const statusLabel = (s: string) =>
 
   <section class="pjd-cta">
     <div class="pjd-cta__inner">
-      <p class="pjd-cta__lede">Pokud Hub vidíte jako reálnou možnost bydlení, vyplňte před-rezervaci. Na otázky k jednotlivým provozům odpovíme e-mailem.</p>
+      <p class="pjd-cta__lede">Pokud vás Hub zajímá jako možné bydlení, vyplňte nezávazný zájem. Na otázky k jednotlivým provozům odpovíme e-mailem.</p>
       <div class="pjd-cta__btns">
-        <a class="pjd-cta__btn pjd-cta__btn--primary" href={withBase('/rezervace/')}>Vyplnit před-rezervaci →</a>
+        <a class="pjd-cta__btn pjd-cta__btn--primary" href={withBase('/rezervace/')}>Vyplnit nezávazný zájem →</a>
         <a class="pjd-cta__btn pjd-cta__btn--ghost" href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>
       </div>
     </div>

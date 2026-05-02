@@ -18,7 +18,7 @@ const formats = [
   {
     name: 'Kapsle',
     src: withBase('/images/hub/interior/kapsle.jpg'),
-    body: 'Nejlevnější varianta. Spací modul ve sdílené jednotce, sdílená koupelna a kuchyň. Pro krátkodobé pobyty a lidi, pro které je hlavní cena.',
+    body: 'Nejlevnější varianta. Spací modul ve sdílené jednotce s privátním sociálním zázemím. Pro krátké pobyty a pro lidi, kde rozhoduje cena.',
   },
   {
     name: 'Klidnější uzavíratelné místo',
@@ -33,7 +33,7 @@ const formats = [
   {
     name: 'Sdílený pokoj',
     src: withBase('/images/hub/interior/interior-03.jpg'),
-    body: 'Dvojlůžkový pokoj sdílený se spolubydlícím. Levnější varianta delšího pobytu pro studenty a lidi, kteří jsou v pohodě se sdílením.',
+    body: 'Dvojlůžkový pokoj sdílený s druhou osobou. Levnější varianta delšího pobytu pro studenty a pro ty, kterým sdílení nevadí.',
   },
 ];
 
@@ -43,7 +43,7 @@ const claims = [
   {
     eyebrow: 'Koncept',
     title: 'Sedm budov, ~331 jednotek 1+kk.',
-    body: 'Rekonstrukce A1–A6 a budovy C v jádru areálu Horních kasáren. Privátní jednotky 1+kk se sklopnou postelí a vlastním sociálním zázemím.',
+    body: 'Rekonstrukce A1–A6 a budovy C v centru areálu Horních kasáren. Privátní jednotky 1+kk se sklopnou postelí a vlastním sociálním zázemím.',
   },
   {
     eyebrow: 'Pro koho',
@@ -57,8 +57,8 @@ const claims = [
   },
   {
     eyebrow: 'Stipendium',
-    title: 'Popsaný výběr, ne slevový kód.',
-    body: 'Pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Vybíráme podle záměru, který v Hubu chcete rozjet.',
+    title: 'Výběr podle záměru, ne sleva.',
+    body: 'Pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Vedle stipendia jsou paralelní role — správce (work-trade) a rezident-tvůrce. Vybíráme podle záměru, který v Hubu chcete rozjet; cestu si vyberete ve formuláři.',
   },
 ];
 
@@ -67,9 +67,9 @@ const zigzag = [
   {
     dir: 'ltr',
     src: withBase('/images/hub/hero/sh-1.jpg'),
-    alt: 'Mladí lidé v okolí zrekonstruované budovy v duchu kasáren.',
+    alt: 'Lidé v dlážděném dvoře mezi rekonstruovanými budovami areálu Horních kasáren.',
     eyebrow: 'Místo',
-    title: 'Areál horních kasáren · 12 km od Prahy.',
+    title: 'Areál Horních kasáren · 12 km od Prahy.',
     body: 'Klecany jsou těsně za hranicí Prahy. Areál je na trase plánované tramvajové zastávky Výzkumný ústav I. (vydáno stavební povolení) a navrhované cyklostezky podél Vltavy.',
     eager: true,
   },
@@ -103,13 +103,13 @@ const zigzag = [
     alt: 'Pracovní zákoutí v jednotce 1+kk s knihovnou a stolem.',
     eyebrow: 'Pro koho',
     title: 'Pracující studenty, OSVČ a mladí kreativci.',
-    body: 'Hub je dimenzovaný pro lidi, kteří startují — začínající podnikatele, studenty pracující na bakalářce nebo diplomce, OSVČ na začátku kariéry. Pro někoho je to startovní bydlení; pro jiného přechodné mezikolečko.',
+    body: 'Hub je dělaný pro lidi, kteří startují — začínající podnikatele, studenty na bakalářce nebo diplomce, OSVČ na začátku kariéry. Pro někoho je to startovní bydlení, pro jiného přechodný mezikrok.',
   },
 ];
 ---
 <Base
-  title="Startovací hub"
-  description="Nájemní bydlení blízko Prahy s komunitním a coworkingovým zázemím v areálu horních kasáren v Klecanech. Přijímáme nezávazné před-rezervace."
+  title="Startovací Hub"
+  description="Nájemní bydlení blízko Prahy s coworkingem, saunou a komunitním zázemím v areálu Horních kasáren v Klecanech. Přijímáme nezávazný zájem."
   headerVariant="dark"
   ogImage={withBase('/og/default.png')}
 >
@@ -129,19 +129,19 @@ const zigzag = [
     <div class="hub-hero__scrim" aria-hidden="true"></div>
     <div class="hub-hero__inner">
       <div class="hub-hero__kicker-row">
-        <span class="osa-eyebrow hub-hero__kicker">Areál horních kasáren · Klecany</span>
+        <span class="osa-eyebrow hub-hero__kicker">Areál Horních kasáren · Klecany</span>
         <a class="osa-eyebrow hub-hero__kicker-out" href="https://keiaiendiel.github.io/vpd-web/vpd1/" rel="noopener">Záměr VPD1 →</a>
       </div>
-      <h1 class="hub-hero__title">Startovací hub.</h1>
-      <p class="hub-hero__lede">Nájemní bydlení blízko Prahy s komunitním a coworkingovým zázemím. Hledáme mladé kreativce, začínající podnikatele a pracující studenty.</p>
-      <a class="hub-hero__cta" href={withBase('/rezervace/')}>Rezervace →</a>
+      <h1 class="hub-hero__title">Startovací Hub.</h1>
+      <p class="hub-hero__lede">Nájemní bydlení blízko Prahy s coworkingem, saunou a komunitním zázemím v areálu Horních kasáren. Pro pracující studenty, OSVČ na začátku a mladé kreativce.</p>
+      <a class="hub-hero__cta" href={withBase('/rezervace/')}>Nezávazný zájem →</a>
     </div>
   </section>
 
   <section class="hub-section hub-formats">
     <header class="osa-sub-head">
       <span class="osa-eyebrow">Co Hub nabídne</span>
-      <h2 class="hub-section__heading">Čtyři režimy obsazení jednotky.</h2>
+      <h2 class="hub-section__heading">Čtyři způsoby, jak v Hubu bydlet.</h2>
     </header>
     <div class="hub-formats__grid">
       {formats.map((f) => (
@@ -154,7 +154,7 @@ const zigzag = [
         </article>
       ))}
     </div>
-    <p class="hub-formats__note">Architektonický základ Hubu je 331 jednotek 1+kk s privátním sociálním zázemím (sprcha, umyvadlo, toaleta). Výše uvedené formáty popisují způsoby obsazení těchto jednotek, ne fyzicky odlišné typy místností.</p>
+    <p class="hub-formats__note">Architektonický základ Hubu je ~331 jednotek 1+kk s vlastním sociálním zázemím (sprcha, umyvadlo, toaleta). Čtyři formáty výše popisují, jak jednotku obýváte — ne, že by to byly různě postavené místnosti.</p>
   </section>
 
   <section class="hub-claims-section">
@@ -218,15 +218,15 @@ const zigzag = [
       <article class="hub-cta-card hub-cta-card--primary">
         <div class="hub-cta-card__content">
           <span class="osa-eyebrow hub-cta-card__kicker">Chci tu bydlet</span>
-          <p class="hub-cta-card__lede">Otevřeli jsme nezávazné před-rezervace. Vyplnění je krátké, nic neúčtujeme a žádný závazek nevzniká.</p>
-          <a class="hub-cta-card__btn hub-cta-card__btn--primary" href={withBase('/rezervace/')}>Vyplnit před-rezervaci →</a>
+          <p class="hub-cta-card__lede">Otevřeli jsme registraci nezávazného zájmu. Vyplnění je krátké, nic neúčtujeme a žádný závazek nevzniká.</p>
+          <a class="hub-cta-card__btn hub-cta-card__btn--primary" href={withBase('/rezervace/')}>Vyplnit nezávazný zájem →</a>
         </div>
       </article>
 
       <article class="hub-cta-card hub-cta-card--secondary">
         <div class="hub-cta-card__content">
           <span class="osa-eyebrow hub-cta-card__kicker">Investice do záměru</span>
-          <p class="hub-cta-card__lede">Nezajímá vás bydlení, ale revitalizace celého areálu? Záměr VPD1 cílí na strategické a finanční partnery.</p>
+          <p class="hub-cta-card__lede">Zajímá vás víc revitalizace areálu než vlastní bydlení? Záměr VPD1 mluví ke strategickým a finančním partnerům.</p>
           <a class="hub-cta-card__btn hub-cta-card__btn--secondary" href="https://keiaiendiel.github.io/vpd-web/vpd1/" rel="noopener">Záměr VPD1 →</a>
         </div>
       </article>
@@ -238,7 +238,7 @@ const zigzag = [
       <span class="osa-eyebrow">Provozy</span>
       <h2 class="hub-section__heading">Jak se Hub rozrůstá.</h2>
     </header>
-    <p class="hub-section__intro">Hub se nerozjede naráz. Skládá se z propojených provozů, které vznikají postupně — některé v aktivní přípravě, jiné teprve dolaďujeme.</p>
+    <p class="hub-section__intro">Hub se nerozjede naráz. Skládá se z propojených provozů, které vznikají postupně — některé už dolaďujeme, jiné teprve definujeme.</p>
     <div class="hub-projects-teaser">
       {subProjects.map((p) => (
         <a class="hub-teaser-card" href={withBase(`/projekty/${p.id}/`)}>
@@ -262,7 +262,7 @@ const zigzag = [
           <span class="osa-eyebrow">Místo</span>
           <h2 class="hub-section__heading">Kde to je.</h2>
         </header>
-        <p>Klecany leží severně od Prahy, 12 km od centra. Areál je na trase plánované tramvajové zastávky Výzkumný ústav I. (na hranici Klecany / Zdiby; vydáno stavební povolení) a navrhované cyklolávky Roztoky–Klecany.</p>
+        <p>Klecany leží severně od Prahy, 12 km od centra. Areál sedí na trase plánované tramvajové zastávky Výzkumný ústav I. — má vydané stavební povolení a stojí na hranici Klecany / Zdiby. V plánu je také cyklolávka Roztoky–Klecany.</p>
         <a class="hub-place__cta" href={withBase('/o-arealu/#misto')}>O areálu a kontextu →</a>
       </div>
       <figure class="hub-place__map">
@@ -278,7 +278,7 @@ const zigzag = [
         <span class="osa-eyebrow">Klecany na mapě</span>
         <h2 id="hub-map-heading" class="hub-map-strip__heading">Severní okraj Prahy, hned za Vltavou.</h2>
       </header>
-      <div class="hub-map-strip__frame" id="hub-landing-map" role="application" aria-label="Interaktivní mapa areálu Horní kasárna Klecany"></div>
+      <div class="hub-map-strip__frame" id="hub-landing-map" role="application" aria-label="Interaktivní mapa areálu Horních kasáren v Klecanech"></div>
       <p class="hub-map-strip__address">
         <strong>Horní kasárna Klecany</strong>
         <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách →</a>

@@ -8,17 +8,17 @@ const faqIds = ['q5', 'q7', 'q8'] as const;
 const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
 ---
 <Base
-  title="Rezervace — Startovací Hub Klecany"
-  description="Před-rezervujte si místo v Hubu. Vyplnění není závazné, jen nám řekne, za jakých podmínek by pro vás bydlení dávalo smysl. Ozveme se, jakmile budeme mít odpovídající nabídku."
+  title="Nezávazný zájem — Startovací Hub Klecany"
+  description="Řekněte nám, jestli by pro vás Hub dával smysl. Nejde o smlouvu ani závazek — pomáháte nám pochopit reálnou poptávku po formátech, cenách a termínech. Ozveme se, jakmile budeme mít konkrétní nabídku."
   headerVariant="dark"
 >
   <section class="rsv-hero osa-dark">
     <img class="rsv-hero__bg" src={withBase('/images/hub/exterior/hub-courtyard-night.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
     <div class="rsv-hero__scrim" aria-hidden="true"></div>
     <div class="rsv-hero__inner">
-      <span class="osa-eyebrow rsv-hero__eyebrow">Před-rezervace</span>
-      <h1 class="rsv-hero__title">Před-rezervujte si místo.</h1>
-      <p class="rsv-hero__lede">Řekněte nám, za jakých podmínek by pro vás Hub dával smysl. Nejde o smlouvu ani závazek — pomáháte nám tvarovat nabídku podle reálné poptávky.</p>
+      <span class="osa-eyebrow rsv-hero__eyebrow">Nezávazný zájem</span>
+      <h1 class="rsv-hero__title">Řekněte nám, jestli by Hub dával smysl.</h1>
+      <p class="rsv-hero__lede">Řekněte nám, za jakých podmínek by pro vás Hub dával smysl. Nejde o smlouvu ani závazek. Vaše odpověď nám pomůže nastavit konkrétní nabídku podle reálné poptávky.</p>
     </div>
   </section>
 
@@ -37,7 +37,7 @@ const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
   <section class="rsv-status">
     <div class="rsv-status__inner">
       <span class="osa-eyebrow rsv-status__eyebrow">Aktuální stav</span>
-      <p>Vyplněním formuláře nám říkáte, za jakých podmínek by pro vás Hub dával smysl. Nejde o smlouvu, neúčtujeme nic. Reálný start první etapy proběhne, jakmile budou potvrzeny tři věci: kapitálová struktura, provozní připravenost areálu a právní rámec provozu.</p>
+      <p>Vyplněním formuláře nám říkáte, za jakých podmínek by pro vás Hub dával smysl. Nejde o smlouvu, neúčtujeme nic. Spustit etapu 1 budeme moct, až budeme mít tři věci: kapitálovou strukturu, provozní připravenost areálu a právní rámec provozu. První obyvatelný formát (kapsle) můžeme zpřístupnit dříve, jakmile bude jasné, že je o něj reálný zájem.</p>
     </div>
   </section>
 
@@ -50,7 +50,7 @@ const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
       <li>
         <span class="rsv-steps__num">01</span>
         <h3>Zapíšeme váš zájem</h3>
-        <p>Vaše odpovědi jdou do okruhu, podle kterého ladíme finální nabídku jednotek a režimů.</p>
+        <p>Vaše odpovědi přidáme k ostatním. Podle nich nastavujeme finální nabídku jednotek, cen a termínů.</p>
       </li>
       <li>
         <span class="rsv-steps__num">02</span>
@@ -60,7 +60,7 @@ const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
       <li>
         <span class="rsv-steps__num">03</span>
         <h3>Smlouvu řešíme až nakonec</h3>
-        <p>Žádný závazek nevzniká dokud spolu reálně nepodepíšeme smlouvu o budoucí smlouvě. Do té chvíle je vše nezávazné.</p>
+        <p>Žádný závazek nevzniká, dokud spolu nepodepíšeme smlouvu o budoucí smlouvě (SoSB). Do té chvíle je vše nezávazné.</p>
       </li>
     </ol>
   </section>

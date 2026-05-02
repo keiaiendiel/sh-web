@@ -2,49 +2,49 @@
   "q1": {
     "audience": "project",
     "question": "Co přesně je Startovací Hub a co bude dál?",
-    "answer": "Startovací Hub je první obyvatelná etapa záměru VPD1, který má z areálu horních kasáren v Klecanech postupně dotvořit obytnou a produktivní vrstvu s potenciálem 1500+ bytových jednotek. Hub je menší provozní celek, kterým chceme co nejdřív přivést areál do reálného fungování. Po Hubu pokračujeme v dalších etapách VPD1.",
+    "answer": "Startovací Hub je první obyvatelná etapa záměru VPD1, který má z areálu Horních kasáren v Klecanech postupně dotvořit obytnou a produktivní vrstvu s potenciálem 1500+ bytových jednotek. Hub je menší provozní celek, kterým chceme co nejdřív přivést areál do reálného fungování. Po Hubu pokračujeme v dalších etapách VPD1.",
     "order": 1
   },
   "q2": {
     "audience": "project",
     "question": "Kdo za projektem stojí?",
-    "answer": "Záměr běží pod hlavičkou VPD (Veřejně Prospěšný Developer), což je projekt v rámci OSA — Občanské sdružení Alternativa II, z.s. OSA je nezisková platforma fungující bez veřejných dotací, na členských příspěvcích a vlastní činnosti. Detail najdete na osa2.cz.",
+    "answer": "Záměr běží pod hlavičkou VPD (Veřejně Prospěšný Developer), což je projekt v rámci OSA — Občanské sdružení Alternativa II, z.s. OSA je neziskový spolek, který funguje bez veřejných dotací — z členských příspěvků a z vlastní činnosti. Detail najdete na osa2.cz.",
     "order": 2
   },
   "q3": {
     "audience": "project",
     "question": "Kdy Hub otevírá?",
-    "answer": "Cílově ve čtvrtém kvartálu 2026 nebo v prvním kvartálu 2027. Reálné datum potvrdíme, jakmile budou hotové tři věci: kapitálová struktura, provozní připravenost areálu a právní rámec provozu. Aktuální stav najdete v sekci O projektu.",
+    "answer": "Záleží na tom, jak rychle potvrdíme dostatečný zájem. Nejdříve otvíratelný formát — kapsle ve sdílené jednotce — můžeme zpřístupnit relativně rychle, jakmile bude jasné, že je o něj reálný zájem. Pokojové formáty s vyšší úpravou interiéru přijdou později, podle tempa rekonstrukce a financování. Plné spuštění areálu navazuje na tři podmínky: kapitálovou strukturu, provozní připravenost a právní rámec. Aktuální stav najdete na stránce O areálu.",
     "order": 3
   },
   "q4": {
     "audience": "project",
     "question": "V jaké fázi je projekt teď?",
-    "answer": "Máme dokončený investiční záměr a navrženou provozní strukturu pro Hub. Přijímáme nezávazné před-rezervace od lidí, kteří mají reálný zájem o bydlení. Paralelně dolaďujeme právní rámec a provozní přípravu.",
+    "answer": "Máme dokončený investiční záměr a navrženou provozní strukturu pro Hub. Přijímáme nezávazný zájem od lidí, kteří mají reálný zájem o bydlení. Paralelně dolaďujeme právní rámec a provozní přípravu.",
     "order": 4
   },
   "q5": {
     "audience": "resident",
-    "question": "Je vyplnění před-rezervace zavazující?",
-    "answer": "Není. Před-rezervace není smlouva ani závazek. Říkáte nám orientačně, za jakých podmínek by pro vás Hub dával smysl, a my si vás zapíšeme do okruhu, se kterým komunikujeme detail nabídky. Můžete kdykoli odstoupit.",
+    "question": "Je vyplnění nezávazného zájmu zavazující?",
+    "answer": "Není. Nezávazný zájem není smlouva ani závazek. Sdělujete nám orientační podmínky, za kterých by pro vás Hub dával smysl, a my vás zapíšeme do skupiny lidí, se kterými budeme dál v kontaktu o detailech nabídky. Můžete kdykoli odstoupit.",
     "order": 5
   },
   "q6": {
     "audience": "resident",
     "question": "Kolik bude pobyt stát?",
-    "answer": "Cenová pásma ladíme podle reálné poptávky a podle finální podoby provozu. Orientačně: kapsle nejlevněji, jednolůžkový pokoj nejdráž, sdílený pokoj a klidnější uzavíratelné místo někde mezi. Konkrétní rozsahy jsou v formuláři. Cena vždy zahrnuje základní služby.",
+    "answer": "Cenová pásma nastavujeme podle reálné poptávky a podle finální podoby provozu. Orientačně: kapsle nejlevněji, jednolůžkový pokoj nejdráž, sdílený pokoj a klidnější uzavíratelné místo někde mezi. Konkrétní rozsahy jsou ve formuláři. Cena vždy zahrnuje základní služby.",
     "order": 6
   },
   "q7": {
     "audience": "resident",
     "question": "Co znamená pobytové stipendium?",
-    "answer": "Stipendium je popsaný výběr pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Není to slevový kód, je to popsaný výběr na základě záměru či projektu, který v Hubu chcete rozjet. V před-rezervačním formuláři máte možnost o stipendium požádat.",
+    "answer": "Stipendium je výběrový režim pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Není to slevový kód — vybíráme podle záměru, který v Hubu chcete rozjet. Vedle stipendia existují dvě paralelní cesty pro non-paying rezidenty: work-trade (správce) a rezident-tvůrce. Všechny tři si můžete vybrat ve formuláři nezávazného zájmu.",
     "order": 7
   },
   "q8": {
     "audience": "resident",
     "question": "Jak je to s délkou pobytu a flexibilitou?",
-    "answer": "Hub je dimenzovaný na různě dlouhé pobyty: krátkodobé v kapslích, dlouhodobější v pokojích. Ve formuláři vybíráte orientační délku (1 měsíc / 1 rok / 5 let nebo jinou) a možnost prodloužit. Konkrétní smluvní podmínky budeme dolaďovat podle toho, co lidem nejvíc dává smysl.",
+    "answer": "Hub počítá s různě dlouhými pobyty: krátké v kapslích, delší v pokojích. Ve formuláři vybíráte orientační délku (1–3 měsíce, 3–6, 6–12, 12 a více) a zda chcete mít možnost ji prodlužovat. Konkrétní smluvní podmínky doladíme podle toho, co lidem nejvíc dává smysl.",
     "order": 8
   }
 }
