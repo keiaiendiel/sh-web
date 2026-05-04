@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import Gallery from '../components/Gallery.astro';
 import { withBase } from '../utils/url';
 import { getEntry } from 'astro:content';
 
@@ -84,48 +85,75 @@ const claims = [
   },
 ];
 
-// Editorial zigzag — 5 rows alternating ltr/rtl with slight overlap rhythm.
+// Editorial zigzag — 5 rows alternating ltr/rtl. Each row teď renderuje
+// inline horizontální galerii (mobile swipe / desktop arrows + dots) místo
+// jediného obrázku, takže každá kapitola má víc snímků k prolistování.
 const zigzag = [
   {
     dir: 'ltr',
-    src: withBase('/images/hub/aerial/areal-entry.jpg'),
-    alt: 'Letecký pohled na vstup do areálu Horních kasáren v Klecanech — historická brána a centrální dvůr s rekonstruovanými budovami.',
     eyebrow: 'Místo',
     title: 'Areál Horních kasáren · 12 km od Prahy.',
     body: 'Klecany leží těsně za hranicí Prahy. Areál sedí na trase plánované tramvajové zastávky Výzkumný ústav I. (vydáno stavební povolení) a navrhované cyklostezky podél Vltavy. Přes špičku jezdí kyvadlový bus na metro Kobylisy.',
     eager: true,
+    images: [
+      { src: withBase('/images/hub/aerial/buildings-a-c.jpg'), alt: 'Letecký pohled na centrální dvůr Startovacího Hubu — budovy A1–A6 a C kolem komunitního parku.' },
+      { src: withBase('/images/hub/aerial/areal-entry.jpg'),   alt: 'Letecký pohled na vstup do areálu Horních kasáren — historická brána a centrální dvůr s rekonstruovanými budovami.' },
+      { src: withBase('/images/hub/aerial/buildings-a.jpg'),   alt: 'Letecký pohled na rekonstruované budovy A1–A6 v Startovacím Hubu.' },
+    ],
   },
   {
     dir: 'rtl',
-    src: withBase('/images/hub/interior/b-jidelna.jpg'),
-    alt: 'Vizualizace jídelní a sezení sekce v objektu B Startovacího Hubu — dřevěné stoly, lavice a večerní osvětlení nad tržnicí a kavárnou.',
     eyebrow: 'Komunita',
     title: 'Tržnice, kavárna, pekárna a minipivovar v objektu B.',
     body: 'V budově B funguje tržnice s lokálními producenty, kavárna, pekárna, minipivovar a venkovní zázemí pro food-trucky. V přízemí budovy C je coworkingový sál s pódiem pro přednášky a kapely.',
+    images: [
+      { src: withBase('/images/hub/interior/b-jidelna.jpg'),          alt: 'Jídelní a sezení v objektu B — dřevěné stoly, lavice, večerní osvětlení nad tržnicí a kavárnou.' },
+      { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'),    alt: 'Tržnice s minipivovarem v objektu B — venkovní zázemí pro food-trucky.' },
+      { src: withBase('/images/hub/interior/hub-market-evening.jpg'), alt: 'Tržnice za soumraku v objektu B s prosvícenými okny.' },
+      { src: withBase('/images/hub/interior/hub-market-daytime.jpg'), alt: 'Tržnice v objektu B přes den — stánky lokálních producentů.' },
+      { src: withBase('/images/hub/exterior/cowork.jpg'),             alt: 'Coworkingový sál v přízemí budovy C — pevné stoly, projektor, kávovar v rohu.' },
+    ],
   },
   {
     dir: 'ltr',
-    src: withBase('/images/hub/interior/1kk-1.jpg'),
-    alt: 'Vizualizace privátní jednotky 1+kk v Startovacím Hubu — sklopná postel, kuchyňský kout, pracovní stůl, vlastní koupelna.',
     eyebrow: 'Bydlení',
     title: '~331 privátních jednotek 1+kk.',
     body: 'Každá jednotka má vlastní sociální zázemí: sprchu, umyvadlo a toaletu. Sklopná postel uvolní obytný prostor přes den. Členové přípravného družstva mají navíc právo na luxusní stavební buňku 1+kk se zvýšeným standardem výbavy.',
+    images: [
+      { src: withBase('/images/hub/interior/1kk-1.jpg'),            alt: 'Vizualizace privátní jednotky 1+kk — sklopná postel, kuchyňský kout, pracovní stůl, vlastní koupelna.' },
+      { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'),        alt: 'Luxusní stavební buňka 1+kk v budovách A4–A6 pro členy přípravného družstva — vyšší standard výbavy.' },
+      { src: withBase('/images/hub/interior/kapsle-horizontal.jpg'),alt: 'Kapsulová jednotka v Hubu — dřevěné spací moduly s integrovaným osvětlením a sdíleným loungem na chodbě.' },
+      { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'),    alt: 'Větší pokoj v budovách A pro dvě osoby — kuchyňský kout, jídelní stůl, postel uprostřed.' },
+      { src: withBase('/images/hub/interior/1kk-2.jpg'),            alt: 'Privátní jednotka 1+kk varianta 2 — alternativní řešení obytného prostoru.' },
+      { src: withBase('/images/hub/interior/1kk-3.jpg'),            alt: 'Privátní jednotka 1+kk varianta 3 — kompaktní layout s vlastní koupelnou.' },
+      { src: withBase('/images/hub/interior/koupelna-a.jpg'),       alt: 'Koupelna v jednotce 1+kk v budovách A — sprcha, umyvadlo, toaleta.' },
+    ],
   },
   {
     dir: 'rtl',
-    src: withBase('/images/hub/aerial/areal-bazen.jpg'),
-    alt: 'Letecký pohled na vnitřní dvůr Startovacího Hubu s venkovním bazénem před objektem D, saunou v objektu E a okolními budovami areálu.',
     eyebrow: 'Areál',
     title: 'Vnitřní dvůr a zázemí.',
     body: 'Sedm rekonstruovaných budov (A1–A6 + C) na ~6 700 m² čistých podlahových ploch. Mezi nimi sauna v objektu E, venkovní bazén před objektem D, komunitní park s grilovacími místy a telocvična na vzduchu.',
+    images: [
+      { src: withBase('/images/hub/aerial/areal-bazen.jpg'),         alt: 'Letecký pohled na vnitřní dvůr s venkovním bazénem před objektem D a saunou v objektu E.' },
+      { src: withBase('/images/hub/exterior/sport.jpg'),             alt: 'Sportoviště v komunitním parku před objektem B — telocvična na vzduchu a calisthenics.' },
+      { src: withBase('/images/hub/exterior/hub-courtyard-trees.jpg'),alt: 'Vnitřní dvůr s břízami, lavicemi a večerním osvětlením.' },
+      { src: withBase('/images/hub/exterior/hub-courtyard-night.jpg'),alt: 'Vnitřní dvůr Startovacího Hubu za soumraku — atmosféra po setmění.' },
+      { src: withBase('/images/hub/exterior/building-e-f.jpg'),      alt: 'Vizualizace objektů E a F Startovacího Hubu — wellness zóna se saunou.' },
+    ],
   },
   {
     dir: 'ltr',
-    src: withBase('/images/hub/interior/window-view-a.jpg'),
-    alt: 'Pohled z okna většího pokoje v budovách A1–A3 do vnitřního dvora areálu — pracovní zóna s laptopem na stole a knihovnou.',
     eyebrow: 'Pro koho',
     title: 'Pracující studenty, OSVČ a mladí kreativci.',
     body: 'Hub je dělaný pro lidi, kteří startují: začínající podnikatele, studenty na bakalářce nebo diplomce, OSVČ na začátku kariéry. Pro někoho je to startovní bydlení, pro jiného přechodný mezikrok.',
+    images: [
+      { src: withBase('/images/hub/interior/window-view-a.jpg'),     alt: 'Pohled z okna pokoje v budovách A1–A3 — pracovní zóna s laptopem a knihovnou nad vnitřním dvorem.' },
+      { src: withBase('/images/hub/interior/hub-market-people.jpg'), alt: 'Skupinka lidí na tržnici v objektu B Startovacího Hubu.' },
+      { src: withBase('/images/hub/exterior/hub-courtyard-night.jpg'),alt: 'Lidé na vnitřním dvoře areálu za soumraku.' },
+      { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'),   alt: 'Lidé před tržnicí a minipivovarem v objektu B.' },
+      { src: withBase('/images/hub/exterior/hub-courtyard-trees.jpg'),alt: 'Lidé na vnitřním dvoře areálu mezi břízami.' },
+    ],
   },
 ];
 ---
@@ -237,16 +265,9 @@ const zigzag = [
         class:list={['hub-zigzag__row', `hub-zigzag__row--${row.dir}`]}
         data-row={i}
         data-zigzag-reveal>
-        <figure class="hub-zigzag__media">
-          <button
-            type="button"
-            class="hub-zigzag__media-trigger"
-            data-lightbox-open
-            data-index={i}
-            aria-label={`Otevřít ve zvětšení: ${row.alt}`}>
-            <img src={row.src} alt={row.alt} loading={row.eager ? 'eager' : 'lazy'} decoding="async" />
-          </button>
-        </figure>
+        <div class="hub-zigzag__media">
+          <Gallery images={row.images} ariaLabel={row.eyebrow} eager={row.eager} aspectRatio="4 / 3" />
+        </div>
         <div class="hub-zigzag__copy">
           <span class="osa-eyebrow">{row.eyebrow}</span>
           <h3>{row.title}</h3>
@@ -255,21 +276,6 @@ const zigzag = [
       </div>
     ))}
   </section>
-
-  <!-- Lightbox overlay — opens on zigzag image click; arrow keys / buttons navigate. -->
-  <div class="hub-lightbox" id="hub-lightbox" role="dialog" aria-modal="true" aria-label="Vizualizace areálu" hidden>
-    <button class="hub-lightbox__close" type="button" aria-label="Zavřít">×</button>
-    <button class="hub-lightbox__nav hub-lightbox__nav--prev" type="button" aria-label="Předchozí">‹</button>
-    <button class="hub-lightbox__nav hub-lightbox__nav--next" type="button" aria-label="Další">›</button>
-    <figure class="hub-lightbox__figure">
-      <img class="hub-lightbox__img" src="" alt="" />
-      <figcaption class="hub-lightbox__caption">
-        <span class="osa-eyebrow hub-lightbox__caption-eyebrow"></span>
-        <span class="hub-lightbox__caption-title"></span>
-        <span class="hub-lightbox__caption-counter"></span>
-      </figcaption>
-    </figure>
-  </div>
 
   <section class="hub-cta-pair">
     <div class="hub-cta-pair__grid">
@@ -382,68 +388,6 @@ const zigzag = [
         }, 1200);
       }
     }
-
-    // Lightbox — arrow nav, ESC close, click outside close.
-    const lightbox = document.getElementById('hub-lightbox');
-    const triggers = document.querySelectorAll('[data-lightbox-open]:not([data-lightbox-bound])');
-    if (!lightbox || !triggers.length) return;
-    triggers.forEach((t) => { t.dataset.lightboxBound = '1'; });
-
-    const slides = Array.from(triggers).map((t) => {
-      const img = t.querySelector('img');
-      const row = t.closest('[data-zigzag-reveal]');
-      return {
-        src: img.src,
-        alt: img.alt,
-        eyebrow: row?.querySelector('.osa-eyebrow')?.textContent?.trim() ?? '',
-        title: row?.querySelector('h3')?.textContent?.trim() ?? '',
-      };
-    });
-
-    let active = 0;
-    const lbImg     = lightbox.querySelector('.hub-lightbox__img');
-    const lbEyebrow = lightbox.querySelector('.hub-lightbox__caption-eyebrow');
-    const lbTitle   = lightbox.querySelector('.hub-lightbox__caption-title');
-    const lbCounter = lightbox.querySelector('.hub-lightbox__caption-counter');
-
-    function render() {
-      const s = slides[active];
-      lbImg.src = s.src;
-      lbImg.alt = s.alt;
-      lbEyebrow.textContent = s.eyebrow;
-      lbTitle.textContent = s.title;
-      lbCounter.textContent = `${active + 1} / ${slides.length}`;
-    }
-    function open(i) {
-      active = i;
-      render();
-      lightbox.hidden = false;
-      requestAnimationFrame(() => lightbox.classList.add('is-open'));
-      document.documentElement.classList.add('osa-nav-lock');
-    }
-    function close() {
-      lightbox.classList.remove('is-open');
-      document.documentElement.classList.remove('osa-nav-lock');
-      setTimeout(() => { lightbox.hidden = true; }, 220);
-    }
-    function step(delta) {
-      active = (active + delta + slides.length) % slides.length;
-      render();
-    }
-
-    triggers.forEach((t, i) => t.addEventListener('click', () => open(i)));
-    lightbox.querySelector('.hub-lightbox__close').addEventListener('click', close);
-    lightbox.querySelector('.hub-lightbox__nav--prev').addEventListener('click', () => step(-1));
-    lightbox.querySelector('.hub-lightbox__nav--next').addEventListener('click', () => step(1));
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) close();
-    });
-    document.addEventListener('keydown', (e) => {
-      if (lightbox.hidden) return;
-      if (e.key === 'Escape') close();
-      else if (e.key === 'ArrowLeft')  step(-1);
-      else if (e.key === 'ArrowRight') step(1);
-    });
 
     // Leaflet map under "Místo" — same pattern as /o-arealu/.
     const mapEl = document.getElementById('hub-landing-map');
@@ -1012,29 +956,7 @@ const zigzag = [
   }
   .hub-zigzag__row--rtl .hub-zigzag__media { order: 2; }
   .hub-zigzag__row--rtl .hub-zigzag__copy  { order: 1; }
-  .hub-zigzag__media { margin: 0; }
-  .hub-zigzag__media-trigger {
-    display: block; width: 100%;
-    padding: 0; margin: 0;
-    background: transparent; border: 0;
-    cursor: zoom-in;
-    border-radius: var(--radius-input);
-    overflow: hidden;
-    transition: box-shadow 300ms var(--ease-decel);
-  }
-  .hub-zigzag__media-trigger:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
-  }
-  .hub-zigzag__media img {
-    width: 100%; height: auto;
-    aspect-ratio: 4/3; object-fit: cover; display: block;
-    border-radius: var(--radius-input);
-    transition: transform 600ms var(--ease-decel);
-  }
-  .hub-zigzag__media-trigger:hover img {
-    transform: scale(1.015);
-  }
+  .hub-zigzag__media { margin: 0; min-width: 0; }
   .hub-zigzag__copy { max-width: 480px; }
   .hub-zigzag__copy .osa-eyebrow {
     display: inline-block; color: var(--accent);
@@ -1315,72 +1237,4 @@ const zigzag = [
   :global(.op-map-popup span) { color: var(--fg-muted); font-size: 12px; }
   :global(.op-map-popup .op-map-popup__cta) { color: var(--accent); font-weight: 600; margin-top: 4px; }
 
-  /* LIGHTBOX -- fullscreen overlay; ESC + arrow-key navigation. */
-  .hub-lightbox {
-    position: fixed; inset: 0;
-    z-index: 60;
-    background: rgba(0, 0, 0, 0.92);
-    display: flex; align-items: center; justify-content: center;
-    padding: clamp(40px, 6vw, 80px);
-    opacity: 0;
-    transition: opacity 220ms var(--ease-decel);
-  }
-  .hub-lightbox.is-open { opacity: 1; }
-  .hub-lightbox[hidden] { display: none; }
-  .hub-lightbox__figure {
-    margin: 0;
-    max-width: min(1280px, 96vw);
-    max-height: 100%;
-    display: flex; flex-direction: column; gap: 12px;
-    align-items: center;
-  }
-  .hub-lightbox__img {
-    max-width: 100%;
-    max-height: calc(100vh - 200px);
-    object-fit: contain;
-    display: block;
-    border-radius: var(--radius-input);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-  }
-  .hub-lightbox__caption {
-    display: grid; gap: 4px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.92);
-    font-size: 14px; line-height: 1.5;
-  }
-  .hub-lightbox__caption-eyebrow { color: rgba(255, 255, 255, 0.6); }
-  .hub-lightbox__caption-title { font-weight: 600; font-size: 16px; }
-  .hub-lightbox__caption-counter {
-    color: rgba(255, 255, 255, 0.5);
-    font-family: var(--font-mono); font-size: 12px;
-  }
-  .hub-lightbox__close,
-  .hub-lightbox__nav {
-    position: absolute;
-    width: 48px; height: 48px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition:
-      background var(--dur-base) var(--ease-decel),
-      border-color var(--dur-base) var(--ease-decel);
-  }
-  .hub-lightbox__close:hover,
-  .hub-lightbox__nav:hover {
-    background: rgba(255, 255, 255, 0.24);
-    border-color: rgba(255, 255, 255, 0.55);
-  }
-  .hub-lightbox__close { top: 24px; right: 24px; }
-  .hub-lightbox__nav--prev { left: 24px; top: 50%; transform: translateY(-50%); }
-  .hub-lightbox__nav--next { right: 24px; top: 50%; transform: translateY(-50%); }
-  .hub-lightbox__close:focus-visible,
-  .hub-lightbox__nav:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
 </style>

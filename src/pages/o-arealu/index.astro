@@ -1,8 +1,45 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Gallery from '../../components/Gallery.astro';
 import { withBase } from '../../utils/url';
 
 const lastUpdated = '2026-05-04';
+
+// Areál a okolí — drone shoty + venkovní pohledy nahrazují bývalý 4-image grid.
+const arealGallery = [
+  { src: withBase('/images/hub/aerial/buildings-a-c.jpg'),       alt: 'Letecký pohled na centrální dvůr areálu — budovy A1–A6 a C v jádru Hubu.' },
+  { src: withBase('/images/hub/aerial/areal-entry.jpg'),         alt: 'Letecký pohled na vstup do areálu Horních kasáren.' },
+  { src: withBase('/images/hub/aerial/buildings-a.jpg'),         alt: 'Letecký pohled na rekonstruované budovy A1–A6.' },
+  { src: withBase('/images/hub/aerial/areal-bazen.jpg'),         alt: 'Letecký pohled na vnitřní dvůr s venkovním bazénem před objektem D a saunou v objektu E.' },
+  { src: withBase('/images/hub/exterior/hub-courtyard-trees.jpg'),alt: 'Vnitřní dvůr s břízami, lavicemi a večerním osvětlením.' },
+  { src: withBase('/images/hub/exterior/hub-courtyard-night.jpg'),alt: 'Vnitřní dvůr Startovacího Hubu za soumraku.' },
+  { src: withBase('/images/hub/exterior/hub-street-daytime.jpg'),alt: 'Pohled z ulice na rekonstruované kasárenské budovy přes den.' },
+  { src: withBase('/images/hub/exterior/hub-street-sunset.jpg'), alt: 'Pohled z ulice na areál za západu slunce.' },
+];
+
+// Budovy a interiéry — nová sekce za časovou osou, představuje sedm budov
+// etapy 1 a interiéry, které v nich rezidenti najdou.
+const budovyGallery = [
+  { src: withBase('/images/hub/exterior/building-b.jpg'),       alt: 'Vizualizace objektu B — komunitní centrum s tržnicí, kavárnou, pekárnou a minipivovarem.' },
+  { src: withBase('/images/hub/exterior/building-c.jpg'),       alt: 'Vizualizace budovy C — coworkingový sál, ateliéry a nahrávací studia v přízemí.' },
+  { src: withBase('/images/hub/exterior/building-e-f.jpg'),     alt: 'Vizualizace objektů E a F — wellness zóna se saunou.' },
+  { src: withBase('/images/hub/exterior/building-d1.jpg'),      alt: 'Vizualizace objektu D1 — venkovní bazén areálu.' },
+  { src: withBase('/images/hub/exterior/building-a-1.jpg'),     alt: 'Vizualizace budovy A — jeden ze šesti rezidenčních objektů.' },
+  { src: withBase('/images/hub/exterior/building-a-5.jpg'),     alt: 'Vizualizace budovy A z dalšího úhlu — fasáda po rekonstrukci.' },
+  { src: withBase('/images/hub/exterior/building-a-6.jpg'),     alt: 'Vizualizace budovy A — varianta detailu fasády.' },
+  { src: withBase('/images/hub/exterior/building-p.jpg'),       alt: 'Vizualizace objektu P v areálu Hubu.' },
+  { src: withBase('/images/hub/exterior/building-s.jpg'),       alt: 'Vizualizace objektu S v areálu Hubu.' },
+];
+
+const interierGallery = [
+  { src: withBase('/images/hub/interior/1kk-1.jpg'),            alt: 'Vizualizace privátní jednotky 1+kk — sklopná postel, kuchyňský kout, pracovní stůl, vlastní koupelna.' },
+  { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'),        alt: 'Luxusní stavební buňka 1+kk v budovách A4–A6 pro členy přípravného družstva.' },
+  { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'),    alt: 'Větší pokoj v budovách A pro dvě osoby — kuchyňský kout, jídelní stůl, postel uprostřed.' },
+  { src: withBase('/images/hub/interior/kapsle-horizontal.jpg'),alt: 'Kapsulová jednotka v Hubu — dřevěné spací moduly s integrovaným osvětlením.' },
+  { src: withBase('/images/hub/interior/koupelna-a.jpg'),       alt: 'Koupelna v jednotce 1+kk v budovách A — sprcha, umyvadlo, toaleta.' },
+  { src: withBase('/images/hub/interior/chodba-a-1.jpg'),       alt: 'Chodba v rekonstruovaných budovách A1–A6 — přírodní materiály, tlumené světlo.' },
+  { src: withBase('/images/hub/interior/b-jidelna.jpg'),        alt: 'Jídelna v objektu B — dřevěné stoly a lavice nad tržnicí a kavárnou.' },
+];
 ---
 <Base
   title="O areálu · Startovací Hub Klecany"
@@ -83,11 +120,8 @@ const lastUpdated = '2026-05-04';
       <h3 class="op-h3">Okolí a služby</h3>
       <p>V pěší dostupnosti od areálu jsou základní služby (potraviny, lékárna, pošta), škola, zdravotní středisko, dvě kavárny a hospoda. V Klecanech funguje dětské hřiště, sportoviště, knihovna a kulturní dům. Do pěti kilometrů je supermarket, koupaliště Vltava, řada hospůdek na pravém břehu a nedaleký zámek Veltrusy. Pro lidi, kteří chtějí bydlet blízko Prahy bez pražských nájmů, jde o reálný kompromis: ne odříznutí od služeb, ale zároveň ne v rušném městě.</p>
 
-      <div class="op-place-photos">
-        <img src={withBase('/images/hub/aerial/buildings-a-c.jpg')} alt="Letecký pohled na centrální dvůr areálu — budovy A1–A6 a C v jádru Hubu." loading="lazy" />
-        <img src={withBase('/images/hub/exterior/building-b.jpg')} alt="Vizualizace objektu B — komunitní centrum s tržnicí, kavárnou, pekárnou a minipivovarem." loading="lazy" />
-        <img src={withBase('/images/hub/aerial/areal-bazen.jpg')} alt="Letecký pohled na vnitřní dvůr s venkovním bazénem před objektem D a saunou v objektu E." loading="lazy" />
-        <img src={withBase('/images/hub/interior/b-jidelna.jpg')} alt="Vizualizace jídelní a sezení sekce v objektu B s dřevěnými stoly, lavicemi a večerním osvětlením." loading="lazy" />
+      <div class="op-gallery-block">
+        <Gallery images={arealGallery} ariaLabel="Areál a okolí" aspectRatio="16 / 10" />
       </div>
     </div>
   </section>
@@ -164,6 +198,15 @@ const lastUpdated = '2026-05-04';
     });
   </script>
 
+  <section class="op-gallery-section" aria-labelledby="op-budovy-heading">
+    <header class="op-gallery-section__head">
+      <span class="osa-eyebrow">Budovy</span>
+      <h2 id="op-budovy-heading" class="op-gallery-section__heading">Sedm objektů etapy 1.</h2>
+      <p class="op-gallery-section__lede">Rekonstruují se stávající kasárenské budovy A1–A6 a budova C. K nim sedm objektů zázemí (B, D, E, F, P, S, bazén) v širším areálu. Každý objekt má vlastní roli v provozu Hubu.</p>
+    </header>
+    <Gallery images={budovyGallery} ariaLabel="Vizualizace budov areálu" aspectRatio="16 / 10" />
+  </section>
+
   <section class="op-chapter" id="casova-osa">
     <header class="op-chapter__head">
       <span class="op-chapter__num osa-mono">Kapitola 02</span>
@@ -217,6 +260,15 @@ const lastUpdated = '2026-05-04';
         </li>
       </ol>
     </div>
+  </section>
+
+  <section class="op-gallery-section" aria-labelledby="op-interier-heading">
+    <header class="op-gallery-section__head">
+      <span class="osa-eyebrow">Interiér</span>
+      <h2 id="op-interier-heading" class="op-gallery-section__heading">Jak rezident bydlí.</h2>
+      <p class="op-gallery-section__lede">Privátní jednotky 1+kk se sklopnou postelí a vlastním sociálním zázemím, kapsle ve sdílených jednotkách, větší pokoje pro páry a luxusní stavební buňky pro členy přípravného družstva. Sdílené chodby a koupelny v běžných standardech.</p>
+    </header>
+    <Gallery images={interierGallery} ariaLabel="Vizualizace interiérů Hubu" aspectRatio="16 / 10" />
   </section>
 
   <section class="op-chapter" id="zazemi">
@@ -446,19 +498,42 @@ const lastUpdated = '2026-05-04';
   }
 
   /* PLACE PHOTOS */
-  .op-place-photos {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-    margin: 24px 0;
+  /* Gallery block uvnitř kapitoly — drží šířku obsahu kapitoly a vytváří
+     dýchavinu nad/pod galerií. */
+  .op-gallery-block {
+    margin: 32px 0 8px;
   }
-  @media (max-width: 720px) { .op-place-photos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .op-place-photos img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    display: block;
-    border-radius: var(--radius-input);
+
+  /* Plnostránková gallery sekce mezi kapitolami — vlastní container, eyebrow
+     a nadpis stejný jako u .op-chapter, ale bez levého numeru kapitoly,
+     takže je čitelně vedlejší (vizuální, ne strukturální obsah). */
+  .op-gallery-section {
+    padding: clamp(48px, 7vw, 96px) var(--gutter);
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    border-top: 1px solid var(--border-muted);
+  }
+  .op-gallery-section__head {
+    max-width: 720px;
+    margin: 0 0 28px;
+    display: grid;
+    gap: 8px;
+  }
+  .op-gallery-section__heading {
+    font-family: var(--font-sans);
+    font-size: clamp(24px, 2.6vw, 36px);
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .op-gallery-section__lede {
+    font-size: clamp(15px, 1.25vw, 17px);
+    line-height: 1.55;
+    color: var(--fg-muted);
+    margin: 4px 0 0;
+    max-width: 64ch;
   }
 
   /* MAP BANNER -- full-width OSM iframe under the Místo chapter. */

@@ -1,358 +1,269 @@
 ---
 /*
- * Gallery - 4x2 uniform grid on desktop, horizontal filmstrip on mobile.
- * Images display in natural color (gallery is the one colorful surface of
- * the site). Entrance: clip-path frame-draw staggered per cell. Hover: soft
- * zoom + subtle contrast lift. Mobile: horizontal scroll-snap with partial peek.
+ * Gallery — inline horizontal carousel for image groups inside zigzag rows
+ * and on /o-arealu/. Mobile: native scroll-snap (touch swipe). Desktop:
+ * arrow buttons + dot indicator + counter. Falls back to a single image
+ * when only one image is given.
+ *
+ * Aspect ratio is controlled by the parent via the `aspectRatio` prop
+ * (default 4/3 to match the prior zigzag image ratio).
  */
-import { withBase } from '../utils/url';
-interface Image { src: string; alt?: string; }
+interface GalleryImage {
+  src: string;
+  alt: string;
+}
 interface Props {
-  /**
-   * Accepts either an array of Image objects ({ src, alt? }) for richer
-   * captions, or a plain string[] of image paths. Strings are normalized
-   * to { src } internally so the rest of the component is unchanged.
-   * Paths in either form may be raw `/images/...` paths OR already wrapped
-   * by withBase() — withBase strips a leading base it already sees, so it
-   * is idempotent and safe either way.
-   */
-  images?: Array<Image | string>;
-  /**
-   * When null, hides the big H2 under the eyebrow. Useful when the gallery
-   * is embedded inside a longer article (the article already owns the page
-   * headline and a "Z provozu spolkových prostorů." line would read as a
-   * second, misplaced title).
-   */
-  title?: string | null;
+  images: GalleryImage[];
+  ariaLabel: string;
+  /** First slide gets loading=eager (use only on above-the-fold rows). */
+  eager?: boolean;
+  /** CSS aspect-ratio for the viewport, e.g. "4 / 3" or "16 / 10". */
+  aspectRatio?: string;
 }
-
-const { images: rawImages = [] as Array<Image | string>, title = null as string | null } = Astro.props;
-const images: Image[] = rawImages.map((it) => (typeof it === 'string' ? { src: it } : it));
-
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
-function srcWithBase(s: string): string {
-  // Idempotent: if the path already starts with the configured base, return as-is;
-  // otherwise wrap. Lets callers pass either raw `/images/...` or pre-wrapped paths.
-  if (BASE && s.startsWith(BASE + '/')) return s;
-  return withBase(s);
-}
+const { images, ariaLabel, eager = false, aspectRatio = '4 / 3' } = Astro.props;
+const single = images.length <= 1;
 ---
-<section class="osa-gallery section--loose">
-  <div class="container-wide">
-    <header class="osa-gallery__head" data-reveal>
-      <span class="osa-eyebrow">Galerie</span>
-      {title && <h2 class="osa-h2 osa-gallery__title">{title}</h2>}
-    </header>
-    <ul class="osa-gallery__grid" role="list">
-      {images.slice(0, 8).map((img, i) => (
-        <li
-          class="osa-gallery__cell"
-          data-reveal
-          data-reveal-delay={String((i % 3) + 1)}>
-          <button
-            type="button"
-            class="osa-gallery__trigger"
-            data-lightbox-src={srcWithBase(img.src)}
-            data-lightbox-alt={img.alt ?? ''}
-            data-lightbox-index={String(i)}
-            aria-label={img.alt ? `Zobrazit fotografii: ${img.alt}` : `Zobrazit fotografii ${i + 1}`}>
-            <img
-              src={srcWithBase(img.src)}
-              alt={img.alt ?? ''}
-              loading="lazy"
-              decoding="async"
-              class="osa-gallery__img" />
-          </button>
-        </li>
+{single ? (
+  <figure class="gallery gallery--single" style={`--gallery-aspect: ${aspectRatio};`}>
+    <img
+      src={images[0]?.src}
+      alt={images[0]?.alt ?? ''}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  </figure>
+) : (
+  <div
+    class="gallery"
+    data-gallery
+    role="region"
+    aria-roledescription="carousel"
+    aria-label={ariaLabel}
+    style={`--gallery-aspect: ${aspectRatio};`}>
+    <div class="gallery__viewport" data-gallery-viewport tabindex="0">
+      {images.map((img, i) => (
+        <figure class="gallery__slide" data-gallery-slide aria-roledescription="slide" aria-label={`${i + 1} / ${images.length}`}>
+          <img
+            src={img.src}
+            alt={img.alt}
+            loading={eager && i === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </figure>
       ))}
-    </ul>
+    </div>
+    <button type="button" class="gallery__btn gallery__btn--prev" data-gallery-prev aria-label="Předchozí snímek">‹</button>
+    <button type="button" class="gallery__btn gallery__btn--next" data-gallery-next aria-label="Další snímek">›</button>
+    <span class="gallery__counter" aria-hidden="true" data-gallery-counter></span>
+    <div class="gallery__dots" role="tablist" aria-label={`Pozice v galerii: ${ariaLabel}`}>
+      {images.map((_, i) => (
+        <button
+          type="button"
+          class="gallery__dot"
+          data-gallery-dot={i}
+          aria-label={`Snímek ${i + 1} z ${images.length}`}>
+        </button>
+      ))}
+    </div>
   </div>
-
-  <div class="osa-lightbox" role="dialog" aria-modal="true" aria-label="Prohlížeč fotografií" hidden>
-    <button type="button" class="osa-lightbox__close" aria-label="Zavřít">
-      <span aria-hidden="true">×</span>
-    </button>
-    <button type="button" class="osa-lightbox__nav osa-lightbox__nav--prev" aria-label="Předchozí fotografie">
-      <span aria-hidden="true">‹</span>
-    </button>
-    <button type="button" class="osa-lightbox__nav osa-lightbox__nav--next" aria-label="Další fotografie">
-      <span aria-hidden="true">›</span>
-    </button>
-    <figure class="osa-lightbox__stage">
-      <img class="osa-lightbox__img" alt="" />
-      <figcaption class="osa-lightbox__caption osa-mono"></figcaption>
-    </figure>
-  </div>
-</section>
+)}
 
 <script is:inline>
+  /* Gallery init — runs on every astro:page-load (SPA nav). Idempotent: each
+     gallery gets a `data-gallery-bound` flag so re-fires don't double-attach.
+     The `window.__hubGalleryBound` guard keeps the page-load listener at one
+     copy even when this component renders multiple times in the same page
+     (each <Gallery> instance inlines this script with is:inline). */
   (function () {
-    function init() {
-      document.querySelectorAll('.osa-gallery').forEach(function (gallery) {
-        if (gallery.dataset.galleryBound === '1') return;
+    if (window.__hubGalleryBound) return;
+    window.__hubGalleryBound = true;
+    function initGalleries() {
+      var galleries = document.querySelectorAll('[data-gallery]:not([data-gallery-bound])');
+      galleries.forEach(function (gallery) {
         gallery.dataset.galleryBound = '1';
-        var triggers = [].slice.call(gallery.querySelectorAll('.osa-gallery__trigger'));
-        var lb       = gallery.querySelector('.osa-lightbox');
-        if (triggers.length === 0 || !lb) return;
+        var viewport = gallery.querySelector('[data-gallery-viewport]');
+        var slides = [].slice.call(gallery.querySelectorAll('[data-gallery-slide]'));
+        var dots = [].slice.call(gallery.querySelectorAll('[data-gallery-dot]'));
+        var prevBtn = gallery.querySelector('[data-gallery-prev]');
+        var nextBtn = gallery.querySelector('[data-gallery-next]');
+        var counter = gallery.querySelector('[data-gallery-counter]');
+        if (!viewport || !slides.length) return;
 
-        var img   = lb.querySelector('.osa-lightbox__img');
-        var cap   = lb.querySelector('.osa-lightbox__caption');
-        var close = lb.querySelector('.osa-lightbox__close');
-        var prev  = lb.querySelector('.osa-lightbox__nav--prev');
-        var next  = lb.querySelector('.osa-lightbox__nav--next');
-        var index = 0;
+        var current = 0;
 
-        function render(i) {
-          index = (i + triggers.length) % triggers.length;
-          var t = triggers[index];
-          img.src = t.getAttribute('data-lightbox-src');
-          img.alt = t.getAttribute('data-lightbox-alt') || '';
-          cap.textContent = (index + 1) + ' / ' + triggers.length
-            + (img.alt ? ' · ' + img.alt : '');
+        function setActive(idx) {
+          current = Math.max(0, Math.min(slides.length - 1, idx));
+          dots.forEach(function (d, i) { d.classList.toggle('is-active', i === current); });
+          if (prevBtn) prevBtn.disabled = current === 0;
+          if (nextBtn) nextBtn.disabled = current === slides.length - 1;
+          if (counter) counter.textContent = (current + 1) + ' / ' + slides.length;
         }
 
-        function open(i) {
-          render(i);
-          lb.hidden = false;
-          requestAnimationFrame(function () { lb.classList.add('open'); });
-          document.documentElement.classList.add('osa-lightbox-lock');
-          close.focus();
+        function scrollToSlide(idx) {
+          var slide = slides[idx];
+          if (!slide || !viewport) return;
+          viewport.scrollTo({ left: slide.offsetLeft, behavior: 'smooth' });
+          setActive(idx);
         }
 
-        function shut() {
-          lb.classList.remove('open');
-          document.documentElement.classList.remove('osa-lightbox-lock');
-          setTimeout(function () {
-            if (!lb.classList.contains('open')) lb.hidden = true;
-          }, 220);
-        }
+        if (prevBtn) prevBtn.addEventListener('click', function () { scrollToSlide(current - 1); });
+        if (nextBtn) nextBtn.addEventListener('click', function () { scrollToSlide(current + 1); });
+        dots.forEach(function (d, i) { d.addEventListener('click', function () { scrollToSlide(i); }); });
 
-        triggers.forEach(function (t, i) {
-          t.addEventListener('click', function () { open(i); });
+        var scrollTimer;
+        viewport.addEventListener('scroll', function () {
+          window.clearTimeout(scrollTimer);
+          scrollTimer = window.setTimeout(function () {
+            var idx = Math.round(viewport.scrollLeft / viewport.clientWidth);
+            setActive(idx);
+          }, 80);
         });
-        close.addEventListener('click', shut);
-        prev.addEventListener('click', function () { render(index - 1); });
-        next.addEventListener('click', function () { render(index + 1); });
-        lb.addEventListener('click', function (e) {
-          // tap on the backdrop (not on the image or controls) closes
-          if (e.target === lb || e.target.classList.contains('osa-lightbox__stage')) shut();
+
+        viewport.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowLeft') { e.preventDefault(); scrollToSlide(current - 1); }
+          else if (e.key === 'ArrowRight') { e.preventDefault(); scrollToSlide(current + 1); }
         });
-        document.addEventListener('keydown', function (e) {
-          if (lb.hidden) return;
-          if (e.key === 'Escape') shut();
-          else if (e.key === 'ArrowLeft') render(index - 1);
-          else if (e.key === 'ArrowRight') render(index + 1);
-        });
+
+        setActive(0);
       });
     }
-    document.addEventListener('astro:page-load', init);
+    document.addEventListener('astro:page-load', initGalleries);
   }());
 </script>
 
 <style>
-  .osa-gallery {
-    /* Allow horizontal overflow on mobile filmstrip without scrollbar leak */
-    overflow-x: clip;
-  }
-  .osa-gallery__head {
-    display: grid;
-    gap: var(--space-3);
-    max-width: 56ch;
-    margin: 0 0 var(--space-6);
-  }
-  .osa-gallery__title { margin: 0; }
-
-  /* Desktop: 4x2 grid, every cell 4:3 aspect. Frameless at rest. */
-  .osa-gallery__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-  .osa-gallery__cell {
+  .gallery {
     position: relative;
-    overflow: hidden;
-    background: var(--bg-muted);
-    aspect-ratio: 4 / 3;
+    --gallery-radius: var(--radius-input);
   }
-  /* Button wrapper around each image: clickable, but strips the default
-     button chrome so the photo stays the whole canvas of the cell. */
-  .osa-gallery__trigger {
+  .gallery--single { margin: 0; }
+  .gallery--single img {
+    width: 100%;
+    aspect-ratio: var(--gallery-aspect, 4 / 3);
+    object-fit: cover;
     display: block;
+    border-radius: var(--gallery-radius);
+  }
+  .gallery__viewport {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border-radius: var(--gallery-radius);
+    aspect-ratio: var(--gallery-aspect, 4 / 3);
+    background: var(--bg-muted);
+  }
+  .gallery__viewport::-webkit-scrollbar { display: none; }
+  .gallery__viewport:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  .gallery__slide {
+    flex: 0 0 100%;
     width: 100%;
     height: 100%;
-    padding: 0;
     margin: 0;
-    border: 0;
-    background: transparent;
-    cursor: zoom-in;
-    color: inherit;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
-  .osa-gallery__trigger:focus-visible {
-    outline: 2px solid var(--fg);
-    outline-offset: -2px;
-  }
-
-  /* ---------- Frame-draw entrance --------
-     Each cell gets a ::after cover that retreats downward on reveal, exposing
-     the image from top-to-bottom. Per-cell delay set via data-reveal-delay (1-3).
-     The cell itself uses default [data-reveal] opacity+translate subtly muted. */
-  [data-reveal].osa-gallery__cell {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .osa-gallery__cell::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--fg);
-    clip-path: inset(0 0 0 0);
-    transition: clip-path 720ms var(--ease-expo, cubic-bezier(0.16, 1, 0.3, 1));
-    pointer-events: none;
-    z-index: 2;
-  }
-  [data-reveal].osa-gallery__cell.shown::after {
-    clip-path: inset(0 0 100% 0);
-  }
-
-  /* Colour by default (client direction); hover only nudges zoom + a hint
-     of extra saturation. Earlier monochrome-at-rest treatment was dropped. */
-  .osa-gallery__img {
+  .gallery__slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: saturate(0.95) contrast(1.02);
-    transition:
-      transform 900ms var(--ease-expo, cubic-bezier(0.16, 1, 0.3, 1)),
-      filter 640ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
-  }
-  .osa-gallery__cell:hover .osa-gallery__img,
-  .osa-gallery__cell:focus-within .osa-gallery__img {
-    transform: scale(1.015);
-    filter: saturate(1.05) contrast(1.02);
   }
 
-  /* ---------- Mobile filmstrip --------
-     Below 720px, flip the 4x2 grid into a horizontal scroll-snap row so users
-     can swipe through. Partial-peek of next cell by setting width to ~84vw. */
-  @media (max-width: 720px) {
-    .osa-gallery__grid {
-      display: flex;
-      flex-direction: row;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 var(--gutter) 0 var(--gutter);
-      gap: 4px;
-      background: transparent;
-      border: 0;
-      margin-left: calc(var(--gutter) * -1);
-      margin-right: calc(var(--gutter) * -1);
-    }
-    .osa-gallery__grid::-webkit-scrollbar { display: none; }
-    .osa-gallery__cell {
-      flex: 0 0 84vw;
-      scroll-snap-align: start;
-      aspect-ratio: 4 / 3;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .osa-gallery__cell::after { display: none; }
-    .osa-gallery__img { transition: none; }
-    .osa-gallery__cell:hover .osa-gallery__img { transform: none; filter: none; }
-  }
-
-  /*
-   * Lightbox: minimal full-viewport overlay with one image + caption and
-   * prev/close/next controls. Opens on gallery image click. Keyboard:
-   * ESC close, ArrowLeft/ArrowRight navigate. Tap on backdrop or on the
-   * empty stage area also closes.
-   */
-  /* The hidden attribute MUST win over display:grid or the lightbox
-     overlay stays in the layer above the whole page and silently eats
-     every click/tap. The :not([hidden]) guard keeps the display:grid
-     only when the lightbox is actually being shown. */
-  .osa-lightbox[hidden] { display: none; }
-  .osa-lightbox:not([hidden]) {
-    position: fixed;
-    inset: 0;
-    z-index: 40;
-    background: #000;
-    display: grid;
-    place-items: center;
-    padding: clamp(16px, 4vw, 48px);
-    opacity: 0;
-    transition: opacity 220ms var(--ease-quart, cubic-bezier(0.25, 1, 0.5, 1));
-  }
-  .osa-lightbox.open { opacity: 1; }
-  .osa-lightbox__stage {
-    display: grid;
-    gap: var(--space-3);
-    justify-items: center;
-    max-width: min(1280px, 100%);
-    max-height: 100%;
-    margin: 0;
-  }
-  .osa-lightbox__img {
-    display: block;
-    max-width: 100%;
-    max-height: calc(100vh - 120px);
-    object-fit: contain;
-    background: transparent;
-  }
-  .osa-lightbox__caption {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: var(--text-xs);
-    text-align: center;
-    max-width: 56ch;
-  }
-  .osa-lightbox__close,
-  .osa-lightbox__nav {
+  /* Arrow buttons — desktop only. Touch swipe handles mobile. */
+  .gallery__btn {
     position: absolute;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: #fff;
-    font-family: var(--font-sans);
-    font-size: 28px;
+    top: calc(50% - 22px);
+    width: 44px; height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--fg);
+    font-size: 22px;
     line-height: 1;
     cursor: pointer;
     display: grid;
     place-items: center;
-    opacity: 0.85;
-    transition: opacity 140ms linear;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition:
+      opacity 160ms var(--ease-decel),
+      background 160ms var(--ease-decel),
+      transform 160ms var(--ease-decel);
+    z-index: 2;
   }
-  .osa-lightbox__close:hover,
-  .osa-lightbox__nav:hover,
-  .osa-lightbox__close:focus-visible,
-  .osa-lightbox__nav:focus-visible { opacity: 1; }
-  .osa-lightbox__close:focus-visible,
-  .osa-lightbox__nav:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-  .osa-lightbox__close {
-    top: 16px;
-    right: 16px;
-    font-size: 32px;
+  .gallery__btn:hover { background: #fff; transform: scale(1.05); }
+  .gallery__btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
-  .osa-lightbox__nav--prev { left: 8px;  top: 50%; transform: translateY(-50%); font-size: 44px; }
-  .osa-lightbox__nav--next { right: 8px; top: 50%; transform: translateY(-50%); font-size: 44px; }
+  .gallery__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+  }
+  .gallery__btn--prev { left: 12px; }
+  .gallery__btn--next { right: 12px; }
 
-  :global(html.osa-lightbox-lock),
-  :global(html.osa-lightbox-lock body) { overflow: hidden; }
+  @media (max-width: 720px) {
+    .gallery__btn { display: none; }
+  }
+
+  /* Dot indicator — visible on every breakpoint. */
+  .gallery__dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 14px;
+  }
+  .gallery__dot {
+    width: 8px; height: 8px;
+    border-radius: 999px;
+    border: 0;
+    padding: 0;
+    background: var(--border-muted);
+    cursor: pointer;
+    transition:
+      background 200ms var(--ease-decel),
+      width 200ms var(--ease-decel);
+  }
+  .gallery__dot.is-active {
+    background: var(--accent);
+    width: 24px;
+  }
+  .gallery__dot:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* Counter — small mono badge in top-right. */
+  .gallery__counter {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    pointer-events: none;
+    z-index: 1;
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .osa-lightbox { transition: none; }
-  }
-  @media (max-width: 560px) {
-    .osa-lightbox__nav--prev { font-size: 36px; left: 4px; }
-    .osa-lightbox__nav--next { font-size: 36px; right: 4px; }
-    .osa-lightbox__close    { top: 8px; right: 8px; }
+    .gallery__viewport { scroll-behavior: auto; }
+    .gallery__btn,
+    .gallery__dot { transition: none; }
   }
 </style>
