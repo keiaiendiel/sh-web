@@ -9,7 +9,7 @@ Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr
 
 - Astro 6.1.8, static output, Czech-only.
 - Atyp Special font, K0–K100 monochrome scale, **plum accent `#5A2A5F`** (1 of 8 OSA tricolor accent colors).
-- Light radii (`--radius-input: 4px`) for inputs, CTA buttons, and cards; sharp `0` everywhere else.
+- Light radii (`--radius-input: 7px`) for inputs, CTA buttons, and cards; sharp `0` everywhere else.
 - MDX content collections (`subProjects`, `faq`, `org`).
 - Vanilla CSS, no client framework, no React island. Tiny inline `<script is:inline>` islands for header drawer, form, lightbox, and Leaflet map.
 - `sharp` for image migration only; Leaflet 1.9.4 from CDN (unpkg) used only on `/o-arealu/` for the map banner.
@@ -24,7 +24,7 @@ Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr
 - `/faq/` — audience-tabbed FAQ (Vše / O projektu / Pro obyvatele).
 - `/404`.
 
-All non-landing pages share the same dark image hero pattern (eyebrow + H1 + lede on a brightness-0.42 hero photo).
+All non-landing pages share the same dark image hero pattern (eyebrow + H1 + lede on a hero photo at native brightness with a bottom-heavy black scrim).
 
 ## Audience
 
@@ -55,6 +55,7 @@ The repo carries `.claude/launch.json` so the Claude Code agent can spin up the 
 | `pnpm build` | Static build to `dist/` |
 | `pnpm preview` | Serve `dist/` (post-build verification) |
 | `pnpm migrate:images` | One-shot image migration from `../../12 Startovaci Hub/image/` (raw photos, hero `selected/sh-{1..4}.jpeg`, named extras `kapsle / cowork / trznice-pivovar / sport`) |
+| `pnpm optimize:images` | Idempotent re-encode of `aerial/ exterior/ interior/ hero/` files > 600 KB to JPEG q=80 mozjpeg, max edge 1600 px (auto-renames `.png` → `.jpg`). Use after dropping a new batch into one of those folders. |
 | `pnpm lint` | Run editorial + links lints |
 | `pnpm lint:editorial` | Voice/style lint over `src/content/**/*.mdx` and page bodies |
 | `pnpm lint:links` | HEAD-check external URLs |
@@ -86,14 +87,12 @@ Watch the action at [github.com/keiaiendiel/sh-web/actions](https://github.com/k
 ## Deferred to a programmer
 
 - **Form submission backend** — validation, anti-spam (e.g. honeypot or hCaptcha), autoresponse, storage. The 10-field payload shape is documented in [src/components/ResidentForm.astro](src/components/ResidentForm.astro).
-- **Real per-format room schematics** for Klidnější / Jednolůžkový / Sdílený (Kapsle already has a real photo). Operator deliverable.
-- **Real per-sub-project thumbnails** on `/projekty/` for the three remaining placeholder cards (Komunitní Pivovar / Bytové Družstvo / Sauna a bazén). Operator deliverable.
 - **Analytics + cookie consent** — Plausible or GoatCounter. Out of scope for v1.
 - **DNS cutover to `startovacihub.cz`** — flip `site` in `astro.config.mjs`, drop the `base` line, find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css`. CI auto-deploys.
 
 ## Operator credit
 
 Marek Semerád, předseda OSA II, z.s. — `vpd@osa2.cz`.
-Parent links: [osa2.cz](https://osa2.cz), [osa2.cz/zamer-vpd/](https://osa2.cz/zamer-vpd/).
+Parent organisation: [alternativa2.info](https://www.alternativa2.info/).
 
 For deep operational context (decisions, gotchas, layout details, polish history) see [CLAUDE.md](CLAUDE.md).

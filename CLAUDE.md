@@ -14,7 +14,7 @@ The Hub is phase 1 of the VPD1 záměr (revitalization of horní kasárny Klecan
 |---|---|
 | Framework | Astro 6.1.8, static output |
 | Content | Astro Content Collections (MDX + JSON), Zod-validated |
-| Styling | Vanilla CSS, tokens in `src/styles/`. Plum accent `#5A2A5F`, `--radius-input: 4px` |
+| Styling | Vanilla CSS, tokens in `src/styles/`. Plum accent `#5A2A5F`, `--radius-input: 7px` |
 | Fonts | Self-hosted Atyp Special WOFF2 in `public/fonts/` |
 | Client JS | Tiny inline `<script is:inline>` islands — no bundle |
 | Map | Leaflet 1.9.4 (CDN unpkg) + CARTO Voyager tiles, only on `/o-arealu/` |
@@ -55,7 +55,8 @@ pnpm lint:weight     # per-page eager-weight budget against dist/
 ## Image migration
 
 ```bash
-pnpm migrate:images  # reads from ../../12 Startovaci Hub/image/, writes public/images/hub/
+pnpm migrate:images   # one-shot: reads from ../../12 Startovaci Hub/image/, writes public/images/hub/
+pnpm optimize:images  # idempotent: re-encodes anything > 600 KB in aerial/ exterior/ interior/ hero/ to q=80 mozjpeg, max edge 1600 px; renames .png → .jpg when re-encoding
 ```
 
 ## Pushing to GitHub
@@ -75,24 +76,22 @@ git push origin master
 
 - **Transitional base path.** `astro.config.mjs` has `base: '/sh-web/'`; `tokens.css` font URLs are `/sh-web/fonts/...`. When DNS flips to `startovacihub.cz`: set `site: 'https://startovacihub.cz'`, delete `base`, find/replace `/sh-web/fonts/` → `/fonts/`. `withBase()` becomes a no-op.
 - **Pre-reservation form `console.log`s payload.** Backend wiring (endpoint, validation, anti-spam, autoresponse, storage) needed before public launch.
-- **Per-format room schematics** on landing's "Co Hub nabídne" still use stand-in renders (Kapsle has a real photo). Replace when operator delivers.
-- **Per-sub-project thumbnails on `/projekty/`** are partial — add `thumbnail: "/sh-web/images/hub/..."` to MDX frontmatter as assets arrive.
 - **`lint:weight` doesn't see the hero image** because the base path resolves against a flat `dist/`. Fix when DNS flips (base becomes `/`).
 - **Leaflet from CDN (unpkg).** No local fallback. Acceptable for v1.
+- **Email domain.** User-facing copy + JSON-LD points at `alternativa2.info`; emails (`vpd@osa2.cz` etc.) still on `osa2.cz`. Operator confirms separately whether email moves with the website.
 - **Backup branch `backup/osa-web-pre-hub-redesign`** is local only. Keep until Hub has been in production for one cycle.
 
 ## Contact points
 
-- Operator: Občanské sdružení Alternativa II, z.s. (OSA II).
+- Operator: Občanské sdružení Alternativa II, z.s. (OSA II) — [alternativa2.info](https://www.alternativa2.info/).
 - Předseda: Marek Semerád — `vpd@osa2.cz`.
 - Místopředseda: Štěpán Říha.
 - Legal identifiers: `src/content/org/identity.json` (drives JSON-LD on every page).
 
 ## Deploy checklist (before public launch)
 
-1. Replace per-format room schematics + per-sub-project thumbnails when delivered.
-2. Wire pre-reservation form backend.
-3. Cut DNS to `startovacihub.cz` (drop `CNAME` in `public/`, configure DNS, flip `astro.config.mjs`).
-4. Analytics decision (Plausible / GoatCounter — out of scope for v1).
+1. Wire pre-reservation form backend.
+2. Cut DNS to `startovacihub.cz` (drop `CNAME` in `public/`, configure DNS, flip `astro.config.mjs`).
+3. Analytics decision (Plausible / GoatCounter — out of scope for v1).
 
 The repo builds, lints, and auto-deploys on every push to master.
