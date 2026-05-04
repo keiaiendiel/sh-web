@@ -716,14 +716,18 @@ const zigzag = [
     }
     .hub-amenity-card__body { display: none; }
     /* Detail → padá na pravou stranu řádku, kde "Detail" mizí a zbude jen
-       šipka — víc místa pro nadpis, a non-linked karty mají rovnou nic. */
+       šipka v plumu — víc místa pro nadpis, a non-linked karty mají rovnou
+       nic, takže absence šipky signalizuje „není to klikatelné". */
     .hub-amenity-card__cta {
       position: static;
       opacity: 1;
-      font-size: 16px;
+      font-size: 20px;
       line-height: 1;
       color: var(--accent);
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      transform: translateY(-1px);
     }
     .hub-amenity-card__cta-text { display: none; }
   }

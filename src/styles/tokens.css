@@ -180,6 +180,12 @@
   --gutter:         24px;
 }
 
+/* Mobile: edge-to-content padding stahujeme z 24 na 16 px (33 %).
+   Standardní mobilní jednotka, dýchavinu drží, obsah dostane víc šířky. */
+@media (max-width: 640px) {
+  :root { --gutter: 16px; }
+}
+
 /* =============================================================================
    Semantic type styles
    Apply via utility classes or @extend-like composition in component CSS.
