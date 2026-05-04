@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import { withBase } from '../../utils/url';
 
@@ -43,7 +44,19 @@ const heroVariant = hasHero ? 'dark' : 'light';
         <span class="osa-eyebrow pjd-hero__building">{buildingLabel(project.id)}</span>
         <h1 class="pjd-hero__title">{project.data.name}</h1>
         <p class="pjd-hero__lede">{project.data.role}</p>
-        <span class="pjd-hero__status">{statusLabel(project.data.status)}</span>
+        <div class="pjd-hero__meta">
+          <span class="pjd-hero__status">{statusLabel(project.data.status)}</span>
+          {project.data.provozy && project.data.provozy.length > 0 && (
+            <ul class="pjd-hero__provozy" aria-label="Provozy a služby v tomto celku">
+              {project.data.provozy.map((p) => (
+                <li class="pjd-hero__provoz">
+                  <span class="pjd-hero__provoz-icon" aria-hidden="true"><Icon name={p.icon} size={16} /></span>
+                  <span>{p.label}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </section>
   ) : (
@@ -53,7 +66,19 @@ const heroVariant = hasHero ? 'dark' : 'light';
         <span class="osa-eyebrow pjd-hero__building">{buildingLabel(project.id)}</span>
         <h1 class="pjd-hero__title">{project.data.name}</h1>
         <p class="pjd-hero__lede">{project.data.role}</p>
-        <span class="pjd-hero__status">{statusLabel(project.data.status)}</span>
+        <div class="pjd-hero__meta">
+          <span class="pjd-hero__status">{statusLabel(project.data.status)}</span>
+          {project.data.provozy && project.data.provozy.length > 0 && (
+            <ul class="pjd-hero__provozy" aria-label="Provozy a služby v tomto celku">
+              {project.data.provozy.map((p) => (
+                <li class="pjd-hero__provoz">
+                  <span class="pjd-hero__provoz-icon" aria-hidden="true"><Icon name={p.icon} size={16} /></span>
+                  <span>{p.label}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </section>
   )}
@@ -167,8 +192,57 @@ const heroVariant = hasHero ? 'dark' : 'light';
     color: var(--accent);
     border: 1px solid var(--accent);
     border-radius: 999px;
-    margin-top: 8px;
   }
+  /* Meta row pod hero textem — status pill + řádek provoz chipů (icon +
+     label), jeden flexbox. Wrap na úzkých breakpointech. */
+  .pjd-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+  }
+  .pjd-hero__provozy {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pjd-hero__provoz {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--accent-rule);
+    border-radius: 999px;
+    line-height: 1.4;
+  }
+  .pjd-hero__provoz-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+  }
+  .pjd-hero__provoz-icon :global(svg) {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+  }
+  /* Image hero variant: bílé chipy s podsvícením, ladí se scrimovaným bg. */
+  .pjd-hero--image .pjd-hero__provoz {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #fff;
+    backdrop-filter: blur(2px);
+  }
+  .pjd-hero--image .pjd-hero__provoz-icon { color: #fff; }
 
   .pjd-body {
     padding: clamp(48px, 6vw, 80px) var(--gutter);

@@ -17,6 +17,12 @@ const subProjects = defineCollection({
     thumbnail: z.string().startsWith('/').optional(),
     heroImage: z.string().startsWith('/').optional(),
     heroImageAlt: z.string().min(10).max(200).optional(),
+    /* Provozy chips — drobný řádek ikonek pod nadpisem na sub-projekt page,
+       tematicky odpovídá tile na landing page „Provozy a služby". `icon` =
+       lucide-static name, `label` = krátký český název. */
+    provozy: z
+      .array(z.object({ icon: z.string(), label: z.string() }))
+      .optional(),
   }),
 });
 

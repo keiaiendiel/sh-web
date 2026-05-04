@@ -56,8 +56,8 @@ const provozyServices = [
   { title: 'Bazén',                   body: 'Před objektem D. V létě venkovní koupání, mimo sezónu zazimovaný a slouží jako požární nádrž areálu.',                     icon: 'waves',        parent: 'sauna-bazen' },
   { title: 'Minipivovar',             body: 'Malý nezávislý pivovar v objektu B. Vaří se v pondělí, rozlévá se v pátek v sousední hospodě.',                            icon: 'beer',         parent: 'komunitni-pivovar' },
   { title: 'Sportoviště a park',      body: 'Komunitní park před objektem B: grilovací místa, ping-pong, dětské hřiště, telocvična na vzduchu (calisthenics).',          icon: 'dumbbell',     parent: 'sportoviste-park' },
-  { title: 'Kontejnerové sklady',     body: 'Pro horská kola, lyže, sezónní krámy, archiv. Uzamykatelné boxy s přístupem 24/7. Doplněk k jednotkám 1+kk.',              icon: 'warehouse',    parent: null },
-  { title: 'Kyvadlový bus na metro',  body: 'Přes ranní a odpolední špičku jezdí areálový minibus na metro Kobylisy. Cesta 15 minut, bez přesedání. Mimo špičku PID.',  icon: 'bus',          parent: null },
+  { title: 'Kontejnerové sklady',     body: 'Pro horská kola, lyže, sezónní krámy, archiv. Uzamykatelné boxy s přístupem 24/7.',                                       icon: 'warehouse',    parent: null },
+  { title: 'Kyvadlový bus na metro',  body: 'Přes ranní a odpolední špičku jezdí areálový minibus na metro Kobylisy. Cesta 15 minut, bez přesedání.',                  icon: 'bus',          parent: null },
 ];
 
 // Four-claim grid — short, parallel, scannable. Replaces the prior prose
@@ -220,7 +220,12 @@ const zigzag = [
             <span class="hub-amenity-card__icon" aria-hidden="true"><Icon name={a.icon} /></span>
             <h3 class="hub-amenity-card__title">{a.title}</h3>
             <p class="hub-amenity-card__body">{a.body}</p>
-            {a.parent && <span class="hub-amenity-card__cta">Detail →</span>}
+            {a.parent && (
+              <span class="hub-amenity-card__cta">
+                <span class="hub-amenity-card__cta-text">Detail </span>
+                <span aria-hidden="true">→</span>
+              </span>
+            )}
           </Tag>
         );
       })}
@@ -244,13 +249,7 @@ const zigzag = [
     <article class="hub-druzstvo__card">
       <span class="osa-eyebrow hub-druzstvo__eyebrow">Přípravné družstvo</span>
       <h2 class="hub-druzstvo__title">Kdo přichází první, určuje pravidla.</h2>
-      <p class="hub-druzstvo__lede">První kohorta budoucích rezidentů. Vy domlouváte denní rytmus, nájemní řád, provozní pravidla. Za to získáváte garantované právo bydlet v luxusní 1+kk stavební buňce. Druhá kohorta otevírá později pro ty, kdo přijdou do hotového rámce.</p>
-      <ul class="hub-druzstvo__benefits">
-        <li><strong>Hlas v pravidlech.</strong> Pravidelná pracovní setkání družstva v komunitním centru.</li>
-        <li><strong>Cenová stabilita.</strong> Nájem domlouváme s kohortou, ne s trhem.</li>
-        <li><strong>Vstup před ostatními.</strong> Až je Hub připravený k nastěhování, máte dveře otevřené dřív.</li>
-        <li><strong>Luxusní 1+kk buňka.</strong> Stavební jednotka se zvýšeným standardem výbavy.</li>
-      </ul>
+      <p class="hub-druzstvo__lede">První kohorta cca 50 rezidentů. Domlouváte <strong>denní rytmus, nájemní řád a provozní pravidla</strong>; za to získáváte <strong>garantované právo bydlet v luxusní stavební buňce 1+kk</strong> s cenovou stabilitou na první období. Druhá kohorta otevírá později pro ty, kdo přijdou do hotového rámce.</p>
       <a class="hub-druzstvo__cta" href={withBase('/projekty/bytove-druzstvo/')}>Detail přípravného družstva →</a>
     </article>
   </section>
@@ -689,10 +688,44 @@ const zigzag = [
     .hub-amenity-card:nth-child(2n) { border-right: none; }
   }
   @media (max-width: 560px) {
+    /* Mobile = compact list. Karta = jeden řádek: ikonka + nadpis vedle sebe,
+       bez body textu, bez CTA. Klikatelný cíl zůstává linked sub-projekt page. */
     .hub-amenity-card,
     .hub-amenity-card:nth-child(2n) { border-right: none; }
     .hub-amenity-card:nth-last-child(-n+2) { border-bottom: 1px solid var(--border-muted); }
     .hub-amenity-card:last-child { border-bottom: none; }
+    .hub-amenity-card {
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+    .hub-amenity-card__icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+    .hub-amenity-card__icon :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+    .hub-amenity-card__title {
+      font-size: 15px;
+      line-height: 1.3;
+      margin: 0;
+    }
+    .hub-amenity-card__body { display: none; }
+    /* Detail → padá na pravou stranu řádku, kde "Detail" mizí a zbude jen
+       šipka — víc místa pro nadpis, a non-linked karty mají rovnou nic. */
+    .hub-amenity-card__cta {
+      position: static;
+      opacity: 1;
+      font-size: 16px;
+      line-height: 1;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .hub-amenity-card__cta-text { display: none; }
   }
   .hub-amenity-card--linked { cursor: pointer; }
   /* Hover signál: 2px plumový tah uvnitř karty (inset). Hairlines zůstávají,
@@ -812,26 +845,7 @@ const zigzag = [
     margin: 0;
     max-width: 64ch;
   }
-  .hub-druzstvo__benefits {
-    list-style: none;
-    padding: 0; margin: 16px 0 0;
-    display: grid; gap: 12px;
-    grid-template-columns: 1fr 1fr;
-    max-width: 880px;
-  }
-  @media (max-width: 720px) { .hub-druzstvo__benefits { grid-template-columns: 1fr; } }
-  .hub-druzstvo__benefits li {
-    padding: 12px 0 12px 20px;
-    font-size: 15px; line-height: 1.5;
-    color: rgba(255, 255, 255, 0.85);
-    border-left: 2px solid var(--accent);
-  }
-  .hub-druzstvo__benefits strong {
-    color: #fff;
-    font-weight: 600;
-    display: inline-block;
-    margin-right: 4px;
-  }
+  .hub-druzstvo__lede strong { color: #fff; font-weight: 600; }
   /* CTA — wipe pattern: outline at rest, white fill on hover, plum text on hover. */
   .hub-druzstvo__cta {
     position: relative;
