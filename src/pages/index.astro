@@ -706,23 +706,15 @@ const zigzag = [
     max-width: 880px;
   }
 
-  /* AMENITY GRID — 14 sdílených provozů s ikonkami. Tighter than format cards. */
-  .hub-amenities {
-    background: var(--k-05);
-    max-width: none;
-    padding-left: 0; padding-right: 0;
-  }
-  .hub-amenities > .osa-sub-head,
-  .hub-amenities > .hub-amenities__grid {
-    max-width: var(--container-wide);
-    margin-left: auto; margin-right: auto;
-    padding-left: var(--gutter); padding-right: var(--gutter);
-  }
+  /* AMENITY GRID — 14 sdílených provozů s ikonkami. Tighter than format cards.
+     Sekce nemá vlastní bg — base .hub-section dodává container/padding,
+     karty sedí přímo na page bg. */
   .hub-amenities__grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--border-muted);
+    /* Hairlines come from per-card box-shadows below, ne z gap+bg triku.
+       Důsledek: prázdné cells na konci gridu (14 položek v 4-col) zůstávají
+       čistě bílé, bez šedého stínu pod nimi. */
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     overflow: hidden;
@@ -741,20 +733,24 @@ const zigzag = [
     color: inherit;
     text-decoration: none;
     position: relative;
-    /* Inset shadow at rest je neviditelný; na linked hover animuje na
-       plum stroke uvnitř karty. Nezměníme box model = žádný layout shift. */
-    box-shadow: inset 0 0 0 0 transparent;
+    /* 1px hairline na pravém a spodním okraji karty — vytváří vnitřní mřížku
+       gridu. Stíny mimo card box jsou ořezány overflow:hidden na parentu, tj.
+       cards na pravém okraji a v poslední row nemají double-border s rámem. */
+    box-shadow:
+      1px 0 0 var(--border-muted),
+      0 1px 0 var(--border-muted);
     transition: box-shadow 320ms var(--ease-decel);
   }
   .hub-amenity-card--linked { cursor: pointer; }
-  /* Hover signál: 2px plumový tah uvnitř karty. Výplň zůstává čistě bílá
-     (žádný plum tint, žádné šedavé překryvy) — celá vizuální zpráva nese
-     stroke + drobné delights uvnitř (title se obarví na plum, ikon trochu
-     vyvstane, „Detail →" se objeví). Non-linked dlaždice hover state
-     nemají — nikam nevedou. */
+  /* Hover signál: 2px plumový tah uvnitř karty (inset). Hairlines zůstávají,
+     takže grid nikde nezmizí; přidává se jen accent stroke uvnitř hovered
+     karty + ikonka a title delights. Non-linked dlaždice hover state nemají. */
   .hub-amenity-card--linked:hover,
   .hub-amenity-card--linked:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--accent);
+    box-shadow:
+      1px 0 0 var(--border-muted),
+      0 1px 0 var(--border-muted),
+      inset 0 0 0 2px var(--accent);
     outline: none;
   }
   .hub-amenity-card__cta {

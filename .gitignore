@@ -32,3 +32,6 @@ pnpm-debug.log*
 
 # Superpowers skill cache
 .superpowers/
+
+# Image staging — assets we are still curating before they go on pages
+public/images/hub/_nove/
