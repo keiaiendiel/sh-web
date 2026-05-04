@@ -48,6 +48,17 @@ const childServices = (id: string): string[] => {
     </div>
   </section>
 
+  <section class="pj-masterplan" aria-labelledby="pj-masterplan-heading">
+    <header class="pj-masterplan__head">
+      <span class="osa-eyebrow">Masterplan</span>
+      <h2 id="pj-masterplan-heading" class="pj-masterplan__heading">Kde co najdete v areálu.</h2>
+      <p class="pj-masterplan__lede">Šest provozů sedí ve čtyřech objektech kolem centrálního dvora. Komunitní centrum, pivovar a sportoviště + park v okolí budovy B, coworking v přízemí budovy C, sauna v objektu E, bazén před objektem D.</p>
+    </header>
+    <figure class="pj-masterplan__figure">
+      <img src={withBase('/images/hub/masterplan_fotoreal.jpg')} alt="Fotorealistický masterplan areálu Horních kasáren — popisky budov A1–A6, B, C, D, E, F, P, S a venkovního bazénu v kontextu celého rozvojového území." loading="lazy" decoding="async" />
+    </figure>
+  </section>
+
   <section class="pj-grid-section">
     <div class="pj-grid">
       {cards.map((p) => (
@@ -122,6 +133,47 @@ const childServices = (id: string): string[] => {
     color: rgba(255,255,255,0.88);
     margin: 0;
     max-width: 56ch;
+  }
+
+  /* Masterplan figure mezi hero a grid karet — fotorealistický masterplan
+     dává prostorový kontext pro šest provozů, které následují. Container
+     šířka jako zbytek stránky, figure se světlým rámečkem. */
+  .pj-masterplan {
+    padding: clamp(40px, 6vw, 72px) var(--gutter) clamp(8px, 1vw, 16px);
+    max-width: var(--container-wide); margin: 0 auto;
+  }
+  .pj-masterplan__head {
+    max-width: 720px;
+    display: grid; gap: 8px;
+    margin: 0 0 24px;
+  }
+  .pj-masterplan__heading {
+    font-family: var(--font-sans);
+    font-size: clamp(24px, 2.6vw, 36px);
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .pj-masterplan__lede {
+    font-size: clamp(15px, 1.25vw, 17px);
+    line-height: 1.55;
+    color: var(--fg-muted);
+    margin: 4px 0 0;
+    max-width: 64ch;
+  }
+  .pj-masterplan__figure {
+    margin: 0;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .pj-masterplan__figure img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .pj-grid-section {
