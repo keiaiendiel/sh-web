@@ -182,7 +182,6 @@ const zigzag = [
     <header class="osa-sub-head">
       <span class="osa-eyebrow">Provozy a služby</span>
       <h2 class="hub-section__heading">Co tu funguje.</h2>
-      <p class="hub-section__intro">K jednotce patří čtrnáct sdílených provozů, které dělají z areálu fungující celek. Šest klíčových má vlastní detailní stránku, proklikněte si.</p>
     </header>
     <div class="hub-amenities__grid">
       {provozyServices.map((a) => {
@@ -706,18 +705,17 @@ const zigzag = [
     max-width: 880px;
   }
 
-  /* AMENITY GRID — 14 sdílených provozů s ikonkami. Tighter than format cards.
-     Sekce nemá vlastní bg — base .hub-section dodává container/padding,
-     karty sedí přímo na page bg. */
+  /* AMENITY GRID — 14 sdílených provozů s ikonkami. Stejný rámeček jako
+     hub-claims pod ní: outer border + radius, vnitřní hairlines per-cell
+     border-right / border-bottom s edge stripping, žádný gap+bg trik (ten
+     šedil prázdné cells v poslední row). */
   .hub-amenities__grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    /* Hairlines come from per-card box-shadows below, ne z gap+bg triku.
-       Důsledek: prázdné cells na konci gridu (14 položek v 4-col) zůstávají
-       čistě bílé, bez šedého stínu pod nimi. */
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     overflow: hidden;
+    background: var(--bg);
     padding: 0 !important;
   }
   @media (max-width: 960px) { .hub-amenities__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -733,24 +731,32 @@ const zigzag = [
     color: inherit;
     text-decoration: none;
     position: relative;
-    /* 1px hairline na pravém a spodním okraji karty — vytváří vnitřní mřížku
-       gridu. Stíny mimo card box jsou ořezány overflow:hidden na parentu, tj.
-       cards na pravém okraji a v poslední row nemají double-border s rámem. */
-    box-shadow:
-      1px 0 0 var(--border-muted),
-      0 1px 0 var(--border-muted);
+    border-right: 1px solid var(--border-muted);
+    border-bottom: 1px solid var(--border-muted);
     transition: box-shadow 320ms var(--ease-decel);
+  }
+  /* Edge stripping — předpokládá 14 položek (poslední row má 2 karty na
+     desktop+tablet, 1 na mobilu). Pokud se počet změní, přepočítat selectory. */
+  .hub-amenity-card:nth-child(4n) { border-right: none; }
+  .hub-amenity-card:nth-last-child(-n+2) { border-bottom: none; }
+  @media (max-width: 960px) {
+    .hub-amenity-card { border-right: 1px solid var(--border-muted); }
+    .hub-amenity-card:nth-child(4n) { border-right: 1px solid var(--border-muted); }
+    .hub-amenity-card:nth-child(2n) { border-right: none; }
+  }
+  @media (max-width: 560px) {
+    .hub-amenity-card,
+    .hub-amenity-card:nth-child(2n) { border-right: none; }
+    .hub-amenity-card:nth-last-child(-n+2) { border-bottom: 1px solid var(--border-muted); }
+    .hub-amenity-card:last-child { border-bottom: none; }
   }
   .hub-amenity-card--linked { cursor: pointer; }
   /* Hover signál: 2px plumový tah uvnitř karty (inset). Hairlines zůstávají,
-     takže grid nikde nezmizí; přidává se jen accent stroke uvnitř hovered
-     karty + ikonka a title delights. Non-linked dlaždice hover state nemají. */
+     přidává se jen accent stroke + delights na ikonu a CTA. Non-linked
+     dlaždice hover state nemají — nikam nevedou. */
   .hub-amenity-card--linked:hover,
   .hub-amenity-card--linked:focus-visible {
-    box-shadow:
-      1px 0 0 var(--border-muted),
-      0 1px 0 var(--border-muted),
-      inset 0 0 0 2px var(--accent);
+    box-shadow: inset 0 0 0 2px var(--accent);
     outline: none;
   }
   .hub-amenity-card__cta {
