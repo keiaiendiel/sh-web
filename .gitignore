@@ -35,3 +35,4 @@ pnpm-debug.log*
 
 # Image staging — assets we are still curating before they go on pages
 public/images/hub/_nove/
+public/images/hub/hero/phone/

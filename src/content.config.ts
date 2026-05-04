@@ -15,6 +15,8 @@ const subProjects = defineCollection({
     status: subProjectStatusEnum,
     order: z.number().int(),
     thumbnail: z.string().startsWith('/').optional(),
+    heroImage: z.string().startsWith('/').optional(),
+    heroImageAlt: z.string().min(10).max(200).optional(),
   }),
 });
 

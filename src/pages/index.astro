@@ -6,32 +6,32 @@ import { getEntry } from 'astro:content';
 
 // Hero rotation — 4 background images sliding horizontally on a 20s loop.
 const heroImages = [
-  withBase('/images/hub/hero/sh-1.jpg'),
-  withBase('/images/hub/hero/sh-2.jpg'),
-  withBase('/images/hub/hero/sh-3.jpg'),
-  withBase('/images/hub/hero/sh-4.jpg'),
+  withBase('/images/hub/hero/hero-1.jpg'),
+  withBase('/images/hub/hero/hero-2.jpg'),
+  withBase('/images/hub/hero/hero-3.jpg'),
+  withBase('/images/hub/hero/hero-4.jpg'),
 ];
 
-// Living formats — three formáty postavené na reálných vizualizacích z
-// public/images/hub/formaty/. Kapsle = sdílený kapsulový hotel; jednolůžko
-// a dvoulůžko jsou obě varianty 1+kk podle počtu obyvatel.
+// Living formats — tři formáty postavené na fresh vizualizacích z public/images/hub/.
+// Kapsle = sdílený kapsulový hotel; jednolůžko a dvoulůžko jsou obě varianty 1+kk
+// podle počtu obyvatel a velikosti pokoje.
 const formats = [
   {
     name: 'Kapsle',
-    src: withBase('/images/hub/formaty/kapsle/28-horizontal.jpg'),
+    src: withBase('/images/hub/interior/kapsle-horizontal.jpg'),
     alt: 'Kapsulová jednotka v Hubu: dřevěné spací moduly s integrovaným osvětlením, číslované pody, sdílený lounge na chodbě.',
     body: 'Spací modul ve sdílené jednotce. Premium kapsulový design: dřevo, tlumené světlo, vlastní zámek a nabíjení. Na chodbě sdílený lounge a společné sociální zázemí. Pro krátké pobyty a pro lidi, kterým rozhoduje cena.',
   },
   {
     name: 'Jednolůžko',
-    src: withBase('/images/hub/formaty/jednoluzko/28.jpg'),
-    alt: 'Jednolůžkový mikroapartmán: postel u okna, integrovaná knihovna, TV, jídelní koutek, dřevěná podlaha.',
+    src: withBase('/images/hub/interior/1kk-a4-a6.jpg'),
+    alt: 'Jednolůžkový mikroapartmán v budovách A4–A6: postel u okna, integrovaná knihovna, pracovní stůl, dřevěná podlaha, vlastní koupelna.',
     body: 'Privátní 1+kk pro 1 osobu. Velká postel, integrovaná knihovna, TV, jídelní stolek pro dva u okna, vlastní sociální zázemí. Sdílená kuchyň s pár sousedy. Pro delší pobyty a klid na práci nebo studium.',
   },
   {
     name: 'Dvoulůžko',
-    src: withBase('/images/hub/formaty/dvouluzko/28.jpg'),
-    alt: 'Dvoulůžkový 1+kk byt: vlastní kuchyňka (dřez, indukční sporák, regál), postel ve středu, jídelní stůl, propojený obývací kout.',
+    src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'),
+    alt: 'Větší 1+kk byt v budovách A pro dvě osoby: kuchyňský kout, jídelní stůl, postel uprostřed, propojený obývací prostor.',
     body: 'Privátní 1+kk pro dva. Vlastní kuchyňka (dřez, sporák, mikrovlnka), pracovní a jídelní kout, postel ve středu, propojený obývací prostor. Sociální zázemí v jednotce. Pro páry, sourozence nebo dvě OSVČ s podobným rytmem.',
   },
 ];
@@ -88,8 +88,8 @@ const claims = [
 const zigzag = [
   {
     dir: 'ltr',
-    src: withBase('/images/hub/hero/sh-1.jpg'),
-    alt: 'Lidé v dlážděném dvoře mezi rekonstruovanými budovami areálu Horních kasáren.',
+    src: withBase('/images/hub/aerial/areal-entry.jpg'),
+    alt: 'Letecký pohled na vstup do areálu Horních kasáren v Klecanech — historická brána a centrální dvůr s rekonstruovanými budovami.',
     eyebrow: 'Místo',
     title: 'Areál Horních kasáren · 12 km od Prahy.',
     body: 'Klecany leží těsně za hranicí Prahy. Areál sedí na trase plánované tramvajové zastávky Výzkumný ústav I. (vydáno stavební povolení) a navrhované cyklostezky podél Vltavy. Přes špičku jezdí kyvadlový bus na metro Kobylisy.',
@@ -97,32 +97,32 @@ const zigzag = [
   },
   {
     dir: 'rtl',
-    src: withBase('/images/hub/interior/hub-market-evening.jpg'),
-    alt: 'Tržnice za soumraku v objektu B s prosvícenými okny.',
+    src: withBase('/images/hub/interior/b-jidelna.jpg'),
+    alt: 'Vizualizace jídelní a sezení sekce v objektu B Startovacího Hubu — dřevěné stoly, lavice a večerní osvětlení nad tržnicí a kavárnou.',
     eyebrow: 'Komunita',
     title: 'Tržnice, kavárna, pekárna a minipivovar v objektu B.',
     body: 'V budově B funguje tržnice s lokálními producenty, kavárna, pekárna, minipivovar a venkovní zázemí pro food-trucky. V přízemí budovy C je coworkingový sál s pódiem pro přednášky a kapely.',
   },
   {
     dir: 'ltr',
-    src: withBase('/images/hub/hero/sh-2.jpg'),
-    alt: 'Interiér 1+kk se sklopnou postelí a balkonem.',
+    src: withBase('/images/hub/interior/1kk-1.jpg'),
+    alt: 'Vizualizace privátní jednotky 1+kk v Startovacím Hubu — sklopná postel, kuchyňský kout, pracovní stůl, vlastní koupelna.',
     eyebrow: 'Bydlení',
     title: '~331 privátních jednotek 1+kk.',
     body: 'Každá jednotka má vlastní sociální zázemí: sprchu, umyvadlo a toaletu. Sklopná postel uvolní obytný prostor přes den. Členové přípravného družstva mají navíc právo na luxusní stavební buňku 1+kk se zvýšeným standardem výbavy.',
   },
   {
     dir: 'rtl',
-    src: withBase('/images/hub/exterior/hub-courtyard-trees.jpg'),
-    alt: 'Vnitřní dvůr s břízami, lavicemi a večerním osvětlením.',
+    src: withBase('/images/hub/aerial/areal-bazen.jpg'),
+    alt: 'Letecký pohled na vnitřní dvůr Startovacího Hubu s venkovním bazénem před objektem D, saunou v objektu E a okolními budovami areálu.',
     eyebrow: 'Areál',
     title: 'Vnitřní dvůr a zázemí.',
     body: 'Sedm rekonstruovaných budov (A1–A6 + C) na ~6 700 m² čistých podlahových ploch. Mezi nimi sauna v objektu E, venkovní bazén před objektem D, komunitní park s grilovacími místy a telocvična na vzduchu.',
   },
   {
     dir: 'ltr',
-    src: withBase('/images/hub/hero/sh-4.jpg'),
-    alt: 'Pracovní zákoutí v jednotce 1+kk s knihovnou a stolem.',
+    src: withBase('/images/hub/interior/window-view-a.jpg'),
+    alt: 'Pohled z okna většího pokoje v budovách A1–A3 do vnitřního dvora areálu — pracovní zóna s laptopem na stole a knihovnou.',
     eyebrow: 'Pro koho',
     title: 'Pracující studenty, OSVČ a mladí kreativci.',
     body: 'Hub je dělaný pro lidi, kteří startují: začínající podnikatele, studenty na bakalářce nebo diplomce, OSVČ na začátku kariéry. Pro někoho je to startovní bydlení, pro jiného přechodný mezikrok.',

@@ -14,7 +14,8 @@
     "lint:editorial": "node scripts/lint-editorial.mjs",
     "lint:links": "node scripts/lint-links.mjs",
     "lint:weight": "node scripts/lint-weight.mjs",
-    "migrate:images": "node scripts/migrate-hub-images.mjs"
+    "migrate:images": "node scripts/migrate-hub-images.mjs",
+    "optimize:images": "node scripts/optimize-new-images.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
