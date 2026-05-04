@@ -8,6 +8,8 @@
  * Aspect ratio is controlled by the parent via the `aspectRatio` prop
  * (default 4/3 to match the prior zigzag image ratio).
  */
+import Icon from './Icon.astro';
+
 interface GalleryImage {
   src: string;
   alt: string;
@@ -52,9 +54,12 @@ const single = images.length <= 1;
         </figure>
       ))}
     </div>
-    <button type="button" class="gallery__btn gallery__btn--prev" data-gallery-prev aria-label="Předchozí snímek">‹</button>
-    <button type="button" class="gallery__btn gallery__btn--next" data-gallery-next aria-label="Další snímek">›</button>
-    <span class="gallery__counter" aria-hidden="true" data-gallery-counter></span>
+    <button type="button" class="gallery__btn gallery__btn--prev" data-gallery-prev aria-label="Předchozí snímek">
+      <Icon name="chevron-left" size={22} strokeWidth={2} />
+    </button>
+    <button type="button" class="gallery__btn gallery__btn--next" data-gallery-next aria-label="Další snímek">
+      <Icon name="chevron-right" size={22} strokeWidth={2} />
+    </button>
     <div class="gallery__dots" role="tablist" aria-label={`Pozice v galerii: ${ariaLabel}`}>
       {images.map((_, i) => (
         <button
@@ -86,7 +91,6 @@ const single = images.length <= 1;
         var dots = [].slice.call(gallery.querySelectorAll('[data-gallery-dot]'));
         var prevBtn = gallery.querySelector('[data-gallery-prev]');
         var nextBtn = gallery.querySelector('[data-gallery-next]');
-        var counter = gallery.querySelector('[data-gallery-counter]');
         if (!viewport || !slides.length) return;
 
         var current = 0;
@@ -96,7 +100,6 @@ const single = images.length <= 1;
           dots.forEach(function (d, i) { d.classList.toggle('is-active', i === current); });
           if (prevBtn) prevBtn.disabled = current === 0;
           if (nextBtn) nextBtn.disabled = current === slides.length - 1;
-          if (counter) counter.textContent = (current + 1) + ' / ' + slides.length;
         }
 
         function scrollToSlide(idx) {
@@ -176,36 +179,50 @@ const single = images.length <= 1;
     display: block;
   }
 
-  /* Arrow buttons — desktop only. Touch swipe handles mobile. */
+  /* Arrow buttons — desktop only. Touch swipe handles mobile.
+     Bílý outline kruh + bílý chevron (Lucide SVG centruje precizně, žádný
+     drift z guillemet glyphů). Soft drop-shadow drží čitelnost přes světlé
+     i tmavé snímky bez bílé výplně, která by zakryla obrázek. */
   .gallery__btn {
     position: absolute;
     top: calc(50% - 22px);
     width: 44px; height: 44px;
     border-radius: 999px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    background: rgba(255, 255, 255, 0.92);
-    color: var(--fg);
-    font-size: 22px;
-    line-height: 1;
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    background: transparent;
+    color: #fff;
     cursor: pointer;
     display: grid;
     place-items: center;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    opacity: 0.78;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.45));
     transition:
       opacity 160ms var(--ease-decel),
-      background 160ms var(--ease-decel),
+      border-color 160ms var(--ease-decel),
       transform 160ms var(--ease-decel);
     z-index: 2;
   }
-  .gallery__btn:hover { background: #fff; transform: scale(1.05); }
+  .gallery__btn :global(svg) {
+    /* Optické vyvážení chevronu — left chevron sedí o 1 px doprava od centra
+       SVG viewBoxu, right naopak doleva, takže vizuálně visí stranou. Drobný
+       posun srovná na optickou střednici tlačítka. */
+    display: block;
+    stroke: currentColor;
+  }
+  .gallery__btn--prev :global(svg) { transform: translateX(-1px); }
+  .gallery__btn--next :global(svg) { transform: translateX(1px); }
+  .gallery__btn:hover {
+    opacity: 1;
+    border-color: #fff;
+    transform: scale(1.05);
+  }
   .gallery__btn:focus-visible {
-    outline: 2px solid var(--accent);
+    opacity: 1;
+    outline: 2px solid #fff;
     outline-offset: 2px;
   }
   .gallery__btn:disabled {
-    opacity: 0.35;
+    opacity: 0.25;
     cursor: default;
     pointer-events: none;
   }
@@ -241,24 +258,6 @@ const single = images.length <= 1;
   .gallery__dot:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
-  }
-
-  /* Counter — small mono badge in top-right. */
-  .gallery__counter {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    padding: 4px 10px;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    border-radius: 999px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    pointer-events: none;
-    z-index: 1;
   }
 
   @media (prefers-reduced-motion: reduce) {
