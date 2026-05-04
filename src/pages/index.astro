@@ -98,7 +98,7 @@ const zigzag = [
     images: [
       { src: withBase('/images/hub/aerial/buildings-a-c.jpg'), alt: 'Letecký pohled na centrální dvůr Startovacího Hubu — budovy A1–A6 a C kolem komunitního parku.' },
       { src: withBase('/images/hub/aerial/areal-entry.jpg'),   alt: 'Letecký pohled na vstup do areálu Horních kasáren — historická brána a centrální dvůr s rekonstruovanými budovami.' },
-      { src: withBase('/images/hub/aerial/buildings-a.jpg'),   alt: 'Letecký pohled na rekonstruované budovy A1–A6 v Startovacím Hubu.' },
+      { src: withBase('/images/hub/aerial/topview.jpg'),       alt: 'Pohled shora na areál Horních kasáren v krajinném kontextu — bývalý vojenský areál mezi poli a Klecanami.' },
     ],
   },
   {
@@ -485,7 +485,9 @@ const zigzag = [
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: brightness(0.9) saturate(0.95);
+    /* No brightness filter — image at native render brightness, scrim drží
+       legibilitu textu. Sjednoceno se sub-projekt [slug] hero, který také
+       nemá filter, takže žádné nekonzistentní tmavé/světlé skoky napříč. */
     transform: translateX(100%);
     will-change: transform;
     animation-name: hub-hero-slide;
@@ -512,7 +514,7 @@ const zigzag = [
   }
   .hub-hero__scrim {
     position: absolute; inset: 0; z-index: 2;
-    background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.18) 38%, rgba(0,0,0,0.72) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.20) 55%, rgba(0,0,0,0.50) 100%);
     pointer-events: none;
   }
   .hub-hero__inner {
