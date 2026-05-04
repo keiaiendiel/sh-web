@@ -184,7 +184,7 @@ const zigzag = [
       </div>
       <h1 class="hub-hero__title">Startovací Hub.</h1>
       <p class="hub-hero__lede">Nájemní bydlení blízko Prahy v areálu Horních kasáren. Coworking, sauna, bazén, kavárna, ateliéry, dílny. K tomu kyvadlový bus na metro Kobylisy. Pro pracující studenty, OSVČ na začátku a mladé kreativce.</p>
-      <a class="hub-hero__cta" href={withBase('/rezervace/')}>Nezávazný zájem →</a>
+      <a class="hub-hero__cta" href={withBase('/rezervace/')}>Rezervace →</a>
     </div>
   </section>
 
@@ -281,8 +281,8 @@ const zigzag = [
       <article class="hub-cta-card hub-cta-card--primary">
         <div class="hub-cta-card__content">
           <span class="osa-eyebrow hub-cta-card__kicker">Chci tu bydlet</span>
-          <p class="hub-cta-card__lede">Vyplněním nezávazného zájmu se přidáváte k první kohortě přípravného družstva. Vyplnění je krátké, nic neúčtujeme a žádný závazek nevzniká.</p>
-          <a class="hub-cta-card__btn hub-cta-card__btn--primary" href={withBase('/rezervace/')}>Vyplnit nezávazný zájem →</a>
+          <p class="hub-cta-card__lede">Přidejte se k první kohortě přípravného družstva. Z vašich odpovědí ve formuláři skládáme provozní pravidla a domlouváme nájemní rámec.</p>
+          <a class="hub-cta-card__btn hub-cta-card__btn--primary" href={withBase('/rezervace/')}>Rezervace →</a>
         </div>
       </article>
 
@@ -715,11 +715,13 @@ const zigzag = [
       margin: 0;
     }
     .hub-amenity-card__body { display: none; }
-    /* Detail → padá na pravou stranu řádku, kde "Detail" mizí a zbude jen
-       šipka v plumu — víc místa pro nadpis, a non-linked karty mají rovnou
-       nic, takže absence šipky signalizuje „není to klikatelné". */
-    .hub-amenity-card__cta {
+    /* Detail → padá zarovnaný do třetí grid kolonky (auto), zrcadlový
+       protějšek ikonky vlevo. Class-chain selektor (.x.x) bumpne specificity
+       nad desktop base rule, který je v zdrojáku níž a má position:absolute
+       + left:24px (jinak by šipka spadla absolutně přes ikonu). */
+    .hub-amenity-card.hub-amenity-card .hub-amenity-card__cta {
       position: static;
+      inset: auto;
       opacity: 1;
       font-size: 20px;
       line-height: 1;
@@ -727,6 +729,7 @@ const zigzag = [
       font-weight: 600;
       display: inline-flex;
       align-items: center;
+      justify-self: end;
       transform: translateY(-1px);
     }
     .hub-amenity-card__cta-text { display: none; }

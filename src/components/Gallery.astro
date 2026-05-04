@@ -188,14 +188,19 @@ const single = images.length <= 1;
     top: calc(50% - 22px);
     width: 44px; height: 44px;
     border-radius: 999px;
-    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    border: 2px solid #fff;
     background: transparent;
     color: #fff;
     cursor: pointer;
     display: grid;
     place-items: center;
-    opacity: 0.78;
-    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.45));
+    opacity: 0.92;
+    /* Dvojitý drop-shadow: blízký 0 1px 3px pro hranu kruhu, vzdálený
+       0 4px 14px pro halo přes světlé pozadí. Drží šipky čitelné i přes
+       světlé snímky bez přidávání bílé výplně, která by zakryla obrázek. */
+    filter:
+      drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
     transition:
       opacity 160ms var(--ease-decel),
       border-color 160ms var(--ease-decel),
