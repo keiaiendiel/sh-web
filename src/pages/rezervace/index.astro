@@ -4,12 +4,12 @@ import ResidentForm from '../../components/ResidentForm.astro';
 import { getEntry } from 'astro:content';
 import { withBase } from '../../utils/url';
 
-const faqIds = ['q5', 'q7', 'q8'] as const;
+const faqIds = ['q5', 'q9', 'q7'] as const;
 const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
 ---
 <Base
-  title="Nezávazný zájem — Startovací Hub Klecany"
-  description="Řekněte nám, jestli by pro vás Hub dával smysl. Nejde o smlouvu ani závazek — pomáháte nám pochopit reálnou poptávku po formátech, cenách a termínech. Ozveme se, jakmile budeme mít konkrétní nabídku."
+  title="Nezávazný zájem · Přípravné družstvo · Startovací Hub Klecany"
+  description="Vyplněním formuláře se přidáváte k první kohortě přípravného družstva. Není to smlouva ani závazek. Jen nám dáváte vědět, za jakých podmínek by pro vás Hub dával smysl. Z odpovědí složíme zakládací kohortu."
   headerVariant="dark"
 >
   <section class="rsv-hero osa-dark">
@@ -17,15 +17,15 @@ const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
     <div class="rsv-hero__scrim" aria-hidden="true"></div>
     <div class="rsv-hero__inner">
       <span class="osa-eyebrow rsv-hero__eyebrow">Nezávazný zájem</span>
-      <h1 class="rsv-hero__title">Řekněte nám, jestli by Hub dával smysl.</h1>
-      <p class="rsv-hero__lede">Řekněte nám, za jakých podmínek by pro vás Hub dával smysl. Nejde o smlouvu ani závazek. Vaše odpověď nám pomůže nastavit konkrétní nabídku podle reálné poptávky.</p>
+      <h1 class="rsv-hero__title">Řekněte nám, jak vám Hub sedí.</h1>
+      <p class="rsv-hero__lede">Vyplnění je krátké a nezavazuje k ničemu. Z vašich odpovědí složíme první kohortu přípravného družstva: lidi, kteří určí finální podobu provozu a získají právo bydlet v luxusních stavebních buňkách 1+kk.</p>
     </div>
   </section>
 
   <section class="rsv-meta">
     <ul class="rsv-meta__list">
       <li><strong>Žádná platba.</strong> Vyplnění je zdarma a nezávazné.</li>
-      <li><strong>Žádný pořadník.</strong> Zapisujeme zájem, ne kapacitu.</li>
+      <li><strong>Žádný pořadník.</strong> Skládáme kohortu, ne FIFO frontu.</li>
       <li><strong>Krátké.</strong> Vyplnění zabere pár minut.</li>
     </ul>
   </section>
@@ -36,8 +36,8 @@ const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
 
   <section class="rsv-status">
     <div class="rsv-status__inner">
-      <span class="osa-eyebrow rsv-status__eyebrow">Aktuální stav</span>
-      <p>Vyplněním formuláře nám říkáte, za jakých podmínek by pro vás Hub dával smysl. Nejde o smlouvu, neúčtujeme nic. Spustit etapu 1 budeme moct, až budeme mít tři věci: kapitálovou strukturu, provozní připravenost areálu a právní rámec provozu. První obyvatelný formát (kapsle) můžeme zpřístupnit dříve, jakmile bude jasné, že je o něj reálný zájem.</p>
+      <span class="osa-eyebrow rsv-status__eyebrow">Co se děje teď</span>
+      <p>Skládáme první kohortu přípravného družstva, cca 50 lidí, kteří projekt společně připraví a získají garantované právo bydlet v luxusní 1+kk stavební buňce. Termín nastěhování dolaďujeme s kohortou; bez vás nemá smysl ho fixovat dopředu.</p>
     </div>
   </section>
 
@@ -50,17 +50,17 @@ const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
       <li>
         <span class="rsv-steps__num">01</span>
         <h3>Zapíšeme váš zájem</h3>
-        <p>Vaše odpovědi přidáme k ostatním. Podle nich nastavujeme finální nabídku jednotek, cen a termínů.</p>
+        <p>Vaše odpovědi přidáme k ostatním. Podle nich skládáme první kohortu: podle záměru, situace a kompatibility, ne podle pořadí.</p>
       </li>
       <li>
         <span class="rsv-steps__num">02</span>
-        <h3>Ozveme se s detailem</h3>
-        <p>Až budeme mít konkrétní jednotku, cenu a termín, který odpovídá vašim preferencím, napíšeme vám e-mailem.</p>
+        <h3>Pošleme vám detail</h3>
+        <p>Privátně vám pošleme aktuální stav projektu, termín nejbližšího setkání družstva, detail buňky 1+kk a smluvní rámec. Zhruba do dvou týdnů od vyplnění.</p>
       </li>
       <li>
         <span class="rsv-steps__num">03</span>
-        <h3>Smlouvu řešíme až nakonec</h3>
-        <p>Žádný závazek nevzniká, dokud spolu nepodepíšeme smlouvu o budoucí smlouvě (SoSB). Do té chvíle je vše nezávazné.</p>
+        <h3>Smlouvu řešíme až s nastěhováním</h3>
+        <p>Žádný závazek nevzniká, dokud spolu nepodepíšeme smlouvu o budoucí smlouvě (SoSB), což bývá těsně před nastěhováním. Do té chvíle je vše nezávazné a můžete kdykoli vystoupit.</p>
       </li>
     </ol>
   </section>

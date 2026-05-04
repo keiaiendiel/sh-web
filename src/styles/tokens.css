@@ -148,7 +148,7 @@
      contexts where zero feels unusable (form controls on web). */
   --radius-0:     0;
   --radius-sm:    2px;
-  --radius-input: 4px;        /* form fields, CTA buttons, pill radios, teaser cards */
+  --radius-input: 7px;        /* form fields, CTA buttons, pill radios, teaser cards */
 
   /* ---------- Borders & rules ---------- */
   --border-hair:   1px solid var(--rule);

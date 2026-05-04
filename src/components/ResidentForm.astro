@@ -42,6 +42,7 @@ const place = [
   { v: 'private',  label: 'Klidnější uzavíratelné místo' },
   { v: 'single',   label: 'Jednolůžkový pokoj' },
   { v: 'shared',   label: 'Sdílený pokoj' },
+  { v: 'bunka',    label: 'Stavební buňka 1+kk (jen pro přípravné družstvo)' },
   { v: 'price',    label: 'Rozhodne cena' },
 ];
 
@@ -128,7 +129,7 @@ const social = [
     <legend>
       <span class="rsv-form__num">04</span>
       <span class="rsv-form__heading">Jaký rozpočet byste měl(a) reálně k dispozici?</span>
-      <span class="rsv-form__hint">Včetně základních služeb. Konkrétní cenu zatím nezveřejňujeme — nastavujeme ji podle skutečné poptávky.</span>
+      <span class="rsv-form__hint">Včetně základních služeb. Konkrétní cena se ladí s přípravným družstvem; orientační rozsahy najdete v poznámce u jednotlivých formátů.</span>
     </legend>
     <div class="rsv-form__pills rsv-form__pills--with-suffix">
       {budget.map((b) => (
@@ -160,7 +161,7 @@ const social = [
     <legend>
       <span class="rsv-form__num">06</span>
       <span class="rsv-form__heading">Jak často potřebujete být v Praze?</span>
-      <span class="rsv-form__hint">Pomáhá nám posoudit, jestli pro vás bude dojezdová doba do Prahy únosná.</span>
+      <span class="rsv-form__hint">Pomáhá nám posoudit, jestli pro vás bude dojezdová doba do Prahy únosná. Kyvadlový bus areálu jezdí přes špičku, jinak PID.</span>
     </legend>
     <div class="rsv-form__pills">
       {prague.map((p) => (
@@ -226,7 +227,7 @@ const social = [
     <legend>
       <span class="rsv-form__num">10</span>
       <span class="rsv-form__heading">Kam vám máme poslat další informace?</span>
-      <span class="rsv-form__hint">Posíláme jen průběžný stav projektu a zprávu, jakmile budeme mít konkrétní nabídku.</span>
+      <span class="rsv-form__hint">Posíláme privátní zprávu s aktuálním stavem projektu, termínem nejbližšího setkání družstva a detailem buňky 1+kk. Zhruba do dvou týdnů od vyplnění.</span>
     </legend>
     <div class="rsv-form__grid-2">
       <label class="rsv-form__field">
@@ -261,9 +262,9 @@ const social = [
 
   <output class="rsv-form__success" hidden>
     <span class="rsv-form__success-eyebrow">Hotovo</span>
-    <h3>Zapsali jsme váš nezávazný zájem.</h3>
-    <p>Není to rezervace, není to pořadník a není to slib přidělené jednotky. Jakmile budeme mít konkrétní nabídku, která bude odpovídat vašim odpovědím, ozveme se vám e-mailem.</p>
-    <p>Pokud jste vybral(a) stipendium, work-trade nebo roli rezidenta-tvůrce, můžeme se vám případně doptat na detail.</p>
+    <h3>Vítejte v přípravném družstvu.</h3>
+    <p>Zapsali jsme váš nezávazný zájem. Není to rezervace, není to pořadník a není to slib přidělené jednotky. Z odpovědí skládáme první kohortu. Do dvou týdnů vám pošleme privátní zprávu s aktuálním stavem, termínem nejbližšího setkání družstva a detailem 1+kk buňky.</p>
+    <p>Pokud jste vybral(a) stipendium, work-trade nebo roli rezidenta-tvůrce, doptáme se na detail samostatně.</p>
   </output>
 </form>
 

@@ -11,16 +11,31 @@ const buildingLabel = (id: string) => {
     case 'komunitni-centrum':  return 'Objekt B';
     case 'coworking-centrum':  return 'Přízemí budovy C';
     case 'komunitni-pivovar':  return 'Objekt B';
-    case 'bytove-druzstvo':    return 'Vlastnické družstvo';
+    case 'bytove-druzstvo':    return 'Přípravné družstvo';
     case 'sauna-bazen':        return 'Objekty D + E';
     case 'sportoviste-park':   return 'Park před objektem B';
     default:                   return 'Areál';
   }
 };
+
+// ID → list of provozy/služeb that live within each sub-project. Mirrors the
+// landing page amenity grid; here we surface them under each parent card so
+// /projekty/ visitors see the full coverage of each provoz, not just its name.
+const childServices = (id: string): string[] => {
+  switch (id) {
+    case 'komunitni-centrum':  return ['Tržnice', 'Kavárna', 'Pekárna', 'Restaurace + hospoda', 'Sdílené dílny', 'Food-trucky'];
+    case 'coworking-centrum':  return ['Coworkingový sál s pódiem', 'Ateliéry', 'Nahrávací studia', 'Studovny', 'Zasedací místnosti', 'Recepce'];
+    case 'komunitni-pivovar':  return ['Varna a stáčírna', 'Hospoda', 'Work-trade pro rezidenty'];
+    case 'bytove-druzstvo':    return ['Luxusní 1+kk stavební buňka', 'Hlas v pravidlech', 'Cenová stabilita', 'Vstup před ostatními'];
+    case 'sauna-bazen':        return ['Finská sauna', 'Outdoor cool-down deck', 'Venkovní bazén', 'Saunové ceremoniály'];
+    case 'sportoviste-park':   return ['Komunitní park', 'Telocvična na vzduchu', 'Ping-pong', 'Dětské hřiště', 'Komunitní zahrádky', 'Grilovací místa'];
+    default:                   return [];
+  }
+};
 ---
 <Base
   title="Provozy Startovacího Hubu"
-  description="Komunitní centrum, coworking, pivovar, sauna a bazén, park, bytové družstvo. Hub se rozrůstá postupně — sdílené provozy, které dělají z areálu fungující celek."
+  description="Komunitní centrum s pekárnou a kavárnou, coworking s ateliéry a nahrávacími studii, minipivovar, sauna a bazén, sportoviště a park, přípravné družstvo. Šest provozů, které dělají z areálu fungující celek."
   headerVariant="dark"
 >
   <section class="pj-hero osa-dark">
@@ -28,8 +43,8 @@ const buildingLabel = (id: string) => {
     <div class="pj-hero__scrim" aria-hidden="true"></div>
     <div class="pj-hero__inner">
       <span class="osa-eyebrow pj-hero__eyebrow">Provozy</span>
-      <h1 class="pj-hero__title">Hub se rozrůstá postupně.</h1>
-      <p class="pj-hero__lede">Šest provozů: komunitní centrum, coworking, pivovar, sauna a bazén, park, bytové družstvo. Některé už dolaďujeme, jiné teprve definujeme. Tady je aktuální mapa toho, co Hub bude obsahovat.</p>
+      <h1 class="pj-hero__title">Šest provozů, jeden areál.</h1>
+      <p class="pj-hero__lede">Komunitní centrum s pekárnou a kavárnou; coworking s ateliéry a nahrávacími studii; minipivovar; sauna a bazén; park s telocvičnou na vzduchu. K tomu přípravné družstvo, které všechno propojuje.</p>
     </div>
   </section>
 
@@ -40,19 +55,24 @@ const buildingLabel = (id: string) => {
           <div class="pj-card__thumb" aria-hidden="true" data-img-reveal>
             {p.data.thumbnail
               ? <img src={p.data.thumbnail} alt="" loading="lazy" />
-              : <span class="pj-card__placeholder">Vizualizace v přípravě</span>
+              : <span class="pj-card__placeholder">Vizualizaci připravujeme</span>
             }
           </div>
           <div class="pj-card__body">
             <span class="osa-eyebrow pj-card__building">{buildingLabel(p.id)}</span>
             <h2 class="pj-card__name">{p.data.name}</h2>
             <p class="pj-card__role">{p.data.role}</p>
+            {childServices(p.id).length > 0 && (
+              <ul class="pj-card__services" aria-label="Provozy a služby v tomto celku">
+                {childServices(p.id).map((s) => <li>{s}</li>)}
+              </ul>
+            )}
             <span class="pj-card__cta">Detail →</span>
           </div>
         </a>
       ))}
     </div>
-    <p class="pj-foot-note">Tato mapa není finální — další provozy a iniciativy doplníme, až budou pojmenované. Pro dotazy nebo zapojení napište na <a href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>.</p>
+    <p class="pj-foot-note">Další iniciativy a provozy doplňujeme, jak se přidávají do areálu. Pokud máte nápad nebo chcete něco rozjet, napište na <a href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>.</p>
   </section>
 </Base>
 
@@ -167,6 +187,37 @@ const buildingLabel = (id: string) => {
   .pj-card__role {
     font-size: 14px; line-height: 1.55;
     color: var(--fg-muted); margin: 0;
+  }
+  /* Child-services chips — amenity tags v eyebrow stylu (verzálky, mono,
+     plum). flex + align-items:center drží text optic-centered uvnitř pillu;
+     line-height:1 vylučuje vertikální drift z mono fontu, takže text sedí
+     opravdu na středu elipsy. */
+  .pj-card__services {
+    list-style: none;
+    padding: 0; margin: 4px 0 0;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .pj-card__services li {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    line-height: 1;
+    padding: 7px 12px 6px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-rule);
+    border-radius: 999px;
+    white-space: nowrap;
+    transition:
+      background var(--dur-base) var(--ease-decel),
+      border-color var(--dur-base) var(--ease-decel);
+  }
+  .pj-card:hover .pj-card__services li {
+    border-color: var(--accent);
+    background: rgba(90, 42, 95, 0.10);
   }
   .pj-card__cta {
     margin-top: 8px;

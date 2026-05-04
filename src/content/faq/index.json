@@ -8,43 +8,55 @@
   "q2": {
     "audience": "project",
     "question": "Kdo za projektem stojí?",
-    "answer": "Záměr běží pod hlavičkou VPD (Veřejně Prospěšný Developer), což je projekt v rámci OSA — Občanské sdružení Alternativa II, z.s. OSA je neziskový spolek, který funguje bez veřejných dotací — z členských příspěvků a z vlastní činnosti. Detail najdete na osa2.cz.",
+    "answer": "Záměr běží pod hlavičkou VPD (Veřejně Prospěšný Developer), což je projekt v rámci OSA (Občanské sdružení Alternativa II, z.s.). OSA je neziskový spolek, který funguje bez veřejných dotací: z členských příspěvků a z vlastní činnosti. Detail najdete na osa2.cz.",
     "order": 2
   },
   "q3": {
     "audience": "project",
-    "question": "Kdy Hub otevírá?",
-    "answer": "Záleží na tom, jak rychle potvrdíme dostatečný zájem. Nejdříve otvíratelný formát — kapsle ve sdílené jednotce — můžeme zpřístupnit relativně rychle, jakmile bude jasné, že je o něj reálný zájem. Pokojové formáty s vyšší úpravou interiéru přijdou později, podle tempa rekonstrukce a financování. Plné spuštění areálu navazuje na tři podmínky: kapitálovou strukturu, provozní připravenost a právní rámec. Aktuální stav najdete na stránce O areálu.",
+    "question": "Kdy se do Hubu nastěhuju?",
+    "answer": "Termín nastěhování domlouváme s přípravným družstvem (první kohortou cca 50 lidí, kteří projekt společně připraví). Bez vás nemá smysl fixovat datum dopředu. Po vyplnění nezávazného zájmu se ozveme privátně s aktuálním stavem rekonstrukce, plánovaným termínem nastěhování pro vaši preferenci a detailem buňky 1+kk. Nejdřív připravený formát jsou kapsle a luxusní 1+kk buňky pro členy přípravného družstva; pokojové formáty navazují, jak postupuje rekonstrukce.",
     "order": 3
   },
   "q4": {
     "audience": "project",
     "question": "V jaké fázi je projekt teď?",
-    "answer": "Máme dokončený investiční záměr a navrženou provozní strukturu pro Hub. Přijímáme nezávazný zájem od lidí, kteří mají reálný zájem o bydlení. Paralelně dolaďujeme právní rámec a provozní přípravu.",
+    "answer": "Máme dokončený investiční záměr a navrženou provozní strukturu. Skládáme první kohortu přípravného družstva. Paralelně pracujeme na zahájení rekonstrukcí (06/2026) a doladění právního rámce.",
     "order": 4
   },
   "q5": {
     "audience": "resident",
     "question": "Je vyplnění nezávazného zájmu zavazující?",
-    "answer": "Není. Nezávazný zájem není smlouva ani závazek. Sdělujete nám orientační podmínky, za kterých by pro vás Hub dával smysl, a my vás zapíšeme do skupiny lidí, se kterými budeme dál v kontaktu o detailech nabídky. Můžete kdykoli odstoupit.",
+    "answer": "Není. Nezávazný zájem není smlouva ani závazek. Sdělujete nám orientační podmínky, za kterých by pro vás Hub dával smysl. Na základě odpovědí vás zařadíme do první kohorty přípravného družstva, tedy do skupiny lidí, se kterými dál mluvíme o detailech. Můžete kdykoli odstoupit.",
     "order": 5
   },
   "q6": {
     "audience": "resident",
     "question": "Kolik bude pobyt stát?",
-    "answer": "Cenová pásma nastavujeme podle reálné poptávky a podle finální podoby provozu. Orientačně: kapsle nejlevněji, jednolůžkový pokoj nejdráž, sdílený pokoj a klidnější uzavíratelné místo někde mezi. Konkrétní rozsahy jsou ve formuláři. Cena vždy zahrnuje základní služby.",
+    "answer": "Cenová pásma nastavujeme s přípravným družstvem podle reálné situace cílové skupiny: pracujících studentů, OSVČ na začátku a mladých kreativců. Pořadí od nejlevnějšího: kapsle, sdílený pokoj, klidnější uzavíratelné místo, jednolůžkový pokoj. Členové přípravného družstva mají navíc luxusní stavební buňku 1+kk s cenovou stabilitou na první období. Cena zahrnuje základní služby (energie, internet, společné prostory). Konkrétní rozsahy sdělujeme privátně po vyplnění formuláře. Nechceme je veřejně fixovat dřív, než se na nich domluví první kohorta.",
     "order": 6
   },
   "q7": {
     "audience": "resident",
     "question": "Co znamená pobytové stipendium?",
-    "answer": "Stipendium je výběrový režim pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Není to slevový kód — vybíráme podle záměru, který v Hubu chcete rozjet. Vedle stipendia existují dvě paralelní cesty pro non-paying rezidenty: work-trade (správce) a rezident-tvůrce. Všechny tři si můžete vybrat ve formuláři nezávazného zájmu.",
+    "answer": "Stipendium je výběrový režim pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Není to slevový kód. Vybíráme podle záměru, který v Hubu chcete rozjet. Vedle stipendia existují dvě paralelní cesty pro non-paying rezidenty: work-trade (správce) a rezident-tvůrce. Všechny tři si můžete vybrat ve formuláři nezávazného zájmu, a všechny tři dávají vstup do přípravného družstva stejnou cestou jako platící rezidence.",
     "order": 7
   },
   "q8": {
     "audience": "resident",
     "question": "Jak je to s délkou pobytu a flexibilitou?",
-    "answer": "Hub počítá s různě dlouhými pobyty: krátké v kapslích, delší v pokojích. Ve formuláři vybíráte orientační délku (1–3 měsíce, 3–6, 6–12, 12 a více) a zda chcete mít možnost ji prodlužovat. Konkrétní smluvní podmínky doladíme podle toho, co lidem nejvíc dává smysl.",
+    "answer": "Hub počítá s různě dlouhými pobyty: krátké v kapslích, delší v pokojích a buňkách 1+kk. Ve formuláři vybíráte orientační délku (1–3 měsíce, 3–6, 6–12, 12 a více) a zda chcete mít možnost ji prodlužovat. Konkrétní smluvní podmínky doladíme s přípravným družstvem.",
     "order": 8
+  },
+  "q9": {
+    "audience": "resident",
+    "question": "Co je přípravné družstvo a proč mě zajímá?",
+    "answer": "Přípravné družstvo je první kohorta cca 50 lidí, kteří projekt společně připravují pro ostatní z cílovky. Jednou za 14 dní se schází v komunitním centru a domlouvá konkrétní provozní pravidla: denní rytmus, nájemní řád, režim sauny a bazénu, formát komunitních akcí. Členové získávají garantované právo bydlet v luxusní stavební buňce 1+kk se zvýšeným standardem výbavy a fixovanou cenou na první rok provozu. Vyplněním nezávazného zájmu se přihlašujete; zařazení záleží na záměru a kompatibilitě, ne na pořadí. Druhá kohorta otevírá později pro ty, kdo přijdou do hotového rámce.",
+    "order": 9
+  },
+  "q10": {
+    "audience": "resident",
+    "question": "Jak se z Hubu dostanu do Prahy?",
+    "answer": "Přes ranní (6:30–9:30) a odpolední (15:30–19:00) špičku jezdí kyvadlový minibus areálu přímo na metro Kobylisy, 15 minut bez přesedání. Mimo špičku jezdí příměstská linka PID každých 15–20 minut do stejné stanice (~25 minut). Plánovaná tramvajová zastávka Výzkumný ústav I. (vydáno stavební povolení) cestu po realizaci ještě zkrátí. Pro cyklisty je v plánu lávka Roztoky–Klecany, která areál spojí s pražskou cyklostezkou.",
+    "order": 10
   }
 }

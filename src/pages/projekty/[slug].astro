@@ -16,7 +16,7 @@ const buildingLabel = (id: string) => {
     case 'komunitni-centrum':  return 'Objekt B';
     case 'coworking-centrum':  return 'Přízemí budovy C';
     case 'komunitni-pivovar':  return 'Objekt B';
-    case 'bytove-druzstvo':    return 'Vlastnické družstvo';
+    case 'bytove-druzstvo':    return 'Přípravné družstvo';
     case 'sauna-bazen':        return 'Objekty D + E';
     case 'sportoviste-park':   return 'Park před objektem B';
     default:                   return 'Areál';
@@ -24,10 +24,10 @@ const buildingLabel = (id: string) => {
 };
 
 const statusLabel = (s: string) =>
-  s === 'realizujeme' ? 'Realizujeme' : 'V přípravě';
+  s === 'realizujeme' ? 'Realizujeme' : 'Aktivní';
 ---
 <Base
-  title={`${project.data.name} — Startovací Hub Klecany`}
+  title={`${project.data.name} · Startovací Hub Klecany`}
   description={project.data.role}
   headerVariant="light"
 >
@@ -49,7 +49,7 @@ const statusLabel = (s: string) =>
 
   <section class="pjd-cta">
     <div class="pjd-cta__inner">
-      <p class="pjd-cta__lede">Pokud vás Hub zajímá jako možné bydlení, vyplňte nezávazný zájem. Na otázky k jednotlivým provozům odpovíme e-mailem.</p>
+      <p class="pjd-cta__lede">Pokud vás Hub zajímá jako možné bydlení, vyplňte nezávazný zájem. Vyplněním se přidáváte k přípravnému družstvu. Na otázky k jednotlivým provozům odpovíme e-mailem.</p>
       <div class="pjd-cta__btns">
         <a class="pjd-cta__btn pjd-cta__btn--primary" href={withBase('/rezervace/')}>Vyplnit nezávazný zájem →</a>
         <a class="pjd-cta__btn pjd-cta__btn--ghost" href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>

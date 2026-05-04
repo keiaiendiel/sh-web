@@ -1,0 +1,49 @@
+---
+/*
+ * Icon — inlines a Lucide SVG by name. Reads from lucide-static at build/dev
+ * time so production HTML is fully static (no JS, no CDN). Stroke color uses
+ * currentColor so the surrounding element controls hue via `color`.
+ *
+ * Usage: <Icon name="coffee" />
+ *        <Icon name="waves" size={28} />
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  name: string;
+  size?: number;
+  strokeWidth?: number;
+}
+
+const { name, size = 24, strokeWidth = 1.75 } = Astro.props;
+
+// Look up icon from lucide-static. Throw at build time if name is wrong so we
+// never ship a broken icon to the page.
+const iconPath = path.join(
+  process.cwd(),
+  'node_modules',
+  'lucide-static',
+  'icons',
+  `${name}.svg`
+);
+
+let svg: string;
+try {
+  svg = fs.readFileSync(iconPath, 'utf-8');
+} catch {
+  throw new Error(`<Icon name="${name}" /> — lucide-static has no icon "${name}".`);
+}
+
+// Strip license comment, normalize size + stroke + remove the lucide class
+// (we'll add our own). Result: clean inline SVG with currentColor stroke.
+const transformed = svg
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/\s+class="[^"]*"/, '')
+  .replace(/\s+width="\d+"/, ` width="${size}"`)
+  .replace(/\s+height="\d+"/, ` height="${size}"`)
+  .replace(/\s+stroke-width="[\d.]+"/, ` stroke-width="${strokeWidth}"`)
+  .replace(/<svg /, `<svg aria-hidden="true" focusable="false" `)
+  .trim();
+---
+<Fragment set:html={transformed} />
