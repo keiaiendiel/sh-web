@@ -10,32 +10,52 @@ Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr
 - Astro 6.1.8, static output, Czech-only.
 - Atyp Special font, K0–K100 monochrome scale, **plum accent `#5A2A5F`** (1 of 8 OSA tricolor accent colors).
 - Light radii (`--radius-input: 7px`) for inputs, CTA buttons, and cards; sharp `0` everywhere else.
-- MDX content collections (`subProjects`, `faq`, `org`).
+- MDX content collections (`subProjects`, `rooms`, `faq`, `org`).
 - Vanilla CSS, no client framework, no React island. Tiny inline `<script is:inline>` islands for header drawer, form, lightbox, and Leaflet map.
 - `sharp` for image migration only; Leaflet 1.9.4 from CDN (unpkg) used only on `/o-arealu/` for the map banner.
 
-## Pages (12)
+## Pages (20)
 
-- `/` Landing — 4-image hero slide carousel; "Co Hub nabídne" 4 format cards (Kapsle / Klidnější / Jednolůžkový / Sdílený); 4-claim 2×2 grid (Koncept / Pro koho / Sdílené prostory / Stipendium); zigzag visualizations with reveal-on-scroll + click-to-lightbox; dual CTA (Chci tu bydlet plum + Investice do záměru subtle); "Jak se Hub rozrůstá" provoz teaser; place + masterplan; FAQ teaser.
-- `/rezervace/` — standalone reservation page with 8-question form (per research spec), role-branched textareas, mini-FAQ.
-- `/o-arealu/` — data-first chapter layout (Klecany, časová osa, OSA II identita, ČVUT diplomky reference). Carries an interactive Leaflet map of the area pinned at the Horní kasárny coordinates with the address "Dolní Kasárna, 250 67 Klecany".
-- `/projekty/` — index of 6 sub-project provozů (Komunitní Centrum / Coworking Centrum / Komunitní Pivovar / Bytové Družstvo / Sauna a bazén / Sportoviště a park). Below cards: masterplan strip ("Mapa areálu / Kde co bude").
-- `/projekty/<slug>/` × 6 — per-objekt detail with MDX body + dual-button CTA panel.
+- `/` Landing — 4-image full-bleed hero slide carousel (with −15 % brightness scrim); 6 room-type cards with anchor pricing + per-osoba ekvivalent + dual CTA (Detail / Rezervovat); „Co Hub nabízí" amenity grid (cowork, bazén, sauna, recepce, kyvadla); „Můžeš si přikoupit" extras (stravování, e-vozidla, sklady); zigzag (Místo + Komunita); final plum CTA panel; place + masterplan; interactive Leaflet map; mini-FAQ.
+- `/pokoje/` — overview of all 6 room types with the same anchor + per-osoba pricing pattern as the homepage cards.
+- `/pokoje/<slug>/` × 6 — detail pages for: `capsule` (jednolůžková), `capsule-double`, `1kk-2l`, `1kk-3l`, `2kk`, `3kk`. Each: hero image with size/kapacita/cena meta, ideal-for panel, MDX body, 4-tier pricing table (1–2 měs / 3+ / 6+ / 12+ months), reserve CTA with URL pre-fill (`/rezervace/?typ=...`).
+- `/sluzby/` — paid extras: stravování, půjčovna e-vozidel, kontejnerové sklady (sauna is **in-rent**, not here). Pitch + price table per service.
+- `/areal/` — 5 sub-project provozů (Komunitní centrum, Coworking, Pivovar, Sauna+bazén, Sportoviště+park) + masterplan. Renamed from `/projekty/`.
+- `/areal/<slug>/` × 5 — per-objekt detail.
+- `/o-arealu/` — data-first chapter layout (Klecany 12 km, kyvadla, plánovaná tramvaj + cyklolávka — both in přípravě), interactive Leaflet map of the area pinned at the Horní kasárny coordinates.
+- `/rezervace/` — 3-section booking flow (typ + termín + délka → kontakt → souhlas with optional stipendium checkbox). URL pre-fill `?typ=<slug>`. Telefon povinný (rezervační oddělení volá).
+- `/druzstvo/` (skrytá, `noindex`) — pro lidi nasměrované manuálně z rezervace, kteří mají zájem o vlastnické bydlení v rámci VPD1.
 - `/faq/` — audience-tabbed FAQ (Vše / O projektu / Pro obyvatele).
 - `/404`.
 
-All non-landing pages share the same dark image hero pattern (eyebrow + H1 + lede on a hero photo at native brightness with a bottom-heavy black scrim).
+All non-landing pages share the same dark image hero pattern (eyebrow + H1 + lede on a hero photo with `filter: brightness(0.85)` and a bottom-heavy black scrim).
 
 ## Audience
 
-The site funnels **residents** — pracující studenti, OSVČ na začátku, mladí kreativci, začínající podnikatelé. Investors get a single secondary CTA on the landing (paired side-by-side with the residents banner) plus a footer pointer to the investor microsite [keiaiendiel.github.io/vpd-web/vpd1/](https://keiaiendiel.github.io/vpd-web/vpd1/).
+The site funnels **residents** — pracující studenti, OSVČ, mladí kreativci, začínající podnikatelé. Voice = „komunita + kreativa + pragmatic value": Klecany s pražským dosahem, méně než centrum, vlastní kapsle nebo privátní 1+kk. Investors get a footer pointer to the investor microsite [keiaiendiel.github.io/vpd-web/vpd1/](https://keiaiendiel.github.io/vpd-web/vpd1/) — no homepage real estate.
 
-## Pre-reservation form
+## Pricing (draft, orientační)
 
-The 8-question flow on `/rezervace/` covers: pragmatic count of 1+kk + move-in month, role (Platící rezident / Stipendium / Work-trade / Rezident-tvůrce / Ještě nevím), stay duration + renewal checkbox, monthly budget band, place type, Prague frequency, top 2 priorities (max-2 enforced via JS), klid-vs-komunita, optional role-branch textareas (only for Stipendium / Work-trade / Rezident-tvůrce), contact + consent. Submit `console.log`s the payload + shows a static success state — backend wiring is deferred.
+| Typ | Max lůžek v ceně | Anchor cena | Sleva 3+ / 6+ / 12+ měs |
+|---|---|---|---|
+| Kapsle (jednolůžková, sdílený pokoj) | 1 | od 4 500 Kč/měs | −5 / −15 / −25 % |
+| Dvoulůžková kapsle (sdílený pokoj) | 2 | od 6 500 Kč/měs | −5 / −15 / −25 % |
+| Privátní 1+kk · 2 lůžka (21 m²) | 2 | od 9 500 Kč/měs | −5 / −10 / −20 % |
+| Privátní 1+kk · 3 lůžka (21 m²) | 3 | od 11 500 Kč/měs | −5 / −10 / −20 % |
+| Privátní 2+kk · 4 lůžka (42 m²) | 4 | od 16 000 Kč/měs | −5 / −10 / −20 % |
+| Privátní 3+kk · 6 lůžek (63 m²) | 6 | od 21 000 Kč/měs | −5 / −10 / −20 % |
 
-Form spec source: `/12 Startovaci Hub/research/Optimal form and calculator for Startovací Hub Klecany.docx`.
-Reality-check claims source: `/12 Startovaci Hub/Podklady_S1/Arch. studie (hub)/Zadávací dokument.pdf` (OSA228 z 2.9.2025).
+Pricing zdroj: Compass deep-research z 5/2026 (50+ pražských referenčních zdrojů — UK/ČVUT/ČZU/VŠCHT/VŠE koleje, FIZZ Holešovice, Youston, Sharedd, Coliving Prague, klasické nájmy P4/P8/P9, Klecany, Roztoky, Zdiby). Klient finalizuje před public launchem.
+
+## Reservation form
+
+3-section flow na `/rezervace/`:
+
+1. **Typ ubytování + termín + délka** — radio cards 6 typů + „Ještě nevím, poraďte mi"; month picker; select 1–3 / 3–6 / 6–12 / 12+ měs.
+2. **Kontakt** — jméno, e-mail, telefon (všechno povinné, rezervační oddělení volá), volitelná poznámka, volitelný stipendium checkbox.
+3. **Souhlas** — GDPR checkbox.
+
+URL pre-fill `?typ=<slug>` z RoomCard tlačítek „Rezervovat termín". Submit `console.log`s payload + zobrazí success state „Zavoláme do 24 hodin". Backend wiring deferred.
 
 ## Local development
 
@@ -54,8 +74,8 @@ The repo carries `.claude/launch.json` so the Claude Code agent can spin up the 
 |---|---|
 | `pnpm build` | Static build to `dist/` |
 | `pnpm preview` | Serve `dist/` (post-build verification) |
-| `pnpm migrate:images` | One-shot image migration from `../../12 Startovaci Hub/image/` (raw photos, hero `selected/sh-{1..4}.jpeg`, named extras `kapsle / cowork / trznice-pivovar / sport`) |
-| `pnpm optimize:images` | Idempotent re-encode of `aerial/ exterior/ interior/ hero/` files > 600 KB to JPEG q=80 mozjpeg, max edge 1600 px (auto-renames `.png` → `.jpg`). Use after dropping a new batch into one of those folders. |
+| `pnpm migrate:images` | One-shot image migration from `../../12 Startovaci Hub/image/` |
+| `pnpm optimize:images` | Idempotent re-encode of `aerial/ exterior/ interior/ hero/` files > 600 KB to JPEG q=80 mozjpeg, max edge 1600 px (auto-renames `.png` → `.jpg`). |
 | `pnpm lint` | Run editorial + links lints |
 | `pnpm lint:editorial` | Voice/style lint over `src/content/**/*.mdx` and page bodies |
 | `pnpm lint:links` | HEAD-check external URLs |
@@ -82,11 +102,11 @@ git commit -m "feat(hub): describe what changed and why"
 git push origin master
 ```
 
-Watch the action at [github.com/keiaiendiel/sh-web/actions](https://github.com/keiaiendiel/sh-web/actions). Recent commits use the prefixes `feat(hub):`, `docs(hub):`, `fix(hub):`, `ci(hub):` — match these for consistency.
+Watch the action at [github.com/keiaiendiel/sh-web/actions](https://github.com/keiaiendiel/sh-web/actions). Recent commits use the prefixes `feat(hub):`, `docs(hub):`, `fix(hub):`, `refactor(hub):`, `content(hub):`, `style(hub):`, `ci(hub):` — match these for consistency.
 
 ## Deferred to a programmer
 
-- **Form submission backend** — validation, anti-spam (e.g. honeypot or hCaptcha), autoresponse, storage. The 10-field payload shape is documented in [src/components/ResidentForm.astro](src/components/ResidentForm.astro).
+- **Form submission backend** — validation, anti-spam (e.g. honeypot or hCaptcha), autoresponse, storage. The reservation payload shape is documented in [src/components/ResidentForm.astro](src/components/ResidentForm.astro).
 - **Analytics + cookie consent** — Plausible or GoatCounter. Out of scope for v1.
 - **DNS cutover to `startovacihub.cz`** — flip `site` in `astro.config.mjs`, drop the `base` line, find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css`. CI auto-deploys.
 
