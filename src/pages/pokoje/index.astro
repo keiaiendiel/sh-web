@@ -1,0 +1,154 @@
+---
+import Base from '../../layouts/Base.astro';
+import RoomCard from '../../components/RoomCard.astro';
+import { withBase } from '../../utils/url';
+import { getCollection } from 'astro:content';
+
+const rooms = (await getCollection('rooms')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base
+  title="Pokoje a kapsle · Startovací Hub Klecany"
+  description="Šest typů ubytování: kapsle ve sdíleném pokoji od 4 500 Kč/měsíc, privátní 1+kk pro 2 nebo 3 lůžka, 2+kk pro 4 lůžka a 3+kk pro 6 lůžek. Dlouhodobé bydlení 15 minut od metra Kobylisy s coworkingem, bazénem a kyvadlovou dopravou v ceně."
+  headerVariant="dark"
+>
+  <section class="pokoje-hero osa-dark">
+    <img class="pokoje-hero__bg" src={withBase('/images/hub/interior/1kk-a4-a6.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="pokoje-hero__scrim" aria-hidden="true"></div>
+    <div class="pokoje-hero__inner">
+      <span class="osa-eyebrow pokoje-hero__eyebrow">Pokoje a kapsle</span>
+      <h1 class="pokoje-hero__title">Šest typů ubytování, jeden Hub.</h1>
+      <p class="pokoje-hero__lede">Od kapsle ve sdíleném pokoji za 4 500 Kč/měsíc po privátní 3+kk pro velkou rodinu nebo partu šesti přátel. Vyberte si formát, který odpovídá vaší situaci a rozpočtu.</p>
+    </div>
+  </section>
+
+  <section class="pokoje-intro">
+    <ul class="pokoje-intro__list">
+      <li><strong>V ceně každého typu.</strong> Energie, internet, úklid společných, coworking, bazén, kyvadla.</li>
+      <li><strong>Sleva za dlouhý pobyt.</strong> Tři měsíce −5 %, šest měsíců až −15 %, dvanáct měsíců až −25 %.</li>
+      <li><strong>Bez závazné smlouvy hned.</strong> Rezervace je nezávazná, smlouva se podepisuje až s nastěhováním.</li>
+    </ul>
+  </section>
+
+  <section class="pokoje-grid-section">
+    <div class="pokoje-grid">
+      {rooms.map((r) => (
+        <RoomCard
+          slug={r.id}
+          type={r.data.type}
+          shortName={r.data.shortName}
+          name={r.data.name}
+          size={r.data.size}
+          capacity={r.data.capacity}
+          maxBeds={r.data.maxBeds}
+          priceFrom={r.data.priceFrom}
+          discount12={r.data.discount12}
+          pitch={r.data.pitch}
+          features={r.data.features}
+          thumbnail={r.data.thumbnail}
+        />
+      ))}
+    </div>
+    <p class="pokoje-grid__note">
+      Ceny jsou orientační a finalizují se podle obsazenosti budovy a délky pobytu.
+      Pokud si nevíte rady, který typ vyhovuje, <a href={withBase('/rezervace/')}>vyplňte formulář</a> a ozveme se.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .pokoje-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(320px, 46vh, 440px);
+    display: flex;
+    align-items: flex-end;
+    background: var(--k-100);
+    color: #fff;
+    overflow: hidden;
+  }
+  .pokoje-hero__bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85);
+    z-index: 1;
+  }
+  .pokoje-hero__scrim {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.55) 100%);
+    pointer-events: none;
+  }
+  .pokoje-hero__inner {
+    position: relative; z-index: 3;
+    padding: clamp(56px, 9vw, 96px) var(--gutter) clamp(40px, 6vw, 72px);
+    max-width: var(--container-wide); margin: 0 auto; width: 100%;
+  }
+  .pokoje-hero__inner > * { max-width: 720px; }
+  .pokoje-hero__eyebrow { color: rgba(255,255,255,0.78); display: inline-block; margin-bottom: 14px; }
+  .pokoje-hero__title {
+    font-family: var(--font-sans);
+    font-size: clamp(36px, 5.5vw, 64px);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  .pokoje-hero__lede {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.55;
+    color: rgba(255,255,255,0.88);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  .pokoje-intro {
+    padding: clamp(24px, 4vw, 40px) var(--gutter);
+    max-width: var(--container-wide); margin: 0 auto;
+    border-bottom: 1px solid var(--border-muted);
+  }
+  .pokoje-intro__list {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0; margin: 0; padding: 0;
+    list-style: none;
+  }
+  .pokoje-intro__list li {
+    padding: 12px 20px;
+    font-size: 14px; line-height: 1.5; color: var(--fg);
+    border-right: 1px solid var(--border-muted);
+  }
+  .pokoje-intro__list li:first-child { padding-left: 0; }
+  .pokoje-intro__list li:last-child  { padding-right: 0; border-right: 0; }
+  .pokoje-intro__list li strong { display: block; color: var(--k-100); margin-bottom: 4px; }
+  @media (max-width: 720px) {
+    .pokoje-intro__list { grid-template-columns: 1fr; }
+    .pokoje-intro__list li {
+      border-right: 0;
+      border-bottom: 1px solid var(--border-muted);
+      padding: 10px 0;
+    }
+    .pokoje-intro__list li:last-child { padding-bottom: 0; border-bottom: 0; }
+  }
+
+  .pokoje-grid-section {
+    padding: clamp(32px, 5vw, 64px) var(--gutter) clamp(64px, 10vw, 96px);
+    max-width: var(--container-wide); margin: 0 auto;
+  }
+  .pokoje-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 960px) { .pokoje-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .pokoje-grid { grid-template-columns: 1fr; } }
+
+  .pokoje-grid__note {
+    margin: 32px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--fg-muted);
+    max-width: 720px;
+  }
+  .pokoje-grid__note a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .pokoje-grid__note a:hover { color: var(--k-100); }
+</style>

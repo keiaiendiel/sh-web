@@ -1,0 +1,164 @@
+---
+/**
+ * /druzstvo/ — skrytá stránka. Není v hlavní navigaci, není v sitemap (noindex),
+ * slouží jako manuální cílový bod pro lidi, které Marek po vyplnění rezervace
+ * vyhodnotí jako kandidáty na vlastnické bydlení (přípravné družstvo VPD1).
+ *
+ * Hub web (tato stránka) drží jen krátký rozcestník: kdo, co, kam dál.
+ * Kanonický web pro družstvo je VPD1 (sibling repo vpd-web).
+ */
+
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Přípravné družstvo · Startovací Hub Klecany"
+  description="Skrytá stránka pro lidi, které zajímá vlastnické bydlení. Hub primárně řeší nájem; družstvo je samostatná cesta v rámci záměru VPD1."
+  noindex={true}
+>
+  <section class="druzstvo-hero">
+    <div class="druzstvo-hero__inner">
+      <span class="osa-eyebrow druzstvo-hero__eyebrow">Skrytá stránka · Přípravné družstvo</span>
+      <h1 class="druzstvo-hero__title">Pro lidi, kteří v Hubu nechtějí jen bydlet — chtějí vlastnit.</h1>
+      <p class="druzstvo-hero__lede">Tahle stránka není v hlavní navigaci. Dostala se k vám, protože vás zajímá dlouhodobé bydlení v Klecanech, které časem přejde do vlastnictví. Hub funguje primárně jako nájemní projekt; vlastnické bydlení žije v rámci sesterského záměru VPD1.</p>
+    </div>
+  </section>
+
+  <section class="druzstvo-body">
+    <div class="druzstvo-body__inner">
+      <h2>Co je přípravné družstvo</h2>
+      <p>Skupina lidí, kteří se přihlašují k prvotní kohortě budoucích vlastníků jednotek v areálu. Společně určujete provozní pravidla a stavební specifikaci jednotek (vyšší standard výbavy oproti nájemnímu 1+kk).</p>
+
+      <h2>Co za to dostáváte</h2>
+      <ul>
+        <li><strong>Právo na vlastní jednotku</strong> v luxusnějším standardu.</li>
+        <li><strong>Hlas v pravidlech.</strong> Pravidelná pracovní setkání družstva v komunitním centru.</li>
+        <li><strong>Cenová stabilita.</strong> Vstupní podmínky se nastavují s první kohortou, ne s trhem.</li>
+        <li><strong>Vstup před ostatními.</strong> Až jsou jednotky připravené, máte přednost před druhou kohortou.</li>
+      </ul>
+
+      <h2>Pro koho dává smysl</h2>
+      <p>Lidé, kteří chtějí v Klecanech zůstat dlouhodobě a mají chuť projekt spoluvytvářet od začátku. Ne pro lidi, kteří chtějí přijít do hotového rámce a jen platit nájem (pro ně je tu klasický Hub).</p>
+
+      <h2>Jak se přidat</h2>
+      <p>Pokud jste vyplnili rezervaci a v poznámce zmínili zájem o družstvo, ozveme se. Pokud chcete jít rovnou na téma vlastnictví, napište nám na <a href="mailto:info@startovacihub.cz">info@startovacihub.cz</a> s předmětem „Družstvo".</p>
+
+      <h2>Kanonický web</h2>
+      <p>Kompletní strategie a investiční rámec záměru VPD1 je na <a href="https://keiaiendiel.github.io/vpd-web/vpd1/" rel="noopener">vpd-web/vpd1</a>.</p>
+    </div>
+  </section>
+
+  <section class="druzstvo-cta">
+    <div class="druzstvo-cta__inner">
+      <p class="druzstvo-cta__lede">Hledáte nájem, ne vlastnictví? Vraťte se na hlavní stránku.</p>
+      <div class="druzstvo-cta__btns">
+        <a class="druzstvo-cta__btn druzstvo-cta__btn--primary" href={withBase('/pokoje/')}>Vybrat ubytování →</a>
+        <a class="druzstvo-cta__btn druzstvo-cta__btn--ghost" href={withBase('/rezervace/')}>Rezervace</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .druzstvo-hero {
+    padding: clamp(56px, 8vw, 96px) var(--gutter) clamp(32px, 5vw, 48px);
+    max-width: var(--container-wide); margin: 0 auto;
+    border-bottom: 1px solid var(--border-muted);
+  }
+  .druzstvo-hero__inner { max-width: 760px; display: grid; gap: 14px; }
+  .druzstvo-hero__eyebrow { color: var(--accent); }
+  .druzstvo-hero__title {
+    font-family: var(--font-sans);
+    font-size: clamp(32px, 4.5vw, 52px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: var(--tracking-tight);
+    margin: 4px 0 0;
+    text-wrap: balance;
+  }
+  .druzstvo-hero__lede {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.55;
+    color: var(--fg);
+    margin: 8px 0 0;
+    max-width: 60ch;
+  }
+
+  .druzstvo-body {
+    padding: clamp(48px, 6vw, 80px) var(--gutter);
+    max-width: var(--container-wide); margin: 0 auto;
+  }
+  .druzstvo-body__inner { max-width: 720px; }
+  .druzstvo-body__inner h2 {
+    font-family: var(--font-sans);
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 600;
+    margin: 32px 0 12px;
+    line-height: 1.2;
+    letter-spacing: var(--tracking-tight);
+  }
+  .druzstvo-body__inner h2:first-child { margin-top: 0; }
+  .druzstvo-body__inner p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--fg);
+    margin: 0 0 16px;
+    max-width: 64ch;
+  }
+  .druzstvo-body__inner ul {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--fg);
+    margin: 0 0 16px;
+    padding-left: 22px;
+    max-width: 64ch;
+  }
+  .druzstvo-body__inner li { margin: 0 0 6px; }
+  .druzstvo-body__inner a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .druzstvo-body__inner strong { font-weight: 600; }
+
+  .druzstvo-cta {
+    padding: 0 var(--gutter) clamp(64px, 8vw, 96px);
+    max-width: var(--container-wide); margin: 0 auto;
+  }
+  .druzstvo-cta__inner {
+    max-width: 720px; margin: 0 auto; text-align: center;
+    padding: clamp(32px, 4vw, 48px);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+  }
+  .druzstvo-cta__lede {
+    font-size: 16px;
+    color: var(--fg);
+    margin: 0 0 16px;
+  }
+  .druzstvo-cta__btns {
+    display: flex; gap: 12px;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .druzstvo-cta__btn {
+    display: inline-flex; align-items: center;
+    padding: 12px 24px;
+    border-radius: var(--radius-input);
+    font-weight: 600; font-size: 15px;
+    text-decoration: none;
+    transition: background var(--dur-base) var(--ease-decel), color var(--dur-base) var(--ease-decel);
+  }
+  .druzstvo-cta__btn--primary {
+    color: var(--accent-on);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .druzstvo-cta__btn--primary:hover { background: var(--k-100); border-color: var(--k-100); }
+  .druzstvo-cta__btn--ghost {
+    color: var(--k-100);
+    background: transparent;
+    border: 1px solid var(--k-100);
+  }
+  .druzstvo-cta__btn--ghost:hover { background: var(--k-100); color: var(--k-0); }
+</style>

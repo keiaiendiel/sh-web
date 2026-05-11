@@ -1,0 +1,258 @@
+---
+/**
+ * RoomCard — karta typu ubytování. Použitá na homepage (5 typů hned pod
+ * heroem) a na /pokoje/ overview. Karta nese anchor cenu „od X Kč/měsíc",
+ * m², kapacitu, krátké bullety a dvě CTA (Detail + Rezervovat).
+ *
+ * Pattern z Zoku / Habyt / Scape: room cards musí mít visible price a m²
+ * pro long-stay rozhodování. „Find out more" + „Book" jako paralelní akce.
+ */
+import { withBase } from '../utils/url';
+
+interface Props {
+  slug: string;
+  type: string;
+  shortName: string;
+  name: string;
+  size: string;
+  capacity: string;
+  maxBeds: number;
+  priceFrom: number;
+  discount12?: number;
+  pitch: string;
+  features?: string[];
+  thumbnail: string;
+}
+
+const {
+  slug,
+  type,
+  shortName,
+  name,
+  size,
+  capacity,
+  maxBeds,
+  priceFrom,
+  discount12,
+  pitch,
+  features = [],
+  thumbnail,
+} = Astro.props;
+
+const formatPrice = (n: number) => new Intl.NumberFormat('cs-CZ').format(n);
+const priceFormatted = formatPrice(priceFrom);
+// Per-osoba ekvivalent při plné obsazenosti (jen pro jednotky s maxBeds > 1)
+const perPerson = maxBeds > 1 ? Math.round(priceFrom / maxBeds) : null;
+const perPersonFormatted = perPerson ? formatPrice(perPerson) : null;
+const detailHref = withBase(`/pokoje/${slug}/`);
+const reserveHref = withBase(`/rezervace/?typ=${type}`);
+---
+<article class="room-card">
+  <a class="room-card__thumb-link" href={detailHref} aria-label={`Detail typu ${shortName}`}>
+    <div class="room-card__thumb" data-img-reveal>
+      <img src={thumbnail} alt="" loading="lazy" decoding="async" />
+    </div>
+  </a>
+  <div class="room-card__body">
+    <span class="osa-eyebrow room-card__eyebrow">{shortName}</span>
+    <h3 class="room-card__name">
+      <a href={detailHref}>{name}</a>
+    </h3>
+    <dl class="room-card__meta">
+      <div><dt>Velikost</dt><dd>{size}</dd></div>
+      <div><dt>Kapacita</dt><dd>{capacity}</dd></div>
+    </dl>
+    <p class="room-card__pitch">{pitch}</p>
+    {features.length > 0 && (
+      <ul class="room-card__features">
+        {features.slice(0, 4).map((f) => <li>{f}</li>)}
+      </ul>
+    )}
+    <div class="room-card__price">
+      <span class="room-card__price-anchor">
+        <span class="room-card__price-prefix">od</span>
+        <span class="room-card__price-num osa-figs">{priceFormatted}</span>
+        <span class="room-card__price-unit">Kč/měsíc</span>
+      </span>
+      {perPersonFormatted && (
+        <span class="room-card__price-perperson">
+          = <span class="osa-figs">{perPersonFormatted}</span> Kč/osoba při plné obsazenosti
+        </span>
+      )}
+      {discount12 && discount12 > 0 && (
+        <span class="room-card__price-note">při pobytu 12+ měsíců až −{discount12} %</span>
+      )}
+    </div>
+    <div class="room-card__cta">
+      <a class="room-card__cta-secondary" href={detailHref}>Detail →</a>
+      <a class="room-card__cta-primary" href={reserveHref}>Rezervovat termín</a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .room-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+    overflow: hidden;
+    transition:
+      border-color var(--dur-base) var(--ease-decel),
+      transform var(--dur-base) var(--ease-decel);
+  }
+  .room-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .room-card__thumb-link {
+    display: block;
+    text-decoration: none;
+  }
+  .room-card__thumb {
+    aspect-ratio: 4/3;
+    background: var(--k-05);
+    overflow: hidden;
+  }
+  .room-card__thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .room-card__body {
+    display: grid; gap: 12px;
+    padding: 20px 22px 22px;
+  }
+  .room-card__eyebrow { color: var(--accent); display: block; }
+  .room-card__name {
+    font-family: var(--font-sans);
+    font-size: 20px; font-weight: 600;
+    margin: 4px 0 0;
+    line-height: 1.25;
+    letter-spacing: var(--tracking-tight);
+  }
+  .room-card__name a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .room-card__name a:hover {
+    color: var(--accent);
+  }
+  .room-card__meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 4px 0 0;
+    padding: 12px 0;
+    border-top: 1px solid var(--border-muted);
+    border-bottom: 1px solid var(--border-muted);
+  }
+  .room-card__meta > div { display: grid; gap: 2px; }
+  .room-card__meta dt {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    margin: 0;
+  }
+  .room-card__meta dd {
+    font-size: 14px;
+    color: var(--fg);
+    margin: 0;
+    line-height: 1.35;
+  }
+  .room-card__pitch {
+    font-size: 14px; line-height: 1.55;
+    color: var(--fg-muted); margin: 0;
+  }
+  .room-card__features {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    gap: 4px;
+  }
+  .room-card__features li {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--fg-muted);
+    padding-left: 16px;
+    position: relative;
+  }
+  .room-card__features li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px;
+    width: 6px; height: 1px;
+    background: var(--accent);
+  }
+  .room-card__price {
+    display: grid;
+    gap: 4px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-muted);
+    margin-top: 4px;
+  }
+  .room-card__price-anchor {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .room-card__price-prefix {
+    font-size: 13px;
+    color: var(--fg-subtle);
+  }
+  .room-card__price-num {
+    font-family: var(--font-sans);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1;
+  }
+  .room-card__price-unit {
+    font-size: 14px;
+    color: var(--fg);
+  }
+  .room-card__price-perperson {
+    font-size: 13px;
+    color: var(--fg);
+    line-height: 1.4;
+  }
+  .room-card__price-note {
+    font-size: 12px;
+    color: var(--fg-subtle);
+    line-height: 1.4;
+  }
+  .room-card__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .room-card__cta-secondary {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg);
+    text-decoration: none;
+    padding: 6px 0;
+    border-bottom: 1px solid currentColor;
+    transition: color var(--dur-base) var(--ease-decel);
+  }
+  .room-card__cta-secondary:hover { color: var(--accent); }
+  .room-card__cta-primary {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-on);
+    background: var(--accent);
+    padding: 9px 16px;
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition: background var(--dur-base) var(--ease-decel);
+  }
+  .room-card__cta-primary:hover { background: var(--k-100); }
+</style>

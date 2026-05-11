@@ -15,6 +15,7 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   headerVariant?: 'light' | 'dark';
+  noindex?: boolean;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
   ogImage = withBase('/og/default.png'),
   ogType = 'website',
   headerVariant = 'light',
+  noindex = false,
 } = Astro.props;
 
 // Canonical URL: derived from Astro.site + current pathname.
@@ -96,6 +98,7 @@ const orgJsonLd = org
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     {/* Open Graph */}
     <meta property="og:title" content={title} />

@@ -17,7 +17,6 @@ const buildingLabel = (id: string) => {
     case 'komunitni-centrum':  return 'Objekt B';
     case 'coworking-centrum':  return 'Přízemí budovy C';
     case 'komunitni-pivovar':  return 'Objekt B';
-    case 'bytove-druzstvo':    return 'Přípravné družstvo';
     case 'sauna-bazen':        return 'Objekty D + E';
     case 'sportoviste-park':   return 'Park před objektem B';
     default:                   return 'Areál';
@@ -40,7 +39,7 @@ const heroVariant = hasHero ? 'dark' : 'light';
       <img class="pjd-hero__bg" src={project.data.heroImage} alt={project.data.heroImageAlt ?? ''} aria-hidden={project.data.heroImageAlt ? undefined : 'true'} loading="eager" decoding="async" />
       <div class="pjd-hero__scrim" aria-hidden="true"></div>
       <div class="pjd-hero__inner pjd-hero__inner--over">
-        <a class="pjd-hero__back" href={withBase('/projekty/')}>← Všechny provozy</a>
+        <a class="pjd-hero__back" href={withBase('/areal/')}>← Všechny provozy</a>
         <span class="osa-eyebrow pjd-hero__building">{buildingLabel(project.id)}</span>
         <h1 class="pjd-hero__title">{project.data.name}</h1>
         <p class="pjd-hero__lede">{project.data.role}</p>
@@ -62,7 +61,7 @@ const heroVariant = hasHero ? 'dark' : 'light';
   ) : (
     <section class="pjd-hero">
       <div class="pjd-hero__inner">
-        <a class="pjd-hero__back" href={withBase('/projekty/')}>← Všechny provozy</a>
+        <a class="pjd-hero__back" href={withBase('/areal/')}>← Všechny provozy</a>
         <span class="osa-eyebrow pjd-hero__building">{buildingLabel(project.id)}</span>
         <h1 class="pjd-hero__title">{project.data.name}</h1>
         <p class="pjd-hero__lede">{project.data.role}</p>
@@ -91,7 +90,7 @@ const heroVariant = hasHero ? 'dark' : 'light';
 
   <section class="pjd-cta">
     <div class="pjd-cta__inner">
-      <p class="pjd-cta__lede">Pokud vás Hub zajímá jako možné bydlení, vyplňte nezávazný zájem. Vyplněním se přidáváte k přípravnému družstvu. Na otázky k jednotlivým provozům odpovíme e-mailem.</p>
+      <p class="pjd-cta__lede">Pokud vás Hub zajímá jako bydlení, vyberte si typ jednotky a vyplňte rezervaci. Otázky k jednotlivým provozům rádi zodpovíme e-mailem.</p>
       <div class="pjd-cta__btns">
         <a class="pjd-cta__btn pjd-cta__btn--primary" href={withBase('/rezervace/')}>Rezervace →</a>
         <a class="pjd-cta__btn pjd-cta__btn--ghost" href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>
@@ -131,6 +130,7 @@ const heroVariant = hasHero ? 'dark' : 'light';
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
+    filter: brightness(0.85);
     z-index: -2;
   }
   .pjd-hero__scrim {

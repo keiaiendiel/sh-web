@@ -59,4 +59,35 @@ const org = defineCollection({
   }),
 });
 
-export const collections = { subProjects, faq, org };
+/* Rooms = 6 typů ubytovacích jednotek (capsule single, capsule double, 1+kk-2L,
+   1+kk-3L, 2+kk, 3+kk). Anchor cena je cena za jednotku při plné konfiguraci
+   (= maxBeds v ceně); discount3/6/12 jsou procentuální slevy za pobyt 3+ / 6+
+   / 12+ měsíců, 3-tier struktura zachycuje Erasmus i celoroční pobyty.
+   maxBeds = počet lůžek v ceně (klíč pro per-osoba ekvivalent v UI). */
+const roomTypeEnum = z.enum(['capsule', 'capsule-double', '1kk-2l', '1kk-3l', '2kk', '3kk']);
+
+const rooms = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: './src/content/rooms' }),
+  schema: z.object({
+    type: roomTypeEnum,
+    name: z.string().min(3).max(80),
+    shortName: z.string().min(2).max(40),
+    size: z.string(),
+    capacity: z.string(),
+    maxBeds: z.number().int().min(1).max(8),
+    priceFrom: z.number().int().min(1000).max(100000),
+    discount3: z.number().int().min(0).max(50).optional(),
+    discount6: z.number().int().min(0).max(50).optional(),
+    discount12: z.number().int().min(0).max(50).optional(),
+    order: z.number().int(),
+    pitch: z.string().min(20).max(300),
+    idealFor: z.string().min(20).max(280),
+    features: z.array(z.string()).optional(),
+    thumbnail: z.string().startsWith('/'),
+    heroImage: z.string().startsWith('/'),
+    heroImageAlt: z.string().min(10).max(200),
+    sharedGenderOptions: z.boolean().default(false),
+  }),
+});
+
+export const collections = { subProjects, faq, org, rooms };

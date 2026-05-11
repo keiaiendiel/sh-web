@@ -14,49 +14,49 @@
   "q3": {
     "audience": "project",
     "question": "Kdy se do Hubu nastěhuju?",
-    "answer": "Termín nastěhování domlouváme s přípravným družstvem (první kohortou cca 50 lidí, kteří projekt společně připraví). Bez vás nemá smysl fixovat datum dopředu. Po vyplnění nezávazného zájmu se ozveme privátně s aktuálním stavem rekonstrukce, plánovaným termínem nastěhování pro vaši preferenci a detailem buňky 1+kk. Nejdřív připravený formát jsou kapsle a luxusní 1+kk buňky pro členy přípravného družstva; pokojové formáty navazují, jak postupuje rekonstrukce.",
+    "answer": "Po odeslání rezervace vám obvykle do 24 hodin zavolá někdo z rezervačního oddělení. Společně doladíte preferovaný typ ubytování, termín nastěhování a délku pobytu, a dostanete konkrétní informace o dostupnosti i ceně pro vaše parametry.",
     "order": 3
   },
   "q4": {
     "audience": "project",
-    "question": "V jaké fázi je projekt teď?",
-    "answer": "Máme dokončený investiční záměr a navrženou provozní strukturu. Skládáme první kohortu přípravného družstva. Paralelně pracujeme na zahájení rekonstrukcí (06/2026) a doladění právního rámce.",
+    "question": "Jak Hub funguje a co od něj čekat?",
+    "answer": "Hub je dlouhodobé ubytovací zařízení v rekonstruovaných budovách areálu Horních kasáren. Funguje na principu privátní jednotky a sdíleného zázemí: vlastní pokoj nebo kapsle, k tomu coworking, bazén, sauna, kavárna, kyvadla na metro a další služby v ceně nájmu. Rezervace je nezávazná, slouží i nám jako přehled o poptávce po jednotlivých typech ubytování.",
     "order": 4
   },
   "q5": {
     "audience": "resident",
-    "question": "Je vyplnění nezávazného zájmu zavazující?",
-    "answer": "Není. Nezávazný zájem není smlouva ani závazek. Sdělujete nám orientační podmínky, za kterých by pro vás Hub dával smysl. Na základě odpovědí vás zařadíme do první kohorty přípravného družstva, tedy do skupiny lidí, se kterými dál mluvíme o detailech. Můžete kdykoli odstoupit.",
+    "question": "Je rezervace zavazující?",
+    "answer": "Není. Rezervace je nezávazná, žádná smlouva, žádná platba předem. Sdělujete nám preferovaný typ jednotky, termín nastěhování a délku pobytu. Někdo z rezervačního oddělení vám obvykle do 24 hodin zavolá s detailem dostupnosti a ceny pro vaše parametry. Smlouvu řešíme až s nastěhováním. Můžete kdykoli odstoupit.",
     "order": 5
   },
   "q6": {
     "audience": "resident",
     "question": "Kolik bude pobyt stát?",
-    "answer": "Cenová pásma nastavujeme s přípravným družstvem podle reálné situace cílové skupiny: pracujících studentů, OSVČ na začátku a mladých kreativců. Pořadí od nejlevnějšího: kapsle, sdílený pokoj, klidnější uzavíratelné místo, jednolůžkový pokoj. Členové přípravného družstva mají navíc luxusní stavební buňku 1+kk s cenovou stabilitou na první období. Cena zahrnuje základní služby (energie, internet, společné prostory). Konkrétní rozsahy sdělujeme privátně po vyplnění formuláře. Nechceme je veřejně fixovat dřív, než se na nich domluví první kohorta.",
+    "answer": "Orientačně, za celou jednotku/měsíc: kapsle ve sdíleném pokoji od 4 500 Kč, dvoulůžková kapsle od 6 500 Kč, privátní 1+kk se dvěma lůžky od 9 500 Kč, 1+kk se třemi lůžky od 11 500 Kč, 2+kk se čtyřmi lůžky od 16 000 Kč, 3+kk se šesti lůžky od 21 000 Kč. V ceně jsou energie, internet, úklid společných prostor, coworking, bazén, recepce s poštou, kyvadla na metro Kobylisy a sleva na saunu. Sleva za dlouhý pobyt: 3+ měsíce −5 %, 6+ měsíců −10 až −15 %, 12+ měsíců −20 až −25 %.",
     "order": 6
   },
   "q7": {
     "audience": "resident",
-    "question": "Co znamená pobytové stipendium?",
-    "answer": "Stipendium je výběrový režim pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Není to slevový kód. Vybíráme podle záměru, který v Hubu chcete rozjet. Vedle stipendia existují dvě paralelní cesty pro non-paying rezidenty: work-trade (správce) a rezident-tvůrce. Všechny tři si můžete vybrat ve formuláři nezávazného zájmu, a všechny tři dávají vstup do přípravného družstva stejnou cestou jako platící rezidence.",
+    "question": "Co je v ceně, a co se připlácí?",
+    "answer": "V ceně každého typu: energie, internet, úklid společných prostor, přístup do coworkingu 24/7, venkovní bazén v sezoně, recepce s přebíráním pošty, kyvadla na metro Kobylisy a sleva na saunu. Doplňkové služby s vlastní cenou: stravování (snídaně, oběd, večeře, svačiny), půjčovna e-vozidel (koloběžky, kola, motorky, sdílená auta), kontejnerové sklady a sauna premium. Detail v sekci Služby.",
     "order": 7
   },
   "q8": {
     "audience": "resident",
     "question": "Jak je to s délkou pobytu a flexibilitou?",
-    "answer": "Hub počítá s různě dlouhými pobyty: krátké v kapslích, delší v pokojích a buňkách 1+kk. Ve formuláři vybíráte orientační délku (1–3 měsíce, 3–6, 6–12, 12 a více) a zda chcete mít možnost ji prodlužovat. Konkrétní smluvní podmínky doladíme s přípravným družstvem.",
+    "answer": "Hub je dělaný pro dlouhodobé pobyty: od jednoho měsíce po roky. Ve formuláři vyberete orientační délku (1–3 měsíce, 3–6, 6–12, 12 a více). Smlouvu uzavíráme až s nastěhováním a obsahuje běžné výpovědní lhůty. Prodloužení řešíme operativně, nemusíte podepisovat novou smlouvu pro každé další období.",
     "order": 8
   },
   "q9": {
     "audience": "resident",
-    "question": "Co je přípravné družstvo a proč mě zajímá?",
-    "answer": "Přípravné družstvo je první kohorta cca 50 lidí, kteří projekt společně připravují pro ostatní z cílovky. Jednou za 14 dní se schází v komunitním centru a domlouvá konkrétní provozní pravidla: denní rytmus, nájemní řád, režim sauny a bazénu, formát komunitních akcí. Členové získávají garantované právo bydlet v luxusní stavební buňce 1+kk se zvýšeným standardem výbavy a fixovanou cenou na první rok provozu. Vyplněním nezávazného zájmu se přihlašujete; zařazení záleží na záměru a kompatibilitě, ne na pořadí. Druhá kohorta otevírá později pro ty, kdo přijdou do hotového rámce.",
+    "question": "Mohu žádat o pobytové stipendium nebo dotovaný režim?",
+    "answer": "Ano. Pobytové stipendium je výběrový režim pro lidi, pro které by Hub dával smysl, ale za běžnou cenu by si pobyt nemohli dovolit — typicky studenty z low-income rodin, začínající kreativce a sociálně potřebné. Není to slevový kód, vybíráme podle záměru a životní situace. Ve formuláři rezervace zaškrtněte „Mám zájem o pobytové stipendium" — rezervační oddělení vás osloví s konkrétními podmínkami.",
     "order": 9
   },
   "q10": {
     "audience": "resident",
     "question": "Jak se z Hubu dostanu do Prahy?",
-    "answer": "Přes ranní (6:30–9:30) a odpolední (15:30–19:00) špičku jezdí kyvadlový minibus areálu přímo na metro Kobylisy, 15 minut bez přesedání. Mimo špičku jezdí příměstská linka PID každých 15–20 minut do stejné stanice (~25 minut). Plánovaná tramvajová zastávka Výzkumný ústav I. (vydáno stavební povolení) cestu po realizaci ještě zkrátí. Pro cyklisty je v plánu lávka Roztoky–Klecany, která areál spojí s pražskou cyklostezkou.",
+    "answer": "V ranní a odpolední špičce jezdí kyvadlový minibus areálu přímo na metro Kobylisy, bez přesedání. Mimo špičku jezdí příměstská linka PID do stejné stanice. V přípravě je tramvajová trať z Kobylis směrem na Zdiby; po realizaci se cesta do Prahy ještě zkrátí. Pro cyklisty se plánuje nová lávka přes Vltavu mezi Roztoky a Klecany, která areál propojí s pražskou cyklostezkou.",
     "order": 10
   }
 }

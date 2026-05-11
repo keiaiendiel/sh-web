@@ -2,8 +2,9 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import Gallery from '../components/Gallery.astro';
+import RoomCard from '../components/RoomCard.astro';
 import { withBase } from '../utils/url';
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 
 // Hero rotation — 4 background images sliding horizontally on a 20s loop.
 const heroImages = [
@@ -13,87 +14,55 @@ const heroImages = [
   withBase('/images/hub/hero/hero-4.jpg'),
 ];
 
-// Living formats — tři formáty postavené na fresh vizualizacích z public/images/hub/.
-// Kapsle = sdílený kapsulový hotel; jednolůžko a dvoulůžko jsou obě varianty 1+kk
-// podle počtu obyvatel a velikosti pokoje.
-const formats = [
+// 5 typů ubytování — capsule single, capsule double, 1+kk, 2+kk, 3+kk.
+// Načítáme z content collection 'rooms' (viz src/content.config.ts a
+// src/content/rooms/*.mdx). Anchor cena a metadata se renderují přes RoomCard.
+const rooms = (await getCollection('rooms')).sort((a, b) => a.data.order - b.data.order);
+
+// Co Hub nabízí — amenity, které dostává každý rezident bez ohledu na typ
+// ubytování. Hierarchie z plánu: jádro (in price) ≠ doplňky (paid).
+const includedAmenities = [
+  { icon: 'monitor',  title: 'Coworking',           body: '24/7 přístup do coworkingového sálu, studoven a zasedaček.' },
+  { icon: 'waves',    title: 'Venkovní bazén',      body: 'Sezónní koupání (květen–září) na vnitřním dvoře areálu.' },
+  { icon: 'flame',    title: 'Sauna',               body: 'Finská sauna v objektu E s pravidelnými směnami pro rezidenty.' },
+  { icon: 'mail',     title: 'Recepce s poštou',    body: 'Přebíráme poštu, vydáváme souhlasy pro sídlo firmy.' },
+  { icon: 'bus',      title: 'Kyvadla na Kobylisy', body: 'Minibus areálu na metro Kobylisy v ranní a odpolední špičce.' },
+];
+
+// „Můžeš si přikoupit" — placené doplňkové služby. Prezentujeme všechny stejně
+// (bez status badge); aktuální dostupnost v termínu rezervace řeší rezervační
+// oddělení individuálně po telefonu.
+const extraServices = [
   {
-    name: 'Kapsle',
-    src: withBase('/images/hub/interior/kapsle-horizontal.jpg'),
-    alt: 'Kapsulová jednotka v Hubu: dřevěné spací moduly s integrovaným osvětlením, číslované pody, sdílený lounge na chodbě.',
-    body: 'Spací modul ve sdílené jednotce. Premium kapsulový design: dřevo, tlumené světlo, vlastní zámek a nabíjení. Na chodbě sdílený lounge a společné sociální zázemí. Pro krátké pobyty a pro lidi, kterým rozhoduje cena.',
+    icon: 'utensils',
+    title: 'Stravování',
+    body: 'Snídaně, obědy, večeře a svačiny z areálové kuchyně. Měsíční paušál nebo platba per jídlo.',
+    href: '/sluzby/#stravovani',
   },
   {
-    name: 'Jednolůžko',
-    src: withBase('/images/hub/interior/1kk-a4-a6.jpg'),
-    alt: 'Jednolůžkový mikroapartmán v budovách A4–A6: postel u okna, integrovaná knihovna, pracovní stůl, dřevěná podlaha, vlastní koupelna.',
-    body: 'Privátní 1+kk pro 1 osobu. Velká postel, integrovaná knihovna, TV, jídelní stolek pro dva u okna, vlastní sociální zázemí. Sdílená kuchyň s pár sousedy. Pro delší pobyty a klid na práci nebo studium.',
+    icon: 'bike',
+    title: 'Půjčovna e-vozidel',
+    body: 'Koloběžky, kola, motorky, sdílená auta, mikrobusy i obytné auto. Hodinové i denní tarify pro rezidenty.',
+    href: '/sluzby/#evozidla',
   },
   {
-    name: 'Dvoulůžko',
-    src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'),
-    alt: 'Větší 1+kk byt v budovách A pro dvě osoby: kuchyňský kout, jídelní stůl, postel uprostřed, propojený obývací prostor.',
-    body: 'Privátní 1+kk pro dva. Vlastní kuchyňka (dřez, sporák, mikrovlnka), pracovní a jídelní kout, postel ve středu, propojený obývací prostor. Sociální zázemí v jednotce. Pro páry, sourozence nebo dvě OSVČ s podobným rytmem.',
+    icon: 'warehouse',
+    title: 'Kontejnerové sklady',
+    body: 'Uzamykatelné boxy 24/7 pro horská kola, lyže, sezónní krámy a archiv firmy.',
+    href: '/sluzby/#sklady',
   },
 ];
 
-// Provozy a služby — 14 sdílených tile s Lucide ikonkami. Některé linkují na
-// detailní sub-projekt page (parent-link), zbylé jsou stand-alone (parent:
-// null). Strukturalní cíl: na landingu jediná koncepce „co tu funguje", která
-// zároveň slouží jako vstupní brána do detailních /projekty/ stránek.
-//
-// `icon` odpovídá souboru v node_modules/lucide-static/icons/<name>.svg.
-const provozyServices = [
-  { title: 'Kavárna',                 body: 'V přízemí budovy B otevírá v 7 ráno. Specialty káva, ranní pečivo z vlastní pekárny, klidné koutky pro práci s laptopem.', icon: 'coffee',       parent: 'komunitni-centrum' },
-  { title: 'Pekárna',                 body: 'Vedle kavárny v budově B. Bochník chleba, croissanty, sezónní pečivo, od 6 ráno čerstvě upečené.',                        icon: 'croissant',    parent: 'komunitni-centrum' },
-  { title: 'Coworkingový sál',        body: 'Devět pevných stolů, dva soft koutky, projektor, kávovar v rohu. Přízemí budovy C.',                                       icon: 'monitor',      parent: 'coworking-centrum' },
-  { title: 'Studovny',                body: 'Tři tiché čítárny v patrech budov A. Pro studium, čtení, klidné hovory přes sluchátka. Knihovní polic na zdi.',           icon: 'book-open',    parent: 'coworking-centrum' },
-  { title: 'Zasedací místnosti',      body: 'Dvě uzavíratelné místnosti pro 4–8 lidí. Bílá tabule, projektor, video hovor. Rezervace přes sdílený kalendář.',           icon: 'presentation', parent: 'coworking-centrum' },
-  { title: 'Ateliéry',                body: 'Otevřené prostory pro malíře, sochaře, krejčí, designéry. Dlouhé stoly, světlo z velkých oken, sdílené nářadí.',           icon: 'palette',      parent: 'coworking-centrum' },
-  { title: 'Sdílené dílny',           body: 'Dřevodílna, kovodílna, oprava kol. Hoblíky, frézky, brusky. Vše značené, vše s návodem. Kdo umí, učí ostatní.',             icon: 'wrench',       parent: 'komunitni-centrum' },
-  { title: 'Nahrávací studia',        body: 'Dvě akusticky tlumené místnosti pro podcast, hudbu, voiceover. Mikrofony, mixovací pult, monitory.',                       icon: 'mic',          parent: 'coworking-centrum' },
-  { title: 'Sauna',                   body: 'V objektu E. Topí dvakrát týdně po práci, plus víkendová ranní směna. Outdoor cool-down deck pro letní i zimní sezónu.',   icon: 'flame',        parent: 'sauna-bazen' },
-  { title: 'Bazén',                   body: 'Před objektem D. V létě venkovní koupání, mimo sezónu zazimovaný a slouží jako požární nádrž areálu.',                     icon: 'waves',        parent: 'sauna-bazen' },
-  { title: 'Minipivovar',             body: 'Malý nezávislý pivovar v objektu B. Vaří se v pondělí, rozlévá se v pátek v sousední hospodě.',                            icon: 'beer',         parent: 'komunitni-pivovar' },
-  { title: 'Sportoviště a park',      body: 'Komunitní park před objektem B: grilovací místa, ping-pong, dětské hřiště, telocvična na vzduchu (calisthenics).',          icon: 'dumbbell',     parent: 'sportoviste-park' },
-  { title: 'Kontejnerové sklady',     body: 'Pro horská kola, lyže, sezónní krámy, archiv. Uzamykatelné boxy s přístupem 24/7.',                                       icon: 'warehouse',    parent: null },
-  { title: 'Kyvadlový bus na metro',  body: 'Přes ranní a odpolední špičku jezdí areálový minibus na metro Kobylisy. Cesta 15 minut, bez přesedání.',                  icon: 'bus',          parent: null },
-];
-
-// Four-claim grid — short, parallel, scannable. Replaces the prior prose
-// sections (koncept / pro koho / sdílené prostory) with a unified 2×2.
-const claims = [
-  {
-    eyebrow: 'Koncept',
-    title: 'Sedm budov, ~331 jednotek 1+kk.',
-    body: 'Rekonstrukce A1–A6 a budovy C v centru areálu Horních kasáren. Privátní jednotky 1+kk se sklopnou postelí a vlastním sociálním zázemím.',
-  },
-  {
-    eyebrow: 'Pro koho',
-    title: 'Lidé, kteří startují.',
-    body: 'Pracující studenti, OSVČ na začátku, mladí kreativci, začínající podnikatelé. Hub dává smysl tomu, kdo hledá flexibilní bydlení blízko Prahy.',
-  },
-  {
-    eyebrow: 'Sdílené prostory',
-    title: 'Privátní jednotka, sdílený zbytek.',
-    body: 'Coworking, sauna, bazén, kavárna, pekárna, minipivovar, ateliéry, dílny, studovny, zasedačky, nahrávací studia, sportoviště s telocvičnou na vzduchu. Vše v rámci areálu.',
-  },
-  {
-    eyebrow: 'Stipendium',
-    title: 'Výběr podle záměru, ne sleva.',
-    body: 'Pro lidi, kteří by Hubu dávali smysl, ale bez podpory by si pobyt nemohli dovolit. Vedle stipendia jsou paralelní role: správce (work-trade) a rezident-tvůrce. Cestu si vyberete ve formuláři.',
-  },
-];
-
-// Editorial zigzag — 5 rows alternating ltr/rtl. Each row teď renderuje
-// inline horizontální galerii (mobile swipe / desktop arrows + dots) místo
-// jediného obrázku, takže každá kapitola má víc snímků k prolistování.
+// Editorial zigzag — 2 řádky alternating ltr/rtl: Místo + Komunita.
+// Zkráceno z 5 sekcí na 2 v rámci redesignu z exploratory web na conversion
+// funnel — areál a komunita se rozkrývají primárně na /areal/ a /pokoje/[slug],
+// homepage drží kompaktní podporu konverzního flow.
 const zigzag = [
   {
     dir: 'ltr',
     eyebrow: 'Místo',
-    title: 'Areál Horních kasáren · 12 km od Prahy.',
-    body: 'Klecany leží těsně za hranicí Prahy. Areál sedí na trase plánované tramvajové zastávky Výzkumný ústav I. (vydáno stavební povolení) a navrhované cyklostezky podél Vltavy. Přes špičku jezdí kyvadlový bus na metro Kobylisy.',
+    title: 'Areál Horních kasáren · 15 minut od metra Kobylisy.',
+    body: 'Klecany leží těsně za hranicí Prahy. Přes ranní a odpolední špičku jezdí kyvadlový bus areálu k metru Kobylisy, mimo špičku PID. Areál sedí na trase plánované tramvajové zastávky Výzkumný ústav I.',
     eager: true,
     images: [
       { src: withBase('/images/hub/aerial/buildings-a-c.jpg'), alt: 'Letecký pohled na centrální dvůr Startovacího Hubu — budovy A1–A6 a C kolem komunitního parku.' },
@@ -104,55 +73,19 @@ const zigzag = [
   {
     dir: 'rtl',
     eyebrow: 'Komunita',
-    title: 'Tržnice, kavárna, pekárna a minipivovar v objektu B.',
-    body: 'V budově B funguje tržnice s lokálními producenty, kavárna, pekárna, minipivovar a venkovní zázemí pro food-trucky. V přízemí budovy C je coworkingový sál s pódiem pro přednášky a kapely.',
+    title: 'Tržnice, kavárna, pekárna a coworking pod jednou střechou.',
+    body: 'V budově B funguje tržnice s lokálními producenty, kavárna, pekárna, minipivovar a venkovní zázemí pro food-trucky. V přízemí budovy C je coworkingový sál s pódiem pro přednášky a kapely. K tomu sauna, bazén, ateliéry, nahrávací studia a venkovní tělocvična.',
     images: [
       { src: withBase('/images/hub/interior/b-jidelna.jpg'),          alt: 'Jídelní a sezení v objektu B — dřevěné stoly, lavice, večerní osvětlení nad tržnicí a kavárnou.' },
       { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'),    alt: 'Tržnice s minipivovarem v objektu B — venkovní zázemí pro food-trucky.' },
       { src: withBase('/images/hub/exterior/cowork.jpg'),             alt: 'Coworkingový sál v přízemí budovy C — pevné stoly, projektor, kávovar v rohu.' },
     ],
   },
-  {
-    dir: 'ltr',
-    eyebrow: 'Bydlení',
-    title: '~331 privátních jednotek 1+kk.',
-    body: 'Každá jednotka má vlastní sociální zázemí: sprchu, umyvadlo a toaletu. Sklopná postel uvolní obytný prostor přes den. Členové přípravného družstva mají navíc právo na luxusní stavební buňku 1+kk se zvýšeným standardem výbavy.',
-    images: [
-      { src: withBase('/images/hub/interior/1kk-1.jpg'),            alt: 'Vizualizace privátní jednotky 1+kk — sklopná postel, kuchyňský kout, pracovní stůl, vlastní koupelna.' },
-      { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'),        alt: 'Luxusní stavební buňka 1+kk v budovách A4–A6 pro členy přípravného družstva — vyšší standard výbavy.' },
-      { src: withBase('/images/hub/interior/kapsle-horizontal.jpg'),alt: 'Kapsulová jednotka v Hubu — dřevěné spací moduly s integrovaným osvětlením a sdíleným loungem na chodbě.' },
-      { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'),    alt: 'Větší pokoj v budovách A pro dvě osoby — kuchyňský kout, jídelní stůl, postel uprostřed.' },
-      { src: withBase('/images/hub/interior/1kk-2.jpg'),            alt: 'Privátní jednotka 1+kk varianta 2 — alternativní řešení obytného prostoru.' },
-      { src: withBase('/images/hub/interior/1kk-3.jpg'),            alt: 'Privátní jednotka 1+kk varianta 3 — kompaktní layout s vlastní koupelnou.' },
-      { src: withBase('/images/hub/interior/koupelna-a.jpg'),       alt: 'Koupelna v jednotce 1+kk v budovách A — sprcha, umyvadlo, toaleta.' },
-    ],
-  },
-  {
-    dir: 'rtl',
-    eyebrow: 'Areál',
-    title: 'Vnitřní dvůr a zázemí.',
-    body: 'Sedm rekonstruovaných budov (A1–A6 + C) na ~6 700 m² čistých podlahových ploch. Mezi nimi sauna v objektu E, venkovní bazén před objektem D, komunitní park s grilovacími místy a telocvična na vzduchu.',
-    images: [
-      { src: withBase('/images/hub/aerial/areal-bazen.jpg'),         alt: 'Letecký pohled na vnitřní dvůr s venkovním bazénem před objektem D a saunou v objektu E.' },
-      { src: withBase('/images/hub/exterior/sport.jpg'),             alt: 'Sportoviště v komunitním parku před objektem B — telocvična na vzduchu a calisthenics.' },
-      { src: withBase('/images/hub/exterior/building-e-f.jpg'),      alt: 'Vizualizace objektů E a F Startovacího Hubu — wellness zóna se saunou.' },
-    ],
-  },
-  {
-    dir: 'ltr',
-    eyebrow: 'Pro koho',
-    title: 'Pracující studenty, OSVČ a mladí kreativci.',
-    body: 'Hub je dělaný pro lidi, kteří startují: začínající podnikatele, studenty na bakalářce nebo diplomce, OSVČ na začátku kariéry. Pro někoho je to startovní bydlení, pro jiného přechodný mezikrok.',
-    images: [
-      { src: withBase('/images/hub/interior/window-view-a.jpg'),     alt: 'Pohled z okna pokoje v budovách A1–A3 — pracovní zóna s laptopem a knihovnou nad vnitřním dvorem.' },
-      { src: withBase('/images/hub/interior/hub-market-people.jpg'), alt: 'Skupinka lidí na tržnici v objektu B Startovacího Hubu.' },
-    ],
-  },
 ];
 ---
 <Base
-  title="Startovací Hub"
-  description="Nájemní bydlení blízko Prahy s coworkingem, saunou, bazénem, kavárnou a kyvadlovým busem na metro. Areál Horních kasáren v Klecanech. Pro pracující studenty, OSVČ na začátku a mladé kreativce."
+  title="Startovací Hub Klecany — bydlení 15 minut od metra Kobylisy"
+  description="Ubytování v Startovacím Hubu Klecany: kapsle od 4 500 Kč/měsíc, privátní 1+kk, 2+kk a 3+kk. Coworking, bazén, recepce s poštou a kyvadla na metro Kobylisy v ceně. Pro studenty, OSVČ a mladé kreativce."
   headerVariant="dark"
   ogImage={withBase('/og/default.png')}
 >
@@ -173,84 +106,84 @@ const zigzag = [
     <div class="hub-hero__inner">
       <div class="hub-hero__kicker-row">
         <span class="osa-eyebrow hub-hero__kicker">Areál Horních kasáren · Klecany</span>
-        <a class="osa-eyebrow hub-hero__kicker-out" href="https://keiaiendiel.github.io/vpd-web/vpd1/" rel="noopener">Záměr VPD1 →</a>
       </div>
       <h1 class="hub-hero__title">Startovací Hub.</h1>
-      <p class="hub-hero__lede">Nájemní bydlení blízko Prahy v areálu Horních kasáren. Coworking, sauna, bazén, kavárna, ateliéry, dílny. K tomu kyvadlový bus na metro Kobylisy. Pro pracující studenty, OSVČ na začátku a mladé kreativce.</p>
-      <a class="hub-hero__cta" href={withBase('/rezervace/')}>Rezervace →</a>
+      <p class="hub-hero__lede">Bydlení 15 minut od metra Kobylisy pro pracující studenty, OSVČ a mladé tvůrce. Kapsle od 4 500 Kč/měsíc, privátní 1+kk od 9 500 Kč. Coworking, bazén a kyvadlová doprava do Prahy v ceně.</p>
+      <a class="hub-hero__cta" href={withBase('/pokoje/')}>Vybrat ubytování →</a>
     </div>
   </section>
 
-  <section class="hub-section hub-formats">
+  <section class="hub-section hub-rooms">
     <header class="osa-sub-head">
-      <span class="osa-eyebrow">Jak v Hubu bydlíte</span>
-      <h2 class="hub-section__heading">Tři způsoby, jak v Hubu bydlet.</h2>
+      <span class="osa-eyebrow">Šest typů ubytování</span>
+      <h2 class="hub-section__heading">Vyberte formát, který vám sedí.</h2>
+      <p class="hub-section__lede">Od kapsle ve sdíleném pokoji po privátní 3+kk pro šest lůžek. Ceny platí za celou jednotku při plné obsazenosti a ladíme je individuálně podle délky pobytu.</p>
     </header>
-    <div class="hub-formats__grid">
-      {formats.map((f) => (
-        <article class="hub-format-card">
-          <figure class="hub-format-card__media">
-            <img src={f.src} alt={f.alt} loading="lazy" />
-          </figure>
-          <h3>{f.name}</h3>
-          <p>{f.body}</p>
-        </article>
+    <div class="hub-rooms__grid">
+      {rooms.map((r) => (
+        <RoomCard
+          slug={r.id}
+          type={r.data.type}
+          shortName={r.data.shortName}
+          name={r.data.name}
+          size={r.data.size}
+          capacity={r.data.capacity}
+          maxBeds={r.data.maxBeds}
+          priceFrom={r.data.priceFrom}
+          discount12={r.data.discount12}
+          pitch={r.data.pitch}
+          features={r.data.features}
+          thumbnail={r.data.thumbnail}
+        />
       ))}
     </div>
+    <p class="hub-rooms__more">
+      <a href={withBase('/pokoje/')}>Porovnat všechny typy →</a>
+    </p>
   </section>
 
   <section class="hub-section hub-amenities">
     <header class="osa-sub-head">
-      <span class="osa-eyebrow">Provozy a služby</span>
-      <h2 class="hub-section__heading">Co tu funguje.</h2>
+      <span class="osa-eyebrow">Co Hub nabízí</span>
+      <h2 class="hub-section__heading">Vše v ceně každého typu ubytování.</h2>
     </header>
     <div class="hub-amenities__grid">
-      {provozyServices.map((a) => {
-        const Tag = a.parent ? 'a' : 'div';
-        const props = a.parent ? { href: withBase(`/projekty/${a.parent}/`) } : {};
-        return (
-          <Tag class:list={['hub-amenity-card', a.parent && 'hub-amenity-card--linked']} {...props}>
-            <span class="hub-amenity-card__icon" aria-hidden="true"><Icon name={a.icon} /></span>
-            <h3 class="hub-amenity-card__title">{a.title}</h3>
-            <p class="hub-amenity-card__body">{a.body}</p>
-            {a.parent && (
-              <span class="hub-amenity-card__cta">
-                <span class="hub-amenity-card__cta-text">Detail </span>
-                <span aria-hidden="true">→</span>
-              </span>
-            )}
-          </Tag>
-        );
-      })}
-    </div>
-    <p class="hub-amenities__more"><a href={withBase('/projekty/')}>Detailní popisy šesti hlavních provozů →</a></p>
-  </section>
-
-  <section class="hub-claims-section">
-    <div class="hub-claims" role="list">
-      {claims.map((c) => (
-        <article class="hub-claims__item" role="listitem">
-          <span class="osa-eyebrow hub-claims__eyebrow">{c.eyebrow}</span>
-          <h3 class="hub-claims__title">{c.title}</h3>
-          <p class="hub-claims__body">{c.body}</p>
+      {includedAmenities.map((a) => (
+        <article class="hub-amenities__item">
+          <span class="hub-amenities__icon" aria-hidden="true"><Icon name={a.icon} /></span>
+          <h3 class="hub-amenities__title">{a.title}</h3>
+          <p class="hub-amenities__body">{a.body}</p>
         </article>
       ))}
     </div>
+    <p class="hub-amenities__note">K tomu energie, internet a úklid společných prostor. Bez extra poplatků, bez kaucí navrch.</p>
   </section>
 
-  <section class="hub-druzstvo">
-    <article class="hub-druzstvo__card">
-      <span class="osa-eyebrow hub-druzstvo__eyebrow">Přípravné družstvo</span>
-      <h2 class="hub-druzstvo__title">Kdo přichází první, určuje pravidla.</h2>
-      <p class="hub-druzstvo__lede">První kohorta cca 50 rezidentů. Domlouváte <strong>denní rytmus, nájemní řád a provozní pravidla</strong>; za to získáváte <strong>garantované právo bydlet v luxusní stavební buňce 1+kk</strong> s cenovou stabilitou na první období. Druhá kohorta otevírá později pro ty, kdo přijdou do hotového rámce.</p>
-      <a class="hub-druzstvo__cta" href={withBase('/projekty/bytove-druzstvo/')}>Detail přípravného družstva →</a>
-    </article>
+  <section class="hub-section hub-amenities">
+    <header class="osa-sub-head">
+      <span class="osa-eyebrow">Můžeš si přikoupit</span>
+      <h2 class="hub-section__heading">Doplňkové služby v areálu.</h2>
+      <p class="hub-section__lede">Stravování, mobilita a úložiště — placené nad rámec nájmu, ale pohodlně z jednoho účtu.</p>
+    </header>
+    <div class="hub-amenities__grid">
+      {extraServices.map((s) => (
+        <article class="hub-amenities__item">
+          <span class="hub-amenities__icon" aria-hidden="true"><Icon name={s.icon} /></span>
+          <h3 class="hub-amenities__title">{s.title}</h3>
+          <p class="hub-amenities__body">{s.body}</p>
+        </article>
+      ))}
+    </div>
+    <p class="hub-amenities__note">Pro nově zarezervované rezidenty obvykle úvodní sleva na první měsíc. Konkrétní ceník doladí rezervační oddělení po telefonu.</p>
+    <p class="hub-amenities__more">
+      <a href={withBase('/sluzby/')}>Detaily doplňkových služeb →</a>
+    </p>
   </section>
 
   <section class="hub-zigzag">
     <header class="osa-sub-head hub-zigzag__head">
-      <span class="osa-eyebrow">Areál</span>
-      <h2 class="hub-section__heading">Jak to tu vypadá.</h2>
+      <span class="osa-eyebrow">Místo a komunita</span>
+      <h2 class="hub-section__heading">Klecany s pražským dosahem.</h2>
     </header>
     {zigzag.map((row, i) => (
       <div
@@ -269,23 +202,15 @@ const zigzag = [
     ))}
   </section>
 
-  <section class="hub-cta-pair">
-    <div class="hub-cta-pair__grid">
-      <article class="hub-cta-card hub-cta-card--primary">
-        <div class="hub-cta-card__content">
-          <span class="osa-eyebrow hub-cta-card__kicker">Chci tu bydlet</span>
-          <p class="hub-cta-card__lede">Přidejte se k první kohortě přípravného družstva. Z vašich odpovědí ve formuláři skládáme provozní pravidla a domlouváme nájemní rámec.</p>
-          <a class="hub-cta-card__btn hub-cta-card__btn--primary" href={withBase('/rezervace/')}>Rezervace →</a>
-        </div>
-      </article>
-
-      <article class="hub-cta-card hub-cta-card--secondary">
-        <div class="hub-cta-card__content">
-          <span class="osa-eyebrow hub-cta-card__kicker">Investice do záměru</span>
-          <p class="hub-cta-card__lede">Zajímá vás víc revitalizace areálu než vlastní bydlení? Záměr VPD1 mluví ke strategickým a finančním partnerům.</p>
-          <a class="hub-cta-card__btn hub-cta-card__btn--secondary" href="https://keiaiendiel.github.io/vpd-web/vpd1/" rel="noopener">Záměr VPD1 →</a>
-        </div>
-      </article>
+  <section class="hub-final-cta">
+    <div class="hub-final-cta__inner">
+      <span class="osa-eyebrow hub-final-cta__eyebrow">Rezervace</span>
+      <h2 class="hub-final-cta__heading">Rezervujte si termín v Hubu.</h2>
+      <p class="hub-final-cta__lede">Vyberte typ jednotky a termín nastěhování. Rezervace je nezávazná, ozveme se do 24 hodin s detailem dostupnosti a ceny pro vaši délku pobytu.</p>
+      <div class="hub-final-cta__btns">
+        <a class="hub-final-cta__btn hub-final-cta__btn--primary" href={withBase('/rezervace/')}>Rezervovat termín →</a>
+        <a class="hub-final-cta__btn hub-final-cta__btn--ghost" href={withBase('/pokoje/')}>Porovnat typy ubytování</a>
+      </div>
     </div>
   </section>
 
@@ -485,9 +410,10 @@ const zigzag = [
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    /* No brightness filter — image at native render brightness, scrim drží
-       legibilitu textu. Sjednoceno se sub-projekt [slug] hero, který také
-       nemá filter, takže žádné nekonzistentní tmavé/světlé skoky napříč. */
+    /* Brightness 0.85 — −15 % sjednoceno napříč všemi hero sekcemi, aby
+       text dostal lepší kontrast a fotky nevypadaly příliš jasně proti
+       tmavému scrimu. */
+    filter: brightness(0.85);
     transform: translateX(100%);
     will-change: transform;
     animation-name: hub-hero-slide;
@@ -522,6 +448,24 @@ const zigzag = [
     padding: clamp(72px, 10vw, 112px) var(--gutter) clamp(56px, 8vw, 88px);
     max-width: var(--container-wide); margin: 0 auto; width: 100%;
     display: grid; gap: clamp(24px, 3vw, 36px);
+  }
+  /* Entrance cascade — each hero child lifts and fades in with a 90ms step.
+     Runs once per element instantiation (fresh on cold load AND after every
+     view-transition arrival, since main is replaced). Reduced-motion below
+     skips the keyframes entirely. */
+  .hub-hero__inner > * {
+    animation: hub-hero-enter 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hub-hero__inner > *:nth-child(1) { animation-delay:  60ms; }
+  .hub-hero__inner > *:nth-child(2) { animation-delay: 150ms; }
+  .hub-hero__inner > *:nth-child(3) { animation-delay: 240ms; }
+  .hub-hero__inner > *:nth-child(4) { animation-delay: 330ms; }
+  @keyframes hub-hero-enter {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hub-hero__inner > * { animation: none; }
   }
   /* Entrance cascade — each hero child lifts and fades in with a 90ms step.
      Runs once per element instantiation (fresh on cold load AND after every
@@ -1383,5 +1327,149 @@ const zigzag = [
   :global(.op-map-popup strong) { font-weight: 600; color: var(--k-100); letter-spacing: 0.02em; }
   :global(.op-map-popup span) { color: var(--fg-muted); font-size: 12px; }
   :global(.op-map-popup .op-map-popup__cta) { color: var(--accent); font-weight: 600; margin-top: 4px; }
+
+  /* ROOMS — 5 typů ubytování pod heroem, hlavní konverzní sekce. */
+  .hub-section__lede {
+    font-size: clamp(15px, 1.25vw, 17px);
+    line-height: 1.6;
+    color: var(--fg-muted);
+    margin: 8px 0 0;
+    max-width: 60ch;
+  }
+  .hub-rooms__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 960px) { .hub-rooms__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .hub-rooms__grid { grid-template-columns: 1fr; } }
+  .hub-rooms__more {
+    margin: 32px 0 0;
+    font-size: 14px;
+  }
+  .hub-rooms__more a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .hub-rooms__more a:hover { color: var(--k-100); }
+
+  /* AMENITIES — sjednocený design pro "v ceně" i "můžeš si přikoupit".
+     Plum-rule accent na kartách, plum-soft hover, auto-fit grid pro
+     pružnou délku (5 in-price / 3 extras za stejných pravidel). */
+  .hub-amenities__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .hub-amenities__item {
+    padding: 24px;
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+    display: grid;
+    gap: 10px;
+    transition: background var(--dur-base) var(--ease-decel);
+  }
+  .hub-amenities__item:hover { background: var(--accent-soft); }
+  .hub-amenities__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .hub-amenities__icon :global(svg) { width: 26px; height: 26px; stroke: currentColor; }
+  .hub-amenities__title {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--fg);
+    line-height: 1.3;
+  }
+  .hub-amenities__body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--fg-muted);
+    margin: 0;
+  }
+  .hub-amenities__note {
+    margin: 24px 0 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--fg-subtle);
+    max-width: 64ch;
+  }
+  .hub-amenities__more {
+    margin: 16px 0 0;
+    font-size: 14px;
+  }
+  .hub-amenities__more a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .hub-amenities__more a:hover { color: var(--k-100); }
+
+  /* FINAL CTA — closing conversion push, nahrazuje invest/resident CTA pair. */
+  .hub-final-cta {
+    padding: clamp(48px, 7vw, 80px) var(--gutter);
+    max-width: var(--container-wide); margin: 0 auto;
+  }
+  .hub-final-cta__inner {
+    max-width: 800px; margin: 0 auto; text-align: center;
+    display: grid; gap: 16px;
+    padding: clamp(40px, 6vw, 64px);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-input);
+    background: var(--accent-soft);
+  }
+  .hub-final-cta__eyebrow { color: var(--accent); display: block; margin-bottom: 4px; }
+  .hub-final-cta__heading {
+    font-family: var(--font-sans);
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+  .hub-final-cta__lede {
+    font-size: clamp(15px, 1.25vw, 17px);
+    line-height: 1.6;
+    color: var(--fg);
+    margin: 0 auto;
+    max-width: 56ch;
+  }
+  .hub-final-cta__btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .hub-final-cta__btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    border-radius: var(--radius-input);
+    font-weight: 600; font-size: 15px;
+    text-decoration: none;
+    transition: background var(--dur-base) var(--ease-decel), color var(--dur-base) var(--ease-decel);
+  }
+  .hub-final-cta__btn--primary {
+    color: var(--accent-on);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .hub-final-cta__btn--primary:hover { background: var(--k-100); border-color: var(--k-100); }
+  .hub-final-cta__btn--ghost {
+    color: var(--k-100);
+    background: transparent;
+    border: 1px solid var(--k-100);
+  }
+  .hub-final-cta__btn--ghost:hover { background: var(--k-100); color: var(--k-0); }
 
 </style>

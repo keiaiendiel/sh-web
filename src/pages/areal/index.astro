@@ -5,28 +5,22 @@ import { getCollection } from 'astro:content';
 
 const cards = (await getCollection('subProjects')).sort((a, b) => a.data.order - b.data.order);
 
-// ID → building label for the card eyebrow.
 const buildingLabel = (id: string) => {
   switch (id) {
     case 'komunitni-centrum':  return 'Objekt B';
     case 'coworking-centrum':  return 'Přízemí budovy C';
     case 'komunitni-pivovar':  return 'Objekt B';
-    case 'bytove-druzstvo':    return 'Přípravné družstvo';
     case 'sauna-bazen':        return 'Objekty D + E';
     case 'sportoviste-park':   return 'Park před objektem B';
     default:                   return 'Areál';
   }
 };
 
-// ID → list of provozy/služeb that live within each sub-project. Mirrors the
-// landing page amenity grid; here we surface them under each parent card so
-// /projekty/ visitors see the full coverage of each provoz, not just its name.
 const childServices = (id: string): string[] => {
   switch (id) {
     case 'komunitni-centrum':  return ['Tržnice', 'Kavárna', 'Pekárna', 'Restaurace + hospoda', 'Sdílené dílny', 'Food-trucky'];
     case 'coworking-centrum':  return ['Coworkingový sál s pódiem', 'Ateliéry', 'Nahrávací studia', 'Studovny', 'Zasedací místnosti', 'Recepce'];
     case 'komunitni-pivovar':  return ['Varna a stáčírna', 'Hospoda', 'Work-trade pro rezidenty'];
-    case 'bytove-druzstvo':    return ['Luxusní 1+kk stavební buňka', 'Hlas v pravidlech', 'Cenová stabilita', 'Vstup před ostatními'];
     case 'sauna-bazen':        return ['Finská sauna', 'Outdoor cool-down deck', 'Venkovní bazén', 'Saunové ceremoniály'];
     case 'sportoviste-park':   return ['Komunitní park', 'Telocvična na vzduchu', 'Ping-pong', 'Dětské hřiště', 'Komunitní zahrádky', 'Grilovací místa'];
     default:                   return [];
@@ -34,17 +28,17 @@ const childServices = (id: string): string[] => {
 };
 ---
 <Base
-  title="Provozy Startovacího Hubu"
-  description="Komunitní centrum s pekárnou a kavárnou, coworking s ateliéry a nahrávacími studii, minipivovar, sauna a bazén, sportoviště a park, přípravné družstvo. Šest provozů, které dělají z areálu fungující celek."
+  title="Areál a komunitní zázemí · Startovací Hub Klecany"
+  description="Komunitní centrum s pekárnou a kavárnou, coworking s ateliéry a nahrávacími studii, minipivovar, sauna a bazén, sportoviště a park. Pět provozů v jednom areálu — sdílené zázemí pro všechny rezidenty Hubu."
   headerVariant="dark"
 >
   <section class="pj-hero osa-dark">
     <img class="pj-hero__bg" src={withBase('/images/hub/aerial/buildings-a-c.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
     <div class="pj-hero__scrim" aria-hidden="true"></div>
     <div class="pj-hero__inner">
-      <span class="osa-eyebrow pj-hero__eyebrow">Provozy</span>
-      <h1 class="pj-hero__title">Šest provozů, jeden areál.</h1>
-      <p class="pj-hero__lede">Komunitní centrum s pekárnou a kavárnou; coworking s ateliéry a nahrávacími studii; minipivovar; sauna a bazén; park s telocvičnou na vzduchu. K tomu přípravné družstvo, které všechno propojuje.</p>
+      <span class="osa-eyebrow pj-hero__eyebrow">Areál a zázemí</span>
+      <h1 class="pj-hero__title">Pět provozů, jeden areál.</h1>
+      <p class="pj-hero__lede">Komunitní centrum s pekárnou a kavárnou; coworking s ateliéry a nahrávacími studii; minipivovar; sauna a bazén; park s tělocvičnou na vzduchu. Všechno v rámci jednoho areálu, všechno v ceně nájmu.</p>
     </div>
   </section>
 
@@ -52,7 +46,7 @@ const childServices = (id: string): string[] => {
     <header class="pj-masterplan__head">
       <span class="osa-eyebrow">Masterplan</span>
       <h2 id="pj-masterplan-heading" class="pj-masterplan__heading">Kde co najdete v areálu.</h2>
-      <p class="pj-masterplan__lede">Šest provozů sedí ve čtyřech objektech kolem centrálního dvora. Komunitní centrum, pivovar a sportoviště + park v okolí budovy B, coworking v přízemí budovy C, sauna v objektu E, bazén před objektem D.</p>
+      <p class="pj-masterplan__lede">Pět provozů sedí ve čtyřech objektech kolem centrálního dvora. Komunitní centrum, pivovar a sportoviště + park v okolí budovy B, coworking v přízemí budovy C, sauna v objektu E, bazén před objektem D.</p>
     </header>
     <figure class="pj-masterplan__figure">
       <img src={withBase('/images/hub/masterplan_fotoreal.jpg')} alt="Fotorealistický masterplan areálu Horních kasáren — popisky budov A1–A6, B, C, D, E, F, P, S a venkovního bazénu v kontextu celého rozvojového území." loading="lazy" decoding="async" />
@@ -62,7 +56,7 @@ const childServices = (id: string): string[] => {
   <section class="pj-grid-section">
     <div class="pj-grid">
       {cards.map((p) => (
-        <a class="pj-card" href={withBase(`/projekty/${p.id}/`)}>
+        <a class="pj-card" href={withBase(`/areal/${p.id}/`)}>
           <div class="pj-card__thumb" aria-hidden="true" data-img-reveal>
             {p.data.thumbnail
               ? <img src={p.data.thumbnail} alt="" loading="lazy" />
@@ -83,7 +77,7 @@ const childServices = (id: string): string[] => {
         </a>
       ))}
     </div>
-    <p class="pj-foot-note">Další iniciativy a provozy doplňujeme, jak se přidávají do areálu. Pokud máte nápad nebo chcete něco rozjet, napište na <a href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>.</p>
+    <p class="pj-foot-note">Pokud máte nápad na další provoz nebo iniciativu v areálu, napište na <a href="mailto:info@startovacihub.cz">info@startovacihub.cz</a>.</p>
   </section>
 </Base>
 
@@ -102,7 +96,7 @@ const childServices = (id: string): string[] => {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    /* No brightness filter — sjednoceno s [slug] hero přes scrim only. */
+    filter: brightness(0.85);
     z-index: 1;
     object-position: center 35%;
   }
@@ -135,18 +129,11 @@ const childServices = (id: string): string[] => {
     max-width: 56ch;
   }
 
-  /* Masterplan figure mezi hero a grid karet — fotorealistický masterplan
-     dává prostorový kontext pro šest provozů, které následují. Container
-     šířka jako zbytek stránky, figure se světlým rámečkem. */
   .pj-masterplan {
     padding: clamp(40px, 6vw, 72px) var(--gutter) clamp(8px, 1vw, 16px);
     max-width: var(--container-wide); margin: 0 auto;
   }
-  .pj-masterplan__head {
-    max-width: 720px;
-    display: grid; gap: 8px;
-    margin: 0 0 24px;
-  }
+  .pj-masterplan__head { max-width: 720px; display: grid; gap: 8px; margin: 0 0 24px; }
   .pj-masterplan__heading {
     font-family: var(--font-sans);
     font-size: clamp(24px, 2.6vw, 36px);
@@ -170,11 +157,7 @@ const childServices = (id: string): string[] => {
     overflow: hidden;
     background: var(--bg);
   }
-  .pj-masterplan__figure img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
+  .pj-masterplan__figure img { width: 100%; height: auto; display: block; }
 
   .pj-grid-section {
     padding: clamp(32px, 5vw, 64px) var(--gutter) clamp(64px, 10vw, 96px);
@@ -197,26 +180,11 @@ const childServices = (id: string): string[] => {
     text-decoration: none;
     color: inherit;
     overflow: hidden;
-    transition:
-      border-color var(--dur-base) var(--ease-decel),
-      transform var(--dur-base) var(--ease-decel);
+    transition: border-color var(--dur-base) var(--ease-decel), transform var(--dur-base) var(--ease-decel);
   }
-  .pj-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .pj-card__thumb {
-    aspect-ratio: 4/3;
-    background: var(--k-05);
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-  }
-  .pj-card__thumb img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+  .pj-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .pj-card__thumb { aspect-ratio: 4/3; background: var(--k-05); display: grid; place-items: center; overflow: hidden; }
+  .pj-card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pj-card__placeholder {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -224,10 +192,7 @@ const childServices = (id: string): string[] => {
     text-transform: uppercase;
     color: var(--fg-subtle);
   }
-  .pj-card__body {
-    display: grid; gap: 8px;
-    padding: 20px 22px 22px;
-  }
+  .pj-card__body { display: grid; gap: 8px; padding: 20px 22px 22px; }
   .pj-card__building { color: var(--accent); display: block; }
   .pj-card__name {
     font-family: var(--font-sans);
@@ -236,19 +201,8 @@ const childServices = (id: string): string[] => {
     line-height: 1.25;
     letter-spacing: var(--tracking-tight);
   }
-  .pj-card__role {
-    font-size: 14px; line-height: 1.55;
-    color: var(--fg-muted); margin: 0;
-  }
-  /* Child-services chips — amenity tags v eyebrow stylu (verzálky, mono,
-     plum). flex + align-items:center drží text optic-centered uvnitř pillu;
-     line-height:1 vylučuje vertikální drift z mono fontu, takže text sedí
-     opravdu na středu elipsy. */
-  .pj-card__services {
-    list-style: none;
-    padding: 0; margin: 4px 0 0;
-    display: flex; flex-wrap: wrap; gap: 6px;
-  }
+  .pj-card__role { font-size: 14px; line-height: 1.55; color: var(--fg-muted); margin: 0; }
+  .pj-card__services { list-style: none; padding: 0; margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
   .pj-card__services li {
     display: inline-flex;
     align-items: center;
@@ -263,20 +217,10 @@ const childServices = (id: string): string[] => {
     border: 1px solid var(--accent-rule);
     border-radius: 999px;
     white-space: nowrap;
-    transition:
-      background var(--dur-base) var(--ease-decel),
-      border-color var(--dur-base) var(--ease-decel);
+    transition: background var(--dur-base) var(--ease-decel), border-color var(--dur-base) var(--ease-decel);
   }
-  .pj-card:hover .pj-card__services li {
-    border-color: var(--accent);
-    background: rgba(90, 42, 95, 0.10);
-  }
-  .pj-card__cta {
-    margin-top: 8px;
-    font-size: 13px; font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.02em;
-  }
+  .pj-card:hover .pj-card__services li { border-color: var(--accent); background: rgba(90, 42, 95, 0.10); }
+  .pj-card__cta { margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: 0.02em; }
 
   .pj-foot-note {
     margin: 40px 0 0;
@@ -286,21 +230,4 @@ const childServices = (id: string): string[] => {
   }
   .pj-foot-note a { color: var(--accent); }
   .pj-foot-note a:hover { text-decoration: underline; }
-
-  /* (legacy map-teaser styles kept harmless — selector unused after the
-     section was removed; skipping the rest below.) */
-  .pj-map-teaser__lede {
-    font-size: clamp(16px, 1.35vw, 18px);
-    line-height: 1.65;
-    color: var(--fg);
-    margin: 0;
-    max-width: 64ch;
-  }
-  .pj-map-teaser__media { margin: 0; }
-  .pj-map-teaser__media img {
-    width: 100%; height: auto;
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    display: block;
-  }
 </style>
