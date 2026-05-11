@@ -145,7 +145,7 @@ const zigzag = [
   <section class="hub-section hub-amenities">
     <header class="osa-sub-head">
       <span class="osa-eyebrow">Co Hub nabízí</span>
-      <h2 class="hub-section__heading">Vše v ceně každého typu ubytování.</h2>
+      <h2 class="hub-section__heading">V ceně každého typu ubytování.</h2>
     </header>
     <div class="hub-amenities__grid">
       {includedAmenities.map((a) => (
@@ -157,6 +157,9 @@ const zigzag = [
       ))}
     </div>
     <p class="hub-amenities__note">K tomu energie, internet a úklid společných prostor. Bez extra poplatků, bez kaucí navrch.</p>
+    <p class="hub-amenities__more">
+      <a href={withBase('/areal/')}>Detaily areálu a komunity →</a>
+    </p>
   </section>
 
   <section class="hub-section hub-amenities">
@@ -1328,7 +1331,10 @@ const zigzag = [
   :global(.op-map-popup span) { color: var(--fg-muted); font-size: 12px; }
   :global(.op-map-popup .op-map-popup__cta) { color: var(--accent); font-weight: 600; margin-top: 4px; }
 
-  /* ROOMS — 5 typů ubytování pod heroem, hlavní konverzní sekce. */
+  /* ROOMS — 6 typů ubytování pod heroem, hlavní konverzní sekce.
+     Desktop: 3-col grid. Tablet: 2-col. Mobile: horizontal swipe gallery
+     (overflow-x scroll + scroll-snap) — 6 karet ve sloupci by zabralo
+     6× výšku karty, swipe drží sekci kompaktní. */
   .hub-section__lede {
     font-size: clamp(15px, 1.25vw, 17px);
     line-height: 1.6;
@@ -1341,10 +1347,33 @@ const zigzag = [
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
   }
-  @media (max-width: 960px) { .hub-rooms__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 600px) { .hub-rooms__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 960px) {
+    .hub-rooms__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  }
+  @media (max-width: 600px) {
+    .hub-rooms__grid {
+      grid-template-columns: none;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 12px;
+      /* Bleed přes section gutter, aby karty „peekly" zprava — naznačuje,
+         že je tam ještě další obsah. */
+      margin: 0 calc(var(--gutter) * -1);
+      padding: 4px var(--gutter) 16px;
+      scroll-padding: var(--gutter);
+      -webkit-overflow-scrolling: touch;
+    }
+    .hub-rooms__grid :global(.room-card) {
+      flex: 0 0 82%;
+      scroll-snap-align: start;
+    }
+    /* Skrýt scrollbar — užší vizuální linie na mobilu, swipe je primární UX. */
+    .hub-rooms__grid::-webkit-scrollbar { display: none; }
+    .hub-rooms__grid { scrollbar-width: none; }
+  }
   .hub-rooms__more {
-    margin: 32px 0 0;
+    margin: 24px 0 0;
     font-size: 14px;
   }
   .hub-rooms__more a {
@@ -1356,20 +1385,19 @@ const zigzag = [
   .hub-rooms__more a:hover { color: var(--k-100); }
 
   /* AMENITIES — sjednocený design pro "v ceně" i "můžeš si přikoupit".
-     Plum-rule accent na kartách, plum-soft hover, auto-fit grid pro
-     pružnou délku (5 in-price / 3 extras za stejných pravidel). */
+     Bez border (klient: „divný stroke"), subtle k-05 background, plum-soft
+     hover. Auto-fit grid pro pružnou délku (5 in-price / 3 extras). */
   .hub-amenities__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
+    gap: 12px;
   }
   .hub-amenities__item {
-    padding: 24px;
-    border: 1px solid var(--accent-rule);
+    padding: 18px 20px;
     border-radius: var(--radius-input);
-    background: var(--bg);
+    background: var(--k-05);
     display: grid;
-    gap: 10px;
+    gap: 8px;
     transition: background var(--dur-base) var(--ease-decel);
   }
   .hub-amenities__item:hover { background: var(--accent-soft); }
@@ -1377,33 +1405,32 @@ const zigzag = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px; height: 36px;
+    width: 32px; height: 32px;
     color: var(--accent);
-    margin-bottom: 4px;
   }
-  .hub-amenities__icon :global(svg) { width: 26px; height: 26px; stroke: currentColor; }
+  .hub-amenities__icon :global(svg) { width: 24px; height: 24px; stroke: currentColor; }
   .hub-amenities__title {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     margin: 0;
     color: var(--fg);
     line-height: 1.3;
   }
   .hub-amenities__body {
-    font-size: 14px;
-    line-height: 1.55;
+    font-size: 13px;
+    line-height: 1.5;
     color: var(--fg-muted);
     margin: 0;
   }
   .hub-amenities__note {
-    margin: 24px 0 0;
+    margin: 20px 0 0;
     font-size: 13px;
     line-height: 1.55;
     color: var(--fg-subtle);
     max-width: 64ch;
   }
   .hub-amenities__more {
-    margin: 16px 0 0;
+    margin: 12px 0 0;
     font-size: 14px;
   }
   .hub-amenities__more a {
@@ -1413,6 +1440,10 @@ const zigzag = [
     text-underline-offset: 3px;
   }
   .hub-amenities__more a:hover { color: var(--k-100); }
+  @media (max-width: 600px) {
+    .hub-amenities__grid { grid-template-columns: 1fr; gap: 8px; }
+    .hub-amenities__item { padding: 14px 16px; }
+  }
 
   /* FINAL CTA — closing conversion push, nahrazuje invest/resident CTA pair. */
   .hub-final-cta {
@@ -1471,5 +1502,23 @@ const zigzag = [
     border: 1px solid var(--k-100);
   }
   .hub-final-cta__btn--ghost:hover { background: var(--k-100); color: var(--k-0); }
+  @media (max-width: 600px) {
+    .hub-final-cta__btns { flex-direction: column; align-items: stretch; gap: 10px; }
+    .hub-final-cta__btn { justify-content: center; padding: 12px 20px; font-size: 14px; }
+  }
 
+  /* ---- Mobile-only paddings cleanup — předchozí karty (rooms, amenities)
+     samy zvládají swipe / 1-col. Tady jen redukujeme padding hub-section
+     boxů na úzkých displejích, aby celková výška landing byla kompaktnější. */
+  @media (max-width: 600px) {
+    .hub-section { padding-top: clamp(32px, 8vw, 48px); padding-bottom: clamp(32px, 8vw, 48px); }
+    .osa-sub-head { margin-bottom: 20px; }
+    .hub-section__heading { font-size: clamp(26px, 6vw, 34px); }
+    .hub-section__lede { font-size: 15px; }
+    .hub-final-cta { padding-top: clamp(32px, 8vw, 48px); padding-bottom: clamp(32px, 8vw, 48px); }
+    .hub-final-cta__inner { padding: 32px 24px; }
+    .hub-zigzag { padding-top: clamp(32px, 8vw, 48px); padding-bottom: clamp(40px, 8vw, 56px); }
+    .hub-zigzag__head { margin-bottom: 24px; }
+    .hub-faq-mini__more { margin-top: 24px; }
+  }
 </style>

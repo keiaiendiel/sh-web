@@ -71,10 +71,16 @@ const reservationActive = isActive('/rezervace/');
 </header>
 
 <script is:inline>
+  // Header je `transition:persist` — DOM přetrvá napříč view-transition navigy.
+  // Astro však znovu vyhodnotí <script is:inline>, takže bez ochrany bychom
+  // přidávali další event listenery na stejný `.hub-header__burger` při každé
+  // navigaci (multiple handlers → menu se otevře a zavře v jednom kliknutí).
+  // Flag na elementu zaručí jeden bind napříč životem stránky.
   (function () {
     var btn = document.querySelector('.hub-header__burger');
     var panel = document.getElementById('hub-drawer');
-    if (!btn || !panel) return;
+    if (!btn || !panel || btn.dataset.menuBound === '1') return;
+    btn.dataset.menuBound = '1';
 
     function setOpen(open) {
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');

@@ -124,6 +124,9 @@ const reserveHref = withBase(`/rezervace/?typ=${type}`);
     display: grid; gap: 12px;
     padding: 20px 22px 22px;
   }
+  @media (max-width: 600px) {
+    .room-card__body { padding: 16px 18px 18px; gap: 10px; }
+  }
   .room-card__eyebrow { color: var(--accent); display: block; }
   .room-card__name {
     font-family: var(--font-sans);
