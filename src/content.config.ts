@@ -1,18 +1,86 @@
 /*
  * Astro 6 Content Collections pro Startovací Hub Klecany.
  *
- * Phase 1 (2026-05-13): pre-restructure cleanup. Collections `rooms`
- * a `subProjects` smazány společně s odpovídajícími MDX soubory (pre-pivot
- * obsah). Phase 3 redesignuje schema pro 9 typů ubytování (4 co-living +
- * 5 privátní apartmány) a Komunita amenity podle Site_Copy.md.
+ * Phase 3 (2026-05-13): nové schémata pro 9 typů ubytování per Site_Copy.md
+ * § 1.1 (privátní apartmány 1+kk až 5+kk) a § 1.2 (co-living: kapsle single,
+ * kapsle double, jedno lůžko, dvoulůžko).
  *
- * Aktivní collections:
- *   - faq      → src/content/faq/index.json  (10 FAQ otázek per Phase 4)
- *   - org      → src/content/org/identity.json  (OSA II identita, JSON-LD)
+ * Collections:
+ *   - apartmany → src/content/apartmany/*.mdx (5 typů privátních)
+ *   - coliving  → src/content/coliving/*.mdx (4 typy co-living)
+ *   - faq       → src/content/faq/index.json (10 FAQ otázek, Phase 4)
+ *   - org       → src/content/org/identity.json (OSA II identita, JSON-LD)
  */
 import { defineCollection, z } from 'astro:content';
-import { file } from 'astro/loaders';
+import { glob, file } from 'astro/loaders';
 
+/* === APARTMÁNY (privátní 1+kk až 5+kk) === */
+const apartmanySlug = z.enum(['1kk', '2kk', '3kk', '4kk', '5kk']);
+
+const apartmany = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: './src/content/apartmany' }),
+  schema: z.object({
+    slug: apartmanySlug,
+    name: z.string().min(3).max(80),
+    shortName: z.string().min(2).max(40),
+    order: z.number().int(),
+    popis: z.string().min(20).max(300),
+    plocha: z.string(),
+    kapacita: z.number().int(),
+    konfigurace: z.string(),
+    koupelna: z.string(),
+    wc: z.string().optional(),
+    kuchyn: z.string(),
+    klicove: z.array(z.string()),
+    cena: z.object({
+      anchor: z.number().int(),
+      m3: z.number().int(),
+      m6: z.number().int(),
+      m12: z.number().int(),
+      perOsoba: z.string().optional(),
+      perOsoba12: z.string().optional(),
+    }),
+    thumbnail: z.string().startsWith('/').optional(),
+    hero: z.string().startsWith('/').optional(),
+    heroAlt: z.string().optional(),
+  }),
+});
+
+/* === CO-LIVING (kapsle single/double, jedno lůžko, dvoulůžko) === */
+const colivingSlug = z.enum(['kapsle-single', 'kapsle-double', 'jedno-luzko', 'dvouluzko']);
+
+const coliving = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: './src/content/coliving' }),
+  schema: z.object({
+    slug: colivingSlug,
+    name: z.string().min(3).max(80),
+    shortName: z.string().min(2).max(40),
+    order: z.number().int(),
+    popis: z.string().min(20).max(300),
+    matrace: z.array(z.string()),
+    klicove: z.array(z.string()),
+    spec: z.object({
+      plochaKapsle: z.string().optional(),
+      plochaPokoj: z.string(),
+      koupelna: z.string(),
+      kuchyn: z.string(),
+      sklon: z.string().optional(),
+    }),
+    cena: z.object({
+      anchor: z.number().int(),
+      m3: z.number().int(),
+      m6: z.number().int(),
+      m12: z.number().int(),
+      perOsoba: z.string().optional(),
+      perOsoba12: z.string().optional(),
+    }),
+    thumbnail: z.string().startsWith('/').optional(),
+    hero: z.string().startsWith('/').optional(),
+    heroAlt: z.string().optional(),
+  }),
+});
+
+/* === FAQ === */
 const faqAudienceEnum = z.enum(['project', 'resident']);
 
 const faq = defineCollection({
@@ -25,6 +93,7 @@ const faq = defineCollection({
   }),
 });
 
+/* === ORG identita === */
 const org = defineCollection({
   loader: file('./src/content/org/identity.json'),
   schema: z.object({
@@ -46,4 +115,4 @@ const org = defineCollection({
   }),
 });
 
-export const collections = { faq, org };
+export const collections = { apartmany, coliving, faq, org };

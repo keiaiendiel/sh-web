@@ -1,23 +1,202 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
+
+/* Dedikovaný landing pro kapsle, samostatný A/B test per SH_Web_Plan.md ř. 195
+   a SH_Web_Research_CapsulePositioning.md. Cíl: ověřit poptávku po kapslové
+   variantě jako levnější alternativě k privátnímu bydlení, než alokujeme
+   podlahovou plochu. Reframing: „kapsle = vlastní mikrosoukromí v pokoji
+   s pár kapslemi", ne „tourist hostel".
+
+   Cena z content collection (kapsle-single + kapsle-double). */
+
+const coliving = await getCollection('coliving');
+const single = coliving.find((c) => c.data.slug === 'kapsle-single')!;
+const double = coliving.find((c) => c.data.slug === 'kapsle-double')!;
+const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 ---
 <Base
   title="Kapsle · Startovací Hub Klecany"
-  description="Privátní 1-lůžková kapsle od 3 000 Kč měsíčně. Pár kapslí v jednom velkém pokoji se společnou kuchyní, sdílená koupelna na patře. Pro lidi, kteří potřebují kde spát a kde pracovat, ne luxus za 18 000 Kč.">
-  <article class="page-stub">
-    <p class="page-stub__eyebrow">Bydlení</p>
-    <h1>Kapsle</h1>
-    <p class="page-stub__lede">
-      Privátní 1-lůžková kapsle od 3 000 Kč měsíčně, dvoulůžková od 4 500 Kč. Pár kapslí v jednom velkém
-      pokoji s knihovnou a společnou kuchyní; sdílená koupelna a sprcha na patře. Pro lidi, kteří
-      potřebují kde spát a kde pracovat, ne luxus za 18 000 Kč. Samostatná stránka pro A/B test
-      kreativy proti hlavnímu rezervačnímu průvodci.
-    </p>
-    <p class="page-stub__note">Plnou stránku doplňujeme</p>
-    <p class="page-stub__links">
-      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
-      <a href={withBase('/ubytovani/')}>Všech 9 typů</a>
-    </p>
-  </article>
+  description="Privátní kapsle ve sdíleném pokoji od 3 000 Kč měsíčně. Pár kapslí v jednom velkém pokoji, vlastní světlo, USB, zamykatelná skříň přímo v pokoji. Pro lidi, kteří potřebují kde spát a kde pracovat, ne luxus za 18 000 Kč."
+  headerVariant="dark">
+
+  <section class="kp-hero">
+    <img class="kp-hero__bg" src={withBase('/images/hub/interior/kapsle-horizontal.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="kp-hero__scrim" aria-hidden="true"></div>
+    <div class="kp-hero__inner">
+      <p class="kp-hero__eyebrow">Vlastní kapsle od 3 000 Kč</p>
+      <h1 class="kp-hero__title">
+        Kapsle, ne hostel.
+      </h1>
+      <p class="kp-hero__lede">
+        Vlastní uzavíratelná kapsle ve sdíleném pokoji s 2 až 5 dalšími kapslemi.
+        Vlastní světlo, USB, zamykatelná skříň, převlékací kabinka přímo v pokoji.
+        Matrace 210×150 cm, širší než standardní jednolůžko na koleji.
+      </p>
+      <div class="kp-hero__cta-row">
+        <a class="kp-hero__cta kp-hero__cta--primary" href={withBase('/rezervace/?typ=kapsle-single')}>Rezervovat kapsli</a>
+        <a class="kp-hero__cta" href={withBase('/ubytovani/co-living/kapsle-single/')}>Detail kapsle</a>
+      </div>
+    </div>
+  </section>
+
+  {/* Reframing: co je kapsle vs co není */}
+  <section class="kp-reframe">
+    <div class="kp-reframe__inner">
+      <p class="kp-reframe__eyebrow">Co je kapsle</p>
+      <h2 class="kp-reframe__title">Tvůj soukromý mikrosvět uvnitř většího pokoje.</h2>
+      <div class="kp-reframe__grid">
+        <div class="kp-reframe__col">
+          <h3>V tvojí kapsli</h3>
+          <ul>
+            <li>Pevná stěna, závěs nebo dveře na vstupu</li>
+            <li>Vlastní lampa nad lůžkem</li>
+            <li>USB-C zásuvka, polička</li>
+            <li>Větrání a teploměr</li>
+            <li>Matrace 210×150 cm nebo 230×160 cm</li>
+          </ul>
+        </div>
+        <div class="kp-reframe__col">
+          <h3>V pokoji s tvojí kapslí</h3>
+          <ul>
+            <li>3 až 6 kapslí celkem, ne 8 až 10 jako v turistickém hostelu</li>
+            <li>Pohovka nebo knihovna mezi kapslemi</li>
+            <li>Zamykatelná skříň na kufr a notebook přímo v pokoji</li>
+            <li>Převlékací kabinka v pokoji, ne na chodbě patra</li>
+            <li>Rostlina, denní světlo z velkého okna</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Dvě varianty */}
+  <section class="kp-variants">
+    <div class="kp-variants__inner">
+      <p class="kp-variants__eyebrow">Dvě varianty</p>
+      <h2 class="kp-variants__title">Pro jednoho nebo pro pár.</h2>
+      <div class="kp-variants__grid">
+        <article class="kp-variant">
+          <header class="kp-variant__head">
+            <h3 class="kp-variant__title">{single.data.name}</h3>
+            <p class="kp-variant__lede">{single.data.popis}</p>
+          </header>
+          <dl class="kp-variant__meta">
+            <div><dt>Matrace</dt><dd>{single.data.matrace.join(' nebo ')}</dd></div>
+            <div><dt>Cena</dt><dd>{formatCena(single.data.cena.anchor)}/měs (anchor)</dd></div>
+            <div><dt>Sleva 12+ měs</dt><dd>{formatCena(single.data.cena.m12)}/měs</dd></div>
+          </dl>
+          <a class="kp-variant__cta" href={withBase('/ubytovani/co-living/kapsle-single/')}>Detail jednolůžkové kapsle →</a>
+        </article>
+
+        <article class="kp-variant">
+          <header class="kp-variant__head">
+            <h3 class="kp-variant__title">{double.data.name}</h3>
+            <p class="kp-variant__lede">{double.data.popis}</p>
+          </header>
+          <dl class="kp-variant__meta">
+            <div><dt>Matrace</dt><dd>{double.data.matrace.join(' nebo ')}</dd></div>
+            <div><dt>Cena</dt><dd>{formatCena(double.data.cena.anchor)}/měs (anchor, {double.data.cena.perOsoba})</dd></div>
+            <div><dt>Sleva 12+ měs</dt><dd>{formatCena(double.data.cena.m12)}/měs ({double.data.cena.perOsoba12})</dd></div>
+          </dl>
+          <a class="kp-variant__cta" href={withBase('/ubytovani/co-living/kapsle-double/')}>Detail dvoulůžkové kapsle →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {/* Co se sdílí */}
+  <section class="kp-share">
+    <div class="kp-share__inner">
+      <p class="kp-share__eyebrow">Co se sdílí</p>
+      <h2 class="kp-share__title">Sprchy, kuchyň, společný prostor.</h2>
+      <p class="kp-share__text">
+        Den trávíš v parteru, v coworkingu, nebo venku. Kapsle slouží na spaní, čtení,
+        soustředění. Sprchy a toalety jsou na patře nebo v rámci patrového bytu (záleží na
+        konečné dispozici po rekonstrukci, k upřesnění s Markem). Sdílená kuchyň
+        v parteru nebo v rámci bytu. Pohovka, knihovna a relaxační zóna přímo v pokoji
+        s kapslemi.
+      </p>
+      <p class="kp-share__text">
+        Pro koho má smysl: pro lidi, kteří potřebují kde spát a kde pracovat, ne luxus
+        za 18 000 Kč. Pro studenty na praxi v Praze. Pro OSVČ, kteří si nájem za 1+kk
+        v centru nemůžou dovolit. Pro digitální nomády na dvou nebo třech měsících. Pro
+        páry, které chtějí bydlet ve dvou levně (dvoulůžková kapsle).
+      </p>
+    </div>
+  </section>
+
+  <section class="kp-cta">
+    <div class="kp-cta__inner">
+      <h2 class="kp-cta__title">Rezervovat kapsli</h2>
+      <p class="kp-cta__lede">
+        Registrace zájmu je nezávazná. Vyplníte termín nástupu, délku pobytu a kontakt.
+        Z rezervačního oddělení vám zavoláme do 24 hodin s detailem dostupnosti.
+      </p>
+      <div class="kp-cta__row">
+        <a class="kp-cta__button" href={withBase('/rezervace/?typ=kapsle-single')}>Jednolůžková od 3 000 Kč</a>
+        <a class="kp-cta__button kp-cta__button--alt" href={withBase('/rezervace/?typ=kapsle-double')}>Dvoulůžková od 4 500 Kč</a>
+      </div>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .kp-hero { position: relative; isolation: isolate; min-height: 70vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-8); color: #fff; background: var(--k-100); overflow: hidden; }
+  .kp-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.6); }
+  .kp-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.1) 90%); z-index: -1; }
+  .kp-hero__inner { max-width: var(--container); margin: 0 auto; width: 100%; }
+  .kp-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-4); padding: 4px 10px; background: rgba(255,255,255,0.08); border: 1px solid var(--accent); border-radius: 2px; display: inline-block; }
+  .kp-hero__title { font: 600 clamp(2.75rem, 6vw, 5rem) / 1.05 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-5); max-width: 16ch; }
+  .kp-hero__lede { font-size: clamp(1.1rem, 1.5vw, 1.25rem); line-height: 1.5; margin: 0 0 var(--space-6); max-width: 56ch; color: rgba(255,255,255,0.95); }
+  .kp-hero__cta-row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+  .kp-hero__cta { display: inline-flex; align-items: center; padding: 12px 22px; font: 600 var(--text-sm) / 1 var(--font-sans); color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: var(--radius-input); text-decoration: none; transition: background 200ms ease, color 200ms ease; }
+  .kp-hero__cta:hover { background: #fff; color: var(--k-100); }
+  .kp-hero__cta--primary { background: var(--accent); border-color: var(--accent); }
+  .kp-hero__cta--primary:hover { background: #fff; color: var(--accent); }
+
+  .kp-reframe { padding: var(--space-9) var(--gutter); background: var(--bg); color: var(--fg); }
+  .kp-reframe__inner { max-width: var(--container); margin: 0 auto; }
+  .kp-reframe__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
+  .kp-reframe__title { font: 600 clamp(2rem, 4vw, 3rem) / 1.1 var(--font-sans); margin: 0 0 var(--space-7); letter-spacing: var(--tracking-tight); max-width: 22ch; }
+  .kp-reframe__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+  .kp-reframe__col h3 { font: 600 var(--text-lg) / 1.3 var(--font-sans); margin: 0 0 var(--space-3); }
+  .kp-reframe__col ul { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
+  .kp-reframe__col li { padding-left: var(--space-4); position: relative; line-height: 1.5; }
+  .kp-reframe__col li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 8px; height: 8px; background: var(--accent); }
+  @media (max-width: 760px) { .kp-reframe__grid { grid-template-columns: 1fr; } }
+
+  .kp-variants { padding: var(--space-9) var(--gutter); background: var(--bg-muted, var(--bg)); color: var(--fg); }
+  .kp-variants__inner { max-width: var(--container); margin: 0 auto; }
+  .kp-variants__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
+  .kp-variants__title { font: 600 clamp(2rem, 4vw, 3rem) / 1.1 var(--font-sans); margin: 0 0 var(--space-7); letter-spacing: var(--tracking-tight); }
+  .kp-variants__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+  @media (max-width: 760px) { .kp-variants__grid { grid-template-columns: 1fr; } }
+
+  .kp-variant { background: var(--bg); border: 1px solid var(--rule, rgba(0,0,0,0.12)); padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .kp-variant__title { font: 600 var(--text-xl) / 1.2 var(--font-sans); margin: 0 0 var(--space-3); letter-spacing: var(--tracking-tight); }
+  .kp-variant__lede { color: var(--fg-muted); margin: 0; line-height: 1.5; font-size: var(--text-sm); }
+  .kp-variant__meta { margin: 0; display: grid; gap: var(--space-2); padding-top: var(--space-3); border-top: 1px solid var(--rule, rgba(0,0,0,0.08)); }
+  .kp-variant__meta > div { display: grid; grid-template-columns: 130px 1fr; gap: var(--space-3); font-size: var(--text-sm); }
+  .kp-variant__meta dt { font: 600 var(--text-2xs) / 1.3 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; color: var(--fg-muted); }
+  .kp-variant__meta dd { margin: 0; }
+  .kp-variant__cta { font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-rule); padding-bottom: 2px; align-self: flex-start; }
+  .kp-variant__cta:hover { border-color: var(--accent); }
+
+  .kp-share { padding: var(--space-9) var(--gutter); background: var(--bg); color: var(--fg); }
+  .kp-share__inner { max-width: 720px; margin: 0 auto; }
+  .kp-share__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
+  .kp-share__title { font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans); margin: 0 0 var(--space-5); letter-spacing: var(--tracking-tight); }
+  .kp-share__text { line-height: 1.65; margin: 0 0 var(--space-4); font-size: var(--text-md); }
+
+  .kp-cta { padding: var(--space-9) var(--gutter); background: var(--accent); color: #fff; text-align: center; }
+  .kp-cta__inner { max-width: 640px; margin: 0 auto; }
+  .kp-cta__title { font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans); margin: 0 0 var(--space-3); letter-spacing: var(--tracking-tight); }
+  .kp-cta__lede { font-size: var(--text-md); line-height: 1.5; margin: 0 0 var(--space-5); opacity: 0.92; }
+  .kp-cta__row { display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; }
+  .kp-cta__button { display: inline-block; padding: 14px 26px; font: 700 var(--text-sm) / 1 var(--font-sans); color: var(--accent); background: #fff; border: 1px solid #fff; border-radius: var(--radius-input); text-decoration: none; transition: background 200ms ease, color 200ms ease; }
+  .kp-cta__button--alt { background: transparent; color: #fff; }
+  .kp-cta__button:hover { background: transparent; color: #fff; }
+  .kp-cta__button--alt:hover { background: #fff; color: var(--accent); }
+</style>

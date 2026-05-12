@@ -1,0 +1,164 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { withBase } from '../../../utils/url';
+
+export async function getStaticPaths() {
+  const apartmany = await getCollection('apartmany');
+  return apartmany.map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const heroSrc = data.hero ? withBase(data.hero) : null;
+const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
+const discountPct = (n: number) => `−${Math.round((1 - n / data.cena.anchor) * 100)} %`;
+---
+<Base
+  title={`${data.name} · Startovací Hub Klecany`}
+  description={data.popis}
+  headerVariant="dark">
+
+  <section class="apt-hero">
+    {heroSrc ? (
+      <img class="apt-hero__bg" src={heroSrc} alt={data.heroAlt ?? ''} loading="eager" decoding="async" />
+    ) : (
+      <div class="apt-hero__bg apt-hero__bg--placeholder" role="img" aria-label={data.heroAlt ?? ''}>
+        <span class="apt-hero__placeholder">▢ Hero foto v Tier A produkci</span>
+      </div>
+    )}
+    <div class="apt-hero__scrim" aria-hidden="true"></div>
+    <div class="apt-hero__inner">
+      <p class="apt-hero__eyebrow">Privátní apartmán</p>
+      <h1 class="apt-hero__title">{data.name}</h1>
+      <p class="apt-hero__lede">{data.popis}</p>
+      <ul class="apt-hero__meta">
+        <li><strong>Plocha</strong> {data.plocha}</li>
+        <li><strong>Kapacita</strong> {data.kapacita} lůžek</li>
+        <li><strong>Od</strong> {formatCena(data.cena.m12)}/měs ({data.cena.perOsoba12 ?? 'roční závazek'})</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="apt-body">
+    <div class="apt-body__inner">
+      <div class="apt-body__text">
+        <Content />
+
+        <h2 class="apt-body__sub">Co k tomu patří</h2>
+        <ul class="apt-body__bullets">
+          {data.klicove.map((k) => (<li>{k}</li>))}
+        </ul>
+      </div>
+
+      <aside class="apt-body__spec">
+        <h2 class="apt-body__sub">Specifikace</h2>
+        <dl class="apt-spec">
+          <div><dt>Plocha</dt><dd>{data.plocha}</dd></div>
+          <div><dt>Kapacita</dt><dd>{data.kapacita} lůžek v ceně</dd></div>
+          <div><dt>Konfigurace lůžek</dt><dd>{data.konfigurace}</dd></div>
+          <div><dt>Vlastní koupelna</dt><dd>{data.koupelna}</dd></div>
+          {data.wc && <div><dt>WC</dt><dd>{data.wc}</dd></div>}
+          <div><dt>Kuchyň</dt><dd>{data.kuchyn}</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="apt-cena">
+    <div class="apt-cena__inner">
+      <p class="apt-cena__eyebrow">Cena</p>
+      <h2 class="apt-cena__title">Cena za celý byt, čím déle, tím nižší.</h2>
+      <p class="apt-cena__lede">
+        Anchor cena je za krátký pobyt 1 až 2 měsíce za celou jednotku. Od třetího měsíce
+        snižujeme, při ročním závazku dáváme nejnižší cenu. Per-osoba kalkulace předpokládá
+        plnou obsazenost.
+      </p>
+      <table class="apt-cena__table">
+        <thead>
+          <tr><th scope="col">Délka pobytu</th><th scope="col">Cena za byt</th><th scope="col">Sleva</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1 až 2 měsíce</td><td>{formatCena(data.cena.anchor)}/měs{data.cena.perOsoba && <small> ({data.cena.perOsoba})</small>}</td><td>anchor</td></tr>
+          <tr><td>3 a více měsíců</td><td>{formatCena(data.cena.m3)}/měs</td><td>{discountPct(data.cena.m3)}</td></tr>
+          <tr><td>6 a více měsíců</td><td>{formatCena(data.cena.m6)}/měs</td><td>{discountPct(data.cena.m6)}</td></tr>
+          <tr><td>12 a více měsíců</td><td>{formatCena(data.cena.m12)}/měs{data.cena.perOsoba12 && <small> ({data.cena.perOsoba12})</small>}</td><td>{discountPct(data.cena.m12)}</td></tr>
+        </tbody>
+      </table>
+      <p class="apt-cena__note">
+        Vše v ceně: energie, internet, úklid společných prostor, 5 jízd Hub-shuttle do metra Kobylis a 1 jízda Hub-taxi po Klecanech měsíčně, přístup do coworkingového sálu, poukaz do sauny 1× týdně.
+      </p>
+    </div>
+  </section>
+
+  <section class="apt-cta">
+    <div class="apt-cta__inner">
+      <h2 class="apt-cta__title">Rezervovat {data.shortName}</h2>
+      <p class="apt-cta__lede">
+        Registrace zájmu je nezávazná. Vyplníte termín nástupu, délku pobytu a kontakt.
+        Z rezervačního oddělení vám zavoláme do 24 hodin.
+      </p>
+      <a class="apt-cta__button" href={withBase(`/rezervace/?typ=${data.slug}`)}>
+        Registrace zájmu, {data.shortName}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .apt-hero { position: relative; isolation: isolate; min-height: 60vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-7); color: #fff; background: var(--k-100); overflow: hidden; }
+  .apt-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.7); }
+  .apt-hero__bg--placeholder { display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--accent); filter: none; }
+  .apt-hero__placeholder { font: 600 var(--text-xs) / 1 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; padding: 8px 14px; border: 1px solid var(--accent-rule); background: rgba(255,255,255,0.6); border-radius: 2px; color: var(--accent); }
+  .apt-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0.05) 90%); z-index: -1; }
+  .apt-hero__inner { max-width: var(--container); margin: 0 auto; width: 100%; }
+  .apt-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: rgba(255,255,255,0.85); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
+  .apt-hero__title { font: 600 clamp(2.5rem, 5vw, 4rem) / 1.05 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-4); }
+  .apt-hero__lede { font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.5; margin: 0 0 var(--space-5); max-width: 56ch; color: rgba(255,255,255,0.92); }
+  .apt-hero__meta { display: flex; gap: var(--space-6); margin: 0; padding: var(--space-3) 0 0; border-top: 1px solid rgba(255,255,255,0.18); flex-wrap: wrap; font-size: var(--text-sm); }
+  .apt-hero__meta li { display: flex; flex-direction: column; gap: 2px; }
+  .apt-hero__meta strong { font-size: var(--text-2xs); letter-spacing: var(--tracking-wider); text-transform: uppercase; opacity: 0.65; font-weight: 600; }
+
+  .apt-body { padding: var(--space-8) var(--gutter); background: var(--bg); color: var(--fg); }
+  .apt-body__inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--space-7); max-width: var(--container); margin: 0 auto; }
+  .apt-body__text :global(p) { line-height: 1.65; margin: 0 0 var(--space-4); font-size: var(--text-md); max-width: 60ch; }
+  .apt-body__text :global(p strong) { font-weight: 600; }
+  .apt-body__sub { font: 600 var(--text-xl) / 1.2 var(--font-sans); margin: var(--space-7) 0 var(--space-4); letter-spacing: var(--tracking-tight); }
+  .apt-body__spec .apt-body__sub:first-child { margin-top: 0; }
+  .apt-body__bullets { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
+  .apt-body__bullets li { padding-left: var(--space-4); position: relative; line-height: 1.5; }
+  .apt-body__bullets li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 8px; height: 8px; background: var(--accent); }
+
+  .apt-spec { display: grid; gap: var(--space-3); margin: 0; }
+  .apt-spec > div { display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--rule, rgba(0,0,0,0.08)); }
+  .apt-spec > div:first-child { border-top: 0; padding-top: 0; }
+  .apt-spec dt { font: 600 var(--text-2xs) / 1.3 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; color: var(--fg-muted); }
+  .apt-spec dd { margin: 0; font-size: var(--text-sm); line-height: 1.5; }
+
+  @media (max-width: 880px) {
+    .apt-body__inner { grid-template-columns: 1fr; }
+  }
+
+  .apt-cena { padding: var(--space-8) var(--gutter); background: var(--bg-muted, var(--bg)); color: var(--fg); }
+  .apt-cena__inner { max-width: var(--container); margin: 0 auto; }
+  .apt-cena__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
+  .apt-cena__title { font: 600 clamp(1.5rem, 3vw, 2.25rem) / 1.15 var(--font-sans); margin: 0 0 var(--space-4); letter-spacing: var(--tracking-tight); }
+  .apt-cena__lede { color: var(--fg-muted); margin: 0 0 var(--space-6); max-width: 60ch; line-height: 1.5; }
+  .apt-cena__table { width: 100%; border-collapse: collapse; background: var(--bg); }
+  .apt-cena__table th, .apt-cena__table td { padding: var(--space-3) var(--space-4); text-align: left; border-bottom: 1px solid var(--rule, rgba(0,0,0,0.1)); }
+  .apt-cena__table th { font: 600 var(--text-2xs) / 1 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; color: var(--fg-muted); background: var(--bg-muted); }
+  .apt-cena__table td small { display: block; color: var(--fg-muted); font-size: var(--text-xs); margin-top: 2px; }
+  .apt-cena__note { font-size: var(--text-sm); color: var(--fg-muted); margin: var(--space-5) 0 0; line-height: 1.5; max-width: 60ch; }
+
+  .apt-cta { padding: var(--space-8) var(--gutter); background: var(--accent); color: #fff; text-align: center; }
+  .apt-cta__inner { max-width: 640px; margin: 0 auto; }
+  .apt-cta__title { font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans); margin: 0 0 var(--space-3); letter-spacing: var(--tracking-tight); }
+  .apt-cta__lede { font-size: var(--text-md); line-height: 1.5; margin: 0 0 var(--space-5); opacity: 0.92; }
+  .apt-cta__button { display: inline-block; padding: 14px 32px; font: 700 var(--text-md) / 1 var(--font-sans); color: var(--accent); background: #fff; border: 1px solid #fff; border-radius: var(--radius-input); text-decoration: none; transition: background 200ms ease, color 200ms ease; }
+  .apt-cta__button:hover { background: transparent; color: #fff; }
+</style>
