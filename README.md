@@ -5,6 +5,8 @@ Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr
 **Live preview:** https://keiaiendiel.github.io/sh-web/ (GitHub Pages, auto-deployed on every push to master)
 **Future canonical:** `startovacihub.cz` (after DNS cutover)
 
+> **Status (2026-05):** repo je v pre-restructure cleanup stavu. Aktuální stránky níže odpovídají předchozí verzi; klient připravuje obsah pro novou strukturu v `CONTENT.md` v rootu. Operační kontext + průběh restructure: `CLAUDE.md`.
+
 ## Stack
 
 - Astro 6.1.8, static output, Czech-only.

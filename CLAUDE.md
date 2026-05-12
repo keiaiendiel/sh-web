@@ -8,6 +8,14 @@ Static site for **Startovací Hub Klecany**, run by OSA II, z.s. Repo: `github.c
 
 The Hub is phase 1 of the VPD1 záměr (revitalization of horní kasárny Klecany). After the May 2026 refactor the site is a **conversion funnel for non-binding reservations** of 6 room types. Družstvo (vlastnické bydlení) je odsunuté na skrytou `/druzstvo/` s `noindex` — pro lidi nasměrované manuálně rezervačním oddělením po telefonu. Investor surface lives on the sibling `vpd-web` repo + footer link.
 
+## ACTIVE WORK (2026-05): full restructure pending
+
+Web je v **pre-restructure cleanup stavu**. Aktuálně běžící stránky (níže v „Pages (20)") jsou předchozí verze; **klient chystá kompletní přestrukturalizaci navigace + obsahu** — širší taxonomie ubytování (5 typů privátních apartmánů + 4 typy co-living lůžek s rozměrovými variantami), expanze amenity sekce (~25 položek seskupených do wellness / sport / gastro / kultura), nové sekce galerie + novinky + občanská vybavenost + dopravní dostupnost + pobytová stipendia.
+
+**Jediný zdroj pravdy pro nový obsah:** `CONTENT.md` v rootu repa. Tam klient průběžně vyplňuje texty + dropuje obrázky podle navržené struktury. Až bude první dávka vyplněná, generujeme nový sitemap, kostry stránek, content collections a navigaci z toho.
+
+Do té doby **udržujeme současný site v provozním stavu** (nelámeme ho), ale neinvestujeme do polishe pre-restructure stránek.
+
 ## Stack snapshot
 
 | | |
@@ -78,7 +86,8 @@ Voice principle: **prezentovat vše sebevědomě jako fungující** — žádné
 - `.astro/` (generated types)
 - `node_modules/`, `pnpm-lock.yaml`
 - `docs/HISTORY.md` unless the question is about historical decisions
-- `docs/copywriting.md`, `docs/copywriting2.md`, `docs/web-texty.md` — primárně referenční copy snapshoty, **pre-pivot stav** (před květnem 2026). Aktuální copy se generuje z content collections.
+
+> Pre-pivot copy snapshoty (`docs/copywriting*.md`, `docs/web-texty.{md,docx}`, `docs/visual-assets.md`) **byly smazány** 2026-05-12 — vyčistili jsme repo před restrukturalizací. Pokud je potřebuješ historicky, najdeš je v `git log` (commit „chore(hub): pre-restructure cleanup").
 
 ## Running locally
 
@@ -121,7 +130,8 @@ git push origin master
 
 ## Open loops
 
-- **Pricing draft k revizi.** 6 anchor cen + 3-tier slevy podle Compass research. Klient finalizuje před public launchem; konzervativně lze cenu skrýt v fázi 1, ale `?typ=<slug>` pre-fill + per-osoba ekvivalent závisí na číslech v MDX (`priceFrom`).
+- **Full site restructure** — viz „ACTIVE WORK" výše. Jediný zdroj pravdy: `CONTENT.md` v rootu. Sledovat průběh tam.
+- **Pricing draft k revizi.** 6 anchor cen + 3-tier slevy podle Compass research. Klient finalizuje před public launchem; konzervativně lze cenu skrýt v fázi 1, ale `?typ=<slug>` pre-fill + per-osoba ekvivalent závisí na číslech v MDX (`priceFrom`). **Bude přepsáno** v rámci restrukturalizace.
 - **Backend rezervačního formuláře.** `/rezervace/` stále `console.log`s payload. Nutné wirovat e-mail / DB / anti-spam před public launchem.
 - **Photo content.** 2+kk a 3+kk používají placeholder fotky (`1kk-a4-a6.jpg` a `vetsi-pokoj-a.jpg`) — reálné rendery zatím nejsou.
 - **Transitional base path.** `astro.config.mjs` má `base: '/sh-web/'`; `tokens.css` font URLs jsou `/sh-web/fonts/...`. Při DNS flip: set `site: 'https://startovacihub.cz'`, smaž `base`, find/replace `/sh-web/fonts/` → `/fonts/`. `withBase()` se stane no-op.
