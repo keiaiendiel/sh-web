@@ -142,11 +142,13 @@ const rules = [
   },
 
   /* Source citations v body textu — banned per brief. Sources stay in
-     internal `Research_Pricing_Comparison.md`, never na webu. */
+     internal `Research_Pricing_Comparison.md`, výjimka jen pro
+     /metodika-srovnani/ kde je celá pointa stránky zveřejnit metodiku. */
   {
     id: 'price-source-citation',
     pattern: /\b(Otiwilium|Bezrealitky|Qara|Sreality|Compass)\b/g,
     msg: 'Citace zdroje cenového srovnání patří jen na /metodika-srovnani/, ne do body textu.',
+    fileExempt: (path) => /metodika-srovnani/.test(path),
   },
 ];
 
@@ -172,6 +174,8 @@ for (const root of SCAN) {
       const content = await readFile(file, 'utf8');
       const lines = content.split('\n');
       for (const rule of rules) {
+        // file-level exempt (např. /metodika-srovnani/ pro price-source-citation)
+        if (rule.fileExempt && rule.fileExempt(file)) continue;
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
           // skip lines matching global exempt regex

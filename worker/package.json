@@ -1,0 +1,18 @@
+{
+  "name": "sh-web-form-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "d1:init": "wrangler d1 execute sh-web-rezervace --file=schema.sql",
+    "d1:dump": "wrangler d1 export sh-web-rezervace --output=backup.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251101.0",
+    "wrangler": "^4.0.0",
+    "typescript": "^5.6.0"
+  }
+}

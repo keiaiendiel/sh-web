@@ -4,20 +4,145 @@ import { withBase } from '../../utils/url';
 ---
 <Base
   title="Ochrana osobních údajů · Startovací Hub Klecany"
-  description="Zásady zpracování osobních údajů. Správcem je OSA II z.s. Data registračního formuláře žijí v EU jurisdikci."
-  noindex={false}>
+  description="Zásady zpracování osobních údajů Startovacího Hubu Klecany. Správcem je OSA II z.s. Data registrace zájmu ukládáme v EU jurisdikci, neposíláme spam, nepředáváme třetí straně.">
   <article class="page-stub">
     <p class="page-stub__eyebrow">Právní</p>
-    <h1>Ochrana osobních údajů</h1>
+    <h1>Ochrana osobních údajů.</h1>
     <p class="page-stub__lede">
-      Správcem osobních údajů je Občanské sdružení Alternativa II, z.s. Data z rezervačního formuláře
-      ukládáme v EU jurisdikci (Cloudflare D1, region eeur). Plná pravidla doplníme s nasazením
-      formuláře v Phase 5 restrukturalizace.
-    </p>
-    <p class="page-stub__note">Plnou stránku doplňujeme s nasazením rezervačního formuláře</p>
-    <p class="page-stub__links">
-      <a href={withBase('/')}>Domů</a>
-      <a href={withBase('/metodika-srovnani/')}>Metodika srovnání</a>
+      Zásady zpracování osobních údajů, které nám zašlete při registraci zájmu nebo
+      e-mailovém kontaktu. Stručně: data ukládáme v EU jurisdikci, používáme jen pro
+      vyřízení vaší žádosti, neposíláme spam, nepředáváme třetí straně.
     </p>
   </article>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Správce</p>
+        <h2 class="sec-block__title">Občanské sdružení Alternativa II, z.s.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Správcem osobních údajů je Občanské sdružení Alternativa II, z.s. (OSA II), se sídlem
+          v Klecanech, IČO TBD (doplníme po Markově dodání). Kontakt pro otázky kolem ochrany
+          údajů: <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Co zpracováváme</p>
+        <h2 class="sec-block__title">Údaje z registrace zájmu.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Při registraci zájmu o bydlení v Hubu (formulář na <a href={withBase('/rezervace/')}>/rezervace/</a>) zpracováváme:
+        </p>
+        <ul>
+          <li>Jméno a příjmení</li>
+          <li>E-mailovou adresu</li>
+          <li>Telefonní číslo</li>
+          <li>Preferovaný typ bydlení, měsíc nástupu, délka pobytu</li>
+          <li>Volitelnou poznámku, kterou nám napíšete</li>
+          <li>Volitelný zájem o pobytové stipendium</li>
+          <li>SHA-256 hash IP adresy (anonymizovaný, prvních 32 znaků) pro rate-limiting</li>
+        </ul>
+        <p>
+          Při e-mailovém kontaktu (mimo formulář) zpracováváme jméno, e-mail a obsah zprávy,
+          tedy údaje, které nám sami v e-mailu zašlete.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Účel</p>
+        <h2 class="sec-block__title">Jen pro vyřízení vaší žádosti.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Údaje zpracováváme jen za účelem:
+        </p>
+        <ul>
+          <li>Vyřízení vaší konkrétní registrace zájmu nebo e-mailové žádosti (telefonický kontakt do 24 hodin, zaslání detailů, dohoda o termínu prohlídky)</li>
+          <li>Vedení interní agendy projektu Hubu (kdo má zájem o jaký formát, statistika poptávky po jednotlivých formátech)</li>
+          <li>Pokud zaškrtnete „Mám zájem o pobytové stipendium", oznámení další otevřené výzvy</li>
+        </ul>
+        <p>
+          Údaje <strong>nepředáváme třetí straně</strong> (mimo dvou výjimek: Cloudflare jako provider
+          infrastruktury, Resend jako provider notifikačních e-mailů, oba v EU jurisdikci s GDPR
+          smluvními ustanoveními).
+        </p>
+        <p>
+          Údaje <strong>nepoužíváme pro marketingové e-maily nebo spam</strong>. Pokud zájem opustíte, můžete
+          si vyžádat smazání všech údajů na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Doba uchování</p>
+        <h2 class="sec-block__title">2 roky od registrace.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Údaje z registrace zájmu uchováváme po dobu 2 let od podání žádosti. Po této době
+          automaticky mažeme. Pokud během této doby uzavřete reálnou nájemní nebo ubytovací
+          smlouvu, údaje přejdou pod novou smluvní dobu (10 let podle archivačních povinností
+          plynoucích z účetní legislativy ČR).
+        </p>
+        <p>
+          Anonymizovaná statistika poptávky (bez jména, e-mailu, telefonu) zůstává delší dobu
+          pro interní hodnocení projektu.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Vaše práva</p>
+        <h2 class="sec-block__title">Co můžete kdykoli udělat.</h2>
+      </header>
+      <div class="sec-block__text">
+        <ul>
+          <li><strong>Přístup</strong> k údajům, které o vás vedeme</li>
+          <li><strong>Opravu</strong> nesprávných údajů (změna telefonu, e-mailu, atd.)</li>
+          <li><strong>Vymazání</strong> všech údajů („právo být zapomenut")</li>
+          <li><strong>Omezení zpracování</strong> nebo námitku proti zpracování</li>
+          <li><strong>Přenositelnost</strong> údajů (export ve strojově čitelném formátu)</li>
+          <li><strong>Stížnost</strong> na Úřad pro ochranu osobních údajů, pokud nejste spokojeni s naším postupem</li>
+        </ul>
+        <p>
+          Žádost zašlete na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>. Odpovídáme do 30 dnů.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Cookies a analytika</p>
+        <h2 class="sec-block__title">Aktuálně neukládáme.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Web aktuálně neukládá cookies pro analytiku ani marketing. Používáme jen technické
+          cookies nezbytné pro fungování formuláře (CSRF ochrana, Cloudflare Turnstile, anti-bot).
+          Pokud v budoucnu nasadíme analytiku (Plausible nebo GoatCounter, oba GDPR-friendly),
+          aktualizujeme tuto stránku a doplníme cookie banner.
+        </p>
+      </div>
+    </div>
+  </section>
 </Base>

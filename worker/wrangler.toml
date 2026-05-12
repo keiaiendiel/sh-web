@@ -1,0 +1,28 @@
+name = "sh-web-form"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Worker je host na form.startovacihub.cz, custom domain musíš nastavit ručně
+# v Cloudflare dashboardu po prvním deploy (Workers > sh-web-form > Triggers
+# > Custom Domains > Add Custom Domain).
+[[routes]]
+pattern = "form.startovacihub.cz/*"
+custom_domain = true
+
+# D1 binding. Před prvním deploy spusť `wrangler d1 create sh-web-rezervace`
+# a zkopíruj database_id sem. Region eeur drží data v EU.
+[[d1_databases]]
+binding = "DB"
+database_name = "sh-web-rezervace"
+database_id = "REPLACE_WITH_D1_ID"
+preview_database_id = "REPLACE_WITH_D1_PREVIEW_ID"
+
+# Secrets nepatří do wrangler.toml. Nastav přes:
+#   wrangler secret put TURNSTILE_SECRET
+#   wrangler secret put RESEND_API_KEY
+#   wrangler secret put NOTIFY_EMAIL
+
+# Observability
+[observability]
+enabled = true

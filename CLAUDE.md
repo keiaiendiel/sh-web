@@ -17,15 +17,22 @@ The Hub is phase 1 of the VPD1 záměr (revitalization of horní kasárny Klecan
 - `SH_Web_Visualization_List.md` (33 KB), shot list pro ~90 záběrů (Tier A/B/C).
 - `Research/SH_Web_Research_CopyVoice.md` (29 KB), **povinné čtení před psaním**, banned phrases v `scripts/lint-editorial.mjs`.
 
-**Phase 1 — IA foundation (DONE 2026-05-13):** smazány staré routes (`/pokoje/`, `/areal/`, `/sluzby/`, `/o-arealu/`), 11 nepoužitých MDX a 2 orphan komponenty; přepsán Header (8-item nav + site-wide plum badge „V projektové přípravě" per Marek 2026-05-12 + Rezervace CTA chip) a Footer (per Site_Copy § 0.3); vytvořeno 12 stub pages pro novou IA; rozšířen `lint-editorial` o 14 banned patterns z CopyVoice research § 1-6 (em/en-dash, „v srdci", „objevte", „více než jen", duté gerundium v -ící, atd.); landing dostala minimální hero shell s claimem z § 0.1.
+**Phase 1 — IA foundation (DONE 2026-05-13):** smazány staré routes (`/pokoje/`, `/areal/`, `/sluzby/`, `/o-arealu/`), 11 nepoužitých MDX a 2 orphan komponenty; přepsán Header (8-item nav + site-wide plum badge „V projektové přípravě" + Rezervace CTA chip) a Footer (per Site_Copy § 0.3); vytvořeno 12 stub pages; rozšířen `lint-editorial` o 14 banned patterns z CopyVoice research § 1-6.
 
-**Phase 2 — Landing (TODO):** hero rotace 5 záběrů (Tier A produkce Hugo), „Co Hub nabízí" 4 karty se swipe gallery, section teasery, mapa.
+**Phase 2 — Landing (DONE 2026-05-13):** hero rotace 5 záběrů s placeholdery (Tier A render Hugo pending), „Co Hub nabízí" 4 karty s horizontal scroll-snap gallery (4 fotky/karta, 16 placeholder slotů celkem), section teasery 4×2 grid, místo + masterplan, finální plum CTA panel.
 
-**Phase 3 — Ubytování + Kapsle (TODO):** nové content collections (4 co-living + 5 privátní apartmány = 9 typů), 9 detail stránek + `/kapsle/` A/B landing, cenovka per Plan.md ř. 125-136.
+**Phase 3 — Ubytování + Kapsle (DONE 2026-05-13):** dvě nové content collections (`apartmany` 5 MDX × 1+kk až 5+kk; `coliving` 4 MDX × kapsle-single/-double/jedno-luzko/dvouluzko); 9 detail stránek pod `/ubytovani/privatni/[slug]/` a `/ubytovani/co-living/[slug]/` (dynamické routes, shared layout: dark hero + meta lišta + 2-col text+spec + cenová tabulka + CTA); `/ubytovani/` overview s 2 skupinami × 9 karet; `/kapsle/` dedikovaný A/B landing per CapsulePositioning reframing.
 
-**Phase 4 — Ostatní content (TODO):** `/coworking/`, `/komunita/`, `/okoli/`, `/doprava/`, `/stipendia/`, `/galerie/`, `/novinky/`, `/kontakty/`, `/faq/`. Plné copy z Site_Copy.md.
+**Phase 4 — Ostatní content (DONE 2026-05-13):** plný obsah pro `/coworking/` (5 tarifů), `/komunita/` (wellness, park, gastro, klubovna + § 3.5 TBD), `/okoli/` (9 podsekcí, fakta ověřená k 12.5.2026), `/doprava/` (Hub-shuttle, 374, Hub-taxi, auto, kolo, plánovaná tramvaj+cyklolávka), `/stipendia/` (4 role + jak se přihlásit), `/galerie/` (4 foto-skupiny), `/novinky/` (blog model + první článek šablona), `/kontakty/` (4 osoby + OSA II), `/faq/` (10 nových otázek z § A.1-A.10). Sdílené utility `sec-*` v kit.css.
 
-**Phase 5 — Rezervace wizard + backend (TODO):** 5-krokový průvodce (per ConfiguratorUX research), Cloudflare Worker na `form.startovacihub.cz` (Turnstile + Resend + D1 EU jurisdikce), `/metodika-srovnani/` + `/gdpr/` + SEO meta + JSON-LD + sitemap.xml + robots.txt.
+**Phase 5 — Rezervace wizard + Worker scaffold (DONE 2026-05-13):** 5-krokový průvodce v `/rezervace/` (koncept → konfigurace per koncept → termín+stipendium → kontakt → rekapitulace+GDPR) s živým sidebar (cena podle vybraného formátu + délky, kontrolní seznam „vše v ceně"), URL pre-fill `?typ=<slug>`, vanilla JS state, console.log payload (Worker endpoint čeká na deploy). Cloudflare Worker scaffold v `worker/` (TypeScript, validace + Turnstile + Resend + D1 EU + CORS, SHA-256 hash IP, SQL schema). `/metodika-srovnani/` plný obsah per § 2980 OZ, `/gdpr/` plné zásady.
+
+**Open na ostrý launch:**
+- Deploy Cloudflare Worker (`worker/`): `wrangler login` → `d1 create` → secrets (TURNSTILE_SECRET, RESEND_API_KEY, NOTIFY_EMAIL) → `wrangler deploy` → custom domain `form.startovacihub.cz`. Detail v `worker/README.md`.
+- Phase 5b: front-end napojit `/rezervace/` submit na Worker endpoint + Turnstile widget. Aktuálně `console.log(payload)` + success state.
+- Tier A render produkce Hugo pro hero rotaci + amenity karty (16 placeholder slotů na landing, 9 hero placeholderů per format).
+- IČO + telefon a další Markovy TBD (viz Plan.md ř. 37-51).
+- SEO meta + JSON-LD per-page + sitemap.xml + robots.txt (Phase 6).
 
 ## Stack snapshot
 
