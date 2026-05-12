@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Galerie · Startovací Hub Klecany"
+  description="Fotky a vizualizace areálu. Z výstavby, dokončené prostory, tváře komunity, akce 2026 a dál.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Sekce</p>
+    <h1>Galerie</h1>
+    <p class="page-stub__lede">
+      Čtyři foto-skupiny: z výstavby, dokončené prostory, tváře komunity, akce 2026 a dál. Doplňujeme
+      průběžně z renderů (Hugo) a fotek z místa (Marek). Aktuální stav v Tier A produkčním plánu.
+    </p>
+    <p class="page-stub__note">Plnou stránku doplňujeme po dokončení Tier A renderů</p>
+    <p class="page-stub__links">
+      <a href={withBase('/')}>Domů</a>
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+    </p>
+  </article>
+</Base>

@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Komunita · Startovací Hub Klecany"
+  description="Wellness, sport, gastronomie a kultura v areálu Hubu. Bazén, sauna, kantýna, klubovna, společenský sál. Program 3 až 4 akce denně přes všechny čtyři kategorie.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Sekce</p>
+    <h1>Komunita</h1>
+    <p class="page-stub__lede">
+      Wellness, sport, gastronomie, kultura. Bazén a sauna ve wellness objektu, kantýna a kavárna v budově B,
+      klubovna a společenský sál v budově C. Program 3 až 4 akce denně přes všechny čtyři kategorie.
+    </p>
+    <p class="page-stub__note">Plnou stránku doplňujeme</p>
+    <p class="page-stub__links">
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+      <a href={withBase('/stipendia/')}>Pobytové stipendium</a>
+    </p>
+  </article>
+</Base>

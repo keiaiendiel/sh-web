@@ -8,13 +8,24 @@ Static site for **Startovací Hub Klecany**, run by OSA II, z.s. Repo: `github.c
 
 The Hub is phase 1 of the VPD1 záměr (revitalization of horní kasárny Klecany). After the May 2026 refactor the site is a **conversion funnel for non-binding reservations** of 6 room types. Družstvo (vlastnické bydlení) je odsunuté na skrytou `/druzstvo/` s `noindex` — pro lidi nasměrované manuálně rezervačním oddělením po telefonu. Investor surface lives on the sibling `vpd-web` repo + footer link.
 
-## ACTIVE WORK (2026-05): full restructure pending
+## ACTIVE WORK (2026-05): full restructure across 5 phases
 
-Web je v **pre-restructure cleanup stavu**. Aktuálně běžící stránky (níže v „Pages (20)") jsou předchozí verze; **klient chystá kompletní přestrukturalizaci navigace + obsahu** — širší taxonomie ubytování (5 typů privátních apartmánů + 4 typy co-living lůžek s rozměrovými variantami), expanze amenity sekce (~25 položek seskupených do wellness / sport / gastro / kultura), nové sekce galerie + novinky + občanská vybavenost + dopravní dostupnost + pobytová stipendia.
+**Master source of truth:** `/Users/kindl/kindl-vault/Projects/SH_Web/` (mimo repo). Klíčové soubory:
 
-**Jediný zdroj pravdy pro nový obsah:** `CONTENT.md` v rootu repa. Tam klient průběžně vyplňuje texty + dropuje obrázky podle navržené struktury. Až bude první dávka vyplněná, generujeme nový sitemap, kostry stránek, content collections a navigaci z toho.
+- `SH_Web_Site_Copy.md` (83 KB), kanonický copy pro živý web. Mirror v repu jako `CONTENT.md` (re-sync přes `cp`).
+- `SH_Web_Plan.md` (39 KB), uzamčená rozhodnutí, IA, fázování, otevřené otázky pro Marka.
+- `SH_Web_Visualization_List.md` (33 KB), shot list pro ~90 záběrů (Tier A/B/C).
+- `Research/SH_Web_Research_CopyVoice.md` (29 KB), **povinné čtení před psaním**, banned phrases v `scripts/lint-editorial.mjs`.
 
-Do té doby **udržujeme současný site v provozním stavu** (nelámeme ho), ale neinvestujeme do polishe pre-restructure stránek.
+**Phase 1 — IA foundation (DONE 2026-05-13):** smazány staré routes (`/pokoje/`, `/areal/`, `/sluzby/`, `/o-arealu/`), 11 nepoužitých MDX a 2 orphan komponenty; přepsán Header (8-item nav + site-wide plum badge „V projektové přípravě" per Marek 2026-05-12 + Rezervace CTA chip) a Footer (per Site_Copy § 0.3); vytvořeno 12 stub pages pro novou IA; rozšířen `lint-editorial` o 14 banned patterns z CopyVoice research § 1-6 (em/en-dash, „v srdci", „objevte", „více než jen", duté gerundium v -ící, atd.); landing dostala minimální hero shell s claimem z § 0.1.
+
+**Phase 2 — Landing (TODO):** hero rotace 5 záběrů (Tier A produkce Hugo), „Co Hub nabízí" 4 karty se swipe gallery, section teasery, mapa.
+
+**Phase 3 — Ubytování + Kapsle (TODO):** nové content collections (4 co-living + 5 privátní apartmány = 9 typů), 9 detail stránek + `/kapsle/` A/B landing, cenovka per Plan.md ř. 125-136.
+
+**Phase 4 — Ostatní content (TODO):** `/coworking/`, `/komunita/`, `/okoli/`, `/doprava/`, `/stipendia/`, `/galerie/`, `/novinky/`, `/kontakty/`, `/faq/`. Plné copy z Site_Copy.md.
+
+**Phase 5 — Rezervace wizard + backend (TODO):** 5-krokový průvodce (per ConfiguratorUX research), Cloudflare Worker na `form.startovacihub.cz` (Turnstile + Resend + D1 EU jurisdikce), `/metodika-srovnani/` + `/gdpr/` + SEO meta + JSON-LD + sitemap.xml + robots.txt.
 
 ## Stack snapshot
 
@@ -28,23 +39,33 @@ Do té doby **udržujeme současný site v provozním stavu** (nelámeme ho), al
 | Map | Leaflet 1.9.4 (CDN unpkg) + CARTO Voyager tiles, only on `/o-arealu/` and `/` |
 | Deploy | GH Pages, `base: '/sh-web/'`. CI in `.github/workflows/deploy-pages.yml` |
 
-## Pages (20)
+## Pages (17 post-Phase-1, target 17+5 post-Phase-3)
+
+Aktuální stav po Phase 1:
 
 ```
-/                       landing — hero + 6 RoomCards + amenity grid + extras + zigzag + final CTA + map + mini-FAQ
-/pokoje/                overview of 6 room types
-/pokoje/<slug>/         × 6 detail pages (capsule, capsule-double, 1kk-2l, 1kk-3l, 2kk, 3kk)
-/sluzby/                paid extras (stravování, e-vozidla, sklady) — no sauna here
-/areal/                 5 sub-projektů (komunitní centrum, coworking, pivovar, sauna+bazén, sportoviště+park)
-/areal/<slug>/          × 5 detail
-/o-arealu/              location, transport, OSA II identity
-/rezervace/             3-section booking form
-/druzstvo/              SKRYTÁ (noindex) — manuální nasměrování pro vlastnické bydlení
-/faq/                   audience-tabbed
+/                          landing (Phase 1 shell, plný redesign v Phase 2)
+/ubytovani/                stub (Phase 3: 9 detail pages)
+/coworking/                stub (Phase 4)
+/komunita/                 stub (Phase 4)
+/okoli/                    stub (Phase 4)
+/doprava/                  stub (Phase 4)
+/stipendia/                stub (Phase 4)
+/novinky/                  stub (Phase 4)
+/galerie/                  stub (Phase 4)
+/kontakty/                 stub (Phase 4)
+/rezervace/                stub s email fallbackem (Phase 5: 5-step wizard)
+/kapsle/                   stub (Phase 3: dedikovaný A/B landing per Plan.md ř. 195)
+/metodika-srovnani/        stub (Phase 5: plná metodika per § 2980 OZ)
+/gdpr/                     stub (Phase 5: plná pravidla s nasazením formuláře)
+/faq/                      drží předchozí obsah (Phase 4 redo per Site_Copy)
+/druzstvo/                 SKRYTÁ (noindex), drží předchozí obsah
 /404
 ```
 
-Per-page anatomy + redesign history in `docs/HISTORY.md`.
+Phase 3 přidá 9 detail pages pod `/ubytovani/co-living/<slug>/` a `/ubytovani/privatni/<slug>/`.
+
+Per-page anatomy + redesign history v `docs/HISTORY.md`.
 
 ## Audience & voice
 
@@ -54,31 +75,49 @@ Per-page anatomy + redesign history in `docs/HISTORY.md`.
 - **Konverzní funnel:** hero → RoomCard → /rezervace/ → telefon do 24 h
 - **Investor:** jen footer link na VPD1, žádná homepage real estate
 
-## Pricing draft (orientační, klient finalizuje)
+## Pricing (uzamčeno 2026-05-12 Markem, per `SH_Web_Plan.md` ř. 125-136)
 
-Anchor cena za celou jednotku při plné obsazenosti + per-osoba ekvivalent v UI. 3-tier slevy (3+ / 6+ / 12+ měsíců).
+Anchor cena za celou jednotku v krátkém pobytu, 3-tier slevy (3+ / 6+ / 12+ měs). Kapsle a co-living agresivně dolů oproti původnímu draftu (Markovo Q1: „za 3 000 Kč super deal pro jednolůžko"). 1+kk-5+kk drží draft.
 
-| Typ | Max lůžek | Anchor | 3+ / 6+ / 12+ |
-|---|---|---|---|
-| Kapsle | 1 | 4 500 Kč | −5 / −15 / −25 % |
-| Dvoulůžková kapsle | 2 | 6 500 Kč | −5 / −15 / −25 % |
-| 1+kk · 2 lůžka | 2 | 9 500 Kč | −5 / −10 / −20 % |
-| 1+kk · 3 lůžka | 3 | 11 500 Kč | −5 / −10 / −20 % |
-| 2+kk · 4 lůžka | 4 | 16 000 Kč | −5 / −10 / −20 % |
-| 3+kk · 6 lůžek | 6 | 21 000 Kč | −5 / −10 / −20 % |
+| Formát | Plocha | Lůžek | Anchor | 3+ / 6+ / 12+ |
+|---|---|---|---|---|
+| Privátní 1-lůžková kapsle | n/a | 1 | 3 000 Kč | 2 850 / 2 550 / 2 250 Kč |
+| Privátní 2-lůžková kapsle | n/a | 2 | 4 500 Kč | 4 275 / 3 825 / 3 375 Kč |
+| Jedno lůžko sdílený pokoj | n/a | 1 | 3 500 Kč | 3 325 / 2 975 / 2 625 Kč |
+| Dvoulůžko sdílený byt | n/a | 2 | 6 000 Kč | 5 700 / 5 100 / 4 500 Kč |
+| 1+kk | 21 m² | 2 | 9 500 Kč | 9 025 / 8 550 / 7 600 Kč |
+| 2+kk | 42 m² | 4 | 14 000 Kč | 13 300 / 12 600 / 11 200 Kč |
+| 3+kk | 63 m² | 6 | 18 000 Kč | 17 100 / 16 200 / 14 400 Kč |
+| 4+kk | 84 m² | 8 | 22 000 Kč | 20 900 / 19 800 / 17 600 Kč |
+| 5+kk | 105 m² | 10 | 25 000 Kč | 23 750 / 22 500 / 20 000 Kč |
 
-Zdroj: Compass deep-research 5/2026 (50+ pražských referencí). GPT light Executive Summary jako sekundární zdroj. Komunikace: per-jednotka anchor, per-osoba sekundárně, sleva za dlouhý pobyt jako tier (ne „akce").
+**Vše v ceně bydlení:** energie, internet, úklid společných prostor, **5 jízd Hub-shuttle do metra Kobylis měsíčně**, **1 jízda Hub-taxi lokálně měsíčně**, přístup do coworkingového sálu (volný stůl), poukaz do sauny 1× týdně. Další shuttle/taxi za zvýhodněnou sazbu.
 
-## Reservation flow
+Komunikační pravidlo per CopyVoice research: per-jednotka anchor + paralelní per-osoba pro velké formáty (2+kk a výš). **Komparativní cenová tvrzení vůči Praze** žijí jen v sekundárním social-proof pruhu, nikdy v body textu, vždy s odkazem na `/metodika-srovnani/` (§ 2980 OZ).
 
-`/rezervace/` má 3 sekce:
-1. **Typ + termín + délka** — 6 carded options + „Ještě nevím, poraďte mi", month picker, length select
-2. **Kontakt** — jméno / e-mail / **telefon (povinný — voláme)** / poznámka / volitelný stipendium checkbox
-3. **Souhlas** — GDPR
+Coworking ceny (uzamčené per Plan.md ř. 152-163):
 
-URL pre-fill `?typ=<slug>` z RoomCard. Submit `console.log` → success state „Zavoláme do 24 hodin." (backend deferred).
+| Tier | Cena |
+|---|---|
+| Volný stůl v sále 24/7 | 2 900 Kč/měs (rezidenti zdarma) |
+| Fixní stůl | 4 200 Kč/měs |
+| Sdílená kancelář pro čtyři | 15 000 Kč/měs |
+| Zasedací místnost (6 osob) | 350 Kč/hod, 1 200 Kč/půlden, 2 000 Kč/den |
+| Ateliér 15-25 m² | 6 500 Kč/měs (~325 Kč/m²) |
+| Dílna základní | 490 Kč/měs |
+| Dílna těžké stroje | 150 Kč/hod (CNC, laser, 3D tiskárny) |
 
-Voice principle: **prezentovat vše sebevědomě jako fungující** — žádné status badges („Spouštíme jaro 2026"), žádné disclaimery o fázování rekonstrukcí. Konkrétní dostupnost v termínu rezervace probere rezervační oddělení po telefonu.
+## Reservation flow (Phase 5, locked design)
+
+`/rezervace/` cíl: 5-krokový průvodce per Plan.md ř. 217-251. URL slug zachován, **H1 „Registrace zájmu o bydlení"**, tlačítko „Odeslat nezávaznou registraci", legal floor: každé potvrzení říká „Toto není závazek na vaší straně".
+
+Kroky: 1. Koncept (Privátní / Co-living / „Nevím, poradíme"), 2. Konfigurace prostoru (radio karty per koncept), 3. Termín + stipendium toggle, 4. Osobní profil (telefon povinný), 5. Rekapitulace + GDPR. Stálý sidebar s aktuální cenou + „vše v ceně" checklistem.
+
+Backend: Cloudflare Worker na `form.startovacihub.cz` → Turnstile invisible → Resend → D1 EU jurisdikce. Per `Projects/OSA_Website/OSA_Website_Hub_Research_Forms.md`.
+
+**Phase 1 stav:** `/rezervace/` je stub s email fallbackem (`mailto:vpd@osa2.cz`), wizard přijde v Phase 5.
+
+Voice principle (per `Research/SH_Web_Research_LegalFloor.md` + `_CopyVoice.md`): **prezentovat vše sebevědomě jako fungující** + **site-wide „V projektové přípravě" badge** v headeru neutralizuje vábivou reklamu podle Přílohy č. 1 písm. d) ZOOS, ne per-amenity disclaimery.
 
 ## Don't read these (token traps)
 
@@ -130,8 +169,9 @@ git push origin master
 
 ## Open loops
 
-- **Full site restructure** — viz „ACTIVE WORK" výše. Jediný zdroj pravdy: `CONTENT.md` v rootu. Sledovat průběh tam.
-- **Pricing draft k revizi.** 6 anchor cen + 3-tier slevy podle Compass research. Klient finalizuje před public launchem; konzervativně lze cenu skrýt v fázi 1, ale `?typ=<slug>` pre-fill + per-osoba ekvivalent závisí na číslech v MDX (`priceFrom`). **Bude přepsáno** v rámci restrukturalizace.
+- **Phase 2-5 restructure** — viz „ACTIVE WORK" výše. Master sources v `/Users/kindl/kindl-vault/Projects/SH_Web/`, mirror v `CONTENT.md`.
+- **Otevřené Markovy otázky** (per Plan.md ř. 37-51): IČO + telefon kontaktního čísla, Hub-shuttle provozovatel, advokát na smluvní šablony (§ 2235 + § 2326 OZ), pojmenovaní rezidenti pro launch, kapacita Hubu v lůžkách, domain timing.
+- **Domain cutover** (`startovacihub.cz`): plánovaný po Phase 4 launch. Per Plan.md Q10 otevřeno.
 - **Backend rezervačního formuláře.** `/rezervace/` stále `console.log`s payload. Nutné wirovat e-mail / DB / anti-spam před public launchem.
 - **Photo content.** 2+kk a 3+kk používají placeholder fotky (`1kk-a4-a6.jpg` a `vetsi-pokoj-a.jpg`) — reálné rendery zatím nejsou.
 - **Transitional base path.** `astro.config.mjs` má `base: '/sh-web/'`; `tokens.css` font URLs jsou `/sh-web/fonts/...`. Při DNS flip: set `site: 'https://startovacihub.cz'`, smaž `base`, find/replace `/sh-web/fonts/` → `/fonts/`. `withBase()` se stane no-op.

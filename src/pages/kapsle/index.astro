@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Kapsle · Startovací Hub Klecany"
+  description="Privátní 1-lůžková kapsle od 3 000 Kč měsíčně. Pár kapslí v jednom velkém pokoji se společnou kuchyní, sdílená koupelna na patře. Pro lidi, kteří potřebují kde spát a kde pracovat, ne luxus za 18 000 Kč.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Bydlení</p>
+    <h1>Kapsle</h1>
+    <p class="page-stub__lede">
+      Privátní 1-lůžková kapsle od 3 000 Kč měsíčně, dvoulůžková od 4 500 Kč. Pár kapslí v jednom velkém
+      pokoji s knihovnou a společnou kuchyní; sdílená koupelna a sprcha na patře. Pro lidi, kteří
+      potřebují kde spát a kde pracovat, ne luxus za 18 000 Kč. Samostatná stránka pro A/B test
+      kreativy proti hlavnímu rezervačnímu průvodci.
+    </p>
+    <p class="page-stub__note">Plnou stránku doplňujeme</p>
+    <p class="page-stub__links">
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+      <a href={withBase('/ubytovani/')}>Všech 9 typů</a>
+    </p>
+  </article>
+</Base>

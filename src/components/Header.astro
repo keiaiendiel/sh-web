@@ -7,11 +7,17 @@ interface Props {
 }
 const { variant = 'light' } = Astro.props;
 
+/* Site-wide nav. Order locked per SH_Web_Plan.md ř. 211 a Site_Copy § 0.2.
+   Rezervace nepatří do nav array, je to samostatný CTA chip vpravo. */
 const nav = [
-  { path: '/pokoje/',  label: 'Pokoje' },
-  { path: '/sluzby/',  label: 'Služby' },
-  { path: '/areal/',   label: 'Areál' },
-  { path: '/faq/',     label: 'FAQ' },
+  { path: '/ubytovani/', label: 'Ubytování' },
+  { path: '/coworking/', label: 'Coworking' },
+  { path: '/komunita/',  label: 'Komunita' },
+  { path: '/okoli/',     label: 'Okolí' },
+  { path: '/doprava/',   label: 'Doprava' },
+  { path: '/stipendia/', label: 'Stipendia' },
+  { path: '/novinky/',   label: 'Novinky' },
+  { path: '/galerie/',   label: 'Galerie' },
 ];
 
 const current = Astro.url.pathname;
@@ -23,10 +29,16 @@ const reservationActive = isActive('/rezervace/');
 ---
 <header class:list={['hub-header', { 'hub-header--dark': variant === 'dark' }]}>
   <div class="hub-header__bar">
-    <a href={withBase('/')} class="hub-header__brand" aria-label="Startovací Hub · domů">
+    <a href={withBase('/')} class="hub-header__brand" aria-label="Startovací Hub Klecany, domů">
       <span class="hub-header__glyph" aria-hidden="true"><OsaGlyph size="1em" /></span>
       <span class="hub-header__wordmark">Startovací Hub</span>
     </a>
+
+    {/* Site-wide štítek „V projektové přípravě" per Marek 2026-05-12.
+        Neutralizuje vábivou reklamu podle Přílohy č. 1 písm. d) ZOOS.
+        Viditelný na každé stránce, nahrazuje per-amenity štítky.
+        Viz SH_Web_Research_LegalFloor.md a SH_Web_Plan.md ř. 286. */}
+    <span class="hub-header__status" aria-label="Stav projektu">V projektové přípravě</span>
 
     <nav class="hub-header__nav" aria-label="Hlavní navigace">
       {nav.map((n) => (
@@ -40,6 +52,11 @@ const reservationActive = isActive('/rezervace/');
         class="hub-header__cta"
         aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
     </nav>
+
+    <a
+      href={withBase('/rezervace/')}
+      class="hub-header__cta hub-header__cta--mobile"
+      aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
 
     <button
       class="hub-header__burger"
@@ -55,6 +72,7 @@ const reservationActive = isActive('/rezervace/');
   <div class="hub-header__rule" role="presentation"></div>
 
   <div id="hub-drawer" class="hub-drawer" role="dialog" aria-modal="true" aria-label="Hlavní navigace" hidden>
+    <p class="hub-drawer__status">V projektové přípravě</p>
     <nav class="hub-drawer__nav" aria-label="Mobilní navigace">
       {nav.map((n) => (
         <a
@@ -71,11 +89,11 @@ const reservationActive = isActive('/rezervace/');
 </header>
 
 <script is:inline>
-  // Header je `transition:persist` — DOM přetrvá napříč view-transition navigy.
-  // Astro však znovu vyhodnotí <script is:inline>, takže bez ochrany bychom
-  // přidávali další event listenery na stejný `.hub-header__burger` při každé
-  // navigaci (multiple handlers → menu se otevře a zavře v jednom kliknutí).
-  // Flag na elementu zaručí jeden bind napříč životem stránky.
+  /* Header je `transition:persist` , DOM přetrvá napříč view-transition navigy.
+     Astro však znovu vyhodnotí <script is:inline>, takže bez ochrany bychom
+     přidávali další event listenery na stejný `.hub-header__burger` při každé
+     navigaci (multiple handlers → menu se otevře a zavře v jednom kliknutí).
+     Flag na elementu zaručí jeden bind napříč životem stránky. */
   (function () {
     var btn = document.querySelector('.hub-header__burger');
     var panel = document.getElementById('hub-drawer');
@@ -139,8 +157,7 @@ const reservationActive = isActive('/rezervace/');
   .hub-header__bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-6);
+    gap: var(--space-5);
     padding: 14px var(--gutter);
     max-width: var(--container-wide);
     margin: 0 auto;
@@ -160,25 +177,47 @@ const reservationActive = isActive('/rezervace/');
     text-decoration: none;
     position: relative;
     z-index: 35;
+    flex-shrink: 0;
   }
   .hub-header__glyph    { display: inline-flex; line-height: 0; }
   .hub-header__wordmark { white-space: nowrap; }
 
+  /* Site-wide status štítek: plum accent, malé verzálky, vedle loga.
+     Mírná opacity na light variantě (mlze nesutí dominovat brandu),
+     plná čitelnost na dark. Žádný pillstyling , operator voice, žádné
+     marketing badges. */
+  .hub-header__status {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 4px 8px;
+    border: 1px solid var(--accent-rule);
+    border-radius: 2px;
+    background: var(--accent-soft);
+    flex-shrink: 0;
+  }
+  .hub-header--dark .hub-header__status {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
   .hub-header__nav {
     display: flex;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-5);
+    margin-left: auto;
   }
   .hub-header__link {
     font: 600 var(--text-sm) / 1 var(--font-sans);
-    /* Light variant: muted body grey. Dark variant overrides below to a
-       softened white so nav legibly contrasts the black bar without
-       competing with the active page indicator. */
     color: var(--fg-muted);
     padding: 6px 0;
     border-bottom: 1px solid transparent;
     text-decoration: none;
     transition: color var(--dur-fast) linear, border-color var(--dur-fast) linear;
+    white-space: nowrap;
   }
   .hub-header--dark .hub-header__link { color: rgba(255, 255, 255, 0.78); }
   .hub-header__link[aria-current='page'] {
@@ -189,11 +228,8 @@ const reservationActive = isActive('/rezervace/');
   .hub-header--dark .hub-header__link:hover,
   .hub-header--dark .hub-header__link[aria-current='page'] { color: #fff; }
 
-  /* CTA pill — Rezervace.
-     Wipe pattern: outline at rest; fill rises from bottom on hover.
-     Fill is hardcoded per variant (NOT currentColor — currentColor
-     transitions with text color, so the fill would chase the text
-     and the button would render solid-on-solid invisible). */
+  /* CTA pill , Rezervace.
+     Wipe pattern: outline at rest; fill rises from bottom on hover. */
   .hub-header__cta {
     position: relative;
     isolation: isolate;
@@ -205,6 +241,8 @@ const reservationActive = isActive('/rezervace/');
     border-radius: var(--radius-input);
     text-decoration: none;
     transition: color 160ms cubic-bezier(0.65, 0, 0.35, 1);
+    flex-shrink: 0;
+    white-space: nowrap;
   }
   .hub-header__cta::after {
     content: "";
@@ -212,9 +250,6 @@ const reservationActive = isActive('/rezervace/');
     inset: 0;
     z-index: -1;
     clip-path: inset(100% 0 0 0);
-    /* 160ms (down from 220) so the mid-flight half-filled state — which
-       reads as grey when the white wipe is at ~50% over the dark hero —
-       is too short to perceive as a stable colour. */
     transition: clip-path 160ms cubic-bezier(0.65, 0, 0.35, 1);
   }
   .hub-header__cta:hover::after,
@@ -222,7 +257,6 @@ const reservationActive = isActive('/rezervace/');
   .hub-header__cta[aria-current='page']::after {
     clip-path: inset(0 0 0 0);
   }
-  /* Dark variant — fill white, text inverts to black on hover. */
   .hub-header--dark .hub-header__cta::after { background: #fff; }
   .hub-header--dark .hub-header__cta:hover,
   .hub-header--dark .hub-header__cta:focus-visible,
@@ -230,7 +264,6 @@ const reservationActive = isActive('/rezervace/');
     color: var(--k-100);
     outline: none;
   }
-  /* Light variant — fill black, text inverts to white on hover. */
   .hub-header:not(.hub-header--dark) .hub-header__cta::after { background: var(--k-100); }
   .hub-header:not(.hub-header--dark) .hub-header__cta:hover,
   .hub-header:not(.hub-header--dark) .hub-header__cta:focus-visible,
@@ -238,6 +271,10 @@ const reservationActive = isActive('/rezervace/');
     color: var(--k-0);
     outline: none;
   }
+  /* Mobile CTA: stejný styl jako desktop, ale ukazuje se vedle burgeru,
+     ne uvnitř nav. Default skrytý, zobrazí se pod 1024px. */
+  .hub-header__cta--mobile { display: none; margin-left: auto; }
+
   @media (prefers-reduced-motion: reduce) {
     .hub-header__cta,
     .hub-header__cta::after { transition: none; }
@@ -302,6 +339,18 @@ const reservationActive = isActive('/rezervace/');
     opacity: 1;
     transform: translateY(0);
   }
+  .hub-drawer__status {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: #fff;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 auto var(--space-5);
+    padding: 4px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 2px;
+    width: max-content;
+    max-width: 640px;
+  }
   .hub-drawer__nav {
     display: grid;
     gap: 0;
@@ -352,18 +401,28 @@ const reservationActive = isActive('/rezervace/');
   :global(html.osa-nav-lock),
   :global(html.osa-nav-lock body) { overflow: hidden; }
 
-  @media (max-width: 720px) {
+  /* Mobile: burger replaces nav, mobile CTA shows next to burger.
+     Breakpoint raised from 720 to 1024 because 8 nav items + brand +
+     status badge + CTA chip don't fit comfortably under ~1100 px. */
+  @media (max-width: 1024px) {
     .hub-header__nav { display: none; }
+    .hub-header__cta--mobile { display: inline-flex; align-items: center; }
     .hub-header__burger {
       display: inline-flex;
       align-items: center;
       justify-content: center;
     }
-    .hub-header__brand { font-size: var(--text-xs); gap: var(--space-1); }
   }
 
-  @media (min-width: 721px) {
+  @media (min-width: 1025px) {
     .hub-drawer { display: none; }
+  }
+
+  /* Tightest mobile: hide wordmark, keep glyph only.
+     Status badge + mobile CTA + burger jsou priorita. */
+  @media (max-width: 480px) {
+    .hub-header__wordmark { display: none; }
+    .hub-header__status { font-size: 10px; padding: 3px 6px; }
   }
 
   @media (prefers-reduced-motion: reduce) {

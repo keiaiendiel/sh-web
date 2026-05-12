@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Stipendia · Startovací Hub Klecany"
+  description="Pobytové stipendium pro rezidenty-tvůrce, work-trade správce, stavitele-rezidenty a programátory-rezidenty. Bydlení v jedné z devíti variant, prostor pro vlastní projekt, sdílená infrastruktura.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Sekce</p>
+    <h1>Stipendia</h1>
+    <p class="page-stub__lede">
+      Pobytové stipendium pro lidi, kteří k Hubu reálně přispějí. Čtyři role: rezident-tvůrce,
+      správce na výměnu (work-trade), stavitel-rezident, rezident-programátor. Nabízíme bydlení v jedné z devíti
+      variant podle dohody, prostor pro vlastní projekt, sdílenou infrastrukturu a komunitu. Zájem ohlásíte
+      přepínačem v rezervačním formuláři, oznámíme jakmile otevřeme další výzvu.
+    </p>
+    <p class="page-stub__note">Pilot podzim 2026, plnou stránku doplňujeme</p>
+    <p class="page-stub__links">
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+      <a href={withBase('/komunita/')}>Komunita</a>
+    </p>
+  </article>
+</Base>

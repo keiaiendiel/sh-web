@@ -1,43 +1,90 @@
 ---
 import { getEntry } from 'astro:content';
+import { withBase } from '../utils/url';
+
 const orgEntry = await getEntry('org', 'identity');
 const org = orgEntry?.data;
 ---
 <footer class="hub-footer">
   <div class="hub-footer__inner">
-    <div class="hub-footer__col">
+    <div class="hub-footer__col hub-footer__col--brand">
       <p class="hub-footer__brand">Startovací Hub Klecany</p>
-      <p class="hub-footer__tagline">Záměr vede VPD pod hlavičkou OSA II, z.s.</p>
-      <p class="hub-footer__parents">
-        <a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a>
-      </p>
+      <p class="hub-footer__tagline">Bývalé vojenské kasárny nad Vltavou. Otevíráme postupně od roku 2026.</p>
+      <p class="hub-footer__status">V projektové přípravě</p>
     </div>
+
     <div class="hub-footer__col">
       <p class="hub-footer__label">Kontakt</p>
-      <p><a href="mailto:info@startovacihub.cz">info@startovacihub.cz</a></p>
-      <p class="hub-footer__investor">Vlastnické bydlení: <a href="https://keiaiendiel.github.io/vpd-web/vpd1/" rel="noopener">záměr VPD1 →</a></p>
+      <p><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></p>
+      <p class="hub-footer__muted">Telefon doplníme po Markovo dodání čísla rezervačního oddělení.</p>
+      <p>Horní Kasárna Klecany<br />250 67 Klecany</p>
     </div>
+
     <div class="hub-footer__col">
-      <p class="hub-footer__label">Právní</p>
-      <p>OSA II, z.s. · IČO {org?.ico ?? '—'}</p>
-      <p class="hub-footer__legal">Údaje o ochraně osobních údajů doplníme s nasazením formulářů.</p>
+      <p class="hub-footer__label">Související</p>
+      <p><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a> <span class="hub-footer__hint">mateřský web OSA II</span></p>
+      <p><a href="https://vepde.com" rel="noopener">vepde.com</a> <span class="hub-footer__hint">záměr VPD pro investory</span></p>
+      <p><a href={withBase('/metodika-srovnani/')}>Metodika srovnání cen</a></p>
+      <p><a href={withBase('/gdpr/')}>Ochrana osobních údajů</a></p>
+    </div>
+
+    <div class="hub-footer__col hub-footer__col--legal">
+      <p class="hub-footer__label">Provozovatel</p>
+      <p>Občanské sdružení Alternativa II, z.s.</p>
+      <p>IČO {org?.ico ?? 'TBD'} · Předseda Marek Semerád</p>
+      <p class="hub-footer__legal">
+        Nabídka rezervací je nezávazná. Slouží k registraci zájmu, není kupní ani nájemní smlouvou.
+      </p>
     </div>
   </div>
 </footer>
 
 <style>
-  .hub-footer { background: var(--k-100, #000); color: var(--bg, #fff); padding: 64px 24px; }
-  .hub-footer__inner { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; max-width: 1440px; margin: 0 auto; }
-  .hub-footer__brand { font-weight: 700; font-size: 18px; margin-bottom: 4px; }
-  .hub-footer__tagline { opacity: 0.7; font-size: 14px; margin-bottom: 12px; }
-  .hub-footer__parents a { color: inherit; }
-  .hub-footer__label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.55; margin-bottom: 8px; }
-  .hub-footer__legal { font-size: 12px; opacity: 0.5; margin-top: 8px; }
-  .hub-footer__col p { margin: 0 0 4px; line-height: 1.5; }
-  .hub-footer__investor { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 12px !important; }
-  .hub-footer__investor a { color: rgba(255,255,255,0.85); text-decoration: underline; }
-  .hub-footer__investor a:hover { color: var(--bg); }
-  @media (max-width: 720px) {
-    .hub-footer__inner { grid-template-columns: 1fr; gap: 24px; }
+  .hub-footer {
+    background: var(--k-100);
+    color: var(--bg);
+    padding: var(--space-8) var(--gutter) var(--space-7);
+  }
+  .hub-footer__inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: var(--space-7) var(--space-6);
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+  .hub-footer__col p { margin: 0 0 6px; line-height: 1.5; font-size: var(--text-sm); }
+  .hub-footer__col a { color: inherit; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.35); text-underline-offset: 3px; }
+  .hub-footer__col a:hover { text-decoration-color: currentColor; }
+
+  .hub-footer__brand { font-weight: 700; font-size: var(--text-lg); margin-bottom: 6px; }
+  .hub-footer__tagline { opacity: 0.65; max-width: 36ch; }
+  .hub-footer__status {
+    display: inline-block;
+    margin-top: var(--space-3);
+    padding: 4px 8px;
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 2px;
+  }
+
+  .hub-footer__label {
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-bottom: var(--space-3);
+  }
+  .hub-footer__muted { opacity: 0.55; font-size: var(--text-xs); }
+  .hub-footer__hint { opacity: 0.55; font-size: var(--text-xs); margin-left: 4px; }
+  .hub-footer__legal { font-size: var(--text-xs); opacity: 0.6; margin-top: var(--space-3); max-width: 38ch; line-height: 1.4; }
+
+  @media (max-width: 1024px) {
+    .hub-footer__inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .hub-footer__inner { grid-template-columns: 1fr; }
   }
 </style>

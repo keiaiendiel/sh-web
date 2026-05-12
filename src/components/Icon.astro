@@ -1,6 +1,6 @@
 ---
 /*
- * Icon — inlines a Lucide SVG by name. Reads from lucide-static at build/dev
+ * Icon , inlines a Lucide SVG by name. Reads from lucide-static at build/dev
  * time so production HTML is fully static (no JS, no CDN). Stroke color uses
  * currentColor so the surrounding element controls hue via `color`.
  *
@@ -32,7 +32,7 @@ let svg: string;
 try {
   svg = fs.readFileSync(iconPath, 'utf-8');
 } catch {
-  throw new Error(`<Icon name="${name}" /> — lucide-static has no icon "${name}".`);
+  throw new Error(`<Icon name="${name}" /> , lucide-static has no icon "${name}".`);
 }
 
 // Strip license comment, normalize size + stroke + remove the lucide class

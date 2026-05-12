@@ -1,1082 +1,235 @@
 ---
 import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
-import Gallery from '../components/Gallery.astro';
-import RoomCard from '../components/RoomCard.astro';
 import { withBase } from '../utils/url';
-import { getCollection, getEntry } from 'astro:content';
 
-// Hero rotation — 4 background images sliding horizontally on a 20s loop.
-const heroImages = [
-  withBase('/images/hub/hero/hero-1.jpg'),
-  withBase('/images/hub/hero/hero-2.jpg'),
-  withBase('/images/hub/hero/hero-3.jpg'),
-  withBase('/images/hub/hero/hero-4.jpg'),
-];
+/* Phase 1 landing: minimální shell. Hero z Site_Copy § 0.1 (H1 + lede),
+   primary CTA na rezervaci, sekundární na ubytování, pod tím seznam 8 sekcí.
+   Phase 2 dodá hero rotaci (5 záběrů), „Co Hub nabízí" 4 karty se swipe
+   galleryí a section teaser bloky. Tier A rendery Huga zatím placeholdery,
+   pre-render hero-1.jpg drží místo. */
 
-// 5 typů ubytování — capsule single, capsule double, 1+kk, 2+kk, 3+kk.
-// Načítáme z content collection 'rooms' (viz src/content.config.ts a
-// src/content/rooms/*.mdx). Anchor cena a metadata se renderují přes RoomCard.
-const rooms = (await getCollection('rooms')).sort((a, b) => a.data.order - b.data.order);
+const heroImage = withBase('/images/hub/hero/hero-1.jpg');
 
-// Co Hub nabízí — amenity, které dostává každý rezident bez ohledu na typ
-// ubytování. Hierarchie z plánu: jádro (in price) ≠ doplňky (paid).
-const includedAmenities = [
-  { icon: 'monitor',  title: 'Coworking',           body: '24/7 přístup do coworkingového sálu, studoven a zasedaček.' },
-  { icon: 'waves',    title: 'Venkovní bazén',      body: 'Sezónní koupání (květen–září) na vnitřním dvoře areálu.' },
-  { icon: 'flame',    title: 'Sauna',               body: 'Finská sauna v objektu E s pravidelnými směnami pro rezidenty.' },
-  { icon: 'mail',     title: 'Recepce s poštou',    body: 'Přebíráme poštu, vydáváme souhlasy pro sídlo firmy.' },
-  { icon: 'bus',      title: 'Kyvadla na Kobylisy', body: 'Minibus areálu na metro Kobylisy v ranní a odpolední špičce.' },
-];
-
-// „Můžeš si přikoupit" — placené doplňkové služby. Prezentujeme všechny stejně
-// (bez status badge); aktuální dostupnost v termínu rezervace řeší rezervační
-// oddělení individuálně po telefonu.
-const extraServices = [
-  {
-    icon: 'utensils',
-    title: 'Stravování',
-    body: 'Snídaně, obědy, večeře a svačiny z areálové kuchyně. Měsíční paušál nebo platba per jídlo.',
-    href: '/sluzby/#stravovani',
-  },
-  {
-    icon: 'bike',
-    title: 'Půjčovna e-vozidel',
-    body: 'Koloběžky, kola, motorky, sdílená auta, mikrobusy i obytné auto. Hodinové i denní tarify pro rezidenty.',
-    href: '/sluzby/#evozidla',
-  },
-  {
-    icon: 'warehouse',
-    title: 'Kontejnerové sklady',
-    body: 'Uzamykatelné boxy 24/7 pro horská kola, lyže, sezónní krámy a archiv firmy.',
-    href: '/sluzby/#sklady',
-  },
-];
-
-// Editorial zigzag — 2 řádky alternating ltr/rtl: Místo + Komunita.
-// Zkráceno z 5 sekcí na 2 v rámci redesignu z exploratory web na conversion
-// funnel — areál a komunita se rozkrývají primárně na /areal/ a /pokoje/[slug],
-// homepage drží kompaktní podporu konverzního flow.
-const zigzag = [
-  {
-    dir: 'ltr',
-    eyebrow: 'Místo',
-    title: 'Areál Horních kasáren · 15 minut od metra Kobylisy.',
-    body: 'Klecany leží těsně za hranicí Prahy. Přes ranní a odpolední špičku jezdí kyvadlový bus areálu k metru Kobylisy, mimo špičku PID. Areál sedí na trase plánované tramvajové zastávky Výzkumný ústav I.',
-    eager: true,
-    images: [
-      { src: withBase('/images/hub/aerial/buildings-a-c.jpg'), alt: 'Letecký pohled na centrální dvůr Startovacího Hubu — budovy A1–A6 a C kolem komunitního parku.' },
-      { src: withBase('/images/hub/aerial/areal-entry.jpg'),   alt: 'Letecký pohled na vstup do areálu Horních kasáren — historická brána a centrální dvůr s rekonstruovanými budovami.' },
-      { src: withBase('/images/hub/aerial/topview.jpg'),       alt: 'Pohled shora na areál Horních kasáren v krajinném kontextu — bývalý vojenský areál mezi poli a Klecanami.' },
-    ],
-  },
-  {
-    dir: 'rtl',
-    eyebrow: 'Komunita',
-    title: 'Tržnice, kavárna, pekárna a coworking pod jednou střechou.',
-    body: 'V budově B funguje tržnice s lokálními producenty, kavárna, pekárna, minipivovar a venkovní zázemí pro food-trucky. V přízemí budovy C je coworkingový sál s pódiem pro přednášky a kapely. K tomu sauna, bazén, ateliéry, nahrávací studia a venkovní tělocvična.',
-    images: [
-      { src: withBase('/images/hub/interior/b-jidelna.jpg'),          alt: 'Jídelní a sezení v objektu B — dřevěné stoly, lavice, večerní osvětlení nad tržnicí a kavárnou.' },
-      { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'),    alt: 'Tržnice s minipivovarem v objektu B — venkovní zázemí pro food-trucky.' },
-      { src: withBase('/images/hub/exterior/cowork.jpg'),             alt: 'Coworkingový sál v přízemí budovy C — pevné stoly, projektor, kávovar v rohu.' },
-    ],
-  },
+const sections = [
+  { path: '/ubytovani/', label: 'Ubytování',  hint: '9 typů pokojů a apartmánů' },
+  { path: '/coworking/', label: 'Coworking',  hint: '5 tarifů od volného stolu po dílnu' },
+  { path: '/komunita/',  label: 'Komunita',   hint: 'Wellness, sport, gastro, kultura' },
+  { path: '/okoli/',     label: 'Okolí',      hint: 'Klecany, 15 km severně od Prahy' },
+  { path: '/doprava/',   label: 'Doprava',    hint: 'Hub-shuttle, bus 374, Hub-taxi' },
+  { path: '/stipendia/', label: 'Stipendia',  hint: 'Pobytové stipendium 4 role' },
+  { path: '/novinky/',   label: 'Novinky',    hint: 'Postup, otevírací termíny, výzvy' },
+  { path: '/galerie/',   label: 'Galerie',    hint: 'Fotky a vizualizace areálu' },
 ];
 ---
 <Base
-  title="Startovací Hub Klecany — bydlení 15 minut od metra Kobylisy"
-  description="Ubytování v Startovacím Hubu Klecany: kapsle od 4 500 Kč/měsíc, privátní 1+kk, 2+kk a 3+kk. Coworking, bazén, recepce s poštou a kyvadla na metro Kobylisy v ceně. Pro studenty, OSVČ a mladé kreativce."
-  headerVariant="dark"
-  ogImage={withBase('/og/default.png')}
->
-  <section class="hub-hero osa-dark">
-    <div class="hub-hero__bg-stack" aria-hidden="true">
-      {heroImages.map((src, i) => (
-        <img
-          class={`hub-hero__bg hub-hero__bg--${i}`}
-          src={src}
-          alt=""
-          loading={i === 0 ? 'eager' : 'lazy'}
-          decoding="async"
-          fetchpriority={i === 0 ? 'high' : 'auto'}
-        />
-      ))}
-    </div>
-    <div class="hub-hero__scrim" aria-hidden="true"></div>
-    <div class="hub-hero__inner">
-      <div class="hub-hero__kicker-row">
-        <span class="osa-eyebrow hub-hero__kicker">Areál Horních kasáren · Klecany</span>
-      </div>
-      <h1 class="hub-hero__title">Startovací Hub.</h1>
-      <p class="hub-hero__lede">Bydlení 15 minut od metra Kobylisy pro pracující studenty, OSVČ a mladé tvůrce. Kapsle od 4 500 Kč/měsíc, privátní 1+kk od 9 500 Kč. Coworking, bazén a kyvadlová doprava do Prahy v ceně.</p>
-      <a class="hub-hero__cta" href={withBase('/pokoje/')}>Vybrat ubytování →</a>
-    </div>
-  </section>
+  title="Startovací Hub Klecany"
+  description="Horní kasárny Klecan, otevřené pro bydlení a práci. Devět typů pokojů a apartmánů, coworking, dílny, sauna, společná kuchyně, kavárna. Bývalé vojenské kasárny nad Vltavou, patnáct kilometrů severně od centra Prahy. Areál se otevírá postupně od roku 2026."
+  headerVariant="dark">
 
-  <section class="hub-section hub-rooms">
-    <header class="osa-sub-head">
-      <span class="osa-eyebrow">Šest typů ubytování</span>
-      <h2 class="hub-section__heading">Vyberte formát, který vám sedí.</h2>
-      <p class="hub-section__lede">Od kapsle ve sdíleném pokoji po privátní 3+kk pro šest lůžek. Ceny platí za celou jednotku při plné obsazenosti a ladíme je individuálně podle délky pobytu.</p>
-    </header>
-    <div class="hub-rooms__grid">
-      {rooms.map((r) => (
-        <RoomCard
-          slug={r.id}
-          type={r.data.type}
-          shortName={r.data.shortName}
-          name={r.data.name}
-          size={r.data.size}
-          capacity={r.data.capacity}
-          maxBeds={r.data.maxBeds}
-          priceFrom={r.data.priceFrom}
-          discount12={r.data.discount12}
-          pitch={r.data.pitch}
-          features={r.data.features}
-          thumbnail={r.data.thumbnail}
-        />
-      ))}
-    </div>
-    <p class="hub-rooms__more">
-      <a href={withBase('/pokoje/')}>Porovnat všechny typy →</a>
-    </p>
-  </section>
-
-  <section class="hub-section hub-amenities">
-    <header class="osa-sub-head">
-      <span class="osa-eyebrow">Co Hub nabízí</span>
-      <h2 class="hub-section__heading">V ceně každého typu ubytování.</h2>
-    </header>
-    <div class="hub-amenities__grid">
-      {includedAmenities.map((a) => (
-        <article class="hub-amenities__item">
-          <span class="hub-amenities__icon" aria-hidden="true"><Icon name={a.icon} /></span>
-          <h3 class="hub-amenities__title">{a.title}</h3>
-          <p class="hub-amenities__body">{a.body}</p>
-        </article>
-      ))}
-    </div>
-    <p class="hub-amenities__note">K tomu energie, internet a úklid společných prostor. Bez extra poplatků, bez kaucí navrch.</p>
-    <p class="hub-amenities__more">
-      <a href={withBase('/areal/')}>Detaily areálu a komunity →</a>
-    </p>
-  </section>
-
-  <section class="hub-section hub-amenities">
-    <header class="osa-sub-head">
-      <span class="osa-eyebrow">Můžeš si přikoupit</span>
-      <h2 class="hub-section__heading">Doplňkové služby v areálu.</h2>
-      <p class="hub-section__lede">Stravování, mobilita a úložiště — placené nad rámec nájmu, ale pohodlně z jednoho účtu.</p>
-    </header>
-    <div class="hub-amenities__grid">
-      {extraServices.map((s) => (
-        <article class="hub-amenities__item">
-          <span class="hub-amenities__icon" aria-hidden="true"><Icon name={s.icon} /></span>
-          <h3 class="hub-amenities__title">{s.title}</h3>
-          <p class="hub-amenities__body">{s.body}</p>
-        </article>
-      ))}
-    </div>
-    <p class="hub-amenities__note">Pro nově zarezervované rezidenty obvykle úvodní sleva na první měsíc. Konkrétní ceník doladí rezervační oddělení po telefonu.</p>
-    <p class="hub-amenities__more">
-      <a href={withBase('/sluzby/')}>Detaily doplňkových služeb →</a>
-    </p>
-  </section>
-
-  <section class="hub-zigzag">
-    <header class="osa-sub-head hub-zigzag__head">
-      <span class="osa-eyebrow">Místo a komunita</span>
-      <h2 class="hub-section__heading">Klecany s pražským dosahem.</h2>
-    </header>
-    {zigzag.map((row, i) => (
-      <div
-        class:list={['hub-zigzag__row', `hub-zigzag__row--${row.dir}`]}
-        data-row={i}
-        data-zigzag-reveal>
-        <div class="hub-zigzag__media">
-          <Gallery images={row.images} ariaLabel={row.eyebrow} eager={row.eager} aspectRatio="4 / 3" />
-        </div>
-        <div class="hub-zigzag__copy">
-          <span class="osa-eyebrow">{row.eyebrow}</span>
-          <h3>{row.title}</h3>
-          <p>{row.body}</p>
-        </div>
-      </div>
-    ))}
-  </section>
-
-  <section class="hub-final-cta">
-    <div class="hub-final-cta__inner">
-      <span class="osa-eyebrow hub-final-cta__eyebrow">Rezervace</span>
-      <h2 class="hub-final-cta__heading">Rezervujte si termín v Hubu.</h2>
-      <p class="hub-final-cta__lede">Vyberte typ jednotky a termín nastěhování. Rezervace je nezávazná, ozveme se do 24 hodin s detailem dostupnosti a ceny pro vaši délku pobytu.</p>
-      <div class="hub-final-cta__btns">
-        <a class="hub-final-cta__btn hub-final-cta__btn--primary" href={withBase('/rezervace/')}>Rezervovat termín →</a>
-        <a class="hub-final-cta__btn hub-final-cta__btn--ghost" href={withBase('/pokoje/')}>Porovnat typy ubytování</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="hub-section hub-place">
-    <div class="hub-place__grid">
-      <div>
-        <header class="osa-sub-head">
-          <span class="osa-eyebrow">Místo</span>
-          <h2 class="hub-section__heading">Kde to je.</h2>
-        </header>
-        <p>Klecany leží severně od Prahy, 12 km od centra. Přes ranní a odpolední špičku k metru Kobylisy jezdí kyvadlový bus areálu (15 minut), mimo špičku příměstská linka PID (~25 minut). Areál sedí na trase plánované tramvajové zastávky Výzkumný ústav I. Stavební povolení už máme, stojí na hranici Klecany / Zdiby. V plánu je také cyklolávka Roztoky–Klecany.</p>
-        <a class="hub-place__cta" href={withBase('/o-arealu/#misto')}>O areálu a kontextu →</a>
-      </div>
-      <figure class="hub-place__map">
-        <button
-          type="button"
-          class="hub-place__map-trigger"
-          data-zoom-open
-          data-zoom-src={withBase('/images/hub/masterplan_fotoreal.jpg')}
-          data-zoom-alt="Fotorealistický masterplan areálu Horních kasáren — budovy Hub jádra (A1–A6 + C) a Hub zázemí (B, D, E, F, P, S, bazén) v kontextu celého rozvojového území."
-          aria-label="Zvětšit masterplan areálu">
-          <img src={withBase('/images/hub/masterplan_fotoreal.jpg')} alt="Fotorealistický masterplan areálu Horních kasáren — budovy Hub jádra (A1–A6 + C) a Hub zázemí (B, D, E, F, P, S, bazén) s popisky v kontextu celého rozvojového území." loading="lazy" />
-          <span class="hub-place__map-zoom" aria-hidden="true">+</span>
-        </button>
-      </figure>
-    </div>
-  </section>
-
-  <section class="hub-map-strip" aria-labelledby="hub-map-heading">
-    <div class="hub-map-strip__inner">
-      <header class="hub-map-strip__head">
-        <span class="osa-eyebrow">Klecany na mapě</span>
-        <h2 id="hub-map-heading" class="hub-map-strip__heading">Severní okraj Prahy, hned za Vltavou.</h2>
-      </header>
-      <div class="hub-map-strip__frame" id="hub-landing-map" role="application" aria-label="Interaktivní mapa areálu Horních kasáren v Klecanech"></div>
-      <p class="hub-map-strip__address">
-        <strong>Horní kasárna Klecany</strong>
-        <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách →</a>
+  <section class="lp-hero">
+    <img class="lp-hero__bg" src={heroImage} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="lp-hero__inner">
+      <p class="lp-hero__eyebrow">Horní kasárny Klecan</p>
+      <h1 class="lp-hero__title">
+        Otevřené pro bydlení a práci.
+      </h1>
+      <p class="lp-hero__lede">
+        Devět typů pokojů a apartmánů, od kapsle pro jednoho po byt 5+kk pro skupinu.
+        Coworking, dílny, sauna, společná kuchyně, kavárna. Pobytové stipendium dvakrát ročně.
       </p>
+      <p class="lp-hero__sub">
+        Areál se otevírá postupně od roku 2026. Bývalé vojenské kasárny nad Vltavou,
+        patnáct kilometrů severně od centra Prahy.
+      </p>
+      <div class="lp-hero__cta-row">
+        <a class="lp-hero__cta lp-hero__cta--primary" href={withBase('/rezervace/')}>Rezervace</a>
+        <a class="lp-hero__cta" href={withBase('/ubytovani/')}>Podívat se na pokoje</a>
+      </div>
     </div>
   </section>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous" is:inline></script>
-
-  <section class="hub-section">
-    <header class="osa-sub-head">
-      <span class="osa-eyebrow">FAQ</span>
-      <h2 class="hub-section__heading">Časté otázky.</h2>
-    </header>
-    {await Promise.all(['q1', 'q5', 'q7'].map(async (id) => {
-      const entry = await getEntry('faq', id);
-      return entry ? (
-        <details class="hub-faq-mini">
-          <summary>{entry.data.question}</summary>
-          <p>{entry.data.answer}</p>
-        </details>
-      ) : null;
-    }))}
-    <p class="hub-faq-mini__more"><a href={withBase('/faq/')}>Všechny otázky →</a></p>
+  <section class="lp-grid">
+    <div class="lp-grid__inner">
+      <p class="lp-grid__eyebrow">Co tu je</p>
+      <h2 class="lp-grid__title">Osm sekcí.</h2>
+      <p class="lp-grid__intro">
+        Plné stránky doplňujeme v dalších fázích restrukturalizace.
+        Sekce níže fungují jako rozcestník, rezervace běží.
+      </p>
+      <ul class="lp-grid__list">
+        {sections.map((s) => (
+          <li class="lp-grid__item">
+            <a class="lp-grid__link" href={withBase(s.path)}>
+              <span class="lp-grid__label">{s.label}</span>
+              <span class="lp-grid__hint">{s.hint}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
-
-  <!-- Image lightbox — single-image overlay aktivovaný přes [data-zoom-open]. -->
-  <div class="hub-zoom" id="hub-zoom" role="dialog" aria-modal="true" aria-label="Zvětšený obrázek" hidden>
-    <button class="hub-zoom__close" type="button" aria-label="Zavřít">×</button>
-    <figure class="hub-zoom__figure">
-      <img class="hub-zoom__img" src="" alt="" />
-    </figure>
-  </div>
 </Base>
 
-<script is:inline>
-  document.addEventListener('astro:page-load', () => {
-    // Reveal-on-scroll for zigzag rows. Element-level idempotency so re-runs
-    // on view-transition navigation only bind freshly-rendered rows. Two
-    // safety nets so rows never get stuck invisible: (1) any row already in
-    // viewport gets revealed synchronously after observer setup, (2) a
-    // 1.2 s timeout reveals all remaining rows as a fallback if IO misses.
-    const rows = Array.from(document.querySelectorAll('[data-zigzag-reveal]:not([data-zigzag-bound])'));
-    rows.forEach((r) => { r.dataset.zigzagBound = '1'; });
-    if (rows.length) {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        rows.forEach((r) => r.classList.add('is-revealed'));
-      } else {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-revealed');
-              io.unobserve(e.target);
-            }
-          });
-        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-        rows.forEach((r) => io.observe(r));
-        // Synchronous reveal pass for rows already in viewport at bind time.
-        requestAnimationFrame(() => {
-          const vh = window.innerHeight || document.documentElement.clientHeight;
-          rows.forEach((r) => {
-            const rect = r.getBoundingClientRect();
-            if (rect.top < vh && rect.bottom > 0) {
-              r.classList.add('is-revealed');
-              io.unobserve(r);
-            }
-          });
-        });
-        // Fallback: if anything is still hidden after 1.2 s, show it anyway.
-        setTimeout(() => {
-          rows.forEach((r) => r.classList.add('is-revealed'));
-        }, 1200);
-      }
-    }
-
-    // Image lightbox — opens on click of [data-zoom-open], closes on ESC,
-    // backdrop click or close button. Reusable for any single-image trigger.
-    const zoom = document.getElementById('hub-zoom');
-    const zoomTriggers = document.querySelectorAll('[data-zoom-open]:not([data-zoom-bound])');
-    if (zoom && zoomTriggers.length) {
-      zoomTriggers.forEach((t) => { t.dataset.zoomBound = '1'; });
-      const zoomImg = zoom.querySelector('.hub-zoom__img');
-      const openZoom = (src, alt) => {
-        zoomImg.src = src;
-        zoomImg.alt = alt || '';
-        zoom.hidden = false;
-        requestAnimationFrame(() => zoom.classList.add('is-open'));
-        document.documentElement.classList.add('osa-nav-lock');
-      };
-      const closeZoom = () => {
-        zoom.classList.remove('is-open');
-        document.documentElement.classList.remove('osa-nav-lock');
-        setTimeout(() => { zoom.hidden = true; zoomImg.src = ''; }, 220);
-      };
-      zoomTriggers.forEach((t) => {
-        t.addEventListener('click', () => {
-          openZoom(t.dataset.zoomSrc || t.querySelector('img')?.src, t.dataset.zoomAlt);
-        });
-      });
-      zoom.querySelector('.hub-zoom__close').addEventListener('click', closeZoom);
-      zoom.addEventListener('click', (e) => { if (e.target === zoom) closeZoom(); });
-      document.addEventListener('keydown', (e) => {
-        if (!zoom.hidden && e.key === 'Escape') closeZoom();
-      });
-    }
-
-    // Leaflet map under "Místo" — same pattern as /o-arealu/.
-    const mapEl = document.getElementById('hub-landing-map');
-    if (mapEl && !mapEl.dataset.mapBound && typeof L !== 'undefined') {
-      mapEl.dataset.mapBound = '1';
-      const center = [50.181447059112294, 14.424094125168379];
-      const map = L.map(mapEl, {
-        center, zoom: 16,
-        zoomControl: false, attributionControl: false,
-        scrollWheelZoom: false,
-      });
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-        subdomains: 'abcd', maxZoom: 19,
-      }).addTo(map);
-      const icon = L.divIcon({
-        html:
-          '<svg width="30" height="40" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-          '<path d="M14 0C6.27 0 0 6.27 0 14c0 9.33 14 22 14 22S28 23.33 28 14C28 6.27 21.73 0 14 0z" fill="#5A2A5F"/>' +
-          '<circle cx="14" cy="14" r="5" fill="#ffffff"/>' +
-          '</svg>',
-        className: '', iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -42],
-      });
-      const gmaps = 'https://maps.app.goo.gl/vCF6VbW7Z49sggau6';
-      const popupHtml =
-        '<a href="' + gmaps + '" target="_blank" rel="noopener" class="op-map-popup">' +
-          '<strong>Horní kasárna Klecany</strong>' +
-          '<span class="op-map-popup__cta">Otevřít v Mapách →</span>' +
-        '</a>';
-      L.marker(center, { icon })
-        .addTo(map)
-        .bindPopup(popupHtml, { className: 'op-map-popup-wrap' })
-        .openPopup()
-        .on('click', () => window.open(gmaps, '_blank'));
-      L.control.attribution({ prefix: false }).addTo(map);
-      L.control.zoom({ position: 'bottomright' }).addTo(map);
-      mapEl.addEventListener('click', () => map.scrollWheelZoom.enable(), { once: true });
-    }
-  });
-</script>
-
 <style>
-  /* HERO -- full-bleed slide carousel + scrim, content above. */
-  .hub-hero {
+  /* Hero, dark, full bleed s photo bg + scrim. */
+  .lp-hero {
     position: relative;
     isolation: isolate;
-    min-height: clamp(560px, 88vh, 820px);
-    display: flex;
-    align-items: flex-end;
-    background: var(--k-100);
+    min-height: 78vh;
+    display: grid;
+    align-items: end;
+    padding: var(--space-9) var(--gutter) var(--space-8);
     color: #fff;
+    background: var(--k-100);
     overflow: hidden;
   }
-  .hub-hero__bg-stack { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
-  .hub-hero__bg {
-    position: absolute; inset: 0;
+  .lp-hero__bg {
+    position: absolute;
+    inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    /* Brightness 0.85 — −15 % sjednoceno napříč všemi hero sekcemi, aby
-       text dostal lepší kontrast a fotky nevypadaly příliš jasně proti
-       tmavému scrimu. */
-    filter: brightness(0.85);
-    transform: translateX(100%);
-    will-change: transform;
-    animation-name: hub-hero-slide;
-    animation-duration: 20s;
-    animation-iteration-count: infinite;
-    animation-timing-function: cubic-bezier(0.5, 0, 0.2, 1);
+    z-index: -2;
+    filter: brightness(0.7);
   }
-  /* Negative delay on image 0 so it starts already on-screen at 5% of cycle. */
-  .hub-hero__bg--0 { animation-delay: -1s; }
-  .hub-hero__bg--1 { animation-delay: 4s;  }
-  .hub-hero__bg--2 { animation-delay: 9s;  }
-  .hub-hero__bg--3 { animation-delay: 14s; }
-
-  @keyframes hub-hero-slide {
-    0%      { transform: translateX(100%); }
-    5%      { transform: translateX(0); }
-    25%     { transform: translateX(0); }
-    30%     { transform: translateX(-100%); }
-    100%    { transform: translateX(-100%); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hub-hero__bg                        { animation: none; transform: translateX(100%); }
-    .hub-hero__bg--0                     { transform: translateX(0); }
-  }
-  .hub-hero__scrim {
-    position: absolute; inset: 0; z-index: 2;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.20) 55%, rgba(0,0,0,0.50) 100%);
-    pointer-events: none;
-  }
-  .hub-hero__inner {
-    position: relative; z-index: 3;
-    padding: clamp(72px, 10vw, 112px) var(--gutter) clamp(56px, 8vw, 88px);
-    max-width: var(--container-wide); margin: 0 auto; width: 100%;
-    display: grid; gap: clamp(24px, 3vw, 36px);
-  }
-  /* Entrance cascade — each hero child lifts and fades in with a 90ms step.
-     Runs once per element instantiation (fresh on cold load AND after every
-     view-transition arrival, since main is replaced). Reduced-motion below
-     skips the keyframes entirely. */
-  .hub-hero__inner > * {
-    animation: hub-hero-enter 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  .hub-hero__inner > *:nth-child(1) { animation-delay:  60ms; }
-  .hub-hero__inner > *:nth-child(2) { animation-delay: 150ms; }
-  .hub-hero__inner > *:nth-child(3) { animation-delay: 240ms; }
-  .hub-hero__inner > *:nth-child(4) { animation-delay: 330ms; }
-  @keyframes hub-hero-enter {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hub-hero__inner > * { animation: none; }
-  }
-  /* Entrance cascade — each hero child lifts and fades in with a 90ms step.
-     Runs once per element instantiation (fresh on cold load AND after every
-     view-transition arrival, since main is replaced). Reduced-motion below
-     skips the keyframes entirely. */
-  .hub-hero__inner > * {
-    animation: hub-hero-enter 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  .hub-hero__inner > *:nth-child(1) { animation-delay:  60ms; }
-  .hub-hero__inner > *:nth-child(2) { animation-delay: 150ms; }
-  .hub-hero__inner > *:nth-child(3) { animation-delay: 240ms; }
-  .hub-hero__inner > *:nth-child(4) { animation-delay: 330ms; }
-  @keyframes hub-hero-enter {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hub-hero__inner > * { animation: none; }
-  }
-  .hub-hero__kicker-row {
-    display: flex; align-items: baseline; justify-content: space-between;
-    gap: 24px; flex-wrap: wrap;
-    /* Match the visible width of "Startovací hub." H1 so the right kicker
-       lines up just beyond the end of the word "hub.". */
-    max-width: clamp(320px, 48vw, 660px);
-  }
-  .hub-hero__kicker     { color: rgba(255,255,255,0.78); }
-  .hub-hero__kicker-out {
-    color: rgba(255,255,255,0.78);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
-    text-decoration-color: rgba(255,255,255,0.4);
-    transition:
-      color var(--dur-fast) linear,
-      text-decoration-color var(--dur-fast) linear;
-  }
-  .hub-hero__kicker-out:hover {
-    color: #fff;
-    text-decoration-color: #fff;
-  }
-  .hub-hero__title {
-    font-family: var(--font-sans); font-weight: 600;
-    font-size: clamp(48px, 7vw, 96px);
-    line-height: 1.0; letter-spacing: -0.025em;
-    margin: 0; max-width: 14ch;
-  }
-  .hub-hero__lede {
-    font-size: clamp(16px, 1.35vw, 19px);
-    line-height: 1.55;
-    /* Lede max-width škáluje s H1 (clamp(48px, 7vw, 96px) × 14ch ≈ width)
-       takže pravý okraj řádku lede sedí přibližně na konci „Startovací Hub.". */
-    max-width: clamp(20em, 36vw, 32em);
-    color: rgba(255,255,255,0.88);
-    margin: 0;
-  }
-  /* Hero CTA — outline at rest, white wipe fills from bottom on hover.
-     Pattern A (outline → fill): default white border + white text;
-     on hover the white fill rises from the bottom, text turns black. */
-  .hub-hero__cta {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    justify-self: start;
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 16px 32px;
-    background: transparent;
-    color: #fff;
-    border: 1px solid #fff;
-    border-radius: var(--radius-input);
-    font: 600 17px / 1 var(--font-sans);
-    text-decoration: none;
-    margin-top: 8px;
-    transition: color 160ms cubic-bezier(0.65, 0, 0.35, 1);
-  }
-  .hub-hero__cta::after {
+  .lp-hero::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: #fff;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.7) 0%,
+      rgba(0,0,0,0.45) 35%,
+      rgba(0,0,0,0.05) 75%
+    );
     z-index: -1;
-    clip-path: inset(100% 0 0 0);
-    transition: clip-path 220ms cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .hub-hero__cta:hover::after,
-  .hub-hero__cta:focus-visible::after {
-    clip-path: inset(0 0 0 0);
-  }
-  .hub-hero__cta:hover,
-  .hub-hero__cta:focus-visible { color: var(--k-100); }
-  .hub-hero__cta:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 3px;
-  }
-  .hub-hero__cta:active { transform: translateY(1px); }
-  @media (prefers-reduced-motion: reduce) {
-    .hub-hero__cta,
-    .hub-hero__cta::after { transition: none; }
-  }
-  @media (max-width: 720px) {
-    .hub-hero__kicker-out { display: none; }
-  }
-
-  /* SECTION SHELL */
-  .hub-section {
-    padding: clamp(48px, 6vw, 72px) var(--gutter);
-    max-width: var(--container-wide);
+  .lp-hero__inner {
+    max-width: var(--container);
     margin: 0 auto;
-  }
-  .hub-section__heading {
-    font-family: var(--font-sans);
-    font-size: clamp(28px, 3vw, 44px);
-    font-weight: 600;
-    margin: 0;
-    letter-spacing: var(--tracking-tight);
-    line-height: 1.1;
-    text-wrap: balance;
-  }
-  .hub-section__intro {
-    font-size: 18px;
-    color: var(--fg-muted);
-    margin: 0 0 32px;
-    max-width: 720px;
-    line-height: 1.55;
-  }
-  .osa-sub-head { margin-bottom: 32px; }
-  .osa-sub-head .osa-eyebrow { color: var(--fg-subtle); display: block; margin-bottom: 8px; }
-
-  /* ZIGZAG -- 5 alternating rows (ltr/rtl). Slight overlap rhythm pulls
-     each row up by ~10vw, creating a single continuous ribbon while
-     copy and image stay vertically centered to each other. Reveal-on-
-     scroll fade-in for delight. */
-  .hub-zigzag {
-    padding: clamp(48px, 6vw, 72px) var(--gutter) clamp(56px, 7vw, 96px);
-    max-width: var(--container-wide); margin: 0 auto;
-  }
-  .hub-zigzag__head { margin-bottom: clamp(40px, 6vw, 72px); }
-  .hub-zigzag__row {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: clamp(32px, 5vw, 64px);
-    align-items: center;
-    padding: 0;
-    /* reveal-on-scroll initial state */
-    opacity: 0;
-    transform: translateY(28px);
-    transition:
-      opacity 700ms var(--ease-decel),
-      transform 700ms var(--ease-decel);
-  }
-  .hub-zigzag__row.is-revealed,
-  .hub-zigzag__row[data-row='0'] {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .hub-zigzag__row + .hub-zigzag__row {
-    margin-top: clamp(-100px, -5vw, -40px);
-  }
-  .hub-zigzag__row--rtl .hub-zigzag__media { order: 2; }
-  .hub-zigzag__row--rtl .hub-zigzag__copy  { order: 1; }
-  .hub-zigzag__media { margin: 0; min-width: 0; }
-  .hub-zigzag__copy { max-width: 480px; }
-  .hub-zigzag__copy .osa-eyebrow {
-    display: inline-block; color: var(--accent);
-    margin-bottom: 12px;
-  }
-  .hub-zigzag__copy h3 {
-    font-family: var(--font-sans);
-    font-size: clamp(22px, 2.4vw, 32px);
-    font-weight: 600;
-    margin: 0 0 12px;
-    letter-spacing: var(--tracking-tight);
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-  .hub-zigzag__copy p {
-    font-size: clamp(15px, 1.25vw, 17px);
-    line-height: 1.6;
-    color: var(--fg);
-    margin: 0;
-  }
-  @media (max-width: 720px) {
-    .hub-zigzag__row {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    .hub-zigzag__row + .hub-zigzag__row { margin-top: 32px; }
-    .hub-zigzag__row--rtl .hub-zigzag__media { order: 1; }
-    .hub-zigzag__row--rtl .hub-zigzag__copy  { order: 2; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hub-zigzag__row { opacity: 1; transform: none; transition: none; }
-    .hub-zigzag__row:hover .hub-zigzag__media img { transform: none; }
-  }
-
-  /* PLACE */
-  .hub-place__grid {
-    display: grid; grid-template-columns: 1fr 1.4fr;
-    gap: 32px; align-items: center;
-  }
-  @media (max-width: 720px) { .hub-place__grid { grid-template-columns: 1fr; } }
-  .hub-place p {
-    font-size: clamp(16px, 1.35vw, 18px); line-height: 1.65;
-    max-width: 540px; margin: 16px 0 24px;
-    color: var(--fg);
-  }
-  .hub-place__cta {
-    color: var(--accent); font-weight: 600;
-    text-decoration: none;
-  }
-  .hub-place__cta:hover { text-decoration: underline; }
-  .hub-place__map { margin: 0; }
-  .hub-place__map-trigger {
-    position: relative;
-    display: block;
     width: 100%;
-    padding: 0; margin: 0;
-    background: transparent;
-    border: 0;
-    cursor: zoom-in;
-    border-radius: var(--radius-input);
-    overflow: hidden;
   }
-  .hub-place__map-trigger:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
+  .lp-hero__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: rgba(255,255,255,0.85);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-4);
   }
-  .hub-place__map img {
-    width: 100%; height: auto;
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    display: block;
-    transition: transform 600ms var(--ease-decel);
-  }
-  .hub-place__map-trigger:hover img { transform: scale(1.015); }
-  .hub-place__map-zoom {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    width: 36px; height: 36px;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    display: grid;
-    place-items: center;
-    font-size: 22px;
-    line-height: 1;
-    font-weight: 300;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    pointer-events: none;
-    transition: background 160ms var(--ease-decel);
-  }
-  .hub-place__map-trigger:hover .hub-place__map-zoom { background: rgba(0, 0, 0, 0.85); }
-
-  /* ZOOM LIGHTBOX — single-image fullscreen overlay. */
-  .hub-zoom {
-    position: fixed; inset: 0;
-    z-index: 60;
-    background: rgba(0, 0, 0, 0.92);
-    display: flex; align-items: center; justify-content: center;
-    padding: clamp(24px, 4vw, 56px);
-    opacity: 0;
-    transition: opacity 220ms var(--ease-decel);
-  }
-  .hub-zoom.is-open { opacity: 1; }
-  .hub-zoom[hidden] { display: none; }
-  .hub-zoom__figure {
-    margin: 0;
-    max-width: min(1400px, 96vw);
-    max-height: 100%;
-  }
-  .hub-zoom__img {
-    max-width: 100%;
-    max-height: calc(100vh - 80px);
-    object-fit: contain;
-    display: block;
-    border-radius: var(--radius-input);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-  }
-  .hub-zoom__close {
-    position: absolute;
-    top: 20px; right: 20px;
-    width: 44px; height: 44px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    transition:
-      background 200ms var(--ease-decel),
-      border-color 200ms var(--ease-decel);
-  }
-  .hub-zoom__close:hover {
-    background: rgba(255, 255, 255, 0.24);
-    border-color: rgba(255, 255, 255, 0.6);
-  }
-  .hub-zoom__close:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  /* FAQ MINI */
-  .hub-faq-mini {
-    padding: 4px 0;
-    border-bottom: 1px solid var(--border-muted);
-  }
-  .hub-faq-mini summary {
-    font-weight: 600; cursor: pointer;
-    padding: 16px 0; list-style: none;
-    font-size: 17px; line-height: 1.4;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .hub-faq-mini summary::-webkit-details-marker { display: none; }
-  .hub-faq-mini summary::before {
-    content: '+'; display: inline-block;
-    width: 16px; text-align: center;
-    color: var(--accent);
-    transition: transform var(--dur-base) var(--ease-decel);
-  }
-  .hub-faq-mini[open] summary::before { transform: rotate(45deg); }
-  .hub-faq-mini p {
-    padding: 0 0 16px 28px;
-    line-height: 1.6; color: var(--fg-muted);
-    margin: 0;
-  }
-  .hub-faq-mini__more { margin: 32px 0 0; }
-  .hub-faq-mini__more a {
-    color: var(--accent); font-weight: 600;
-    text-decoration: none;
-  }
-  .hub-faq-mini__more a:hover { text-decoration: underline; }
-
-  /* MAP STRIP -- full-width Leaflet map under the "Místo" section. */
-  .hub-map-strip {
-    padding: clamp(48px, 7vw, 80px) var(--gutter);
-    max-width: var(--container-wide); margin: 0 auto;
-  }
-  .hub-map-strip__inner { max-width: var(--container-wide); margin: 0 auto; }
-  .hub-map-strip__head { margin-bottom: 24px; max-width: 760px; }
-  .hub-map-strip__head .osa-eyebrow { color: var(--accent); display: block; margin-bottom: 8px; }
-  .hub-map-strip__heading {
-    font-family: var(--font-sans);
-    font-size: clamp(24px, 2.6vw, 32px);
-    font-weight: 600;
-    line-height: 1.15;
+  .lp-hero__title {
+    font: 600 clamp(2.5rem, 6vw, 4.5rem) / 1.05 var(--font-sans);
     letter-spacing: var(--tracking-tight);
-    margin: 0;
-    text-wrap: balance;
+    margin: 0 0 var(--space-5);
+    max-width: 18ch;
   }
-  .hub-map-strip__frame {
-    position: relative;
-    width: 100%;
-    height: clamp(320px, 44vh, 460px);
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    overflow: hidden;
-    background: var(--k-05);
+  .lp-hero__lede {
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    line-height: 1.45;
+    margin: 0 0 var(--space-3);
+    max-width: 52ch;
+    color: rgba(255,255,255,0.95);
   }
-  .hub-map-strip__address {
-    margin: 16px 0 0;
-    font-size: 14px; line-height: 1.55; color: var(--fg-muted);
+  .lp-hero__sub {
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    margin: 0 0 var(--space-6);
+    max-width: 52ch;
+    color: rgba(255,255,255,0.75);
   }
-  .hub-map-strip__address strong { color: var(--k-100); font-weight: 600; }
-  .hub-map-strip__address a {
-    color: var(--accent); font-weight: 600;
-    text-decoration: none; margin-left: 12px;
+  .lp-hero__cta-row {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
   }
-  .hub-map-strip__address a:hover { text-decoration: underline; }
-
-  /* Leaflet brand overrides — shared between landing + /o-arealu/.
-     z-index 0 forces the map to create its own stacking context so its
-     internal panes (200–800) don't escape above the sticky header (30). */
-  :global(.leaflet-container) {
-    background: var(--k-05);
-    font-family: var(--font-sans);
-    z-index: 0;
-  }
-  :global(.leaflet-control-attribution) {
-    background: rgba(255, 255, 255, 0.92) !important;
-    color: var(--fg-muted) !important;
-    font-size: 10px !important;
-    border-top: 1px solid var(--border-muted) !important;
-    padding: 2px 8px !important;
-  }
-  :global(.leaflet-control-attribution a) { color: var(--fg) !important; }
-  :global(.leaflet-control-zoom a) {
-    background: var(--bg) !important; color: var(--fg-muted) !important;
-    border-color: var(--border-muted) !important; font-family: var(--font-sans);
-  }
-  :global(.leaflet-control-zoom a:hover) {
-    background: var(--accent) !important; color: #fff !important;
-    border-color: var(--accent) !important;
-  }
-  :global(.op-map-popup-wrap .leaflet-popup-content-wrapper) {
-    background: var(--bg);
-    border: 1px solid var(--accent);
-    box-shadow: 0 8px 32px rgba(90, 42, 95, 0.18);
-    border-radius: var(--radius-input); padding: 0;
-  }
-  :global(.op-map-popup-wrap .leaflet-popup-tip) { background: var(--bg); border: 1px solid var(--accent); }
-  :global(.op-map-popup-wrap .leaflet-popup-content) { margin: 0; width: auto !important; min-width: 200px; }
-  :global(.op-map-popup-wrap .leaflet-popup-close-button) { color: var(--fg-subtle) !important; padding: 6px 8px 0 0 !important; }
-  :global(.op-map-popup-wrap .leaflet-popup-close-button:hover) { color: var(--accent) !important; }
-  :global(.op-map-popup) {
-    display: grid; gap: 4px;
-    padding: 14px 16px;
-    color: var(--k-100);
-    font: 500 13px / 1.5 var(--font-sans);
-    text-decoration: none; cursor: pointer;
-  }
-  :global(.op-map-popup strong) { font-weight: 600; color: var(--k-100); letter-spacing: 0.02em; }
-  :global(.op-map-popup span) { color: var(--fg-muted); font-size: 12px; }
-  :global(.op-map-popup .op-map-popup__cta) { color: var(--accent); font-weight: 600; margin-top: 4px; }
-
-  /* ROOMS — 6 typů ubytování pod heroem, hlavní konverzní sekce.
-     Desktop: 3-col grid. Tablet: 2-col. Mobile: horizontal swipe gallery
-     (overflow-x scroll + scroll-snap) — 6 karet ve sloupci by zabralo
-     6× výšku karty, swipe drží sekci kompaktní. */
-  .hub-section__lede {
-    font-size: clamp(15px, 1.25vw, 17px);
-    line-height: 1.6;
-    color: var(--fg-muted);
-    margin: 8px 0 0;
-    max-width: 60ch;
-  }
-  .hub-rooms__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-  }
-  @media (max-width: 960px) {
-    .hub-rooms__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  }
-  @media (max-width: 600px) {
-    .hub-rooms__grid {
-      grid-template-columns: none;
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      gap: 12px;
-      /* Bleed přes section gutter, aby karty „peekly" zprava — naznačuje,
-         že je tam ještě další obsah. */
-      margin: 0 calc(var(--gutter) * -1);
-      padding: 4px var(--gutter) 16px;
-      scroll-padding: var(--gutter);
-      -webkit-overflow-scrolling: touch;
-    }
-    .hub-rooms__grid :global(.room-card) {
-      flex: 0 0 82%;
-      scroll-snap-align: start;
-    }
-    /* Skrýt scrollbar — užší vizuální linie na mobilu, swipe je primární UX. */
-    .hub-rooms__grid::-webkit-scrollbar { display: none; }
-    .hub-rooms__grid { scrollbar-width: none; }
-  }
-  .hub-rooms__more {
-    margin: 24px 0 0;
-    font-size: 14px;
-  }
-  .hub-rooms__more a {
-    color: var(--accent);
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .hub-rooms__more a:hover { color: var(--k-100); }
-
-  /* AMENITIES — sjednocený design pro "v ceně" i "můžeš si přikoupit".
-     Plum-rule border na kartách, plum-soft hover. Auto-fit grid pro
-     pružnou délku (5 in-price / 3 extras). */
-  .hub-amenities__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-  }
-  .hub-amenities__item {
-    padding: 18px 20px;
-    border: 1px solid var(--accent-rule);
-    border-radius: var(--radius-input);
-    background: var(--bg);
-    display: grid;
-    gap: 8px;
-    transition: background var(--dur-base) var(--ease-decel), border-color var(--dur-base) var(--ease-decel);
-  }
-  .hub-amenities__item:hover { border-color: var(--accent); }
-  .hub-amenities__item:hover { background: var(--accent-soft); }
-  .hub-amenities__icon {
+  .lp-hero__cta {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 32px; height: 32px;
-    color: var(--accent);
-  }
-  .hub-amenities__icon :global(svg) { width: 24px; height: 24px; stroke: currentColor; }
-  .hub-amenities__title {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0;
-    color: var(--fg);
-    line-height: 1.3;
-  }
-  .hub-amenities__body {
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--fg-muted);
-    margin: 0;
-  }
-  .hub-amenities__note {
-    margin: 20px 0 0;
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--fg-subtle);
-    max-width: 64ch;
-  }
-  .hub-amenities__more {
-    margin: 12px 0 0;
-    font-size: 14px;
-  }
-  .hub-amenities__more a {
-    color: var(--accent);
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .hub-amenities__more a:hover { color: var(--k-100); }
-  @media (max-width: 600px) {
-    .hub-amenities__grid { grid-template-columns: 1fr; gap: 8px; }
-    .hub-amenities__item { padding: 14px 16px; }
-  }
-
-  /* FINAL CTA — closing conversion push, nahrazuje invest/resident CTA pair. */
-  .hub-final-cta {
-    padding: clamp(48px, 7vw, 80px) var(--gutter);
-    max-width: var(--container-wide); margin: 0 auto;
-  }
-  .hub-final-cta__inner {
-    max-width: 800px; margin: 0 auto; text-align: center;
-    display: grid; gap: 16px;
-    padding: clamp(40px, 6vw, 64px);
-    border: 1px solid var(--accent);
+    padding: 12px 22px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
     border-radius: var(--radius-input);
-    background: var(--accent-soft);
-  }
-  .hub-final-cta__eyebrow { color: var(--accent); display: block; margin-bottom: 4px; }
-  .hub-final-cta__heading {
-    font-family: var(--font-sans);
-    font-size: clamp(28px, 3.5vw, 44px);
-    font-weight: 600;
-    margin: 0;
-    line-height: 1.1;
-    letter-spacing: var(--tracking-tight);
-    text-wrap: balance;
-  }
-  .hub-final-cta__lede {
-    font-size: clamp(15px, 1.25vw, 17px);
-    line-height: 1.6;
-    color: var(--fg);
-    margin: 0 auto;
-    max-width: 56ch;
-  }
-  .hub-final-cta__btns {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 8px;
-  }
-  .hub-final-cta__btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 14px 28px;
-    border-radius: var(--radius-input);
-    font-weight: 600; font-size: 15px;
     text-decoration: none;
-    transition: background var(--dur-base) var(--ease-decel), color var(--dur-base) var(--ease-decel);
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
   }
-  .hub-final-cta__btn--primary {
-    color: var(--accent-on);
-    background: var(--accent);
-    border: 1px solid var(--accent);
-  }
-  .hub-final-cta__btn--primary:hover { background: var(--k-100); border-color: var(--k-100); }
-  .hub-final-cta__btn--ghost {
+  .lp-hero__cta:hover {
+    background: #fff;
     color: var(--k-100);
-    background: transparent;
-    border: 1px solid var(--k-100);
+    border-color: #fff;
   }
-  .hub-final-cta__btn--ghost:hover { background: var(--k-100); color: var(--k-0); }
-  @media (max-width: 600px) {
-    .hub-final-cta__btns { flex-direction: column; align-items: stretch; gap: 10px; }
-    .hub-final-cta__btn { justify-content: center; padding: 12px 20px; font-size: 14px; }
+  .lp-hero__cta--primary {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .lp-hero__cta--primary:hover {
+    background: #fff;
+    color: var(--accent);
   }
 
-  /* ---- Mobile-only paddings cleanup — předchozí karty (rooms, amenities)
-     samy zvládají swipe / 1-col. Tady jen redukujeme padding hub-section
-     boxů na úzkých displejích, aby celková výška landing byla kompaktnější. */
+  /* Section grid pod hero. */
+  .lp-grid {
+    padding: var(--space-8) var(--gutter);
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .lp-grid__inner {
+    max-width: var(--container);
+    margin: 0 auto;
+  }
+  .lp-grid__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-3);
+  }
+  .lp-grid__title {
+    font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.1 var(--font-sans);
+    margin: 0 0 var(--space-4);
+    letter-spacing: var(--tracking-tight);
+  }
+  .lp-grid__intro {
+    color: var(--fg-muted);
+    margin: 0 0 var(--space-7);
+    max-width: 50ch;
+    font-size: var(--text-md);
+  }
+  .lp-grid__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule, rgba(0,0,0,0.12));
+    border: 1px solid var(--rule, rgba(0,0,0,0.12));
+  }
+  .lp-grid__item { background: var(--bg); }
+  .lp-grid__link {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: var(--space-5);
+    color: inherit;
+    text-decoration: none;
+    transition: background 160ms ease, color 160ms ease;
+  }
+  .lp-grid__link:hover {
+    background: var(--accent);
+    color: var(--accent-on);
+  }
+  .lp-grid__link:hover .lp-grid__hint { color: rgba(255,255,255,0.85); }
+  .lp-grid__label {
+    font: 600 var(--text-lg) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+  }
+  .lp-grid__hint {
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 1024px) {
+    .lp-grid__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
   @media (max-width: 600px) {
-    .hub-section { padding-top: clamp(32px, 8vw, 48px); padding-bottom: clamp(32px, 8vw, 48px); }
-    .osa-sub-head { margin-bottom: 20px; }
-    .hub-section__heading { font-size: clamp(26px, 6vw, 34px); }
-    .hub-section__lede { font-size: 15px; }
-    .hub-final-cta { padding-top: clamp(32px, 8vw, 48px); padding-bottom: clamp(32px, 8vw, 48px); }
-    .hub-final-cta__inner { padding: 32px 24px; }
-    .hub-zigzag { padding-top: clamp(32px, 8vw, 48px); padding-bottom: clamp(40px, 8vw, 56px); }
-    .hub-zigzag__head { margin-bottom: 24px; }
-    .hub-faq-mini__more { margin-top: 24px; }
+    .lp-grid__list { grid-template-columns: 1fr; }
+    .lp-hero { min-height: 70vh; padding-top: var(--space-7); }
   }
 </style>

@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Coworking · Startovací Hub Klecany"
+  description="Coworkingový sál v budově C, ateliéry v D1, dílny v H1 až H3 a D2. Pět produktových tarifů od volného stolu po dílnu s těžkými stroji. Pro rezidenty Hubu volný stůl v sále zdarma.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Sekce</p>
+    <h1>Coworking</h1>
+    <p class="page-stub__lede">
+      Coworkingový sál v přízemí budovy C, ateliéry v D1, dílny v H1 až H3 a v D2. Pět produktových tarifů:
+      volný stůl v sále 24/7, fixní stůl, sdílená kancelář pro čtyři, zasedací místnost na hodinu,
+      ateliér 15 až 25 m². Pro rezidenty Hubu volný stůl v sále zdarma.
+    </p>
+    <p class="page-stub__note">Plnou stránku doplňujeme</p>
+    <p class="page-stub__links">
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+      <a href={withBase('/ubytovani/')}>Ubytování</a>
+    </p>
+  </article>
+</Base>

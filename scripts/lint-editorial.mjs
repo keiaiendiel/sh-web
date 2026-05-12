@@ -2,15 +2,20 @@
 /*
  * lint-editorial.mjs
  *
- * Editorial rulebook from Plan section 4. Grep for banned characters and
- * phrases in markdown, mdx, and .astro sources. Exit 1 with file:line report
- * on any violation.
+ * Editorial rulebook pro Hub voice. Grep banned characters a phrases
+ * v markdown, mdx, .astro sources. Exit 1 s file:line reportem on any
+ * violation.
+ *
+ * Pravidla pocházejí z `Projects/SH_Web/Research/SH_Web_Research_CopyVoice.md`
+ * § 1-6 (uzamčeno 2026-05-12). Sentinel test pro borderline cases:
+ * „Napsal bys tu větu Marek do e-mailu jednomu konkrétnímu rezidentovi?"
  *
  * Exceptions:
- *   - `…` is allowed only inside the Hero motto "Pomáháme tvořit…" and the
- *     Kreditní systém paragraph; allowlist is literal-match.
- *   - `!` is allowed in HTML attributes (alt="...", aria-label="..."),
- *     inside <script> / <style> blocks, and inside MDX frontmatter dates.
+ *   - `…` jen v motto „Pomáháme tvořit…" a v site-wide badge „V projektové přípravě".
+ *   - `!` v HTML atributech (alt="…", aria-label="…"), v <script>/<style>, MDX frontmatter.
+ *   - Em-dash a en-dash nepoužívat vůbec (Cherryleaf 2026-02-13 AI-tell, public
+ *     association strong enough that em-dash flags as AI generated). Místo
+ *     em/en-dash použij čárku nebo středník.
  */
 import { readFile, readdir } from 'node:fs/promises';
 import { resolve, relative, join } from 'node:path';
@@ -24,31 +29,124 @@ const SCAN = [
 ];
 
 const rules = [
-  // Typographic rules (em-dash, en-dash, exclamation) were previously hard
-  // bans. Client decision: authors of individual articles own that call.
-  // Semantic rules below still enforce voice (passive, legalese, hype).
+  /* Typographic — hard bans podle CopyVoice § 6 a Cherryleaf 2026-02-13.
+     Em-dash a en-dash nesmí nikde, ellipsis jen ve dvou allowlisted místech. */
+  {
+    id: 'em-dash',
+    pattern: /—/g,
+    msg: 'Em-dash (—) je AI-tell. Použij čárku nebo středník.',
+  },
+  {
+    id: 'en-dash',
+    pattern: /–/g,
+    msg: 'En-dash (–) je AI-tell. Použij čárku nebo středník.',
+    // Allow legit number ranges "200–300", "9:00–17:00" since en-dash is
+    // typographically correct there per Czech typographic rules. But the
+    // brief bans it outright; if needed for ranges, use hyphen "200-300"
+    // or " až " ("200 až 300"). No exemption.
+  },
   {
     id: 'ellipsis-outside-motto',
     pattern: /…/g,
-    msg: 'Ellipsis (…) is reserved for the "Pomáháme tvořit…" motto.',
+    msg: 'Ellipsis (…) je vyhrazený pro motto „Pomáháme tvořit…" a status badge.',
     lineExempt: (line) =>
       /Pomáháme tvořit/.test(line) ||
       /přípravě/.test(line),
   },
+
+  /* Voice — calques z angličtiny ban podle CopyVoice § 3. */
+  {
+    id: 'v-srdci',
+    pattern: /\bv srdci\b/gi,
+    msg: '„v srdci" je kalk „in the heart of". Napiš konkrétní adresu nebo dopravní uzel.',
+  },
+  {
+    id: 'discover-objevte',
+    pattern: /\b(objevte|ponořte se|prozkoumejte)\b/gi,
+    msg: '„Objevte/ponořte se/prozkoumejte" jsou kalky „discover/dive into/explore". Operátor řekne „podívejte se", „přijďte", „zkuste", nebo nic.',
+  },
+  {
+    id: 'more-than-just',
+    pattern: /\bvíce než jen\b/gi,
+    msg: '„více než jen X" je nejčastější česká copy klišé (Šimeček 2023). Napiš fakticky.',
+  },
+  {
+    id: 'vibrant-pulzujici',
+    pattern: /\b(pulzující|vibrant)\b/gi,
+    msg: '„Pulzující" je AI-tell pro „vibrant". Klecany nejsou pulzující; popiš co tam reálně je.',
+  },
+  {
+    id: 'home-away-from-home',
+    pattern: /\b(domov daleko od domova|home away from home)\b/gi,
+    msg: '„Domov daleko od domova" je nejautomatizovanější fráze v category. Vypusť.',
+  },
+  {
+    id: 'seamless',
+    pattern: /\b(seamless|hladce propojuj|bezproblémově)/gi,
+    msg: '„Seamless/hladce propojuje/bezproblémově" jsou na top AI-tell listu (Cherryleaf 2026). Vypusť.',
+  },
+  {
+    id: 'thoughtfully-designed',
+    pattern: /\b(thoughtfully designed|pečlivě navržen[áéý]|peclive navrz)/gi,
+    msg: '„Pečlivě navržené" je univerzální AI-tell. Místo toho popiš, co tam je.',
+  },
+  {
+    id: 'fast-paced-world',
+    pattern: /\b(v dnešní uspěchané době|v dnešním zrychleném světě|in today.s fast.paced)/gi,
+    msg: '„V dnešní uspěchané době" je kalk „in today\'s fast-paced world". Cut without replacement.',
+  },
+  {
+    id: 'elevate-unlock',
+    pattern: /\b(pozvedněte|elevate your|unlock the potential|odemkněte potenciál)\b/gi,
+    msg: 'Tech-corporate fráze co přešla do living-space copy. Operator voice je faktický.',
+  },
+  {
+    id: 'delve-leverage',
+    pattern: /\b(delve|leverage|harness|tapestry|robust|intricate)\b/gi,
+    msg: 'Anglická tech/marketing slovní zásoba. Najdi český fakt.',
+  },
+
+  /* Hollow gerundium v -ící podle § 4.1 — English participle calques.
+     Konkrétní vysokofrekvenční offenders. */
+  {
+    id: 'hollow-gerund',
+    pattern: /\b(nabízej[íi]c[íi]|zajišťuj[íi]c[íi]|garantuj[íi]c[íi]|propojuj[íi]c[íi]|umožňuj[íi]c[íi]|poskytuj[íi]c[íi]|vytvářej[íi]c[íi])\b/gi,
+    msg: 'Hollow gerundium v -ící. Přepiš konjugovaným slovesem („ateliér je vybavený", ne „ateliér nabízející").',
+  },
+
+  /* Existing passive-voice a legalistic patterns. */
   {
     id: 'passive-voice',
     pattern: /\b(?:je realizováno|je zajišťováno|je prováděno|snaha o)\b/gi,
-    msg: 'Passive voice. Prefer active verbs.',
+    msg: 'Passive voice. Prefer aktivní sloveso.',
   },
   {
     id: 'legalistic-ve-smyslu',
     pattern: /\bve smyslu §/gi,
-    msg: 'Legalistic "ve smyslu §". Drop it; just state the fact.',
+    msg: 'Legalistic „ve smyslu §". Vypusť, jen řekni fakt.',
   },
+
+  /* Marketing hype — superlatives banned. „revoluční" už zde, přidávám
+     zbytek z CopyVoice § 4.9 a section 2 anti-patterns. */
   {
     id: 'marketing-hype',
-    pattern: /\b(úžasný|úžasná|úžasné|neuvěřitelný|neuvěřitelná|zásadní význam|revoluční|klíčový moment)\b/gi,
-    msg: 'Marketing hype adjective. Replace with a concrete fact.',
+    pattern: /\b(úžasný|úžasná|úžasné|neuvěřitelný|neuvěřitelná|zásadní význam|revoluční|klíčový moment|nejlepší|špičkový|jedinečný|výjimečný|exkluzivní|award.winning)\b/gi,
+    msg: 'Marketing hype adjektivum. Nahraď konkrétním faktem (jméno, číslo, datum).',
+  },
+
+  /* Auto-translation tells z § 4.9. */
+  {
+    id: 'translation-tells',
+    pattern: /\b(ucelený|ladný|plynulý)\b/gi,
+    msg: 'AI-translation tell. Operator voice je drsnější, faktický.',
+  },
+
+  /* Source citations v body textu — banned per brief. Sources stay in
+     internal `Research_Pricing_Comparison.md`, never na webu. */
+  {
+    id: 'price-source-citation',
+    pattern: /\b(Otiwilium|Bezrealitky|Qara|Sreality|Compass)\b/g,
+    msg: 'Citace zdroje cenového srovnání patří jen na /metodika-srovnani/, ne do body textu.',
   },
 ];
 

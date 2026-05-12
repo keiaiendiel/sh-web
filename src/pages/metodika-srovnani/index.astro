@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Metodika srovnání cen · Startovací Hub Klecany"
+  description="Jak srovnáváme ceny Hubu s pražskými referencemi, jaké zdroje používáme, jaké roviny porovnání platí. Povinná metodika podle § 2980 občanského zákoníku."
+  noindex={false}>
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Právní</p>
+    <h1>Metodika srovnání cen</h1>
+    <p class="page-stub__lede">
+      Stránka shrnuje, jak srovnáváme ceny Hubu s pražskými referencemi, jaké zdroje cen používáme,
+      jaká období a jaké formáty porovnáváme. Povinná metodika podle § 2980 občanského zákoníku
+      pro komparativní reklamní tvrzení.
+    </p>
+    <p class="page-stub__note">Plnou metodiku doplňujeme před první komparativní zmínkou</p>
+    <p class="page-stub__links">
+      <a href={withBase('/')}>Domů</a>
+      <a href={withBase('/gdpr/')}>Ochrana osobních údajů</a>
+    </p>
+  </article>
+</Base>

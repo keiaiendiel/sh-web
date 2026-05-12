@@ -34,7 +34,7 @@
     // Re-run on initial load AND every view transition. The body of run()
     // is idempotent: data-split="done" guards word-splits, observer.observe
     // ignores already-shown elements (they no longer match the selector
-    // because they've been classed .shown — actually they still do; we add
+    // because they've been classed .shown , actually they still do; we add
     // a [data-reveal-bound] flag below so we don't re-observe).
     function run() {
       // ---------- 1. Split [data-reveal-words] before observing ---------------
@@ -101,7 +101,7 @@
           obs.observe(el);
         });
 
-        // [data-img-reveal] — clip-path wipe from left to right as the
+        // [data-img-reveal] , clip-path wipe from left to right as the
         // container enters the viewport. Same observer infrastructure.
         var imgObs = new IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
@@ -201,7 +201,7 @@
   [data-reveal][data-reveal-delay='2'] { transition-delay: 120ms; }
   [data-reveal][data-reveal-delay='3'] { transition-delay: 180ms; }
 
-  /* [data-img-reveal] — left-to-right clip-path wipe on container; the inner
+  /* [data-img-reveal] , left-to-right clip-path wipe on container; the inner
      <img> gets a small parallax counter-translate so the image feels like
      it's sliding into a developing frame, not just unmasking. */
   [data-img-reveal] {

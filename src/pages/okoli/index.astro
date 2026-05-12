@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Okolí · Startovací Hub Klecany"
+  description="Klecany, patnáct kilometrů severně od pražského centra. Skate hala Klecany, ZOO Praha, Vltava a procházková okruh, vesnické náměstí s hospodou.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Sekce</p>
+    <h1>Okolí</h1>
+    <p class="page-stub__lede">
+      Klecany leží patnáct kilometrů severně od pražského centra, na pravém břehu Vltavy. V docházkové
+      vzdálenosti skate hala v Dolních Kasárnách, vesnické náměstí s hospodou, břeh Vltavy a procházkový
+      okruh kolem řeky. Praha Kobylisy autobusem 374 dvanáct minut.
+    </p>
+    <p class="page-stub__note">Plnou stránku doplňujeme</p>
+    <p class="page-stub__links">
+      <a href={withBase('/doprava/')}>Doprava</a>
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+    </p>
+  </article>
+</Base>

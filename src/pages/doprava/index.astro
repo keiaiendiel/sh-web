@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Doprava · Startovací Hub Klecany"
+  description="Hub-shuttle do metra Kobylisy s pěti jízdami v ceně nájmu, autobus 374 každých dvacet minut, Hub-taxi po Klecanech. Plánovaná tramvaj 2029 až 2030, cyklolávka 2027 až 2028.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Sekce</p>
+    <h1>Doprava</h1>
+    <p class="page-stub__lede">
+      Hub-shuttle do metra Kobylisy: pět jízd měsíčně v ceně nájmu, další za zvýhodněnou sazbu.
+      Autobus 374 každých dvacet minut, cesta dvanáct minut. Hub-taxi po Klecanech: jedna jízda
+      měsíčně v ceně. Plánovaná tramvajová trať Kobylisy-Zdiby a cyklolávka přes Vltavu, oboje v období 2027 až 2030.
+    </p>
+    <p class="page-stub__note">Plnou stránku doplňujeme</p>
+    <p class="page-stub__links">
+      <a href={withBase('/okoli/')}>Okolí Klecan</a>
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+    </p>
+  </article>
+</Base>

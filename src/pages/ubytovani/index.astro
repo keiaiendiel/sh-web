@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Ubytování · Startovací Hub Klecany"
+  description="Devět typů bydlení v Hubu: čtyři varianty co-livingu od kapsle pro jednoho po dvoulůžkový pokoj pro pár, pět privátních apartmánů 1+kk až 5+kk. Energie, internet, úklid společných prostor, pět jízd Hub-shuttle a poukaz do sauny v ceně.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Sekce</p>
+    <h1>Ubytování</h1>
+    <p class="page-stub__lede">
+      V Hubu nabízíme devět typů bydlení. Čtyři varianty co-livingu, od kapsle pro jednoho po dvoulůžkový pokoj pro pár,
+      a pět privátních apartmánů od 1+kk do 5+kk. Energie, internet, úklid společných prostor, pět jízd Hub-shuttle
+      do metra Kobylis měsíčně a poukaz do sauny v ceně. Najmete si pokoj na měsíc nebo na rok, čím déle zůstanete,
+      tím nižší nájem.
+    </p>
+    <p class="page-stub__note">Detail per formát doplňujeme</p>
+    <p class="page-stub__links">
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+      <a href={withBase('/kapsle/')}>Samostatná stránka kapsle</a>
+    </p>
+  </article>
+</Base>

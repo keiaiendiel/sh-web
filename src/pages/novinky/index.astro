@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Novinky · Startovací Hub Klecany"
+  description="Co se v Hubu právě děje. Postup rekonstrukce, otevírací termíny, výzvy k pobytovému stipendiu, akce.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Sekce</p>
+    <h1>Novinky</h1>
+    <p class="page-stub__lede">
+      Postup rekonstrukce po budovách, otevírací termíny prvních provozů, výzvy k pobytovému stipendiu,
+      akce v areálu. První článek doplníme po startu Phase 1 prací na rekonstrukci.
+    </p>
+    <p class="page-stub__note">Plnou stránku doplňujeme</p>
+    <p class="page-stub__links">
+      <a href={withBase('/')}>Domů</a>
+      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
+    </p>
+  </article>
+</Base>

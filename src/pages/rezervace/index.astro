@@ -1,242 +1,75 @@
 ---
 import Base from '../../layouts/Base.astro';
-import ResidentForm from '../../components/ResidentForm.astro';
-import { getEntry } from 'astro:content';
 import { withBase } from '../../utils/url';
 
-const faqIds = ['q5', 'q9', 'q7'] as const;
-const faqEntries = await Promise.all(faqIds.map((id) => getEntry('faq', id)));
+/* Phase 1 stub. Plný 5-krokový wizard + Cloudflare Worker backend
+   (Turnstile + Resend + D1 EU) přijde v Phase 5 per SH_Web_Plan.md
+   sekce „Konfigurátor rezervace". H1, podtitulek a slug jsou už finální.
+
+   Do té doby fungujeme přes e-mail. URL `/rezervace/?typ=<slug>` se
+   v Phase 5 napojí na pre-fill prvního kroku wizardu. */
 ---
 <Base
-  title="Rezervace ubytování · Startovací Hub Klecany"
-  description="Nezávazná rezervace ubytování v Startovacím Hubu Klecany. Vyberete typ jednotky, termín nastěhování a délku pobytu. Ozveme se do 24 hodin s detailem dostupnosti a ceny."
-  headerVariant="dark"
->
-  <section class="rsv-hero osa-dark">
-    <img class="rsv-hero__bg" src={withBase('/images/hub/interior/1kk-a4-a6.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
-    <div class="rsv-hero__scrim" aria-hidden="true"></div>
-    <div class="rsv-hero__inner">
-      <span class="osa-eyebrow rsv-hero__eyebrow">Rezervace ubytování</span>
-      <h1 class="rsv-hero__title">Rezervujte si místo v Hubu.</h1>
-      <p class="rsv-hero__lede">Vyberte typ jednotky, termín a délku pobytu. Rezervace je nezávazná — někdo z rezervačního oddělení vám obvykle do 24 hodin zavolá s detailem dostupnosti a ceny. Smlouvu řešíme až s nastěhováním.</p>
-    </div>
-  </section>
-
-  <section class="rsv-meta">
-    <ul class="rsv-meta__list">
-      <li><strong>Žádná platba.</strong> Vyplnění je zdarma a nezávazné.</li>
-      <li><strong>Zavoláme do 24 hodin.</strong> Privátně, z rezervačního oddělení.</li>
-      <li><strong>Smlouva až s nastěhováním.</strong> Do té doby kdykoliv ustoupíte.</li>
-    </ul>
-  </section>
-
-  <section class="rsv-form-shell" id="formular">
-    <ResidentForm />
-  </section>
-
-  <section class="rsv-aftermath">
-    <header class="osa-sub-head">
-      <span class="osa-eyebrow">Co se stane po odeslání</span>
-      <h2 class="rsv-aftermath__heading">Tři kroky, žádný papír.</h2>
-    </header>
-    <ol class="rsv-steps">
-      <li>
-        <span class="rsv-steps__num">01</span>
-        <h3>Zapíšeme rezervaci</h3>
-        <p>Vaše údaje a preference zaznamenáme do interního přehledu. Žádná data nepředáváme dál, žádné konto nezakládáme.</p>
-      </li>
-      <li>
-        <span class="rsv-steps__num">02</span>
-        <h3>Zavoláme do 24 hodin</h3>
-        <p>Někdo z rezervačního oddělení vám zavolá s detailem dostupnosti vybraného typu, konkrétní cenou pro vaši délku pobytu a nejbližším možným termínem nastěhování.</p>
-      </li>
-      <li>
-        <span class="rsv-steps__num">03</span>
-        <h3>Smlouvu podepíšeme až s nastěhováním</h3>
-        <p>Nezávazný stav trvá až do podpisu nájemní smlouvy, který bývá těsně před nastěhováním. Do té chvíle můžete kdykoli ustoupit.</p>
-      </li>
-    </ol>
-  </section>
-
-  <section class="rsv-faq">
-    <header class="osa-sub-head">
-      <span class="osa-eyebrow">Časté otázky</span>
-      <h2 class="rsv-faq__heading">Co se mě jako budoucího rezidenta nejvíc týká?</h2>
-    </header>
-    {faqEntries.map((entry) => entry && (
-      <details class="rsv-faq__item">
-        <summary>{entry.data.question}</summary>
-        <p>{entry.data.answer}</p>
-      </details>
-    ))}
-    <p class="rsv-faq__more">
-      <a href={withBase('/faq/')}>Všechny otázky →</a>
+  title="Rezervace · Startovací Hub Klecany"
+  description="Registrace zájmu o bydlení v Startovacím Hubu Klecany. Vyplníte konfiguraci pokoje, datum nástupu a kontakt. Není to závazek, jen vám zavoláme do 24 hodin.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Rezervace</p>
+    <h1>Registrace zájmu o bydlení</h1>
+    <p class="page-stub__lede">
+      Vyplníte konfiguraci pokoje, datum nástupu a kontakt. Není to závazek, jen vám zavoláme.
+      Plný formulář (5 kroků: koncept bydlení, konfigurace, termín, kontakt, souhlas) dokončujeme,
+      backend napojený na Cloudflare D1 v EU jurisdikci připravujeme.
     </p>
-  </section>
+
+    <div class="rez-fallback">
+      <p class="rez-fallback__label">Mezitím napište e-mail</p>
+      <p class="rez-fallback__email">
+        <a href="mailto:vpd@osa2.cz?subject=Registrace zájmu o bydlení v Hubu">vpd@osa2.cz</a>
+      </p>
+      <p class="rez-fallback__hint">
+        Stačí typ ubytování (kapsle, dvoulůžko, 1+kk, 2+kk, 3+kk, 4+kk nebo 5+kk),
+        orientační termín nástupu a telefon. Ozveme se do 24 hodin.
+      </p>
+    </div>
+
+    <p class="page-stub__note">Plný 5-krokový formulář v Phase 5</p>
+    <p class="page-stub__links">
+      <a href={withBase('/ubytovani/')}>9 typů ubytování</a>
+      <a href={withBase('/stipendia/')}>Pobytové stipendium</a>
+    </p>
+  </article>
 </Base>
 
 <style>
-  .rsv-hero {
-    position: relative;
-    isolation: isolate;
-    min-height: clamp(320px, 46vh, 440px);
-    display: flex;
-    align-items: flex-end;
-    background: var(--k-100);
-    color: #fff;
-    overflow: hidden;
-  }
-  .rsv-hero__bg {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    filter: brightness(0.85);
-    z-index: 1;
-  }
-  .rsv-hero__scrim {
-    position: absolute; inset: 0; z-index: 2;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.20) 55%, rgba(0,0,0,0.50) 100%);
-    pointer-events: none;
-  }
-  .rsv-hero__inner {
-    position: relative; z-index: 3;
-    padding: clamp(56px, 9vw, 96px) var(--gutter) clamp(40px, 6vw, 72px);
-    max-width: var(--container-wide); margin: 0 auto; width: 100%;
-  }
-  .rsv-hero__inner > * { max-width: 720px; }
-  .rsv-hero__eyebrow { color: rgba(255,255,255,0.78); display: inline-block; margin-bottom: 14px; }
-  .rsv-hero__title {
-    font-family: var(--font-sans);
-    font-size: clamp(36px, 5.5vw, 64px);
-    font-weight: 600;
-    line-height: 1.04;
-    letter-spacing: var(--tracking-tight);
-    margin: 0 0 20px;
-    text-wrap: balance;
-  }
-  .rsv-hero__lede {
-    font-size: clamp(16px, 1.4vw, 19px);
-    line-height: 1.55;
-    color: rgba(255,255,255,0.88);
-    margin: 0;
-    max-width: 56ch;
-  }
-
-  .rsv-meta {
-    padding: clamp(24px, 4vw, 40px) var(--gutter);
-    max-width: var(--container-wide); margin: 0 auto;
-    border-bottom: 1px solid var(--border-muted);
-  }
-  .rsv-meta__list {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0; margin: 0; padding: 0;
-    list-style: none;
-  }
-  .rsv-meta__list li {
-    padding: 12px 20px;
-    font-size: 14px; line-height: 1.5; color: var(--fg);
-    border-right: 1px solid var(--border-muted);
-  }
-  .rsv-meta__list li:first-child { padding-left: 0; }
-  .rsv-meta__list li:last-child  { padding-right: 0; border-right: 0; }
-  .rsv-meta__list li strong { display: block; color: var(--k-100); margin-bottom: 4px; }
-  @media (max-width: 720px) {
-    .rsv-meta__list { grid-template-columns: 1fr; }
-    .rsv-meta__list li {
-      border-right: 0;
-      border-bottom: 1px solid var(--border-muted);
-      padding: 10px 0;
-    }
-    .rsv-meta__list li:last-child { padding-bottom: 0; border-bottom: 0; }
-  }
-
-  .rsv-form-shell {
-    padding: 0 var(--gutter) clamp(48px, 7vw, 80px);
-    max-width: 880px; margin: clamp(32px, 5vw, 64px) auto 0;
-  }
-  .rsv-form-shell :global(.rsv-form) {
-    padding: clamp(32px, 5vw, 56px) clamp(28px, 4vw, 48px);
+  .rez-fallback {
+    margin: var(--space-7) 0 var(--space-5);
+    padding: var(--space-5) var(--space-6);
+    background: var(--bg-muted);
     border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
-    background: var(--bg);
-    box-shadow:
-      0 1px 0 rgba(0, 0, 0, 0.02),
-      0 12px 32px rgba(0, 0, 0, 0.06),
-      0 36px 80px rgba(90, 42, 95, 0.04);
   }
-
-  .rsv-aftermath, .rsv-faq {
-    padding: clamp(48px, 7vw, 80px) var(--gutter);
-    max-width: var(--container-wide); margin: 0 auto;
+  .rez-fallback__label {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-2);
   }
-  .osa-sub-head { margin-bottom: 32px; }
-  .osa-sub-head .osa-eyebrow { color: var(--fg-subtle); display: block; margin-bottom: 8px; }
-  .rsv-aftermath__heading,
-  .rsv-faq__heading {
-    font-family: var(--font-sans);
-    font-size: clamp(28px, 3vw, 40px);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: var(--tracking-tight);
+  .rez-fallback__email {
+    font: 600 var(--text-2xl) / 1.1 var(--font-sans);
+    margin: 0 0 var(--space-3);
+  }
+  .rez-fallback__email a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-rule);
+    text-underline-offset: 4px;
+  }
+  .rez-fallback__email a:hover { text-decoration-color: var(--accent); }
+  .rez-fallback__hint {
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
     margin: 0;
-    text-wrap: balance;
+    line-height: 1.5;
   }
-
-  .rsv-steps {
-    list-style: none; padding: 0; margin: 0;
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-  }
-  @media (max-width: 720px) { .rsv-steps { grid-template-columns: 1fr; } }
-  .rsv-steps li {
-    padding: 24px;
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    background: var(--bg);
-  }
-  .rsv-steps__num {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--accent);
-    letter-spacing: 0.04em;
-    display: block;
-    margin-bottom: 12px;
-  }
-  .rsv-steps li h3 {
-    font-size: 18px; font-weight: 600; margin: 0 0 8px;
-    line-height: 1.3;
-  }
-  .rsv-steps li p {
-    font-size: 14px; line-height: 1.55; color: var(--fg-muted); margin: 0;
-  }
-
-  .rsv-faq__item {
-    border-bottom: 1px solid var(--border-muted);
-    padding: 4px 0;
-  }
-  .rsv-faq__item summary {
-    font-weight: 600; cursor: pointer;
-    padding: 16px 0; list-style: none;
-    font-size: 17px; line-height: 1.4;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .rsv-faq__item summary::-webkit-details-marker { display: none; }
-  .rsv-faq__item summary::before {
-    content: '+'; display: inline-block;
-    width: 16px; text-align: center;
-    color: var(--accent);
-    transition: transform 200ms var(--ease-decel);
-  }
-  .rsv-faq__item[open] summary::before { transform: rotate(45deg); }
-  .rsv-faq__item p {
-    padding: 0 0 16px 28px;
-    font-size: 15px; line-height: 1.6; color: var(--fg-muted);
-    margin: 0; max-width: 64ch;
-  }
-  .rsv-faq__more { margin-top: 32px; }
-  .rsv-faq__more a {
-    color: var(--accent); font-weight: 600;
-    text-decoration: none;
-  }
-  .rsv-faq__more a:hover { text-decoration: underline; }
 </style>

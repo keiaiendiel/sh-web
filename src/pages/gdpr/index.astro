@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../utils/url';
+---
+<Base
+  title="Ochrana osobních údajů · Startovací Hub Klecany"
+  description="Zásady zpracování osobních údajů. Správcem je OSA II z.s. Data registračního formuláře žijí v EU jurisdikci."
+  noindex={false}>
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Právní</p>
+    <h1>Ochrana osobních údajů</h1>
+    <p class="page-stub__lede">
+      Správcem osobních údajů je Občanské sdružení Alternativa II, z.s. Data z rezervačního formuláře
+      ukládáme v EU jurisdikci (Cloudflare D1, region eeur). Plná pravidla doplníme s nasazením
+      formuláře v Phase 5 restrukturalizace.
+    </p>
+    <p class="page-stub__note">Plnou stránku doplňujeme s nasazením rezervačního formuláře</p>
+    <p class="page-stub__links">
+      <a href={withBase('/')}>Domů</a>
+      <a href={withBase('/metodika-srovnani/')}>Metodika srovnání</a>
+    </p>
+  </article>
+</Base>
