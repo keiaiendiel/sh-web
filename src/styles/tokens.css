@@ -157,11 +157,21 @@
 
   /* ---------- Elevation ----------
      Shadows are RARELY used in OSA's print-first identity.
-     On web UI surfaces keep them barely perceptible. */
+     On web UI surfaces keep them barely perceptible. Card shadows
+     are layered: a thin contact shadow + a softer ambient halo. */
   --shadow-none: none;
   --shadow-sm:   0 1px 0 rgba(0,0,0,0.08);
   --shadow-md:   0 2px 8px rgba(0,0,0,0.10);
   --shadow-lg:   0 8px 32px rgba(0,0,0,0.12);
+  /* Layered card shadows (rest + hover). Both keep print-restraint;
+     the hover lift comes mostly from the small Y translate, ne shadow. */
+  --shadow-card:        0 1px 1px rgba(0,0,0,0.03), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-card-hover:  0 1px 2px rgba(0,0,0,0.05), 0 8px 24px rgba(90,42,95,0.08);
+  --shadow-button-hover: 0 4px 12px rgba(90,42,95,0.14);
+
+  /* Focus ring: plum outline, 2px, with 2px offset.
+     Universal accessibility marker; consume via `:focus-visible`. */
+  --ring-focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
 
   /* ---------- Geometry ---------- */
   --skew-osa: 30deg;   /* 60° slant on one side of the trapezoid glyph */

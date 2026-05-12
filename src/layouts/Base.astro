@@ -192,8 +192,9 @@ const breadcrumbJsonLd = crumbs.length > 1
     </noscript>
   </head>
   <body class="osa-body">
+    <a class="skip-link" href="#main">Přeskočit na hlavní obsah</a>
     <Header variant={headerVariant} transition:persist />
-    <main transition:animate="fade"><slot /></main>
+    <main id="main" transition:animate="fade"><slot /></main>
     <Footer transition:persist />
     <RevealOnScroll />
 
@@ -234,12 +235,33 @@ const breadcrumbJsonLd = crumbs.length > 1
 </html>
 <style is:global>
   *, *::before, *::after { box-sizing: border-box; }
-  html { background: var(--bg, var(--k-0)); color: var(--fg, var(--k-100)); }
-  body { margin: 0; font-family: var(--font-sans); font-size: var(--text-md); line-height: var(--lh-normal); }
+  html {
+    background: var(--bg, var(--k-0));
+    color: var(--fg, var(--k-100));
+    /* Smooth scroll pro #main skip-link target a anchor links. */
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--lh-normal);
+    /* Sofistikovaná typografie: kerning + ligatury + contextual alternates
+       z Atyp Special OpenType features. Plus antialiasing pro retinu. */
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
   a { color: inherit; text-decoration: none; }
   ul, ol { margin: 0; padding: 0; list-style: none; }
   img, svg { display: block; max-width: 100%; }
   button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  /* Tabular numerals pro ceny, statistiky, čísla v tabulkách. Atyp
+     Special má tabular variant. Aplikováno globálně na <td>, <dd>
+     a vlastní data atribut pro flex. */
+  td, dd, .tabular-nums { font-variant-numeric: tabular-nums; }
 
   /* Plum text-selection , Hub's reserved sub-identity, applied site-wide
      because the entire site IS the Hub. One free brand cue. */
