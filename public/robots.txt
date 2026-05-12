@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://osa2.cz/sitemap-index.xml
+# Druzstvo stranka je noindex (manualni nasmerovani), navic vyloucena pro
+# konzistenci s meta robots.
+Disallow: /sh-web/druzstvo/
+
+# Rezervace s utm parametry, aby search engines ignorovaly varianty.
+Disallow: /sh-web/rezervace/?
+
+Sitemap: https://keiaiendiel.github.io/sh-web/sitemap-index.xml

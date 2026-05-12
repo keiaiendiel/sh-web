@@ -33,22 +33,40 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://startovaci
 const canonical = `${siteUrl}${Astro.url.pathname}`;
 const ogImageAbs = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage.startsWith('/') ? ogImage : withBase(ogImage)}`;
 
-// Organization JSON-LD from content collection. The Hub site represents
-// the Startovací Hub Klecany project; the operating org (OSA II, z.s.) is
-// referenced as parentOrganization. Falls back to hardcoded defaults if
-// the entry is missing (shouldnt happen, Zod validates on build).
+/* JSON-LD per SH_Web_Research_SEO.md § „Structured data":
+   1. LocalBusiness (site-wide, na každé stránce v hlavičce)
+   2. NGO parentOrganization (OSA II z.s.) jako sub-entity
+   3. BreadcrumbList automaticky z URL pathu, lidsky znějící labely
+
+   Per-page schema (Apartment, FAQPage, Service, Article) přidává
+   jednotlivá stránka přes `pageSchema` prop. */
 const orgEntry = await getEntry('org', 'identity');
 const org = orgEntry?.data;
-const orgJsonLd = org
+
+const localBusinessJsonLd = org
   ? {
       '@context': 'https://schema.org',
-      '@type': 'Organization',
+      '@type': 'LocalBusiness',
+      '@id': `${siteUrl}${withBase('/')}#organization`,
       name: 'Startovací Hub Klecany',
+      alternateName: ['Hub Klecany', 'Startovací Hub'],
+      description: 'Co-living, privátní byty, kapsle a coworking v horních kasárnách v Klecanech, 15 minut autobusem z metra Kobylisy.',
       url: `${siteUrl}${withBase('/')}`,
-      subjectOf: {
-        '@type': 'WebPage',
-        url: 'https://www.alternativa2.info/',
+      logo: `${siteUrl}${withBase('/og/default.png')}`,
+      image: `${siteUrl}${withBase('/og/default.png')}`,
+      email: org.email,
+      telephone: org.phone,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Horní Kasárna',
+        addressLocality: 'Klecany',
+        postalCode: '250 67',
+        addressRegion: 'Středočeský kraj',
+        addressCountry: 'CZ',
       },
+      geo: { '@type': 'GeoCoordinates', latitude: 50.1743, longitude: 14.4082 },
+      areaServed: { '@type': 'AdministrativeArea', name: 'Praha a okolí' },
+      priceRange: '3000-25000 Kč/měsíc',
       parentOrganization: {
         '@type': 'NGO',
         name: org.name,
@@ -60,34 +78,63 @@ const orgJsonLd = org
         address: {
           '@type': 'PostalAddress',
           streetAddress: 'Terronská 894/56',
-          addressLocality: 'Praha 6 - Bubeneč',
+          addressLocality: 'Praha 6, Bubeneč',
           postalCode: '160 00',
           addressCountry: 'CZ',
         },
         taxID: org.dic,
-        vatID: org.dic,
-        identifier: {
-          '@type': 'PropertyValue',
-          name: 'IČO',
-          value: org.ico.replace(/\s/g, ''),
-        },
+        identifier: { '@type': 'PropertyValue', name: 'IČO', value: org.ico.replace(/\s/g, '') },
         member: [
-          {
-            '@type': 'Person',
-            name: org.predseda.name,
-            jobTitle: 'Předseda',
-            email: org.predseda.email,
-            telephone: org.predseda.phone,
-          },
-          {
-            '@type': 'Person',
-            name: org.mistopredseda.name,
-            jobTitle: 'Místopředseda',
-            email: org.mistopredseda.email,
-            telephone: org.mistopredseda.phone,
-          },
+          { '@type': 'Person', name: org.predseda.name, jobTitle: 'Předseda', email: org.predseda.email, telephone: org.predseda.phone },
+          { '@type': 'Person', name: org.mistopredseda.name, jobTitle: 'Místopředseda', email: org.mistopredseda.email, telephone: org.mistopredseda.phone },
         ],
       },
+    }
+  : null;
+
+const breadcrumbLabels: Record<string, string> = {
+  '/': 'Domů',
+  '/ubytovani/': 'Ubytování',
+  '/ubytovani/privatni/': 'Privátní apartmány',
+  '/ubytovani/co-living/': 'Co-living',
+  '/coworking/': 'Coworking',
+  '/komunita/': 'Komunita',
+  '/okoli/': 'Okolí',
+  '/doprava/': 'Doprava',
+  '/stipendia/': 'Stipendia',
+  '/novinky/': 'Novinky',
+  '/galerie/': 'Galerie',
+  '/rezervace/': 'Registrace zájmu',
+  '/kontakty/': 'Kontakty',
+  '/kapsle/': 'Kapsle',
+  '/faq/': 'FAQ',
+  '/metodika-srovnani/': 'Metodika srovnání cen',
+  '/gdpr/': 'Ochrana osobních údajů',
+  '/druzstvo/': 'Družstvo',
+};
+const labelForSlug = (seg: string) => {
+  if (/^\d+kk$/.test(seg)) return seg.replace('kk', '+kk');
+  return seg.replace(/-/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
+};
+const pathnameRaw = Astro.url.pathname;
+const pathnameClean = pathnameRaw.replace(new RegExp('^' + withBase('/').replace(/\/$/, '')), '') || '/';
+const crumbs: { name: string; item: string }[] = [];
+if (pathnameClean !== '/' && pathnameClean !== '') {
+  crumbs.push({ name: 'Domů', item: `${siteUrl}${withBase('/')}` });
+  const segs = pathnameClean.split('/').filter(Boolean);
+  let acc = '';
+  for (const seg of segs) {
+    acc += '/' + seg;
+    const key = acc + '/';
+    const name = breadcrumbLabels[key] ?? labelForSlug(seg);
+    crumbs.push({ name, item: `${siteUrl}${withBase(key)}` });
+  }
+}
+const breadcrumbJsonLd = crumbs.length > 1
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.item })),
     }
   : null;
 ---
@@ -129,9 +176,12 @@ const orgJsonLd = org
 
     <title>{title}</title>
 
-    {/* Structured data: Organization (site-wide) */}
-    {orgJsonLd && (
-      <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+    {/* Structured data: LocalBusiness + BreadcrumbList (site-wide) */}
+    {localBusinessJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(localBusinessJsonLd)} />
+    )}
+    {breadcrumbJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
     )}
 
     {/* Fallback for JS-off readers: the reveal system hides the

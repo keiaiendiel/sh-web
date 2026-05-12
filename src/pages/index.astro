@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { withBase } from '../utils/url';
 
 /* Phase 2 landing per SH_Web_Site_Copy.md § 0.1 + SH_Web_Visualization_List
-   § 1.1 + 1.2. Hero rotace 5 záběrů (Tier A produkce Hugo, zatím placeholdery),
+   § 1.1 + 1.2. Hero rotace 5 záběrů (Foto se připravuje, zatím placeholdery),
    „Co Hub nabízí" 4 karty s horizontal scroll-snap gallery, section teasery
    pro 8 sekcí, masterplan, finální CTA panel.
 
@@ -18,34 +18,34 @@ const heroSlides = [
   {
     src: withBase('/images/hub/aerial/topview.jpg'),
     alt: 'Letecký pohled na areál horních kasáren v Klecanech v krajinném kontextu nad Vltavou.',
-    placeholder: 'Tier A render Hugo, ranní mlha nebo zlatá hodina',
+    placeholder: 'Letecký pohled, ranní mlha nebo zlatá hodina',
   },
   {
     src: withBase('/images/hub/exterior/building-c.jpg'),
     alt: 'Budova C, coworking a komunitní zázemí, modré hodiny s osvětlenými okny.',
-    placeholder: 'Tier A render Hugo, večer s 20 lidmi v záběru',
+    placeholder: 'Budova C ve večerní hodině, 20 lidí přicházejících a odcházejících',
   },
   {
     src: withBase('/images/hub/exterior/trznice-pivovar.jpg'),
     alt: 'Tržnice s minipivovarem v budově B, večerní zázemí pro gastronomii.',
-    placeholder: 'Tier A render Hugo, dav u stolů venku, food truck',
+    placeholder: 'Tržnice s minipivovarem za soumraku, dav u stolů venku',
   },
   {
     src: withBase('/images/hub/interior/1kk-a4-a6.jpg'),
     alt: 'Privátní apartmán 1+kk v budovách A1 až A6, denní světlo, klidná pracovní atmosféra.',
-    placeholder: 'Tier A render Hugo, jedna osoba u okna s laptopem',
+    placeholder: 'Pokoj v ranním světle, jeden člověk u okna s laptopem',
   },
   {
     src: withBase('/images/hub/interior/kapsle-horizontal.jpg'),
     alt: 'Kapsle ve sdíleném pokoji s knihovnou a relaxační zónou.',
-    placeholder: 'Tier A render Hugo, 3 kapsle v rohu, knihovna, rostlina',
+    placeholder: 'Tři kapsle v rohu pokoje, knihovna a rostlina mezi nimi',
   },
 ];
 
 /* === AMENITY KARTY („Co Hub nabízí", 4 karty) === */
 /* Visualization_List § 1.2: 4 karty (Ubytování, Coworking, Komunita, Doprava).
    Každá karta má 4 fotky v horizontal scroll-snap galerii.
-   Cover ratio 4:3 jednotně. Kde fotka chybí, render-placeholder block. */
+   Cover ratio 4:3 jednotně. Kde fotka chybí, popisný placeholder block. */
 type GalleryItem = { src?: string; alt: string; placeholder?: string };
 type AmenityCard = { title: string; lede: string; href: string; gallery: GalleryItem[] };
 
@@ -58,7 +58,7 @@ const amenityCards: AmenityCard[] = [
       { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'), alt: '1+kk ranní rituál: káva u okna, denní světlo, postel ustlaná v pozadí.' },
       { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'), alt: 'Větší privátní apartmán pro skupinu: jídelní stůl, kuchyňský kout, postel.' },
       { src: withBase('/images/hub/interior/kapsle-horizontal.jpg'), alt: 'Kapsle ve společném pokoji s knihovnou a rostlinou.' },
-      { placeholder: 'Dvoulůžko v privátním pokoji pro pár, manželská postel, prostor pro práci.', alt: 'Placeholder: dvoulůžko pro pár, foto v Tier A produkci.' },
+      { placeholder: 'Dvoulůžko v privátním pokoji pro pár, manželská postel, prostor pro práci.', alt: 'Dvoulůžko v privátním pokoji pro pár, manželská postel.' },
     ],
   },
   {
@@ -67,9 +67,9 @@ const amenityCards: AmenityCard[] = [
     href: '/coworking/',
     gallery: [
       { src: withBase('/images/hub/exterior/cowork.jpg'), alt: 'Coworkingový sál v 1. NP budovy C, pevné stoly a kávovar v rohu.' },
-      { placeholder: 'Fixní stůl, dva monitory, ergonomická klávesnice, rostlina.', alt: 'Placeholder: fixní stůl, foto v Tier A produkci.' },
-      { placeholder: 'Zasedací místnost se 6-člennou skupinou a AV technikou.', alt: 'Placeholder: zasedací místnost, foto v Tier A produkci.' },
-      { placeholder: 'Ateliér v D1 nebo dílna v H1 až H3, tvůrce u pracovního stolu.', alt: 'Placeholder: ateliér nebo dílna, foto v Tier A produkci.' },
+      { placeholder: 'Fixní stůl, dva monitory, ergonomická klávesnice, rostlina.', alt: 'Fixní coworkingový stůl s dvěma monitory a ergonomickou klávesnicí.' },
+      { placeholder: 'Zasedací místnost se 6-člennou skupinou a AV technikou.', alt: 'Zasedací místnost se šesti účastníky a AV technikou.' },
+      { placeholder: 'Ateliér v D1 nebo dílna v H1 až H3, tvůrce u pracovního stolu.', alt: 'Ateliér v D1 s tvůrcem u pracovního stolu.' },
     ],
   },
   {
@@ -78,9 +78,9 @@ const amenityCards: AmenityCard[] = [
     href: '/komunita/',
     gallery: [
       { src: withBase('/images/hub/aerial/areal-bazen.jpg'), alt: 'Bazén v centrálním dvoře areálu, sluneční terasa.' },
-      { placeholder: 'Grilovací místo, rodinné grilování v sobotu poledne.', alt: 'Placeholder: grilovací místo, foto v Tier A produkci.' },
+      { placeholder: 'Grilovací místo, rodinné grilování v sobotu poledne.', alt: 'Grilovací místo v komunitním parku v sobotní poledne.' },
       { src: withBase('/images/hub/interior/b-jidelna.jpg'), alt: 'Jídelna v budově B, dřevěné stoly, lavice, večerní osvětlení.' },
-      { placeholder: 'Klubovna v budově C s eventem (quiz noc, přednáška, projektor).', alt: 'Placeholder: klubovna, foto v Tier A produkci.' },
+      { placeholder: 'Klubovna v budově C s eventem (quiz noc, přednáška, projektor).', alt: 'Klubovna v budově C s eventem, projektor a stoly s lavicemi.' },
     ],
   },
   {
@@ -88,10 +88,10 @@ const amenityCards: AmenityCard[] = [
     lede: 'Hub-shuttle do metra Kobylisy, bus 374, Hub-taxi, pět jízd v ceně nájmu.',
     href: '/doprava/',
     gallery: [
-      { placeholder: 'Hub-shuttle dodávka před hlavním vstupem, 3 rezidenti nastupují.', alt: 'Placeholder: Hub-shuttle, foto v Tier A produkci.' },
-      { placeholder: 'Autobus 374 přijíždí na zastávku U Kostela v Klecanech.', alt: 'Placeholder: bus 374, foto v Tier A produkci.' },
-      { placeholder: 'Hub-taxi, menší auto s lokálním logem, řidič a rezident.', alt: 'Placeholder: Hub-taxi, foto v Tier A produkci.' },
-      { placeholder: 'Cyklostezka EuroVelo 7 podél Vltavy, jezdec na kole.', alt: 'Placeholder: cyklostezka, foto v Tier A produkci.' },
+      { placeholder: 'Hub-shuttle dodávka před hlavním vstupem, 3 rezidenti nastupují.', alt: 'Hub-shuttle dodávka před hlavním vstupem, tři rezidenti nastupují.' },
+      { placeholder: 'Autobus 374 přijíždí na zastávku U Kostela v Klecanech.', alt: 'Autobus 374 přijíždí na zastávku U Kostela v Klecanech.' },
+      { placeholder: 'Hub-taxi, menší auto s lokálním logem, řidič a rezident.', alt: 'Hub-taxi, menší auto s lokálním logem.' },
+      { placeholder: 'Cyklostezka EuroVelo 7 podél Vltavy, jezdec na kole.', alt: 'Cyklostezka EuroVelo 7 podél Vltavy, cyklista na kole.' },
     ],
   },
 ];
@@ -109,7 +109,7 @@ const sections = [
 ];
 ---
 <Base
-  title="Startovací Hub Klecany"
+  title="Bydlení v Klecanech, 15 minut autobusem z Prahy · Hub"
   description="Horní kasárny Klecan, otevřené pro bydlení a práci. Devět typů pokojů a apartmánů, coworking, dílny, sauna, společná kuchyně, kavárna. Bývalé vojenské kasárny nad Vltavou, patnáct kilometrů severně od centra Prahy. Areál se otevírá postupně od roku 2026."
   headerVariant="dark">
 
@@ -164,7 +164,7 @@ const sections = [
                     <div class="lp-card__placeholder" role="img" aria-label={item.alt}>
                       <span class="lp-card__placeholder-icon" aria-hidden="true">▢</span>
                       <span class="lp-card__placeholder-text">{item.placeholder}</span>
-                      <span class="lp-card__placeholder-note">Render připravuje Hugo</span>
+                      <span class="lp-card__placeholder-note">Foto doplníme</span>
                     </div>
                   )}
                 </figure>
@@ -235,7 +235,7 @@ const sections = [
   <section class="lp-cta" aria-label="Závěrečná výzva k registraci">
     <div class="lp-cta__inner">
       <p class="lp-cta__eyebrow">Rezervujte si místo</p>
-      <h2 class="lp-cta__title">Bydlíte tady na měsíc nebo na rok.</h2>
+      <h2 class="lp-cta__title">Bydlete tady měsíc, nebo rok.</h2>
       <p class="lp-cta__lede">
         Registrace zájmu je nezávazná. Vyplníte konfiguraci pokoje, datum nástupu a kontakt.
         Z rezervačního oddělení vám zavoláme do 24 hodin s detailem dostupnosti a ceny.
