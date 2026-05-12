@@ -2,21 +2,108 @@
 import Base from '../layouts/Base.astro';
 import { withBase } from '../utils/url';
 
-/* Phase 1 landing: minimální shell. Hero z Site_Copy § 0.1 (H1 + lede),
-   primary CTA na rezervaci, sekundární na ubytování, pod tím seznam 8 sekcí.
-   Phase 2 dodá hero rotaci (5 záběrů), „Co Hub nabízí" 4 karty se swipe
-   galleryí a section teaser bloky. Tier A rendery Huga zatím placeholdery,
-   pre-render hero-1.jpg drží místo. */
+/* Phase 2 landing per SH_Web_Site_Copy.md § 0.1 + SH_Web_Visualization_List
+   § 1.1 + 1.2. Hero rotace 5 záběrů (Tier A produkce Hugo, zatím placeholdery),
+   „Co Hub nabízí" 4 karty s horizontal scroll-snap gallery, section teasery
+   pro 8 sekcí, masterplan, finální CTA panel.
 
-const heroImage = withBase('/images/hub/hero/hero-1.jpg');
+   Hero rotace: cross-fade přes všech 5 slidů, 5 s na slide, 25 s celkový cyklus.
+   `prefers-reduced-motion: reduce` zastaví na slide 1. */
 
+/* === HERO ROTACE (5 záběrů) === */
+/* Visualization_List § 1.1: 1) Areál drone, 2) Budova C večer, 3) Budova B
+   gastro, 4) Pokoj interiér s pracujícím, 5) Kapsle ve velkém pokoji.
+   Placeholdery z existujících fotek + alt z popisků shot listu. */
+const heroSlides = [
+  {
+    src: withBase('/images/hub/aerial/topview.jpg'),
+    alt: 'Letecký pohled na areál horních kasáren v Klecanech v krajinném kontextu nad Vltavou.',
+    placeholder: 'Tier A render Hugo, ranní mlha nebo zlatá hodina',
+  },
+  {
+    src: withBase('/images/hub/exterior/building-c.jpg'),
+    alt: 'Budova C, coworking a komunitní zázemí, modré hodiny s osvětlenými okny.',
+    placeholder: 'Tier A render Hugo, večer s 20 lidmi v záběru',
+  },
+  {
+    src: withBase('/images/hub/exterior/trznice-pivovar.jpg'),
+    alt: 'Tržnice s minipivovarem v budově B, večerní zázemí pro gastronomii.',
+    placeholder: 'Tier A render Hugo, dav u stolů venku, food truck',
+  },
+  {
+    src: withBase('/images/hub/interior/1kk-a4-a6.jpg'),
+    alt: 'Privátní apartmán 1+kk v budovách A1 až A6, denní světlo, klidná pracovní atmosféra.',
+    placeholder: 'Tier A render Hugo, jedna osoba u okna s laptopem',
+  },
+  {
+    src: withBase('/images/hub/interior/kapsle-horizontal.jpg'),
+    alt: 'Kapsle ve sdíleném pokoji s knihovnou a relaxační zónou.',
+    placeholder: 'Tier A render Hugo, 3 kapsle v rohu, knihovna, rostlina',
+  },
+];
+
+/* === AMENITY KARTY („Co Hub nabízí", 4 karty) === */
+/* Visualization_List § 1.2: 4 karty (Ubytování, Coworking, Komunita, Doprava).
+   Každá karta má 4 fotky v horizontal scroll-snap galerii.
+   Cover ratio 4:3 jednotně. Kde fotka chybí, render-placeholder block. */
+type GalleryItem = { src?: string; alt: string; placeholder?: string };
+type AmenityCard = { title: string; lede: string; href: string; gallery: GalleryItem[] };
+
+const amenityCards: AmenityCard[] = [
+  {
+    title: 'Ubytování',
+    lede: 'Devět typů, od kapsle pro jednoho po byt 5+kk pro skupinu.',
+    href: '/ubytovani/',
+    gallery: [
+      { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'), alt: '1+kk ranní rituál: káva u okna, denní světlo, postel ustlaná v pozadí.' },
+      { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'), alt: 'Větší privátní apartmán pro skupinu: jídelní stůl, kuchyňský kout, postel.' },
+      { src: withBase('/images/hub/interior/kapsle-horizontal.jpg'), alt: 'Kapsle ve společném pokoji s knihovnou a rostlinou.' },
+      { placeholder: 'Dvoulůžko v privátním pokoji pro pár, manželská postel, prostor pro práci.', alt: 'Placeholder: dvoulůžko pro pár, foto v Tier A produkci.' },
+    ],
+  },
+  {
+    title: 'Coworking',
+    lede: 'Volný stůl v sále zdarma pro rezidenty, dílny s těžkými stroji za hodinovou sazbu.',
+    href: '/coworking/',
+    gallery: [
+      { src: withBase('/images/hub/exterior/cowork.jpg'), alt: 'Coworkingový sál v 1. NP budovy C, pevné stoly a kávovar v rohu.' },
+      { placeholder: 'Fixní stůl, dva monitory, ergonomická klávesnice, rostlina.', alt: 'Placeholder: fixní stůl, foto v Tier A produkci.' },
+      { placeholder: 'Zasedací místnost se 6-člennou skupinou a AV technikou.', alt: 'Placeholder: zasedací místnost, foto v Tier A produkci.' },
+      { placeholder: 'Ateliér v D1 nebo dílna v H1 až H3, tvůrce u pracovního stolu.', alt: 'Placeholder: ateliér nebo dílna, foto v Tier A produkci.' },
+    ],
+  },
+  {
+    title: 'Komunita',
+    lede: 'Wellness, sport, gastronomie, kultura. Bazén, sauna, kantýna, klubovna.',
+    href: '/komunita/',
+    gallery: [
+      { src: withBase('/images/hub/aerial/areal-bazen.jpg'), alt: 'Bazén v centrálním dvoře areálu, sluneční terasa.' },
+      { placeholder: 'Grilovací místo, rodinné grilování v sobotu poledne.', alt: 'Placeholder: grilovací místo, foto v Tier A produkci.' },
+      { src: withBase('/images/hub/interior/b-jidelna.jpg'), alt: 'Jídelna v budově B, dřevěné stoly, lavice, večerní osvětlení.' },
+      { placeholder: 'Klubovna v budově C s eventem (quiz noc, přednáška, projektor).', alt: 'Placeholder: klubovna, foto v Tier A produkci.' },
+    ],
+  },
+  {
+    title: 'Doprava',
+    lede: 'Hub-shuttle do metra Kobylisy, bus 374, Hub-taxi, pět jízd v ceně nájmu.',
+    href: '/doprava/',
+    gallery: [
+      { placeholder: 'Hub-shuttle dodávka před hlavním vstupem, 3 rezidenti nastupují.', alt: 'Placeholder: Hub-shuttle, foto v Tier A produkci.' },
+      { placeholder: 'Autobus 374 přijíždí na zastávku U Kostela v Klecanech.', alt: 'Placeholder: bus 374, foto v Tier A produkci.' },
+      { placeholder: 'Hub-taxi, menší auto s lokálním logem, řidič a rezident.', alt: 'Placeholder: Hub-taxi, foto v Tier A produkci.' },
+      { placeholder: 'Cyklostezka EuroVelo 7 podél Vltavy, jezdec na kole.', alt: 'Placeholder: cyklostezka, foto v Tier A produkci.' },
+    ],
+  },
+];
+
+/* === SECTION TEASERY (8 sekcí) === */
 const sections = [
   { path: '/ubytovani/', label: 'Ubytování',  hint: '9 typů pokojů a apartmánů' },
   { path: '/coworking/', label: 'Coworking',  hint: '5 tarifů od volného stolu po dílnu' },
   { path: '/komunita/',  label: 'Komunita',   hint: 'Wellness, sport, gastro, kultura' },
   { path: '/okoli/',     label: 'Okolí',      hint: 'Klecany, 15 km severně od Prahy' },
   { path: '/doprava/',   label: 'Doprava',    hint: 'Hub-shuttle, bus 374, Hub-taxi' },
-  { path: '/stipendia/', label: 'Stipendia',  hint: 'Pobytové stipendium 4 role' },
+  { path: '/stipendia/', label: 'Stipendia',  hint: 'Pobytové stipendium, 4 role' },
   { path: '/novinky/',   label: 'Novinky',    hint: 'Postup, otevírací termíny, výzvy' },
   { path: '/galerie/',   label: 'Galerie',    hint: 'Fotky a vizualizace areálu' },
 ];
@@ -26,13 +113,21 @@ const sections = [
   description="Horní kasárny Klecan, otevřené pro bydlení a práci. Devět typů pokojů a apartmánů, coworking, dílny, sauna, společná kuchyně, kavárna. Bývalé vojenské kasárny nad Vltavou, patnáct kilometrů severně od centra Prahy. Areál se otevírá postupně od roku 2026."
   headerVariant="dark">
 
-  <section class="lp-hero">
-    <img class="lp-hero__bg" src={heroImage} alt="" aria-hidden="true" loading="eager" decoding="async" />
+  {/* ============ HERO ROTATION ============ */}
+  <section class="lp-hero" aria-label="Startovací Hub Klecany, hero galerie">
+    <div class="lp-hero__rotation" aria-hidden="true">
+      {heroSlides.map((slide, i) => (
+        <div class="lp-hero__slide" data-slide={i} style={`animation-delay: ${i * 5}s`}>
+          <img class="lp-hero__bg" src={slide.src} alt="" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          <span class="lp-hero__placeholder" aria-hidden="true">▢ {slide.placeholder}</span>
+        </div>
+      ))}
+    </div>
+    <div class="lp-hero__scrim" aria-hidden="true"></div>
+
     <div class="lp-hero__inner">
       <p class="lp-hero__eyebrow">Horní kasárny Klecan</p>
-      <h1 class="lp-hero__title">
-        Otevřené pro bydlení a práci.
-      </h1>
+      <h1 class="lp-hero__title">Otevřené pro bydlení a práci.</h1>
       <p class="lp-hero__lede">
         Devět typů pokojů a apartmánů, od kapsle pro jednoho po byt 5+kk pro skupinu.
         Coworking, dílny, sauna, společná kuchyně, kavárna. Pobytové stipendium dvakrát ročně.
@@ -48,13 +143,50 @@ const sections = [
     </div>
   </section>
 
-  <section class="lp-grid">
+  {/* ============ CO HUB NABÍZÍ (4 karty) ============ */}
+  <section class="lp-amenities" aria-label="Co Hub nabízí">
+    <div class="lp-amenities__inner">
+      <p class="lp-amenities__eyebrow">Co Hub nabízí</p>
+      <h2 class="lp-amenities__title">Bydlení, práce, komunita, doprava.</h2>
+      <div class="lp-amenities__grid">
+        {amenityCards.map((card) => (
+          <article class="lp-card">
+            <header class="lp-card__head">
+              <h3 class="lp-card__title">{card.title}</h3>
+              <p class="lp-card__lede">{card.lede}</p>
+            </header>
+            <div class="lp-card__gallery" tabindex="0" aria-label={`${card.title}, foto galerie`}>
+              {card.gallery.map((item, i) => (
+                <figure class="lp-card__shot" data-shot={i}>
+                  {item.src ? (
+                    <img src={item.src} alt={item.alt} loading="lazy" decoding="async" />
+                  ) : (
+                    <div class="lp-card__placeholder" role="img" aria-label={item.alt}>
+                      <span class="lp-card__placeholder-icon" aria-hidden="true">▢</span>
+                      <span class="lp-card__placeholder-text">{item.placeholder}</span>
+                      <span class="lp-card__placeholder-note">Render připravuje Hugo</span>
+                    </div>
+                  )}
+                </figure>
+              ))}
+            </div>
+            <footer class="lp-card__foot">
+              <a class="lp-card__link" href={withBase(card.href)}>Detail {card.title.toLowerCase()} →</a>
+            </footer>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ============ SECTION TEASERY (8 sekcí) ============ */}
+  <section class="lp-grid" aria-label="Sekce webu">
     <div class="lp-grid__inner">
-      <p class="lp-grid__eyebrow">Co tu je</p>
-      <h2 class="lp-grid__title">Osm sekcí.</h2>
+      <p class="lp-grid__eyebrow">Sekce</p>
+      <h2 class="lp-grid__title">Osm dalších stránek.</h2>
       <p class="lp-grid__intro">
-        Plné stránky doplňujeme v dalších fázích restrukturalizace.
-        Sekce níže fungují jako rozcestník, rezervace běží.
+        Areál má víc než ubytování a coworking. Stipendia, okolí, doprava, akce, kontakty.
+        Klikni do sekce, která tě zajímá.
       </p>
       <ul class="lp-grid__list">
         {sections.map((s) => (
@@ -68,14 +200,59 @@ const sections = [
       </ul>
     </div>
   </section>
+
+  {/* ============ MÍSTO / MASTERPLAN ============ */}
+  <section class="lp-place" aria-label="Místo, kde Hub stojí">
+    <div class="lp-place__inner">
+      <div class="lp-place__text">
+        <p class="lp-place__eyebrow">Místo</p>
+        <h2 class="lp-place__title">Horní kasárny, 15 km severně od centra Prahy.</h2>
+        <p>
+          Areál horních kasáren v Klecanech leží nad pravým břehem Vltavy. Patnáct kilometrů
+          severně od Václavského náměstí, dvanáct minut autobusem 374 od metra Kobylisy.
+        </p>
+        <p>
+          Bývalý vojenský areál, který otevíráme po etapách od roku 2026. Hub je první obyvatelná
+          fáze záměru VPD1, který má z areálu postupně dotvořit obytnou a produktivní vrstvu.
+        </p>
+        <p class="lp-place__links">
+          <a href={withBase('/okoli/')}>Co je v okolí →</a>
+          <a href={withBase('/doprava/')}>Jak se sem dostanete →</a>
+        </p>
+      </div>
+      <figure class="lp-place__map">
+        <img
+          src={withBase('/images/hub/masterplan_fotoreal.jpg')}
+          alt="Fotorealistický masterplan areálu Horních kasáren, popisky budov A1 až A6, B, C, D, E, F, P, S a venkovního bazénu."
+          loading="lazy"
+          decoding="async" />
+        <figcaption>Masterplan areálu, stav 2026</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  {/* ============ FINÁLNÍ CTA PANEL ============ */}
+  <section class="lp-cta" aria-label="Závěrečná výzva k registraci">
+    <div class="lp-cta__inner">
+      <p class="lp-cta__eyebrow">Rezervujte si místo</p>
+      <h2 class="lp-cta__title">Bydlíte tady na měsíc nebo na rok.</h2>
+      <p class="lp-cta__lede">
+        Registrace zájmu je nezávazná. Vyplníte konfiguraci pokoje, datum nástupu a kontakt.
+        Z rezervačního oddělení vám zavoláme do 24 hodin s detailem dostupnosti a ceny.
+      </p>
+      <a class="lp-cta__button" href={withBase('/rezervace/')}>Registrace zájmu</a>
+    </div>
+  </section>
 </Base>
 
 <style>
-  /* Hero, dark, full bleed s photo bg + scrim. */
+  /* ============ HERO ROTATION ============ */
+  /* 5 slides absolutely overlapped, 25 s cyklus, 5 s na slide,
+     cross-fade 1 s. animation-delay posunuje každý slide v cyklu. */
   .lp-hero {
     position: relative;
     isolation: isolate;
-    min-height: 78vh;
+    min-height: 82vh;
     display: grid;
     align-items: end;
     padding: var(--space-9) var(--gutter) var(--space-8);
@@ -83,21 +260,57 @@ const sections = [
     background: var(--k-100);
     overflow: hidden;
   }
+  .lp-hero__rotation {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .lp-hero__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: lp-hero-cycle 25s infinite;
+  }
+  /* animation-delay je inline (per-slide) přes style="" v template, protože
+     dynamicky generované class suffixy (lp-hero__slide--0..4) by Astro
+     scoper musel ručně whitelistnout. Inline style je jednodušší. */
+
+  @keyframes lp-hero-cycle {
+    /* 0-20 %: slide viditelný (5 s ze 25). 20-24 %: fade out. */
+    0%, 20% { opacity: 1; }
+    24%, 100% { opacity: 0; }
+  }
+
   .lp-hero__bg {
     position: absolute;
     inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    z-index: -2;
-    filter: brightness(0.7);
+    filter: brightness(0.75);
   }
-  .lp-hero::before {
-    content: "";
+  .lp-hero__placeholder {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    padding: 4px 8px;
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: rgba(255,255,255,0.85);
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 2px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    pointer-events: none;
+    max-width: 280px;
+    line-height: 1.3;
+  }
+
+  .lp-hero__scrim {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       to top,
-      rgba(0,0,0,0.7) 0%,
+      rgba(0,0,0,0.75) 0%,
       rgba(0,0,0,0.45) 35%,
       rgba(0,0,0,0.05) 75%
     );
@@ -116,13 +329,13 @@ const sections = [
     margin: 0 0 var(--space-4);
   }
   .lp-hero__title {
-    font: 600 clamp(2.5rem, 6vw, 4.5rem) / 1.05 var(--font-sans);
+    font: 600 clamp(2.5rem, 6vw, 4.75rem) / 1.05 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     margin: 0 0 var(--space-5);
     max-width: 18ch;
   }
   .lp-hero__lede {
-    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
     line-height: 1.45;
     margin: 0 0 var(--space-3);
     max-width: 52ch;
@@ -165,10 +378,143 @@ const sections = [
     color: var(--accent);
   }
 
-  /* Section grid pod hero. */
+  /* reduced-motion: freeze on slide 0 */
+  @media (prefers-reduced-motion: reduce) {
+    .lp-hero__slide { animation: none; opacity: 0; }
+    .lp-hero__slide--0 { opacity: 1; }
+  }
+
+  /* ============ AMENITY KARTY ============ */
+  .lp-amenities {
+    padding: var(--space-9) var(--gutter) var(--space-8);
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .lp-amenities__inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+  .lp-amenities__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-3);
+  }
+  .lp-amenities__title {
+    font: 600 clamp(2rem, 4vw, 3rem) / 1.1 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--space-7);
+    max-width: 22ch;
+  }
+  .lp-amenities__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  .lp-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    border: 1px solid var(--rule, rgba(0,0,0,0.12));
+    overflow: hidden;
+  }
+  .lp-card__head {
+    padding: var(--space-5) var(--space-5) var(--space-4);
+  }
+  .lp-card__title {
+    font: 600 var(--text-2xl) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--space-2);
+  }
+  .lp-card__lede {
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--fg-muted);
+    margin: 0;
+  }
+
+  /* Horizontal scroll-snap gallery, 4 shots, peek next on right */
+  .lp-card__gallery {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: var(--space-2);
+    padding: 0 var(--space-2);
+    margin: var(--space-2) 0 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-rule) transparent;
+  }
+  .lp-card__gallery::-webkit-scrollbar { height: 6px; }
+  .lp-card__gallery::-webkit-scrollbar-thumb { background: var(--accent-rule); border-radius: 3px; }
+
+  .lp-card__shot {
+    flex: 0 0 calc(100% - var(--space-5));
+    aspect-ratio: 4 / 3;
+    margin: 0;
+    scroll-snap-align: center;
+    background: var(--bg-muted);
+    overflow: hidden;
+    position: relative;
+  }
+  .lp-card__shot img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .lp-card__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: var(--space-5);
+    text-align: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .lp-card__placeholder-icon {
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: var(--space-3);
+  }
+  .lp-card__placeholder-text {
+    font: 500 var(--text-sm) / 1.4 var(--font-sans);
+    color: var(--fg);
+    max-width: 30ch;
+    margin-bottom: var(--space-3);
+  }
+  .lp-card__placeholder-note {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .lp-card__foot {
+    padding: var(--space-4) var(--space-5) var(--space-5);
+    border-top: 1px solid var(--rule, rgba(0,0,0,0.08));
+    margin-top: auto;
+  }
+  .lp-card__link {
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-rule);
+    padding-bottom: 2px;
+    transition: border-color 160ms ease;
+  }
+  .lp-card__link:hover { border-color: var(--accent); }
+
+  @media (max-width: 760px) {
+    .lp-amenities__grid { grid-template-columns: 1fr; }
+  }
+
+  /* ============ SECTION TEASERS (8) ============ */
   .lp-grid {
     padding: var(--space-8) var(--gutter);
-    background: var(--bg);
+    background: var(--bg-muted, var(--bg));
     color: var(--fg);
   }
   .lp-grid__inner {
@@ -190,7 +536,7 @@ const sections = [
   .lp-grid__intro {
     color: var(--fg-muted);
     margin: 0 0 var(--space-7);
-    max-width: 50ch;
+    max-width: 56ch;
     font-size: var(--text-md);
   }
   .lp-grid__list {
@@ -230,6 +576,112 @@ const sections = [
   }
   @media (max-width: 600px) {
     .lp-grid__list { grid-template-columns: 1fr; }
-    .lp-hero { min-height: 70vh; padding-top: var(--space-7); }
+  }
+
+  /* ============ MÍSTO / MASTERPLAN ============ */
+  .lp-place {
+    padding: var(--space-9) var(--gutter);
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .lp-place__inner {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: var(--space-7);
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    align-items: center;
+  }
+  .lp-place__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-3);
+  }
+  .lp-place__title {
+    font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--space-5);
+    max-width: 22ch;
+  }
+  .lp-place__text p {
+    line-height: 1.6;
+    margin: 0 0 var(--space-4);
+    max-width: 50ch;
+  }
+  .lp-place__links {
+    display: flex;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+    margin-top: var(--space-5);
+  }
+  .lp-place__links a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-rule);
+    padding-bottom: 2px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    transition: border-color 160ms ease;
+  }
+  .lp-place__links a:hover { border-color: var(--accent); }
+  .lp-place__map figcaption {
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    margin-top: var(--space-2);
+  }
+  .lp-place__map img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule, rgba(0,0,0,0.12));
+  }
+
+  @media (max-width: 760px) {
+    .lp-place__inner { grid-template-columns: 1fr; gap: var(--space-6); }
+  }
+
+  /* ============ FINÁLNÍ CTA ============ */
+  .lp-cta {
+    padding: var(--space-9) var(--gutter);
+    background: var(--accent);
+    color: #fff;
+    text-align: center;
+  }
+  .lp-cta__inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .lp-cta__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: rgba(255,255,255,0.85);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-3);
+  }
+  .lp-cta__title {
+    font: 600 clamp(2rem, 4vw, 3rem) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--space-4);
+  }
+  .lp-cta__lede {
+    font-size: var(--text-md);
+    line-height: 1.5;
+    margin: 0 0 var(--space-6);
+    opacity: 0.92;
+  }
+  .lp-cta__button {
+    display: inline-block;
+    padding: 14px 32px;
+    font: 700 var(--text-md) / 1 var(--font-sans);
+    color: var(--accent);
+    background: #fff;
+    border: 1px solid #fff;
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition: background 200ms ease, color 200ms ease;
+  }
+  .lp-cta__button:hover {
+    background: transparent;
+    color: #fff;
   }
 </style>
