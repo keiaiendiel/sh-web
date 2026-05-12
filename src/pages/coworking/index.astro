@@ -4,19 +4,177 @@ import { withBase } from '../../utils/url';
 ---
 <Base
   title="Coworking · Startovací Hub Klecany"
-  description="Coworkingový sál v budově C, ateliéry v D1, dílny v H1 až H3 a D2. Pět produktových tarifů od volného stolu po dílnu s těžkými stroji. Pro rezidenty Hubu volný stůl v sále zdarma.">
-  <article class="page-stub">
-    <p class="page-stub__eyebrow">Sekce</p>
-    <h1>Coworking</h1>
-    <p class="page-stub__lede">
-      Coworkingový sál v přízemí budovy C, ateliéry v D1, dílny v H1 až H3 a v D2. Pět produktových tarifů:
-      volný stůl v sále 24/7, fixní stůl, sdílená kancelář pro čtyři, zasedací místnost na hodinu,
-      ateliér 15 až 25 m². Pro rezidenty Hubu volný stůl v sále zdarma.
-    </p>
-    <p class="page-stub__note">Plnou stránku doplňujeme</p>
-    <p class="page-stub__links">
-      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
-      <a href={withBase('/ubytovani/')}>Ubytování</a>
-    </p>
-  </article>
+  description="Coworking je v budově C v jádře areálu (1. NP). Pět typů pracovních prostor: volný stůl, fixní stůl, sdílená kancelář pro čtyři, zasedací místnost, ateliér pro tvořivou práci. Pro rezidenty Hubu volný stůl v ceně bydlení."
+  headerVariant="dark">
+
+  <section class="sec-hero">
+    <img class="sec-hero__bg" src={withBase('/images/hub/exterior/cowork.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="sec-hero__scrim" aria-hidden="true"></div>
+    <div class="sec-hero__inner">
+      <p class="sec-hero__eyebrow">Coworking</p>
+      <h1 class="sec-hero__title">Pět typů pracovních prostor v budově C.</h1>
+      <p class="sec-hero__lede">
+        Coworkingové zázemí v 1. NP budovy C v jádře areálu. Budova C je komunitní centrum
+        Hubu, kromě coworkingu jsou tu i klubovna a další společenské prostory. Pro každého
+        rezidenta Hubu je volný stůl v sále v ceně bydlení (přístup 24/7). Pro externí
+        pracovníky z okolí dostupné za měsíční nebo hodinový tarif.
+      </p>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Coworkingový sál (volný stůl)</p>
+        <h2 class="sec-block__title">Pro rezidenty zdarma, externí 2 900 Kč.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Velký otevřený sál s denním světlem z velkých oken, dřevěné podlahy, stoly s ergonomickými
+          židlemi, dva kávovary, vodní stanice. Wi-Fi přes celý prostor, tiché telefonní budky
+          pro hovory. Kapacita 30 až 40 míst současně, provoz 24/7, přístup čipem.
+        </p>
+        <ul>
+          <li>30 až 40 volných stolů, žádné rezervace</li>
+          <li>Wi-Fi přes celý prostor</li>
+          <li>2 kávovary, voda, čaj zdarma</li>
+          <li>4 tiché telefonní budky pro hovory</li>
+          <li>Tiskárna a skener za drobný kredit</li>
+          <li>Pohovkový kout pro neformální schůzky</li>
+        </ul>
+      </div>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Provoz</dt><dd>24/7, přístup čipem</dd></div>
+        <div class="sec-table__row"><dt>Kapacita</dt><dd>30 až 40 míst</dd></div>
+        <div class="sec-table__row"><dt>Pro rezidenty</dt><dd>Zdarma, neomezený přístup</dd></div>
+        <div class="sec-table__row"><dt>Pro externí</dt><dd>2 900 Kč/měs (přístupový čip)</dd></div>
+        <div class="sec-table__row"><dt>Vyžaduje se u externích</dt><dd>Registrace s krátkým životopisem a LinkedIn profilem</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Fixní stůl (dedicated desk)</p>
+        <h2 class="sec-block__title">Tvůj vlastní stůl. 4 200 Kč/měs.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Stejný stůl, na kterém pracuješ každý den. Personalizovaný setup: dva monitory,
+          ergonomická židle, lampa, organizér. Pod stolem zamykatelná skříňka.
+        </p>
+        <p>
+          Pro koho má smysl: lidi, kteří potřebují víc soustředění než ve volném sále, lidi
+          se dvěma obrazovkami nebo specifickými nástroji (grafici, programátoři), lidi se
+          stálým fyzickým zázemím v Hubu i bez bydlení.
+        </p>
+      </div>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Provoz</dt><dd>24/7</dd></div>
+        <div class="sec-table__row"><dt>Cena</dt><dd>4 200 Kč/měs (stejná pro rezidenty i externí)</dd></div>
+        <div class="sec-table__row"><dt>Smlouva</dt><dd>Minimálně 3 měsíce, výpovědní lhůta 30 dnů</dd></div>
+        <div class="sec-table__row"><dt>Vybavení</dt><dd>2× monitor 27" (Full HD nebo 4K), ergonomická židle, lampa, uzamykatelná skříňka</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Sdílená kancelář pro čtyři</p>
+        <h2 class="sec-block__title">Privátní místnost. 15 000 Kč/měs za celou.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Menší privátní místnost v patře budovy C. 15 až 20 m², čtyři samostatné stoly
+          nebo dva propojené, whiteboard 1,5 × 1,2 m, vlastní zámek na dveřích.
+        </p>
+        <p>
+          Hodí se pro startupové týmy, agenturní 4-členné týmy, sociolingvistické laboratoře,
+          malé inženýrské skupiny. Pro tým, který už nezvládá open space a potřebuje
+          soustředění v menší skupině. Cena 3 750 Kč na osobu při čtyřčlenném týmu.
+        </p>
+      </div>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Provoz</dt><dd>24/7, přístupový čip</dd></div>
+        <div class="sec-table__row"><dt>Kapacita</dt><dd>4 stoly s ergonomickými židlemi</dd></div>
+        <div class="sec-table__row"><dt>Cena</dt><dd>15 000 Kč/měs za celý prostor</dd></div>
+        <div class="sec-table__row"><dt>Smlouva</dt><dd>Minimálně 6 měsíců, výpovědní lhůta 60 dnů</dd></div>
+        <div class="sec-table__row"><dt>V ceně</dt><dd>Zasedací místnost 4 hodiny měsíčně, sdílené monitory, případně vlastní wifi router pro VPN izolaci</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Zasedací místnost</p>
+        <h2 class="sec-block__title">Dvě místnosti pro 6 osob. 350 Kč/hod.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Dvě zasedací místnosti v patře budovy C, každá pro 6 osob. Audiovizuální technika
+          (Smart TV 65" s HDMI/AirPlay/Miracast, konferenční mikrofon, kamera), tabule, kávovar
+          v rohu, voda. Rezervace přes komunitní aplikaci nebo telefonicky v recepci.
+        </p>
+      </div>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Otevírací doba</dt><dd>Po telefonické nebo aplikační rezervaci, 07:00 až 22:00</dd></div>
+        <div class="sec-table__row"><dt>Cena externí</dt><dd>350 Kč/hod, 1 200 Kč/půlden, 2 000 Kč/celý den</dd></div>
+        <div class="sec-table__row"><dt>Pro rezidenty</dt><dd>4 hodiny v měsíci zdarma, nad rámec hodinová sazba</dd></div>
+        <div class="sec-table__row"><dt>Pro fixní stůl</dt><dd>4 hodiny v měsíci zdarma v rámci ceny stolu</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Ateliéry a dílny</p>
+        <h2 class="sec-block__title">Tvořivá práce v D1 a H1 až H3.</h2>
+        <p class="sec-block__lede">Ateliéry v budově D1, dílny v H1, H2, H3 a D1, D2 v samostatných objektech areálu.</p>
+      </header>
+      <div class="sec-block__text">
+        <h3 class="sec-sub__title">Ateliér (15 až 25 m²)</h3>
+        <p>
+          Hlavní ateliérový blok areálu (D1). Plocha 15 až 25 m² na ateliér, vlastní zámek,
+          velká okna pro denní světlo, elektrika 16A jednofázová (380V možno doplnit), umyvadlo.
+          Vhodné pro malíře, grafiky, keramiky, řemeslníky s vlastním nářadím, brand a UX
+          designéry, fotografy s vlastním studiem.
+        </p>
+        <p>
+          6 500 Kč/měsíc za ateliér 20 m² (cca 325 Kč/m², stejná úroveň jako Pragovka Art
+          District v Praze 9). Bez slevy pro rezidenty (ateliér je samostatný produkt nad
+          rámec bydlení).
+        </p>
+
+        <h3 class="sec-sub__title">Dílny (H1, H2, H3, D1, D2)</h3>
+        <p>
+          Základní členství 490 Kč/měs zpřístupní ruční nářadí, pracovní stoly, pájecí stanice,
+          brusky, elektrické nářadí. Pro CNC, laser, 3D tiskárny a větší obráběcí stroje je
+          nad rámec hodinová sazba 150 Kč/hod (RFID zámek u stroje, automatické účtování).
+        </p>
+      </div>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Ateliéry provoz</dt><dd>24/7 (vlastní zámek)</dd></div>
+        <div class="sec-table__row"><dt>Dílny základní</dt><dd>06:00 až 22:00</dd></div>
+        <div class="sec-table__row"><dt>Dílny těžké stroje</dt><dd>08:00 až 20:00, jen pro proškolené (BOZP)</dd></div>
+        <div class="sec-table__row"><dt>Ateliér cena</dt><dd>6 500 Kč/měs za 20 m² (± 10 % podle plochy)</dd></div>
+        <div class="sec-table__row"><dt>Dílna členství</dt><dd>490 Kč/měs</dd></div>
+        <div class="sec-table__row"><dt>Dílna těžké stroje</dt><dd>150 Kč/hod RFID-billed</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-cta">
+    <div class="sec-cta__inner">
+      <h2 class="sec-cta__title">Místo pro práci a tvorbu.</h2>
+      <p class="sec-cta__lede">
+        Registrace zájmu je nezávazná, slouží i pro coworking-only zájemce. Z rezervačního
+        oddělení vám zavoláme do 24 hodin.
+      </p>
+      <a class="sec-cta__button" href={withBase('/rezervace/')}>Registrace zájmu</a>
+    </div>
+  </section>
 </Base>

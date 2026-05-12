@@ -1,21 +1,120 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { getEntry } from 'astro:content';
 import { withBase } from '../../utils/url';
+
+const orgEntry = await getEntry('org', 'identity');
+const org = orgEntry?.data;
 ---
 <Base
   title="Kontakty · Startovací Hub Klecany"
-  description="OSA II z.s. provozuje Hub. Marek Semerád předseda, rezervační oddělení, koordinátor stipendií, tiskový kontakt.">
+  description="Hub a celý záměr VPD1 provozuje občanské sdružení Alternativa II, z.s. (OSA II). Hlavní kontakt: Marek Semerád, předseda. Pro rezervace, novinky a otázky vpd@osa2.cz.">
   <article class="page-stub">
-    <p class="page-stub__eyebrow">Sekce</p>
-    <h1>Kontakty</h1>
+    <p class="page-stub__eyebrow">Kontakty</p>
+    <h1>Občanské sdružení Alternativa II, z.s.</h1>
     <p class="page-stub__lede">
-      Hub provozuje Občanské sdružení Alternativa II, z.s. Předseda Marek Semerád, rezervační oddělení,
-      koordinátor stipendií, tiskový kontakt. Telefonní čísla doplníme po Markovo dodání.
-    </p>
-    <p class="page-stub__note">Plnou stránku doplňujeme</p>
-    <p class="page-stub__links">
-      <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>
-      <a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a>
+      Hub a celý záměr VPD1 provozuje OSA II. Hlavní kontakt je Marek Semerád, předseda spolku.
+      Pro rezervace, novinky a otázky kolem provozu Hubu používejte společný kontakt vpd@osa2.cz.
+      Pro tisk, médiové žádosti a větší partnerství máme oddělený kontakt (viz níže).
     </p>
   </article>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Provozovatel</p>
+        <h2 class="sec-block__title">Občanské sdružení Alternativa II, z.s.</h2>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Název</dt><dd>{org?.name ?? 'Občanské sdružení Alternativa II, z.s.'} (OSA II)</dd></div>
+        <div class="sec-table__row"><dt>IČO</dt><dd>{org?.ico ?? 'TBD (Marek doplní)'}</dd></div>
+        <div class="sec-table__row"><dt>Adresa</dt><dd>Horní Kasárna Klecany, 250 67 Klecany</dd></div>
+        <div class="sec-table__row"><dt>E-mail</dt><dd><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></dd></div>
+        <div class="sec-table__row"><dt>Telefon</dt><dd>TBD (Marek doplní číslo rezervačního oddělení)</dd></div>
+        <div class="sec-table__row"><dt>Datová schránka</dt><dd>{org?.datova_schranka ?? 'TBD'}</dd></div>
+        <div class="sec-table__row"><dt>Mateřský web</dt><dd><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Osoby</p>
+        <h2 class="sec-block__title">Kdo s vámi jedná o čem.</h2>
+      </header>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Marek Semerád, předseda OSA II</h3>
+        <p class="sec-sub__lede">Vedoucí záměru VPD1 a Startovacího Hubu Klecany.</p>
+        <dl class="sec-table">
+          <div class="sec-table__row"><dt>E-mail</dt><dd><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></dd></div>
+          <div class="sec-table__row"><dt>Telefon</dt><dd>TBD</dd></div>
+        </dl>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Rezervační oddělení</h3>
+        <p class="sec-sub__lede">Zájemci o bydlení, plánování prohlídek areálu, ceník a podmínky.</p>
+        <dl class="sec-table">
+          <div class="sec-table__row"><dt>Jméno</dt><dd>TBD (Marek doplní jméno koordinátora rezervací)</dd></div>
+          <div class="sec-table__row"><dt>E-mail</dt><dd><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a> (společný)</dd></div>
+          <div class="sec-table__row"><dt>Telefon</dt><dd>TBD</dd></div>
+        </dl>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Stipendijní program</h3>
+        <p class="sec-sub__lede">Otázky kolem pobytového stipendia, výběrový proces (otevírá se po pilotu podzim 2026).</p>
+        <dl class="sec-table">
+          <div class="sec-table__row"><dt>Jméno</dt><dd>TBD</dd></div>
+          <div class="sec-table__row"><dt>E-mail</dt><dd>stipendium@startovacihub.cz (návrh) nebo vpd@osa2.cz</dd></div>
+        </dl>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Tisk a média</h3>
+        <p class="sec-sub__lede">Médiové žádosti, rozhovory, podklady pro novináře.</p>
+        <dl class="sec-table">
+          <div class="sec-table__row"><dt>Jméno</dt><dd>TBD</dd></div>
+          <div class="sec-table__row"><dt>E-mail</dt><dd>tisk@startovacihub.cz (návrh) nebo vpd@osa2.cz</dd></div>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Kde nás najdete</p>
+        <h2 class="sec-block__title">Horní Kasárna Klecany, 250 67 Klecany.</h2>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Adresa</dt><dd>Horní Kasárna Klecany, 250 67 Klecany</dd></div>
+        <div class="sec-table__row"><dt>GPS</dt><dd>TBD (Marek doplní souřadnice hlavního vstupu V z masterplánu)</dd></div>
+        <div class="sec-table__row"><dt>Hlavní vstup</dt><dd>Vrátnice V, označený „Hlavní vstup", 4 minuty pěšky ze zastávky „Klecany, U hřbitova"</dd></div>
+        <div class="sec-table__row"><dt>Otevírací doba kanceláře</dt><dd>TBD (návrh Po až Pá 9:00 až 17:00, k upřesnění)</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">GDPR a právní</p>
+        <h2 class="sec-block__title">Co s vašimi údaji.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Ke všem kontaktům platí: údaje, které nám napíšete, používáme jen k tomu, abychom
+          vám odpověděli na konkrétní žádost a abychom vyřídili registraci zájmu. Nepředáváme
+          je třetí straně, neposíláme spam. Plný text v <a href={withBase('/gdpr/')}>Zásadách ochrany osobních údajů</a>.
+        </p>
+        <p>
+          Hub a celý projekt jsou nekomerční záměr nestátního občanského sdružení. Nehledáme
+          zisk pro spolek, ale dostupné bydlení a komunitu pro cílovou skupinu Hubu.
+        </p>
+      </div>
+    </div>
+  </section>
 </Base>

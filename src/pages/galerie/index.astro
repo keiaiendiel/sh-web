@@ -4,18 +4,79 @@ import { withBase } from '../../utils/url';
 ---
 <Base
   title="Galerie · Startovací Hub Klecany"
-  description="Fotky a vizualizace areálu. Z výstavby, dokončené prostory, tváře komunity, akce 2026 a dál.">
-  <article class="page-stub">
-    <p class="page-stub__eyebrow">Sekce</p>
-    <h1>Galerie</h1>
-    <p class="page-stub__lede">
-      Čtyři foto-skupiny: z výstavby, dokončené prostory, tváře komunity, akce 2026 a dál. Doplňujeme
-      průběžně z renderů (Hugo) a fotek z místa (Marek). Aktuální stav v Tier A produkčním plánu.
-    </p>
-    <p class="page-stub__note">Plnou stránku doplňujeme po dokončení Tier A renderů</p>
-    <p class="page-stub__links">
-      <a href={withBase('/')}>Domů</a>
-      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
-    </p>
-  </article>
+  description="Galerie Hubu auto-generovaná z fotek napříč webem plus čtyři dedikované foto-skupiny: z výstavby, areál v ročních obdobích, tváře komunity, akce 2026 a dál."
+  headerVariant="dark">
+
+  <section class="sec-hero">
+    <img class="sec-hero__bg" src={withBase('/images/hub/aerial/topview.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="sec-hero__scrim" aria-hidden="true"></div>
+    <div class="sec-hero__inner">
+      <p class="sec-hero__eyebrow">Galerie</p>
+      <h1 class="sec-hero__title">Fotky a vizualizace areálu.</h1>
+      <p class="sec-hero__lede">
+        Galerie je auto-generovaná z fotek napříč webem (ubytování, coworking, komunita, doprava,
+        okolí). Vedle toho máme dedikované foto-skupiny, které drží jednu narativní linii.
+        Skupiny otevíráme postupně, podle toho, co reálně produkujeme.
+      </p>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Foto-skupiny</p>
+        <h2 class="sec-block__title">Čtyři dedikované série.</h2>
+      </header>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Z výstavby</h3>
+        <p class="sec-sub__lede">
+          Postup rekonstrukce horních kasáren. Bourání, vyklízení, první instalace, dokončení
+          interiéru. Dokumentační styl, ne marketingový. Ukazuje, že stavíme reálnou věc, ne render.
+          Zveřejňujeme měsíčně po dokončení dalších milníků.
+        </p>
+        <p class="sec-sub__lede"><em>První fotky doplníme po startu rekonstrukčních prací.</em></p>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Areál v ročních obdobích</h3>
+        <p class="sec-sub__lede">
+          Stejné záběry areálu pořízené na jaře, v létě, na podzim, v zimě. Kontext: areál
+          v krajině nad Vltavou. Ukázat, že to není sezónní destinace, ale celoroční prostor
+          pro život.
+        </p>
+        <p class="sec-sub__lede"><em>Sérii otevřeme po první sezóně foto-záznamů.</em></p>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Tváře komunity</h3>
+        <p class="sec-sub__lede">
+          Portréty rezidentů a tvůrců, kteří v Hubu bydlí nebo skrz něj prošli. Pojmenovaní
+          s krátkým představením, co dělají. Pro mladé kreativce, kteří se rozhodují podle
+          „kdo už tady je".
+        </p>
+        <p class="sec-sub__lede"><em>Otevřeme po výběru první kohorty stipendia (podzim 2026).</em></p>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Akce 2026 a dál</h3>
+        <p class="sec-sub__lede">
+          Fotky z reálných akcí v Hubu: otevření, sezónní festivaly, otevřené ateliéry,
+          koncerty, společné večeře. Důkaz, že komunita reálně žije, ne jen v marketingových
+          slibech.
+        </p>
+        <p class="sec-sub__lede"><em>Otevřeme po první akci po launchi.</em></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec-cta">
+    <div class="sec-cta__inner">
+      <h2 class="sec-cta__title">Zatím čerstvé fotky chybí.</h2>
+      <p class="sec-cta__lede">
+        Galerii doplňujeme průběžně z renderů a fotek z místa. Tier A produkce probíhá.
+      </p>
+      <a class="sec-cta__button" href={withBase('/novinky/')}>Sledujte novinky</a>
+    </div>
+  </section>
 </Base>

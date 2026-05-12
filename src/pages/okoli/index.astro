@@ -4,19 +4,159 @@ import { withBase } from '../../utils/url';
 ---
 <Base
   title="Okolí · Startovací Hub Klecany"
-  description="Klecany, patnáct kilometrů severně od pražského centra. Skate hala Klecany, ZOO Praha, Vltava a procházková okruh, vesnické náměstí s hospodou.">
-  <article class="page-stub">
-    <p class="page-stub__eyebrow">Sekce</p>
-    <h1>Okolí</h1>
-    <p class="page-stub__lede">
-      Klecany leží patnáct kilometrů severně od pražského centra, na pravém břehu Vltavy. V docházkové
-      vzdálenosti skate hala v Dolních Kasárnách, vesnické náměstí s hospodou, břeh Vltavy a procházkový
-      okruh kolem řeky. Praha Kobylisy autobusem 374 dvanáct minut.
-    </p>
-    <p class="page-stub__note">Plnou stránku doplňujeme</p>
-    <p class="page-stub__links">
-      <a href={withBase('/doprava/')}>Doprava</a>
-      <a href={withBase('/rezervace/')}>Registrace zájmu</a>
-    </p>
-  </article>
+  description="Klecany jsou klidná obec na severním okraji Prahy. Mateřská škola Astra v rámci areálu, skate hala 100 metrů, lékaři, lékárna, obchody, kavárna Klícka, bus 374 do metra. Co tu je a co tu není."
+  headerVariant="dark">
+
+  <section class="sec-hero">
+    <img class="sec-hero__bg" src={withBase('/images/hub/aerial/areal-entry.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
+    <div class="sec-hero__scrim" aria-hidden="true"></div>
+    <div class="sec-hero__inner">
+      <p class="sec-hero__eyebrow">Okolí</p>
+      <h1 class="sec-hero__title">Klidná obec, rušné město 15 minut autobusem.</h1>
+      <p class="sec-hero__lede">
+        Klecany jsou klidná obec na severním okraji Prahy. Hluboká práce v Klecanech, rušný
+        život v Praze 15 minut autobusem. V docházkové a krátké dojezdové vzdálenosti
+        školství, zdravotnictví, obchody, sport, kultura, pošta, banka a nabídky brigád pro
+        studenty. Všechna fakta níže ověřená k 12. 5. 2026.
+      </p>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Vzdělávání</p>
+        <h2 class="sec-block__title">Školy a školky.</h2>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>MŠ Astra (Montessori)</dt><dd>Dolní Kasárna 766, 0 m od Hubu (v rámci areálu), Po až Pá 7:00 až 17:00, česko-anglická Montessori</dd></div>
+        <div class="sec-table__row"><dt>ZŠ a MŠ Klecany</dt><dd>U Školky 74, výuka na Sídlišti 375, 1,3 km, 16 minut pěšky, 5 minut na kole</dd></div>
+        <div class="sec-table__row"><dt>ZUŠ Klecany</dt><dd>Klecany 375, 1,4 km, 17 minut pěšky, hudba a výtvarné obory</dd></div>
+        <div class="sec-table__row"><dt>Gymnázia v Praze 8</dt><dd>Thomase Manna (Střížkovská, 8,5 km, 15 minut autem), Karlínské gymnázium (15 minut bus + metro)</dd></div>
+        <div class="sec-table__row"><dt>Letecká SŠ Odolena Voda</dt><dd>Commute 15 až 20 minut autem</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Zdravotnictví</p>
+        <h2 class="sec-block__title">Lékaři a lékárna v U Školy 17.</h2>
+        <p class="sec-block__lede">V jedné budově na adrese U Školy 17 (1,3 km, 16 minut pěšky, 5 minut na kole).</p>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Ordinace Jach-Ta</dt><dd>Praktický lékař, dr. Jáchym Bednář, dr. Pavla Stachoňová, Po a Čt do 18:00, online recepty přes Smartmedix</dd></div>
+        <div class="sec-table__row"><dt>MUDr. Vosečková</dt><dd>Praktický lékař, Po až Pá 8:00 až 13:00</dd></div>
+        <div class="sec-table__row"><dt>MUDr. Ondráčková</dt><dd>Zubařka, Po 10 až 17, Út až Čt 8 až 15, Pá 8 až 12, online rezervace</dd></div>
+        <div class="sec-table__row"><dt>Lékárna Klecany</dt><dd>Po, Út do 16:00, Čt do 18:00, víkend zavřeno</dd></div>
+      </dl>
+      <p class="sec-block__text">
+        Pohotovost a 24h lékárna v Klecanech nejsou. Nejbližší 24h lékárna je v centru Prahy
+        (přes metro Kobylisy 25 až 30 minut).
+      </p>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Obchody</p>
+        <h2 class="sec-block__title">Potraviny, drogerie, velký nákup.</h2>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Potraviny Klecany</dt><dd>V Honech 690/1, 1,6 km, 20 minut pěšky, Po až Ne 7:00 až 19:00, běžné potraviny, čerstvé pečivo, jízdenky PID</dd></div>
+        <div class="sec-table__row"><dt>Drogerie Och!</dt><dd>Do Klecánek 58, 1,1 km, 13 minut pěšky, otevřeno od 8:30</dd></div>
+        <div class="sec-table__row"><dt>Lidl Zdiby</dt><dd>Ke Zdibsku 272, 3,5 km, 6 minut autem, 15 minut na kole, Po až Ne do 21:00, hlavní velký nákup</dd></div>
+        <div class="sec-table__row"><dt>Albert Roztoky</dt><dd>Tyršovo nám., 4,2 km přes Přívoz Klecánky, 25 minut s přívozem, alternativa s cestou přes Vltavu</dd></div>
+      </dl>
+      <p class="sec-block__text">Rohlík.cz a Košík.cz doručují přímo do Klecan.</p>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Pošta, banka, balíkomat</p>
+        <h2 class="sec-block__title">Logistika v docházce.</h2>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Česká pošta Klecany</dt><dd>Do Klecánek 52, 1,1 km</dd></div>
+        <div class="sec-table__row"><dt>Z-BOX Zásilkovna</dt><dd>Do Klecánek 58, 1,1 km, nonstop (vyžaduje Bluetooth a aplikaci)</dd></div>
+        <div class="sec-table__row"><dt>AlzaBox Klecany</dt><dd>Do Klecánek 58, 1,1 km, nonstop (vyžaduje aplikaci Alza)</dd></div>
+        <div class="sec-table__row"><dt>MONETA bankomat</dt><dd>U Školky 74, 1,3 km, nonstop bezkontaktní</dd></div>
+        <div class="sec-table__row"><dt>KB bankomat</dt><dd>Zdibsko 164, cca 2 km, nonstop</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Sport a venkovní aktivity</p>
+        <h2 class="sec-block__title">Skate hala 100 metrů, fotbal, cyklostezka.</h2>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Skate hala Klecany</dt><dd>Dolní Kasárna, 100 m od Hubu (v rámci areálu), Po až Pá 14:00 až 21:00, So až Ne 10:00 až 21:00, krytý dřevěný skatepark</dd></div>
+        <div class="sec-table__row"><dt>Fotbal TJ Sokol</dt><dd>Na Skalkách 368/33, 1,8 km, 23 minut pěšky, 7 minut na kole</dd></div>
+        <div class="sec-table__row"><dt>Workout a gril park</dt><dd>Centrum obce u fotbalu, 1,8 km, veřejně přístupné, revitalizovaný</dd></div>
+        <div class="sec-table__row"><dt>EuroVelo 7</dt><dd>Vltavské nábřeží, 2,5 km, 30 minut pěšky, 10 minut na kole, podél Vltavy směr Praha i Mělník</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Kavárny, restaurace, kultura</p>
+        <h2 class="sec-block__title">Klícka, Sportklub, KC Rychta.</h2>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Kavárna Klícka</dt><dd>Náměstí Třebízského 54, 1,5 km, 20 minut pěšky, výběrová káva Coffee Spot, řemeslné pivo, domácí pečivo, Čt do 21:00</dd></div>
+        <div class="sec-table__row"><dt>Sportklub Restaurace</dt><dd>Na Skalkách 368/33 u fotbalu, 1,8 km, Po až Ne 11:00 až 23:00, denní menu, pizza večer</dd></div>
+        <div class="sec-table__row"><dt>KC Rychta</dt><dd>Klecany, 1,6 km, kapacita 232 osob, koncerty, plesy, kulturní program KVČ</dd></div>
+        <div class="sec-table__row"><dt>Letní kino Roztoky</dt><dd>4,5 km přes přívoz, sezónní vybrané večery v létě</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Brigády a práce</p>
+        <h2 class="sec-block__title">Alza, HOPI a PURTEX v okolí.</h2>
+        <p class="sec-block__lede">Pro studenty, kteří hledají brigádu nebo doplňkový příjem.</p>
+      </header>
+      <dl class="sec-table">
+        <div class="sec-table__row"><dt>Alza.cz Zdiby</dt><dd>Zdibsko 615, 2,5 km, 30 minut pěšky, 10 minut na kole, skladník na noční směny, nástupní mzda 31 900 Kč</dd></div>
+        <div class="sec-table__row"><dt>PURTEX s.r.o.</dt><dd>Parkerova 617 Zdibsko, 2,5 km, údržba a provozní personál</dd></div>
+        <div class="sec-table__row"><dt>HOPI</dt><dd>Region Zdiby, logistika a rozvoz potravin</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Co tu není (otevřeně přiznáno)</p>
+        <h2 class="sec-block__title">Žádný noční život, řidší víkendová doprava.</h2>
+      </header>
+      <div class="sec-block__text">
+        <ul>
+          <li>Noční život po 23:00, žádné kluby ani noční bary. Rámujeme to jako vlastnost, ne nedostatek: hluboký spánek pro tvrdou práci.</li>
+          <li>Víkendová lékárna, řešíme přes Rohlík/Košík nebo cestou do Prahy.</li>
+          <li>Hypermarket v docházce. Lidl Zdiby na kole nebo autem, donáška přes online supermarkety.</li>
+          <li>Linka 374 má víkendovou frekvenci řidší (30 až 60 minut intervaly), poslední spoj 22:50. Hub-shuttle a Hub-taxi tento gap pokrývají.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-cta">
+    <div class="sec-cta__inner">
+      <h2 class="sec-cta__title">Klecany 12 km, Praha 15 minut.</h2>
+      <p class="sec-cta__lede">Hluboká práce v Klecanech, rušný život v Praze. Registrace zájmu je nezávazná.</p>
+      <a class="sec-cta__button" href={withBase('/rezervace/')}>Registrace zájmu</a>
+    </div>
+  </section>
 </Base>
