@@ -29,21 +29,11 @@ import { withBase } from '../../utils/url';
 
   <section class="sec-feature">
     <div class="sec-feature__inner">
-      <div class="sec-feature__intro">
+      <div class="sec-feature__col">
         <div class="sec-feature__head">
           <p class="sec-feature__eyebrow">Wellness</p>
           <h2 class="sec-feature__title" id="km-wellness">Bazén a sauna v samostatném objektu.</h2>
         </div>
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { src: withBase('/images/hub/amenities/ko02-bazen.jpg'), alt: 'Bazén v centrálním dvoře areálu, sluneční terasa, relax po práci.' },
-              { placeholder: 'Sauna a wellness, 6 až 8 osob, sprchy, odpočinková zóna', alt: 'Sauna interiér.' },
-            ]}
-            ariaLabel="Wellness" />
-        </div>
-      </div>
-      <div class="sec-feature__body">
         <div class="sec-feature__text">
           <h3 id="km-bazen">Bazén</h3>
           <p>
@@ -58,6 +48,16 @@ import { withBase } from '../../utils/url';
             v tarifu 12+ poukaz 1× týdně, jinak vstupné podle ceníku.
           </p>
         </div>
+      </div>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { src: withBase('/images/hub/amenities/ko02-bazen.jpg'), alt: 'Bazén v centrálním dvoře areálu, sluneční terasa, relax po práci.' },
+              { placeholder: 'Sauna a wellness, 6 až 8 osob, sprchy, odpočinková zóna', alt: 'Sauna interiér.' },
+            ]}
+            ariaLabel="Wellness" />
+        </div>
         <dl class="sec-feature__spec">
           <div><dt>Sauna návrh</dt><dd>Čt až So 18:00 až 22:00</dd></div>
           <div><dt>Kapacita sauny</dt><dd>6 až 8 osob</dd></div>
@@ -70,21 +70,11 @@ import { withBase } from '../../utils/url';
 
   <section class="sec-feature sec-feature--alt">
     <div class="sec-feature__inner">
-      <div class="sec-feature__intro">
+      <div class="sec-feature__col">
         <div class="sec-feature__head">
           <p class="sec-feature__eyebrow">Venkovní park</p>
           <h2 class="sec-feature__title" id="km-park">Zahrádky, grilovací místa, hřiště.</h2>
         </div>
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { placeholder: 'ko01 Grilovací místo, rodinné grilování v sobotu poledne, 8 až 12 lidí', alt: 'Grilovací místo v komunitním parku.' },
-              { placeholder: 'Komunitní zahrádky, sezónní záhony', alt: 'Komunitní zahrádky.' },
-            ]}
-            ariaLabel="Venkovní park" />
-        </div>
-      </div>
-      <div class="sec-feature__body">
         <div class="sec-feature__text">
           <h3 id="km-zahradky">Komunitní zahrádky</h3>
           <p>
@@ -104,6 +94,16 @@ import { withBase } from '../../utils/url';
             hřiště (dětské, sportovní, multifunkční) bude doplněn.
           </p>
         </div>
+      </div>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { placeholder: 'ko01 Grilovací místo, rodinné grilování v sobotu poledne, 8 až 12 lidí', alt: 'Grilovací místo v komunitním parku.' },
+              { placeholder: 'Komunitní zahrádky, sezónní záhony', alt: 'Komunitní zahrádky.' },
+            ]}
+            ariaLabel="Venkovní park" />
+        </div>
         <dl class="sec-feature__spec">
           <div><dt>Park rozloha</dt><dd>18 000 m²</dd></div>
           <div><dt>Vstup</dt><dd>Volný pro rezidenty i externí</dd></div>
@@ -116,21 +116,11 @@ import { withBase } from '../../utils/url';
 
   <section class="sec-feature">
     <div class="sec-feature__inner">
-      <div class="sec-feature__intro">
+      <div class="sec-feature__col">
         <div class="sec-feature__head">
           <p class="sec-feature__eyebrow">Gastro</p>
           <h2 class="sec-feature__title" id="km-gastro">Kantýna, restaurace, pekárna.</h2>
         </div>
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { src: withBase('/images/hub/hero/h04.jpg'), alt: 'Jídelna v budově B v poledne, společné stolování.' },
-              { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'), alt: 'Tržnice s minipivovarem v budově B, večerní zázemí.' },
-            ]}
-            ariaLabel="Gastro" />
-        </div>
-      </div>
-      <div class="sec-feature__body">
         <div class="sec-feature__text">
           <h3 id="km-kantyna">Kantýna</h3>
           <p>
@@ -150,6 +140,16 @@ import { withBase } from '../../utils/url';
             croissanty, sladké pečivo, káva k odnesení. Po až Pá 6:30 až 10:30.
           </p>
         </div>
+      </div>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { src: withBase('/images/hub/hero/h04.jpg'), alt: 'Jídelna v budově B v poledne, společné stolování.' },
+              { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'), alt: 'Tržnice s minipivovarem v budově B, večerní zázemí.' },
+            ]}
+            ariaLabel="Gastro" />
+        </div>
         <dl class="sec-feature__spec">
           <div><dt>Kantýna</dt><dd>Po až Pá 11:00 až 14:00</dd></div>
           <div><dt>Restaurace</dt><dd>Po až Pá 17:00 až 22:00, víkend 11:00 až 22:00</dd></div>
@@ -162,20 +162,11 @@ import { withBase } from '../../utils/url';
 
   <section class="sec-feature sec-feature--alt">
     <div class="sec-feature__inner">
-      <div class="sec-feature__intro">
+      <div class="sec-feature__col">
         <div class="sec-feature__head">
           <p class="sec-feature__eyebrow">Klubovna</p>
           <h2 class="sec-feature__title" id="km-klubovna">Společenský prostor pro 30 až 50 osob.</h2>
         </div>
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { src: withBase('/images/hub/amenities/ko04-klubovna.jpg'), alt: 'Klubovna v budově C s eventem, lidé u stolů, kulturní život uvnitř Hubu.' },
-            ]}
-            ariaLabel="Klubovna" />
-        </div>
-      </div>
-      <div class="sec-feature__body">
         <div class="sec-feature__text">
           <p>
             Klubovna je v patrech budovy C, v jádře areálu, společně s coworkingem v 1. NP.
@@ -187,6 +178,15 @@ import { withBase } from '../../utils/url';
             setkání, nedělní filmový klub. Rezidenti si mohou rezervovat klubovnu i pro soukromé
             akce (narozeniny, malé workshopy). Pro externí spolky pronájem v cenách dohodou.
           </p>
+        </div>
+      </div>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { src: withBase('/images/hub/amenities/ko04-klubovna.jpg'), alt: 'Klubovna v budově C s eventem, lidé u stolů, kulturní život uvnitř Hubu.' },
+            ]}
+            ariaLabel="Klubovna" />
         </div>
         <dl class="sec-feature__spec">
           <div><dt>Pravidelné akce</dt><dd>Kvíz Út 20:00, desky Čt 19:00, film Ne 19:00</dd></div>

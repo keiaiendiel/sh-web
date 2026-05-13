@@ -253,10 +253,11 @@ textarea:focus-visible {
   .sec-table__row { grid-template-columns: 1fr; gap: 4px; }
 }
 
-/* Section feature block , 2-col layout per user spec:
-   Intro řada (title + media), pod tím body řada (text + spec).
-   Použito pro Coworking + Komunita pro vizualně bohatší sekce
-   než plochý sec-block s wide table. */
+/* Section feature block , 2-col layout:
+   LEFT col: title + description (eyebrow + h2 + prose flow)
+   RIGHT col: media (Gallery 4:3) + spec table pod ním
+   Sloupce běží nezávisle top-down. Použito pro Coworking + Komunita
+   pro vizualně bohatší sekce než plochý sec-block s wide table. */
 .sec-feature {
   padding: var(--space-8) var(--gutter);
   background: var(--bg);
@@ -264,17 +265,20 @@ textarea:focus-visible {
 }
 .sec-feature--alt { background: var(--bg-muted, var(--bg)); }
 .sec-feature__inner {
-  max-width: var(--container-wide);
-  margin: 0 auto;
-}
-.sec-feature__intro {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(32px, 5vw, 72px);
-  align-items: center;
-  margin-bottom: var(--space-7);
+  align-items: start;
+  max-width: var(--container-wide);
+  margin: 0 auto;
 }
-.sec-feature__head { display: grid; gap: var(--space-3); max-width: 28ch; }
+.sec-feature__col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+.sec-feature__head { display: grid; gap: var(--space-3); }
 .sec-feature__eyebrow {
   font: 600 var(--text-2xs) / 1 var(--font-sans);
   color: var(--accent);
@@ -289,13 +293,12 @@ textarea:focus-visible {
   text-wrap: balance;
 }
 .sec-feature__media { min-width: 0; }
-.sec-feature__body {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: clamp(32px, 5vw, 56px);
-  align-items: start;
+.sec-feature__text p {
+  line-height: 1.65;
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-md);
+  max-width: 60ch;
 }
-.sec-feature__text p { line-height: 1.65; margin: 0 0 var(--space-4); font-size: var(--text-md); max-width: 60ch; }
 .sec-feature__text p:last-child { margin-bottom: 0; }
 .sec-feature__text ul {
   margin: var(--space-3) 0 0;
@@ -344,9 +347,7 @@ textarea:focus-visible {
 .sec-feature__spec dd { margin: 0; line-height: 1.45; }
 
 @media (max-width: 900px) {
-  .sec-feature__intro,
-  .sec-feature__body { grid-template-columns: 1fr; gap: var(--space-5); }
-  .sec-feature__head { max-width: none; }
+  .sec-feature__inner { grid-template-columns: 1fr; gap: var(--space-5); }
 }
 
 .sec-cta { padding: var(--space-8) var(--gutter); background: var(--accent); color: #fff; text-align: center; }
