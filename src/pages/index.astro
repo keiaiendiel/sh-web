@@ -233,7 +233,7 @@ const sections = [
           alt="Fotorealistický masterplan areálu Horních kasáren, popisky budov A1 až A6, B, C, D, E, F, P, S a venkovního bazénu."
           loading="lazy"
           decoding="async" />
-        <figcaption>Masterplan areálu, stav 2026</figcaption>
+        <figcaption>Plán areálu</figcaption>
       </figure>
     </div>
   </section>
@@ -578,15 +578,23 @@ const sections = [
     transition: border-color 160ms ease;
   }
   .lp-place__links a:hover { border-color: var(--accent); }
+  .lp-place__map {
+    margin: 0;
+  }
   .lp-place__map figcaption {
-    font-size: var(--text-xs);
-    color: var(--fg-muted);
-    margin-top: var(--space-2);
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--fg-subtle);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin-top: var(--space-3);
+    text-align: center;
   }
   .lp-place__map img {
     width: 100%;
     height: auto;
-    border: 1px solid var(--rule, rgba(0,0,0,0.12));
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    display: block;
   }
 
   @media (max-width: 760px) {

@@ -69,21 +69,23 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
         </figure>
       ))}
     </div>
-    <button type="button" class="gallery__btn gallery__btn--prev" data-gallery-prev aria-label="Předchozí snímek">
-      <Icon name="chevron-left" size={22} strokeWidth={2} />
-    </button>
-    <button type="button" class="gallery__btn gallery__btn--next" data-gallery-next aria-label="Další snímek">
-      <Icon name="chevron-right" size={22} strokeWidth={2} />
-    </button>
-    <div class="gallery__dots" role="tablist" aria-label={`Pozice v galerii: ${ariaLabel}`}>
-      {images.map((_, i) => (
-        <button
-          type="button"
-          class="gallery__dot"
-          data-gallery-dot={i}
-          aria-label={`Snímek ${i + 1} z ${images.length}`}>
-        </button>
-      ))}
+    <div class="gallery__controls" role="group" aria-label={`Ovládání galerie: ${ariaLabel}`}>
+      <button type="button" class="gallery__nav gallery__nav--prev" data-gallery-prev aria-label="Předchozí snímek">
+        <Icon name="chevron-left" size={18} strokeWidth={2} />
+      </button>
+      <div class="gallery__dots" role="tablist" aria-label={`Pozice v galerii: ${ariaLabel}`}>
+        {images.map((_, i) => (
+          <button
+            type="button"
+            class="gallery__dot"
+            data-gallery-dot={i}
+            aria-label={`Snímek ${i + 1} z ${images.length}`}>
+          </button>
+        ))}
+      </div>
+      <button type="button" class="gallery__nav gallery__nav--next" data-gallery-next aria-label="Další snímek">
+        <Icon name="chevron-right" size={18} strokeWidth={2} />
+      </button>
     </div>
   </div>
 )}
@@ -230,95 +232,106 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
     background: rgba(255, 255, 255, 0.5);
   }
 
-  /* Arrow buttons , desktop only. Touch swipe handles mobile.
-     Bílý outline kruh + bílý chevron (Lucide SVG centruje precizně, žádný
-     drift z guillemet glyphů). Soft drop-shadow drží čitelnost přes světlé
-     i tmavé snímky bez bílé výplně, která by zakryla obrázek. */
-  .gallery__btn {
-    position: absolute;
-    top: calc(50% - 22px);
-    width: 44px; height: 44px;
+  /* Controls row: prev + dots + next sedí na jednom řádku pod obrázkem,
+     žádné šipky nepřekrývají vizuál. Plum accent. */
+  .gallery__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  /* Chevron nav buttons , inline s dot indikátorem, malé plum kruhy. */
+  .gallery__nav {
+    width: 32px;
+    height: 32px;
     border-radius: 999px;
-    border: 2px solid #fff;
+    border: 1px solid var(--accent-rule);
     background: transparent;
-    color: #fff;
+    color: var(--accent);
     cursor: pointer;
     display: grid;
     place-items: center;
-    opacity: 0.92;
-    /* Dvojitý drop-shadow: blízký 0 1px 3px pro hranu kruhu, vzdálený
-       0 4px 14px pro halo přes světlé pozadí. Drží šipky čitelné i přes
-       světlé snímky bez přidávání bílé výplně, která by zakryla obrázek. */
-    filter:
-      drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
+    flex-shrink: 0;
     transition:
-      opacity 160ms var(--ease-decel),
-      border-color 160ms var(--ease-decel),
-      transform 160ms var(--ease-decel);
-    z-index: 2;
+      background 220ms cubic-bezier(0.2, 0, 0, 1),
+      border-color 220ms cubic-bezier(0.2, 0, 0, 1),
+      transform 220ms cubic-bezier(0.2, 0, 0, 1);
   }
-  .gallery__btn :global(svg) {
-    /* Optické vyvážení chevronu , left chevron sedí o 1 px doprava od centra
-       SVG viewBoxu, right naopak doleva, takže vizuálně visí stranou. Drobný
-       posun srovná na optickou střednici tlačítka. */
+  .gallery__nav :global(svg) {
     display: block;
     stroke: currentColor;
   }
-  .gallery__btn--prev :global(svg) { transform: translateX(-1px); }
-  .gallery__btn--next :global(svg) { transform: translateX(1px); }
-  .gallery__btn:hover {
-    opacity: 1;
-    border-color: #fff;
-    transform: scale(1.05);
+  /* Optické vyvážení chevronu (visí stranou v SVG viewBoxu). */
+  .gallery__nav--prev :global(svg) { transform: translateX(-1px); }
+  .gallery__nav--next :global(svg) { transform: translateX(1px); }
+  .gallery__nav:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    transform: scale(1.06);
   }
-  .gallery__btn:focus-visible {
-    opacity: 1;
-    outline: 2px solid #fff;
-    outline-offset: 2px;
+  .gallery__nav--prev:hover :global(svg) { transform: translateX(-3px); }
+  .gallery__nav--next:hover :global(svg) { transform: translateX(3px); }
+  .gallery__nav:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
-  .gallery__btn:disabled {
+  .gallery__nav:disabled {
     opacity: 0.25;
     cursor: default;
     pointer-events: none;
+    transform: none;
   }
-  .gallery__btn--prev { left: 12px; }
-  .gallery__btn--next { right: 12px; }
-
-  @media (max-width: 720px) {
-    .gallery__btn { display: none; }
+  .gallery__nav :global(svg) {
+    transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
   }
 
-  /* Dot indicator , visible on every breakpoint. */
+  /* Dot indicator s plynulou expand animací (capsule lengthens). Active
+     dot expanduje ze 6 px na 28 px s cubic-bezier ease + jemný pulse
+     scale pro „aha" moment při změně. */
   .gallery__dots {
     display: flex;
-    justify-content: center;
+    align-items: center;
     gap: 6px;
-    margin-top: 14px;
   }
   .gallery__dot {
-    width: 8px; height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 999px;
     border: 0;
     padding: 0;
     background: var(--border-muted);
     cursor: pointer;
     transition:
-      background 200ms var(--ease-decel),
-      width 200ms var(--ease-decel);
+      background 320ms cubic-bezier(0.2, 0, 0, 1),
+      width 360ms cubic-bezier(0.2, 0, 0, 1),
+      transform 220ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .gallery__dot:hover {
+    background: var(--accent-rule);
+    transform: scale(1.4);
   }
   .gallery__dot.is-active {
     background: var(--accent);
-    width: 24px;
+    width: 28px;
+    animation: gallery-dot-pulse 480ms cubic-bezier(0.2, 0, 0, 1);
   }
+  .gallery__dot.is-active:hover { transform: scale(1.05); }
   .gallery__dot:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
+  @keyframes gallery-dot-pulse {
+    0%   { transform: scale(0.6); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .gallery__viewport { scroll-behavior: auto; }
-    .gallery__btn,
-    .gallery__dot { transition: none; }
+    .gallery__nav,
+    .gallery__nav :global(svg),
+    .gallery__dot { transition: none; animation: none; }
   }
 </style>
