@@ -14,24 +14,29 @@ import { withBase } from '../../utils/url';
       <p class="sec-hero__eyebrow">Okolí</p>
       <h1 class="sec-hero__title">Klidná obec, rušné město 15 minut autobusem.</h1>
       <p class="sec-hero__lede">
-        Klecany jsou klidná obec na severním okraji Prahy. Hluboká práce v Klecanech, rušný
-        život v Praze 15 minut autobusem. V docházkové a krátké dojezdové vzdálenosti
-        školství, zdravotnictví, obchody, sport, kultura, pošta, banka a nabídky brigád pro
-        studenty. Všechna fakta níže ověřená k 12. 5. 2026.
+        Klecany jsou klidná obec na severním okraji Prahy. V docházkové a krátké dojezdové
+        vzdálenosti školství, zdravotnictví, obchody, sport, kultura a další zázemí.
       </p>
+      <nav class="sec-hero__jumps" aria-label="Skok na sekci">
+        <a class="sec-hero__jump" href="#ok-skoly">Vzdělávání</a>
+        <a class="sec-hero__jump" href="#ok-zdravotnictvi">Zdravotnictví</a>
+        <a class="sec-hero__jump" href="#ok-obchody">Obchody</a>
+        <a class="sec-hero__jump" href="#ok-sport">Sport</a>
+        <a class="sec-hero__jump" href="#ok-kavarny">Kavárny a kultura</a>
+      </nav>
     </div>
   </section>
 
   <section class="sec-block">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Vzdělávání</p>
+        <p class="sec-block__eyebrow" id="ok-skoly">Vzdělávání</p>
         <h2 class="sec-block__title">Školy a školky.</h2>
       </header>
       <dl class="sec-table">
         <div class="sec-table__row"><dt>MŠ Astra (Montessori)</dt><dd>Dolní Kasárna 766, 0 m od Hubu (v rámci areálu), Po až Pá 7:00 až 17:00, česko-anglická Montessori</dd></div>
-        <div class="sec-table__row"><dt>ZŠ a MŠ Klecany</dt><dd>U Školky 74, výuka na Sídlišti 375, 1,3 km, 16 minut pěšky, 5 minut na kole</dd></div>
-        <div class="sec-table__row"><dt>ZUŠ Klecany</dt><dd>Klecany 375, 1,4 km, 17 minut pěšky, hudba a výtvarné obory</dd></div>
+        <div class="sec-table__row"><dt><a href="https://www.zsmsklecany.cz/" rel="noopener">ZŠ a MŠ Klecany</a></dt><dd>U Školky 74, výuka na Sídlišti 375, 1,3 km, 16 minut pěšky, 5 minut na kole</dd></div>
+        <div class="sec-table__row"><dt><a href="https://zus.klecany.cz/" rel="noopener">ZUŠ Klecany</a></dt><dd>Klecany 375, 1,4 km, 17 minut pěšky, hudba a výtvarné obory</dd></div>
         <div class="sec-table__row"><dt>Gymnázia v Praze 8</dt><dd>Thomase Manna (Střížkovská, 8,5 km, 15 minut autem), Karlínské gymnázium (15 minut bus + metro)</dd></div>
         <div class="sec-table__row"><dt>Letecká SŠ Odolena Voda</dt><dd>Commute 15 až 20 minut autem</dd></div>
       </dl>
@@ -41,7 +46,7 @@ import { withBase } from '../../utils/url';
   <section class="sec-block sec-block--alt">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Zdravotnictví</p>
+        <p class="sec-block__eyebrow" id="ok-zdravotnictvi">Zdravotnictví</p>
         <h2 class="sec-block__title">Lékaři a lékárna v U Školy 17.</h2>
         <p class="sec-block__lede">V jedné budově na adrese U Školy 17 (1,3 km, 16 minut pěšky, 5 minut na kole).</p>
       </header>
@@ -61,14 +66,14 @@ import { withBase } from '../../utils/url';
   <section class="sec-block">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Obchody</p>
+        <p class="sec-block__eyebrow" id="ok-obchody">Obchody</p>
         <h2 class="sec-block__title">Potraviny, drogerie, velký nákup.</h2>
       </header>
       <dl class="sec-table">
         <div class="sec-table__row"><dt>Potraviny Klecany</dt><dd>V Honech 690/1, 1,6 km, 20 minut pěšky, Po až Ne 7:00 až 19:00, běžné potraviny, čerstvé pečivo, jízdenky PID</dd></div>
         <div class="sec-table__row"><dt>Drogerie Och!</dt><dd>Do Klecánek 58, 1,1 km, 13 minut pěšky, otevřeno od 8:30</dd></div>
-        <div class="sec-table__row"><dt>Lidl Zdiby</dt><dd>Ke Zdibsku 272, 3,5 km, 6 minut autem, 15 minut na kole, Po až Ne do 21:00, hlavní velký nákup</dd></div>
-        <div class="sec-table__row"><dt>Albert Roztoky</dt><dd>Tyršovo nám., 4,2 km přes Přívoz Klecánky, 25 minut s přívozem, alternativa s cestou přes Vltavu</dd></div>
+        <div class="sec-table__row"><dt><a href="https://www.lidl.cz" rel="noopener">Lidl Zdiby</a></dt><dd>Ke Zdibsku 272, 3,5 km, 6 minut autem, 15 minut na kole, Po až Ne do 21:00, hlavní velký nákup</dd></div>
+        <div class="sec-table__row"><dt><a href="https://www.albert.cz" rel="noopener">Albert Roztoky</a></dt><dd>Tyršovo nám., 4,2 km přes Přívoz Klecánky, 25 minut s přívozem, alternativa s cestou přes Vltavu</dd></div>
       </dl>
       <p class="sec-block__text">Rohlík.cz a Košík.cz doručují přímo do Klecan.</p>
     </div>
@@ -81,9 +86,9 @@ import { withBase } from '../../utils/url';
         <h2 class="sec-block__title">Logistika v docházce.</h2>
       </header>
       <dl class="sec-table">
-        <div class="sec-table__row"><dt>Česká pošta Klecany</dt><dd>Do Klecánek 52, 1,1 km</dd></div>
-        <div class="sec-table__row"><dt>Z-BOX Zásilkovna</dt><dd>Do Klecánek 58, 1,1 km, nonstop (vyžaduje Bluetooth a aplikaci)</dd></div>
-        <div class="sec-table__row"><dt>AlzaBox Klecany</dt><dd>Do Klecánek 58, 1,1 km, nonstop (vyžaduje aplikaci Alza)</dd></div>
+        <div class="sec-table__row"><dt><a href="https://www.ceskaposta.cz" rel="noopener">Česká pošta Klecany</a></dt><dd>Do Klecánek 52, 1,1 km</dd></div>
+        <div class="sec-table__row"><dt><a href="https://www.zasilkovna.cz" rel="noopener">Z-BOX Zásilkovna</a></dt><dd>Do Klecánek 58, 1,1 km, nonstop (vyžaduje Bluetooth a aplikaci)</dd></div>
+        <div class="sec-table__row"><dt><a href="https://www.alza.cz/alzabox" rel="noopener">AlzaBox Klecany</a></dt><dd>Do Klecánek 58, 1,1 km, nonstop (vyžaduje aplikaci Alza)</dd></div>
         <div class="sec-table__row"><dt>MONETA bankomat</dt><dd>U Školky 74, 1,3 km, nonstop bezkontaktní</dd></div>
         <div class="sec-table__row"><dt>KB bankomat</dt><dd>Zdibsko 164, cca 2 km, nonstop</dd></div>
       </dl>
@@ -93,11 +98,11 @@ import { withBase } from '../../utils/url';
   <section class="sec-block">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Sport a venkovní aktivity</p>
+        <p class="sec-block__eyebrow" id="ok-sport">Sport a venkovní aktivity</p>
         <h2 class="sec-block__title">Skate hala 100 metrů, fotbal, cyklostezka.</h2>
       </header>
       <dl class="sec-table">
-        <div class="sec-table__row"><dt>Skate hala Klecany</dt><dd>Dolní Kasárna, 100 m od Hubu (v rámci areálu), Po až Pá 14:00 až 21:00, So až Ne 10:00 až 21:00, krytý dřevěný skatepark</dd></div>
+        <div class="sec-table__row"><dt><a href="https://www.skateskola.cz/" rel="noopener">Skate hala Klecany</a></dt><dd>Dolní Kasárna, 100 m od Hubu (v rámci areálu), Po až Pá 14:00 až 21:00, So až Ne 10:00 až 21:00, krytý dřevěný skatepark</dd></div>
         <div class="sec-table__row"><dt>Fotbal TJ Sokol</dt><dd>Na Skalkách 368/33, 1,8 km, 23 minut pěšky, 7 minut na kole</dd></div>
         <div class="sec-table__row"><dt>Workout a gril park</dt><dd>Centrum obce u fotbalu, 1,8 km, veřejně přístupné, revitalizovaný</dd></div>
         <div class="sec-table__row"><dt>EuroVelo 7</dt><dd>Vltavské nábřeží, 2,5 km, 30 minut pěšky, 10 minut na kole, podél Vltavy směr Praha i Mělník</dd></div>
@@ -108,7 +113,7 @@ import { withBase } from '../../utils/url';
   <section class="sec-block sec-block--alt">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Kavárny, restaurace, kultura</p>
+        <p class="sec-block__eyebrow" id="ok-kavarny">Kavárny, restaurace, kultura</p>
         <h2 class="sec-block__title">Klícka, Sportklub, KC Rychta.</h2>
       </header>
       <dl class="sec-table">
@@ -154,7 +159,7 @@ import { withBase } from '../../utils/url';
 
   <section class="sec-cta">
     <div class="sec-cta__inner">
-      <h2 class="sec-cta__title">Klecany 12 km, Praha 15 minut.</h2>
+      <h2 class="sec-cta__title">Bydlení blízko Prahy bez ceny centra.</h2>
       <p class="sec-cta__lede">Hluboká práce v Klecanech, rušný život v Praze. Rezervace je nezávazná.</p>
       <a class="sec-cta__button" href={withBase('/rezervace/')}>Rezervace</a>
     </div>

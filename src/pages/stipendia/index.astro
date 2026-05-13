@@ -4,63 +4,63 @@ import { withBase } from '../../utils/url';
 ---
 <Base
   title="Pobytové stipendium Hub Klecany, 4 role pro rezidenty"
-  description="Pobytové stipendium pro lidi, kteří k Hubu reálně přispějí. Čtyři role: rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor. První otevřená výzva podzim 2026, pilot 8 až 12 míst.">
-  <article class="page-stub">
-    <p class="page-stub__eyebrow">Stipendia</p>
-    <h1>Pobytové stipendium pro lidi, kteří k Hubu reálně přispějí.</h1>
-    <p class="page-stub__lede">
-      Bydlení nebo jeho zvýhodněnou cenu vyměníme za hmatatelný vstup do života Hubu, ne za vágní „pomoc kolem". První otevřená výzva proběhne na podzim 2026 (pilot 8 až 12 míst).
-    </p>
-  </article>
+  description="Pobytové stipendium pro lidi, kteří k Hubu reálně přispějí. Čtyři role: rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor.">
+
+  <section class="sec-hero">
+    <div class="sec-hero__inner">
+      <p class="sec-hero__eyebrow">Stipendia</p>
+      <h1 class="sec-hero__title">Pobytové stipendium pro lidi, kteří k Hubu přispějí.</h1>
+      <p class="sec-hero__lede">
+        Bydlení nebo jeho zvýhodněnou cenu vyměníme za hmatatelný vstup do života Hubu.
+      </p>
+      <nav class="sec-hero__jumps" aria-label="Skok na sekci">
+        <a class="sec-hero__jump" href="#st-tvurce">Rezident-tvůrce</a>
+        <a class="sec-hero__jump" href="#st-spravce">Správce</a>
+        <a class="sec-hero__jump" href="#st-stavitel">Stavitel</a>
+        <a class="sec-hero__jump" href="#st-programator">Programátor</a>
+      </nav>
+    </div>
+  </section>
 
   <section class="sec-block">
     <div class="sec-block__inner">
       <header class="sec-block__head">
         <p class="sec-block__eyebrow">Čtyři role v programu</p>
         <h2 class="sec-block__title">Vyberte tu, která vám sedí.</h2>
-        <p class="sec-block__lede">
-          Při registraci zájmu vyberete jednu z rolí, nebo zaškrtnete „Mám zájem o pobytové
-          stipendium" a my se ozveme s návrhem.
-        </p>
       </header>
 
       <article class="sec-sub">
-        <h3 class="sec-sub__title">Rezident-tvůrce</h3>
+        <h3 class="sec-sub__title" id="st-tvurce">Rezident-tvůrce</h3>
         <p class="sec-sub__lede">
-          Umělec, výzkumník, designér, autor nebo žurnalista, který pracuje na vlastním projektu.
-          Stipendium pokrývá tříměsíční pobyt v Hubu, za to v Hubu uděláte dvě otevřené dílny
-          nebo prezentace pro komunitu, plus závěrečnou dokumentaci své práce. Hodí se pro lidi,
-          kteří potřebují klid blízko Prahy a nemají rozpočet na pražský ateliér.
+          Umělec, výzkumník, designér, autor nebo žurnalista pracující na vlastním projektu.
+          Stipendium pokryje tříměsíční pobyt, za to uděláte v Hubu dvě otevřené dílny
+          nebo prezentace pro komunitu a závěrečnou dokumentaci své práce.
         </p>
       </article>
 
       <article class="sec-sub">
-        <h3 class="sec-sub__title">Správce na výměnu (work-trade)</h3>
+        <h3 class="sec-sub__title" id="st-spravce">Správce na výměnu (work-trade)</h3>
         <p class="sec-sub__lede">
           Operativní role v provozu Hubu: večerní recepce, koordinace komunitních akcí, péče
-          o sdílené prostory, pomoc s návštěvníky. Měsíční úvazek 32 až 40 hodin (asi 8 až 10
-          hodin týdně), za to výrazně zvýhodněné nebo plně hrazené bydlení. Hodí se pro lidi,
-          kteří mají vlastní práci na dálku a chtějí být součástí provozu Hubu.
+          o sdílené prostory, pomoc s návštěvníky. Měsíční úvazek 32 až 40 hodin výměnou
+          za zvýhodněné nebo plně hrazené bydlení.
         </p>
       </article>
 
       <article class="sec-sub">
-        <h3 class="sec-sub__title">Stavitel-rezident</h3>
+        <h3 class="sec-sub__title" id="st-stavitel">Stavitel-rezident</h3>
         <p class="sec-sub__lede">
           Účast na konkrétní stavební nebo rekonstrukční fázi Hubu. Týden v měsíci na staveništi,
           zbytek měsíce vlastní práce. Stipendium pokrývá bydlení plus malý materiálový rozpočet.
-          Hodí se pro lidi se stavebními dovednostmi, kteří chtějí být u toho a mít na tom
-          autorský podíl.
         </p>
       </article>
 
       <article class="sec-sub">
-        <h3 class="sec-sub__title">Rezident-programátor</h3>
+        <h3 class="sec-sub__title" id="st-programator">Rezident-programátor</h3>
         <p class="sec-sub__lede">
           Vývojář, který buduje konkrétní digitální nástroj pro Hub: rezervační systém,
-          komunitní aplikaci, dokumentační platformu, integraci s Cloudflare backendem.
-          Tříměsíční pobyt s konkrétním deliverable na konci. Hodí se pro full-stack developery
-          nebo design-developery, kteří chtějí pracovat na reálném produktu s reálnými uživateli.
+          komunitní aplikaci, dokumentační platformu. Tříměsíční pobyt s konkrétním
+          deliverable na konci.
         </p>
       </article>
     </div>
@@ -69,30 +69,8 @@ import { withBase } from '../../utils/url';
   <section class="sec-block sec-block--alt">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Jak se přihlásit</p>
-        <h2 class="sec-block__title">Přepínač v rezervačním formuláři.</h2>
-      </header>
-      <div class="sec-block__text">
-        <p>
-          Při registraci zájmu o bydlení (<a href={withBase('/rezervace/')}>/rezervace/</a>)
-          zaškrtnete přepínač <strong>„Mám zájem o pobytové stipendium"</strong>. Není to
-          závazná přihláška, jen signál: až se otevře první kolo, ozveme se s konkrétními
-          podmínkami, termíny a formulářem.
-        </p>
-        <p>
-          <strong>První otevřená výzva: podzim 2026.</strong> Cyklus pilotu tři měsíce,
-          8 až 12 míst, primárně role rezident-tvůrce.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec-block">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
         <p class="sec-block__eyebrow">Co stipendium pokrývá</p>
-        <h2 class="sec-block__title">Rámec pro pilotní kolo.</h2>
-        <p class="sec-block__lede">Plný rozsah bude doplněn před prvním kolem.</p>
+        <h2 class="sec-block__title">Rámec programu.</h2>
       </header>
       <div class="sec-block__text">
         <ul>
@@ -108,8 +86,7 @@ import { withBase } from '../../utils/url';
     <div class="sec-cta__inner">
       <h2 class="sec-cta__title">Zájem o pobytové stipendium.</h2>
       <p class="sec-cta__lede">
-        V rezervačním formuláři zaškrtněte „Mám zájem o pobytové stipendium" a my se ozveme,
-        jakmile otevřeme první výzvu (podzim 2026).
+        V rezervačním formuláři zaškrtněte „Mám zájem o pobytové stipendium" a my se ozveme.
       </p>
       <a class="sec-cta__button" href={withBase('/rezervace/')}>Rezervace</a>
     </div>

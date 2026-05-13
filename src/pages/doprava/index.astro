@@ -15,16 +15,22 @@ import { withBase } from '../../utils/url';
       <h1 class="sec-hero__title">15 minut autobusem na metro Kobylisy.</h1>
       <p class="sec-hero__lede">
         Pro rezidenty Hubu v ceně bydlení: pět jízd Hub-shuttle a jedna jízda Hub-taxi měsíčně.
-        PID linka 374 jako záloha, 14 minut na Kobylisy ve špičce s dedikovanými pruhy. Plánovaná
-        tramvaj z Kobylis do Sedlce začne sloužit 2029 až 2030, cyklolávka přes Vltavu 2027 až 2028.
+        PID linka 374 jako záloha.
       </p>
+      <nav class="sec-hero__jumps" aria-label="Skok na sekci">
+        <a class="sec-hero__jump" href="#dp-shuttle">Hub-shuttle</a>
+        <a class="sec-hero__jump" href="#dp-374">Bus 374</a>
+        <a class="sec-hero__jump" href="#dp-taxi">Hub-taxi</a>
+        <a class="sec-hero__jump" href="#dp-auto">Auto a kolo</a>
+        <a class="sec-hero__jump" href="#dp-planned">Plánované</a>
+      </nav>
     </div>
   </section>
 
   <section class="sec-block">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Hub-shuttle (v ceně 5 jízd měsíčně)</p>
+        <p class="sec-block__eyebrow" id="dp-shuttle">Hub-shuttle (v ceně 5 jízd měsíčně)</p>
         <h2 class="sec-block__title">Vlastní dodávka, peak doprava na Kobylisy.</h2>
       </header>
       <div class="sec-block__text">
@@ -57,7 +63,7 @@ import { withBase } from '../../utils/url';
   <section class="sec-block sec-block--alt">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Linka 374 PID</p>
+        <p class="sec-block__eyebrow" id="dp-374">Linka 374 PID</p>
         <h2 class="sec-block__title">Záloha v rámci pražského tarifu.</h2>
       </header>
       <div class="sec-block__text">
@@ -84,7 +90,7 @@ import { withBase } from '../../utils/url';
   <section class="sec-block">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Hub-taxi (v ceně 1 jízda měsíčně)</p>
+        <p class="sec-block__eyebrow" id="dp-taxi">Hub-taxi (v ceně 1 jízda měsíčně)</p>
         <h2 class="sec-block__title">Lokální doprava v Klecanech a okolí.</h2>
       </header>
       <div class="sec-block__text">
@@ -110,7 +116,7 @@ import { withBase } from '../../utils/url';
   <section class="sec-block sec-block--alt">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Auto, kolo, pěšky</p>
+        <p class="sec-block__eyebrow" id="dp-auto">Auto, kolo, pěšky</p>
         <h2 class="sec-block__title">Vlastní cesta do Prahy.</h2>
       </header>
       <div class="sec-block__text">
@@ -140,7 +146,7 @@ import { withBase } from '../../utils/url';
   <section class="sec-block">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Plánováno 2027 až 2030</p>
+        <p class="sec-block__eyebrow" id="dp-planned">Plánováno 2027 až 2030</p>
         <h2 class="sec-block__title">Tramvaj a cyklolávka přes Vltavu.</h2>
         <p class="sec-block__lede">
           Plánované investice se schváleným územním rozhodnutím, ale ještě nejsou postaveny.
