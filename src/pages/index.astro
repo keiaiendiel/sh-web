@@ -20,7 +20,7 @@ import { withBase } from '../utils/url';
 const heroSlides = [
   {
     src: withBase('/images/hub/hero/h01.jpg'),
-    alt: 'Budova C (coworking + komunita) v parteru, hlavní vstup v odpoledním podvětí, 20 až 30 lidí v záběru: někteří vchází, někdo telefonuje, někdo na kole.',
+    alt: 'Budova C (coworking + komunita) v parteru, denní pohled z odstupu, kreativní atmosféra areálu.',
   },
   {
     src: withBase('/images/hub/hero/h02.jpg'),
@@ -78,11 +78,14 @@ const amenityRows: AmenityRow[] = [
     lede: 'Volný stůl v sále zdarma pro rezidenty. Fixní stůl, ateliéry, dílny s těžkými stroji za hodinovou sazbu.',
     href: '/coworking/',
     detailLabel: 'Coworking, dílny a ateliéry',
-    /* Vault cw01-cw04 folders zatím empty (úplně nové vizualizace per
-       Marek + Scott Weber / Impact Hub reference). Placeholder slots. */
+    /* Coworking žije v budově C. Existující Building C záběry (exterior +
+       interior) drží 2 první sloty, zbývající cw01-cw04 specifické záběry
+       z vault Visualizations/cw zatím chybí (úplně nové vizualizace per
+       Marek + Scott Weber / Impact Hub reference). */
     gallery: [
+      { src: withBase('/images/hub/amenities/cw-budova-c-exterior.jpg'), alt: 'Budova C zvenku, parter s hlavním vstupem do coworkingu a komunitního zázemí.' },
+      { src: withBase('/images/hub/amenities/cw-budova-c-interior.jpg'), alt: 'Interiér budovy C, společný prostor pro coworking a komunitní akce.' },
       { placeholder: 'cw01 Volný stůl v sále, hot-desking, 6 až 8 lidí ve flow', alt: 'Coworkingový sál v 1. NP budovy C, flexibilní hot-desking.' },
-      { placeholder: 'cw02 Fixní stůl personalizovaný, monitory, klávesnice, rostlina', alt: 'Detail dedicated desku s monitory a osobními věcmi.' },
       { placeholder: 'cw03 Zasedací místnost s týmem 4 až 6 lidí, prezentace na obrazovku', alt: 'Zasedací místnost v budově C v plné akci.' },
       { placeholder: 'cw04 Ateliér nebo dílna v D1 nebo H1 až H3, hardware a nářadí', alt: 'Ateliér nebo dílna s fyzickou prací mimo office.' },
     ],
