@@ -1,15 +1,26 @@
 # sh-web — CLAUDE.md
 
-> **▶ CONTINUATION POINTER (2026-05-13)**
+> **▶ STATE (2026-05-13 EOD)**
 >
-> Pokud jsi nový Claude session v tomto worktree, jsi uprostřed rozdělané práce:
+> Branch: `claude/pensive-satoshi-8b3aed`, **pushed to `master`** přes celý den (deploy GH Pages funguje, master HEAD = aktuální stav webu na `https://keiaiendiel.github.io/sh-web/`). Build 23 stránek, lint clean. Worker scaffold v `worker/` deploy pending.
 >
-> - **Branch:** `claude/pedantic-shirley-b5ed77`, 9 commits ahead of master, working tree clean, **NIC nepushnuto a nemergnuto**.
-> - **Stav:** všech 6 fází restrukturalizace + vault sync hotovo (viz „ACTIVE WORK" níže). Web má 26 stránek, kompletní obsah ze Site_Copy.md, Cloudflare Worker scaffold pro form backend (deploy pending).
-> - **Co klient pravděpodobně udělá příště:** edituje `/Users/kindl/kindl-vault/Projects/SH_Web/SH_Web_Site_Copy.md` (nebo Plan.md) ve své vault a vrátí se s prosbou „syncni to". Postup je dole v sekci „Workflow: vault → repo sync".
-> - **Preview server:** spustit `pnpm dev` v této složce (port 4322 via `.claude/launch.json`), nebo přes `mcp__Claude_Preview__preview_start` s name `sh-web`.
-> - **Než cokoli změníš:** přečti si CLAUDE.md celý (zejména „Vault sync 2026-05-13" + „Workflow"), `git log --oneline -10`, a podívej se do `git status` pro orientaci.
-> - **Merge do master:** klient nechce zatím mergeovat. Až řekne `merge` nebo `push`, pak: `cd "/Users/kindl/Work/_2026/02 OSA/11 WWW/sh-web" && git merge claude/pedantic-shirley-b5ed77`.
+> **Hlavní změny od May 2026 restrukturalizace (Phase 1-6) → dnešní design pass:**
+> - **Layout pattern `.sec-feature`** (`src/styles/kit.css`): 2-col continuous flow (left = head + text + h3 sub-sekce, right = Gallery 4:3 + compact spec dl). Použito na `/coworking/` (5 sekcí) + `/komunita/` (4 sekcí). `.sec-table` tightnutý (žádný outer box, hairline rows, narrow label col `minmax(140px, 1fr)`).
+> - **Hero swipe carousel** (`src/pages/index.astro`): 5 slidů, 4 s hold + 1 s sweep (translateX 100% → 0% → -100%). Soubory `public/images/hub/hero/h01-h05.jpg` per vault `SH_Web_Visualization_List_Cleanup.md` mapping (h01 Budova C / h02 Inner courtyard / h03 Pokoj 2+kk / h04 Kapsle / h05 Aerial).
+> - **Landing „Co Hub nabízí" zig-zag** (4 řady, alternující foto-text). Gallery komponenta podporuje placeholder items (`{ placeholder, alt }` rendrují plum-tinted box + „FOTO SE PŘIPRAVUJE" badge), Sekce list nahrazená icon cards (Lucide ikony + label + hint). Eyebrow „Co Hub nabízí" povýšen na hlavní h2 (eyebrow-style small caps).
+> - **/ubytovani/:** booking-style RoomCard 3-col grid (`src/components/RoomCard.astro`), jemné rozdělení Co-living vs Privátní, 2 quick-jump buttony pod hero. Co-living renames: kapsle-single + kapsle-double (pořadí 1+2), pak jedno-luzko + dvouluzko (pořadí 3+4), names: „Privátní jednolůžková kapsle" / „Privátní dvoulůžková kapsle" / „Jednolůžko v pokoji" / „Dvoulůžko v pokoji".
+> - **Dropdown nav** (`src/components/Header.astro`): hover/focus dropdowny pro Ubytování / Coworking / Komunita s flat item lists. Stejné sjednocené hero quick-jumps na všech podstránkách přes `.sec-hero__jumps` v kit.css.
+> - **Smazané stránky:** `/novinky/`, `/galerie/`, `/metodika-srovnani/` (žádný obsah). Build je teď 23 stránek místo 26.
+> - **Discount tiers display pryč:** karty + detail pages show jen anchor cenu („X Kč/měsíc"). m3/m6/m12 fields zůstaly v MDX collection data, jen display ignore. Místo discount mention je „Pro rezervaci s právem prodloužit pobyt si připravte přibližně 5 až 10 % nad základní cenu" v apt-cena lede a jako checkbox v /rezervace/ kroku 3.
+> - **Marek/TBD/podzim 2026 mentions** odstraněné napříč webem. Reálné org data tažené z `src/content/org/identity.json` (IČO 270 26 345, datová schránka xen5zi3, telefony Marka + Štěpána). Stipendia stránka kompletně cleanup od timing claims.
+> - **Sjednocené oblé rohy:** všechno `2 px` / `4 px` border-radius → `var(--radius-input)` (7 px) napříč Header / Footer / Tooltip / detail page placeholdery / rezervace panely. Gallery controls (chevron + dot indicator) přesunuté pod obrázek, plum 32 px outline kruhy + 28 px capsule active dot s pulse animací.
+> - **Vault sync:** `/Users/kindl/kindl-vault/Projects/SH_Web/SH_Web_Site_Copy.md` má `==REPO: ...==` highlight anotace + sync log v hlavičce. Memory pravidlo „Site_Copy.md jako jediný zdroj textů" v `~/.claude/projects/.../memory/feedback-vault-copy-canonical.md`.
+>
+> **Co klient pravděpodobně udělá příště:**
+> - Pošle nové fotky do `/Users/kindl/kindl-vault/Projects/SH_Web/Visualizations/<code>/`. Postup: `cp` do `public/images/hub/`, `pnpm optimize:images`, update reference v `src/pages/index.astro` (heroSlides nebo amenityRows) nebo v Coworking/Komunita Gallery slots. Vault kód mapping: h01-h05 (hero), cw01-cw04 (coworking), ko01-ko04 (komunita landing), dp01-dp03 (doprava), we/sp/ga/ku/ok/ks/kd/lj/lp/p1k-p5k (konkrétní ubytování + okolí).
+> - Edituje `SH_Web_Site_Copy.md` ve vault → sync postup v „Workflow: vault → repo sync" níže (mapování vault § ↔ repo file).
+>
+> **Preview server:** `pnpm dev` v této složce (port 4322 via `.claude/launch.json`), nebo `mcp__Claude_Preview__preview_start` s name `sh-web`. Pozor — když je preview spuštěný v jiném worktree, restart nutný.
 
 Operational handoff for the Startovací Hub Klecany site. Keep this file terse — it loads into every Claude Code conversation. Long-form history (per-page anatomy, design decisions, redesign aftermath) lives in `docs/HISTORY.md`; read it on demand only.
 
