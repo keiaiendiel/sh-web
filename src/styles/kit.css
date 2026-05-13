@@ -52,7 +52,7 @@
   background: transparent;
   border: 1px solid var(--fg);
   cursor: pointer;
-  border-radius: 0;
+  border-radius: var(--radius-input);
   text-decoration: none;
   transition: background var(--dur-base) var(--ease-standard),
               color      var(--dur-base) var(--ease-standard);
@@ -105,7 +105,7 @@
 :focus-visible {
   outline: none;
   box-shadow: var(--ring-focus);
-  border-radius: 2px;
+  border-radius: var(--radius-input);
 }
 /* Form fields a buttons s vlastním border-radius je respektován. */
 a:focus-visible,
@@ -263,7 +263,7 @@ textarea:focus-visible {
   color: var(--accent);
   border: 1px solid var(--accent-rule);
   background: var(--accent-soft);
-  border-radius: 2px;
+  border-radius: var(--radius-input);
 }
 .page-stub__links {
   margin-top: var(--space-6);

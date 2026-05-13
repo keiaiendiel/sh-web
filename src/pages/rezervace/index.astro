@@ -40,7 +40,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         <li class="rez-progress__step" data-step="2"><span>02</span>Konfigurace</li>
         <li class="rez-progress__step" data-step="3"><span>03</span>Termín</li>
         <li class="rez-progress__step" data-step="4"><span>04</span>Kontakt</li>
-        <li class="rez-progress__step" data-step="5"><span>05</span>Souhlas</li>
       </ol>
 
       {/* === KROK 1: Koncept === */}
@@ -89,14 +88,22 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           <p class="rez-sub__hint">Pět privátních apartmánů. Cena za celou jednotku.</p>
           <div class="rez-cards rez-cards--3">
             {apartmany.map((a) => (
-              <label class="rez-card rez-card--compact">
-                <input type="radio" name="format" value={a.data.slug} />
+              <div class="rez-card rez-card--media" data-card data-format={a.data.slug}>
+                <input type="radio" name="format" value={a.data.slug} class="rez-card__radio" tabindex="-1" aria-hidden="true" />
+                <div class="rez-card__thumb">
+                  {a.data.thumbnail ? (
+                    <img src={withBase(a.data.thumbnail)} alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <div class="rez-card__thumb-empty" aria-hidden="true">▢</div>
+                  )}
+                </div>
                 <div class="rez-card__body">
                   <h3>{a.data.name}</h3>
-                  <p>{a.data.plocha}, {a.data.kapacita} lůžek</p>
-                  <p class="rez-card__price">{fmt(a.data.cena.anchor)}/měs · od {fmt(a.data.cena.m12)} při 12+ měs</p>
+                  <p>{a.data.plocha} · {a.data.kapacita} lůžek</p>
+                  <p class="rez-card__price">od {fmt(a.data.cena.m12)}/měsíc<small> (12+ měs)</small></p>
+                  <a class="rez-card__detail" href={withBase(`/ubytovani/privatni/${a.data.slug}/`)} target="_blank" rel="noopener" data-no-select>Detail →</a>
                 </div>
-              </label>
+              </div>
             ))}
           </div>
         </div>
@@ -105,14 +112,22 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           <p class="rez-sub__hint">Čtyři varianty co-livingu. Cena na osobu (kapsle pro 1), nebo na kapsli/pokoj (pro pár).</p>
           <div class="rez-cards rez-cards--2">
             {coliving.map((c) => (
-              <label class="rez-card rez-card--compact">
-                <input type="radio" name="format" value={c.data.slug} />
+              <div class="rez-card rez-card--media" data-card data-format={c.data.slug}>
+                <input type="radio" name="format" value={c.data.slug} class="rez-card__radio" tabindex="-1" aria-hidden="true" />
+                <div class="rez-card__thumb">
+                  {c.data.thumbnail ? (
+                    <img src={withBase(c.data.thumbnail)} alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <div class="rez-card__thumb-empty" aria-hidden="true">▢</div>
+                  )}
+                </div>
                 <div class="rez-card__body">
                   <h3>{c.data.name}</h3>
-                  <p>Matrace {c.data.matrace.join(' nebo ')}</p>
-                  <p class="rez-card__price">{fmt(c.data.cena.anchor)}/měs · od {fmt(c.data.cena.m12)} při 12+ měs</p>
+                  <p>Matrace {c.data.matrace[0]}{c.data.matrace[1] && ` nebo ${c.data.matrace[1]}`}</p>
+                  <p class="rez-card__price">od {fmt(c.data.cena.m12)}/měsíc<small> (12+ měs)</small></p>
+                  <a class="rez-card__detail" href={withBase(`/ubytovani/co-living/${c.data.slug}/`)} target="_blank" rel="noopener" data-no-select>Detail →</a>
                 </div>
-              </label>
+              </div>
             ))}
           </div>
         </div>
@@ -231,23 +246,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           <textarea id="poznamka" name="poznamka" rows="4" maxlength="500" placeholder="Cokoli speciálního, co bychom měli vědět (mazlíček, partner, preference spolubydlícího, atd.)"></textarea>
         </div>
 
-        <div class="rez-nav">
-          <button type="button" class="rez-btn rez-btn--ghost" data-prev>← Zpět</button>
-          <button type="button" class="rez-btn" data-next>Pokračovat →</button>
-        </div>
-      </fieldset>
-
-      {/* === KROK 5: Rekapitulace + GDPR === */}
-      <fieldset class="rez-step" data-step="5" hidden>
-        <legend>
-          <span class="rez-step__num">05</span>
-          <span class="rez-step__title">Rekapitulace a souhlas</span>
-        </legend>
-
-        <div class="rez-recap" id="rez-recap" aria-live="polite">
-          <p>Souhrn se vyplní po dokončení předchozích kroků.</p>
-        </div>
-
         <div class="rez-field rez-field--check">
           <label class="rez-check">
             <input type="checkbox" name="gdpr" value="ano" required />
@@ -257,7 +255,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
         <div class="rez-nav">
           <button type="button" class="rez-btn rez-btn--ghost" data-prev>← Zpět</button>
-          <button type="submit" class="rez-btn rez-btn--primary">Odeslat nezávaznou registraci</button>
+          <button type="submit" class="rez-btn rez-btn--primary">Odeslat nezávaznou rezervaci</button>
         </div>
       </fieldset>
 
@@ -322,8 +320,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   colivingData: coliving.map((c) => ({ slug: c.data.slug, name: c.data.name, cena: c.data.cena })),
 }}>
   /* Wizard state + step controller. State persists in form data
-     (FormData API), no global mutable object. Sidebar a recap se
-     průběžně aktualizují z form data při změnách. */
+     (FormData API), no global mutable object. Sidebar se průběžně
+     aktualizuje z form data při změnách. */
   (function () {
     var form = document.getElementById('rez-form');
     if (!form) return;
@@ -331,8 +329,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     var steps = form.querySelectorAll('.rez-step');
     var progressItems = form.querySelectorAll('.rez-progress__step');
     var sidePrice = document.getElementById('rez-side-price-value');
-    var recap = document.getElementById('rez-recap');
     var success = document.getElementById('rez-success');
+    var TOTAL_STEPS = 4;
 
     var allFormats = {};
     apartmanyData.forEach(function (a) { allFormats[a.slug] = a; });
@@ -356,7 +354,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         p.classList.toggle('is-active', stepNum === n);
         p.classList.toggle('is-done', stepNum < n);
       });
-      if (n === 5) updateRecap();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -385,7 +382,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       var cur = getCurrent();
       if (!validateStep(cur)) return;
       if (cur === 1) handleStep1Branch();
-      if (cur < 5) showStep(cur + 1);
+      if (cur < TOTAL_STEPS) showStep(cur + 1);
     }
     function prev() {
       var cur = getCurrent();
@@ -434,35 +431,20 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       sidePrice.textContent = fmt(base) + '/měs';
     }
 
-    function updateRecap() {
-      var fd = new FormData(form);
-      var koncept = fd.get('koncept') || '(neuvedeno)';
-      var format = fd.get('format');
-      var formatName = format && allFormats[format] ? allFormats[format].name : (koncept === 'nevim' ? 'Poradíme po telefonu' : '(neuvedeno)');
-      var mesic = fd.get('mesic') || '(neuvedeno)';
-      var delka = fd.get('delka') || '(neuvedeno)';
-      var stipendium = fd.get('stipendium') ? 'ano' : 'ne';
-      var jmeno = fd.get('jmeno') || '';
-      var prijmeni = fd.get('prijmeni') || '';
-      var telefon = fd.get('telefon') || '';
-      var email = fd.get('email') || '';
-      recap.innerHTML =
-        '<dl class="rez-recap__list">' +
-        '<div><dt>Koncept</dt><dd>' + koncept + '</dd></div>' +
-        '<div><dt>Formát</dt><dd>' + formatName + '</dd></div>' +
-        '<div><dt>Měsíc nástupu</dt><dd>' + mesic + '</dd></div>' +
-        '<div><dt>Délka pobytu</dt><dd>' + delka + '</dd></div>' +
-        '<div><dt>Stipendium</dt><dd>' + stipendium + '</dd></div>' +
-        '<div><dt>Jméno</dt><dd>' + jmeno + ' ' + prijmeni + '</dd></div>' +
-        '<div><dt>Telefon</dt><dd>' + telefon + '</dd></div>' +
-        '<div><dt>E-mail</dt><dd>' + email + '</dd></div>' +
-        '</dl>';
-    }
-
     /* Event handlers */
     form.addEventListener('click', function (e) {
-      if (e.target.matches('[data-next]')) { e.preventDefault(); next(); }
-      else if (e.target.matches('[data-prev]')) { e.preventDefault(); prev(); }
+      if (e.target.matches('[data-next]')) { e.preventDefault(); next(); return; }
+      if (e.target.matches('[data-prev]')) { e.preventDefault(); prev(); return; }
+
+      /* Karty bez <label>: klik kdekoliv kromě Detail linku označí radio. */
+      var card = e.target.closest('[data-card]');
+      if (card && !e.target.closest('[data-no-select]')) {
+        var radio = card.querySelector('input[type="radio"]');
+        if (radio) {
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
     });
     form.addEventListener('change', updateSidePrice);
     form.addEventListener('input', updateSidePrice);
@@ -478,7 +460,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (!validateStep(5)) return;
+      if (!validateStep(TOTAL_STEPS)) return;
       var fd = new FormData(form);
       var payload = {};
       fd.forEach(function (v, k) { payload[k] = v; });
@@ -516,56 +498,243 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez-hero__lede { color: var(--fg-muted); margin: 0; max-width: 60ch; line-height: 1.5; }
 
   /* Layout: form + sticky sidebar */
-  .rez-layout { display: grid; grid-template-columns: 1fr 320px; gap: var(--space-7); max-width: var(--container-wide); margin: 0 auto; padding: var(--space-7) var(--gutter); }
-  @media (max-width: 960px) { .rez-layout { grid-template-columns: 1fr; } }
+  .rez-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--space-7);
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: var(--space-7) var(--gutter);
+  }
+  @media (max-width: 960px) {
+    .rez-layout { grid-template-columns: 1fr; gap: var(--space-5); }
+    .rez-side { position: static; order: -1; }
+  }
 
-  /* Progress */
-  .rez-progress { list-style: none; padding: 0; margin: 0 0 var(--space-6); display: flex; gap: var(--space-3); flex-wrap: wrap; font-size: var(--text-xs); }
-  .rez-progress__step { display: flex; align-items: center; gap: var(--space-2); color: var(--fg-subtle); }
-  .rez-progress__step span { font-weight: 700; color: var(--fg-subtle); }
-  .rez-progress__step.is-active, .rez-progress__step.is-active span { color: var(--accent); }
-  .rez-progress__step.is-done, .rez-progress__step.is-done span { color: var(--fg-muted); }
+  /* Progress: clickable looking pill steps, plum fill na aktivním kroku */
+  .rez-progress {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-7);
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    font-size: var(--text-xs);
+  }
+  .rez-progress__step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    color: var(--fg-subtle);
+    background: var(--bg);
+    transition: border-color 220ms ease, color 220ms ease, background 220ms ease;
+  }
+  .rez-progress__step span {
+    font-weight: 700;
+    color: var(--fg-subtle);
+    font-variant-numeric: tabular-nums;
+    transition: color 220ms ease;
+  }
+  .rez-progress__step.is-active,
+  .rez-progress__step.is-active span {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .rez-progress__step.is-done,
+  .rez-progress__step.is-done span {
+    color: var(--accent);
+    border-color: var(--accent-rule);
+  }
+  .rez-progress__step.is-done::after {
+    content: "✓";
+    margin-left: 4px;
+    font-weight: 700;
+    color: var(--accent);
+  }
 
-  /* Step */
+  /* Step + smooth entrance animation */
   .rez-step { border: 0; padding: 0; margin: 0; }
-  .rez-step legend { display: flex; align-items: baseline; gap: var(--space-3); margin-bottom: var(--space-5); }
-  .rez-step__num { font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); }
-  .rez-step__title { font: 600 clamp(1.5rem, 2.5vw, 2rem) / 1.15 var(--font-sans); letter-spacing: var(--tracking-tight); }
+  .rez-step legend {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    width: 100%;
+  }
+  .rez-step__num {
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    font-variant-numeric: tabular-nums;
+  }
+  .rez-step__title {
+    font: 600 clamp(1.5rem, 2.5vw, 2rem) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+  }
+  .rez-step.is-current {
+    animation: rez-step-in 340ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  @keyframes rez-step-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rez-step.is-current { animation: none; }
+  }
 
-  /* Cards (radio) */
-  .rez-cards { display: grid; gap: var(--space-3); }
+  /* Cards: simple koncept karty + media karty (s thumbnailem + Detail linkem) */
+  .rez-cards { display: grid; gap: var(--space-4); }
   .rez-cards--2 { grid-template-columns: repeat(2, 1fr); }
   .rez-cards--3 { grid-template-columns: repeat(3, 1fr); }
   @media (max-width: 760px) { .rez-cards--2, .rez-cards--3 { grid-template-columns: 1fr; } }
 
-  .rez-card { display: block; padding: var(--space-5); border: 1px solid var(--rule, rgba(0,0,0,0.15)); cursor: pointer; transition: border-color 160ms ease, background 160ms ease; position: relative; }
-  .rez-card:hover { border-color: var(--accent); background: var(--accent-soft); }
-  .rez-card input { position: absolute; opacity: 0; pointer-events: none; }
-  .rez-card:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); border-width: 2px; padding: calc(var(--space-5) - 1px); }
-  .rez-card--compact { padding: var(--space-4); }
-  .rez-card--compact:has(input:checked) { padding: calc(var(--space-4) - 1px); }
-  .rez-card h3 { font: 600 var(--text-lg) / 1.2 var(--font-sans); margin: 0 0 var(--space-2); letter-spacing: var(--tracking-tight); }
-  .rez-card p { font-size: var(--text-sm); line-height: 1.5; color: var(--fg-muted); margin: 0; }
-  .rez-card__price { font-weight: 600; color: var(--fg); margin-top: var(--space-2) !important; }
+  .rez-card {
+    position: relative;
+    display: block;
+    background: var(--bg);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    cursor: pointer;
+    transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+    overflow: hidden;
+  }
+  .rez-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+  .rez-card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .rez-card:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    box-shadow: 0 0 0 2px var(--accent), 0 8px 24px rgba(90, 42, 95, 0.12);
+  }
+  .rez-card > input + div,
+  .rez-card > input + .rez-card__body,
+  .rez-card > .rez-card__body { padding: var(--space-5); }
+  .rez-card h3 {
+    font: 600 var(--text-lg) / 1.2 var(--font-sans);
+    margin: 0 0 var(--space-2);
+    letter-spacing: var(--tracking-tight);
+  }
+  .rez-card p {
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--fg-muted);
+    margin: 0;
+  }
+  .rez-card__price {
+    font: 600 var(--text-md) / 1.2 var(--font-sans);
+    color: var(--fg);
+    margin-top: var(--space-2) !important;
+    font-variant-numeric: tabular-nums;
+  }
+  .rez-card__price small {
+    font-weight: 400;
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    margin-left: 4px;
+  }
+
+  /* Media variant: thumbnail nahoře, body s Detail linkem dole */
+  .rez-card--media { padding: 0; }
+  .rez-card--media .rez-card__body { padding: var(--space-4); }
+  .rez-card__thumb {
+    aspect-ratio: 4 / 3;
+    background: var(--bg-muted);
+    overflow: hidden;
+  }
+  .rez-card__thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 420ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .rez-card--media:hover .rez-card__thumb img { transform: scale(1.03); }
+  .rez-card__thumb-empty {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 2rem;
+  }
+  .rez-card__detail {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font: 600 var(--text-xs) / 1 var(--font-sans);
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-rule);
+    padding-bottom: 2px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    transition: border-color 200ms ease;
+    position: relative;
+    z-index: 2;
+  }
+  .rez-card__detail:hover,
+  .rez-card__detail:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+  }
 
   /* Fields */
   .rez-sub { margin-bottom: var(--space-5); }
   .rez-sub__hint { color: var(--fg-muted); font-size: var(--text-sm); margin: 0 0 var(--space-4); }
   .rez-field { display: grid; gap: var(--space-2); margin-bottom: var(--space-4); }
   .rez-field label { font: 600 var(--text-sm) / 1.3 var(--font-sans); color: var(--fg); }
-  .rez-field input[type="text"], .rez-field input[type="tel"], .rez-field input[type="email"], .rez-field select, .rez-field textarea {
-    font: 400 var(--text-md) / 1.3 var(--font-sans); padding: 10px 12px; border: 1px solid var(--rule, rgba(0,0,0,0.2)); border-radius: var(--radius-input); background: var(--bg);
+  .rez-field input[type="text"],
+  .rez-field input[type="tel"],
+  .rez-field input[type="email"],
+  .rez-field select,
+  .rez-field textarea {
+    font: 400 var(--text-md) / 1.4 var(--font-sans);
+    padding: 12px 14px;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+    color: var(--fg);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
   }
-  .rez-field input:focus, .rez-field select:focus, .rez-field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .rez-field input:focus,
+  .rez-field select:focus,
+  .rez-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
   .rez-field__hint { color: var(--fg-muted); font-size: var(--text-xs); margin: 4px 0 0; }
-  .rez-field--check { margin-top: var(--space-3); }
+  .rez-field--check { margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-muted); }
   .rez-field input[type="range"] { padding: 0; }
-  .rez-field output { font-weight: 600; color: var(--accent); font-size: var(--text-sm); }
+  .rez-field output { font-weight: 600; color: var(--accent); font-size: var(--text-sm); font-variant-numeric: tabular-nums; }
 
   .rez-radio-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
-  .rez-pill { position: relative; display: inline-flex; padding: 8px 14px; border: 1px solid var(--rule, rgba(0,0,0,0.2)); border-radius: 999px; cursor: pointer; font-size: var(--text-sm); }
+  .rez-pill {
+    position: relative;
+    display: inline-flex;
+    padding: 8px 16px;
+    border: 1px solid var(--border-muted);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: var(--text-sm);
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
+  }
+  .rez-pill:hover { border-color: var(--accent); transform: translateY(-1px); }
   .rez-pill input { position: absolute; opacity: 0; }
-  .rez-pill:has(input:checked) { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .rez-pill:has(input:checked) {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
 
   .rez-check { display: grid; grid-template-columns: 22px 1fr; gap: var(--space-3); align-items: start; font-size: var(--text-sm); line-height: 1.5; cursor: pointer; }
   .rez-check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); }
@@ -575,24 +744,65 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   @media (max-width: 600px) { .rez-grid-2 { grid-template-columns: 1fr; } }
 
   /* Navigation */
-  .rez-nav { display: flex; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px solid var(--rule, rgba(0,0,0,0.08)); }
-  .rez-btn { display: inline-flex; align-items: center; padding: 12px 22px; font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--fg); background: transparent; border: 1px solid var(--fg); border-radius: var(--radius-input); cursor: pointer; transition: background 160ms ease, color 160ms ease; }
-  .rez-btn:hover { background: var(--fg); color: var(--bg); }
-  .rez-btn--primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .rez-btn--primary:hover { background: var(--bg); color: var(--accent); }
-  .rez-btn--ghost { background: transparent; border: 0; color: var(--fg-muted); padding-left: 0; }
-  .rez-btn--ghost:hover { background: transparent; color: var(--fg); }
-
-  /* Recap */
-  .rez-recap { background: var(--bg-muted); padding: var(--space-5); border-radius: 4px; margin-bottom: var(--space-4); }
-  .rez-recap__list { margin: 0; display: grid; gap: var(--space-3); }
-  .rez-recap__list > div { display: grid; grid-template-columns: 140px 1fr; gap: var(--space-3); font-size: var(--text-sm); }
-  .rez-recap__list dt { font: 600 var(--text-2xs) / 1.3 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; color: var(--fg-muted); }
-  .rez-recap__list dd { margin: 0; line-height: 1.5; }
+  .rez-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-muted);
+  }
+  .rez-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 22px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg);
+    background: transparent;
+    border: 1px solid var(--fg);
+    border-radius: var(--radius-input);
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  }
+  .rez-btn:hover {
+    background: var(--fg);
+    color: var(--bg);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  .rez-btn--primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    padding: 14px 28px;
+  }
+  .rez-btn--primary:hover {
+    background: var(--k-100);
+    color: #fff;
+    border-color: var(--k-100);
+    box-shadow: 0 6px 18px rgba(90, 42, 95, 0.18);
+  }
+  .rez-btn--ghost {
+    background: transparent;
+    border: 0;
+    color: var(--fg-muted);
+    padding-left: 0;
+  }
+  .rez-btn--ghost:hover {
+    background: transparent;
+    color: var(--fg);
+    transform: translateX(-2px);
+    box-shadow: none;
+  }
 
   /* Sticky sidebar */
   .rez-side { position: sticky; top: calc(64px + var(--space-4)); align-self: start; }
-  .rez-side__inner { background: var(--bg-muted); border: 1px solid var(--rule, rgba(0,0,0,0.08)); padding: var(--space-5); border-radius: 4px; }
+  .rez-side__inner {
+    background: var(--bg-muted);
+    border: 1px solid var(--border-muted);
+    padding: var(--space-5);
+    border-radius: var(--radius-input);
+  }
   .rez-side__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
   .rez-side__price { display: grid; gap: 4px; padding: var(--space-3) 0; border-bottom: 1px solid var(--rule, rgba(0,0,0,0.1)); }
   .rez-side__price-label { font-size: var(--text-xs); color: var(--fg-muted); }
@@ -604,10 +814,40 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez-side__check li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
   .rez-side__note { font-size: var(--text-xs); color: var(--fg-muted); margin: var(--space-4) 0 0; line-height: 1.45; }
 
-  /* Success state */
-  .rez-success { padding: var(--space-7); background: var(--accent-soft); border: 1px solid var(--accent-rule); border-radius: 4px; }
-  .rez-success h2 { font: 600 var(--text-3xl) / 1.15 var(--font-sans); margin: 0 0 var(--space-4); letter-spacing: var(--tracking-tight); color: var(--accent); }
+  /* Success state with checkmark pulse animation */
+  .rez-success {
+    padding: var(--space-7);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
+    animation: rez-success-in 480ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .rez-success h2 {
+    font: 600 var(--text-3xl) / 1.15 var(--font-sans);
+    margin: 0 0 var(--space-4);
+    letter-spacing: var(--tracking-tight);
+    color: var(--accent);
+  }
+  .rez-success h2::before {
+    content: "✓ ";
+    display: inline-block;
+    margin-right: 8px;
+    animation: rez-success-check 720ms cubic-bezier(0.2, 0, 0, 1);
+  }
   .rez-success p { line-height: 1.6; margin: 0 0 var(--space-3); max-width: 60ch; }
+  @keyframes rez-success-in {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes rez-success-check {
+    0%   { opacity: 0; transform: scale(0); }
+    60%  { opacity: 1; transform: scale(1.25); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rez-success { animation: none; }
+    .rez-success h2::before { animation: none; }
+  }
 
   /* Mini-FAQ */
   .faq-mini { padding: var(--space-3) 0; border-top: 1px solid var(--rule, rgba(0,0,0,0.08)); }

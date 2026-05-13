@@ -114,7 +114,7 @@ const discountPct = (n: number) => `−${Math.round((1 - n / data.cena.anchor) *
   .apt-hero { position: relative; isolation: isolate; min-height: 60vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-7); color: #fff; background: var(--k-100); overflow: hidden; }
   .apt-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.7); }
   .apt-hero__bg--placeholder { display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--accent); filter: none; }
-  .apt-hero__placeholder { font: 600 var(--text-xs) / 1 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; padding: 8px 14px; border: 1px solid var(--accent-rule); background: rgba(255,255,255,0.6); border-radius: 2px; color: var(--accent); }
+  .apt-hero__placeholder { font: 600 var(--text-xs) / 1 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; padding: 8px 14px; border: 1px solid var(--accent-rule); background: rgba(255,255,255,0.6); border-radius: var(--radius-input); color: var(--accent); }
   .apt-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0.05) 90%); z-index: -1; }
   .apt-hero__inner { max-width: var(--container); margin: 0 auto; width: 100%; }
   .apt-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: rgba(255,255,255,0.85); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
