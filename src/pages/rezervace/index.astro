@@ -20,8 +20,8 @@ const coliving = (await getCollection('coliving')).sort((a, b) => a.data.order -
 const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 ---
 <Base
-  title="Registrace zájmu o bydlení v Hubu Klecany"
-  description="Sestavte si bydlení v Hubu. Vyberte typ, termín, délku pobytu a kontakt. Do 24 hodin se vám ozveme. Registrace je nezávazná, není to smlouva.">
+  title="Registrace zájmu o bydlení · Startovací Hub Klecany"
+  description="Vyberte typ bydlení, termín a délku pobytu. Do 24 hodin se vám ozveme s dostupností a cenou. Registrace je nezávazná.">
   <section class="rez-hero">
     <div class="rez-hero__inner">
       <p class="rez-hero__eyebrow">Rezervace</p>
@@ -506,8 +506,24 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     padding: var(--space-7) var(--gutter);
   }
   @media (max-width: 960px) {
-    .rez-layout { grid-template-columns: 1fr; gap: var(--space-5); }
-    .rez-side { position: static; order: -1; }
+    .rez-layout { grid-template-columns: 1fr; gap: 0; }
+    .rez-side { position: sticky; top: 56px; order: -1; z-index: 10; }
+    .rez-side__inner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-4);
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+      margin: 0 calc(-1 * var(--gutter));
+    }
+    .rez-side__eyebrow { margin: 0; flex-shrink: 0; }
+    .rez-side__price { padding: 0; border: 0; display: flex; align-items: baseline; gap: var(--space-2); }
+    .rez-side__price-label { display: none; }
+    .rez-side__price-value { font-size: var(--text-lg); }
+    .rez-side__check,
+    .rez-side__note { display: none; }
   }
 
   /* Progress: clickable looking pill steps, plum fill na aktivním kroku */
@@ -784,12 +800,12 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez-btn--ghost {
     background: transparent;
     border: 0;
-    color: var(--fg-muted);
+    color: var(--fg);
     padding-left: 0;
   }
   .rez-btn--ghost:hover {
     background: transparent;
-    color: var(--fg);
+    color: var(--accent);
     transform: translateX(-2px);
     box-shadow: none;
   }

@@ -67,15 +67,9 @@ const reservationActive = isActive('/rezervace/');
 <header class:list={['hub-header', { 'hub-header--dark': variant === 'dark' }]}>
   <div class="hub-header__bar">
     <a href={withBase('/')} class="hub-header__brand" aria-label="Startovací Hub Klecany, domů">
-      <span class="hub-header__glyph" aria-hidden="true"><OsaGlyph size="1em" /></span>
+      <span class="hub-header__glyph" aria-hidden="true"><OsaGlyph size="13px" /></span>
       <span class="hub-header__wordmark">Startovací Hub</span>
     </a>
-
-    {/* Site-wide štítek „V projektové přípravě" per Marek 2026-05-12.
-        Neutralizuje vábivou reklamu podle Přílohy č. 1 písm. d) ZOOS.
-        Viditelný na každé stránce, nahrazuje per-amenity štítky.
-        Viz SH_Web_Research_LegalFloor.md a SH_Web_Plan.md ř. 286. */}
-    <span class="hub-header__status" aria-label="Stav projektu">V projektové přípravě</span>
 
     <nav class="hub-header__nav" aria-label="Hlavní navigace">
       {nav.map((n) => (
@@ -129,7 +123,6 @@ const reservationActive = isActive('/rezervace/');
   <div class="hub-header__rule" role="presentation"></div>
 
   <div id="hub-drawer" class="hub-drawer" role="dialog" aria-modal="true" aria-label="Hlavní navigace" hidden>
-    <p class="hub-drawer__status">V projektové přípravě</p>
     <nav class="hub-drawer__nav" aria-label="Mobilní navigace">
       {nav.map((n) => (
         n.dropdown ? (
@@ -161,16 +154,10 @@ const reservationActive = isActive('/rezervace/');
 </header>
 
 <script is:inline>
-  /* Header je `transition:persist` , DOM přetrvá napříč view-transition navigy.
-     Astro však znovu vyhodnotí <script is:inline>, takže bez ochrany bychom
-     přidávali další event listenery na stejný `.hub-header__burger` při každé
-     navigaci (multiple handlers → menu se otevře a zavře v jednom kliknutí).
-     Flag na elementu zaručí jeden bind napříč životem stránky. */
   (function () {
     var btn = document.querySelector('.hub-header__burger');
     var panel = document.getElementById('hub-drawer');
-    if (!btn || !panel || btn.dataset.menuBound === '1') return;
-    btn.dataset.menuBound = '1';
+    if (!btn || !panel) return;
 
     function setOpen(open) {
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -188,9 +175,10 @@ const reservationActive = isActive('/rezervace/');
       }
     }
 
-    btn.addEventListener('click', function () {
+    btn.onclick = function (e) {
+      e.stopPropagation();
       setOpen(btn.getAttribute('aria-expanded') !== 'true');
-    });
+    };
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') setOpen(false);
@@ -215,8 +203,8 @@ const reservationActive = isActive('/rezervace/');
   :global(html.osa-nav-lock) .hub-header {
     position: fixed;
     top: 0; left: 0; right: 0;
-    background: var(--k-100);
-    color: var(--k-0);
+    background: var(--bg);
+    color: var(--fg);
     z-index: 30;
   }
   :global(html.osa-nav-lock) .hub-header .hub-header__rule { display: none; }
@@ -230,20 +218,19 @@ const reservationActive = isActive('/rezervace/');
     display: flex;
     align-items: center;
     gap: var(--space-5);
-    padding: 14px var(--gutter);
+    padding: 10px var(--gutter);
     max-width: var(--container-wide);
     margin: 0 auto;
   }
 
-  /* Brand: glyph + wordmark inline */
   .hub-header__brand {
     display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
+    align-items: flex-end;
+    gap: 6px;
     color: inherit;
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     letter-spacing: var(--tracking-tight);
     line-height: 1;
     text-decoration: none;
@@ -251,30 +238,8 @@ const reservationActive = isActive('/rezervace/');
     z-index: 35;
     flex-shrink: 0;
   }
-  .hub-header__glyph    { display: inline-flex; line-height: 0; }
+  .hub-header__glyph { display: inline-flex; line-height: 0; margin-bottom: 1px; }
   .hub-header__wordmark { white-space: nowrap; }
-
-  /* Site-wide status štítek: plum accent, malé verzálky, vedle loga.
-     Mírná opacity na light variantě (mlze nesutí dominovat brandu),
-     plná čitelnost na dark. Žádný pillstyling , operator voice, žádné
-     marketing badges. */
-  .hub-header__status {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    color: var(--accent);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    white-space: nowrap;
-    padding: 4px 8px;
-    border: 1px solid var(--accent-rule);
-    border-radius: var(--radius-input);
-    background: var(--accent-soft);
-    flex-shrink: 0;
-  }
-  .hub-header--dark .hub-header__status {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.18);
-  }
 
   .hub-header__nav {
     display: flex;
@@ -291,20 +256,20 @@ const reservationActive = isActive('/rezervace/');
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: var(--fg-muted);
-    padding: 6px 0;
+    font: 500 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg);
+    padding: 4px 0;
     border-bottom: 1px solid transparent;
     text-decoration: none;
     transition: color var(--dur-fast) linear, border-color var(--dur-fast) linear;
     white-space: nowrap;
   }
-  .hub-header--dark .hub-header__link { color: rgba(255, 255, 255, 0.78); }
+  .hub-header--dark .hub-header__link { color: rgba(255, 255, 255, 0.9); }
   .hub-header__link[aria-current='page'] {
-    color: inherit;
-    border-bottom-color: currentColor;
+    color: var(--accent);
+    border-bottom-color: var(--accent);
   }
-  .hub-header__link:hover { color: inherit; }
+  .hub-header__link:hover { color: var(--accent); }
   .hub-header--dark .hub-header__link:hover,
   .hub-header--dark .hub-header__link[aria-current='page'] { color: #fff; }
 
@@ -400,9 +365,9 @@ const reservationActive = isActive('/rezervace/');
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
+    font: 500 var(--text-sm) / 1 var(--font-sans);
     color: inherit;
-    padding: 8px 16px;
+    padding: 6px 14px;
     border: 1px solid currentColor;
     border-radius: var(--radius-input);
     text-decoration: none;
@@ -430,11 +395,12 @@ const reservationActive = isActive('/rezervace/');
     color: var(--k-100);
     outline: none;
   }
-  .hub-header:not(.hub-header--dark) .hub-header__cta::after { background: var(--k-100); }
+  .hub-header:not(.hub-header--dark) .hub-header__cta { color: var(--accent); border-color: var(--accent); }
+  .hub-header:not(.hub-header--dark) .hub-header__cta::after { background: var(--accent); }
   .hub-header:not(.hub-header--dark) .hub-header__cta:hover,
   .hub-header:not(.hub-header--dark) .hub-header__cta:focus-visible,
   .hub-header:not(.hub-header--dark) .hub-header__cta[aria-current='page'] {
-    color: var(--k-0);
+    color: #fff;
     outline: none;
   }
   /* Mobile CTA: stejný styl jako desktop, ale ukazuje se vedle burgeru,
@@ -486,14 +452,14 @@ const reservationActive = isActive('/rezervace/');
     outline-offset: 2px;
   }
 
-  /* Mobile drawer */
+  /* Mobile drawer — white, spacious, minimal */
   .hub-drawer {
     position: fixed;
     inset: 0;
-    z-index: 19;
-    background: var(--k-100);
-    color: var(--k-0);
-    padding: calc(56px + var(--space-6)) var(--gutter) var(--space-7);
+    z-index: 29;
+    background: var(--bg);
+    color: var(--fg);
+    padding: calc(48px + var(--space-7)) var(--gutter) var(--space-7);
     overflow-y: auto;
     opacity: 0;
     transform: translateY(-8px);
@@ -505,40 +471,30 @@ const reservationActive = isActive('/rezervace/');
     opacity: 1;
     transform: translateY(0);
   }
-  .hub-drawer__status {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    color: #fff;
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    margin: 0 auto var(--space-5);
-    padding: 4px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: var(--radius-input);
-    width: max-content;
-    max-width: 640px;
-  }
   .hub-drawer__nav {
     display: grid;
     gap: 0;
-    max-width: 640px;
+    max-width: 480px;
     margin: 0 auto;
   }
   .hub-drawer__link {
     font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: var(--text-2xl);
+    font-weight: 500;
+    font-size: var(--text-xl);
     letter-spacing: var(--tracking-tight);
     padding: var(--space-4) 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-    color: var(--k-0);
+    border-bottom: 1px solid var(--border-muted);
+    color: var(--fg);
     text-decoration: none;
     display: block;
+    transition: color 160ms ease;
   }
-  .hub-drawer__link[aria-current='page'] { opacity: 0.55; }
+  .hub-drawer__link:hover { color: var(--accent); }
+  .hub-drawer__link[aria-current='page'] { color: var(--accent); }
 
   /* Drawer accordion (mobile dropdown). */
   .hub-drawer__group {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 1px solid var(--border-muted);
   }
   .hub-drawer__link--summary {
     list-style: none;
@@ -551,21 +507,21 @@ const reservationActive = isActive('/rezervace/');
   .hub-drawer__link--summary::-webkit-details-marker { display: none; }
   .hub-drawer__caret {
     font-size: 0.55em;
-    opacity: 0.55;
+    opacity: 0.45;
     transition: transform 220ms var(--ease-standard);
   }
   .hub-drawer__group[open] .hub-drawer__caret { transform: rotate(180deg); }
   .hub-drawer__sub {
     display: grid;
-    gap: 4px;
+    gap: 2px;
     padding: 0 0 var(--space-4) var(--space-3);
-    border-left: 2px solid rgba(255, 255, 255, 0.18);
+    border-left: 2px solid var(--border-muted);
     margin-left: var(--space-2);
   }
   .hub-drawer__sublink {
     display: block;
-    font: 500 var(--text-md) / 1.3 var(--font-sans);
-    color: rgba(255, 255, 255, 0.88);
+    font: 400 var(--text-md) / 1.3 var(--font-sans);
+    color: var(--fg-muted);
     padding: 8px var(--space-3);
     text-decoration: none;
     border-radius: var(--radius-input);
@@ -579,38 +535,29 @@ const reservationActive = isActive('/rezervace/');
   }
   .hub-drawer__sublink:hover,
   .hub-drawer__sublink:focus-visible {
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    background: var(--accent-soft);
+    color: var(--accent);
     outline: none;
   }
   .hub-drawer__link--cta {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    margin-top: var(--space-4);
+    margin-top: var(--space-5);
     color: #fff;
-    background: transparent;
+    background: var(--accent);
     padding: var(--space-4) var(--space-5);
     border: 1px solid var(--accent);
     border-radius: var(--radius-input);
-    border-bottom: 1px solid var(--accent);
-    font-weight: 700;
+    font-weight: 600;
     text-align: center;
-    transition: color 280ms cubic-bezier(0.65, 0, 0.35, 1);
-  }
-  .hub-drawer__link--cta::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: var(--accent);
-    z-index: -1;
-    clip-path: inset(0 0 0 0);
-    transition: clip-path 220ms cubic-bezier(0.65, 0, 0.35, 1);
+    transition: background 200ms ease, border-color 200ms ease;
   }
   .hub-drawer__link--cta:hover,
-  .hub-drawer__link--cta:focus-visible { color: var(--accent); }
-  .hub-drawer__link--cta:hover::after,
-  .hub-drawer__link--cta:focus-visible::after { clip-path: inset(100% 0 0 0); }
+  .hub-drawer__link--cta:focus-visible {
+    background: transparent;
+    color: var(--accent);
+  }
 
   :global(html.osa-nav-lock),
   :global(html.osa-nav-lock body) { overflow: hidden; }
@@ -630,13 +577,6 @@ const reservationActive = isActive('/rezervace/');
 
   @media (min-width: 1025px) {
     .hub-drawer { display: none; }
-  }
-
-  /* Tightest mobile: hide wordmark, keep glyph only.
-     Status badge + mobile CTA + burger jsou priorita. */
-  @media (max-width: 480px) {
-    .hub-header__wordmark { display: none; }
-    .hub-header__status { font-size: 10px; padding: 3px 6px; }
   }
 
   @media (prefers-reduced-motion: reduce) {

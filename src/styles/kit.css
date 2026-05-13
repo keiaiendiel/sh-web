@@ -63,7 +63,7 @@
 .btn--inverse          { background: var(--bg); color: var(--fg); border-color: var(--bg); }
 .btn--inverse:hover    { background: transparent; color: var(--bg); }
 .btn--ghost            { background: transparent; border-color: transparent; border-bottom: 1px solid var(--fg); padding: 12px 0; }
-.btn--ghost:hover      { opacity: 0.55; background: transparent; color: var(--fg); }
+.btn--ghost:hover      { color: var(--accent); background: transparent; }
 .btn[aria-disabled="true"] {
   opacity: 0.5;
   pointer-events: none;

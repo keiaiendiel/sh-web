@@ -23,9 +23,9 @@ const colivingKapacita: Record<string, string> = {
 };
 ---
 <Base
-  title="Ubytování v Klecanech, 9 typů od 3 000 Kč · Hub"
-  description="Devět typů bydlení v Hubu, čtyři varianty co-livingu od kapsle pro jednoho po dvoulůžkový pokoj pro pár, pět privátních apartmánů 1+kk až 5+kk. Energie, internet, úklid společných prostor, pět jízd Hub-shuttle a poukaz do sauny v ceně."
-  headerVariant="dark">
+  title="Ubytování od 3 000 Kč, 9 typů · Startovací Hub Klecany"
+  description="Čtyři varianty co-livingu od kapsle po dvoulůžkový pokoj, pět privátních apartmánů 1+kk až 5+kk. Energie, internet, úklid, pět jízd Hub-shuttle a poukaz do sauny v ceně."
+  headerVariant="light">
 
   <section class="ub-hero">
     <img class="ub-hero__bg" src={withBase('/images/hub/interior/1kk-a4-a6.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
@@ -214,7 +214,28 @@ const colivingKapacita: Record<string, string> = {
     gap: 24px;
   }
   @media (max-width: 960px) { .ub-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 600px) { .ub-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) {
+    .ub-grid {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: var(--space-3);
+      margin: 0 calc(-1 * var(--gutter));
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+    }
+    .ub-grid::-webkit-scrollbar { display: none; }
+    .ub-grid > :global(*) {
+      flex: 0 0 85%;
+      min-width: 0;
+      scroll-snap-align: start;
+    }
+  }
 
   .ub-cta { padding: var(--space-9) var(--gutter); background: var(--accent); color: #fff; text-align: center; }
   .ub-cta__inner { max-width: 640px; margin: 0 auto; }

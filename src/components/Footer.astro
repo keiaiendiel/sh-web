@@ -39,8 +39,9 @@ const org = orgEntry?.data;
 
 <style>
   .hub-footer {
-    background: var(--k-100);
-    color: var(--bg);
+    background: var(--bg);
+    color: var(--fg);
+    border-top: 1px solid var(--border-muted);
     padding: var(--space-8) var(--gutter) var(--space-7);
   }
   .hub-footer__inner {
@@ -51,11 +52,11 @@ const org = orgEntry?.data;
     margin: 0 auto;
   }
   .hub-footer__col p { margin: 0 0 6px; line-height: 1.5; font-size: var(--text-sm); }
-  .hub-footer__col a { color: inherit; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.35); text-underline-offset: 3px; }
-  .hub-footer__col a:hover { text-decoration-color: currentColor; }
+  .hub-footer__col a { color: inherit; text-decoration: underline; text-decoration-color: var(--border-muted); text-underline-offset: 3px; }
+  .hub-footer__col a:hover { text-decoration-color: var(--accent); color: var(--accent); }
 
   .hub-footer__brand { font-weight: 700; font-size: var(--text-lg); margin-bottom: 6px; }
-  .hub-footer__tagline { opacity: 0.65; max-width: 36ch; }
+  .hub-footer__tagline { color: var(--fg-muted); max-width: 36ch; }
   .hub-footer__status {
     display: inline-block;
     margin-top: var(--space-3);
@@ -63,21 +64,22 @@ const org = orgEntry?.data;
     font: 600 var(--text-2xs) / 1 var(--font-sans);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--accent);
+    border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
+    background: var(--accent-soft);
   }
 
   .hub-footer__label {
     font-size: var(--text-2xs);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
-    opacity: 0.55;
+    color: var(--fg-muted);
     margin-bottom: var(--space-3);
   }
-  .hub-footer__muted { opacity: 0.55; font-size: var(--text-xs); }
-  .hub-footer__hint { opacity: 0.55; font-size: var(--text-xs); margin-left: 4px; }
-  .hub-footer__legal { font-size: var(--text-xs); opacity: 0.6; margin-top: var(--space-3); max-width: 38ch; line-height: 1.4; }
+  .hub-footer__muted { color: var(--fg-muted); font-size: var(--text-xs); }
+  .hub-footer__hint { color: var(--fg-muted); font-size: var(--text-xs); margin-left: 4px; }
+  .hub-footer__legal { font-size: var(--text-xs); color: var(--fg-muted); margin-top: var(--space-3); max-width: 38ch; line-height: 1.4; }
 
   @media (max-width: 1024px) {
     .hub-footer__inner { grid-template-columns: 1fr 1fr; }
