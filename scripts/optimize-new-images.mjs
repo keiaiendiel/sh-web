@@ -2,7 +2,7 @@
 // One-shot: optimize newly-imported Hub vizualizace in-place to match the
 // migrate-hub-images.mjs standard (jpeg q=80 mozjpeg, max-edge 1600).
 //
-// Targets: public/images/hub/{aerial,exterior,interior}/* — only files that
+// Targets: public/images/hub/{aerial,exterior,interior,hero,amenities}/*, only files that
 // currently exceed `sizeLimit` are re-encoded. Idempotent.
 
 import { promises as fs } from 'node:fs';
@@ -15,6 +15,7 @@ const targets = [
   'public/images/hub/exterior',
   'public/images/hub/interior',
   'public/images/hub/hero',
+  'public/images/hub/amenities',
 ];
 const sizeLimit = 600 * 1024; // 600 KB — anything bigger gets re-encoded.
 const maxEdge = 1600;

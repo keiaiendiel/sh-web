@@ -39,12 +39,11 @@ const heroSlides = [
 ];
 
 /* === AMENITY ZIG-ZAG (4 řady) === */
-/* Zig-zag layout: alternující foto + text. Galerie 3 reálných záběrů per
+/* Zig-zag layout: alternující foto + text. Galerie reálných záběrů per
    řada, ovládaná Gallery komponentou (dot pagination + chevron buttons,
    scroll-snap pro touch). Copy per Site_Copy § 0.4.1. */
 type AmenityRow = {
   eyebrow: string;
-  headline: string;
   lede: string;
   href: string;
   detailLabel: string;
@@ -54,50 +53,44 @@ type AmenityRow = {
 const amenityRows: AmenityRow[] = [
   {
     eyebrow: 'Ubytování',
-    headline: 'Devět typů, od kapsle po 5+kk apartmán.',
-    lede: 'Čtyři varianty co-livingu pro jednotlivce a páry, pět privátních apartmánů 1+kk až 5+kk pro rodiny a skupiny. Čím déle zůstanete, tím nižší nájem.',
+    lede: 'Devět typů, od privátní kapsle pro jednoho po byt 5+kk pro skupinu.',
     href: '/ubytovani/',
     detailLabel: 'Možnosti ubytování',
     gallery: [
-      { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'), alt: 'Privátní apartmán 1+kk, postel u okna, denní světlo.' },
-      { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'), alt: 'Větší privátní apartmán pro skupinu, jídelní stůl, kuchyňský kout.' },
-      { src: withBase('/images/hub/interior/kapsle-horizontal.jpg'), alt: 'Kapsle ve sdíleném pokoji, knihovna a relaxační prostor.' },
+      { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'), alt: '1+kk ranní rituál: káva u okna, denní světlo, postel ustlaná v pozadí.' },
+      { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'), alt: 'Větší privátní apartmán pro skupinu: jídelní stůl, kuchyňský kout, postel.' },
+      { src: withBase('/images/hub/amenities/kapsle-horizontal-2.jpg'), alt: 'Kapsle ve společném pokoji s knihovnou a rostlinou.' },
+      { src: withBase('/images/hub/amenities/1kk-2.jpg'), alt: '1+kk varianta s manželskou postelí a pracovním stolem u okna.' },
     ],
   },
   {
     eyebrow: 'Coworking',
-    headline: 'Coworking, dílny a ateliéry pod jednou střechou.',
-    lede: 'Volný stůl v sále zdarma pro rezidenty, fixní stůl 4 200 Kč/měs, zasedací místnost po hodinách, ateliéry a dílny s těžkými stroji za hodinovou sazbu.',
+    lede: 'Volný stůl v sále zdarma pro rezidenty. Fixní stůl, ateliéry, dílny s těžkými stroji za hodinovou sazbu.',
     href: '/coworking/',
-    detailLabel: 'Detail coworkingu',
+    detailLabel: 'Coworking, dílny a ateliéry',
     gallery: [
-      { src: withBase('/images/hub/hero/hero-3-cowork.jpg'), alt: 'Exteriér coworkingové budovy v areálu.' },
-      { src: withBase('/images/hub/exterior/cowork.jpg'), alt: 'Coworkingový sál v 1. NP budovy C, pevné stoly a kávovar v rohu.' },
-      { src: withBase('/images/hub/exterior/building-c.jpg'), alt: 'Budova C s coworkingem a komunitním zázemím za soumraku.' },
+      { src: withBase('/images/hub/hero/hero-3-cowork.jpg'), alt: 'Exteriér coworkingové budovy v areálu, denní pohled z odstupu.' },
+      { src: withBase('/images/hub/amenities/cowork-interior.jpg'), alt: 'Coworkingový sál v 1. NP budovy C, pevné stoly a kávovar v rohu.' },
     ],
   },
   {
     eyebrow: 'Komunita',
-    headline: 'Wellness, sport, gastro, kultura.',
-    lede: 'Bazén, sauna, kantýna v budově B, klubovna, komunitní zahrádky. Sociální kontakt jako součást nájmu, ne podmínka bydlení.',
+    lede: 'Wellness, sport, gastro, kultura. Bazén, sauna, kantýna v budově B, klubovna, komunitní zahrádky.',
     href: '/komunita/',
-    detailLabel: 'Detail komunity',
+    detailLabel: 'Komunitní program',
     gallery: [
-      { src: withBase('/images/hub/aerial/areal-bazen.jpg'), alt: 'Bazén v centrálním dvoře areálu, sluneční terasa.' },
-      { src: withBase('/images/hub/interior/b-jidelna.jpg'), alt: 'Jídelna v budově B, dřevěné stoly, lavice, večerní osvětlení.' },
-      { src: withBase('/images/hub/hero/hero-2-courtyard.jpg'), alt: 'Vnitřní dvůr areálu za modré hodiny, lidé u stolu venku.' },
+      { src: withBase('/images/hub/amenities/komunita-courtyard.jpg'), alt: 'Vnitřní dvůr areálu s pizzerií v budově B, večerní zázemí.' },
+      { src: withBase('/images/hub/hero/hero-4-jidelna.jpg'), alt: 'Jídelna v budově B, dřevěné stoly a lavice v poledne.' },
+      { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'), alt: 'Tržnice s minipivovarem v budově B, večerní zázemí pro gastronomii.' },
     ],
   },
   {
     eyebrow: 'Doprava',
-    headline: 'Hub-shuttle do metra Kobylisy, 5 jízd v ceně.',
-    lede: 'Hub-shuttle do metra 5 jízd měsíčně v ceně nájmu. Bus 374 PID každých 15 minut. Hub-taxi pro lokální cesty. Cyklostezka EuroVelo 7 podél Vltavy.',
+    lede: 'Hub-shuttle do metra Kobylisy, 5 jízd v ceně. Bus 374 a Hub-taxi. Cyklostezka EuroVelo 7 podél Vltavy.',
     href: '/doprava/',
-    detailLabel: 'Detail dopravy',
+    detailLabel: 'Jak se sem dostanete',
     gallery: [
-      { src: withBase('/images/hub/hero/hero-1-aerial.jpg'), alt: 'Letecký pohled na areál horních kasáren Klecan v ranní mlze, krajinný kontext.' },
-      { src: withBase('/images/hub/aerial/topview.jpg'), alt: 'Letecký pohled na areál a navazující komunikace.' },
-      { src: withBase('/images/hub/hero/hero-2-courtyard.jpg'), alt: 'Vnitřní dvůr areálu jako klidové zázemí v dosahu Prahy.' },
+      { src: withBase('/images/hub/amenities/doprava-tram.jpg'), alt: 'Plánovaná tramvajová zastávka Výzkumný ústav I poblíž areálu.' },
     ],
   },
 ];
@@ -159,8 +152,7 @@ const sections = [
             </div>
             <div class="lp-zigzag__copy">
               <p class="lp-zigzag__eyebrow">{row.eyebrow}</p>
-              <h3 class="lp-zigzag__headline">{row.headline}</h3>
-              <p class="lp-zigzag__lede">{row.lede}</p>
+              <h3 class="lp-zigzag__headline">{row.lede}</h3>
               <a class="lp-zigzag__cta" href={withBase(row.href)}>
                 {row.detailLabel}
                 <span aria-hidden="true"> →</span>
@@ -413,16 +405,10 @@ const sections = [
     margin: 0 0 var(--space-3);
   }
   .lp-zigzag__headline {
-    font: 600 clamp(1.625rem, 2.6vw, 2.25rem) / 1.15 var(--font-sans);
+    font: 600 clamp(1.625rem, 2.6vw, 2.25rem) / 1.25 var(--font-sans);
     letter-spacing: var(--tracking-tight);
-    margin: 0 0 var(--space-4);
-    text-wrap: balance;
-  }
-  .lp-zigzag__lede {
-    font-size: var(--text-md);
-    line-height: 1.6;
-    color: var(--fg-muted);
     margin: 0 0 var(--space-5);
+    text-wrap: balance;
   }
   .lp-zigzag__cta {
     display: inline-flex;
