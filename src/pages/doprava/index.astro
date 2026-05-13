@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Gallery from '../../components/Gallery.astro';
 import { withBase } from '../../utils/url';
 ---
 <Base
@@ -27,147 +28,212 @@ import { withBase } from '../../utils/url';
     </div>
   </section>
 
-  <section class="sec-block">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow" id="dp-shuttle">Hub-shuttle (v ceně 5 jízd měsíčně)</p>
-        <h2 class="sec-block__title">Vlastní dodávka, peak doprava na Kobylisy.</h2>
-      </header>
-      <div class="sec-block__text">
-        <p>
-          Hub-shuttle je vlastní dopravní služba Hubu. Dvě devítimístné dodávky, peak doprava
-          mezi Hubem a metrem Kobylisy. Časy: ranní špička 06:30 až 09:30 (odjezdy každých
-          30 minut), odpolední 15:30 až 18:30 (odjezdy každých 30 minut). Mimo špičku je
-          k dispozici linka 374.
-        </p>
-        <p>
-          Cesta trvá 12 až 15 minut (mimo provoz může být i 10 minut), což je rychleji než
-          bus 374 (14 až 17 minut), protože shuttle jede přímou cestou bez stavění na všech
-          zastávkách ve Zdibech, Veltěži a Přemyšlení.
-        </p>
-        <p>
-          V ceně bydlení 5 jízd měsíčně na rezidenta. Po vyčerpání zvýhodněná sazba (cca 60 Kč
-          za jízdu), tedy 30 až 50 % pod tarifem MHD nebo taxi.
-        </p>
+  <section class="sec-feature">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__col">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Hub-shuttle (v ceně 5 jízd měsíčně)</p>
+          <h2 class="sec-feature__title" id="dp-shuttle">Vlastní dodávka, peak doprava na Kobylisy.</h2>
+        </div>
+        <div class="sec-feature__text">
+          <p>
+            Hub-shuttle je vlastní dopravní služba Hubu. Dvě devítimístné dodávky, peak doprava
+            mezi Hubem a metrem Kobylisy. Časy: ranní špička 06:30 až 09:30 (odjezdy každých
+            30 minut), odpolední 15:30 až 18:30 (odjezdy každých 30 minut). Mimo špičku je
+            k dispozici linka 374.
+          </p>
+          <p>
+            Cesta trvá 12 až 15 minut (mimo provoz může být i 10 minut), což je rychleji než
+            bus 374 (14 až 17 minut), protože shuttle jede přímou cestou bez stavění na všech
+            zastávkách ve Zdibech, Veltěži a Přemyšlení.
+          </p>
+          <p>
+            V ceně bydlení 5 jízd měsíčně na rezidenta. Po vyčerpání zvýhodněná sazba (cca 60 Kč
+            za jízdu), tedy 30 až 50 % pod tarifem MHD nebo taxi.
+          </p>
+        </div>
       </div>
-      <dl class="sec-table">
-        <div class="sec-table__row"><dt>Pracovní dny</dt><dd>06:30 až 09:30 a 15:30 až 18:30 (odjezdy každých 30 minut)</dd></div>
-        <div class="sec-table__row"><dt>Víkend a svátky</dt><dd>Omezený provoz podle počasí a poptávky</dd></div>
-        <div class="sec-table__row"><dt>Booking</dt><dd>V aplikaci Hubu, max 12 hodin předem</dd></div>
-        <div class="sec-table__row"><dt>Pro rezidenty</dt><dd>5 jízd zdarma za měsíc</dd></div>
-        <div class="sec-table__row"><dt>Po vyčerpání</dt><dd>Cca 60 Kč za jízdu (zvýhodněná sazba)</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <section class="sec-block sec-block--alt">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow" id="dp-374">Linka 374 PID</p>
-        <h2 class="sec-block__title">Záloha v rámci pražského tarifu.</h2>
-      </header>
-      <div class="sec-block__text">
-        <p>
-          Standardní pražská integrovaná doprava. Trasa Klecany, Zdiby, Veltěž, Přemyšlení,
-          Kobylisy. Cesta z Klecan na Kobylisy 14 až 17 minut ve špičce s dedikovanými
-          autobusovými pruhy na Cínovecké, mimo špičku 12 až 14 minut.
-        </p>
-        <p>
-          Frekvence: ve špičce každých 15 minut, mimo špičku každých 30 minut, ve večerních
-          hodinách a o víkendech 30 až 60 minut. Poslední bus z Kobylis cca 22:50.
-        </p>
-      </div>
-      <dl class="sec-table">
-        <div class="sec-table__row"><dt>Zastávky u Hubu</dt><dd>„Klecany, U Kostela" (1,2 km, 15 minut pěšky) a „Klecany, U hřbitova" (300 m od hlavního vstupu)</dd></div>
-        <div class="sec-table__row"><dt>Frekvence ve špičce</dt><dd>Cca 15 minut</dd></div>
-        <div class="sec-table__row"><dt>Frekvence mimo špičku</dt><dd>Cca 30 minut</dd></div>
-        <div class="sec-table__row"><dt>Poslední bus večer</dt><dd>Cca 22:50</dd></div>
-        <div class="sec-table__row"><dt>Tarif</dt><dd>3 pásma PID (Praha + Středočeský kraj), měsíční předplatné 1 488 Kč</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <section class="sec-block">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow" id="dp-taxi">Hub-taxi (v ceně 1 jízda měsíčně)</p>
-        <h2 class="sec-block__title">Lokální doprava v Klecanech a okolí.</h2>
-      </header>
-      <div class="sec-block__text">
-        <p>
-          Lokální doprava v rámci Klecan a okolí (Roztoky, Zdiby, Dolní Chabry). Volá se
-          přes aplikaci Hubu. Provozuje smluvní lokální dopravce nebo platforma typu
-          Bolt Business.
-        </p>
-        <p>
-          Užitečné použití: večerní návrat z nákupu z Lidlu Zdiby, doprovod při stěhování věcí
-          z Klecan na vlak, výjezd na vlakové nádraží Roztoky-Žalov, lékař na Kobylisích po
-          skončení autobusu, doprava v nemoci.
-        </p>
-      </div>
-      <dl class="sec-table">
-        <div class="sec-table__row"><dt>Dostupnost</dt><dd>Nonstop, krátká reakce</dd></div>
-        <div class="sec-table__row"><dt>Pro rezidenty</dt><dd>1 jízda zdarma za měsíc</dd></div>
-        <div class="sec-table__row"><dt>Po vyčerpání</dt><dd>Cca 80 až 150 Kč za jízdu podle vzdálenosti (zvýhodněná sazba)</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <section class="sec-block sec-block--alt">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow" id="dp-auto">Auto, kolo, pěšky</p>
-        <h2 class="sec-block__title">Vlastní cesta do Prahy.</h2>
-      </header>
-      <div class="sec-block__text">
-        <h3 class="sec-sub__title">Auto a parkování</h3>
-        <p>
-          Hub má parkoviště v rámci areálu (dvě plochy: vlevo nahoře a uprostřed). Kapacita
-          podle finální projektové dokumentace, bude doplněna. Pro rezidenty Hubu vyhrazené stání
-          zdarma, pro hosty dohodou.
-        </p>
-        <p>
-          Z Hubu na D8 sjezd Zdiby (MÚK Zdiby) 3 km, cca 5 minut autem. Z MÚK Zdiby na centrum
-          Prahy přes Cínoveckou cca 15 minut (ve špičce 25 až 35 minut). P+R Kobylisy 6,8 km
-          od Hubu (11 minut autem), pak metro do centra.
-        </p>
-
-        <h3 class="sec-sub__title">Kolo a pěšky</h3>
-        <p>
-          Cyklostezka EuroVelo 7 prochází podél Vltavy pod Klecanami. Z Hubu na cyklostezku
-          cca 30 minut pěšky nebo 10 minut na kole (sestup do údolí Vltavy). Klecany mají
-          vlastní pěší a cyklistickou infrastrukturu: chodníky kolem ulic centrem, polní
-          cesty kolem areálu, navazují na turistické trasy podél Vltavy.
-        </p>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { placeholder: 'dp01 Hub-shuttle dodávka před hlavním vstupem, 3 až 4 rezidenti nastupují', alt: 'Hub-shuttle dodávka před hlavním vstupem do Hubu, ranní mlha.' },
+            ]}
+            ariaLabel="Hub-shuttle" />
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>Pracovní dny</dt><dd>06:30 až 09:30 a 15:30 až 18:30 (každých 30 minut)</dd></div>
+          <div><dt>Víkend a svátky</dt><dd>Omezený provoz podle poptávky</dd></div>
+          <div><dt>Pro rezidenty</dt><dd>5 jízd zdarma za měsíc</dd></div>
+          <div><dt>Po vyčerpání</dt><dd>Cca 60 Kč za jízdu</dd></div>
+        </dl>
       </div>
     </div>
   </section>
 
-  <section class="sec-block">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow" id="dp-planned">Plánováno 2027 až 2030</p>
-        <h2 class="sec-block__title">Tramvaj a cyklolávka přes Vltavu.</h2>
-        <p class="sec-block__lede">
-          Plánované investice se schváleným územním rozhodnutím, ale ještě nejsou postaveny.
-          Mluvíme o nich otevřeně v budoucím čase. Hub-shuttle a linka 374 jsou dostupné dnes.
-        </p>
-      </header>
-      <div class="sec-block__text">
-        <h3 class="sec-sub__title">Tramvaj Kobylisy až Sedlec (2029 až 2030)</h3>
-        <p>
-          Středočeský kraj a IDSK plánují prodloužení tramvajové linky 17 z Kobylis přes
-          Zdiby do Sedlce (5,2 až 5,6 km nové trati). První územní rozhodnutí získalo právní
-          moc v lednu 2025, stavba 2027, provoz 2029 až 2030. Z Hubu na tramvajovou zastávku
-          v Sedleci pětiminutový lokální autobus, pak tramvaj přímo na centrum Prahy bez přestupu.
-        </p>
+  <section class="sec-feature sec-feature--alt">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__col">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Linka 374 PID</p>
+          <h2 class="sec-feature__title" id="dp-374">Záloha v rámci pražského tarifu.</h2>
+        </div>
+        <div class="sec-feature__text">
+          <p>
+            Standardní pražská integrovaná doprava. Trasa Klecany, Zdiby, Veltěž, Přemyšlení,
+            Kobylisy. Cesta z Klecan na Kobylisy 14 až 17 minut ve špičce s dedikovanými
+            autobusovými pruhy na Cínovecké, mimo špičku 12 až 14 minut.
+          </p>
+          <p>
+            Frekvence: ve špičce každých 15 minut, mimo špičku každých 30 minut, ve večerních
+            hodinách a o víkendech 30 až 60 minut. Poslední bus z Kobylis cca 22:50.
+          </p>
+        </div>
+      </div>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { placeholder: 'dp03 Zastávka autobusu 374 v Klecanech, U hřbitova', alt: 'Zastávka autobusu 374 jako záložní spoj na Kobylisy.' },
+            ]}
+            ariaLabel="Linka 374" />
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>Zastávky u Hubu</dt><dd>„Klecany, U hřbitova" (300 m od vstupu)</dd></div>
+          <div><dt>Frekvence ve špičce</dt><dd>Cca 15 minut</dd></div>
+          <div><dt>Frekvence mimo špičku</dt><dd>Cca 30 minut</dd></div>
+          <div><dt>Tarif</dt><dd>3 pásma PID, měsíční předplatné 1 488 Kč</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
 
-        <h3 class="sec-sub__title">Cyklolávka přes Vltavu (2027 až 2028)</h3>
-        <p>
-          Plánovaná cyklolávka přes Vltavu mezi Roztoky a Klecany. Po dokončení bude spojení
-          Roztoky, vlak na Masarykovo nádraží v Praze trvat 10 až 15 minut na kole plus 14
-          minut vlakem, tedy 25 až 30 minut na centrum Prahy z Hubu, mimo metro Kobylisy.
-        </p>
+  <section class="sec-feature">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__col">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Hub-taxi (v ceně 1 jízda měsíčně)</p>
+          <h2 class="sec-feature__title" id="dp-taxi">Lokální doprava v Klecanech a okolí.</h2>
+        </div>
+        <div class="sec-feature__text">
+          <p>
+            Lokální doprava v rámci Klecan a okolí (Roztoky, Zdiby, Dolní Chabry). Volá se
+            přes aplikaci Hubu. Provozuje smluvní lokální dopravce nebo platforma typu
+            Bolt Business.
+          </p>
+          <p>
+            Užitečné použití: večerní návrat z nákupu z Lidlu Zdiby, doprovod při stěhování věcí
+            z Klecan na vlak, výjezd na vlakové nádraží Roztoky-Žalov, lékař na Kobylisích po
+            skončení autobusu, doprava v nemoci.
+          </p>
+        </div>
+      </div>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { placeholder: 'dp04 Hub-taxi vůz před areálem, večerní scéna', alt: 'Hub-taxi pro lokální cesty v Klecanech a okolí.' },
+            ]}
+            ariaLabel="Hub-taxi" />
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>Dostupnost</dt><dd>Nonstop, krátká reakce</dd></div>
+          <div><dt>Pro rezidenty</dt><dd>1 jízda zdarma za měsíc</dd></div>
+          <div><dt>Po vyčerpání</dt><dd>Cca 80 až 150 Kč za jízdu</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-feature sec-feature--alt">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__col">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Auto, kolo, pěšky</p>
+          <h2 class="sec-feature__title" id="dp-auto">Vlastní cesta do Prahy.</h2>
+        </div>
+        <div class="sec-feature__text">
+          <h3>Auto a parkování</h3>
+          <p>
+            Hub má parkoviště v rámci areálu (dvě plochy: vlevo nahoře a uprostřed). Kapacita
+            podle finální projektové dokumentace, bude doplněna. Pro rezidenty Hubu vyhrazené stání
+            zdarma, pro hosty dohodou.
+          </p>
+          <p>
+            Z Hubu na D8 sjezd Zdiby (MÚK Zdiby) 3 km, cca 5 minut autem. Z MÚK Zdiby na centrum
+            Prahy přes Cínoveckou cca 15 minut (ve špičce 25 až 35 minut). P+R Kobylisy 6,8 km
+            od Hubu (11 minut autem), pak metro do centra.
+          </p>
+          <h3>Kolo a pěšky</h3>
+          <p>
+            Cyklostezka EuroVelo 7 prochází podél Vltavy pod Klecanami. Z Hubu na cyklostezku
+            cca 30 minut pěšky nebo 10 minut na kole (sestup do údolí Vltavy). Klecany mají
+            vlastní pěší a cyklistickou infrastrukturu: chodníky kolem ulic centrem, polní
+            cesty kolem areálu, navazují na turistické trasy podél Vltavy.
+          </p>
+        </div>
+      </div>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { src: withBase('/images/hub/amenities/dp02-cyklostezka.jpg'), alt: 'Cyklista v motion bluru na cyklostezce Praha až Klecany.' },
+              { placeholder: 'dp05 Parkoviště areálu, vyhrazená stání pro rezidenty', alt: 'Parkování v areálu Hubu.' },
+            ]}
+            ariaLabel="Auto, kolo, pěšky" />
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>D8 sjezd Zdiby</dt><dd>3 km, 5 minut autem</dd></div>
+          <div><dt>P+R Kobylisy</dt><dd>6,8 km, 11 minut autem</dd></div>
+          <div><dt>Parkování rezidenti</dt><dd>Vyhrazené stání zdarma</dd></div>
+          <div><dt>EuroVelo 7</dt><dd>10 minut na kole z Hubu</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-feature">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__col">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Plánováno 2027 až 2030</p>
+          <h2 class="sec-feature__title" id="dp-planned">Tramvaj a cyklolávka přes Vltavu.</h2>
+        </div>
+        <div class="sec-feature__text">
+          <p>
+            Plánované investice se schváleným územním rozhodnutím, ale ještě nejsou postaveny.
+            Mluvíme o nich otevřeně v budoucím čase. Hub-shuttle a linka 374 jsou dostupné dnes.
+          </p>
+          <h3>Tramvaj Kobylisy až Sedlec (2029 až 2030)</h3>
+          <p>
+            Středočeský kraj a IDSK plánují prodloužení tramvajové linky 17 z Kobylis přes
+            Zdiby do Sedlce (5,2 až 5,6 km nové trati). První územní rozhodnutí získalo právní
+            moc v lednu 2025, stavba 2027, provoz 2029 až 2030. Z Hubu na tramvajovou zastávku
+            v Sedleci pětiminutový lokální autobus, pak tramvaj přímo na centrum Prahy bez přestupu.
+          </p>
+          <h3>Cyklolávka přes Vltavu (2027 až 2028)</h3>
+          <p>
+            Plánovaná cyklolávka přes Vltavu mezi Roztoky a Klecany. Po dokončení bude spojení
+            Roztoky, vlak na Masarykovo nádraží v Praze trvat 10 až 15 minut na kole plus 14
+            minut vlakem, tedy 25 až 30 minut na centrum Prahy z Hubu, mimo metro Kobylisy.
+          </p>
+        </div>
+      </div>
+      <div class="sec-feature__col">
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { src: withBase('/images/hub/amenities/doprava-tram.jpg'), alt: 'Plánovaná tramvajová zastávka Výzkumný ústav I poblíž areálu (2029 až 2030).' },
+              { placeholder: 'dp06 Vizualizace cyklolávky přes Vltavu, Roztoky-Klecany', alt: 'Plánovaná cyklolávka přes Vltavu.' },
+            ]}
+            ariaLabel="Plánovaná doprava" />
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>Tramvaj provoz</dt><dd>2029 až 2030</dd></div>
+          <div><dt>Tramvaj trasa</dt><dd>Kobylisy až Sedlec, 5,2 km</dd></div>
+          <div><dt>Cyklolávka</dt><dd>2027 až 2028</dd></div>
+          <div><dt>Roztoky + vlak</dt><dd>25 až 30 minut na centrum</dd></div>
+        </dl>
       </div>
     </div>
   </section>

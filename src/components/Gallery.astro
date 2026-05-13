@@ -157,11 +157,12 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
     --gallery-radius: var(--radius-input);
   }
   .gallery--single { margin: 0; }
-  .gallery--single img {
+  .gallery--single img,
+  .gallery--single .gallery__placeholder {
     width: 100%;
     aspect-ratio: var(--gallery-aspect, 4 / 3);
     object-fit: cover;
-    display: block;
+    display: flex;
     border-radius: var(--gallery-radius);
   }
   .gallery__viewport {
