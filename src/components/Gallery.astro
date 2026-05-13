@@ -10,10 +10,9 @@
  */
 import Icon from './Icon.astro';
 
-interface GalleryImage {
-  src: string;
-  alt: string;
-}
+type GalleryImage =
+  | { src: string; alt: string }
+  | { placeholder: string; alt: string };
 interface Props {
   images: GalleryImage[];
   ariaLabel: string;
@@ -24,15 +23,23 @@ interface Props {
 }
 const { images, ariaLabel, eager = false, aspectRatio = '4 / 3' } = Astro.props;
 const single = images.length <= 1;
+const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in i;
 ---
 {single ? (
   <figure class="gallery gallery--single" style={`--gallery-aspect: ${aspectRatio};`}>
-    <img
-      src={images[0]?.src}
-      alt={images[0]?.alt ?? ''}
-      loading={eager ? 'eager' : 'lazy'}
-      decoding="async"
-    />
+    {images[0] && isImage(images[0]) ? (
+      <img
+        src={images[0].src}
+        alt={images[0].alt ?? ''}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    ) : (
+      <div class="gallery__placeholder" role="img" aria-label={images[0]?.alt ?? ariaLabel}>
+        <span class="gallery__placeholder-icon" aria-hidden="true">▢</span>
+        <span class="gallery__placeholder-note">{images[0] && !isImage(images[0]) ? images[0].placeholder : 'Foto doplníme'}</span>
+      </div>
+    )}
   </figure>
 ) : (
   <div
@@ -45,12 +52,20 @@ const single = images.length <= 1;
     <div class="gallery__viewport" data-gallery-viewport tabindex="0">
       {images.map((img, i) => (
         <figure class="gallery__slide" data-gallery-slide aria-roledescription="slide" aria-label={`${i + 1} / ${images.length}`}>
-          <img
-            src={img.src}
-            alt={img.alt}
-            loading={eager && i === 0 ? 'eager' : 'lazy'}
-            decoding="async"
-          />
+          {isImage(img) ? (
+            <img
+              src={img.src}
+              alt={img.alt}
+              loading={eager && i === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          ) : (
+            <div class="gallery__placeholder" role="img" aria-label={img.alt}>
+              <span class="gallery__placeholder-icon" aria-hidden="true">▢</span>
+              <span class="gallery__placeholder-note">{img.placeholder}</span>
+              <span class="gallery__placeholder-badge">Foto se připravuje</span>
+            </div>
+          )}
         </figure>
       ))}
     </div>
@@ -177,6 +192,42 @@ const single = images.length <= 1;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  /* Placeholder slide: zobrazuje se ve slotech kde vizualizace zatím
+     není dodaná z vault Visualizations/. Mini text říká, co tam bude. */
+  .gallery__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: clamp(16px, 4vw, 32px);
+    text-align: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .gallery__placeholder-icon {
+    font-size: 2rem;
+    line-height: 1;
+    opacity: 0.45;
+  }
+  .gallery__placeholder-note {
+    font: 500 var(--text-sm) / 1.45 var(--font-sans);
+    color: var(--fg);
+    max-width: 38ch;
+  }
+  .gallery__placeholder-badge {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 10px;
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
+    background: rgba(255, 255, 255, 0.5);
   }
 
   /* Arrow buttons , desktop only. Touch swipe handles mobile.

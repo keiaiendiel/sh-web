@@ -323,12 +323,13 @@ const reservationActive = isActive('/rezervace/');
   /* Dropdown panel: minimalist white card, plum accent, smooth fade-in.
      Bridged 14 px gap pseudo-elementem, aby hover nezhasl při přejezdu
      ze linku na panel. Vždy flat single-column list (max 5 short items),
-     šíře 220 px, anchored na pravý okraj triggeru aby se nepřetékalo
-     z viewportu pro nav items v pravé části headeru. */
+     šíře 220 px, anchored na levý okraj triggeru pro konzistentní vizuální
+     zarovnání s nav itemem. Šíře 220 px se vždy vejde i pro nav items v
+     pravé části headeru (Komunita) v 1280+ viewport (nav skrytý pod 1024). */
   .hub-header__dropdown {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
     min-width: 220px;
     margin-top: 14px;
     padding: 8px;
@@ -347,11 +348,6 @@ const reservationActive = isActive('/rezervace/');
       transform 180ms var(--ease-standard),
       visibility 0s linear 180ms;
     z-index: 40;
-  }
-  /* Levý okraj nav (Ubytování) chce dropdown rozbalit doprava, ne doleva. */
-  .hub-header__nav-item--has-dropdown:first-of-type .hub-header__dropdown {
-    right: auto;
-    left: 0;
   }
   .hub-header__dropdown::before {
     /* Invisible hover bridge between trigger link and panel. */

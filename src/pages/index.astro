@@ -13,42 +13,48 @@ import { withBase } from '../utils/url';
    `prefers-reduced-motion: reduce` zastaví na slide 1. */
 
 /* === HERO ROTACE (5 záběrů) === */
-/* Per Site_Copy § 0.1 + Visualization_List § 1.1: 1) Areál drone v ranní mlze,
-   2) Vnitřní dvůr za modré hodiny, 3) Cowork budova exteriér, 4) Jídelna v B
-   během oběda, 5) Kapsle ve sdíleném pokoji. Tier A rendery z Hugo / Twinmotion. */
+/* Per Visualization_List_Cleanup.md § Landing/Hero h01-h05:
+   h01 Budova C zvenku · h02 Vnitřní dvůr · h03 Pokoj 2+kk s pracujícím ·
+   h04 Kapsle interiér · h05 Areál Klecany aerial. Nové Tier A rendery z
+   vault Visualizations/h*. */
 const heroSlides = [
   {
-    src: withBase('/images/hub/hero/hero-1-aerial.jpg'),
-    alt: 'Letecký pohled na areál horních kasáren Klecan v ranní mlze, krajinný kontext nad Vltavou.',
+    src: withBase('/images/hub/hero/h01.jpg'),
+    alt: 'Budova C (coworking + komunita) v parteru, hlavní vstup v odpoledním podvětí, 20 až 30 lidí v záběru: někteří vchází, někdo telefonuje, někdo na kole.',
   },
   {
-    src: withBase('/images/hub/hero/hero-2-courtyard.jpg'),
+    src: withBase('/images/hub/hero/h02.jpg'),
     alt: 'Vnitřní dvůr areálu za modré hodiny, lidé u stolu venku, světla v oknech budov.',
   },
   {
-    src: withBase('/images/hub/hero/hero-3-cowork.jpg'),
-    alt: 'Exteriér coworkingové budovy v areálu, denní pohled z odstupu.',
+    src: withBase('/images/hub/hero/h03.jpg'),
+    alt: 'Privátní apartmán 2+kk: jeden člověk u laptopu u okna s denním světlem, káva na stole, klidná pracovní atmosféra.',
   },
   {
-    src: withBase('/images/hub/hero/hero-4-jidelna.jpg'),
-    alt: 'Jídelna v budově B v poledne, společné stolování u dlouhých stolů.',
+    src: withBase('/images/hub/hero/h04.jpg'),
+    alt: 'Velký pokoj s privátními kapslemi v rohu, „obývák s pody" se sedáky, knihami a převlékací kabinkou v pozadí.',
   },
   {
-    src: withBase('/images/hub/hero/hero-5-kapsle.jpg'),
-    alt: 'Privátní kapsle ve sdíleném pokoji, knihovna a relaxační prostor.',
+    src: withBase('/images/hub/hero/h05.jpg'),
+    alt: 'Letecký pohled na horní kasárny Klecan v ranní mlze, krajinný kontext nad Vltavou.',
   },
 ];
 
 /* === AMENITY ZIG-ZAG (4 řady) === */
-/* Zig-zag layout: alternující foto + text. Galerie reálných záběrů per
-   řada, ovládaná Gallery komponentou (dot pagination + chevron buttons,
-   scroll-snap pro touch). Copy per Site_Copy § 0.4.1. */
+/* Zig-zag layout per Visualization_List_Cleanup.md § Landing/Co Hub nabízí.
+   Galerie reálných záběrů per řada (Gallery komponenta: dot pagination +
+   chevron buttons + scroll-snap), kde vault folder zatím nemá záběr, slot
+   nese placeholder s krátkou poznámkou, co tam bude. Copy per Site_Copy
+   § 0.4.1. */
+type GalleryItem =
+  | { src: string; alt: string }
+  | { placeholder: string; alt: string };
 type AmenityRow = {
   eyebrow: string;
   lede: string;
   href: string;
   detailLabel: string;
-  gallery: { src: string; alt: string }[];
+  gallery: GalleryItem[];
 };
 
 const amenityRows: AmenityRow[] = [
@@ -57,6 +63,9 @@ const amenityRows: AmenityRow[] = [
     lede: 'Devět typů, od privátní kapsle pro jednoho po byt 5+kk pro skupinu.',
     href: '/ubytovani/',
     detailLabel: 'Možnosti ubytování',
+    /* Vault neukládá samostatné Ubytování záběry pro landing, recyklujeme
+       z konkrétních ubytovacích sekcí (ks, kd, lj, lp, p1k a další zatím
+       empty), držíme aktuální mix. */
     gallery: [
       { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'), alt: '1+kk ranní rituál: káva u okna, denní světlo, postel ustlaná v pozadí.' },
       { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'), alt: 'Větší privátní apartmán pro skupinu: jídelní stůl, kuchyňský kout, postel.' },
@@ -69,9 +78,13 @@ const amenityRows: AmenityRow[] = [
     lede: 'Volný stůl v sále zdarma pro rezidenty. Fixní stůl, ateliéry, dílny s těžkými stroji za hodinovou sazbu.',
     href: '/coworking/',
     detailLabel: 'Coworking, dílny a ateliéry',
+    /* Vault cw01-cw04 folders zatím empty (úplně nové vizualizace per
+       Marek + Scott Weber / Impact Hub reference). Placeholder slots. */
     gallery: [
-      { src: withBase('/images/hub/hero/hero-3-cowork.jpg'), alt: 'Exteriér coworkingové budovy v areálu, denní pohled z odstupu.' },
-      { src: withBase('/images/hub/amenities/cowork-interior.jpg'), alt: 'Coworkingový sál v 1. NP budovy C, pevné stoly a kávovar v rohu.' },
+      { placeholder: 'cw01 Volný stůl v sále, hot-desking, 6 až 8 lidí ve flow', alt: 'Coworkingový sál v 1. NP budovy C, flexibilní hot-desking.' },
+      { placeholder: 'cw02 Fixní stůl personalizovaný, monitory, klávesnice, rostlina', alt: 'Detail dedicated desku s monitory a osobními věcmi.' },
+      { placeholder: 'cw03 Zasedací místnost s týmem 4 až 6 lidí, prezentace na obrazovku', alt: 'Zasedací místnost v budově C v plné akci.' },
+      { placeholder: 'cw04 Ateliér nebo dílna v D1 nebo H1 až H3, hardware a nářadí', alt: 'Ateliér nebo dílna s fyzickou prací mimo office.' },
     ],
   },
   {
@@ -79,10 +92,13 @@ const amenityRows: AmenityRow[] = [
     lede: 'Wellness, sport, gastro, kultura. Bazén, sauna, kantýna v budově B, klubovna, komunitní zahrádky.',
     href: '/komunita/',
     detailLabel: 'Komunitní program',
+    /* Vault ko02-ko04 nové (Bazén, Kantýna, Klubovna). ko01 Grilovací
+       místo zatím chybí. */
     gallery: [
-      { src: withBase('/images/hub/amenities/komunita-courtyard.jpg'), alt: 'Vnitřní dvůr areálu s pizzerií v budově B, večerní zázemí.' },
-      { src: withBase('/images/hub/hero/hero-4-jidelna.jpg'), alt: 'Jídelna v budově B, dřevěné stoly a lavice v poledne.' },
+      { src: withBase('/images/hub/amenities/ko02-bazen.jpg'), alt: 'Bazén v centrálním objektu areálu, letní odpoledne, sluneční terasa, relax po práci.' },
+      { src: withBase('/images/hub/amenities/ko04-klubovna.jpg'), alt: 'Klubovna v budově C s eventem, lidé u stolů, kulturní život uvnitř Hubu.' },
       { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'), alt: 'Tržnice s minipivovarem v budově B, večerní zázemí pro gastronomii.' },
+      { placeholder: 'ko01 Grilovací místo, rodinné grilování v sobotu poledne, 8 až 12 lidí', alt: 'Grilovací místo v komunitním parku v sobotní poledne.' },
     ],
   },
   {
@@ -90,8 +106,13 @@ const amenityRows: AmenityRow[] = [
     lede: 'Hub-shuttle do metra Kobylisy, 5 jízd v ceně. Bus 374 a Hub-taxi. Cyklostezka EuroVelo 7 podél Vltavy.',
     href: '/doprava/',
     detailLabel: 'Jak se sem dostanete',
+    /* Vault dp02 nový (cyklostezka). dp01 Hub-shuttle a dp03 zastávka
+       autobusu zatím chybí. */
     gallery: [
-      { src: withBase('/images/hub/amenities/doprava-tram.jpg'), alt: 'Plánovaná tramvajová zastávka Výzkumný ústav I poblíž areálu.' },
+      { src: withBase('/images/hub/amenities/dp02-cyklostezka.jpg'), alt: 'Cyklista v motion bluru na cyklostezce Praha až Klecany, alternativa pro tělo a klima.' },
+      { src: withBase('/images/hub/amenities/doprava-tram.jpg'), alt: 'Plánovaná tramvajová zastávka Výzkumný ústav I poblíž areálu (2029 až 2030).' },
+      { placeholder: 'dp01 Hub-shuttle dodávka před hlavním vstupem, 3 až 4 rezidenti nastupují', alt: 'Hub-shuttle dodávka před hlavním vstupem do Hubu, ranní mlha.' },
+      { placeholder: 'dp03 Zastávka autobusu 374 v Klecanech, U hřbitova', alt: 'Zastávka autobusu 374 jako záložní spoj na Kobylisy.' },
     ],
   },
 ];
