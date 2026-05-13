@@ -32,6 +32,43 @@ The Hub is phase 1 of the VPD1 záměr (revitalization of horní kasárny Klecan
 - Copy fixy podle CopyVoice § 4.2 + user feedback: site-wide ty→vy konverze v MDX (12+ substitucí: tvoje/tvůj/tvojí, 2. os. sg. slovesa); imperativ pro CTA volání (Bydlíte → Bydlete, Najmete si → Najměte si); calque „na měsíc" + missing comma před „nebo" v parech; všech 16 amenity card placeholderů přepsány jako popisné alt texty, žádné „Hugo" / „Tier A produkce" mentions.
 - Design polish: focus-visible ring na všechny interaktivní prvky (plum, 2px + 2px offset), skip-link „Přeskočit na hlavní obsah" pro a11y/klávesnici, card hover lift (translateY -2px + soft plum shadow) na `.ub-card` a `.kp-variant`, CTA button hover lift; sofistikovaná typografie globálně (font-feature-settings kern/liga/calt/ss01, text-rendering optimizeLegibility, tabular-nums na td/dd), scroll-padding-top pro anchor links, smooth scroll.
 
+**Vault sync 2026-05-13 (post-Phase-6):**
+- Renames v co-living: „Jedno lůžko ve sdíleném pokoji" → „Jedno lůžko", „Dvoulůžko ve sdíleném bytě" → „Dvoulůžko".
+- Reorder co-living po cenovém ascending: kapsle-single (1) → jedno-luzko (2) → kapsle-double (3) → dvouluzko (4). `/ubytovani/` overview, wizard step 2, `/kapsle/` landing všechno auto-pickup z collection order.
+- Body texts v 4 coliving MDX ~50 % kratší per nové Site_Copy § 1.2.x.
+- `/ubytovani/` § 1.1 + 1.2 intro: nový odstavec o volitelném sdílení v privátních + 2-odstavcový reframing o lůžku vs kapsli v co-livingu.
+- FAQ JSON: kompletně přepsáno (předchozí Phase 4 update se ztratil, držel pre-pivot otázky). Nyní 10 otázek z vault A.1-A.10, vč. A.1 reformulace produktů a A.5 mazlíčci alignment s rename.
+- CONTENT.md re-synced z `/Users/kindl/kindl-vault/Projects/SH_Web/SH_Web_Site_Copy.md`.
+
+## Workflow: vault → repo sync
+
+Klient pracuje v `/Users/kindl/kindl-vault/Projects/SH_Web/`. Když editne **Site_Copy.md** (kanonický copy zdroj), nebo **Plan.md** (locked decisions), Claude má za úkol porovnat a syncnout. Postup:
+
+1. **Re-read vault soubory** (`Site_Copy.md` první, `Plan.md` jen když user explicitně zmíní strukturální nebo cenovou změnu).
+2. **Porovnej s aktuálním stavem repa** na úrovni:
+   - `src/content/apartmany/*.mdx` (5 souborů) ↔ Site_Copy § 1.1.1-1.1.5
+   - `src/content/coliving/*.mdx` (4 soubory) ↔ Site_Copy § 1.2.1-1.2.4
+   - `src/content/faq/index.json` (10 otázek) ↔ Site_Copy § A.1-A.10
+   - `src/pages/index.astro` (hero claim + amenity karty) ↔ § 0.1 + Visualization_List § 1.2
+   - `src/pages/ubytovani/index.astro` (sekce intros) ↔ § 1.0 + 1.1 + 1.2 intra
+   - `src/pages/coworking/` ↔ § 2.x
+   - `src/pages/komunita/` ↔ § 3.x
+   - `src/pages/okoli/` ↔ § 4.x
+   - `src/pages/doprava/` ↔ § 5.x
+   - `src/pages/stipendia/` ↔ § 6.x
+   - `src/pages/galerie/` ↔ § 7.x
+   - `src/pages/novinky/` ↔ § 8.x
+   - `src/pages/rezervace/` ↔ § 9.x (success copy, mini-FAQ, configurator field labels) — wizard cards auto z collections
+   - `src/pages/kontakty/` ↔ § 10.x
+3. **Aplikuj změny** v MDX a Astro souborech.
+4. **Voice rule guardrails** (CopyVoice § 4.2 lock): vy/váš lowercase, bez ty form, bez em-dash, bez „v srdci", bez „objevte/ponořte se", bez duté gerundium v -ící, bez source citations Otiwilium/Bezrealitky/Compass v body textu (jen na `/metodika-srovnani/`).
+5. **Imperativ pro CTA volání** (user feedback): „Bydlete tady", „Najměte si", „Rezervujte si" — ne „Bydlíte tady", „Najmete si".
+6. **Sync CONTENT.md**: `cp "/Users/kindl/kindl-vault/Projects/SH_Web/SH_Web_Site_Copy.md" CONTENT.md` + frontmatter „Last sync: YYYY-MM-DD" + sync note.
+7. **Verifikace**: `pnpm lint:editorial` + `pnpm build`. Žádné violations, 26 stránek.
+8. **Commit** s prefixem `content(hub):` nebo `fix(hub):` a popisem co se v Site_Copy změnilo.
+
+Pokud vault přidá novou stránku nebo amenity, řekni klientovi (potřebuje to přidat do Plan.md locked sitemap + Astro routy + nav).
+
 **Open na ostrý launch:**
 - Deploy Cloudflare Worker (`worker/`): `wrangler login` → `d1 create` → secrets (TURNSTILE_SECRET, RESEND_API_KEY, NOTIFY_EMAIL) → `wrangler deploy` → custom domain `form.startovacihub.cz`. Detail v `worker/README.md`.
 - Phase 5b: front-end napojit `/rezervace/` submit na Worker endpoint + Turnstile widget. Aktuálně `console.log(payload)` + success state.

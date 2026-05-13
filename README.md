@@ -5,32 +5,47 @@ Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr
 **Live preview:** https://keiaiendiel.github.io/sh-web/ (GitHub Pages, auto-deployed on every push to master)
 **Future canonical:** `startovacihub.cz` (after DNS cutover)
 
-> **Status (2026-05):** repo je v pre-restructure cleanup stavu. Aktuální stránky níže odpovídají předchozí verzi; klient připravuje obsah pro novou strukturu v `CONTENT.md` v rootu. Operační kontext + průběh restructure: `CLAUDE.md`.
+> **Status (2026-05-13):** post-restructure, 6 fází + vault sync dokončeno. 26 stránek, kompletní obsah ze Site_Copy.md, Cloudflare Worker scaffold pro form backend (deploy pending). Detail v `CLAUDE.md`. Master copy a strategy v `/Users/kindl/kindl-vault/Projects/SH_Web/`, lokální mirror v `CONTENT.md`.
 
 ## Stack
 
 - Astro 6.1.8, static output, Czech-only.
 - Atyp Special font, K0–K100 monochrome scale, **plum accent `#5A2A5F`** (1 of 8 OSA tricolor accent colors).
 - Light radii (`--radius-input: 7px`) for inputs, CTA buttons, and cards; sharp `0` everywhere else.
-- MDX content collections (`subProjects`, `rooms`, `faq`, `org`).
-- Vanilla CSS, no client framework, no React island. Tiny inline `<script is:inline>` islands for header drawer, form, lightbox, and Leaflet map.
-- `sharp` for image migration only; Leaflet 1.9.4 from CDN (unpkg) used only on `/o-arealu/` for the map banner.
+- MDX content collections: `apartmany` (5 privátních), `coliving` (4 typy), `faq` (10), `org` (OSA II identita).
+- Vanilla CSS, no client framework, no React island. Tiny inline `<script is:inline>` islands pro header drawer a 5-step wizard.
+- Cloudflare Worker scaffold v `worker/` pro form backend (Turnstile + Resend + D1 EU), deploy přes Wrangler. Detail v `worker/README.md`.
 
-## Pages (20)
+## Pages (26)
 
-- `/` Landing — 4-image full-bleed hero slide carousel (with −15 % brightness scrim); 6 room-type cards with anchor pricing + per-osoba ekvivalent + dual CTA (Detail / Rezervovat); „Co Hub nabízí" amenity grid (cowork, bazén, sauna, recepce, kyvadla); „Můžeš si přikoupit" extras (stravování, e-vozidla, sklady); zigzag (Místo + Komunita); final plum CTA panel; place + masterplan; interactive Leaflet map; mini-FAQ.
-- `/pokoje/` — overview of all 6 room types with the same anchor + per-osoba pricing pattern as the homepage cards.
-- `/pokoje/<slug>/` × 6 — detail pages for: `capsule` (jednolůžková), `capsule-double`, `1kk-2l`, `1kk-3l`, `2kk`, `3kk`. Each: hero image with size/kapacita/cena meta, ideal-for panel, MDX body, 4-tier pricing table (1–2 měs / 3+ / 6+ / 12+ months), reserve CTA with URL pre-fill (`/rezervace/?typ=...`).
-- `/sluzby/` — paid extras: stravování, půjčovna e-vozidel, kontejnerové sklady (sauna is **in-rent**, not here). Pitch + price table per service.
-- `/areal/` — 5 sub-project provozů (Komunitní centrum, Coworking, Pivovar, Sauna+bazén, Sportoviště+park) + masterplan. Renamed from `/projekty/`.
-- `/areal/<slug>/` × 5 — per-objekt detail.
-- `/o-arealu/` — data-first chapter layout (Klecany 12 km, kyvadla, plánovaná tramvaj + cyklolávka — both in přípravě), interactive Leaflet map of the area pinned at the Horní kasárny coordinates.
-- `/rezervace/` — 3-section booking flow (typ + termín + délka → kontakt → souhlas with optional stipendium checkbox). URL pre-fill `?typ=<slug>`. Telefon povinný (rezervační oddělení volá).
-- `/druzstvo/` (skrytá, `noindex`) — pro lidi nasměrované manuálně z rezervace, kteří mají zájem o vlastnické bydlení v rámci VPD1.
-- `/faq/` — audience-tabbed FAQ (Vše / O projektu / Pro obyvatele).
+**Landing + core:**
+- `/` Landing — hero rotace 5 záběrů (5 s/slide, cross-fade), „Co Hub nabízí" 4 karty s horizontal scroll-snap gallery (Ubytování / Coworking / Komunita / Doprava), 8-section nav grid, masterplan, finální plum CTA. Site-wide badge „V projektové přípravě" v hlavičce per Marek 2026-05-12 (neutralizuje vábivou reklamu podle Přílohy č. 1 písm. d) ZOOS).
+- `/ubytovani/` Overview s 9 kartami ve 2 skupinách: 4 co-living (kapsle 1L, jedno lůžko, kapsle 2L, dvoulůžko) + 5 privátních apartmánů (1+kk až 5+kk).
+
+**9 detail pages s plnou cenovkou + per-osoba ekvivalentem:**
+- `/ubytovani/co-living/<slug>/` × 4: `kapsle-single` (3 000 Kč), `jedno-luzko` (3 500 Kč), `kapsle-double` (4 500 Kč), `dvouluzko` (6 000 Kč). Cenovka anchor + 3-tier slevy (3+/6+/12+ měs).
+- `/ubytovani/privatni/<slug>/` × 5: `1kk` (9 500 Kč), `2kk` (14 000), `3kk` (18 000), `4kk` (22 000), `5kk` (25 000).
+- `/kapsle/` dedikovaný A/B test landing per Plan.md (reframing kapsle, ne hostel).
+
+**8 obsahových sekcí (Phase 4):**
+- `/coworking/` — 5 tarifů (sál 2 900 Kč/měs rezidenti zdarma, fixní stůl 4 200, kancelář pro 4 15 000, zasedačka 350/hod, ateliér 6 500, dílna 490 + 150/hod CNC).
+- `/komunita/` — wellness (bazén + sauna), park (zahrádky, gril, hřiště), gastro (kantýna, restaurace, pekárna v B), klubovna v C.
+- `/okoli/` — 9 podsekcí Klecan (vzdělávání, zdravotnictví, obchody, doprava, sport, brigády, kavárny+kultura, co tu není).
+- `/doprava/` — Hub-shuttle 5 jízd v ceně, bus 374 PID, Hub-taxi 1 jízda v ceně, auto+parkování, kolo+pěšky, plánovaná tramvaj 2029-2030 + cyklolávka 2027-2028.
+- `/stipendia/` — 4 role: rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor. Pilot podzim 2026.
+- `/galerie/` — 4 foto-skupiny (z výstavby, areál v ročních obdobích, tváře komunity, akce 2026+). Fotky se postupně doplňují.
+- `/novinky/` — blog model, šablona prvního článku, rytmus dalších.
+- `/kontakty/` — OSA II identita (IČO 270 26 345) + 4 osoby (Marek, rezervační, stipendijní, tisk) + adresa + GDPR.
+
+**Service + legal:**
+- `/rezervace/` — 5-step wizard (koncept → konfigurace → termín → kontakt → GDPR) s živým sidebar (cena podle vybraného formátu + délky, „vše v ceně" checklist). URL pre-fill `?typ=<slug>`. Backend `worker/` (scaffold).
+- `/faq/` — 10 nejčastějších otázek (A.1-A.10 z Site_Copy.md).
+- `/metodika-srovnani/` — povinná metodika cenového srovnání per § 2980 OZ.
+- `/gdpr/` — zásady zpracování osobních údajů.
+- `/druzstvo/` (skrytá, `noindex`) — manuální nasměrování pro vlastnické bydlení.
 - `/404`.
 
-All non-landing pages share the same dark image hero pattern (eyebrow + H1 + lede on a hero photo with `filter: brightness(0.85)` and a bottom-heavy black scrim).
+Sub-page hero pattern: eyebrow + H1 + lede na dark image bg s `filter: brightness(0.65-0.7)` a bottom-heavy black scrim.
 
 ## Audience
 
