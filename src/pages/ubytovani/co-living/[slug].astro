@@ -97,13 +97,13 @@ const discountPct = (n: number) => `−${Math.round((1 - n / data.cena.anchor) *
 
   <section class="apt-cta">
     <div class="apt-cta__inner">
-      <h2 class="apt-cta__title">Rezervovat {data.shortName.toLowerCase()}</h2>
+      <h2 class="apt-cta__title">Rezervace</h2>
       <p class="apt-cta__lede">
         Rezervace je nezávazná. Vyplníte termín nástupu, délku pobytu a kontakt.
         Z rezervačního oddělení vám zavoláme do 24 hodin.
       </p>
       <a class="apt-cta__button" href={withBase(`/rezervace/?typ=${data.slug}`)}>
-        Rezervace, {data.shortName.toLowerCase()}
+        Rezervace
       </a>
     </div>
   </section>
