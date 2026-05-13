@@ -1,6 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { getEntry } from 'astro:content';
 import { withBase } from '../../utils/url';
+
+const orgEntry = await getEntry('org', 'identity');
+const org = orgEntry?.data;
 ---
 <Base
   title="Ochrana osobních údajů · Hub Klecany"
@@ -24,7 +28,7 @@ import { withBase } from '../../utils/url';
       <div class="sec-block__text">
         <p>
           Správcem osobních údajů je Občanské sdružení Alternativa II, z.s. (OSA II), se sídlem
-          v Klecanech, IČO TBD (doplníme po Markově dodání). Kontakt pro otázky kolem ochrany
+          v Klecanech, IČO {org?.ico ?? 'bude doplněno'}. Kontakt pro otázky kolem ochrany
           údajů: <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.
         </p>
       </div>
@@ -139,8 +143,6 @@ import { withBase } from '../../utils/url';
         <p>
           Web aktuálně neukládá cookies pro analytiku ani marketing. Používáme jen technické
           cookies nezbytné pro fungování formuláře (CSRF ochrana, Cloudflare Turnstile, anti-bot).
-          Pokud v budoucnu nasadíme analytiku (Plausible nebo GoatCounter, oba GDPR-friendly),
-          aktualizujeme tuto stránku a doplníme cookie banner.
         </p>
       </div>
     </div>

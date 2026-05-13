@@ -27,11 +27,11 @@ const org = orgEntry?.data;
       </header>
       <dl class="sec-table">
         <div class="sec-table__row"><dt>Název</dt><dd>{org?.name ?? 'Občanské sdružení Alternativa II, z.s.'} (OSA II)</dd></div>
-        <div class="sec-table__row"><dt>IČO</dt><dd>{org?.ico ?? 'TBD (Marek doplní)'}</dd></div>
+        <div class="sec-table__row"><dt>IČO</dt><dd>{org?.ico ?? 'bude doplněno'}</dd></div>
         <div class="sec-table__row"><dt>Adresa</dt><dd>Horní Kasárna Klecany, 250 67 Klecany</dd></div>
         <div class="sec-table__row"><dt>E-mail</dt><dd><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></dd></div>
-        <div class="sec-table__row"><dt>Telefon</dt><dd>TBD (Marek doplní číslo rezervačního oddělení)</dd></div>
-        <div class="sec-table__row"><dt>Datová schránka</dt><dd>{org?.datova_schranka ?? 'TBD'}</dd></div>
+        <div class="sec-table__row"><dt>Telefon</dt><dd>{org?.phone ?? 'bude doplněno'}</dd></div>
+        <div class="sec-table__row"><dt>Datová schránka</dt><dd>{org?.datova_schranka ?? 'bude doplněno'}</dd></div>
         <div class="sec-table__row"><dt>Mateřský web</dt><dd><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a></dd></div>
       </dl>
     </div>
@@ -48,8 +48,17 @@ const org = orgEntry?.data;
         <h3 class="sec-sub__title">Marek Semerád, předseda OSA II</h3>
         <p class="sec-sub__lede">Vedoucí záměru VPD1 a Startovacího Hubu Klecany.</p>
         <dl class="sec-table">
-          <div class="sec-table__row"><dt>E-mail</dt><dd><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></dd></div>
-          <div class="sec-table__row"><dt>Telefon</dt><dd>TBD</dd></div>
+          <div class="sec-table__row"><dt>E-mail</dt><dd><a href={`mailto:${org?.predseda?.email ?? 'vpd@osa2.cz'}`}>{org?.predseda?.email ?? 'vpd@osa2.cz'}</a></dd></div>
+          <div class="sec-table__row"><dt>Telefon</dt><dd>{org?.predseda?.phone ?? 'bude doplněno'}</dd></div>
+        </dl>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Štěpán Říha, místopředseda OSA II</h3>
+        <p class="sec-sub__lede">Spoluvedoucí záměru, technické a provozní otázky.</p>
+        <dl class="sec-table">
+          <div class="sec-table__row"><dt>E-mail</dt><dd><a href={`mailto:${org?.mistopredseda?.email ?? 'vpd@osa2.cz'}`}>{org?.mistopredseda?.email ?? 'vpd@osa2.cz'}</a></dd></div>
+          <div class="sec-table__row"><dt>Telefon</dt><dd>{org?.mistopredseda?.phone ?? 'bude doplněno'}</dd></div>
         </dl>
       </article>
 
@@ -57,9 +66,9 @@ const org = orgEntry?.data;
         <h3 class="sec-sub__title">Rezervační oddělení</h3>
         <p class="sec-sub__lede">Zájemci o bydlení, plánování prohlídek areálu, ceník a podmínky.</p>
         <dl class="sec-table">
-          <div class="sec-table__row"><dt>Jméno</dt><dd>TBD (Marek doplní jméno koordinátora rezervací)</dd></div>
+          <div class="sec-table__row"><dt>Jméno</dt><dd>bude doplněno</dd></div>
           <div class="sec-table__row"><dt>E-mail</dt><dd><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a> (společný)</dd></div>
-          <div class="sec-table__row"><dt>Telefon</dt><dd>TBD</dd></div>
+          <div class="sec-table__row"><dt>Telefon</dt><dd>bude doplněno</dd></div>
         </dl>
       </article>
 
@@ -67,7 +76,7 @@ const org = orgEntry?.data;
         <h3 class="sec-sub__title">Stipendijní program</h3>
         <p class="sec-sub__lede">Otázky kolem pobytového stipendia, výběrový proces (otevírá se po pilotu podzim 2026).</p>
         <dl class="sec-table">
-          <div class="sec-table__row"><dt>Jméno</dt><dd>TBD</dd></div>
+          <div class="sec-table__row"><dt>Jméno</dt><dd>bude doplněno</dd></div>
           <div class="sec-table__row"><dt>E-mail</dt><dd>stipendium@startovacihub.cz (návrh) nebo vpd@osa2.cz</dd></div>
         </dl>
       </article>
@@ -76,7 +85,7 @@ const org = orgEntry?.data;
         <h3 class="sec-sub__title">Tisk a média</h3>
         <p class="sec-sub__lede">Médiové žádosti, rozhovory, podklady pro novináře.</p>
         <dl class="sec-table">
-          <div class="sec-table__row"><dt>Jméno</dt><dd>TBD</dd></div>
+          <div class="sec-table__row"><dt>Jméno</dt><dd>bude doplněno</dd></div>
           <div class="sec-table__row"><dt>E-mail</dt><dd>tisk@startovacihub.cz (návrh) nebo vpd@osa2.cz</dd></div>
         </dl>
       </article>
@@ -91,9 +100,9 @@ const org = orgEntry?.data;
       </header>
       <dl class="sec-table">
         <div class="sec-table__row"><dt>Adresa</dt><dd>Horní Kasárna Klecany, 250 67 Klecany</dd></div>
-        <div class="sec-table__row"><dt>GPS</dt><dd>TBD (Marek doplní souřadnice hlavního vstupu V z masterplánu)</dd></div>
+        <div class="sec-table__row"><dt>GPS</dt><dd>bude doplněno</dd></div>
         <div class="sec-table__row"><dt>Hlavní vstup</dt><dd>Vrátnice V, označený „Hlavní vstup", 4 minuty pěšky ze zastávky „Klecany, U hřbitova"</dd></div>
-        <div class="sec-table__row"><dt>Otevírací doba kanceláře</dt><dd>TBD (návrh Po až Pá 9:00 až 17:00, k upřesnění)</dd></div>
+        <div class="sec-table__row"><dt>Otevírací doba kanceláře</dt><dd>Po až Pá 9:00 až 17:00</dd></div>
       </dl>
     </div>
   </section>

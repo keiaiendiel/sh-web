@@ -29,7 +29,7 @@ const discountPct = (n: number) => `−${Math.round((1 - n / data.cena.anchor) *
       <img class="apt-hero__bg" src={heroSrc} alt={data.heroAlt ?? ''} loading="eager" decoding="async" />
     ) : (
       <div class="apt-hero__bg apt-hero__bg--placeholder" role="img" aria-label={data.heroAlt ?? ''}>
-        <span class="apt-hero__placeholder">▢ Foto doplníme</span>
+        <span class="apt-hero__placeholder" aria-hidden="true">▢</span>
       </div>
     )}
     <div class="apt-hero__scrim" aria-hidden="true"></div>
@@ -100,11 +100,11 @@ const discountPct = (n: number) => `−${Math.round((1 - n / data.cena.anchor) *
     <div class="apt-cta__inner">
       <h2 class="apt-cta__title">Rezervovat {data.shortName}</h2>
       <p class="apt-cta__lede">
-        Registrace zájmu je nezávazná. Vyplníte termín nástupu, délku pobytu a kontakt.
+        Rezervace je nezávazná. Vyplníte termín nástupu, délku pobytu a kontakt.
         Z rezervačního oddělení vám zavoláme do 24 hodin.
       </p>
       <a class="apt-cta__button" href={withBase(`/rezervace/?typ=${data.slug}`)}>
-        Registrace zájmu, {data.shortName}
+        Rezervace, {data.shortName}
       </a>
     </div>
   </section>

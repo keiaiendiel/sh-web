@@ -26,7 +26,7 @@
   "q5": {
     "audience": "resident",
     "question": "Mazlíček ano nebo ne?",
-    "answer": "Předběžně ano, ale s dohodou. V privátních apartmánech bez většího omezení (jen u sousedů zajistit dohodu o klidu). V co-livingu (kapsle, lůžka, dvoulůžka) dle dohody s ostatními rezidenty patra. Při registraci zájmu napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily. Definitivní pravidla doladíme s prvním kolem rezidentů.",
+    "answer": "Předběžně ano, ale s dohodou. V privátních apartmánech bez většího omezení (jen u sousedů zajistit dohodu o klidu). V co-livingu (kapsle, lůžka, dvoulůžka) dle dohody s ostatními rezidenty patra. Při registraci zájmu napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily.",
     "order": 5
   },
   "q6": {
@@ -38,7 +38,7 @@
   "q7": {
     "audience": "resident",
     "question": "Jsem živnostník, můžu si v Hubu zaregistrovat sídlo firmy?",
-    "answer": "Pracujeme na tom. Pro registraci sídla je třeba souhlas vlastníka prostor, který jako provozovatel poskytneme za drobný poplatek (cca 99 Kč/měs, k upřesnění) jen pro rezidenty Hubu. Sídlo nebude exklusivně využíváno, slouží jako poštovní adresa s skenováním pošty na e-mail. Pro detailní podmínky se ozvěte na vpd@osa2.cz při registraci zájmu.",
+    "answer": "Pracujeme na tom. Pro registraci sídla je třeba souhlas vlastníka prostor, který jako provozovatel poskytneme za drobný poplatek (cca 99 Kč/měs) jen pro rezidenty Hubu. Sídlo nebude exklusivně využíváno, slouží jako poštovní adresa se skenováním pošty na e-mail. Pro detailní podmínky se ozvěte na vpd@osa2.cz při registraci zájmu.",
     "order": 7
   },
   "q8": {
