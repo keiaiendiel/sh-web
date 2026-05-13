@@ -190,13 +190,20 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         </div>
 
         <div class="rez-field">
-          <label>Délka pobytu</label>
+          <label>Předpokládaná délka pobytu</label>
           <div class="rez-radio-row">
             <label class="rez-pill"><input type="radio" name="delka" value="1-2" required /><span>1 až 2 měsíce</span></label>
             <label class="rez-pill"><input type="radio" name="delka" value="3-5" /><span>3 až 5 měsíců</span></label>
             <label class="rez-pill"><input type="radio" name="delka" value="6-11" /><span>6 až 11 měsíců</span></label>
             <label class="rez-pill"><input type="radio" name="delka" value="12+" /><span>12+ měsíců</span></label>
           </div>
+        </div>
+
+        <div class="rez-field rez-field--check">
+          <label class="rez-check">
+            <input type="checkbox" name="prodlouzeni" value="ano" />
+            <span>Chci si vyhradit právo prodloužit pobyt o další období. Cena s touto opcí je přibližně o 5 až 10 % vyšší.</span>
+          </label>
         </div>
 
         <div class="rez-field rez-field--check">
@@ -406,7 +413,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
     function updateSidePrice() {
       var format = form.querySelector('input[name="format"]:checked');
-      var delka = form.querySelector('input[name="delka"]:checked');
       var koncept = form.querySelector('input[name="koncept"]:checked');
       if (koncept && koncept.value === 'nevim') {
         var rozpocet = form.querySelector('input[name="nevim-rozpocet"]');
@@ -421,14 +427,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       }
       var data = allFormats[format.value];
       if (!data) { sidePrice.textContent = 'vyberte formát'; return; }
-      var base = data.cena.anchor;
-      if (delka) {
-        if (delka.value === '3-5') base = data.cena.m3;
-        else if (delka.value === '6-11') base = data.cena.m6;
-        else if (delka.value === '12+') base = data.cena.m12;
-      }
-      var perPerson = (data.cena.perOsoba || data.cena.perOsoba12) ? '' : '';
-      sidePrice.textContent = fmt(base) + '/měs';
+      sidePrice.textContent = fmt(data.cena.anchor) + '/měs';
     }
 
     /* Event handlers */

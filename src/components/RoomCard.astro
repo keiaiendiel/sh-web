@@ -15,7 +15,6 @@ interface Props {
   kapacita: string;
   popis: string;
   cenaAnchor: number;
-  cenaM12: number;
   perOsoba?: string;
   thumbnail?: string;
   thumbnailAlt?: string;
@@ -30,7 +29,6 @@ const {
   kapacita,
   popis,
   cenaAnchor,
-  cenaM12,
   perOsoba,
   thumbnail,
   thumbnailAlt = '',
@@ -39,7 +37,6 @@ const {
 } = Astro.props;
 
 const fmt = (n: number) => n.toLocaleString('cs-CZ');
-const discountPct = Math.round(((cenaAnchor - cenaM12) / cenaAnchor) * 100);
 ---
 <article class="room-card">
   <a class="room-card__thumb-link" href={detailHref} aria-label={`Detail typu ${name}`}>
@@ -65,15 +62,11 @@ const discountPct = Math.round(((cenaAnchor - cenaM12) / cenaAnchor) * 100);
     <p class="room-card__popis">{popis}</p>
     <div class="room-card__price">
       <span class="room-card__price-anchor">
-        <span class="room-card__price-prefix">od</span>
         <span class="room-card__price-num">{fmt(cenaAnchor)}</span>
         <span class="room-card__price-unit">Kč/měsíc</span>
       </span>
       {perOsoba && (
         <span class="room-card__price-perperson">{perOsoba}</span>
-      )}
-      {discountPct > 0 && (
-        <span class="room-card__price-note">při pobytu 12+ měsíců až −{discountPct} %</span>
       )}
     </div>
     <div class="room-card__cta">
@@ -193,10 +186,6 @@ const discountPct = Math.round(((cenaAnchor - cenaM12) / cenaAnchor) * 100);
     gap: 6px;
     flex-wrap: wrap;
   }
-  .room-card__price-prefix {
-    font-size: var(--text-xs);
-    color: var(--fg-subtle);
-  }
   .room-card__price-num {
     font: 600 var(--text-2xl) / 1 var(--font-sans);
     color: var(--accent);
@@ -210,11 +199,6 @@ const discountPct = Math.round(((cenaAnchor - cenaM12) / cenaAnchor) * 100);
   .room-card__price-perperson {
     font-size: var(--text-xs);
     color: var(--fg);
-    line-height: 1.4;
-  }
-  .room-card__price-note {
-    font-size: var(--text-xs);
-    color: var(--fg-subtle);
     line-height: 1.4;
   }
   .room-card__cta {

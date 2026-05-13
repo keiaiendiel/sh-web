@@ -335,7 +335,7 @@ const sections = [
   }
   .lp-hero__lede {
     font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-    line-height: 1.45;
+    line-height: 1.5;
     margin: 0 0 var(--space-6);
     max-width: 52ch;
     color: rgba(255,255,255,0.95);
@@ -378,7 +378,7 @@ const sections = [
 
   /* ============ AMENITY ZIG-ZAG ============ */
   .lp-amenities {
-    padding: var(--space-9) var(--gutter);
+    padding: var(--space-8) var(--gutter);
     background: var(--bg);
     color: var(--fg);
   }
@@ -387,19 +387,15 @@ const sections = [
     margin: 0 auto;
   }
   .lp-amenities__head {
-    margin: 0 0 var(--space-8);
-    max-width: 36ch;
+    margin: 0 0 var(--space-6);
   }
-  .lp-amenities__eyebrow {
+  /* „Co Hub nabízí" je section label, ne hero heading, takže
+     eyebrow-style: small caps, plum, letterspaced. */
+  .lp-amenities__title {
     font: 600 var(--text-2xs) / 1 var(--font-sans);
     color: var(--accent);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
-    margin: 0 0 var(--space-3);
-  }
-  .lp-amenities__title {
-    font: 600 clamp(2rem, 4vw, 3rem) / 1.1 var(--font-sans);
-    letter-spacing: var(--tracking-tight);
     margin: 0;
   }
 
@@ -407,7 +403,7 @@ const sections = [
      media v pravém sloupci, copy v levém. */
   .lp-zigzag {
     display: grid;
-    gap: clamp(56px, 9vw, 112px);
+    gap: clamp(40px, 5.5vw, 72px);
   }
   .lp-zigzag__row {
     display: grid;
@@ -616,7 +612,7 @@ const sections = [
     margin: 0 0 var(--space-3);
   }
   .lp-cta__title {
-    font: 600 clamp(2rem, 4vw, 3rem) / 1.15 var(--font-sans);
+    font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     margin: 0 0 var(--space-4);
   }
