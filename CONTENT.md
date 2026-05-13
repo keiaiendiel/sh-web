@@ -7,7 +7,7 @@
      Tento soubor je MIRROR vault souboru pro účely Astro buildu.
      Necommituj edity přímo sem, edituj vault verzi a sync-ni přes:
        cp "/Users/kindl/kindl-vault/Projects/SH_Web/SH_Web_Site_Copy.md" CONTENT.md
-     Last sync: 2026-05-12
+     Last sync: 2026-05-13
      ============================================================ -->
 
 ---
@@ -122,7 +122,9 @@ V Hubu nabízíme devět typů bydlení. Čtyři varianty co-livingu (od kapsle 
 
 **Úvod pro skupinu privátních apartmánů:**
 
-Privátní apartmán je celý byt jen pro vás. Vlastní koupelna, vlastní kuchyň, vlastní vchod. Pět velikostí od 1+kk pro pár nebo dva spolubydlící až po 5+kk pro skupinu osmi až deseti lidí. Hodí se pro páry, rodiny, kamarády, sportovní oddíly, startupy. Cena je za celý byt; čím víc vás v něm bude, tím nižší nájem na osobu.
+Privátní apartmán je celý byt jen pro vás. Vlastní koupelna, vlastní kuchyň, vlastní vchod. Sdílení s ostatními rezidenty Hubu je volitelné, ne automatické: coworking, sauna, kavárna a komunitní program jsou v ceně, ale potkat tam ostatní není podmínkou bydlení.
+
+Pět velikostí od 1+kk pro pár nebo dva spolubydlící až po 5+kk pro skupinu osmi až deseti lidí. Hodí se pro páry, rodiny, kamarády, sportovní oddíly, startupy. Cena je za celý byt; čím víc vás v něm bude, tím nižší nájem na osobu.
 
 
 #### 1.1.1 Privátní apartmán 1+kk
@@ -327,203 +329,181 @@ Privátní byt 105 m² pro deset lidí. Největší formát; pro velkou skupinu,
 
 **Úvod pro skupinu co-living:**
 
-Co-living znamená, že nemáte vlastní celý byt, ale máte vlastní lůžko nebo vlastní kapsli a sdílíte koupelnu a kuchyň na patře s ostatními rezidenty. Cena je výrazně nižší než privátní apartmán, protože platíte za jedno místo (nebo jeden malý pokoj), ne za celý byt s vlastní kuchyní a koupelnou.
+Co-living: sdílíš koupelnu a kuchyň s ostatními rezidenty. Sociální kontakt je součástí toho, co si platíš. Cena je výrazně nižší než privátní apartmán, protože platíš za lůžko nebo kapsli, ne za celý byt.
 
-Čtyři produkty na ose „kolik soukromí dostanete":
+Rozdíl mezi lůžkem a kapslí je míra soukromí. Kapsle je uzamykatelný modul (zámek, stěny, vlastní světlo a USB). Lůžko je otevřená postel s vlastním stolem a skříní v pokoji. Kapsle dává řádově víc soukromí, lůžko víc podlahové plochy.
 
-> **Co je kapsle a co je „jen" lůžko nebo pokoj?**
->
-> **Kapsle** je samostatný uzavíratelný modul s vlastní stěnou, dveřmi nebo závěsem, vlastním světlem, USB a větráním. V pokoji s tvojí kapslí je 2-5 dalších kapslí, ale každá kapsle je vlastní mikrosoukromí. V tom samém pokoji máš vlastní zamykatelnou skříň, převlékací kabinku a pohovku nebo posezení k odpočinku. Sprchy a kuchyň jsou na patře nebo v rámci patrového bytu (TBD podle dispozice).
->
-> **Jedno lůžko ve sdíleném pokoji** je klasický „dorm-style" formát: jedno z dvou lůžek v pokoji. Máš vlastní postel, vlastní noční stolek, vlastní skříň a vlastní pracovní stůl. Sdílíš pokoj s jedním dalším rezidentem (každý si pronajímáte své lůžko zvlášť). Koupelnu a kuchyň sdílíš na patře nebo v rámci patrového bytu (TBD podle dispozice).
->
-> **Dvoulůžko ve sdíleném bytě** je opak: pár dostane celý pokoj jen pro sebe s manželskou postelí, skříní, stolem a vybavením. Žádný spolubydlící, který by tam přišel. Pokoj je vaším domovem v rámci většího bytu, který sdílíte s 2-4 dalšími pokoji ze stejného patra (kuchyň a koupelna jsou sdílené v rámci toho bytu nebo v rámci patra - TBD).
+Čtyři varianty od nejnižší ceny po nejvyšší:
 
-Čtyři varianty s pořadím od nejlevnější k nejdražší při 12+ tarifu:
+1. **Privátní 1lůžková kapsle** (3 000 Kč anchor, 2 250 Kč při 12+) - uzamykatelný modul pro jednoho. Matrace 210×150 nebo 230×160 cm.
+2. **Jedno lůžko** (3 500 Kč, 2 625 Kč při 12+) - postel ve dvoulůžkovém pokoji. Vlastní stůl, skříň, noční stolek. Matrace 200×80 nebo 230×90 cm.
+3. **Privátní 2lůžková kapsle** (4 500 Kč, 1 688 Kč/os. při 12+) - uzamykatelný modul pro pár. Matrace 210×230 nebo 230×240 cm (King+).
+4. **Dvoulůžko** (6 000 Kč, 2 250 Kč/os. při 12+) - celý pokoj pro pár. Manželská postel, vlastní skříň a stůl.
 
-1. **Privátní 1lůžková kapsle** (3 000 Kč anchor, 2 250 Kč při 12+) - vlastní uzavíratelná kapsle pro jednoho (zámek, světlo, USB) v pokoji s 2-5 dalšími kapslemi. V pokoji vlastní skříň, převlékací kabinka a sezení pro odpočinek. Matrace 210×150 nebo 230×160 cm.
-2. **Jedno lůžko ve sdíleném pokoji** (3 500 Kč anchor, 2 625 Kč při 12+) - jedno z dvou lůžek v pokoji. Vlastní postel, noční stolek, skříň a stůl. Pokoj sdílíš s jedním dalším rezidentem. Matrace 200×80 nebo 230×90 cm.
-3. **Privátní 2lůžková kapsle** (4 500 Kč anchor, 3 375 Kč při 12+, = 1 688 Kč/os. při páru) - vlastní uzavíratelná kapsle pro pár (zámek, světlo, USB) v pokoji s 2-5 dalšími kapslemi. Stejné zázemí v pokoji jako u 1lůžkové. Matrace 210×230 nebo 230×240 cm (King+).
-4. **Dvoulůžko ve sdíleném bytě** (6 000 Kč anchor, 4 500 Kč při 12+, = 2 250 Kč/os. při páru) - celý pokoj jen pro pár v rámci většího bytu. Manželská postel, skříň, stůl, vybavení. Sdílíš jen koupelnu a kuchyň v rámci bytu nebo na patře.
+V ceně všeho co-livingu: zamykatelná skříň, energie, internet, úklid společných prostor, 5 jízd Hub-shuttle a 1 jízda Hub-taxi měsíčně.
 
-V každé variantě: zamykatelná skříň pro věci (u kapslí přímo v pokoji vedle kapslí, u jedno/dvoulůžka v rámci vlastního pokoje), převlékací kabinka u kapslí v pokoji, 5 jízd Hub-shuttle a 1 jízda Hub-taxi měsíčně v ceně, energie, internet, úklid společných prostor.
-
-> **K upřesnění s Markem (architektonická dispozice):** U jednolůžka a dvoulůžka zůstává otevřené, jestli se koupelna a kuchyň sdílejí v rámci patrového bytu (cluster model: 3-5 pokojů sdílí jeden byt s kuchyní a koupelnou) nebo v rámci celého patra (corridor model: 10+ pokojů sdílí společnou kuchyň a sociální zařízení). Záleží na konečné dispozici po rekonstrukci.
+> *Interní: dispozice koupelny a kuchyně (cluster vs corridor model) zůstává otevřená pro Marka, viz `SH_Web_Plan.md` Q9. Konečná dispozice po rekonstrukci.*
 
 #### 1.2.1 Privátní 1lůžková kapsle
 
 **Krátký popis:**
 
-Nejlevnější varianta bydlení v Hubu. Vlastní uzavíratelná kapsle ve sdíleném pokoji s 2-5 dalšími kapslemi. Matrace 210×150 cm (širší než standardní jednolůžko).
+Nejnižší vstupní cena v Hubu. Uzamykatelný modul pro jednoho, matrace 210×150 cm (širší než standardní jednolůžko).
 
 **Hlavní text:**
 
-Kapsle je tvoje soukromé místo na spaní uvnitř většího pokoje. Má pevnou stěnu, závěs nebo dveře na vstupu, vlastní světlo, větrání, USB-C zásuvku. Den trávíš v loungi v parteru, v coworkingu, nebo venku. Kapsle slouží na spaní, čtení, soustředění.
+Kapsle má pevnou stěnu, závěs nebo dveře na vstupu, vlastní světlo, větrání a USB-C. Den trávíš v loungi, coworkingu, nebo venku. Kapsle slouží na spaní, čtení, soustředění.
 
-V pokoji jsou typicky 3-6 kapslí (3 až 5 dalších kapslí kromě tvojí), ne 8-10 jako v tourist hostelu. Mezi nimi je místo na pohovku, knihovnu, rostliny, ale taky **tvoje zamykatelná skříň** a **převlékací kabinka přímo v pokoji**, abys nemusel běhat na patro pro kufr nebo se převlékat na chodbě.
+V pokoji jsou typicky 3-6 kapslí, ne 8-10 jako v tourist hostelu. Mezi nimi pohovka, knihovna, rostliny, zamykatelná skříň a převlékací kabinka.
 
-Matrace 210×150 cm (nebo 230×160 cm při dostupnosti) - to je o 60-70 cm širší než standardní jednolůžková matrace ve studentském hostelu nebo na koleji. V kapsli si rozložíš. Notebook, šálek, knížku máš kolem sebe a stále spíš na pohodlné ploše.
+Matrace 210×150 cm (nebo 230×160 cm při dostupnosti) - o 60-70 cm širší než standardní jednolůžková matrace na koleji.
 
-Sprchy a toalety jsou na patře (nebo v rámci patrového bytu, podle dispozice). Sdílená kuchyň v parteru nebo v rámci bytu.
-
-3 000 Kč měsíčně v krátkém pobytu; 2 250 Kč při ročním závazku.
+3 000 Kč měsíčně, 2 250 Kč při ročním závazku.
 
 **Klíčové vlastnosti:**
-- Vlastní uzavíratelná kapsle s pevnou stěnou, závěsem nebo dveřmi
-- Vlastní světlo nad lůžkem, USB-C zásuvka, polička
-- Matrace 210×150 cm nebo 230×160 cm (volíš při rezervaci podle dostupnosti)
-- **Zamykatelná skříň přímo v pokoji** (kufr + notebook), ne na chodbě patra
-- **Převlékací kabinka v pokoji** se sedadlem a háčkem
-- Pohovka nebo posezení v pokoji k odpočinku (mezi kapslemi)
-- 3-6 kapslí v jednom pokoji (počet závisí na velikosti místnosti)
-- Sprchy a toalety: na patře nebo v rámci patrového bytu (podle dispozice)
-- Sdílená kuchyň: v parteru nebo v rámci patrového bytu (podle dispozice)
-- 5 jízd Hub-shuttle + 1 jízda Hub-taxi měsíčně v ceně
+- Uzamykatelný modul s vlastním světlem a USB-C
+- Matrace 210×150 cm nebo 230×160 cm (volíš podle dostupnosti)
+- Zamykatelná skříň a převlékací kabinka v pokoji
+- Pohovka nebo posezení k odpočinku
+- 3-6 kapslí v jednom pokoji (podle velikosti místnosti)
+- 5 jízd Hub-shuttle + 1 Hub-taxi měsíčně v ceně
 
 **Specifikace:**
-- Kapsle plocha: cca 3-4 m² (matrace plus 50 cm úložného)
-- Pokoj plocha (sdílený se 2-5 dalšími kapslemi): 25-45 m² podle počtu kapslí
-- Konfigurace matrace: 210×150 cm nebo 230×160 cm
-- Skříň: ve sdíleném pokoji, zamykatelná
-- Převlékací kabinka: ve sdíleném pokoji
-- Vlastní koupelna: ne, sdílená na patře nebo v rámci patrového bytu
-- Kuchyňský kout: ne, sdílená kuchyň v parteru nebo v rámci patrového bytu
+- Plocha kapsle: ~3-4 m² (matrace plus 50 cm úložného)
+- Matrace: 210×150 cm nebo 230×160 cm
+- Vlastní koupelna: ne
+- Kuchyňský kout: ne
 
 **Cena:**
 - Anchor (1-2 měs): 3 000 Kč/měsíc
 - 3+ měsíců: 2 850 Kč (-5 %)
 - 6+ měsíců: 2 550 Kč (-15 %)
 - 12+ měsíců: 2 250 Kč (-25 %)
+
 **Obrázky:**
-- [ ] Hero: pohled dovnitř jedné kapsle, závěs napůl otevřený, vlastní lampa, USB, knížka (Tier A #5)
+- [ ] Hero: pohled dovnitř jedné kapsle, závěs napůl otevřený, lampa, USB, knížka (Tier A #5)
 - [ ] Pokoj se 3-4 kapslemi, denní světlo z okna, knihovna a rostlina mezi nimi
-- [ ] Přebalovací kabinka + zamykatelné skříně na patře
+- [ ] Převlékací kabinka + zamykatelné skříně v pokoji
 
 #### 1.2.2 Privátní 2lůžková kapsle
 
 **Krátký popis:**
 
-Kapsle pro dva. Velká matrace 210×230 cm nebo 230×240 cm (rozměr King+). Vlastní zatemnění, dvě čtecí lampy, dva USB porty. Pro páry nebo dvě osoby, které se znají.
+Kapsle pro pár. Velká společná matrace 210×230 cm nebo 230×240 cm (King+). Dvě čtecí lampy, dva USB porty, vlastní zatemnění.
 
 **Hlavní text:**
 
-Dvoulůžková kapsle je kapsle pro pár nebo dva kamarády. Velká společná matrace (210×230 nebo 230×240 cm - to je rozměr větší než klasická manželská postel), dvě čtecí lampy nad hlavou, dva USB porty, vlastní zatemnění závěsem nebo dveřmi.
+Dvoulůžková kapsle = stejný uzamykatelný modul jako jednolůžková, ale pro dva. Společná matrace větší než klasická manželská postel, dvě čtecí lampy, dva USB porty, vlastní zatemnění závěsem nebo dveřmi.
 
-V pokoji je typicky jedna dvojkapsle plus jedna až čtyři jednolůžkové kapsle, nebo dvě dvojkapsle podle dispozice. Celkem 3-6 kapslí v pokoji. Stejné zázemí jako u jednolůžkové kapsle: **vlastní zamykatelná skříň přímo v pokoji**, **převlékací kabinka v pokoji**, pohovka nebo posezení. Sprchy, toalety a kuchyň jsou na patře nebo v rámci patrového bytu (podle dispozice po rekonstrukci).
+V pokoji jsou typicky 3-6 kapslí různých velikostí. Zamykatelná skříň a převlékací kabinka stejně jako u jednolůžkové.
 
-4 500 Kč měsíčně za celou kapsli v krátkém pobytu; 3 375 Kč při ročním závazku. Pro pár to znamená 2 250 Kč na osobu základní cenu, 1 688 Kč na osobu při ročním závazku. Nejlevnější způsob, jak v Hubu bydlet ve dvou.
+4 500 Kč měsíčně za kapsli (= 2 250 Kč/os.), 3 375 Kč při ročním závazku (= 1 688 Kč/os.). Nejlevnější způsob, jak v Hubu bydlet ve dvou.
 
 **Klíčové vlastnosti:**
-- Uzavíratelná kapsle pro dvě osoby, společná velká matrace
-- Dvě čtecí lampy, dva USB-C porty
-- Vlastní zatemnění, závěs nebo dveře
-- Matrace 210×230 cm nebo 230×240 cm (volíš při rezervaci podle dostupnosti) - rozměr větší než klasická King postel
-- Stejné sdílené zázemí jako u jednolůžkové kapsle (skříně v patře, přebalovací kabinka, sprchy, kuchyň)
+- Uzamykatelný modul pro dva, společná velká matrace
+- Dvě čtecí lampy, dva USB-C porty, vlastní zatemnění
+- Matrace 210×230 cm nebo 230×240 cm (King+)
+- Zamykatelná skříň a převlékací kabinka v pokoji
+- 5 jízd Hub-shuttle + 1 Hub-taxi měsíčně v ceně
 
 **Specifikace:**
-- Plocha kapsle: cca 5-6 m²
-- Pokoj plocha (sdílený se 2-5 dalšími kapslemi): 30-50 m² podle počtu kapslí
-- Konfigurace matrace: 210×230 cm nebo 230×240 cm
-- Skříň: ve sdíleném pokoji, zamykatelná
-- Převlékací kabinka: ve sdíleném pokoji
-- Vlastní koupelna: ne, sdílená na patře nebo v rámci patrového bytu
-- Kuchyňský kout: ne, sdílená kuchyň v parteru nebo v rámci patrového bytu
+- Plocha kapsle: ~5-6 m²
+- Matrace: 210×230 cm nebo 230×240 cm
+- Vlastní koupelna: ne
+- Kuchyňský kout: ne
 
 **Cena:**
 - Anchor: 4 500 Kč/měsíc za kapsli (= 2 250 Kč/osobu)
 - 3+ měsíců: 4 275 Kč (-5 %)
 - 6+ měsíců: 3 825 Kč (-15 %)
 - 12+ měsíců: 3 375 Kč (-25 %, = 1 688 Kč/osobu)
+
 **Obrázky:**
 - [ ] Hero: dvojkapsle s velkou společnou matrací, dvě čtecí lampy (Tier A #6)
 - [ ] Pokoj se dvojkapslemi a jednolůžkovými kapslemi
 
-#### 1.2.3 Jedno lůžko ve sdíleném pokoji
+#### 1.2.3 Jedno lůžko
 
 **Krátký popis:**
 
-Klasický spolubydlení v pokoji. Dvě jednolůžka (200×80 cm nebo 230×90 cm), vlastní noční stolek a lampa, sdílená skříň s jedním druhým rezidentem.
+Vlastní postel v dvoulůžkovém pokoji. Vlastní noční stolek, lampa, skříň a pracovní stůl.
 
 **Hlavní text:**
 
-Pokoj se dvěma jednolůžky. Pronájem si bere jeden ze dvou lidí; druhý si pronajímá vedlejší lůžko samostatně. Tvůj prostor: **vlastní lůžko, vlastní noční stolek, vlastní skříň, vlastní pracovní stůl**. Sdílíš s druhým rezidentem jenom samotnou místnost. Koupelnu a kuchyň sdílíš s dalšími rezidenty buď na patře, nebo v rámci patrového bytu (záleží na dispozici po rekonstrukci, k upřesnění s Markem).
+Pokoj se dvěma jednolůžky, pronajímáš si jedno. Druhý rezident si pronajímá vedlejší lůžko samostatně.
 
-Tohle je klasický „dorm-style" formát s dvěma lidmi v pokoji. Pokud chceš víc soukromí než kapsle, ale platit méně než privátní 1+kk, tohle je ten střed. Pokoj má okno, vlastní teploměr, vlastní vytápění.
+Tvoje: vlastní lůžko, vlastní noční stolek, vlastní skříň, vlastní pracovní stůl. S druhým rezidentem sdílíš jen samotnou místnost.
 
-3 500 Kč měsíčně v krátkém pobytu; 2 625 Kč při ročním závazku. Hub vám pomůže s párováním, pokud si nepronajmete oba sami: pokud preferuješ klid, řekneme to, a najdeme druhého rezidenta s podobnými potřebami.
+Mezi lůžkem a kapslí je rozdíl v tom, jak moc se zavřeš: kapsle má stěny a zámek, lůžko jen čistou postel. Naopak u lůžka máš v pokoji vlastní stůl a skříň, u kapsle je všechno společné zázemí mezi kapslemi.
+
+3 500 Kč měsíčně, 2 625 Kč při ročním závazku. Hub pomůže s párováním podle preferencí (klid, čas spánku, kuřáctví).
 
 **Klíčové vlastnosti:**
 - Jedno jednolůžko ze dvou v pokoji
 - Matrace 200×80 cm nebo 230×90 cm (volíš)
-- Vlastní noční stolek, lampa, USB-C port
-- **Vlastní skříň** (ne sdílená s druhým rezidentem)
-- **Vlastní pracovní stůl**
+- Vlastní noční stolek, lampa, USB-C
+- Vlastní skříň a pracovní stůl
 - Okno a vlastní teploměr v pokoji
-- Sdílená koupelna a kuchyň na patře nebo v rámci patrového bytu (TBD podle dispozice)
 - 5 jízd Hub-shuttle + 1 Hub-taxi měsíčně v ceně
 
 **Specifikace:**
-- Pokoj plocha: cca 18-22 m² (jen vy dva)
-- Konfigurace matrace: 200×80 cm nebo 230×90 cm (jednolůžková velikost)
-- Vlastní koupelna: ne, sdílená na patře nebo v rámci patrového bytu (TBD)
-- Kuchyňský kout: ne, sdílená kuchyň v parteru nebo v rámci patrového bytu (TBD)
-- Souhlas se spolubydlením: ano, párujeme podle preferencí (klid, čas spánku, kuřáctví)
+- Plocha pokoje: ~18-22 m² (jen vy dva)
+- Matrace: 200×80 cm nebo 230×90 cm
+- Vlastní koupelna: ne
+- Kuchyňský kout: ne
+- Párování spolubydlících: podle preferencí (klid, čas spánku, kuřáctví)
 
 **Cena:**
 - Anchor: 3 500 Kč/měsíc
 - 3+ měsíců: 3 325 Kč (-5 %)
 - 6+ měsíců: 2 975 Kč (-15 %)
 - 12+ měsíců: 2 625 Kč (-25 %)
+
 **Obrázky:**
-- [ ] Hero: dvoulůžkový pokoj s dvěma jednolůžky kolmo, sdílená skříň, stůl mezi (Tier A #7)
+- [ ] Hero: dvoulůžkový pokoj s dvěma jednolůžky kolmo, vlastní skříň, stůl mezi (Tier A #7)
 - [ ] Detail jednoho lůžka s nočním stolkem
 
-#### 1.2.4 Dvoulůžko ve sdíleném bytě
+#### 1.2.4 Dvoulůžko
 
 **Krátký popis:**
 
-Celý pokoj jen pro pár v rámci většího bytu (nebo patra). Manželská postel 200×190 cm nebo 230×200 cm, vlastní skříň, stůl a vybavení. Sdílíte jen koupelnu a kuchyň s ostatními rezidenty v rámci bytu nebo na patře.
+Celý pokoj pro pár. Manželská postel 200×190 cm nebo 230×200 cm, vlastní skříň a stůl.
 
 **Hlavní text:**
 
-Toto je nejdražší co-living varianta, ale stále výrazně levnější než privátní 1+kk. Pár dostane **celý pokoj v rámci většího patrového bytu**, který má 2-4 další pokoje a sdílenou kuchyň plus koupelnu. Pokoj je váš výhradně - žádný spolubydlící, který by tam přišel mimo vás.
+Nejprivátnější varianta co-livingu. Pár dostane celý pokoj v rámci patrového bytu, který má 2-4 další pokoje. V místnosti žádný další spolubydlící.
 
-V pokoji je manželská postel, vlastní skříň, pracovní stůl, vybavení (lampy, polička, kobercem nebo dřevěná podlaha podle bloku). Sdílení s ostatními rezidenty bytu (2-4 dalších pokojů) se týká jen kuchyně a koupelny + případného obývacího prostoru bytu.
+Manželská postel, vlastní skříň, pracovní stůl, lampy. Sdílení s ostatními rezidenty se týká jen kuchyně a koupelny v rámci bytu.
 
-Co tedy dostáváte ve srovnání s privátním 1+kk: stejné soukromí v pokoji, ale bez vlastní kuchyně a bez vlastní koupelny. Místo toho ve sdíleném bytě poznáte 2-6 dalších rezidentů (nájemníků sousedních pokojů ve stejném bytě), se kterými se potkáváte v kuchyni a v obýváku, ale spát chodíte do vlastní místnosti.
+Oproti privátnímu 1+kk: stejné soukromí pokoje, ale bez vlastní kuchyně a koupelny. Místo nich poznáš 2-6 dalších rezidentů ve sdíleném bytě.
 
-Pro koho má smysl:
-- Pár, který chce bydlet spolu, ale nepotřebuje vlastní kuchyňku (1+kk je pro ně moc drahé).
-- Jednotlivec, který potřebuje víc prostoru než kapsle a chce mít celý pokoj jen pro sebe, ale nepotřebuje plně privátní byt.
-- Někdo, kdo pracuje doma a chce mít vlastní místnost bez kompromisu se spolubydlícím, ale nevadí mu komunita ve sdíleném bytě.
+Standardně manželská postel 200×190 cm. Při preferenci dvou jednolůžek pro nepárové sdílení (např. dva kamarádi) se dohodneme při rezervaci.
 
-V pokoji je standardně manželská postel 200×190 cm (nebo 230×200 cm). Pokud místo manželské postele preferujete dvě jednolůžka pro nepárové sdílení (např. dva kamarádi), dohodneme se při rezervaci.
-
-6 000 Kč měsíčně v krátkém pobytu; 4 500 Kč při ročním závazku. Pro pár to vychází 3 000 Kč na osobu základní cenu, 2 250 Kč na osobu ročně.
+6 000 Kč měsíčně, 4 500 Kč při ročním závazku. Pro pár 3 000 Kč/os. základní, 2 250 Kč/os. ročně.
 
 **Klíčové vlastnosti:**
-- Vlastní celý pokoj v rámci sdíleného bytu, žádný spolubydlící v pokoji
-- Manželská postel 200×190 cm nebo 230×200 cm (volíš při rezervaci podle dostupnosti)
+- Celý pokoj pro pár, žádný další spolubydlící v místnosti
+- Manželská postel 200×190 cm nebo 230×200 cm
 - Alternativní konfigurace: 2× jednolůžka 200×80 cm pro nepárové sdílení (po dohodě)
 - Vlastní skříň, pracovní stůl, lampy
-- Vlastní okno a teploměr v pokoji
-- Sdílená koupelna a kuchyň v rámci patrového bytu se 2-4 dalšími pokoji
-- Možné sdílené obývací prostory v rámci bytu
-- 5 jízd Hub-shuttle + 1 jízda Hub-taxi měsíčně v ceně
+- Okno a vlastní teploměr v pokoji
+- Sdílená koupelna a kuchyň v rámci patrového bytu (2-4 další pokoje)
+- 5 jízd Hub-shuttle + 1 Hub-taxi měsíčně v ceně
 
 **Specifikace:**
-- Pokoj plocha: 18-22 m²
-- Konfigurace matrace: 1× manželská 200×190 cm nebo 230×200 cm (standardně); alternativně 2× jednolůžka 200×80 cm po dohodě
-- Vlastní koupelna: ne, sdílená v rámci patrového bytu (2-4 další pokoje)
-- Kuchyňský kout: ne, sdílená kuchyň v rámci patrového bytu
-- Spolubydlící v pokoji: ne, máš celý pokoj
-- Spolubydlící v bytě: ano, 2-6 osob ve 2-4 dalších pokojích bytu
+- Plocha pokoje: 18-22 m²
+- Matrace: 1× manželská 200×190 cm nebo 230×200 cm; alternativně 2× jednolůžka 200×80 cm
+- Vlastní koupelna: ne
+- Kuchyňský kout: ne
+- Spolubydlící v pokoji: ne
+- Spolubydlící v bytě: 2-6 osob ve 2-4 dalších pokojích
 
 **Cena:**
 - Anchor (1-2 měs): 6 000 Kč/měsíc za pokoj (= 3 000 Kč/osobu při páru)
 - 3+ měsíců: 5 700 Kč (-5 %)
 - 6+ měsíců: 5 100 Kč (-15 %)
 - 12+ měsíců: 4 500 Kč (-25 %, = 2 250 Kč/osobu)
+
 **Obrázky:**
 - [ ] Hero: privátní pokoj s manželskou postelí 200×190, denní světlo z okna, pracovní stůl, vlastní skříň (Tier A #8)
 - [ ] Detail: pokoj v ranní atmosféře
@@ -1334,7 +1314,7 @@ Pětikrokový průvodce, struktura locked dle `SH_Web_Plan.md` „Reservation co
 
 **Krok 2: Konfigurace prostoru** (podmínečné na kroku 1)
 - Pokud Privátní: 5 karet (1+kk, 2+kk, 3+kk, 4+kk, 5+kk) s cenou za jednotku, cenou za osobu, plochou, lůžky
-- Pokud Co-living: 4 karty (Jedno-lůžko 2L, Dvou-lůžko 2L, Kapsle single, Kapsle double) s cenou za osobu, výběr matrace (200×80 / 230×90 atd.)
+- Pokud Co-living: 4 karty (Privátní 1lůžková kapsle, Privátní 2lůžková kapsle, Jedno lůžko, Dvoulůžko) s cenou za osobu, výběr matrace (200×80 / 230×90 atd.)
 - Pokud Nevím: 3 jednoduché otázky (rozpočet slider 3 000-25 000 Kč, soukromí vs komunita slider, úvazek full-time/hybrid/víkendy)
 
 **Krok 3: Termín a stipendium**
@@ -1472,7 +1452,7 @@ Hub a celý projekt jsou nekomerční záměr nestátního občanského sdružen
 
 **Otázka:** Co je Startovací Hub Klecany a kdo za ním stojí?
 
-**Odpověď:** Hub je první fáze revitalizace bývalých horních kasáren v Klecanech (sever Prahy). 331 bytových jednotek typu 1+kk operativně konfigurovaných do 9 produktových variant (kapsle, sdílené pokoje, privátní 1+kk až 5+kk). K tomu coworking, sauna, bazén, dílny, ateliéry, klubovna, kuchyňský blok s pekárnou a restaurací, komunitní park. Provozuje občanské sdružení Alternativa II, z.s. (OSA II) v rámci záměru VPD1. Je to nekomerční projekt s cílem dostupné bydlení a komunita pro pracující studenty, OSVČ, mladé kreativce a začínající podnikatele.
+**Odpověď:** Hub je první fáze revitalizace bývalých horních kasáren v Klecanech (sever Prahy). 331 bytových jednotek typu 1+kk operativně konfigurovaných do 9 produktových variant (4 co-living: kapsle a lůžka; 5 privátních apartmánů 1+kk až 5+kk). K tomu coworking, sauna, bazén, dílny, ateliéry, klubovna, kuchyňský blok s pekárnou a restaurací, komunitní park. Provozuje občanské sdružení Alternativa II, z.s. (OSA II) v rámci záměru VPD1. Je to nekomerční projekt s cílem dostupné bydlení a komunita pro pracující studenty, OSVČ, mladé kreativce a začínající podnikatele.
 
 #### A.2 Kdy se mohu reálně nastěhovat?
 
@@ -1496,7 +1476,7 @@ Hub a celý projekt jsou nekomerční záměr nestátního občanského sdružen
 
 **Otázka:** Mazlíček ano nebo ne?
 
-**Odpověď:** Předběžně ano, ale s dohodou. Plně privátní apartmány bez většího omezení (jen u sousedů zajistit dohodu o klidu). Co-living a kapsle, kde sdílíte prostor: dle dohody s ostatními rezidenty patra. Při registraci zájmu napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily. Definitivní pravidla doladíme s prvním kolem rezidentů.
+**Odpověď:** Předběžně ano, ale s dohodou. V privátních apartmánech bez většího omezení (jen u sousedů zajistit dohodu o klidu). V co-livingu (kapsle, lůžka, dvoulůžka) dle dohody s ostatními rezidenty patra. Při registraci zájmu napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily. Definitivní pravidla doladíme s prvním kolem rezidentů.
 
 #### A.6 Jak funguje stipendium? Kdy se otvírá?
 

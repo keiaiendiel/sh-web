@@ -1,62 +1,62 @@
 {
   "q1": {
-    "audience": "project",
-    "question": "Co přesně je Startovací Hub a co bude dál?",
-    "answer": "Startovací Hub je první obyvatelná etapa záměru VPD1, který má z areálu Horních kasáren v Klecanech postupně dotvořit obytnou a produktivní vrstvu s potenciálem 1500+ bytových jednotek. Hub je menší provozní celek, kterým chceme co nejdřív přivést areál do reálného fungování. Po Hubu pokračujeme v dalších etapách VPD1.",
+    "audience": "resident",
+    "question": "Co je Startovací Hub Klecany a kdo za ním stojí?",
+    "answer": "Hub je první fáze revitalizace bývalých horních kasáren v Klecanech (sever Prahy). 331 bytových jednotek typu 1+kk operativně konfigurovaných do 9 produktových variant (4 co-living: kapsle a lůžka; 5 privátních apartmánů 1+kk až 5+kk). K tomu coworking, sauna, bazén, dílny, ateliéry, klubovna, kuchyňský blok s pekárnou a restaurací, komunitní park. Provozuje občanské sdružení Alternativa II, z.s. (OSA II) v rámci záměru VPD1. Je to nekomerční projekt s cílem dostupné bydlení a komunita pro pracující studenty, OSVČ, mladé kreativce a začínající podnikatele.",
     "order": 1
   },
   "q2": {
-    "audience": "project",
-    "question": "Kdo za projektem stojí?",
-    "answer": "Záměr běží pod hlavičkou VPD (Veřejně Prospěšný Developer), což je projekt v rámci OSA (Občanské sdružení Alternativa II, z.s.). OSA je neziskový spolek, který funguje bez veřejných dotací: z členských příspěvků a z vlastní činnosti. Detail najdete na alternativa2.info.",
+    "audience": "resident",
+    "question": "Kdy reálně začne provoz a kdy se mohu nastěhovat?",
+    "answer": "Areál je v projektové přípravě (viz badge „V projektové přípravě\" v hlavičce). Konkrétní termíny otevření jednotlivých budov a typů bydlení upřesňujeme s postupem rekonstrukce a zveřejňujeme v novinkách. Když si zaregistrujete zájem, při telefonickém potvrzení vám řekneme realisticky, jestli je váš preferovaný měsíc nástupu možný, nebo navrhneme alternativy.",
     "order": 2
   },
   "q3": {
-    "audience": "project",
-    "question": "Kdy se do Hubu nastěhuju?",
-    "answer": "Po odeslání rezervace vám obvykle do 24 hodin zavolá někdo z rezervačního oddělení. Společně doladíte preferovaný typ ubytování, termín nastěhování a délku pobytu, a dostanete konkrétní informace o dostupnosti i ceně pro vaše parametry.",
+    "audience": "resident",
+    "question": "Co všechno je v ceně měsíčního nájmu?",
+    "answer": "Energie, internet, úklid společných prostor, 5 jízd Hub-shuttle do metra Kobylisy měsíčně, 1 jízda Hub-taxi lokálně měsíčně, přístup do coworkingového sálu (volný stůl 24/7), poukaz do sauny 1× týdně. Nad rámec za zvýhodněnou cenu: další jízdy shuttle a taxi, fixní stůl v coworkingu, ateliér nebo dílna se zvláštní sazbou, vybrané kulturní akce za vstupné.",
     "order": 3
   },
   "q4": {
-    "audience": "project",
-    "question": "Jak Hub funguje a co od něj čekat?",
-    "answer": "Hub je dlouhodobé ubytovací zařízení v rekonstruovaných budovách areálu Horních kasáren. Funguje na principu privátní jednotky a sdíleného zázemí: vlastní pokoj nebo kapsle, k tomu coworking, bazén, sauna, kavárna, kyvadla na metro a další služby v ceně nájmu. Rezervace je nezávazná, slouží i nám jako přehled o poptávce po jednotlivých typech ubytování.",
+    "audience": "resident",
+    "question": "Je to opravdu 15 minut do Prahy?",
+    "answer": "Z Klecan na metro Kobylisy: Hub-shuttle 12 až 15 minut (vlastní devítimístná dodávka v peak špičce ráno a odpoledne, pro rezidenty 5 jízd v ceně), PID linka 374 14 až 17 minut (standardní jízdenka). Na metru pak Florenc 9 minut, Karlák asi 12 minut. Tedy z bytu v Hubu na Florenc cca 25 až 30 minut, na Karlák cca 30 až 35 minut. Plánovaná tramvaj Kobylisy-Sedlec (2029 až 2030) toto zrychlí.",
     "order": 4
   },
   "q5": {
     "audience": "resident",
-    "question": "Je rezervace zavazující?",
-    "answer": "Není. Rezervace je nezávazná, žádná smlouva, žádná platba předem. Sdělujete nám preferovaný typ jednotky, termín nastěhování a délku pobytu. Někdo z rezervačního oddělení vám obvykle do 24 hodin zavolá s detailem dostupnosti a ceny pro vaše parametry. Smlouvu řešíme až s nastěhováním. Můžete kdykoli odstoupit.",
+    "question": "Mazlíček ano nebo ne?",
+    "answer": "Předběžně ano, ale s dohodou. V privátních apartmánech bez většího omezení (jen u sousedů zajistit dohodu o klidu). V co-livingu (kapsle, lůžka, dvoulůžka) dle dohody s ostatními rezidenty patra. Při registraci zájmu napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily. Definitivní pravidla doladíme s prvním kolem rezidentů.",
     "order": 5
   },
   "q6": {
     "audience": "resident",
-    "question": "Kolik bude pobyt stát?",
-    "answer": "Orientačně, za celou jednotku/měsíc: kapsle ve sdíleném pokoji od 4 500 Kč, dvoulůžková kapsle od 6 500 Kč, privátní 1+kk se dvěma lůžky od 9 500 Kč, 1+kk se třemi lůžky od 11 500 Kč, 2+kk se čtyřmi lůžky od 16 000 Kč, 3+kk se šesti lůžky od 21 000 Kč. V ceně jsou energie, internet, úklid společných prostor, coworking, bazén, recepce s poštou, kyvadla na metro Kobylisy a sleva na saunu. Sleva za dlouhý pobyt: 3+ měsíce −5 %, 6+ měsíců −10 až −15 %, 12+ měsíců −20 až −25 %.",
+    "question": "Slyšel jsem o pobytovém stipendiu. Co to je a jak se přihlásit?",
+    "answer": "Stipendium pokrývá nebo zvýhodňuje pobyt výměnou za hmatatelný vstup do života Hubu. Čtyři role: rezident-tvůrce (vlastní projekt), správce na výměnu (operativní role), stavitel-rezident (účast na rekonstrukci), rezident-programátor (vývoj digitální infrastruktury Hubu). První otevřená výzva: podzim 2026, pilot 8 až 12 míst, primárně rezident-tvůrce. V registraci zájmu o bydlení zaškrtnete přepínač „Mám zájem o pobytové stipendium\", ozveme se, jakmile otevřeme výzvu.",
     "order": 6
   },
   "q7": {
     "audience": "resident",
-    "question": "Co je v ceně, a co se připlácí?",
-    "answer": "V ceně každého typu: energie, internet, úklid společných prostor, přístup do coworkingu 24/7, venkovní bazén v sezoně, recepce s přebíráním pošty, kyvadla na metro Kobylisy a sleva na saunu. Doplňkové služby s vlastní cenou: stravování (snídaně, oběd, večeře, svačiny), půjčovna e-vozidel (koloběžky, kola, motorky, sdílená auta), kontejnerové sklady a sauna premium. Detail v sekci Služby.",
+    "question": "Jsem živnostník, můžu si v Hubu zaregistrovat sídlo firmy?",
+    "answer": "Pracujeme na tom. Pro registraci sídla je třeba souhlas vlastníka prostor, který jako provozovatel poskytneme za drobný poplatek (cca 99 Kč/měs, k upřesnění) jen pro rezidenty Hubu. Sídlo nebude exklusivně využíváno, slouží jako poštovní adresa s skenováním pošty na e-mail. Pro detailní podmínky se ozvěte na vpd@osa2.cz při registraci zájmu.",
     "order": 7
   },
   "q8": {
     "audience": "resident",
-    "question": "Jak je to s délkou pobytu a flexibilitou?",
-    "answer": "Hub je dělaný pro dlouhodobé pobyty: od jednoho měsíce po roky. Ve formuláři vyberete orientační délku (1-3 měsíce, 3-6, 6-12, 12 a více). Smlouvu uzavíráme až s nastěhováním a obsahuje běžné výpovědní lhůty. Prodloužení řešíme operativně, nemusíte podepisovat novou smlouvu pro každé další období.",
+    "question": "Co se stane, když Hub nestihnete otevřít včas, jak plánujete?",
+    "answer": "Záleží na fázi. Pokud rezervace zájmu zatím neaktivuje žádný platební ani smluvní závazek, jsme oba kryti: nás nic netlačí spustit dřív, vás nic nezavazuje čekat. Když přijde termín otevření a něco se opozdí, ozveme se předem s odhadem, kdy reálně bude jednotka volná. Ve chvíli, kdy podepíšete reálnou nájemní nebo ubytovací smlouvu, jsou plnění a termíny závazné podle smluvního textu a podle občanského zákoníku.",
     "order": 8
   },
   "q9": {
     "audience": "resident",
-    "question": "Mohu žádat o pobytové stipendium nebo dotovaný režim?",
-    "answer": "Ano. Pobytové stipendium je výběrový režim pro lidi, pro které by Hub dával smysl, ale za běžnou cenu by si pobyt nemohli dovolit , typicky studenty z low-income rodin, začínající kreativce a sociálně potřebné. Není to slevový kód, vybíráme podle záměru a životní situace. Ve formuláři rezervace zaškrtněte „Mám zájem o pobytové stipendium" , rezervační oddělení vás osloví s konkrétními podmínkami.",
+    "question": "Co když si v co-livingu nesedneme se spolubydlícím, kterého mi přidělíte?",
+    "answer": "Při registraci se ptáme na preference (klid, čas spánku, kuřáctví, partner, dítě), podle toho párujeme. Pokud první týden něco nefunguje, řešíme to. Přesun do jiné kapsle nebo do jiného pokoje provádíme zdarma, dokud zbývá volné lůžko. Pokud je obsazenost plná, hledáme jiné řešení (změna formátu, krátká přestávka, výpověď bez sankce v případě závažnějšího problému).",
     "order": 9
   },
   "q10": {
     "audience": "resident",
-    "question": "Jak se z Hubu dostanu do Prahy?",
-    "answer": "V ranní a odpolední špičce jezdí kyvadlový minibus areálu přímo na metro Kobylisy, bez přesedání. Mimo špičku jezdí příměstská linka PID do stejné stanice. V přípravě je tramvajová trať z Kobylis směrem na Zdiby; po realizaci se cesta do Prahy ještě zkrátí. Pro cyklisty se plánuje nová lávka přes Vltavu mezi Roztoky a Klecany, která areál propojí s pražskou cyklostezkou.",
+    "question": "Kolik lidí v Hubu reálně bude?",
+    "answer": "Architektonický základ je přibližně 280 až 330 jednotek 1+kk v šesti obytných budovách (A1 až A6). Sedmá budova C v jádru areálu obsahuje coworking a komunitní zázemí. Při plné obsazenosti všech variant by to bylo zhruba 500 až 600 lůžek. V první fázi spouštíme postupně po jednotlivých budovách, kapacita poroste s rekonstrukcí. V plně obsazené verzi bude Hub mít komunitní rozměr menšího městečka uvnitř obce Klecany.",
     "order": 10
   }
 }
