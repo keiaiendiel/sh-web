@@ -2,11 +2,25 @@
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
+import RoomCard from '../../components/RoomCard.astro';
 
 const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
 const coliving = (await getCollection('coliving')).sort((a, b) => a.data.order - b.data.order);
 
-const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
+/* Co-living items nemají jednotnou „plocha" / „kapacita" pole (capsule vs.
+   lůžko vs. dvoulůžko mají odlišnou strukturu). Mapujeme per-slug. */
+const coligvingVelikost: Record<string, string> = {
+  'kapsle-single': 'kapsle ve sdíleném pokoji',
+  'jedno-luzko':   'lůžko ve sdíleném pokoji',
+  'kapsle-double': 'kapsle ve sdíleném pokoji',
+  'dvouluzko':     'celý pokoj v patrovém bytě',
+};
+const colivingKapacita: Record<string, string> = {
+  'kapsle-single': '1 osoba',
+  'jedno-luzko':   '1 osoba',
+  'kapsle-double': '1-2 osoby',
+  'dvouluzko':     '1-2 osoby',
+};
 ---
 <Base
   title="Ubytování v Klecanech, 9 typů od 3 000 Kč · Hub"
@@ -25,15 +39,19 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         pět jízd Hub-shuttle do metra Kobylis a poukaz do sauny v ceně.
         Najměte si pokoj na měsíc, nebo na rok. Čím déle zůstanete, tím nižší nájem.
       </p>
+      <nav class="ub-hero__jumps" aria-label="Skok na sekci">
+        <a class="ub-hero__jump" href="#ub-coliving-title">Co-living</a>
+        <a class="ub-hero__jump" href="#ub-privatni-title">Privátní apartmány</a>
+      </nav>
     </div>
   </section>
 
   {/* ============ CO-LIVING (4 typy) ============ */}
-  <section class="ub-section ub-section--coliving">
+  <section class="ub-section ub-section--coliving" aria-labelledby="ub-coliving-title">
     <div class="ub-section__inner">
       <header class="ub-section__head">
         <p class="ub-section__eyebrow">Co-living</p>
-        <h2 class="ub-section__title">Vlastní lůžko nebo kapsle, sdílené zázemí.</h2>
+        <h2 class="ub-section__title" id="ub-coliving-title">Vlastní lůžko nebo kapsle, sdílené zázemí.</h2>
         <p class="ub-section__lede">
           Sdílíte koupelnu a kuchyň s ostatními rezidenty. Sociální kontakt je součástí
           toho, co si platíte. Cena je výrazně nižší než privátní apartmán, protože platíte
@@ -46,40 +64,32 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         </p>
       </header>
 
-      <ul class="ub-cards">
+      <div class="ub-grid">
         {coliving.map((c) => (
-          <li class="ub-card">
-            <a class="ub-card__link" href={withBase(`/ubytovani/co-living/${c.data.slug}/`)}>
-              <div class="ub-card__media">
-                {c.data.thumbnail ? (
-                  <img src={withBase(c.data.thumbnail)} alt="" loading="lazy" decoding="async" />
-                ) : (
-                  <div class="ub-card__placeholder" aria-hidden="true">▢</div>
-                )}
-              </div>
-              <div class="ub-card__body">
-                <h3 class="ub-card__title">{c.data.name}</h3>
-                <p class="ub-card__popis">{c.data.popis}</p>
-                <dl class="ub-card__meta">
-                  <div><dt>Matrace</dt><dd>{c.data.matrace[0]}{c.data.matrace[1] && ` nebo ${c.data.matrace[1]}`}</dd></div>
-                  <div><dt>Anchor</dt><dd>{formatCena(c.data.cena.anchor)}/měs{c.data.cena.perOsoba && <small> ({c.data.cena.perOsoba})</small>}</dd></div>
-                  <div><dt>Od (12+ měs)</dt><dd>{formatCena(c.data.cena.m12)}/měs</dd></div>
-                </dl>
-                <span class="ub-card__cta">Detail →</span>
-              </div>
-            </a>
-          </li>
+          <RoomCard
+            eyebrow={c.data.shortName}
+            name={c.data.name}
+            velikost={coligvingVelikost[c.data.slug] ?? 've sdíleném pokoji'}
+            kapacita={colivingKapacita[c.data.slug] ?? '1 osoba'}
+            popis={c.data.popis}
+            cenaAnchor={c.data.cena.anchor}
+            cenaM12={c.data.cena.m12}
+            perOsoba={c.data.cena.perOsoba}
+            thumbnail={c.data.thumbnail}
+            detailHref={withBase(`/ubytovani/co-living/${c.data.slug}/`)}
+            reserveHref={withBase(`/rezervace/?typ=${c.data.slug}`)}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   </section>
 
   {/* ============ PRIVÁTNÍ APARTMÁNY (5 typů) ============ */}
-  <section class="ub-section ub-section--privatni">
+  <section class="ub-section ub-section--privatni" aria-labelledby="ub-privatni-title">
     <div class="ub-section__inner">
       <header class="ub-section__head">
         <p class="ub-section__eyebrow">Privátní apartmány</p>
-        <h2 class="ub-section__title">Vlastní byt, vlastní koupelna, vlastní kuchyň.</h2>
+        <h2 class="ub-section__title" id="ub-privatni-title">Vlastní byt, vlastní koupelna, vlastní kuchyň.</h2>
         <p class="ub-section__lede">
           Privátní apartmán je celý byt jen pro vás. Sdílení s ostatními rezidenty Hubu je
           volitelné, ne automatické: coworking, sauna, kavárna a komunitní program jsou
@@ -92,32 +102,23 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         </p>
       </header>
 
-      <ul class="ub-cards">
+      <div class="ub-grid">
         {apartmany.map((a) => (
-          <li class="ub-card">
-            <a class="ub-card__link" href={withBase(`/ubytovani/privatni/${a.data.slug}/`)}>
-              <div class="ub-card__media">
-                {a.data.thumbnail ? (
-                  <img src={withBase(a.data.thumbnail)} alt="" loading="lazy" decoding="async" />
-                ) : (
-                  <div class="ub-card__placeholder" aria-hidden="true">▢</div>
-                )}
-              </div>
-              <div class="ub-card__body">
-                <h3 class="ub-card__title">{a.data.name}</h3>
-                <p class="ub-card__popis">{a.data.popis}</p>
-                <dl class="ub-card__meta">
-                  <div><dt>Plocha</dt><dd>{a.data.plocha}</dd></div>
-                  <div><dt>Kapacita</dt><dd>{a.data.kapacita} lůžek</dd></div>
-                  <div><dt>Anchor</dt><dd>{formatCena(a.data.cena.anchor)}/měs{a.data.cena.perOsoba && <small> ({a.data.cena.perOsoba})</small>}</dd></div>
-                  <div><dt>Od (12+ měs)</dt><dd>{formatCena(a.data.cena.m12)}/měs</dd></div>
-                </dl>
-                <span class="ub-card__cta">Detail →</span>
-              </div>
-            </a>
-          </li>
+          <RoomCard
+            eyebrow={a.data.shortName}
+            name={a.data.name}
+            velikost={a.data.plocha}
+            kapacita={`${a.data.kapacita} lůžek`}
+            popis={a.data.popis}
+            cenaAnchor={a.data.cena.anchor}
+            cenaM12={a.data.cena.m12}
+            perOsoba={a.data.cena.perOsoba}
+            thumbnail={a.data.thumbnail}
+            detailHref={withBase(`/ubytovani/privatni/${a.data.slug}/`)}
+            reserveHref={withBase(`/rezervace/?typ=${a.data.slug}`)}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   </section>
 
@@ -144,50 +145,77 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .ub-hero__title { font: 600 clamp(2.25rem, 5vw, 3.75rem) / 1.05 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-4); max-width: 18ch; }
   .ub-hero__lede { font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.5; margin: 0; max-width: 60ch; color: rgba(255,255,255,0.92); }
 
-  .ub-section { padding: var(--space-9) var(--gutter); background: var(--bg); color: var(--fg); }
-  .ub-section--coliving { background: var(--bg); }
-  .ub-section--privatni { background: var(--bg-muted, var(--bg)); }
-  .ub-section__inner { max-width: var(--container-wide); margin: 0 auto; }
-  .ub-section__head { margin-bottom: var(--space-7); max-width: 60ch; }
-  .ub-section__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
-  .ub-section__title { font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans); margin: 0 0 var(--space-4); letter-spacing: var(--tracking-tight); }
-  .ub-section__lede { color: var(--fg-muted); margin: 0; line-height: 1.6; font-size: var(--text-md); }
+  /* Quick-jump nav pod hero lede: 2 outline buttony pro skok na sekce. */
+  .ub-hero__jumps {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-top: var(--space-5);
+  }
+  .ub-hero__jump {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+  }
+  .ub-hero__jump:hover,
+  .ub-hero__jump:focus-visible {
+    background: #fff;
+    color: var(--k-100);
+    border-color: #fff;
+    outline: none;
+  }
 
-  .ub-cards { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
-  @media (max-width: 760px) { .ub-cards { grid-template-columns: 1fr; } }
-
-  .ub-card {
+  /* Sekce: jemné rozlišení backgrounds (co-living muted, privátní bílá),
+     1 px hairline na vrchu jako oddělovač. Žádný velký marker, žádná dark
+     inverze, žádný chunky plum rule. */
+  .ub-section {
+    padding: var(--space-9) var(--gutter);
     background: var(--bg);
-    border: 1px solid var(--rule, rgba(0,0,0,0.12));
-    box-shadow: var(--shadow-card);
-    transition: transform 200ms var(--ease-standard),
-                box-shadow 200ms var(--ease-standard),
-                border-color 200ms var(--ease-standard);
+    color: var(--fg);
+    border-top: 1px solid var(--border-muted);
   }
-  .ub-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-card-hover);
-    border-color: var(--accent-rule);
-  }
-  .ub-card__link { display: grid; grid-template-columns: 200px 1fr; gap: 0; color: inherit; text-decoration: none; transition: background 160ms ease; }
-  .ub-card__link:hover { background: var(--accent-soft); }
-  .ub-card__media { background: var(--bg-muted); aspect-ratio: 4 / 3; overflow: hidden; }
-  .ub-card__media img { width: 100%; height: 100%; object-fit: cover; }
-  .ub-card__placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--accent); font-size: 2rem; background: var(--accent-soft); }
-  .ub-card__body { padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
-  .ub-card__title { font: 600 var(--text-xl) / 1.2 var(--font-sans); margin: 0; letter-spacing: var(--tracking-tight); }
-  .ub-card__popis { font-size: var(--text-sm); line-height: 1.5; color: var(--fg-muted); margin: 0; }
-  .ub-card__meta { margin: 0; display: grid; gap: var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--rule, rgba(0,0,0,0.08)); }
-  .ub-card__meta > div { display: grid; grid-template-columns: 120px 1fr; gap: var(--space-3); align-items: baseline; font-size: var(--text-sm); }
-  .ub-card__meta dt { font: 600 var(--text-2xs) / 1.3 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; color: var(--fg-muted); }
-  .ub-card__meta dd { margin: 0; }
-  .ub-card__meta dd small { display: block; color: var(--fg-muted); font-size: var(--text-xs); margin-top: 1px; }
-  .ub-card__cta { font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--accent); margin-top: auto; }
+  .ub-section--coliving { background: var(--bg-muted, var(--k-05)); }
+  .ub-section--privatni { background: var(--bg); }
 
-  @media (max-width: 600px) {
-    .ub-card__link { grid-template-columns: 1fr; }
-    .ub-card__media { aspect-ratio: 16 / 9; }
+  .ub-section__inner { max-width: var(--container-wide); margin: 0 auto; }
+  .ub-section__head {
+    margin-bottom: var(--space-7);
+    max-width: 65ch;
   }
+  .ub-section__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-3);
+  }
+  .ub-section__title {
+    font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans);
+    margin: 0 0 var(--space-4);
+    letter-spacing: var(--tracking-tight);
+    scroll-margin-top: 90px;
+  }
+  .ub-section__lede {
+    color: var(--fg-muted);
+    margin: 0 0 var(--space-3);
+    line-height: 1.6;
+    font-size: var(--text-md);
+  }
+  .ub-section__lede:last-child { margin-bottom: 0; }
+
+  .ub-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 960px) { .ub-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .ub-grid { grid-template-columns: 1fr; } }
 
   .ub-cta { padding: var(--space-9) var(--gutter); background: var(--accent); color: #fff; text-align: center; }
   .ub-cta__inner { max-width: 640px; margin: 0 auto; }
