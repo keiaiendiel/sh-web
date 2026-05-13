@@ -1,5 +1,16 @@
 # sh-web — CLAUDE.md
 
+> **▶ CONTINUATION POINTER (2026-05-13)**
+>
+> Pokud jsi nový Claude session v tomto worktree, jsi uprostřed rozdělané práce:
+>
+> - **Branch:** `claude/pedantic-shirley-b5ed77`, 9 commits ahead of master, working tree clean, **NIC nepushnuto a nemergnuto**.
+> - **Stav:** všech 6 fází restrukturalizace + vault sync hotovo (viz „ACTIVE WORK" níže). Web má 26 stránek, kompletní obsah ze Site_Copy.md, Cloudflare Worker scaffold pro form backend (deploy pending).
+> - **Co klient pravděpodobně udělá příště:** edituje `/Users/kindl/kindl-vault/Projects/SH_Web/SH_Web_Site_Copy.md` (nebo Plan.md) ve své vault a vrátí se s prosbou „syncni to". Postup je dole v sekci „Workflow: vault → repo sync".
+> - **Preview server:** spustit `pnpm dev` v této složce (port 4322 via `.claude/launch.json`), nebo přes `mcp__Claude_Preview__preview_start` s name `sh-web`.
+> - **Než cokoli změníš:** přečti si CLAUDE.md celý (zejména „Vault sync 2026-05-13" + „Workflow"), `git log --oneline -10`, a podívej se do `git status` pro orientaci.
+> - **Merge do master:** klient nechce zatím mergeovat. Až řekne `merge` nebo `push`, pak: `cd "/Users/kindl/Work/_2026/02 OSA/11 WWW/sh-web" && git merge claude/pedantic-shirley-b5ed77`.
+
 Operational handoff for the Startovací Hub Klecany site. Keep this file terse — it loads into every Claude Code conversation. Long-form history (per-page anatomy, design decisions, redesign aftermath) lives in `docs/HISTORY.md`; read it on demand only.
 
 ## What this is
