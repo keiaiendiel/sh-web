@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Gallery from '../../components/Gallery.astro';
 import { withBase } from '../../utils/url';
 ---
 <Base
@@ -26,127 +27,174 @@ import { withBase } from '../../utils/url';
     </div>
   </section>
 
-  <section class="sec-block">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Wellness</p>
-        <h2 class="sec-block__title" id="km-wellness">Bazén a sauna v samostatném objektu.</h2>
-        <p class="sec-block__lede">V jádře areálu, blízko coworkingu (C) i obytných bloků (A1 až A6).</p>
-      </header>
-      <div class="sec-block__text">
-        <h3 class="sec-sub__title" id="km-bazen">Bazén</h3>
-        <p>
-          Bazén v samostatném objektu uprostřed areálu. Slouží jako relaxační prostor pro rezidenty
-          po práci, místo pro letní setkání, malá kondiční možnost. Provozní detaily (otevírací
-          doba, vstupné pro externí, vyhřívaný v zimě) budou doplněny.
-        </p>
-
-        <h3 class="sec-sub__title" id="km-sauna">Sauna a wellness</h3>
-        <p>
-          Veřejná sauna pro 6 až 8 osob plus menší wellness prostor (sprchy, odpočinková zóna).
-          Sauna se topí dle harmonogramu, navrhujeme čtvrtek až sobota večery. Pro rezidenty
-          v ceně tarifu 12+ měsíců poukaz 1× týdně, jinak vstupné podle ceníku.
-        </p>
+  <section class="sec-feature">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__intro">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Wellness</p>
+          <h2 class="sec-feature__title" id="km-wellness">Bazén a sauna v samostatném objektu.</h2>
+        </div>
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { src: withBase('/images/hub/amenities/ko02-bazen.jpg'), alt: 'Bazén v centrálním dvoře areálu, sluneční terasa, relax po práci.' },
+              { placeholder: 'Sauna a wellness, 6 až 8 osob, sprchy, odpočinková zóna', alt: 'Sauna interiér.' },
+            ]}
+            ariaLabel="Wellness" />
+        </div>
       </div>
-      <dl class="sec-table">
-        <div class="sec-table__row"><dt>Sauna návrh</dt><dd>Čtvrtek až sobota 18:00 až 22:00</dd></div>
-        <div class="sec-table__row"><dt>Kapacita sauny</dt><dd>6 až 8 osob</dd></div>
-        <div class="sec-table__row"><dt>Pro rezidenty 12+ tarif</dt><dd>1 vstup týdně zdarma</dd></div>
-        <div class="sec-table__row"><dt>Pro krátkodobé a externí</dt><dd>Cena podle ceníku, bude doplněno</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <section class="sec-block sec-block--alt">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Venkovní program (komunitní park)</p>
-        <h2 class="sec-block__title" id="km-park">Zahrádky, grilovací místa, hřiště.</h2>
-        <p class="sec-block__lede">V modré zóně masterplánu (18 000 m², zázemí Hubu). Otevřený park pro rezidenty i externí návštěvníky obce. Žádné turnikety ani vstupné, jen pravidla provozu.</p>
-      </header>
-      <div class="sec-block__text">
-        <h3 class="sec-sub__title" id="km-zahradky">Komunitní zahrádky</h3>
-        <p>
-          V severní části komunitního parku, plocha rozdělená na malé záhony, které si rezidenti
-          rezervují na sezónu (od jara do podzimu). Voda, kompost a základní nářadí v ceně. Pro
-          nováčky 1× ročně otevíráme začátečnický workshop s místním zahradníkem.
-        </p>
-
-        <h3 class="sec-sub__title" id="km-gril">Grilovací místa</h3>
-        <p>
-          Tři až čtyři grilovací místa s pevnými grily, lavičkami a stoly. Rezervace přes
-          komunitní aplikaci na konkrétní den a čas. Uhlí, dřevo a podpalovač přinesete vlastní,
-          nebo zakoupíte v kantýně. V letní sezóně organizujeme pravidelná komunitní grilování.
-        </p>
-
-        <h3 class="sec-sub__title" id="km-hriste">Hřiště a venkovní posezení</h3>
-        <p>
-          Otevřené hřiště v komunitním parku, venkovní posezení s lavičkami a stoly. Typ hřiště
-          (dětské, sportovní, multifunkční) bude doplněn.
-        </p>
+      <div class="sec-feature__body">
+        <div class="sec-feature__text">
+          <h3 id="km-bazen">Bazén</h3>
+          <p>
+            Bazén v samostatném objektu uprostřed areálu. Slouží jako relaxační prostor pro
+            rezidenty po práci, místo pro letní setkání, malá kondiční možnost. Provozní detaily
+            budou doplněny.
+          </p>
+          <h3 id="km-sauna">Sauna a wellness</h3>
+          <p>
+            Veřejná sauna pro 6 až 8 osob plus menší wellness prostor (sprchy, odpočinková zóna).
+            Sauna se topí dle harmonogramu, navrhujeme čtvrtek až sobota večery. Pro rezidenty
+            v tarifu 12+ poukaz 1× týdně, jinak vstupné podle ceníku.
+          </p>
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>Sauna návrh</dt><dd>Čt až So 18:00 až 22:00</dd></div>
+          <div><dt>Kapacita sauny</dt><dd>6 až 8 osob</dd></div>
+          <div><dt>Tarif 12+</dt><dd>1 vstup týdně zdarma</dd></div>
+          <div><dt>Externí</dt><dd>Cena podle ceníku</dd></div>
+        </dl>
       </div>
     </div>
   </section>
 
-  <section class="sec-block">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Gastro (kuchyňský blok B)</p>
-        <h2 class="sec-block__title" id="km-gastro">Kantýna, restaurace, pekárna.</h2>
-        <p class="sec-block__lede">Hlavní gastro hub Hubu je v budově B na masterplánu. Jeden objekt, různé režimy provozu.</p>
-      </header>
-      <div class="sec-block__text">
-        <h3 class="sec-sub__title" id="km-kantyna">Kantýna</h3>
-        <p>
-          Polední menu v pracovní dny. Tři až čtyři varianty hlavního jídla (jedno vegetariánské,
-          jedno levné maso), polévka, salát. Cena 130 až 180 Kč podle tržního průměru pro
-          Prahu-okolí 2026. Vstup volný pro všechny, žádné průkazky. Platba kartou
-          v aplikaci nebo přímo v kantýně. Po až Pá 11:00 až 14:00.
-        </p>
-
-        <h3 class="sec-sub__title" id="km-restaurace">Restaurace</h3>
-        <p>
-          Restaurace přebírá kuchyňský blok B večerně a o víkendech. Sezónní menu, jednodušší
-          á la carte. Vhodné pro setkání rezidentů s návštěvami z Prahy, pro páry, pro malé skupiny
-          do 12 lidí. Sobotní brunch s živou hudbou, nedělní rodinný oběd. Rezervace přes web
-          nebo telefonicky. Po až Pá 17:00 až 22:00, So a Ne 11:00 až 22:00.
-        </p>
-
-        <h3 class="sec-sub__title" id="km-pekarna">Pekárna</h3>
-        <p>
-          Otevírá ráno (6:30) a obsluhuje rezidenty i obyvatele Klecan. Čerstvý chléb, croissanty,
-          sladké pečivo, káva k odnesení. Začátek odpoledne pekárna zavírá, prostor přebírá kantýna
-          pro polední menu. Po až Pá 6:30 až 10:30.
-        </p>
+  <section class="sec-feature sec-feature--alt">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__intro">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Venkovní park</p>
+          <h2 class="sec-feature__title" id="km-park">Zahrádky, grilovací místa, hřiště.</h2>
+        </div>
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { placeholder: 'ko01 Grilovací místo, rodinné grilování v sobotu poledne, 8 až 12 lidí', alt: 'Grilovací místo v komunitním parku.' },
+              { placeholder: 'Komunitní zahrádky, sezónní záhony', alt: 'Komunitní zahrádky.' },
+            ]}
+            ariaLabel="Venkovní park" />
+        </div>
+      </div>
+      <div class="sec-feature__body">
+        <div class="sec-feature__text">
+          <h3 id="km-zahradky">Komunitní zahrádky</h3>
+          <p>
+            V severní části komunitního parku, plocha rozdělená na malé záhony, které si
+            rezidenti rezervují na sezónu (od jara do podzimu). Voda, kompost a základní nářadí
+            v ceně. Pro nováčky 1× ročně otevíráme začátečnický workshop s místním zahradníkem.
+          </p>
+          <h3 id="km-gril">Grilovací místa</h3>
+          <p>
+            Tři až čtyři grilovací místa s pevnými grily, lavičkami a stoly. Rezervace přes
+            komunitní aplikaci na konkrétní den a čas. Uhlí a podpalovač přinesete vlastní,
+            nebo zakoupíte v kantýně.
+          </p>
+          <h3 id="km-hriste">Hřiště a venkovní posezení</h3>
+          <p>
+            Otevřené hřiště v komunitním parku, venkovní posezení s lavičkami a stoly. Typ
+            hřiště (dětské, sportovní, multifunkční) bude doplněn.
+          </p>
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>Park rozloha</dt><dd>18 000 m²</dd></div>
+          <div><dt>Vstup</dt><dd>Volný pro rezidenty i externí</dd></div>
+          <div><dt>Grilovací místa</dt><dd>3 až 4 stálá, rezervace v aplikaci</dd></div>
+          <div><dt>Zahrádky</dt><dd>Sezónní záhony pro rezidenty</dd></div>
+        </dl>
       </div>
     </div>
   </section>
 
-  <section class="sec-block sec-block--alt">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Klubovna v budově C</p>
-        <h2 class="sec-block__title" id="km-klubovna">Společenský prostor pro 30 až 50 osob.</h2>
-      </header>
-      <div class="sec-block__text">
-        <p>
-          Klubovna je v patrech budovy C, v jádře areálu, společně s coworkingem v 1. NP.
-          Kapacita 30 až 50 lidí podle dispozice. Vybavení: stoly s lavicemi,
-          projektor a plátno, ozvučení, vařič na kávu, lednička.
-        </p>
-        <p>
-          V provozu pro pravidelné komunitní akce: úterní kvízový večer, čtvrteční deskoherní
-          setkání, nedělní filmový klub. Rezidenti si můžou rezervovat
-          klubovnu i pro soukromé akce (narozeniny, malé workshopy) podle volných termínů. Pro
-          externí návštěvníky Klecan: pronájem pro spolky a sousedské akce v cenách dohodou s OSA II.
-        </p>
+  <section class="sec-feature">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__intro">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Gastro</p>
+          <h2 class="sec-feature__title" id="km-gastro">Kantýna, restaurace, pekárna.</h2>
+        </div>
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { src: withBase('/images/hub/hero/h04.jpg'), alt: 'Jídelna v budově B v poledne, společné stolování.' },
+              { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'), alt: 'Tržnice s minipivovarem v budově B, večerní zázemí.' },
+            ]}
+            ariaLabel="Gastro" />
+        </div>
       </div>
-      <dl class="sec-table">
-        <div class="sec-table__row"><dt>Pravidelné akce</dt><dd>Kvízový večer (úterý 20:00), deskoherní (čtvrtek 19:00), filmový klub (neděle 19:00)</dd></div>
-        <div class="sec-table__row"><dt>Rezervace soukromých akcí</dt><dd>Přes komunitní aplikaci</dd></div>
-        <div class="sec-table__row"><dt>Kapacita</dt><dd>30 až 50 osob</dd></div>
-        <div class="sec-table__row"><dt>Vybavení</dt><dd>Projektor, ozvučení, kávovar, lednička</dd></div>
-      </dl>
+      <div class="sec-feature__body">
+        <div class="sec-feature__text">
+          <h3 id="km-kantyna">Kantýna</h3>
+          <p>
+            Polední menu v pracovní dny. Tři až čtyři varianty hlavního jídla (jedno
+            vegetariánské, jedno levné maso), polévka, salát. Cena 130 až 180 Kč podle tržního
+            průměru pro Prahu-okolí 2026. Vstup volný pro všechny. Po až Pá 11:00 až 14:00.
+          </p>
+          <h3 id="km-restaurace">Restaurace</h3>
+          <p>
+            Restaurace přebírá kuchyňský blok B večerně a o víkendech. Sezónní menu, jednodušší
+            á la carte. Sobotní brunch s živou hudbou, nedělní rodinný oběd. Po až Pá 17:00 až
+            22:00, So a Ne 11:00 až 22:00.
+          </p>
+          <h3 id="km-pekarna">Pekárna</h3>
+          <p>
+            Otevírá ráno (6:30) a obsluhuje rezidenty i obyvatele Klecan. Čerstvý chléb,
+            croissanty, sladké pečivo, káva k odnesení. Po až Pá 6:30 až 10:30.
+          </p>
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>Kantýna</dt><dd>Po až Pá 11:00 až 14:00</dd></div>
+          <div><dt>Restaurace</dt><dd>Po až Pá 17:00 až 22:00, víkend 11:00 až 22:00</dd></div>
+          <div><dt>Pekárna</dt><dd>Po až Pá 6:30 až 10:30</dd></div>
+          <div><dt>Cena oběda</dt><dd>130 až 180 Kč</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-feature sec-feature--alt">
+    <div class="sec-feature__inner">
+      <div class="sec-feature__intro">
+        <div class="sec-feature__head">
+          <p class="sec-feature__eyebrow">Klubovna</p>
+          <h2 class="sec-feature__title" id="km-klubovna">Společenský prostor pro 30 až 50 osob.</h2>
+        </div>
+        <div class="sec-feature__media">
+          <Gallery
+            images={[
+              { src: withBase('/images/hub/amenities/ko04-klubovna.jpg'), alt: 'Klubovna v budově C s eventem, lidé u stolů, kulturní život uvnitř Hubu.' },
+            ]}
+            ariaLabel="Klubovna" />
+        </div>
+      </div>
+      <div class="sec-feature__body">
+        <div class="sec-feature__text">
+          <p>
+            Klubovna je v patrech budovy C, v jádře areálu, společně s coworkingem v 1. NP.
+            Kapacita 30 až 50 lidí podle dispozice. Vybavení: stoly s lavicemi, projektor
+            a plátno, ozvučení, kávovar, lednička.
+          </p>
+          <p>
+            V provozu pro pravidelné komunitní akce: úterní kvízový večer, čtvrteční deskoherní
+            setkání, nedělní filmový klub. Rezidenti si mohou rezervovat klubovnu i pro soukromé
+            akce (narozeniny, malé workshopy). Pro externí spolky pronájem v cenách dohodou.
+          </p>
+        </div>
+        <dl class="sec-feature__spec">
+          <div><dt>Pravidelné akce</dt><dd>Kvíz Út 20:00, desky Čt 19:00, film Ne 19:00</dd></div>
+          <div><dt>Kapacita</dt><dd>30 až 50 osob</dd></div>
+          <div><dt>Vybavení</dt><dd>Projektor, ozvučení, kávovar, lednička</dd></div>
+          <div><dt>Rezervace</dt><dd>Přes komunitní aplikaci</dd></div>
+        </dl>
+      </div>
     </div>
   </section>
 
