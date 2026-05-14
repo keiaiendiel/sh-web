@@ -9,49 +9,15 @@ const { variant = 'light' } = Astro.props;
 
 /* Site-wide nav. Order locked per SH_Web_Plan.md ř. 211 a Site_Copy § 0.2.
    Rezervace nepatří do nav array, je to samostatný CTA chip vpravo. */
-type DropdownItem = { label: string; href: string };
 type NavItem = {
   path: string;
   label: string;
-  dropdown?: { items: DropdownItem[] };
 };
 
 const nav: NavItem[] = [
-  {
-    path: '/ubytovani/',
-    label: 'Ubytování',
-    dropdown: {
-      items: [
-        { label: 'Co-living',          href: '/ubytovani/#ub-coliving-title' },
-        { label: 'Privátní apartmány', href: '/ubytovani/#ub-privatni-title' },
-      ],
-    },
-  },
-  {
-    path: '/coworking/',
-    label: 'Coworking',
-    dropdown: {
-      items: [
-        { label: 'Coworkingový sál',  href: '/coworking/#cw-sal' },
-        { label: 'Fixní stůl',        href: '/coworking/#cw-fix' },
-        { label: 'Sdílená kancelář',  href: '/coworking/#cw-shared' },
-        { label: 'Zasedací místnost', href: '/coworking/#cw-zasedacka' },
-        { label: 'Ateliéry a dílny',  href: '/coworking/#cw-ateliery-dilny' },
-      ],
-    },
-  },
-  {
-    path: '/komunita/',
-    label: 'Komunita',
-    dropdown: {
-      items: [
-        { label: 'Wellness', href: '/komunita/#km-wellness' },
-        { label: 'Park',     href: '/komunita/#km-park' },
-        { label: 'Gastro',   href: '/komunita/#km-gastro' },
-        { label: 'Klubovna', href: '/komunita/#km-klubovna' },
-      ],
-    },
-  },
+  { path: '/ubytovani/', label: 'Ubytování' },
+  { path: '/coworking/', label: 'Coworking' },
+  { path: '/komunita/',  label: 'Komunita' },
   { path: '/okoli/',     label: 'Okolí' },
   { path: '/doprava/',   label: 'Doprava' },
   { path: '/stipendia/', label: 'Stipendia' },
@@ -73,30 +39,10 @@ const reservationActive = isActive('/rezervace/');
 
     <nav class="hub-header__nav" aria-label="Hlavní navigace">
       {nav.map((n) => (
-        n.dropdown ? (
-          <div class="hub-header__nav-item hub-header__nav-item--has-dropdown">
-            <a
-              href={withBase(n.path)}
-              class="hub-header__link"
-              aria-current={isActive(n.path) ? 'page' : undefined}
-              aria-haspopup="true">
-              {n.label}
-              <span class="hub-header__caret" aria-hidden="true">▾</span>
-            </a>
-            <div class="hub-header__dropdown" role="menu">
-              <ul class="hub-header__dd-list">
-                {(n.dropdown.items ?? []).map((it) => (
-                  <li><a href={withBase(it.href)} role="menuitem">{it.label}</a></li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ) : (
-          <a
-            href={withBase(n.path)}
-            class="hub-header__link"
-            aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
-        )
+        <a
+          href={withBase(n.path)}
+          class="hub-header__link"
+          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
       ))}
       <a
         href={withBase('/rezervace/')}
@@ -125,25 +71,10 @@ const reservationActive = isActive('/rezervace/');
   <div id="hub-drawer" class="hub-drawer" role="dialog" aria-modal="true" aria-label="Hlavní navigace" hidden>
     <nav class="hub-drawer__nav" aria-label="Mobilní navigace">
       {nav.map((n) => (
-        n.dropdown ? (
-          <details class="hub-drawer__group">
-            <summary class="hub-drawer__link hub-drawer__link--summary">
-              {n.label}
-              <span class="hub-drawer__caret" aria-hidden="true">▾</span>
-            </summary>
-            <div class="hub-drawer__sub">
-              <a href={withBase(n.path)} class="hub-drawer__sublink hub-drawer__sublink--overview">Všechno z {n.label.toLowerCase()} →</a>
-              {n.dropdown.items.map((it) => (
-                <a href={withBase(it.href)} class="hub-drawer__sublink">{it.label}</a>
-              ))}
-            </div>
-          </details>
-        ) : (
-          <a
-            href={withBase(n.path)}
-            class="hub-drawer__link"
-            aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
-        )
+        <a
+          href={withBase(n.path)}
+          class="hub-drawer__link"
+          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
       ))}
       <a
         href={withBase('/rezervace/')}
@@ -317,11 +248,6 @@ const reservationActive = isActive('/rezervace/');
     gap: var(--space-5);
     margin-left: auto;
   }
-  .hub-header__nav-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
   .hub-header__link {
     display: inline-flex;
     align-items: center;
@@ -343,90 +269,11 @@ const reservationActive = isActive('/rezervace/');
   .hub-header--dark .hub-header__link:hover,
   .hub-header--dark .hub-header__link[aria-current='page'] { color: #fff; }
 
-  .hub-header__caret {
-    font-size: 0.65em;
-    line-height: 1;
-    opacity: 0.55;
-    transition: transform 200ms var(--ease-standard), opacity 200ms var(--ease-standard);
-  }
-  .hub-header__nav-item--has-dropdown:hover .hub-header__caret,
-  .hub-header__nav-item--has-dropdown:focus-within .hub-header__caret {
-    transform: rotate(180deg);
-    opacity: 1;
-  }
-
-  /* Dropdown panel: minimalist white card, plum accent, smooth fade-in.
-     Bridged 14 px gap pseudo-elementem, aby hover nezhasl při přejezdu
-     ze linku na panel. Vždy flat single-column list (max 5 short items),
-     šíře 220 px, anchored na levý okraj triggeru pro konzistentní vizuální
-     zarovnání s nav itemem. Šíře 220 px se vždy vejde i pro nav items v
-     pravé části headeru (Komunita) v 1280+ viewport (nav skrytý pod 1024). */
-  .hub-header__dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 220px;
-    margin-top: 14px;
-    padding: 8px;
-    background: var(--bg);
-    color: var(--fg);
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    box-shadow:
-      0 12px 32px rgba(0, 0, 0, 0.10),
-      0 2px 8px rgba(0, 0, 0, 0.04);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-6px);
-    transition:
-      opacity 180ms var(--ease-standard),
-      transform 180ms var(--ease-standard),
-      visibility 0s linear 180ms;
-    z-index: 40;
-  }
-  .hub-header__dropdown::before {
-    /* Invisible hover bridge between trigger link and panel. */
-    content: "";
-    position: absolute;
-    top: -14px;
-    left: 0;
-    right: 0;
-    height: 14px;
-  }
-  .hub-header__nav-item--has-dropdown:hover .hub-header__dropdown,
-  .hub-header__nav-item--has-dropdown:focus-within .hub-header__dropdown {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    transition:
-      opacity 180ms var(--ease-standard),
-      transform 180ms var(--ease-standard),
-      visibility 0s linear 0s;
-  }
-
-  .hub-header__dd-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 1px;
-  }
-  .hub-header__dd-list a {
-    display: block;
-    padding: 10px 12px;
-    font: 500 var(--text-sm) / 1.35 var(--font-sans);
-    color: var(--fg);
-    text-decoration: none;
-    border-radius: var(--radius-input);
-    transition: background 160ms ease, color 160ms ease;
-    white-space: nowrap;
-    letter-spacing: -0.005em;
-  }
-  .hub-header__dd-list a:hover,
-  .hub-header__dd-list a:focus-visible {
-    background: var(--accent-soft);
-    color: var(--accent);
-    outline: none;
+  /* Overlay (transparent, nad hero): aktivní link je bílý + bílý underline.
+     Po scrollu pod hero (is-stuck) se vrací k plum přes původní rule výš. */
+  .hub-header--overlay:not(.is-stuck) .hub-header__link[aria-current='page'] {
+    color: #fff;
+    border-bottom-color: #fff;
   }
 
   /* CTA pill , Rezervace.
@@ -562,53 +409,6 @@ const reservationActive = isActive('/rezervace/');
   .hub-drawer__link:hover { color: var(--accent); }
   .hub-drawer__link[aria-current='page'] { color: var(--accent); }
 
-  /* Drawer accordion (mobile dropdown). */
-  .hub-drawer__group {
-    border-bottom: 1px solid var(--border-muted);
-  }
-  .hub-drawer__link--summary {
-    list-style: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 0;
-  }
-  .hub-drawer__link--summary::-webkit-details-marker { display: none; }
-  .hub-drawer__caret {
-    font-size: 0.55em;
-    opacity: 0.45;
-    transition: transform 220ms var(--ease-standard);
-  }
-  .hub-drawer__group[open] .hub-drawer__caret { transform: rotate(180deg); }
-  .hub-drawer__sub {
-    display: grid;
-    gap: 2px;
-    padding: 0 0 var(--space-4) var(--space-3);
-    border-left: 2px solid var(--border-muted);
-    margin-left: var(--space-2);
-  }
-  .hub-drawer__sublink {
-    display: block;
-    font: 400 var(--text-md) / 1.3 var(--font-sans);
-    color: var(--fg-muted);
-    padding: 8px var(--space-3);
-    text-decoration: none;
-    border-radius: var(--radius-input);
-    transition: background 160ms ease, color 160ms ease;
-  }
-  .hub-drawer__sublink--overview {
-    color: var(--accent);
-    font-weight: 600;
-    padding-top: var(--space-2);
-    padding-bottom: var(--space-3);
-  }
-  .hub-drawer__sublink:hover,
-  .hub-drawer__sublink:focus-visible {
-    background: var(--accent-soft);
-    color: var(--accent);
-    outline: none;
-  }
   .hub-drawer__link--cta {
     position: relative;
     isolation: isolate;

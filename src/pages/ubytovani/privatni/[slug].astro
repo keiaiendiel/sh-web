@@ -19,21 +19,9 @@ const { Content } = await render(entry);
 const heroSrc = data.hero ? withBase(data.hero) : null;
 const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
-/* Per-slug specifický extra shot (Tier B fotka konkrétního formátu) + 2 sdílené
-   shoty (koupelna, chodba), vždy ZA hero. Pokud konkrétní fotka chybí, mapování
-   vrátí undefined a slot se přeskočí, místo něj se vloží placeholder. */
-const extraShots: Record<string, { src: string; alt: string }> = {
-  '1kk': { src: withBase('/images/hub/ubytovani/privatni/1kk-hero-alt.jpg'), alt: 'Detail 1+kk: pracovní stůl pod oknem, jednolůžko nebo manželská postel, kuchyňský kout.' },
-  '2kk': { src: withBase('/images/hub/ubytovani/privatni/2kk-hero.jpg'),     alt: 'Detail 2+kk: oddělená ložnice, obývací pokoj s jídelním stolem, plnohodnotná kuchyň.' },
-  '3kk': { src: withBase('/images/hub/ubytovani/privatni/3kk-hero.jpg'),     alt: 'Detail 3+kk: dvě ložnice, společný obývací pokoj, kuchyň s jídelním koutem.' },
-  '4kk': { src: withBase('/images/hub/ubytovani/privatni/4kk-hero.jpg'),     alt: 'Detail 4+kk: tři ložnice, prostorný společný prostor pro skupinu šesti až osmi lidí.' },
-  '5kk': { src: withBase('/images/hub/ubytovani/privatni/5kk-placeholder.jpg'), alt: 'Návrh dispozice 5+kk: čtyři ložnice, dvě koupelny, společný obývací prostor a velká kuchyň.' },
-};
-
 type GalleryItem = { src: string; alt: string } | { placeholder: string; alt: string };
 const galleryImages: GalleryItem[] = [
   ...(heroSrc ? [{ src: heroSrc, alt: data.heroAlt ?? '' } as GalleryItem] : []),
-  ...(extraShots[data.slug] ? [extraShots[data.slug]] : []),
   { src: withBase('/images/hub/ubytovani/privatni/shared-koupelna.jpg'), alt: 'Privátní koupelna se sprchou, vlastní WC, denní světlo.' },
   { src: withBase('/images/hub/ubytovani/privatni/shared-chodba.jpg'),   alt: 'Vstupní chodba apartmánu se šatnou a vlastním vchodem.' },
   { placeholder: 'Kuchyňský kout v detailu, indukční deska, dřez, lednice, mikrovlnka', alt: 'Detail kuchyňského koutu.' },
@@ -43,33 +31,12 @@ const galleryImages: GalleryItem[] = [
 <Base
   title={`${data.name} · Startovací Hub Klecany`}
   description={data.popis}
-  headerVariant="overlay">
-
-  <section class="apt-hero">
-    {heroSrc ? (
-      <img class="apt-hero__bg" src={heroSrc} alt={data.heroAlt ?? ''} loading="eager" decoding="async" />
-    ) : (
-      <div class="apt-hero__bg apt-hero__bg--placeholder" role="img" aria-label={data.heroAlt ?? ''}>
-        <span class="apt-hero__placeholder" aria-hidden="true">▢</span>
-      </div>
-    )}
-    <div class="apt-hero__scrim" aria-hidden="true"></div>
-    <div class="apt-hero__inner">
-      <p class="apt-hero__eyebrow">Privátní apartmán</p>
-      <h1 class="apt-hero__title">{data.name}</h1>
-      <p class="apt-hero__lede">{data.popis}</p>
-      <ul class="apt-hero__meta">
-        <li><strong>Plocha</strong> {data.plocha}</li>
-        <li><strong>Kapacita</strong> {data.kapacita} lůžek</li>
-        <li><strong>Cena</strong> {formatCena(data.cena.anchor)}/měs{data.cena.perOsoba && <span> ({data.cena.perOsoba})</span>}</li>
-      </ul>
-    </div>
-  </section>
+  headerVariant="light">
 
   <section class="apt-gallery" aria-label={`Galerie typu ${data.name}`}>
     <div class="apt-gallery__inner">
       <aside class="apt-gallery__side">
-        <p class="apt-gallery__eyebrow">Galerie</p>
+        <a class="apt-gallery__eyebrow osa-nolink" href={withBase('/ubytovani/#ub-privatni-title')}>Privátní apartmány<span aria-hidden="true"> →</span></a>
         <h2 class="apt-gallery__title">{data.name}</h2>
         <p class="apt-gallery__lede">{data.popis}</p>
         <p class="apt-gallery__price">
@@ -146,24 +113,12 @@ const galleryImages: GalleryItem[] = [
 </Base>
 
 <style>
-  .apt-hero { position: relative; isolation: isolate; min-height: 60vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-7); color: #fff; background: var(--k-100); overflow: hidden; }
-  .apt-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.7); }
-  .apt-hero__bg--placeholder { display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--accent); filter: none; }
-  .apt-hero__placeholder { font: 600 var(--text-xs) / 1 var(--font-sans); letter-spacing: var(--tracking-wider); text-transform: uppercase; padding: 8px 14px; border: 1px solid var(--accent-rule); background: rgba(255,255,255,0.6); border-radius: var(--radius-input); color: var(--accent); }
-  .apt-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0.05) 90%); z-index: -1; }
-  .apt-hero__inner { max-width: var(--container); margin: 0 auto; width: 100%; }
-  .apt-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: rgba(255,255,255,0.85); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
-  .apt-hero__title { font: 600 clamp(2.5rem, 5vw, 4rem) / 1.05 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-4); }
-  .apt-hero__lede { font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.5; margin: 0 0 var(--space-5); max-width: 56ch; color: rgba(255,255,255,0.92); }
-  .apt-hero__meta { display: flex; gap: var(--space-6); margin: 0; padding: var(--space-3) 0 0; border-top: 1px solid rgba(255,255,255,0.18); flex-wrap: wrap; font-size: var(--text-sm); }
-  .apt-hero__meta li { display: flex; flex-direction: column; gap: 2px; }
-  .apt-hero__meta strong { font-size: var(--text-2xs); letter-spacing: var(--tracking-wider); text-transform: uppercase; opacity: 0.65; font-weight: 600; }
-
-  /* === GALERIE (mezi hero a body) === */
+  /* === GALERIE === */
   .apt-gallery { padding: var(--space-8) var(--gutter); background: var(--bg-muted); color: var(--fg); }
   .apt-gallery__inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: clamp(28px, 4vw, 56px); max-width: var(--container-wide); margin: 0 auto; align-items: start; }
   .apt-gallery__side { display: flex; flex-direction: column; gap: var(--space-3); position: sticky; top: 100px; }
-  .apt-gallery__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0; }
+  .apt-gallery__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0; display: inline-flex; align-items: center; gap: 4px; width: fit-content; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 200ms ease; }
+  .apt-gallery__eyebrow:hover, .apt-gallery__eyebrow:focus-visible { border-bottom-color: currentColor; outline: none; }
   .apt-gallery__title { font: 600 clamp(1.75rem, 3vw, 2.25rem) / 1.15 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0; }
   .apt-gallery__lede { font-size: var(--text-md); line-height: 1.55; margin: var(--space-2) 0 var(--space-4); color: var(--fg-soft, var(--fg)); max-width: 38ch; }
   .apt-gallery__price { display: flex; align-items: baseline; gap: 6px; margin: 0 0 var(--space-4); flex-wrap: wrap; }
