@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Gallery from '../components/Gallery.astro';
-import Icon from '../components/Icon.astro';
 import { withBase } from '../utils/url';
 
 /* Phase 2 landing per SH_Web_Site_Copy.md § 0.1 + SH_Web_Visualization_List
@@ -120,14 +119,15 @@ const amenityRows: AmenityRow[] = [
   },
 ];
 
-/* === SEKCE LIST (6 sekcí jako icon karty) === */
-const sections = [
-  { path: '/ubytovani/', label: 'Ubytování',  icon: 'bed-double',    hint: '9 typů pokojů a apartmánů' },
-  { path: '/coworking/', label: 'Coworking',  icon: 'briefcase',     hint: '5 tarifů od volného stolu po dílnu' },
-  { path: '/komunita/',  label: 'Komunita',   icon: 'users',         hint: 'Wellness, sport, gastro, kultura' },
-  { path: '/okoli/',     label: 'Okolí',      icon: 'map-pin',       hint: 'Klecany, 15 km severně od Prahy' },
-  { path: '/doprava/',   label: 'Doprava',    icon: 'bus',           hint: 'Hub-shuttle, bus 374, Hub-taxi' },
-  { path: '/stipendia/', label: 'Stipendia',  icon: 'sparkles',      hint: 'Pobytové stipendium, 4 role' },
+/* === NAV STRIP (pod hero) === */
+const navItems = [
+  { path: '/rezervace/',  label: 'Rezervace',  primary: true },
+  { path: '/ubytovani/',  label: 'Ubytování' },
+  { path: '/coworking/',  label: 'Coworking' },
+  { path: '/komunita/',   label: 'Komunita' },
+  { path: '/okoli/',      label: 'Okolí' },
+  { path: '/doprava/',    label: 'Doprava' },
+  { path: '/stipendia/',  label: 'Stipendia' },
 ];
 ---
 <Base
@@ -149,18 +149,18 @@ const sections = [
     <div class="lp-hero__inner">
       <p class="lp-hero__eyebrow">Areál Horních kasáren · Klecany</p>
       <h1 class="lp-hero__title">Startovací Hub.</h1>
-      <p class="lp-hero__lede">
-        Prostor pro život a tvorbu. Devět možností ubytování, od privátních kapslí
-        po 5+kk apartmány. Coworking, dílny a ateliéry pro práci. Sauna, kavárna
-        a společná kuchyně pro každodenní život. Patnáct minut autobusem do metra
-        Kobylisy. Komunita a možnost pobytového stipendia.
-      </p>
-      <div class="lp-hero__cta-row">
-        <a class="lp-hero__cta lp-hero__cta--primary" href={withBase('/rezervace/')}>Rezervace</a>
-        <a class="lp-hero__cta" href={withBase('/ubytovani/')}>Možnosti ubytování</a>
-      </div>
+      <p class="lp-hero__lede">Na prahu metropole · Praha-sever</p>
     </div>
   </section>
+
+  {/* ============ NAV STRIP ============ */}
+  <nav class="lp-nav" aria-label="Hlavní sekce">
+    <div class="lp-nav__inner">
+      {navItems.map((item) => (
+        <a class:list={['lp-nav__item', item.primary && 'lp-nav__item--primary']} href={withBase(item.path)}>{item.label}</a>
+      ))}
+    </div>
+  </nav>
 
   {/* ============ CO HUB NABÍZÍ (zig-zag, 4 řady) ============ */}
   <section class="lp-amenities" aria-label="Co Hub nabízí">
@@ -185,22 +185,6 @@ const sections = [
           </div>
         ))}
       </div>
-    </div>
-  </section>
-
-  {/* ============ SECTION TEASERY (8 sekcí) ============ */}
-  <section class="lp-grid" aria-label="Sekce webu">
-    <div class="lp-grid__inner">
-      <ul class="lp-grid__list">
-        {sections.map((s) => (
-          <li class="lp-grid__item">
-            <a class="lp-grid__link" href={withBase(s.path)}>
-              <span class="lp-grid__icon" aria-hidden="true"><Icon name={s.icon} size={26} strokeWidth={1.75} /></span>
-              <span class="lp-grid__label">{s.label}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
     </div>
   </section>
 
@@ -330,40 +314,10 @@ const sections = [
     max-width: 18ch;
   }
   .lp-hero__lede {
-    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-    line-height: 1.5;
-    margin: 0 0 var(--space-6);
-    max-width: 52ch;
-    color: rgba(255,255,255,0.95);
-  }
-  .lp-hero__cta-row {
-    display: flex;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-  }
-  .lp-hero__cta {
-    display: inline-flex;
-    align-items: center;
-    padding: 12px 22px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.4);
-    border-radius: var(--radius-input);
-    text-decoration: none;
-    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
-  }
-  .lp-hero__cta:hover {
-    background: #fff;
-    color: var(--k-100);
-    border-color: #fff;
-  }
-  .lp-hero__cta--primary {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
-  .lp-hero__cta--primary:hover {
-    background: #fff;
-    color: var(--accent);
+    font: 600 clamp(1.1rem, 1.8vw, 1.35rem) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-wide);
+    margin: 0;
+    color: rgba(255,255,255,0.8);
   }
 
   /* reduced-motion: freeze on slide 0 */
@@ -453,67 +407,63 @@ const sections = [
     .lp-zigzag__row--rtl .lp-zigzag__copy { order: 0; }
   }
 
-  /* ============ SEKCE ICON CARDS (6 sekcí) ============ */
-  .lp-grid {
-    padding: var(--space-8) var(--gutter);
-    background: var(--bg-muted, var(--bg));
-    color: var(--fg);
+  /* ============ NAV STRIP ============ */
+  .lp-nav {
+    padding: var(--space-4) var(--gutter);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-muted);
   }
-  .lp-grid__inner {
+  .lp-nav__inner {
     max-width: var(--container);
     margin: 0 auto;
-  }
-  .lp-grid__list {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: var(--space-4);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .lp-grid__item { display: block; }
-  .lp-grid__link {
     display: flex;
-    flex-direction: column;
+    gap: var(--space-2);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .lp-nav__item {
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-5) var(--space-3);
-    background: var(--bg);
+    padding: 10px 18px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg);
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
-    color: inherit;
     text-decoration: none;
-    transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+    white-space: nowrap;
+    transition: border-color 200ms ease, color 200ms ease, background 200ms ease;
   }
-  .lp-grid__link:hover,
-  .lp-grid__link:focus-visible {
+  .lp-nav__item:hover,
+  .lp-nav__item:focus-visible {
     border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
+    color: var(--accent);
     outline: none;
   }
-  .lp-grid__icon {
-    display: grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    border-radius: 12px;
-    transition: background 220ms ease, color 220ms ease;
+  .lp-nav__item--primary {
+    background: var(--accent);
+    color: var(--accent-on);
+    border-color: var(--accent);
   }
-  .lp-grid__link:hover .lp-grid__icon { background: var(--accent); color: var(--accent-on); }
-  .lp-grid__label {
-    font: 600 var(--text-base) / 1.2 var(--font-sans);
-    letter-spacing: var(--tracking-tight);
-    text-align: center;
+  .lp-nav__item--primary:hover,
+  .lp-nav__item--primary:focus-visible {
+    background: #fff;
+    color: var(--accent);
+    border-color: var(--accent);
   }
 
-  @media (max-width: 900px) {
-    .lp-grid__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  }
-  @media (max-width: 480px) {
-    .lp-grid__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 760px) {
+    .lp-nav__inner {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .lp-nav__inner::-webkit-scrollbar { display: none; }
+    .lp-nav__item {
+      padding: 8px 14px;
+      font-size: var(--text-xs);
+    }
   }
 
   /* ============ MÍSTO / MASTERPLAN ============ */
