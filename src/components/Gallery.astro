@@ -154,6 +154,7 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
 <style>
   .gallery {
     position: relative;
+    overflow: hidden;
     --gallery-radius: var(--radius-input);
   }
   .gallery--single { margin: 0; }
