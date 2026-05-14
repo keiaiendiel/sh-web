@@ -51,27 +51,18 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
     </div>
   </a>
   <div class="room-card__body">
-    <span class="room-card__eyebrow">{eyebrow}</span>
     <h3 class="room-card__name">
       <a href={detailHref}>{name}</a>
     </h3>
-    <dl class="room-card__meta">
-      <div><dt>Velikost</dt><dd>{velikost}</dd></div>
-      <div><dt>Kapacita</dt><dd>{kapacita}</dd></div>
-    </dl>
-    <p class="room-card__popis">{popis}</p>
     <div class="room-card__price">
       <span class="room-card__price-anchor">
         <span class="room-card__price-num">{fmt(cenaAnchor)}</span>
         <span class="room-card__price-unit">Kč/měsíc</span>
       </span>
-      {perOsoba && (
-        <span class="room-card__price-perperson">{perOsoba}</span>
-      )}
     </div>
     <div class="room-card__cta">
       <a class="room-card__cta-secondary" href={detailHref}>Detail →</a>
-      <a class="room-card__cta-primary" href={reserveHref}>Rezervovat termín</a>
+      <a class="room-card__cta-primary" href={reserveHref}>Rezervovat</a>
     </div>
   </div>
 </article>
@@ -123,18 +114,12 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
   }
   .room-card__body {
     display: grid;
-    gap: 12px;
-    padding: 20px 22px 22px;
-  }
-  .room-card__eyebrow {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    color: var(--accent);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
+    gap: 10px;
+    padding: 16px 18px 18px;
   }
   .room-card__name {
-    font: 600 var(--text-xl) / 1.25 var(--font-sans);
-    margin: 4px 0 0;
+    font: 600 var(--text-lg) / 1.25 var(--font-sans);
+    margin: 0;
     letter-spacing: var(--tracking-tight);
   }
   .room-card__name a {
@@ -144,41 +129,11 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
   .room-card__name a:hover {
     color: var(--accent);
   }
-  .room-card__meta {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin: 4px 0 0;
-    padding: 12px 0;
-    border-top: 1px solid var(--border-muted);
-    border-bottom: 1px solid var(--border-muted);
-  }
-  .room-card__meta > div { display: grid; gap: 2px; }
-  .room-card__meta dt {
-    font: 600 10px / 1.3 var(--font-sans);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    color: var(--fg-subtle);
-    margin: 0;
-  }
-  .room-card__meta dd {
-    font-size: var(--text-sm);
-    color: var(--fg);
-    margin: 0;
-    line-height: 1.35;
-  }
-  .room-card__popis {
-    font-size: var(--text-sm);
-    line-height: 1.55;
-    color: var(--fg-muted);
-    margin: 0;
-  }
   .room-card__price {
     display: grid;
     gap: 4px;
     padding-top: 8px;
     border-top: 1px solid var(--border-muted);
-    margin-top: 4px;
   }
   .room-card__price-anchor {
     display: flex;
@@ -195,11 +150,6 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
   .room-card__price-unit {
     font-size: var(--text-sm);
     color: var(--fg);
-  }
-  .room-card__price-perperson {
-    font-size: var(--text-xs);
-    color: var(--fg);
-    line-height: 1.4;
   }
   .room-card__cta {
     display: flex;

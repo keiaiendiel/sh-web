@@ -329,6 +329,11 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
     100% { transform: scale(1); }
   }
 
+  @media (max-width: 760px) {
+    .gallery__nav { display: none; }
+    .gallery__controls { margin-top: 10px; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .gallery__viewport { scroll-behavior: auto; }
     .gallery__nav,
