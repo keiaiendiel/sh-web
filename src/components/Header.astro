@@ -3,7 +3,7 @@ import { withBase } from '../utils/url';
 import OsaGlyph from './OsaGlyph.astro';
 
 interface Props {
-  variant?: 'light' | 'dark';
+  variant?: 'light' | 'dark' | 'overlay';
 }
 const { variant = 'light' } = Astro.props;
 
@@ -64,7 +64,7 @@ const isActive = (path: string) => {
 };
 const reservationActive = isActive('/rezervace/');
 ---
-<header class:list={['hub-header', { 'hub-header--dark': variant === 'dark' }]}>
+<header class:list={['hub-header', { 'hub-header--dark': variant === 'dark', 'hub-header--overlay': variant === 'overlay' }]} data-variant={variant}>
   <div class="hub-header__bar">
     <a href={withBase('/')} class="hub-header__brand" aria-label="Startovací Hub Klecany, domů">
       <span class="hub-header__glyph" aria-hidden="true"><OsaGlyph size="13px" /></span>
@@ -100,13 +100,13 @@ const reservationActive = isActive('/rezervace/');
       ))}
       <a
         href={withBase('/rezervace/')}
-        class="hub-header__cta"
+        class="hub-header__cta osa-nolink"
         aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
     </nav>
 
     <a
       href={withBase('/rezervace/')}
-      class="hub-header__cta hub-header__cta--mobile"
+      class="hub-header__cta hub-header__cta--mobile osa-nolink"
       aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
 
     <button
@@ -190,6 +190,41 @@ const reservationActive = isActive('/rezervace/');
   }());
 </script>
 
+<script is:inline>
+  /* Header overlay → opaque switch při scrollu mimo hero.
+     Hledá první image-hero sekci (.lp-hero, .ub-hero, .sec-hero,
+     .apt-hero, .kp-hero) a observuje její spodek. Dokud je hero
+     viditelné, header zůstává transparent. Když hero opustí viewport,
+     přidá se class `is-stuck` (bílé pozadí, tmavé písmo). */
+  (function () {
+    if (window.__hubHeaderOverlayBound) return;
+    window.__hubHeaderOverlayBound = true;
+    function initOverlay() {
+      var header = document.querySelector('.hub-header--overlay');
+      if (!header || !('IntersectionObserver' in window)) return;
+      if (header.dataset.overlayBound === '1') return;
+      var hero = document.querySelector('.lp-hero, .ub-hero, .sec-hero, .apt-hero, .kp-hero');
+      if (!hero) {
+        header.classList.add('is-stuck');
+        return;
+      }
+      header.dataset.overlayBound = '1';
+      var sentinel = document.createElement('div');
+      sentinel.setAttribute('aria-hidden', 'true');
+      sentinel.style.cssText = 'position:absolute;left:0;right:0;bottom:1px;height:1px;pointer-events:none;';
+      if (getComputedStyle(hero).position === 'static') hero.style.position = 'relative';
+      hero.appendChild(sentinel);
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          header.classList.toggle('is-stuck', !entries[i].isIntersecting);
+        }
+      }, { rootMargin: '-80px 0px 0px 0px', threshold: 0 });
+      io.observe(sentinel);
+    }
+    document.addEventListener('astro:page-load', initOverlay);
+  }());
+</script>
+
 <style>
   .hub-header {
     position: sticky; top: 0; z-index: 30;
@@ -200,6 +235,41 @@ const reservationActive = isActive('/rezervace/');
     background: var(--k-100);
     color: var(--k-0);
   }
+
+  /* Overlay variant: fixed nad hero, default průhledný, bílý text.
+     Po scrolování přes hero přidá JS class `is-stuck` a header dostane
+     bílé pozadí a tmavý text (= light look). */
+  .hub-header--overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: transparent;
+    color: #fff;
+    border-bottom: 1px solid transparent;
+    transition: background 220ms ease, color 220ms ease, border-color 220ms ease;
+  }
+  .hub-header--overlay .hub-header__rule { display: none; }
+  .hub-header--overlay .hub-header__link { color: rgba(255,255,255,0.95); }
+  .hub-header--overlay .hub-header__link:hover { color: #fff; }
+  .hub-header--overlay .hub-header__cta { color: #fff; border-color: #fff; }
+  .hub-header--overlay .hub-header__cta::after { background: #fff; }
+  .hub-header--overlay .hub-header__cta:hover,
+  .hub-header--overlay .hub-header__cta:focus-visible,
+  .hub-header--overlay .hub-header__cta[aria-current='page'] { color: var(--k-100); }
+  .hub-header--overlay .hub-header__burger { color: #fff; }
+
+  .hub-header--overlay.is-stuck {
+    background: var(--bg);
+    color: var(--fg);
+    border-bottom-color: var(--border-muted);
+  }
+  .hub-header--overlay.is-stuck .hub-header__link { color: var(--fg); }
+  .hub-header--overlay.is-stuck .hub-header__link:hover { color: var(--accent); }
+  .hub-header--overlay.is-stuck .hub-header__cta { color: var(--accent); border-color: var(--accent); }
+  .hub-header--overlay.is-stuck .hub-header__cta::after { background: var(--accent); }
+  .hub-header--overlay.is-stuck .hub-header__cta:hover,
+  .hub-header--overlay.is-stuck .hub-header__cta:focus-visible,
+  .hub-header--overlay.is-stuck .hub-header__cta[aria-current='page'] { color: #fff; }
+  .hub-header--overlay.is-stuck .hub-header__burger { color: var(--fg); }
   :global(html.osa-nav-lock) .hub-header {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -256,7 +326,7 @@ const reservationActive = isActive('/rezervace/');
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font: 500 var(--text-sm) / 1 var(--font-sans);
+    font: 600 var(--text-sm) / 1 var(--font-sans);
     color: var(--fg);
     padding: 4px 0;
     border-bottom: 1px solid transparent;
@@ -395,11 +465,11 @@ const reservationActive = isActive('/rezervace/');
     color: var(--k-100);
     outline: none;
   }
-  .hub-header:not(.hub-header--dark) .hub-header__cta { color: var(--accent); border-color: var(--accent); }
-  .hub-header:not(.hub-header--dark) .hub-header__cta::after { background: var(--accent); }
-  .hub-header:not(.hub-header--dark) .hub-header__cta:hover,
-  .hub-header:not(.hub-header--dark) .hub-header__cta:focus-visible,
-  .hub-header:not(.hub-header--dark) .hub-header__cta[aria-current='page'] {
+  .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta { color: var(--accent); border-color: var(--accent); }
+  .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta::after { background: var(--accent); }
+  .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta:hover,
+  .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta:focus-visible,
+  .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta[aria-current='page'] {
     color: #fff;
     outline: none;
   }

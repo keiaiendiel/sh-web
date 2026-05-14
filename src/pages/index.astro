@@ -2,146 +2,213 @@
 import Base from '../layouts/Base.astro';
 import Gallery from '../components/Gallery.astro';
 import Icon from '../components/Icon.astro';
+import RoomCard from '../components/RoomCard.astro';
+import { getCollection } from 'astro:content';
 import { withBase } from '../utils/url';
 
+/* Room collections pro 2-sloupcový picker pod Ubytováním sekcí. */
+const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
+const coliving = (await getCollection('coliving')).sort((a, b) => a.data.order - b.data.order);
+const coligvingVelikost: Record<string, string> = {
+  'kapsle-single': 'kapsle ve sdíleném pokoji',
+  'jedno-luzko':   'lůžko ve sdíleném pokoji',
+  'kapsle-double': 'kapsle ve sdíleném pokoji',
+  'dvouluzko':     'celý pokoj v patrovém bytě',
+};
+const colivingKapacita: Record<string, string> = {
+  'kapsle-single': '1 osoba',
+  'jedno-luzko':   '1 osoba',
+  'kapsle-double': '1-2 osoby',
+  'dvouluzko':     '1-2 osoby',
+};
+
 /* Phase 2 landing per SH_Web_Site_Copy.md § 0.1 + SH_Web_Visualization_List
-   § 1.1 + 1.2. Hero rotace 5 záběrů (Foto se připravuje, zatím placeholdery),
+   § 1.1 + 1.2. Hero rotace 4 záběrů (Tier A rendery z vault hero-update),
    „Co Hub nabízí" 4 karty s horizontal scroll-snap gallery, section teasery
    pro 8 sekcí, masterplan, finální CTA panel.
 
-   Hero rotace: cross-fade přes všech 5 slidů, 5 s na slide, 25 s celkový cyklus.
+   Hero rotace: swipe přes 4 slidy, 5 s na slide, 20 s celkový cyklus.
    `prefers-reduced-motion: reduce` zastaví na slide 1. */
 
-/* === HERO ROTACE (5 záběrů) === */
-/* Per Visualization_List_Cleanup.md § Landing/Hero h01-h05:
-   h01 Budova C zvenku · h02 Vnitřní dvůr · h03 Pokoj 2+kk s pracujícím ·
-   h04 Kapsle interiér · h05 Areál Klecany aerial. Nové Tier A rendery z
-   vault Visualizations/h*. */
+/* === HERO ROTACE (4 záběry) === */
+/* Tier A rendery z vault Visualizations/h - Hero/hero-update.
+   Každý slide má desktop (landscape) a phone (portrait) variantu,
+   <picture> přepíná v zlomu 768 px. */
 const heroSlides = [
   {
-    src: withBase('/images/hub/hero/h01.jpg'),
-    alt: 'Budova C (coworking + komunita) v parteru, denní pohled z odstupu, kreativní atmosféra areálu.',
+    desktop: withBase('/images/hub/hero/h01.jpg'),
+    phone:   withBase('/images/hub/hero/h01-phone.jpg'),
+    alt: 'Privátní apartmány v parteru po setmění, lidé před vstupem mezi břízami, teplá světla v oknech.',
   },
   {
-    src: withBase('/images/hub/hero/h02.jpg'),
-    alt: 'Vnitřní dvůr areálu za modré hodiny, lidé u stolu venku, světla v oknech budov.',
+    desktop: withBase('/images/hub/hero/h02.jpg'),
+    phone:   withBase('/images/hub/hero/h02-phone.jpg'),
+    alt: 'Chodba s privátními kapslemi v dřevěném obložení, lavice a rostlina v lounge, tlumené ambientní světlo.',
   },
   {
-    src: withBase('/images/hub/hero/h03.jpg'),
-    alt: 'Privátní apartmán 2+kk: jeden člověk u laptopu u okna s denním světlem, káva na stole, klidná pracovní atmosféra.',
+    desktop: withBase('/images/hub/hero/h03.jpg'),
+    phone:   withBase('/images/hub/hero/h03-phone.jpg'),
+    alt: 'Vnitřní dvůr areálu za modré hodiny, lidé u dlouhého stolu venku, světla v oknech renovovaných budov.',
   },
   {
-    src: withBase('/images/hub/hero/h04.jpg'),
-    alt: 'Velký pokoj s privátními kapslemi v rohu, „obývák s pody" se sedáky, knihami a převlékací kabinkou v pozadí.',
-  },
-  {
-    src: withBase('/images/hub/hero/h05.jpg'),
-    alt: 'Letecký pohled na horní kasárny Klecan v ranní mlze, krajinný kontext nad Vltavou.',
+    desktop: withBase('/images/hub/hero/h04.jpg'),
+    phone:   withBase('/images/hub/hero/h04-phone.jpg'),
+    alt: 'Privátní apartmán 1+kk: žena vaří v kuchyni, muž čte u stolu, postel u okna, teplé večerní světlo.',
   },
 ];
 
-/* === AMENITY ZIG-ZAG (4 řady) === */
-/* Zig-zag layout per Visualization_List_Cleanup.md § Landing/Co Hub nabízí.
-   Galerie reálných záběrů per řada (Gallery komponenta: dot pagination +
-   chevron buttons + scroll-snap), kde vault folder zatím nemá záběr, slot
-   nese placeholder s krátkou poznámkou, co tam bude. Copy per Site_Copy
-   § 0.4.1. */
+/* === SEKCE ZIG-ZAG (6 řad, one-pager) === */
+/* Každá sekce má anchor id pro scroll z jump strip pod hero. Eyebrow +
+   title + lede + CTA do detail page na jedné straně, gallery (chevron +
+   dot pagination, scroll-snap) na druhé. Sudé řady mají gallery vlevo
+   přes :nth-of-type(even) flip. Copy per Site_Copy § 0.4.1 a sekční
+   intra § 1-6. */
 type GalleryItem =
   | { src: string; alt: string }
   | { placeholder: string; alt: string };
-type AmenityRow = {
+type Section = {
+  id: string;
   eyebrow: string;
+  title: string;
   lede: string;
   href: string;
   detailLabel: string;
   gallery: GalleryItem[];
 };
 
-const amenityRows: AmenityRow[] = [
+const sections: Section[] = [
   {
+    id: 'ubytovani',
     eyebrow: 'Ubytování',
-    lede: 'Devět typů, od privátní kapsle pro jednoho po byt 5+kk pro skupinu.',
+    title: 'Devět typů, od kapsle po byt 5+kk.',
+    lede: 'Privátní apartmány 1+kk až 5+kk, dvě kapsle a dva sdílené pokoje. Energie, internet, úklid společných prostor, pět jízd Hub-shuttle do metra Kobylis měsíčně a poukaz do sauny týdně v ceně.',
     href: '/ubytovani/',
     detailLabel: 'Možnosti ubytování',
-    /* Vault neukládá samostatné Ubytování záběry pro landing, recyklujeme
-       z konkrétních ubytovacích sekcí (ks, kd, lj, lp, p1k a další zatím
-       empty), držíme aktuální mix. */
     gallery: [
-      { src: withBase('/images/hub/interior/1kk-a4-a6.jpg'), alt: '1+kk ranní rituál: káva u okna, denní světlo, postel ustlaná v pozadí.' },
-      { src: withBase('/images/hub/interior/vetsi-pokoj-a.jpg'), alt: 'Větší privátní apartmán pro skupinu: jídelní stůl, kuchyňský kout, postel.' },
-      { src: withBase('/images/hub/amenities/kapsle-horizontal-2.jpg'), alt: 'Kapsle ve společném pokoji s knihovnou a rostlinou.' },
-      { src: withBase('/images/hub/amenities/1kk-2.jpg'), alt: '1+kk varianta s manželskou postelí a pracovním stolem u okna.' },
+      { src: withBase('/images/hub/ubytovani/privatni/1kk-a4-a6.jpg'), alt: '1+kk ranní rituál: káva u okna, denní světlo, postel ustlaná v pozadí.' },
+      { src: withBase('/images/hub/ubytovani/privatni/vetsi-pokoj-a.jpg'), alt: 'Větší privátní apartmán pro skupinu: jídelní stůl, kuchyňský kout, postel.' },
+      { src: withBase('/images/hub/ubytovani/coliving/kapsle-horizontal-2.jpg'), alt: 'Kapsle ve společném pokoji s knihovnou a rostlinou.' },
+      { src: withBase('/images/hub/ubytovani/privatni/1kk-2.jpg'), alt: '1+kk varianta s manželskou postelí a pracovním stolem u okna.' },
     ],
   },
   {
+    id: 'coworking',
     eyebrow: 'Coworking',
-    lede: 'Volný stůl v sále zdarma pro rezidenty. Fixní stůl, ateliéry, dílny s těžkými stroji za hodinovou sazbu.',
+    title: 'Sál, fixní stůl, ateliér nebo dílna.',
+    lede: 'Pět typů pracovních prostor v budově C: volný stůl v sále 24/7, fixní stůl s vlastní skříňkou, sdílená kancelář pro čtyři, zasedací místnost na hodinovou rezervaci. Ateliéry a dílny s těžkými stroji v samostatných objektech.',
     href: '/coworking/',
     detailLabel: 'Coworking, dílny a ateliéry',
-    /* Coworking žije v budově C. Existující Building C záběry (exterior +
-       interior) drží 2 první sloty, zbývající cw01-cw04 specifické záběry
-       z vault Visualizations/cw zatím chybí (úplně nové vizualizace per
-       Marek + Scott Weber / Impact Hub reference). */
     gallery: [
-      { src: withBase('/images/hub/amenities/cw-budova-c-exterior.jpg'), alt: 'Budova C zvenku, parter s hlavním vstupem do coworkingu a komunitního zázemí.' },
-      { src: withBase('/images/hub/amenities/cw-budova-c-interior.jpg'), alt: 'Interiér budovy C, společný prostor pro coworking a komunitní akce.' },
-      { placeholder: 'cw01 Volný stůl v sále, hot-desking, 6 až 8 lidí ve flow', alt: 'Coworkingový sál v 1. NP budovy C, flexibilní hot-desking.' },
+      { src: withBase('/images/hub/coworking/budova-c-exterior.jpg'), alt: 'Budova C zvenku, parter s hlavním vstupem do coworkingu a komunitního zázemí.' },
+      { src: withBase('/images/hub/coworking/budova-c-interior.jpg'), alt: 'Interiér budovy C, společný prostor pro coworking a komunitní akce.' },
+      { src: withBase('/images/hub/coworking/cowork-interior.jpg'), alt: 'Coworkingový sál v 1. NP budovy C, flexibilní hot-desking.' },
       { placeholder: 'cw03 Zasedací místnost s týmem 4 až 6 lidí, prezentace na obrazovku', alt: 'Zasedací místnost v budově C v plné akci.' },
       { placeholder: 'cw04 Ateliér nebo dílna v D1 nebo H1 až H3, hardware a nářadí', alt: 'Ateliér nebo dílna s fyzickou prací mimo office.' },
     ],
   },
   {
+    id: 'komunita',
     eyebrow: 'Komunita',
-    lede: 'Wellness, sport, gastro, kultura. Bazén, sauna, kantýna v budově B, klubovna, komunitní zahrádky.',
+    title: 'Wellness, gastro, kultura, sport.',
+    lede: 'Vlastní bazén a sauna v jádře areálu, jídelna s minipivovarem v budově B, klubovna v budově C, komunitní park s grilem. Pro rezidenty s dlouhým pobytem poukaz do sauny týdně v ceně.',
     href: '/komunita/',
     detailLabel: 'Komunitní program',
-    /* Vault ko02-ko04 nové (Bazén, Kantýna, Klubovna). ko01 Grilovací
-       místo zatím chybí. */
     gallery: [
-      { src: withBase('/images/hub/amenities/ko02-bazen.jpg'), alt: 'Bazén v centrálním objektu areálu, letní odpoledne, sluneční terasa, relax po práci.' },
-      { src: withBase('/images/hub/amenities/ko04-klubovna.jpg'), alt: 'Klubovna v budově C s eventem, lidé u stolů, kulturní život uvnitř Hubu.' },
-      { src: withBase('/images/hub/exterior/trznice-pivovar.jpg'), alt: 'Tržnice s minipivovarem v budově B, večerní zázemí pro gastronomii.' },
+      { src: withBase('/images/hub/komunita/bazen.jpg'), alt: 'Bazén v centrálním objektu areálu, letní odpoledne, sluneční terasa, relax po práci.' },
+      { src: withBase('/images/hub/komunita/klubovna.jpg'), alt: 'Klubovna v budově C s eventem, lidé u stolů, kulturní život uvnitř Hubu.' },
+      { src: withBase('/images/hub/komunita/trznice-pivovar.jpg'), alt: 'Tržnice s minipivovarem v budově B, večerní zázemí pro gastronomii.' },
       { placeholder: 'ko01 Grilovací místo, rodinné grilování v sobotu poledne, 8 až 12 lidí', alt: 'Grilovací místo v komunitním parku v sobotní poledne.' },
     ],
   },
   {
+    id: 'okoli',
+    eyebrow: 'Místo a okolí',
+    title: 'Horní kasárny v Klecanech, 15 km severně od Prahy.',
+    lede: 'Bývalý vojenský areál nad pravým břehem Vltavy, který otevíráme po etapách od roku 2026. V docházkové vzdálenosti Montessori školka Astra (přímo v areálu), praktický lékař, lékárna, pošta a balíkomaty. Skate hala v sousedním areálu, cyklostezka EuroVelo 7 podél Vltavy deset minut na kole.',
+    href: '/okoli/',
+    detailLabel: 'Co je v okolí',
+    gallery: [
+      { src: withBase('/images/hub/areal/masterplan_fotoreal.jpg'), alt: 'Fotorealistický masterplan areálu Horních kasáren, popisky budov A1 až A6, B, C, D, E, F, P, S a venkovního bazénu.' },
+      { src: withBase('/images/hub/areal/topview.jpg'), alt: 'Letecký pohled na areál horních kasáren a obec Klecany v širším krajinném kontextu.' },
+      { src: withBase('/images/hub/doprava/cyklostezka.jpg'), alt: 'Cyklostezka EuroVelo 7 podél Vltavy, alternativa k autobusu na Prahu.' },
+      { placeholder: 'Skate hala Klecany v Dolních kasárnách, krytý dřevěný park 100 m od Hubu', alt: 'Krytý dřevěný skatepark Klecany v sousedním areálu Dolních kasáren.' },
+      { placeholder: 'Kavárna Klícka na náměstí Třebízského, výběrová káva a domácí pečivo', alt: 'Kavárna Klícka v centru Klecan, výběrová káva a řemeslné pivo.' },
+    ],
+  },
+  {
+    id: 'doprava',
     eyebrow: 'Doprava',
-    lede: 'Hub-shuttle do metra Kobylisy, 5 jízd v ceně. Bus 374 a Hub-taxi. Cyklostezka EuroVelo 7 podél Vltavy.',
+    title: 'Patnáct minut autobusem na metro.',
+    lede: 'Hub-shuttle do metra Kobylisy v ceně, pět jízd měsíčně. Bus 374 PID a Hub-taxi jako záloha. Cyklostezka EuroVelo 7 podél Vltavy, plánovaná tramvaj Kobylisy-Sedlec do roku 2030.',
     href: '/doprava/',
     detailLabel: 'Jak se sem dostanete',
-    /* Vault dp02 nový (cyklostezka). dp01 Hub-shuttle a dp03 zastávka
-       autobusu zatím chybí. */
     gallery: [
-      { src: withBase('/images/hub/amenities/dp02-cyklostezka.jpg'), alt: 'Cyklista v motion bluru na cyklostezce Praha až Klecany, alternativa pro tělo a klima.' },
-      { src: withBase('/images/hub/amenities/doprava-tram.jpg'), alt: 'Plánovaná tramvajová zastávka Výzkumný ústav I poblíž areálu (2029 až 2030).' },
+      { src: withBase('/images/hub/doprava/tram.jpg'), alt: 'Plánovaná tramvajová zastávka Výzkumný ústav I poblíž areálu (2029 až 2030).' },
+      { src: withBase('/images/hub/doprava/cyklostezka.jpg'), alt: 'Cyklista na cyklostezce Praha až Klecany podél Vltavy.' },
       { placeholder: 'dp01 Hub-shuttle dodávka před hlavním vstupem, 3 až 4 rezidenti nastupují', alt: 'Hub-shuttle dodávka před hlavním vstupem do Hubu, ranní mlha.' },
       { placeholder: 'dp03 Zastávka autobusu 374 v Klecanech, U hřbitova', alt: 'Zastávka autobusu 374 jako záložní spoj na Kobylisy.' },
     ],
   },
+  {
+    id: 'stipendia',
+    eyebrow: 'Stipendia',
+    title: 'Pobytové stipendium.',
+    lede: 'Rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor. Bydlení nebo zvýhodněná cena výměnou za hmatatelný vstup do života Hubu. Při registraci stačí zaškrtnout zájem, ozveme se s podmínkami a termíny.',
+    href: '/stipendia/',
+    detailLabel: 'Pobytová stipendia',
+    gallery: [
+      { placeholder: 'Ateliér s rezidentem-tvůrcem v práci, denní světlo, velký stůl', alt: 'Ateliér s rezidentem-tvůrcem v práci.' },
+      { placeholder: 'Skupinový moment u stolu, společné plánování nebo večeře rezidentů', alt: 'Skupinový moment u stolu, společné plánování rezidentů.' },
+      { placeholder: 'Stavitel-rezident v akci, týden v měsíci na staveništi', alt: 'Stavitel-rezident v akci na staveništi.' },
+      { placeholder: 'Rezident-programátor u stolu s dvojicí monitorů, kód na obrazovce', alt: 'Rezident-programátor u stolu s dvojicí monitorů.' },
+    ],
+  },
 ];
 
-/* === NAV STRIP (pod hero) === */
+/* === FEATURE CHIPS pod Coworking a Komunita ===
+   Kompaktní řada kliknutelných chipů s Lucide ikonkou + label, pod
+   zigzagem dané sekce. Každý chip linkuje na anchor v detail page. */
+type Feature = { label: string; icon: string; href: string };
+const coworkingFeatures: Feature[] = [
+  { label: 'Coworkingový sál',  icon: 'laptop',       href: '/coworking/#cw-sal' },
+  { label: 'Sdílená kancelář',  icon: 'users',        href: '/coworking/#cw-shared' },
+  { label: 'Zasedací místnost', icon: 'presentation', href: '/coworking/#cw-zasedacka' },
+  { label: 'Ateliéry a dílny',  icon: 'palette',      href: '/coworking/#cw-ateliery-dilny' },
+];
+const komunitaFeatures: Feature[] = [
+  { label: 'Wellness',         icon: 'waves',            href: '/komunita/#km-wellness' },
+  { label: 'Komunitní park',   icon: 'trees',            href: '/komunita/#km-park' },
+  { label: 'Gastro',           icon: 'utensils-crossed', href: '/komunita/#km-gastro' },
+  { label: 'Klubovna',         icon: 'party-popper',     href: '/komunita/#km-klubovna' },
+];
+
+/* === JUMP STRIP (pod hero) === */
+/* Šest scroll anchorů na sekce níže + Rezervace odkaz na detail page.
+   Anchor links využívají globální scroll-padding-top: 80px ze Base.astro. */
 const navItems = [
-  { path: '/rezervace/',  label: 'Rezervace',  icon: 'calendar-check', primary: true },
-  { path: '/ubytovani/',  label: 'Ubytování',  icon: 'bed-double' },
-  { path: '/coworking/',  label: 'Coworking',  icon: 'briefcase' },
-  { path: '/komunita/',   label: 'Komunita',   icon: 'users' },
-  { path: '/okoli/',      label: 'Okolí',      icon: 'map-pin' },
-  { path: '/doprava/',    label: 'Doprava',    icon: 'bus' },
-  { path: '/stipendia/',  label: 'Stipendia',  icon: 'sparkles' },
+  { href: '#ubytovani',   label: 'Ubytování',  icon: 'bed-double' },
+  { href: '#coworking',   label: 'Coworking',  icon: 'briefcase' },
+  { href: '#komunita',    label: 'Komunita',   icon: 'users' },
+  { href: '#okoli',       label: 'Okolí',      icon: 'map-pin' },
+  { href: '#doprava',     label: 'Doprava',    icon: 'bus' },
+  { href: '#stipendia',   label: 'Stipendia',  icon: 'sparkles' },
+  { href: withBase('/rezervace/'), label: 'Rezervace', icon: 'calendar-check', primary: true },
 ];
 ---
 <Base
   title="Startovací Hub Klecany · Bydlení a coworking 15 min od Prahy"
   description="Devět typů bydlení od kapsle po byt 5+kk, coworking, dílny, sauna a kavárna. Horní kasárna Klecany, patnáct minut autobusem od metra Kobylisy. Od 3 000 Kč měsíčně, energie a internet v ceně."
-  headerVariant="light">
+  headerVariant="overlay">
 
   {/* ============ HERO ROTATION ============ */}
   <section class="lp-hero" aria-label="Startovací Hub Klecany, hero galerie">
     <div class="lp-hero__rotation" aria-hidden="true">
       {heroSlides.map((slide, i) => (
         <div class="lp-hero__slide" data-slide={i} style={`animation-delay: ${i * 5 - 1}s`}>
-          <img class="lp-hero__bg" src={slide.src} alt={slide.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          <picture>
+            <source media="(max-width: 768px)" srcset={slide.phone} />
+            <img class="lp-hero__bg" src={slide.desktop} alt={slide.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          </picture>
         </div>
       ))}
     </div>
@@ -151,88 +218,155 @@ const navItems = [
       <h1 class="lp-hero__title">Startovací Hub.</h1>
       <p class="lp-hero__lede">Na prahu metropole · Praha-sever</p>
     </div>
-  </section>
 
-  {/* ============ NAV STRIP ============ */}
-  <nav class="lp-nav" aria-label="Hlavní sekce">
-    <div class="lp-nav__inner">
-      {navItems.map((item) => (
-        <a class:list={['lp-nav__item', item.primary && 'lp-nav__item--primary']} href={withBase(item.path)}>
-          <Icon name={item.icon} size={15} strokeWidth={1.75} />
-          {item.label}
-        </a>
-      ))}
-    </div>
-  </nav>
-
-  {/* ============ AMENITY ZIG-ZAG (4 řady) ============ */}
-  <section class="lp-amenities" aria-label="Nabídka Hubu">
-    <div class="lp-amenities__inner">
-      <div class="lp-zigzag">
-        <div class="lp-zigzag__col">
-          {amenityRows.filter((_, i) => i % 2 === 0).map((row) => (
-            <div class="lp-zigzag__card">
-              <a class="lp-zigzag__cta" href={withBase(row.href)}>
-                {row.detailLabel}<span aria-hidden="true"> →</span>
-              </a>
-              <Gallery images={row.gallery} ariaLabel={row.eyebrow} aspectRatio="4 / 3" />
-            </div>
-          ))}
-        </div>
-        <div class="lp-zigzag__col lp-zigzag__col--offset">
-          {amenityRows.filter((_, i) => i % 2 === 1).map((row) => (
-            <div class="lp-zigzag__card">
-              <a class="lp-zigzag__cta" href={withBase(row.href)}>
-                {row.detailLabel}<span aria-hidden="true"> →</span>
-              </a>
-              <Gallery images={row.gallery} ariaLabel={row.eyebrow} aspectRatio="4 / 3" />
-            </div>
-          ))}
-        </div>
+    {/* Jump strip uvnitř hero, dole. Bílé outline buttony + Rezervace white-fill. */}
+    <nav class="lp-jumps" aria-label="Skok do sekcí">
+      <div class="lp-jumps__inner">
+        {navItems.map((item) => (
+          <a class:list={['lp-jumps__item osa-nolink', item.primary && 'lp-jumps__item--primary']} href={item.href}>
+            <Icon name={item.icon} size={16} strokeWidth={1.75} />
+            {item.label}
+          </a>
+        ))}
       </div>
-    </div>
+    </nav>
   </section>
 
-  {/* ============ MÍSTO / MASTERPLAN ============ */}
-  <section class="lp-place" aria-label="Místo, kde Hub stojí">
-    <div class="lp-place__inner">
-      <div class="lp-place__text">
-        <p class="lp-place__eyebrow">Místo</p>
-        <h2 class="lp-place__title">Horní kasárny, 15 km severně od centra Prahy.</h2>
-        <p>
-          Areál horních kasáren v Klecanech leží nad pravým břehem Vltavy. Patnáct kilometrů
-          severně od Václavského náměstí, dvanáct minut autobusem 374 od metra Kobylisy.
-        </p>
-        <p>
-          Bývalý vojenský areál, který otevíráme po etapách od roku 2026. Hub je první obyvatelná
-          fáze záměru VPD1.
-        </p>
-        <p class="lp-place__links">
-          <a href={withBase('/okoli/')}>Co je v okolí →</a>
-          <a href={withBase('/doprava/')}>Jak se sem dostanete →</a>
-        </p>
-      </div>
-      <figure class="lp-place__map">
-        <img
-          src={withBase('/images/hub/masterplan_fotoreal.jpg')}
-          alt="Fotorealistický masterplan areálu Horních kasáren, popisky budov A1 až A6, B, C, D, E, F, P, S a venkovního bazénu."
-          loading="lazy"
-          decoding="async" />
-        <figcaption>Plán areálu</figcaption>
-      </figure>
-    </div>
-  </section>
+  {/* ============ ZIG-ZAG SEKCE (6 řad, one-pager) ============ */}
+  <div class="lp-sections">
+    {sections.map((sec) => (
+      <>
+        <section class="lp-section" id={sec.id} aria-labelledby={`${sec.id}-title`}>
+          <div class="lp-section__inner">
+            <div class="lp-section__text">
+              <p class="lp-section__eyebrow">{sec.eyebrow}</p>
+              <h2 class="lp-section__title" id={`${sec.id}-title`}>{sec.title}</h2>
+              <p class="lp-section__lede">{sec.lede}</p>
+              <a class="lp-section__cta osa-nolink" href={withBase(sec.href)}>
+                {sec.detailLabel}<span aria-hidden="true"> →</span>
+              </a>
+            </div>
+            <div class="lp-section__media">
+              <Gallery images={sec.gallery} ariaLabel={sec.eyebrow} aspectRatio="4 / 3" />
+            </div>
+          </div>
 
-  {/* ============ MAPA ============ */}
-  <section class="lp-map-strip" aria-label="Poloha areálu na mapě">
-    <div class="lp-map-strip__inner">
-      <div class="lp-map-strip__frame" id="lp-landing-map" role="application" aria-label="Interaktivní mapa areálu Horních kasáren v Klecanech"></div>
-      <p class="lp-map-strip__address">
-        <strong>Horní kasárna Klecany</strong>
-        <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách →</a>
-      </p>
-    </div>
-  </section>
+          {sec.id === 'ubytovani' && (
+            <div class="lp-rooms">
+              <div class="lp-rooms__group">
+                <a class="lp-rooms__eyebrow osa-nolink" href={withBase('/ubytovani/#ub-coliving-title')}>
+                  Co-living<span aria-hidden="true"> →</span>
+                </a>
+                <div class="lp-rooms__picker" data-gallery role="region" aria-roledescription="carousel" aria-label="Karty co-living variant">
+                  <div class="lp-rooms__strip" data-gallery-viewport tabindex="0">
+                    {coliving.map((c) => (
+                      <div class="lp-rooms__slide" data-gallery-slide>
+                        <RoomCard
+                          eyebrow={c.data.shortName}
+                          name={c.data.name}
+                          velikost={coligvingVelikost[c.data.slug] ?? 've sdíleném pokoji'}
+                          kapacita={colivingKapacita[c.data.slug] ?? '1 osoba'}
+                          popis={c.data.popis}
+                          cenaAnchor={c.data.cena.anchor}
+                          perOsoba={c.data.cena.perOsoba}
+                          thumbnail={c.data.thumbnail}
+                          detailHref={withBase(`/ubytovani/co-living/${c.data.slug}/`)}
+                          reserveHref={withBase(`/rezervace/?typ=${c.data.slug}`)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div class="lp-rooms__controls" role="group" aria-label="Ovládání karet co-living">
+                    <button type="button" class="lp-rooms__nav lp-rooms__nav--prev" data-gallery-prev aria-label="Předchozí karta">
+                      <Icon name="chevron-left" size={18} strokeWidth={2} />
+                    </button>
+                    <div class="lp-rooms__dots" role="tablist" aria-label="Pozice v co-living kartách">
+                      {coliving.map((_, i) => (
+                        <button type="button" class="lp-rooms__dot" data-gallery-dot={i} aria-label={`Karta ${i + 1} z ${coliving.length}`}></button>
+                      ))}
+                    </div>
+                    <button type="button" class="lp-rooms__nav lp-rooms__nav--next" data-gallery-next aria-label="Další karta">
+                      <Icon name="chevron-right" size={18} strokeWidth={2} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="lp-rooms__group">
+                <a class="lp-rooms__eyebrow osa-nolink" href={withBase('/ubytovani/#ub-privatni-title')}>
+                  Privátní apartmány<span aria-hidden="true"> →</span>
+                </a>
+                <div class="lp-rooms__picker" data-gallery role="region" aria-roledescription="carousel" aria-label="Karty privátních apartmánů">
+                  <div class="lp-rooms__strip" data-gallery-viewport tabindex="0">
+                    {apartmany.map((a) => (
+                      <div class="lp-rooms__slide" data-gallery-slide>
+                        <RoomCard
+                          eyebrow={a.data.shortName}
+                          name={a.data.name}
+                          velikost={a.data.plocha}
+                          kapacita={`${a.data.kapacita} lůžek`}
+                          popis={a.data.popis}
+                          cenaAnchor={a.data.cena.anchor}
+                          perOsoba={a.data.cena.perOsoba}
+                          thumbnail={a.data.thumbnail}
+                          detailHref={withBase(`/ubytovani/privatni/${a.data.slug}/`)}
+                          reserveHref={withBase(`/rezervace/?typ=${a.data.slug}`)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div class="lp-rooms__controls" role="group" aria-label="Ovládání karet privátních apartmánů">
+                    <button type="button" class="lp-rooms__nav lp-rooms__nav--prev" data-gallery-prev aria-label="Předchozí karta">
+                      <Icon name="chevron-left" size={18} strokeWidth={2} />
+                    </button>
+                    <div class="lp-rooms__dots" role="tablist" aria-label="Pozice v kartách privátních apartmánů">
+                      {apartmany.map((_, i) => (
+                        <button type="button" class="lp-rooms__dot" data-gallery-dot={i} aria-label={`Karta ${i + 1} z ${apartmany.length}`}></button>
+                      ))}
+                    </div>
+                    <button type="button" class="lp-rooms__nav lp-rooms__nav--next" data-gallery-next aria-label="Další karta">
+                      <Icon name="chevron-right" size={18} strokeWidth={2} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {sec.id === 'coworking' && (
+            <div class="lp-features" aria-label="Hlavní typy coworkingu">
+              {coworkingFeatures.map((f) => (
+                <a class="lp-feature osa-nolink" href={withBase(f.href)}>
+                  <span class="lp-feature__icon" aria-hidden="true"><Icon name={f.icon} size={18} strokeWidth={1.75} /></span>
+                  <span class="lp-feature__label">{f.label}</span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {sec.id === 'komunita' && (
+            <div class="lp-features" aria-label="Hlavní komunitní zázemí">
+              {komunitaFeatures.map((f) => (
+                <a class="lp-feature osa-nolink" href={withBase(f.href)}>
+                  <span class="lp-feature__icon" aria-hidden="true"><Icon name={f.icon} size={18} strokeWidth={1.75} /></span>
+                  <span class="lp-feature__label">{f.label}</span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {sec.id === 'okoli' && (
+            <div class="lp-okoli-map" aria-label="Poloha areálu na mapě">
+              <div class="lp-okoli-map__frame" id="lp-landing-map" role="application" aria-label="Interaktivní mapa areálu Horních kasáren v Klecanech"></div>
+              <p class="lp-okoli-map__address">
+                <strong>Horní kasárna Klecany</strong>
+                <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách →</a>
+              </p>
+            </div>
+          )}
+        </section>
+      </>
+    ))}
+  </div>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous" is:inline></script>
@@ -246,7 +380,7 @@ const navItems = [
         Rezervace je nezávazná. Vyplníte konfiguraci pokoje, datum nástupu a kontakt.
         Z rezervačního oddělení vám zavoláme do 24 hodin s detailem dostupnosti a ceny.
       </p>
-      <a class="lp-cta__button" href={withBase('/rezervace/')}>Rezervace</a>
+      <a class="lp-cta__button osa-nolink" href={withBase('/rezervace/')}>Rezervace</a>
     </div>
   </section>
 </Base>
@@ -293,15 +427,22 @@ const navItems = [
 
 <style>
   /* ============ HERO ROTATION ============ */
-  /* 5 slides absolutely overlapped, 25 s cyklus, 5 s na slide,
-     cross-fade 1 s. animation-delay posunuje každý slide v cyklu. */
+  /* 4 slides absolutely overlapped, 20 s cyklus, 5 s na slide,
+     swipe 1 s. animation-delay posunuje každý slide v cyklu. */
   .lp-hero {
     position: relative;
     isolation: isolate;
-    min-height: 64vh;
-    display: grid;
-    align-items: end;
-    padding: var(--space-8) var(--gutter) var(--space-7);
+    /* Full-screen na desktop i mobile. dvh = dynamic viewport height,
+       řeší iOS Safari URL bar bez jumping při scrollu. Fallback vh pro
+       starší prohlížeče. Header je position: fixed (overlay variant),
+       takže hero může jít plně pod něj. */
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--space-9) var(--gutter) var(--space-8);
+    gap: var(--space-6);
     color: #fff;
     background: var(--k-100);
     overflow: hidden;
@@ -311,7 +452,7 @@ const navItems = [
     inset: 0;
     z-index: -2;
   }
-  /* 5 slidů jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
+  /* 4 slidy jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
      celé fotky doleva. Sousední slide zároveň zprava vplouvá dovnitř,
      takže přechod je jeden plynulý sweep bez cross-fade.
      Slide N animation-delay = N × 5 s − 1 s (pre-roll, aby slide 0 byl
@@ -320,19 +461,19 @@ const navItems = [
     position: absolute;
     inset: 0;
     transform: translateX(100%);
-    animation: lp-hero-swipe 25s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    animation: lp-hero-swipe 20s cubic-bezier(0.65, 0, 0.35, 1) infinite;
     will-change: transform;
   }
 
   @keyframes lp-hero-swipe {
-    /* 25 s smyčka = 100 %. 0-4 % (1 s): swipe-in zprava. 4-20 % (4 s):
-       hold na středu. 20-24 % (1 s): swipe-out doleva. 24-100 %: hidden
+    /* 20 s smyčka = 100 %. 0-5 % (1 s): swipe-in zprava. 5-25 % (4 s):
+       hold na středu. 25-30 % (1 s): swipe-out doleva. 30-100 %: hidden
        off-screen vlevo dokud se animace neresetuje. Boundary teleport
        z -100 % zpět na 100 % se děje off-screen, uživatel ho nevidí. */
     0%   { transform: translateX(100%); }
-    4%   { transform: translateX(0); }
-    20%  { transform: translateX(0); }
-    24%  { transform: translateX(-100%); }
+    5%   { transform: translateX(0); }
+    25%  { transform: translateX(0); }
+    30%  { transform: translateX(-100%); }
     100% { transform: translateX(-100%); }
   }
 
@@ -358,11 +499,12 @@ const navItems = [
     max-width: var(--container);
     margin: 0 auto;
     width: 100%;
+    text-align: center;
   }
   .lp-hero__title {
     font: 600 clamp(2.5rem, 6vw, 4.75rem) / 1.05 var(--font-sans);
     letter-spacing: var(--tracking-tight);
-    margin: 0 0 var(--space-2);
+    margin: 0 auto var(--space-2);
     max-width: 18ch;
   }
   .lp-hero__lede {
@@ -370,7 +512,7 @@ const navItems = [
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
     margin: 0;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.75);
   }
 
   /* reduced-motion: freeze on slide 0 */
@@ -379,45 +521,139 @@ const navItems = [
     .lp-hero__slide[data-slide="0"] { transform: translateX(0); }
   }
 
-  /* ============ AMENITY ZIG-ZAG ============ */
-  .lp-amenities {
-    padding: var(--space-7) var(--gutter) var(--space-6);
-    background: var(--bg);
-    color: var(--fg);
-    overflow: hidden;
-  }
-  .lp-amenities__inner {
+  /* ============ JUMP STRIP (uvnitř hero, anchor scroll) ============ */
+  /* Bílé outline buttony nad tmavým hero. Rezervace má bílý fill a černé
+     písmo. Šířka na mobilu rozprostřená přes 3-col grid + Rezervace přes
+     celou šířku spodního řádku, ať buttony nejsou namačkané. */
+  .lp-jumps {
+    width: 100%;
     max-width: var(--container-wide);
     margin: 0 auto;
   }
+  .lp-jumps__inner {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .lp-jumps__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 22px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.75);
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+    backdrop-filter: blur(2px);
+  }
+  .lp-jumps__item :global(svg) { flex-shrink: 0; }
+  .lp-jumps__item:hover,
+  .lp-jumps__item:focus-visible {
+    background: rgba(255,255,255,0.12);
+    border-color: #fff;
+    color: #fff;
+    outline: none;
+  }
+  .lp-jumps__item--primary {
+    background: #fff;
+    color: var(--fg);
+    border-color: #fff;
+  }
+  .lp-jumps__item--primary:hover,
+  .lp-jumps__item--primary:focus-visible {
+    background: rgba(255,255,255,0.86);
+    color: var(--fg);
+    border-color: #fff;
+  }
 
-  .lp-zigzag {
+  @media (max-width: 900px) {
+    .lp-jumps__inner {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .lp-jumps__item {
+      padding: 10px 8px;
+      font-size: var(--text-xs);
+      gap: 6px;
+      min-width: 0;
+    }
+    .lp-jumps__item--primary {
+      grid-column: 1 / -1;
+      padding: 12px 8px;
+      font-size: var(--text-sm);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .lp-jumps__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lp-jumps__item :global(svg) { width: 14px; height: 14px; }
+  }
+
+  /* ============ ZIG-ZAG SEKCE (one-pager) ============ */
+  .lp-sections {
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .lp-section {
+    padding: var(--space-8) var(--gutter);
+    scroll-margin-top: 80px;
+    border-bottom: 1px solid var(--border-muted);
+  }
+  .lp-section:last-child { border-bottom: 0; }
+  .lp-section:nth-of-type(even) {
+    background: var(--bg-muted);
+  }
+  .lp-section__inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(24px, 3vw, 40px);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: center;
   }
-  .lp-zigzag__col {
+  /* Sudé sekce: flipnout media doleva, text doprava. */
+  .lp-section:nth-of-type(even) .lp-section__media { order: -1; }
+
+  .lp-section__text {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: clamp(32px, 4vw, 56px);
-    min-width: 0;
+    gap: var(--space-4);
+    max-width: 52ch;
   }
-  .lp-zigzag__col--offset {
-    padding-top: clamp(100px, 14vw, 220px);
+  .lp-section__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0;
   }
-  .lp-zigzag__card {
-    display: grid;
-    gap: var(--space-2);
-    min-width: 0;
+  .lp-section__title {
+    font: 600 clamp(1.875rem, 3.5vw, 2.75rem) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    max-width: 22ch;
   }
-  .lp-zigzag__cta {
+  .lp-section__lede {
+    font: 400 var(--text-md) / 1.6 var(--font-sans);
+    color: var(--fg-soft, var(--fg));
+    margin: 0;
+  }
+  .lp-section__cta {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 16px;
-    font: 600 var(--text-xs) / 1 var(--font-sans);
+    margin-top: var(--space-2);
+    padding: 12px 22px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
     letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
     color: var(--accent);
     background: transparent;
     border: 1px solid var(--accent);
@@ -426,161 +662,248 @@ const navItems = [
     width: fit-content;
     transition: background 200ms ease, color 200ms ease;
   }
-  .lp-zigzag__cta:hover,
-  .lp-zigzag__cta:focus-visible {
+  .lp-section__cta:hover,
+  .lp-section__cta:focus-visible {
     background: var(--accent);
     color: var(--accent-on);
     outline: none;
   }
+  .lp-section__media { min-width: 0; }
 
   @media (max-width: 760px) {
-    .lp-zigzag {
+    .lp-section { padding: var(--space-7) var(--gutter); }
+    .lp-section__inner {
       grid-template-columns: 1fr;
+      gap: var(--space-5);
     }
-    .lp-zigzag__col--offset {
-      padding-top: 0;
-    }
+    /* Na mobilu vždy text první, pak média (žádný flip). */
+    .lp-section:nth-of-type(even) .lp-section__media { order: 0; }
   }
 
-  /* ============ NAV STRIP ============ */
-  .lp-nav {
-    padding: var(--space-4) var(--gutter);
-    background: var(--bg);
-    border-bottom: 1px solid var(--border-muted);
+  /* ============ ROOM PICKER (pod Ubytováním) ============ */
+  /* 2 sloupce, Co-living a Privátní apartmány. Každý sloupec je
+     horizontálně scrollovatelný snap-strip kartiček (jeden picker
+     analogický mobilní verzi /ubytovani/). Na mobilu 1 sloupec pod
+     druhým. */
+  .lp-rooms {
+    max-width: var(--container-wide);
+    margin: var(--space-7) auto 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
   }
-  .lp-nav__inner {
-    max-width: var(--container);
-    margin: 0 auto;
+  .lp-rooms__group {
+    min-width: 0;
     display: flex;
-    gap: var(--space-2);
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: var(--space-3);
   }
-  .lp-nav__item {
+  .lp-rooms__eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: var(--fg);
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    text-decoration: none;
-    white-space: nowrap;
-    transition: border-color 200ms ease, color 200ms ease, background 200ms ease;
-  }
-  .lp-nav__item :global(svg) {
-    flex-shrink: 0;
-  }
-  .lp-nav__item:hover,
-  .lp-nav__item:focus-visible {
-    border-color: var(--accent);
-    color: var(--accent);
-    outline: none;
-  }
-  .lp-nav__item--primary {
-    background: var(--accent);
-    color: var(--accent-on);
-    border-color: var(--accent);
-  }
-  .lp-nav__item--primary:hover,
-  .lp-nav__item--primary:focus-visible {
-    background: #fff;
-    color: var(--accent);
-    border-color: var(--accent);
-  }
-
-  @media (max-width: 760px) {
-    .lp-nav__inner {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: var(--space-1);
-    }
-    .lp-nav__item {
-      padding: 8px 4px;
-      font-size: var(--text-2xs);
-      justify-content: center;
-      gap: 3px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      min-width: 0;
-    }
-    .lp-nav__item :global(svg) {
-      width: 14px;
-      height: 14px;
-    }
-  }
-
-  /* ============ MÍSTO / MASTERPLAN ============ */
-  .lp-place {
-    padding: var(--space-8) var(--gutter);
-    background: var(--bg-muted);
-    color: var(--fg);
-  }
-  .lp-place__inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-7);
-    max-width: var(--container-wide);
-    margin: 0 auto;
-    align-items: center;
-  }
-  .lp-place__eyebrow {
+    gap: 4px;
     font: 600 var(--text-2xs) / 1 var(--font-sans);
     color: var(--accent);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
-    margin: 0 0 var(--space-3);
+    margin: 0;
+    width: fit-content;
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 160ms ease, color 160ms ease;
   }
-  .lp-place__title {
-    font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans);
-    letter-spacing: var(--tracking-tight);
-    margin: 0 0 var(--space-5);
-    max-width: 22ch;
+  .lp-rooms__eyebrow:hover,
+  .lp-rooms__eyebrow:focus-visible {
+    border-bottom-color: var(--accent);
+    outline: none;
   }
-  .lp-place__text p {
-    line-height: 1.6;
-    margin: 0 0 var(--space-4);
-    max-width: 50ch;
+
+  /* Card picker: full-width karta, jeden snímek = jedna karta. Gallery
+     JS overuje data-gallery atributy (scroll-snap + dot indicator +
+     chevron buttons), takže stejné UX jako u obrazové galerie. */
+  .lp-rooms__picker {
+    position: relative;
+    min-width: 0;
   }
-  .lp-place__links {
+  .lp-rooms__strip {
     display: flex;
-    gap: var(--space-5);
-    flex-wrap: wrap;
-    margin-top: var(--space-5);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
-  .lp-place__links a {
+  .lp-rooms__strip::-webkit-scrollbar { display: none; }
+  .lp-rooms__strip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: var(--radius-input);
+  }
+  .lp-rooms__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .lp-rooms__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .lp-rooms__nav {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 1px solid var(--accent-rule);
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    transition: background 220ms cubic-bezier(0.2, 0, 0, 1),
+                border-color 220ms cubic-bezier(0.2, 0, 0, 1),
+                transform 220ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .lp-rooms__nav :global(svg) { display: block; stroke: currentColor; transition: transform 220ms cubic-bezier(0.2, 0, 0, 1); }
+  .lp-rooms__nav--prev :global(svg) { transform: translateX(-1px); }
+  .lp-rooms__nav--next :global(svg) { transform: translateX(1px); }
+  .lp-rooms__nav:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    transform: scale(1.06);
+  }
+  .lp-rooms__nav--prev:hover :global(svg) { transform: translateX(-3px); }
+  .lp-rooms__nav--next:hover :global(svg) { transform: translateX(3px); }
+  .lp-rooms__nav:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .lp-rooms__nav:disabled {
+    opacity: 0.25;
+    cursor: default;
+    pointer-events: none;
+    transform: none;
+  }
+  .lp-rooms__dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .lp-rooms__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    border: 0;
+    padding: 0;
+    background: var(--border-muted);
+    cursor: pointer;
+    transition: background 320ms cubic-bezier(0.2, 0, 0, 1),
+                width 360ms cubic-bezier(0.2, 0, 0, 1),
+                transform 220ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .lp-rooms__dot:hover { background: var(--accent-rule); transform: scale(1.4); }
+  .lp-rooms__dot.is-active {
+    background: var(--accent);
+    width: 28px;
+    animation: lp-rooms-dot-pulse 480ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .lp-rooms__dot.is-active:hover { transform: scale(1.05); }
+  .lp-rooms__dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  @keyframes lp-rooms-dot-pulse {
+    0%   { transform: scale(0.6); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+
+  @media (max-width: 900px) {
+    .lp-rooms {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+  @media (max-width: 760px) {
+    .lp-rooms__nav { display: none; }
+  }
+
+  /* ============ FEATURE CHIPS (Coworking + Komunita) ============ */
+  /* Kompaktní řada kliknutelných chipů pod zigzagem, ilustruje hlavní
+     pod-sekce. Hover dostane plum outline + jemný lift. */
+  .lp-features {
+    max-width: var(--container-wide);
+    margin: var(--space-6) auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .lp-feature {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition: border-color 180ms ease, color 180ms ease, background 180ms ease, transform 180ms ease;
+  }
+  .lp-feature__icon {
+    color: var(--accent);
+    display: inline-flex;
+  }
+  .lp-feature__icon :global(svg) { display: block; }
+  .lp-feature:hover,
+  .lp-feature:focus-visible {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--fg);
+    transform: translateY(-1px);
+    outline: none;
+  }
+  .lp-section:nth-of-type(even) .lp-feature { background: var(--bg); }
+
+  @media (max-width: 760px) {
+    .lp-features { gap: 8px; }
+    .lp-feature { padding: 8px 12px; font-size: var(--text-xs); }
+  }
+
+  /* ============ OKOLÍ EMBED MAPA ============ */
+  /* Pod zigzagem okolí, jako jeden šedý frame s Leaflet mapou + adresa. */
+  .lp-okoli-map {
+    max-width: var(--container-wide);
+    margin: var(--space-7) auto 0;
+  }
+  .lp-okoli-map__frame {
+    width: 100%;
+    height: clamp(280px, 42vw, 480px);
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    background: var(--bg-muted);
+    border: 1px solid var(--border-muted);
+  }
+  .lp-okoli-map__address {
+    margin: var(--space-3) 0 0;
+    font: 500 var(--text-sm) / 1.5 var(--font-sans);
+    color: var(--fg-soft, var(--fg));
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .lp-okoli-map__address strong { color: var(--fg); }
+  .lp-okoli-map__address a {
     color: var(--accent);
     text-decoration: none;
     border-bottom: 1px solid var(--accent-rule);
-    padding-bottom: 2px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    transition: border-color 160ms ease;
+    padding-bottom: 1px;
   }
-  .lp-place__links a:hover { border-color: var(--accent); }
-  .lp-place__map {
-    margin: 0;
-  }
-  .lp-place__map figcaption {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    color: var(--fg-subtle);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    margin-top: var(--space-3);
-    text-align: center;
-  }
-  .lp-place__map img {
-    width: 100%;
-    height: auto;
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    display: block;
-  }
-
-  @media (max-width: 760px) {
-    .lp-place__inner { grid-template-columns: 1fr; gap: var(--space-6); }
-  }
+  .lp-okoli-map__address a:hover { border-bottom-color: var(--accent); }
 
   /* ============ FINÁLNÍ CTA ============ */
   .lp-cta {
@@ -626,40 +949,6 @@ const navItems = [
     background: transparent;
     color: #fff;
   }
-
-  /* ============ MAPA / KLECANY NA MAPĚ ============ */
-  /* Full-width Leaflet strip mezi masterplanem a finálním CTA. */
-  .lp-map-strip {
-    padding: var(--space-9) var(--gutter);
-    background: var(--bg);
-    color: var(--fg);
-  }
-  .lp-map-strip__inner {
-    max-width: var(--container-wide);
-    margin: 0 auto;
-  }
-  .lp-map-strip__frame {
-    position: relative;
-    width: 100%;
-    height: clamp(320px, 44vh, 460px);
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    overflow: hidden;
-    background: var(--k-05);
-  }
-  .lp-map-strip__address {
-    margin: var(--space-4) 0 0;
-    font: 400 var(--text-sm) / 1.55 var(--font-sans);
-    color: var(--fg-muted);
-  }
-  .lp-map-strip__address strong { color: var(--k-100); font-weight: 600; }
-  .lp-map-strip__address a {
-    color: var(--accent);
-    font-weight: 600;
-    text-decoration: none;
-    margin-left: var(--space-3);
-  }
-  .lp-map-strip__address a:hover { text-decoration: underline; }
 
   /* Leaflet brand overrides: same plum accent, sharp borders. */
   :global(.leaflet-container) {

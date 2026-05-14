@@ -39,7 +39,7 @@ const {
 const fmt = (n: number) => n.toLocaleString('cs-CZ');
 ---
 <article class="room-card">
-  <a class="room-card__thumb-link" href={detailHref} aria-label={`Detail typu ${name}`}>
+  <a class="room-card__thumb-link osa-nolink" href={detailHref} aria-label={`Detail typu ${name}`}>
     <div class="room-card__thumb">
       {thumbnail ? (
         <img src={withBase(thumbnail)} alt={thumbnailAlt} loading="lazy" decoding="async" />

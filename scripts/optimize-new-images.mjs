@@ -11,11 +11,15 @@ import sharp from 'sharp';
 
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const targets = [
-  'public/images/hub/aerial',
-  'public/images/hub/exterior',
-  'public/images/hub/interior',
   'public/images/hub/hero',
-  'public/images/hub/amenities',
+  'public/images/hub/ubytovani/privatni',
+  'public/images/hub/ubytovani/coliving',
+  'public/images/hub/coworking',
+  'public/images/hub/komunita',
+  'public/images/hub/okoli',
+  'public/images/hub/doprava',
+  'public/images/hub/stipendia',
+  'public/images/hub/areal',
 ];
 const sizeLimit = 600 * 1024; // 600 KB — anything bigger gets re-encoded.
 const maxEdge = 1600;
