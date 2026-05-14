@@ -12,10 +12,12 @@ import sharp from 'sharp';
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const targets = [
   'public/images/hub/hero',
+  'public/images/hub/ubytovani',
   'public/images/hub/ubytovani/privatni',
   'public/images/hub/ubytovani/coliving',
   'public/images/hub/coworking',
   'public/images/hub/komunita',
+  'public/images/hub/komunita/gastro',
   'public/images/hub/okoli',
   'public/images/hub/doprava',
   'public/images/hub/stipendia',
