@@ -367,6 +367,7 @@ const navItems = [
     display: flex;
     flex-direction: column;
     gap: clamp(32px, 4vw, 56px);
+    min-width: 0;
   }
   .lp-zigzag__col--offset {
     padding-top: clamp(100px, 14vw, 220px);
@@ -398,11 +399,17 @@ const navItems = [
   }
 
   @media (max-width: 760px) {
+    .lp-amenities {
+      overflow: hidden;
+    }
     .lp-zigzag {
       grid-template-columns: 1fr;
     }
     .lp-zigzag__col--offset {
       padding-top: 0;
+    }
+    .lp-zigzag__card {
+      max-width: 100%;
     }
   }
 
@@ -457,15 +464,22 @@ const navItems = [
   @media (max-width: 760px) {
     .lp-nav__inner {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: var(--space-1);
     }
     .lp-nav__item {
-      padding: 8px 6px;
+      padding: 8px 4px;
       font-size: var(--text-2xs);
       justify-content: center;
-      gap: 4px;
+      gap: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
+      min-width: 0;
+    }
+    .lp-nav__item :global(svg) {
+      width: 14px;
+      height: 14px;
     }
   }
 
