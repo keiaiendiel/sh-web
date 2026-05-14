@@ -79,37 +79,6 @@ const galleryImages: GalleryItem[] = [
     </div>
   </section>
 
-  <section class="apt-cena">
-    <div class="apt-cena__inner">
-      <p class="apt-cena__eyebrow">Cena</p>
-      <h2 class="apt-cena__title">Cena za celý byt.</h2>
-      <p class="apt-cena__price">
-        <span class="apt-cena__num">{formatCena(data.cena.anchor)}</span>
-        <span class="apt-cena__unit">/měsíc</span>
-        {data.cena.perOsoba && <small class="apt-cena__per"> ({data.cena.perOsoba})</small>}
-      </p>
-      <p class="apt-cena__lede">
-        Pro rezervaci s právem prodloužit pobyt si připravte přibližně 5 až 10 % nad
-        základní cenu. Per-osoba kalkulace předpokládá plnou obsazenost.
-      </p>
-      <p class="apt-cena__note">
-        Vše v ceně: energie, internet, úklid společných prostor, 5 jízd Hub-shuttle do metra Kobylisy a 1 jízda Hub-taxi po Klecanech měsíčně, přístup do coworkingového sálu, poukaz do sauny 1× týdně.
-      </p>
-    </div>
-  </section>
-
-  <section class="apt-cta">
-    <div class="apt-cta__inner">
-      <h2 class="apt-cta__title">Rezervovat {data.shortName}</h2>
-      <p class="apt-cta__lede">
-        Rezervace je nezávazná. Vyplníte termín nástupu, délku pobytu a kontakt.
-        Z rezervačního oddělení vám zavoláme do 24 hodin.
-      </p>
-      <a class="apt-cta__button" href={withBase(`/rezervace/?typ=${data.slug}`)}>
-        Rezervace, {data.shortName}
-      </a>
-    </div>
-  </section>
 </Base>
 
 <style>
@@ -152,22 +121,4 @@ const galleryImages: GalleryItem[] = [
   @media (max-width: 880px) {
     .apt-body__inner { grid-template-columns: 1fr; }
   }
-
-  .apt-cena { padding: var(--space-8) var(--gutter); background: var(--bg-muted, var(--bg)); color: var(--fg); }
-  .apt-cena__inner { max-width: var(--container); margin: 0 auto; }
-  .apt-cena__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
-  .apt-cena__title { font: 600 clamp(1.5rem, 3vw, 2.25rem) / 1.15 var(--font-sans); margin: 0 0 var(--space-4); letter-spacing: var(--tracking-tight); }
-  .apt-cena__price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin: 0 0 var(--space-4); }
-  .apt-cena__num { font: 600 clamp(2rem, 4vw, 2.75rem) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
-  .apt-cena__unit { font: 500 var(--text-md) / 1 var(--font-sans); color: var(--fg); }
-  .apt-cena__per { font: 400 var(--text-sm) / 1.4 var(--font-sans); color: var(--fg-muted); }
-  .apt-cena__lede { color: var(--fg-muted); margin: 0 0 var(--space-5); max-width: 60ch; line-height: 1.5; }
-  .apt-cena__note { font-size: var(--text-sm); color: var(--fg-muted); margin: var(--space-5) 0 0; line-height: 1.5; max-width: 60ch; padding-top: var(--space-4); border-top: 1px solid var(--border-muted); }
-
-  .apt-cta { padding: var(--space-8) var(--gutter); background: var(--accent); color: #fff; text-align: center; }
-  .apt-cta__inner { max-width: 640px; margin: 0 auto; }
-  .apt-cta__title { font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans); margin: 0 0 var(--space-3); letter-spacing: var(--tracking-tight); }
-  .apt-cta__lede { font-size: var(--text-md); line-height: 1.5; margin: 0 0 var(--space-5); opacity: 0.92; }
-  .apt-cta__button { display: inline-block; padding: 14px 32px; font: 700 var(--text-md) / 1 var(--font-sans); color: var(--accent); background: #fff; border: 1px solid #fff; border-radius: var(--radius-input); text-decoration: none; transition: background 200ms ease, color 200ms ease; }
-  .apt-cta__button:hover { background: transparent; color: #fff; }
 </style>
