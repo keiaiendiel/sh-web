@@ -148,7 +148,6 @@ const navItems = [
     <div class="lp-hero__scrim" aria-hidden="true"></div>
 
     <div class="lp-hero__inner">
-      <p class="lp-hero__eyebrow">Areál Horních kasáren · Klecany</p>
       <h1 class="lp-hero__title">Startovací Hub.</h1>
       <p class="lp-hero__lede">Na prahu metropole · Praha-sever</p>
     </div>
@@ -166,30 +165,27 @@ const navItems = [
     </div>
   </nav>
 
-  {/* ============ CO HUB NABÍZÍ (zig-zag, 4 řady) ============ */}
-  <section class="lp-amenities" aria-label="Co Hub nabízí">
+  {/* ============ AMENITY ZIG-ZAG (4 řady) ============ */}
+  <section class="lp-amenities" aria-label="Nabídka Hubu">
     <div class="lp-amenities__inner">
-      <header class="lp-amenities__head">
-        <h2 class="lp-amenities__title">Co Hub nabízí</h2>
-      </header>
       <div class="lp-zigzag">
         <div class="lp-zigzag__col">
           {amenityRows.filter((_, i) => i % 2 === 0).map((row) => (
             <div class="lp-zigzag__card">
-              <Gallery images={row.gallery} ariaLabel={row.eyebrow} aspectRatio="4 / 3" />
               <a class="lp-zigzag__cta" href={withBase(row.href)}>
                 {row.detailLabel}<span aria-hidden="true"> →</span>
               </a>
+              <Gallery images={row.gallery} ariaLabel={row.eyebrow} aspectRatio="4 / 3" />
             </div>
           ))}
         </div>
         <div class="lp-zigzag__col lp-zigzag__col--offset">
           {amenityRows.filter((_, i) => i % 2 === 1).map((row) => (
             <div class="lp-zigzag__card">
-              <Gallery images={row.gallery} ariaLabel={row.eyebrow} aspectRatio="4 / 3" />
               <a class="lp-zigzag__cta" href={withBase(row.href)}>
                 {row.detailLabel}<span aria-hidden="true"> →</span>
               </a>
+              <Gallery images={row.gallery} ariaLabel={row.eyebrow} aspectRatio="4 / 3" />
             </div>
           ))}
         </div>
@@ -309,24 +305,18 @@ const navItems = [
     margin: 0 auto;
     width: 100%;
   }
-  .lp-hero__eyebrow {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    color: rgba(255,255,255,0.85);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    margin: 0 0 var(--space-4);
-  }
   .lp-hero__title {
     font: 600 clamp(2.5rem, 6vw, 4.75rem) / 1.05 var(--font-sans);
     letter-spacing: var(--tracking-tight);
-    margin: 0 0 var(--space-3);
+    margin: 0 0 var(--space-2);
     max-width: 18ch;
   }
   .lp-hero__lede {
-    font: 600 clamp(1.1rem, 1.8vw, 1.35rem) / 1.2 var(--font-sans);
-    letter-spacing: var(--tracking-wide);
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
     margin: 0;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255,255,255,0.7);
   }
 
   /* reduced-motion: freeze on slide 0 */
@@ -340,27 +330,16 @@ const navItems = [
     padding: var(--space-7) var(--gutter) var(--space-6);
     background: var(--bg);
     color: var(--fg);
+    overflow: hidden;
   }
   .lp-amenities__inner {
     max-width: var(--container-wide);
     margin: 0 auto;
   }
-  .lp-amenities__head {
-    margin: 0 0 var(--space-4);
-  }
-  /* „Co Hub nabízí" je section label, ne hero heading, takže
-     eyebrow-style: small caps, plum, letterspaced. */
-  .lp-amenities__title {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    color: var(--accent);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    margin: 0;
-  }
 
   .lp-zigzag {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(24px, 3vw, 40px);
   }
   .lp-zigzag__col {
@@ -374,7 +353,9 @@ const navItems = [
   }
   .lp-zigzag__card {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
+    max-width: 100%;
+    overflow: hidden;
   }
   .lp-zigzag__cta {
     display: inline-flex;
@@ -384,32 +365,28 @@ const navItems = [
     font: 600 var(--text-xs) / 1 var(--font-sans);
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--fg);
-    border: 1px solid var(--border-muted);
+    color: var(--accent-on);
+    background: var(--accent);
+    border: 1px solid var(--accent);
     border-radius: var(--radius-input);
     text-decoration: none;
     width: fit-content;
-    transition: border-color 200ms ease, color 200ms ease;
+    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
   }
   .lp-zigzag__cta:hover,
   .lp-zigzag__cta:focus-visible {
-    border-color: var(--accent);
+    background: transparent;
     color: var(--accent);
+    border-color: var(--accent);
     outline: none;
   }
 
   @media (max-width: 760px) {
-    .lp-amenities {
-      overflow: hidden;
-    }
     .lp-zigzag {
       grid-template-columns: 1fr;
     }
     .lp-zigzag__col--offset {
       padding-top: 0;
-    }
-    .lp-zigzag__card {
-      max-width: 100%;
     }
   }
 
@@ -486,7 +463,7 @@ const navItems = [
   /* ============ MÍSTO / MASTERPLAN ============ */
   .lp-place {
     padding: var(--space-8) var(--gutter);
-    background: var(--bg);
+    background: var(--bg-muted);
     color: var(--fg);
   }
   .lp-place__inner {

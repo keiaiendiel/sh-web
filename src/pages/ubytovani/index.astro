@@ -220,15 +220,18 @@ const colivingKapacita: Record<string, string> = {
       gap: 16px;
       overflow-x: auto;
       overflow-y: hidden;
-      scroll-snap-type: x proximity;
+      scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       scrollbar-width: none;
       -ms-overflow-style: none;
       padding-bottom: var(--space-3);
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: var(--gutter);
+      scroll-padding-inline-start: var(--gutter);
     }
     .ub-grid::-webkit-scrollbar { display: none; }
     .ub-grid > :global(*) {
-      flex: 0 0 82%;
+      flex: 0 0 85%;
       min-width: 0;
       scroll-snap-align: start;
     }
