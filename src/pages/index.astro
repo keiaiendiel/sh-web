@@ -225,8 +225,8 @@ const navItems = [
       <p class="lp-hero__lede">Na prahu metropole · Praha-sever</p>
     </div>
 
-    {/* Jump strip uvnitř hero, dole. Bílé outline buttony + Rezervace white-fill. */}
-    <nav class="lp-jumps" aria-label="Skok do sekcí">
+    {/* Jump strip uvnitř hero (desktop only). Bílé outline buttony + Rezervace white-fill. */}
+    <nav class="lp-jumps lp-jumps--desktop" aria-label="Skok do sekcí">
       <div class="lp-jumps__inner">
         {navItems.map((item) => (
           <a class:list={['lp-jumps__item osa-nolink', item.primary && 'lp-jumps__item--primary']} href={item.href}>
@@ -237,6 +237,18 @@ const navItems = [
       </div>
     </nav>
   </section>
+
+  {/* Jump strip POD hero (mobile only). 3-col grid, čtvercové buttony s ikonkou nahoře a labelem dole. Rezervace přes celou šířku. */}
+  <nav class="lp-jumps lp-jumps--mobile" aria-label="Skok do sekcí">
+    <div class="lp-jumps__inner">
+      {navItems.map((item) => (
+        <a class:list={['lp-jumps__item osa-nolink', item.primary && 'lp-jumps__item--primary']} href={item.href}>
+          <Icon name={item.icon} size={22} strokeWidth={1.75} />
+          <span class="lp-jumps__label">{item.label}</span>
+        </a>
+      ))}
+    </div>
+  </nav>
 
   {/* ============ ZIG-ZAG SEKCE (6 řad, one-pager) ============ */}
   <div class="lp-sections">
@@ -526,10 +538,8 @@ const navItems = [
     .lp-hero__slide[data-slide="0"] { transform: translateX(0); }
   }
 
-  /* ============ JUMP STRIP (uvnitř hero, anchor scroll) ============ */
-  /* Bílé outline buttony nad tmavým hero. Rezervace má bílý fill a černé
-     písmo. Šířka na mobilu rozprostřená přes 3-col grid + Rezervace přes
-     celou šířku spodního řádku, ať buttony nejsou namačkané. */
+  /* ============ JUMP STRIP DESKTOP (uvnitř hero) ============ */
+  /* Bílé outline buttony nad tmavým hero, Rezervace bílý fill. */
   .lp-jumps {
     width: 100%;
     max-width: var(--container-wide);
@@ -577,28 +587,83 @@ const navItems = [
     border-color: #fff;
   }
 
-  @media (max-width: 900px) {
-    .lp-jumps__inner {
+  /* Mobile varianta žije pod hero v normalním flow s bílým pozadím. */
+  .lp-jumps--mobile { display: none; }
+
+  @media (max-width: 760px) {
+    /* Hero zkráceno na 70 % viewportu, aby pod ním zbylo místo pro
+       mobile jump strip. */
+    .lp-hero {
+      min-height: 70vh;
+      min-height: 70dvh;
+      padding: var(--space-7) var(--gutter);
+    }
+    .lp-jumps--desktop { display: none; }
+    .lp-jumps--mobile {
+      display: block;
+      padding: var(--space-5) var(--gutter) var(--space-6);
+      background: var(--bg);
+    }
+    .lp-jumps--mobile .lp-jumps__inner {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .lp-jumps--mobile .lp-jumps__item {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       gap: 8px;
+      aspect-ratio: 1;
+      padding: 8px;
+      font-size: var(--text-2xs);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--fg);
+      background: var(--bg);
+      border: 1px solid var(--border-muted);
+      backdrop-filter: none;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.25;
     }
-    .lp-jumps__item {
-      padding: 10px 8px;
-      font-size: var(--text-xs);
-      gap: 6px;
-      min-width: 0;
+    .lp-jumps--mobile .lp-jumps__item :global(svg) {
+      color: var(--accent);
+      width: 24px;
+      height: 24px;
     }
-    .lp-jumps__item--primary {
+    .lp-jumps--mobile .lp-jumps__item:hover,
+    .lp-jumps--mobile .lp-jumps__item:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .lp-jumps--mobile .lp-jumps__item--primary {
       grid-column: 1 / -1;
-      padding: 12px 8px;
+      aspect-ratio: auto;
+      flex-direction: row;
+      padding: 14px 18px;
       font-size: var(--text-sm);
+      gap: 8px;
+      background: var(--accent);
+      color: var(--accent-on);
+      border-color: var(--accent);
     }
-  }
-
-  @media (max-width: 480px) {
-    .lp-jumps__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .lp-jumps__item :global(svg) { width: 14px; height: 14px; }
+    .lp-jumps--mobile .lp-jumps__item--primary :global(svg) {
+      color: var(--accent-on);
+    }
+    .lp-jumps--mobile .lp-jumps__item--primary:hover,
+    .lp-jumps--mobile .lp-jumps__item--primary:focus-visible {
+      background: transparent;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .lp-jumps--mobile .lp-jumps__item--primary:hover :global(svg),
+    .lp-jumps--mobile .lp-jumps__item--primary:focus-visible :global(svg) {
+      color: var(--accent);
+    }
   }
 
   /* ============ ZIG-ZAG SEKCE (one-pager) ============ */
