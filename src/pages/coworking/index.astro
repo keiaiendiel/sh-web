@@ -1,7 +1,15 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Gallery from '../../components/Gallery.astro';
+import Icon from '../../components/Icon.astro';
 import { withBase } from '../../utils/url';
+
+const heroJumps = [
+  { label: 'Coworkingový sál',  icon: 'laptop',       href: '#cw-sal' },
+  { label: 'Sdílená kancelář',  icon: 'users',        href: '#cw-shared' },
+  { label: 'Zasedací místnost', icon: 'presentation', href: '#cw-zasedacka' },
+  { label: 'Ateliéry a dílny',  icon: 'palette',      href: '#cw-ateliery-dilny' },
+];
 ---
 <Base
   title="Coworking od 2 900 Kč, sál, ateliér, dílna · Startovací Hub"
@@ -13,13 +21,14 @@ import { withBase } from '../../utils/url';
     <div class="sec-hero__scrim" aria-hidden="true"></div>
     <div class="sec-hero__inner">
       <p class="sec-hero__eyebrow">Coworking</p>
-      <h1 class="sec-hero__title">Pracujte tady.</h1>
+      <h1 class="sec-hero__title">Sál, fixní stůl, ateliér nebo dílna.</h1>
       <nav class="sec-hero__jumps" aria-label="Skok na sekci">
-        <a class="sec-hero__jump" href="#cw-sal">Coworkingový sál</a>
-        <a class="sec-hero__jump" href="#cw-fix">Fixní stůl</a>
-        <a class="sec-hero__jump" href="#cw-shared">Sdílená kancelář</a>
-        <a class="sec-hero__jump" href="#cw-zasedacka">Zasedací místnost</a>
-        <a class="sec-hero__jump" href="#cw-ateliery-dilny">Ateliéry a dílny</a>
+        {heroJumps.map((j) => (
+          <a class="sec-hero__jump osa-nolink" href={j.href}>
+            <Icon name={j.icon} size={18} strokeWidth={1.75} />
+            <span>{j.label}</span>
+          </a>
+        ))}
       </nav>
     </div>
   </section>

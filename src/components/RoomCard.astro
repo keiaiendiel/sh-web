@@ -51,19 +51,19 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
     </div>
   </a>
   <div class="room-card__body">
-    <h3 class="room-card__name">
-      <a href={detailHref}>{name}</a>
-    </h3>
+    <div class="room-card__head">
+      <h3 class="room-card__name">
+        <a href={detailHref}>{name}</a>
+      </h3>
+      <p class="room-card__price">
+        <span class="room-card__price-num">{fmt(cenaAnchor)}</span>
+        <span class="room-card__price-unit">Kč</span>
+      </p>
+    </div>
     <dl class="room-card__meta">
       <div><dt>Velikost</dt><dd>{velikost}</dd></div>
       <div><dt>Kapacita</dt><dd>{kapacita}</dd></div>
     </dl>
-    <div class="room-card__price">
-      <span class="room-card__price-anchor">
-        <span class="room-card__price-num">{fmt(cenaAnchor)}</span>
-        <span class="room-card__price-unit">Kč/měsíc</span>
-      </span>
-    </div>
     <div class="room-card__cta">
       <a class="room-card__cta-secondary" href={detailHref}>Detail →</a>
       <a class="room-card__cta-primary" href={reserveHref}>Rezervovat</a>
@@ -121,6 +121,12 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
     gap: 10px;
     padding: 16px 18px 18px;
   }
+  .room-card__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
   .room-card__name {
     font: 600 var(--text-lg) / 1.25 var(--font-sans);
     margin: 0;
@@ -132,6 +138,21 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
   }
   .room-card__name a:hover {
     color: var(--accent);
+  }
+  .room-card__price {
+    margin: 0;
+    font: 600 var(--text-lg) / 1.25 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-tight);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .room-card__price-num { display: inline; }
+  .room-card__price-unit {
+    font-weight: 500;
+    color: var(--fg-soft, var(--fg));
+    margin-left: 2px;
   }
   .room-card__meta {
     display: grid;
@@ -155,27 +176,6 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
     color: var(--fg);
     margin: 0;
     line-height: 1.35;
-  }
-  .room-card__price {
-    display: grid;
-    gap: 4px;
-    padding-top: 8px;
-  }
-  .room-card__price-anchor {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .room-card__price-num {
-    font: 600 var(--text-2xl) / 1 var(--font-sans);
-    color: var(--accent);
-    letter-spacing: var(--tracking-tight);
-    font-variant-numeric: tabular-nums;
-  }
-  .room-card__price-unit {
-    font-size: var(--text-sm);
-    color: var(--fg);
   }
   .room-card__cta {
     display: flex;
