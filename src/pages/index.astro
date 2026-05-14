@@ -223,6 +223,20 @@ const navItems = [
     </div>
   </section>
 
+  {/* ============ MAPA ============ */}
+  <section class="lp-map-strip" aria-label="Poloha areálu na mapě">
+    <div class="lp-map-strip__inner">
+      <div class="lp-map-strip__frame" id="lp-landing-map" role="application" aria-label="Interaktivní mapa areálu Horních kasáren v Klecanech"></div>
+      <p class="lp-map-strip__address">
+        <strong>Horní kasárna Klecany</strong>
+        <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách →</a>
+      </p>
+    </div>
+  </section>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous" is:inline></script>
+
   {/* ============ FINÁLNÍ CTA PANEL ============ */}
   <section class="lp-cta" aria-label="Závěrečná výzva k registraci">
     <div class="lp-cta__inner">
@@ -236,6 +250,46 @@ const navItems = [
     </div>
   </section>
 </Base>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const mapEl = document.getElementById('lp-landing-map');
+    if (!mapEl || mapEl.dataset.mapBound || typeof L === 'undefined') return;
+    mapEl.dataset.mapBound = '1';
+    const center = [50.181447059112294, 14.424094125168379];
+    const map = L.map(mapEl, {
+      center, zoom: 16,
+      zoomControl: false, attributionControl: false,
+      scrollWheelZoom: false,
+    });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19,
+    }).addTo(map);
+    const icon = L.divIcon({
+      html:
+        '<svg width="30" height="40" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M14 0C6.27 0 0 6.27 0 14c0 9.33 14 22 14 22S28 23.33 28 14C28 6.27 21.73 0 14 0z" fill="#5A2A5F"/>' +
+        '<circle cx="14" cy="14" r="5" fill="#ffffff"/>' +
+        '</svg>',
+      className: '', iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -42],
+    });
+    const gmaps = 'https://maps.app.goo.gl/vCF6VbW7Z49sggau6';
+    const popupHtml =
+      '<a href="' + gmaps + '" target="_blank" rel="noopener" class="lp-map-popup">' +
+        '<strong>Horní kasárna Klecany</strong>' +
+        '<span class="lp-map-popup__cta">Otevřít v Mapách →</span>' +
+      '</a>';
+    L.marker(center, { icon })
+      .addTo(map)
+      .bindPopup(popupHtml, { className: 'lp-map-popup-wrap' })
+      .openPopup()
+      .on('click', () => window.open(gmaps, '_blank'));
+    L.control.attribution({ prefix: false }).addTo(map);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+    mapEl.addEventListener('click', () => map.scrollWheelZoom.enable(), { once: true });
+  });
+</script>
 
 <style>
   /* ============ HERO ROTATION ============ */
@@ -572,4 +626,84 @@ const navItems = [
     background: transparent;
     color: #fff;
   }
+
+  /* ============ MAPA / KLECANY NA MAPĚ ============ */
+  /* Full-width Leaflet strip mezi masterplanem a finálním CTA. */
+  .lp-map-strip {
+    padding: var(--space-9) var(--gutter);
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .lp-map-strip__inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+  .lp-map-strip__frame {
+    position: relative;
+    width: 100%;
+    height: clamp(320px, 44vh, 460px);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    background: var(--k-05);
+  }
+  .lp-map-strip__address {
+    margin: var(--space-4) 0 0;
+    font: 400 var(--text-sm) / 1.55 var(--font-sans);
+    color: var(--fg-muted);
+  }
+  .lp-map-strip__address strong { color: var(--k-100); font-weight: 600; }
+  .lp-map-strip__address a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: var(--space-3);
+  }
+  .lp-map-strip__address a:hover { text-decoration: underline; }
+
+  /* Leaflet brand overrides — same plum accent, sharp borders. */
+  :global(.leaflet-container) {
+    background: var(--k-05);
+    font-family: var(--font-sans);
+    z-index: 0;
+  }
+  :global(.leaflet-control-attribution) {
+    background: rgba(255, 255, 255, 0.92) !important;
+    color: var(--fg-muted) !important;
+    font-size: 10px !important;
+    border-top: 1px solid var(--border-muted) !important;
+    padding: 2px 8px !important;
+  }
+  :global(.leaflet-control-attribution a) { color: var(--fg) !important; }
+  :global(.leaflet-control-zoom a) {
+    background: var(--bg) !important;
+    color: var(--fg-muted) !important;
+    border-color: var(--border-muted) !important;
+    font-family: var(--font-sans);
+  }
+  :global(.leaflet-control-zoom a:hover) {
+    background: var(--accent) !important;
+    color: #fff !important;
+    border-color: var(--accent) !important;
+  }
+  :global(.lp-map-popup-wrap .leaflet-popup-content-wrapper) {
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    box-shadow: 0 8px 32px rgba(90, 42, 95, 0.18);
+    border-radius: var(--radius-input);
+    padding: 0;
+  }
+  :global(.lp-map-popup-wrap .leaflet-popup-tip) { background: var(--bg); border: 1px solid var(--accent); }
+  :global(.lp-map-popup-wrap .leaflet-popup-content) { margin: 0; width: auto !important; min-width: 200px; }
+  :global(.lp-map-popup-wrap .leaflet-popup-close-button) { color: var(--fg-subtle) !important; padding: 6px 8px 0 0 !important; }
+  :global(.lp-map-popup-wrap .leaflet-popup-close-button:hover) { color: var(--accent) !important; }
+  :global(.lp-map-popup) {
+    display: grid; gap: 4px;
+    padding: 14px 16px;
+    color: var(--k-100);
+    font: 500 13px / 1.5 var(--font-sans);
+    text-decoration: none; cursor: pointer;
+  }
+  :global(.lp-map-popup strong) { font-weight: 600; color: var(--k-100); letter-spacing: 0.02em; }
+  :global(.lp-map-popup .lp-map-popup__cta) { color: var(--accent); font-weight: 600; margin-top: 4px; }
 </style>
