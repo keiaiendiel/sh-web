@@ -85,39 +85,57 @@ const reservationActive = isActive('/rezervace/');
 </header>
 
 <script is:inline>
+  /* Burger drawer init. Re-runs na každém astro:page-load, protože header
+     persist nemusí zachovat element napříč navigací (variant prop se mění
+     overlay↔light). Globální guard nestačí, potřebujeme nové handler na
+     novém DOM node. */
   (function () {
-    var btn = document.querySelector('.hub-header__burger');
-    var panel = document.getElementById('hub-drawer');
-    if (!btn || !panel) return;
+    function bindBurger() {
+      var btn = document.querySelector('.hub-header__burger');
+      var panel = document.getElementById('hub-drawer');
+      if (!btn || !panel) return;
+      if (btn.dataset.burgerBound === '1') return;
+      btn.dataset.burgerBound = '1';
 
-    function setOpen(open) {
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      btn.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
-      if (open) {
-        panel.hidden = false;
-        requestAnimationFrame(function () { panel.classList.add('open'); });
-        document.documentElement.classList.add('osa-nav-lock');
-      } else {
-        panel.classList.remove('open');
-        document.documentElement.classList.remove('osa-nav-lock');
-        setTimeout(function () {
-          if (btn.getAttribute('aria-expanded') === 'false') panel.hidden = true;
-        }, 280);
+      function setOpen(open) {
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+        if (open) {
+          panel.hidden = false;
+          requestAnimationFrame(function () { panel.classList.add('open'); });
+          document.documentElement.classList.add('osa-nav-lock');
+        } else {
+          panel.classList.remove('open');
+          document.documentElement.classList.remove('osa-nav-lock');
+          setTimeout(function () {
+            if (btn.getAttribute('aria-expanded') === 'false') panel.hidden = true;
+          }, 280);
+        }
       }
+
+      btn.onclick = function (e) {
+        e.stopPropagation();
+        setOpen(btn.getAttribute('aria-expanded') !== 'true');
+      };
+
+      panel.addEventListener('click', function (e) {
+        if (e.target.closest('a')) setOpen(false);
+      });
     }
 
-    btn.onclick = function (e) {
-      e.stopPropagation();
-      setOpen(btn.getAttribute('aria-expanded') !== 'true');
-    };
+    // Globální Escape handler, připojen jen jednou.
+    if (!window.__hubHeaderEscBound) {
+      window.__hubHeaderEscBound = true;
+      document.addEventListener('keydown', function (e) {
+        var btn = document.querySelector('.hub-header__burger');
+        if (e.key === 'Escape' && btn && btn.getAttribute('aria-expanded') === 'true') {
+          btn.click();
+        }
+      });
+    }
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') setOpen(false);
-    });
-
-    panel.addEventListener('click', function (e) {
-      if (e.target.closest('a')) setOpen(false);
-    });
+    bindBurger();
+    document.addEventListener('astro:page-load', bindBurger);
   }());
 </script>
 

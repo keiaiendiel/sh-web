@@ -40,6 +40,7 @@ const galleryImages: GalleryItem[] = [
         <h2 class="apt-gallery__title">{data.name}</h2>
         <p class="apt-gallery__lede">{data.popis}</p>
         <p class="apt-gallery__price">
+          <span class="apt-gallery__prefix">od </span>
           <span class="apt-gallery__num">{formatCena(data.cena.anchor)}</span>
           <span class="apt-gallery__unit">/měsíc</span>
           {data.cena.perOsoba && <small class="apt-gallery__per"> ({data.cena.perOsoba})</small>}
@@ -91,6 +92,7 @@ const galleryImages: GalleryItem[] = [
   .apt-gallery__title { font: 600 clamp(1.75rem, 3vw, 2.25rem) / 1.15 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0; }
   .apt-gallery__lede { font-size: var(--text-md); line-height: 1.55; margin: var(--space-2) 0 var(--space-4); color: var(--fg-soft, var(--fg)); max-width: 38ch; }
   .apt-gallery__price { display: flex; align-items: baseline; gap: 6px; margin: 0 0 var(--space-4); flex-wrap: wrap; }
+  .apt-gallery__prefix { font: 500 var(--text-md) / 1 var(--font-sans); color: var(--fg-soft, var(--fg)); }
   .apt-gallery__num { font: 600 clamp(1.75rem, 3vw, 2.25rem) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-tight); }
   .apt-gallery__unit { font: 500 var(--text-md) / 1 var(--font-sans); color: var(--fg-soft, var(--fg)); }
   .apt-gallery__per { font: 500 var(--text-sm) / 1 var(--font-sans); color: var(--fg-muted, var(--fg)); }

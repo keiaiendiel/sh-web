@@ -56,8 +56,9 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
         <a href={detailHref}>{name}</a>
       </h3>
       <p class="room-card__price">
+        <span class="room-card__price-prefix">od </span>
         <span class="room-card__price-num">{fmt(cenaAnchor)}</span>
-        <span class="room-card__price-unit">Kč</span>
+        <span class="room-card__price-unit"> Kč<span class="room-card__price-period">/měsíc</span></span>
       </p>
     </div>
     <dl class="room-card__meta">
@@ -148,11 +149,17 @@ const fmt = (n: number) => n.toLocaleString('cs-CZ');
     white-space: nowrap;
     flex-shrink: 0;
   }
+  .room-card__price-prefix {
+    font-weight: 500;
+    color: var(--fg-soft, var(--fg));
+  }
   .room-card__price-num { display: inline; }
   .room-card__price-unit {
     font-weight: 500;
     color: var(--fg-soft, var(--fg));
-    margin-left: 2px;
+  }
+  @media (max-width: 760px) {
+    .room-card__price-period { display: none; }
   }
   .room-card__meta {
     display: grid;
