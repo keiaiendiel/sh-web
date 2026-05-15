@@ -221,29 +221,24 @@ const navItems = [
     <div class="lp-hero__scrim" aria-hidden="true"></div>
 
     <div class="lp-hero__inner">
-      <h1 class="lp-hero__title">Startovací Hub.</h1>
-      <p class="lp-hero__lede">Na prahu metropole · Praha-sever</p>
+      <h1 class="lp-hero__title">Dostupné bydlení s&nbsp;coworkingovým a&nbsp;komunitním zázemím.</h1>
+      <p class="lp-hero__lede">Na&nbsp;prahu nové metropole&nbsp;· Praha-sever</p>
     </div>
 
-    {/* Jump strip uvnitř hero (desktop only). Bílé outline buttony + Rezervace white-fill. */}
-    <nav class="lp-jumps lp-jumps--desktop" aria-label="Skok do sekcí">
-      <div class="lp-jumps__inner">
-        {navItems.map((item) => (
-          <a class:list={['lp-jumps__item osa-nolink', item.primary && 'lp-jumps__item--primary']} href={item.href}>
-            <Icon name={item.icon} size={16} strokeWidth={1.75} />
-            {item.label}
-          </a>
-        ))}
-      </div>
-    </nav>
+    {/* Scroll cue: kruhový button s chevron-down, jemně poskakuje + pulsing ring,
+        klik smooth-scrolluje na jump strip pod hero. */}
+    <a class="lp-hero__scroll-cue osa-nolink" href="#lp-jumps" aria-label="Skrolovat na možnosti">
+      <Icon name="chevron-down" size={24} strokeWidth={2} />
+    </a>
   </section>
 
-  {/* Jump strip POD hero (mobile only). 3-col grid, čtvercové buttony s ikonkou nahoře a labelem dole. Rezervace přes celou šířku. */}
-  <nav class="lp-jumps lp-jumps--mobile" aria-label="Skok do sekcí">
+  {/* Jump strip POD hero (desktop + mobile). Horizontální pill řada na desktopu,
+      3-col mřížka čtvercových buttonů na mobilu. Rezervace primární. */}
+  <nav class="lp-jumps" id="lp-jumps" aria-label="Skok do sekcí">
     <div class="lp-jumps__inner">
       {navItems.map((item) => (
         <a class:list={['lp-jumps__item osa-nolink', item.primary && 'lp-jumps__item--primary']} href={item.href}>
-          <Icon name={item.icon} size={22} strokeWidth={1.75} />
+          <Icon name={item.icon} size={18} strokeWidth={1.75} />
           <span class="lp-jumps__label">{item.label}</span>
         </a>
       ))}
@@ -452,14 +447,15 @@ const navItems = [
     /* Full-screen na desktop i mobile. dvh = dynamic viewport height,
        řeší iOS Safari URL bar bez jumping při scrollu. Fallback vh pro
        starší prohlížeče. Header je position: fixed (overlay variant),
-       takže hero může jít plně pod něj. */
+       takže hero může jít plně pod něj. Horizontální gutter je na
+       __inner aby content alignoval s header bar pattern (max-width +
+       padding-x + margin auto). */
     min-height: 100vh;
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: var(--space-9) var(--gutter) var(--space-8);
-    gap: var(--space-6);
+    justify-content: center;
+    padding: var(--space-9) 0;
     color: #fff;
     background: var(--k-100);
     overflow: hidden;
@@ -513,156 +509,190 @@ const navItems = [
     z-index: -1;
   }
   .lp-hero__inner {
-    max-width: var(--container);
+    max-width: var(--container-wide);
     margin: 0 auto;
     width: 100%;
-    text-align: center;
+    padding: 0 var(--gutter);
+    text-align: left;
   }
   .lp-hero__title {
-    font: 600 clamp(2.5rem, 6vw, 4.75rem) / 1.05 var(--font-sans);
+    font: 600 clamp(1.75rem, 3.8vw, 2.875rem) / 1.18 var(--font-sans);
     letter-spacing: var(--tracking-tight);
-    margin: 0 auto var(--space-2);
-    max-width: 18ch;
+    margin: 0 0 var(--space-4);
+    max-width: 22ch;
+    text-wrap: balance;
   }
   .lp-hero__lede {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
+    font: 600 clamp(1rem, 1.25vw, 1.25rem) / 1.45 var(--font-sans);
+    letter-spacing: var(--tracking-wide);
     margin: 0;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255,255,255,0.92);
+    max-width: 36ch;
   }
 
-  /* reduced-motion: freeze on slide 0 */
+  /* === SCROLL CUE === */
+  /* Kruhový button dole na hero, který smooth-scrolluje na jump strip.
+     Glass-morph styling (blur + transparent), uvnitř bouncing chevron,
+     kolem subtle pulsing ring jako delight cue. */
+  .lp-hero__scroll-cue {
+    position: absolute;
+    bottom: clamp(20px, 4vh, 36px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    background: rgba(0, 0, 0, 0.22);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: border-color 220ms ease, background 220ms ease, transform 220ms cubic-bezier(0.2, 0, 0, 1);
+    z-index: 1;
+  }
+  .lp-hero__scroll-cue::before {
+    /* Subtle pulse ring, drží rytmus s bounce uvnitř. */
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    opacity: 0;
+    animation: lp-hero-cue-ping 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    pointer-events: none;
+  }
+  .lp-hero__scroll-cue :global(svg) {
+    display: block;
+    animation: lp-hero-cue-bounce 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+  .lp-hero__scroll-cue:hover,
+  .lp-hero__scroll-cue:focus-visible {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateX(-50%) translateY(2px);
+    outline: none;
+  }
+  .lp-hero__scroll-cue:hover :global(svg),
+  .lp-hero__scroll-cue:focus-visible :global(svg) {
+    animation-play-state: paused;
+  }
+  @keyframes lp-hero-cue-bounce {
+    0%, 20%, 100% { transform: translateY(0); }
+    50%          { transform: translateY(5px); }
+    70%          { transform: translateY(0); }
+  }
+  @keyframes lp-hero-cue-ping {
+    0%   { opacity: 0.7; transform: scale(1); }
+    70%  { opacity: 0;   transform: scale(1.45); }
+    100% { opacity: 0;   transform: scale(1.45); }
+  }
+
+  /* reduced-motion: freeze on slide 0, vypnout cue animace */
   @media (prefers-reduced-motion: reduce) {
     .lp-hero__slide { animation: none; transform: translateX(-100%); }
     .lp-hero__slide[data-slide="0"] { transform: translateX(0); }
+    .lp-hero__scroll-cue :global(svg),
+    .lp-hero__scroll-cue::before { animation: none; }
+    .lp-hero__scroll-cue::before { opacity: 0; }
   }
 
-  /* ============ JUMP STRIP DESKTOP (uvnitř hero) ============ */
-  /* Bílé outline buttony nad tmavým hero, Rezervace bílý fill. */
+  /* ============ JUMP STRIP (pod hero, desktop + mobile) ============ */
+  /* Pill řada na desktopu, 3-col mřížka čtvercových buttonů na mobilu.
+     Plum outline na bílém pozadí, Rezervace primární filled. */
   .lp-jumps {
-    width: 100%;
-    max-width: var(--container-wide);
-    margin: 0 auto;
+    background: var(--bg);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--border-muted);
+    scroll-margin-top: 80px;
   }
   .lp-jumps__inner {
     display: flex;
     gap: 10px;
     justify-content: center;
     flex-wrap: wrap;
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
   }
   .lp-jumps__item {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 11px 22px;
+    padding: 11px 20px;
     font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: #fff;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.75);
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     text-decoration: none;
     white-space: nowrap;
-    transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
-    backdrop-filter: blur(2px);
+    transition: border-color 180ms ease, color 180ms ease, background 180ms ease, transform 180ms ease;
   }
-  .lp-jumps__item :global(svg) { flex-shrink: 0; }
+  .lp-jumps__item :global(svg) { color: var(--accent); flex-shrink: 0; }
   .lp-jumps__item:hover,
   .lp-jumps__item:focus-visible {
-    background: rgba(255,255,255,0.12);
-    border-color: #fff;
-    color: #fff;
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--fg);
+    transform: translateY(-1px);
     outline: none;
   }
   .lp-jumps__item--primary {
-    background: #fff;
-    color: var(--fg);
-    border-color: #fff;
+    background: var(--accent);
+    color: var(--accent-on);
+    border-color: var(--accent);
   }
+  .lp-jumps__item--primary :global(svg) { color: var(--accent-on); }
   .lp-jumps__item--primary:hover,
   .lp-jumps__item--primary:focus-visible {
-    background: rgba(255,255,255,0.86);
-    color: var(--fg);
-    border-color: #fff;
+    background: transparent;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .lp-jumps__item--primary:hover :global(svg),
+  .lp-jumps__item--primary:focus-visible :global(svg) {
+    color: var(--accent);
   }
 
-  /* Mobile varianta žije pod hero v normalním flow s bílým pozadím. */
-  .lp-jumps--mobile { display: none; }
-
   @media (max-width: 760px) {
-    /* Hero zkráceno na 70 % viewportu, aby pod ním zbylo místo pro
-       mobile jump strip. */
+    /* Hero zkráceno na 78 % viewportu na mobilu, aby pod ním zbylo
+       místo pro jump strip + scroll cue zůstal viditelný. */
     .lp-hero {
-      min-height: 70vh;
-      min-height: 70dvh;
+      min-height: 78vh;
+      min-height: 78dvh;
       padding: var(--space-7) var(--gutter);
     }
-    .lp-jumps--desktop { display: none; }
-    .lp-jumps--mobile {
-      display: block;
-      padding: var(--space-5) var(--gutter) var(--space-6);
-      background: var(--bg);
-    }
-    .lp-jumps--mobile .lp-jumps__inner {
+    .lp-jumps { padding: var(--space-5) var(--gutter) var(--space-6); }
+    .lp-jumps__inner {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       max-width: 520px;
-      margin: 0 auto;
     }
-    .lp-jumps--mobile .lp-jumps__item {
+    .lp-jumps__item {
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
       gap: 6px;
       aspect-ratio: 1.45 / 1;
       padding: 10px 8px;
-      font-size: var(--text-sm);
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      color: var(--fg);
-      background: var(--bg);
-      border: 1px solid var(--border-muted);
-      backdrop-filter: none;
       white-space: normal;
       text-align: center;
       line-height: 1.25;
+      letter-spacing: 0.01em;
     }
-    .lp-jumps--mobile .lp-jumps__item :global(svg) {
-      color: var(--accent);
+    .lp-jumps__item :global(svg) {
       width: 22px;
       height: 22px;
     }
-    .lp-jumps--mobile .lp-jumps__item:hover,
-    .lp-jumps--mobile .lp-jumps__item:focus-visible {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-soft);
-    }
-    .lp-jumps--mobile .lp-jumps__item--primary {
+    .lp-jumps__item--primary {
       grid-column: 1 / -1;
       aspect-ratio: auto;
       flex-direction: row;
       padding: 14px 18px;
-      font-size: var(--text-sm);
-      gap: 8px;
-      background: var(--accent);
-      color: var(--accent-on);
-      border-color: var(--accent);
-    }
-    .lp-jumps--mobile .lp-jumps__item--primary :global(svg) {
-      color: var(--accent-on);
-    }
-    .lp-jumps--mobile .lp-jumps__item--primary:hover,
-    .lp-jumps--mobile .lp-jumps__item--primary:focus-visible {
-      background: transparent;
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-    .lp-jumps--mobile .lp-jumps__item--primary:hover :global(svg),
-    .lp-jumps--mobile .lp-jumps__item--primary:focus-visible :global(svg) {
-      color: var(--accent);
     }
   }
 
@@ -672,7 +702,7 @@ const navItems = [
     color: var(--fg);
   }
   .lp-section {
-    padding: var(--space-8) var(--gutter);
+    padding: var(--space-8) 0;
     scroll-margin-top: 80px;
     border-bottom: 1px solid var(--border-muted);
   }
@@ -683,6 +713,7 @@ const navItems = [
   .lp-section__inner {
     max-width: var(--container-wide);
     margin: 0 auto;
+    padding: 0 var(--gutter);
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(32px, 5vw, 80px);
@@ -758,6 +789,7 @@ const navItems = [
   .lp-rooms {
     max-width: var(--container-wide);
     margin: var(--space-7) auto 0;
+    padding: 0 var(--gutter);
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(24px, 4vw, 56px);
@@ -906,6 +938,7 @@ const navItems = [
   .lp-features {
     max-width: var(--container-wide);
     margin: var(--space-6) auto 0;
+    padding: 0 var(--gutter);
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -948,6 +981,7 @@ const navItems = [
   .lp-okoli-map {
     max-width: var(--container-wide);
     margin: var(--space-7) auto 0;
+    padding: 0 var(--gutter);
   }
   .lp-okoli-map__frame {
     width: 100%;

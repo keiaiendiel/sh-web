@@ -186,11 +186,13 @@
 
   /* ---------- Layout ---------- */
   --container:      1200px;
-  --container-wide: 1440px;
-  --gutter:         24px;
+  --container-wide: 1320px;
+  /* Gutter škáluje: 20 px na malých obrazovkách, max 80 px na FullHD+,
+     aby obsah vždy dýchal několik set pixelů od kraje. */
+  --gutter:         clamp(20px, 4vw, 80px);
 }
 
-/* Mobile: edge-to-content padding stahujeme z 24 na 16 px (33 %).
+/* Mobile: edge-to-content padding stahujeme na 16 px.
    Standardní mobilní jednotka, dýchavinu drží, obsah dostane víc šířky. */
 @media (max-width: 640px) {
   :root { --gutter: 16px; }
