@@ -27,8 +27,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       <p class="rez-hero__eyebrow">Rezervace</p>
       <h1 class="rez-hero__title">Registrace zájmu o bydlení.</h1>
       <p class="rez-hero__lede">
-        Vyplníte konfiguraci pokoje, datum a kontakt. Není to závazek, jen vám zavoláme.
-        Do 24 hodin se ozve někdo z rezervačního oddělení s detailem dostupnosti a ceny.
+        Vyberete pokoj, termín a&nbsp;způsob kontaktu. Není to závazek, jen vám zavoláme.
+        Z&nbsp;rezervačního oddělení se ozveme do 24 hodin s&nbsp;detailem dostupnosti a&nbsp;ceny.
       </p>
     </div>
   </section>
@@ -67,7 +67,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <input type="radio" name="koncept" value="nevim" required />
             <div class="rez-card__body">
               <h3>Nevím ještě</h3>
-              <p>Tři otázky, doporučíme variantu, ozveme se.</p>
+              <p>Tři rychlé otázky a doporučíme. Pak vám zavoláme.</p>
             </div>
           </label>
         </div>
@@ -240,7 +240,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         <div class="rez-field">
           <label for="telefon">Telefon <span aria-hidden="true">*</span></label>
           <input type="tel" id="telefon" name="telefon" required autocomplete="tel" inputmode="tel" placeholder="+420" />
-          <p class="rez-field__hint">Zavoláme do 24 hodin pro potvrzení detailů. Nikomu jinému ho nepředáme.</p>
+          <p class="rez-field__hint">Zavoláme do 24 hodin pro potvrzení detailů. Číslo nikomu jinému nepředáme.</p>
         </div>
 
         <div class="rez-field">
@@ -268,8 +268,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
       <div class="rez-success" id="rez-success" hidden>
         <h2>Děkujeme, dorazilo.</h2>
-        <p>Zavoláme vám do 24 hodin. Někdo z rezervačního týmu se vám ozve telefonicky během příštího pracovního dne, většinou rychleji. Probereme, kdy chcete přijet na prohlídku, jaké jsou detaily kolem termínu nástupu a jak postupujeme dál.</p>
-        <p>Toto je nezávazná registrace zájmu. Žádný závazek z vaší strany, žádný účet od nás. Pokud se rozhodnete jinak, prostě nám to dejte vědět nebo neodpovídejte, nic nezačne běžet.</p>
+        <p>Zavoláme vám do 24 hodin, většinou dřív. Probereme termín prohlídky, detaily kolem nástupu a&nbsp;co dál.</p>
+        <p>Pořád je to nezávazná registrace zájmu. Žádný závazek z&nbsp;vaší strany, žádný účet od nás. Pokud změníte rozhodnutí, dejte vědět, nebo prostě neodpovězte. Nic nezačne běžet.</p>
       </div>
     </form>
 
@@ -292,8 +292,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           </ul>
         </div>
         <p class="rez-side__note">
-          Cena se po odeslání upřesní podle aktuální dostupnosti a délky pobytu. Registrace je
-          nezávazná, není to smlouva.
+          Cenu upřesníme při telefonu podle aktuální dostupnosti a&nbsp;délky pobytu. Registrace
+          je nezávazná, není to smlouva.
         </p>
       </div>
     </aside>
@@ -308,15 +308,15 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       </header>
       <details class="faq-mini">
         <summary>Co znamená „nezávazná registrace zájmu"?</summary>
-        <p>K ničemu vás nezavazuje. Není to nájemní ani ubytovací smlouva. Jen nám říkáte, že vás formát zajímá a chcete podrobnosti. Pokud se rozhodnete nepokračovat, prostě neodpovíte při dalším kontaktu. Bez storno poplatku, bez zálohy.</p>
+        <p>K ničemu vás nezavazuje. Není to nájemní ani ubytovací smlouva, jen nám říkáte, že vás formát zajímá a chcete podrobnosti. Když se rozhodnete nepokračovat, neodpovězte na další kontakt. Bez storno poplatku, bez zálohy.</p>
       </details>
       <details class="faq-mini">
         <summary>Kdy můžu reálně do Hubu nastoupit?</summary>
-        <p>Hub je v projektové přípravě. Termíny otevření jednotlivých budov upřesňujeme s postupem rekonstrukce. V registraci vyberete měsíc, kdy byste chtěli nastoupit, a my vám při telefonu řekneme realisticky, jestli je to v té době možné. Pokud zatím není, navrhneme alternativy nebo se ozveme, až bude.</p>
+        <p>Hub je v&nbsp;projektové přípravě. Termíny otevření jednotlivých budov upřesňujeme s&nbsp;postupem rekonstrukce. V&nbsp;registraci vyberete měsíc nástupu a&nbsp;při telefonu vám řekneme, jestli je to v&nbsp;té době reálné. Když ne, navrhneme alternativu, nebo se ozveme, až bude.</p>
       </details>
       <details class="faq-mini">
         <summary>Můžu napřed přijet a podívat se?</summary>
-        <p>Ano, pravidelně otevíráme prohlídky areálu. V registraci zatím není ani prohlídka závazná, jen nám usnadní, abychom věděli, koho čekat. Pokud chcete přijet bez registrace, napište na vpd@osa2.cz nebo zavolejte, domluvíme termín.</p>
+        <p>Ano, pravidelně otevíráme prohlídky areálu. Prohlídka není závazná, jen nám usnadní, abychom věděli, koho čekat. Když chcete přijet bez registrace, napište na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a> nebo zavolejte. Domluvíme termín.</p>
       </details>
     </div>
   </section>
@@ -713,13 +713,15 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez-field select,
   .rez-field textarea {
     font: 400 var(--text-md) / 1.4 var(--font-sans);
-    padding: 12px 14px;
+    padding: 14px 14px;
+    min-height: 48px;
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     background: var(--bg);
     color: var(--fg);
     transition: border-color 180ms ease, box-shadow 180ms ease;
   }
+  .rez-field textarea { min-height: 96px; }
   .rez-field input:focus,
   .rez-field select:focus,
   .rez-field textarea:focus {
@@ -736,7 +738,9 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez-pill {
     position: relative;
     display: inline-flex;
-    padding: 8px 16px;
+    align-items: center;
+    padding: 10px 18px;
+    min-height: 44px;
     border: 1px solid var(--border-muted);
     border-radius: 999px;
     cursor: pointer;
@@ -751,8 +755,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     border-color: var(--accent);
   }
 
-  .rez-check { display: grid; grid-template-columns: 22px 1fr; gap: var(--space-3); align-items: start; font-size: var(--text-sm); line-height: 1.5; cursor: pointer; }
-  .rez-check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); }
+  .rez-check { display: grid; grid-template-columns: 28px 1fr; gap: var(--space-3); align-items: start; font-size: var(--text-sm); line-height: 1.5; cursor: pointer; padding: 8px 0; }
+  .rez-check input { width: 22px; height: 22px; margin-top: 0; accent-color: var(--accent); }
   .rez-check a { color: var(--accent); text-decoration: underline; }
 
   .rez-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
@@ -865,9 +869,16 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   }
 
   /* Mini-FAQ */
-  .faq-mini { padding: var(--space-3) 0; border-top: 1px solid var(--rule, rgba(0,0,0,0.08)); }
+  .faq-mini { padding: 0; border-top: 1px solid var(--rule, rgba(0,0,0,0.08)); }
   .faq-mini:first-of-type { border-top: 0; }
-  .faq-mini summary { font: 600 var(--text-md) / 1.3 var(--font-sans); cursor: pointer; padding: var(--space-2) 0; }
+  .faq-mini summary {
+    font: 600 var(--text-md) / 1.3 var(--font-sans);
+    cursor: pointer;
+    padding: 14px 0;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
   .faq-mini summary::-webkit-details-marker { color: var(--accent); }
-  .faq-mini p { color: var(--fg-muted); line-height: 1.6; margin: var(--space-2) 0 0; max-width: 70ch; }
+  .faq-mini p { color: var(--fg-muted); line-height: 1.6; margin: 0 0 var(--space-4); max-width: 70ch; }
 </style>

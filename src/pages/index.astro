@@ -80,8 +80,8 @@ const sections: Section[] = [
   {
     id: 'ubytovani',
     eyebrow: 'Ubytování',
-    title: 'Sdílené bydlení i privátní apartmány.',
-    lede: 'Privátní apartmány 1+kk až 5+kk, dvě kapsle a dva sdílené pokoje. Energie, internet, úklid společných prostor, pět jízd Hub-shuttle do metra Kobylis měsíčně a poukaz do sauny týdně v ceně.',
+    title: 'Vlastní apartmán, nebo místo v co-livingu?',
+    lede: 'Devět typů ubytování. Privátní apartmány 1+kk až 5+kk, kapsle pro jednoho nebo dva, lůžka ve sdílených pokojích. V ceně energie, internet, pět jízd Hub-shuttle a týdenní poukaz do sauny.',
     href: '/ubytovani/',
     detailLabel: 'Možnosti ubytování',
     gallery: [
@@ -96,9 +96,9 @@ const sections: Section[] = [
     id: 'coworking',
     eyebrow: 'Coworking',
     title: 'Sál, fixní stůl, ateliér nebo dílna.',
-    lede: 'Pět typů pracovních prostor v budově C: volný stůl v sále 24/7, fixní stůl s vlastní skříňkou, sdílená kancelář pro čtyři, zasedací místnost na hodinovou rezervaci. Ateliéry a dílny s těžkými stroji v samostatných objektech.',
+    lede: 'Volný stůl v sále 24/7, fixní stůl s vlastní skříňkou, sdílená kancelář pro čtyři, zasedací místnost na hodinu. K tomu ateliéry a dílny s těžkými stroji v sousedních budovách. Coworkingový sál mají rezidenti v ceně bydlení.',
     href: '/coworking/',
-    detailLabel: 'Coworking, dílny a ateliéry',
+    detailLabel: 'Coworking a dílny',
     gallery: [
       { src: withBase('/images/hub/coworking/budova-c-exterior.jpg'), alt: 'Budova C zvenku, parter s hlavním vstupem do coworkingu a komunitního zázemí.' },
       { src: withBase('/images/hub/coworking/budova-c-interior.jpg'), alt: 'Interiér budovy C, společný prostor pro coworking a komunitní akce.' },
@@ -109,8 +109,8 @@ const sections: Section[] = [
   {
     id: 'komunita',
     eyebrow: 'Komunita',
-    title: 'Wellness, gastro, kultura, sport.',
-    lede: 'Vlastní bazén a sauna v jádře areálu, jídelna s minipivovarem v budově B, klubovna v budově C, komunitní park s grilem. Pro rezidenty s dlouhým pobytem poukaz do sauny týdně v ceně.',
+    title: 'Bazén, sauna, jídelna, klubovna.',
+    lede: 'Vlastní bazén a sauna v jádře areálu, jídelna s minipivovarem v budově B, klubovna v budově C, komunitní park s grilem. Týdenní vstup do sauny mají v ceně všichni rezidenti.',
     href: '/komunita/',
     detailLabel: 'Komunitní program',
     gallery: [
@@ -126,7 +126,7 @@ const sections: Section[] = [
     id: 'okoli',
     eyebrow: 'Místo a okolí',
     title: 'Horní kasárny v Klecanech, 15 km severně od Prahy.',
-    lede: 'Bývalý vojenský areál nad pravým břehem Vltavy, který otevíráme po etapách od roku 2026. V docházkové vzdálenosti Montessori školka Astra (přímo v areálu), praktický lékař, lékárna, pošta a balíkomaty. Skate hala v sousedním areálu, cyklostezka EuroVelo 7 podél Vltavy deset minut na kole.',
+    lede: 'Bývalý vojenský areál nad pravým břehem Vltavy. Otevíráme ho po etapách od roku 2026. V docházkové vzdálenosti školka Astra (přímo v areálu), praktický lékař, lékárna, pošta, balíkomaty. Cyklostezka EuroVelo 7 podél Vltavy deset minut na kole.',
     href: '/okoli/',
     detailLabel: 'Co je v okolí',
     gallery: [
@@ -145,7 +145,7 @@ const sections: Section[] = [
     id: 'doprava',
     eyebrow: 'Doprava',
     title: 'Patnáct minut autobusem na metro.',
-    lede: 'Hub-shuttle do metra Kobylisy v ceně, pět jízd měsíčně. Bus 374 PID a Hub-taxi jako záloha. Cyklostezka EuroVelo 7 podél Vltavy, plánovaná tramvaj Kobylisy-Sedlec do roku 2030.',
+    lede: 'Pět jízd Hub-shuttle do metra Kobylisy měsíčně v ceně. Bus 374 PID a Hub-taxi jako záloha. Cyklostezka EuroVelo 7 podél Vltavy, tramvaj Kobylisy-Sedlec do roku 2030.',
     href: '/doprava/',
     detailLabel: 'Jak se sem dostanete',
     gallery: [
@@ -159,7 +159,7 @@ const sections: Section[] = [
     id: 'stipendia',
     eyebrow: 'Stipendia',
     title: 'Pobytové stipendium.',
-    lede: 'Rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor. Bydlení nebo zvýhodněná cena výměnou za hmatatelný vstup do života Hubu. Při registraci stačí zaškrtnout zájem, ozveme se s podmínkami a termíny.',
+    lede: 'Čtyři role: rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor. Bydlení nebo zvýhodněná cena za konkrétní vstup do života Hubu (dílny, péče o areál, vlastní projekt). Při registraci zaškrtněte zájem, ozveme se s podmínkami.',
     href: '/stipendia/',
     detailLabel: 'Pobytová stipendia',
     gallery: [
@@ -221,8 +221,8 @@ const navItems = [
     <div class="lp-hero__scrim" aria-hidden="true"></div>
 
     <div class="lp-hero__inner">
-      <h1 class="lp-hero__title">Dostupné bydlení s&nbsp;coworkingovým a&nbsp;komunitním zázemím.</h1>
-      <p class="lp-hero__lede">Na&nbsp;prahu nové metropole&nbsp;· Praha-sever</p>
+      <h1 class="lp-hero__title">Bydlení, coworking, dílny a&nbsp;sauna. 15&nbsp;minut od&nbsp;metra.</h1>
+      <p class="lp-hero__lede">Devět typů ubytování od&nbsp;kapsle po&nbsp;5+kk apartmán. Od&nbsp;3&nbsp;000&nbsp;Kč měsíčně, energie a&nbsp;internet v&nbsp;ceně.</p>
     </div>
 
     {/* Scroll cue: kruhový button s chevron-down, jemně poskakuje + pulsing ring,
@@ -389,10 +389,10 @@ const navItems = [
     <div class="lp-cta__inner">
       <h2 class="lp-cta__title">Rezervujte si místo.</h2>
       <p class="lp-cta__lede">
-        Rezervace je nezávazná. Vyplníte konfiguraci pokoje, datum nástupu a kontakt.
-        Z rezervačního oddělení vám zavoláme do 24 hodin s detailem dostupnosti a ceny.
+        Rezervace je nezávazná. Vyberete pokoj, termín a způsob kontaktu.
+        Z&nbsp;rezervačního oddělení vám zavoláme do 24 hodin.
       </p>
-      <a class="lp-cta__button osa-nolink" href={withBase('/rezervace/')}>Rezervace</a>
+      <a class="lp-cta__button osa-nolink" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
     </div>
   </section>
 </Base>
@@ -516,7 +516,7 @@ const navItems = [
     text-align: left;
   }
   .lp-hero__title {
-    font: 600 clamp(1.75rem, 3.8vw, 2.875rem) / 1.18 var(--font-sans);
+    font: 600 clamp(1.625rem, 4.2vw, 2.875rem) / 1.18 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     margin: 0 0 var(--space-4);
     max-width: 22ch;
@@ -660,11 +660,13 @@ const navItems = [
   }
 
   @media (max-width: 760px) {
-    /* Hero zkráceno na 78 % viewportu na mobilu, aby pod ním zbylo
-       místo pro jump strip + scroll cue zůstal viditelný. */
+    /* Hero zkráceno na 70 % viewportu na mobilu, aby pod ním zbylo
+       místo pro jump strip a aby scroll cue zůstal viditelný i na
+       iPhone SE (375×667). 78 dvh tlačil cue na hranu, snížení na 70 dvh
+       drží 50+ px volného prostoru nad jump stripem. */
     .lp-hero {
-      min-height: 78vh;
-      min-height: 78dvh;
+      min-height: 70vh;
+      min-height: 70dvh;
       padding: var(--space-7) var(--gutter);
     }
     .lp-jumps { padding: var(--space-5) var(--gutter) var(--space-6); }
@@ -678,8 +680,10 @@ const navItems = [
       flex-direction: column;
       gap: 6px;
       aspect-ratio: 1.45 / 1;
-      padding: 10px 8px;
+      min-height: 64px;
+      padding: 10px 6px;
       white-space: normal;
+      word-break: break-word;
       text-align: center;
       line-height: 1.25;
       letter-spacing: 0.01em;

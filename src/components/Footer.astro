@@ -4,6 +4,11 @@ import { withBase } from '../utils/url';
 
 const orgEntry = await getEntry('org', 'identity');
 const org = orgEntry?.data;
+
+/* Build-time stamp. Aktualizováno = den nejnovějšího deployu. */
+const buildDate = new Date().toLocaleDateString('cs-CZ', {
+  day: 'numeric', month: 'numeric', year: 'numeric',
+});
 ---
 <footer class="hub-footer">
   <div class="hub-footer__inner">
@@ -17,6 +22,9 @@ const org = orgEntry?.data;
       <p class="hub-footer__label">Kontakt</p>
       <p><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></p>
       <p>Horní Kasárna Klecany<br />250 67 Klecany</p>
+      <p class="hub-footer__chip">
+        <a href={withBase('/rezervace/')} class="hub-footer__chip-link">Stavte se na prohlídku →</a>
+      </p>
     </div>
 
     <div class="hub-footer__col">
@@ -31,8 +39,9 @@ const org = orgEntry?.data;
       <p>Občanské sdružení Alternativa II, z.s.</p>
       <p>IČO {org?.ico ?? 'bude doplněno'} · Předseda Marek Semerád</p>
       <p class="hub-footer__legal">
-        Nabídka rezervací je nezávazná. Slouží k registraci zájmu, není kupní ani nájemní smlouvou.
+        Nabídka rezervací je nezávazná. Slouží k&nbsp;registraci zájmu, není kupní ani nájemní smlouvou.
       </p>
+      <p class="hub-footer__updated">Aktualizováno {buildDate}</p>
     </div>
   </div>
 </footer>
@@ -80,6 +89,33 @@ const org = orgEntry?.data;
   .hub-footer__muted { color: var(--fg-muted); font-size: var(--text-xs); }
   .hub-footer__hint { color: var(--fg-muted); font-size: var(--text-xs); margin-left: 4px; }
   .hub-footer__legal { font-size: var(--text-xs); color: var(--fg-muted); margin-top: var(--space-3); max-width: 38ch; line-height: 1.4; }
+  .hub-footer__updated { font-size: var(--text-2xs); color: var(--fg-subtle, var(--fg-muted)); margin-top: var(--space-3); letter-spacing: var(--tracking-wider); text-transform: uppercase; font-variant-numeric: tabular-nums; }
+
+  .hub-footer__chip { margin-top: var(--space-3) !important; }
+  .hub-footer__chip-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    min-height: 40px;
+    font: 600 var(--text-xs) / 1 var(--font-sans);
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
+    text-decoration: none !important;
+    transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+  @media (max-width: 640px) {
+    .hub-footer__chip-link { padding: 12px 16px; min-height: 44px; }
+  }
+  .hub-footer__chip-link:hover,
+  .hub-footer__chip-link:focus-visible {
+    background: var(--accent);
+    color: var(--accent-on, #fff) !important;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    outline: none;
+  }
 
   @media (max-width: 1024px) {
     .hub-footer__inner { grid-template-columns: 1fr 1fr; }

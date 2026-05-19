@@ -1,15 +1,3 @@
-<!-- ============================================================
-     WORKING COPY of SH_Web_Site_Copy.md
-
-     Source of truth:
-     /Users/kindl/kindl-vault/Projects/SH_Web/SH_Web_Site_Copy.md
-
-     Tento soubor je MIRROR vault souboru pro účely Astro buildu.
-     Necommituj edity přímo sem, edituj vault verzi a sync-ni přes:
-       cp "/Users/kindl/kindl-vault/Projects/SH_Web/SH_Web_Site_Copy.md" CONTENT.md
-     Last sync: 2026-05-13
-     ============================================================ -->
-
 ---
 title: SH Web Site Copy
 type: project
@@ -25,6 +13,29 @@ note: Pouze obsah, který se objeví na živém webu startovacihub.cz. Cenové s
 
 Jediný zdroj pravdy pro **veškerý text a obrázky na živém webu** startovacihub.cz. Z tohoto dokumentu generuju Astro stránky, content collections a navigaci.
 
+> **==Sync log (vault ↔ repo) 2026-05-13==**
+>
+> Tato verze vaultu obsahuje `==REPO: ...==` highlight anotace tam, kde živý web v repu (`sh-web` branch `master`) má jiný text/strukturu než tato copy spec. Cílem je, aby copywriter v jednom dokumentu viděl, co je *pending* update vs co už *je* nasazené.
+>
+> **Strukturální změny v repu, které vault neodrážel:**
+> - § 0.2 menu: ~~Novinky~~ + ~~Galerie~~ smazány z navigace (i adresáře `/novinky/` a `/galerie/` jsou pryč)
+> - § 0.4.2 „Sekce" grid: 8 → 6 položek (Novinky + Galerie odpadly), přepsán z plochého 4-col gridu na 2-col icon cards s Lucide ikonami
+> - § 0.4.1 „Co Hub nabízí": eyebrow povýšen na hlavní h2, podnadpis „Bydlení, práce, komunita, doprava." odstraněn; layout přepsán z 2-col karet na zig-zag (foto vlevo / text vpravo, alternující)
+> - § 3.5 „K upřesnění s Markem": omylem renderovaná na `/komunita/` jako veřejná sekce, odstraněna
+> - § 7 Galerie: stránka `/galerie/` smazaná
+> - § 8 Novinky: stránka `/novinky/` smazaná
+> - § 9.2 Rezervační wizard: 5 → 4 kroky (rekapitulace vypadla, GDPR + Odeslat sloučeny do kroku 4); karty v kroku 2 mají nově thumbnail + Detail link na detail stránku ubytování
+> - `/metodika-srovnani/` stránka smazaná (na žádost klienta) + odpovídající footer odkaz
+>
+> **Org údaje doplněné z `src/content/org/identity.json`:**
+> - IČO `270 26 345`, DIČ `CZ 270 26 345`, datová schránka `xen5zi3`, spisová značka `L 16540`
+> - OSA telefon `+420 777 786 476`, Marek `+420 602 849 342`, Štěpán Říha (místopředseda) `+420 725 307 798`
+> - Všechny „TBD (Marek doplní)" placeholdery v repu nahrazeny buď reálnou hodnotou, nebo neutrálním „bude doplněno"
+>
+> **„Registrace zájmu" → „Rezervace"** sjednoceno napříč buttons / breadcrumbs / CTA panely per locked decision z 2026-05-12. H1 + page title na samotné `/rezervace/` stránce zůstávají „Registrace zájmu o bydlení" jako kanonické per § 9.4.1.
+>
+> Detail anotací inline v jednotlivých sekcích níže (vyhledej `==REPO`).
+
 > **Co tu NENÍ:**
 >
 > - Srovnání s pražskou konkurencí (cenové analýzy, savings kalkulace, source citations) → [`Research/SH_Web_Research_Pricing_Comparison.md`](Research/SH_Web_Research_Pricing_Comparison.md)
@@ -38,31 +49,36 @@ Jediný zdroj pravdy pro **veškerý text a obrázky na živém webu** startovac
 
 ### 0.1 Brand sdělení (hero na landing, OG meta, social share)
 
+**Eyebrow:** Areál Horních kasáren · Klecany
+
 **Hlavní claim (H1 na `/`):**
 
-Horní kasárny Klecan, otevřené pro bydlení a práci. Devět typů pokojů a apartmánů: od kapsle pro jednoho po byt 5+kk pro skupinu. Coworking, dílny, sauna, společná kuchyně, kavárna. Pobytové stipendium dvakrát ročně.
+Startovací Hub.
 
-**Krátký lede pod nadpisem (60-120 znaků):**
+**Lead pod nadpisem:**
 
-Areál se otevírá postupně od roku 2026. Bývalé vojenské kasárny nad Vltavou, patnáct kilometrů severně od centra.
+Prostor pro život a tvorbu. Devět možností ubytování, od privátních kapslí po 5+kk apartmány. Coworking, dílny a ateliéry pro práci. Sauna, kavárna a společná kuchyně pro každodenní život. Patnáct minut autobusem do metra Kobylisy. Komunita a možnost pobytového stipendia.
 
 **Primární CTA (tlačítko v hero):**
 
-*Rezervovat* (vede na `/rezervace/`)
+*Rezervace* (vede na `/rezervace/`)
 
 **Sekundární CTA (link/exit):**
 
-*Podívat se na pokoje* (vede na `/ubytovani/`)
+*Možnosti ubytování* (vede na `/ubytovani/`)
 
 **Hlavní obrázky** (cyklus 4 fotek, 5 sekund na snímek; per `SH_Web_Visualization_List.md` §1.1 Tier A #1-4):
-- [ ] Letecký pohled na areál Klecany v ranní mlze nebo zlaté hodině (drone foto / Marek)
-- [ ] Dvůr za modré hodiny s lidmi u stolu venku, světla v oknech (render Hugo / Twinmotion)
+- [x] Letecký pohled na areál Klecany v ranní mlze nebo zlaté hodině (drone foto / Marek [[Aerial_view_of_revitalized_former_202605122011.jpeg]] ✅ 2026-05-13
+- [x] Dvůr za modré hodiny s lidmi u stolu venku, světla v oknech (render Hugo / Twinmotion)[[Inner_courtyard_of_revitalized_former_202605122002.jpeg]] ✅ 2026-05-13
+- [x] Cowork budova exteriér [[move_camera_bit_further,_from_202605122013.jpeg]] ✅ 2026-05-13
+- [x] jidelna [[change_angle,_photorealistic,_lunch_time,_202605122005.jpeg]] ✅ 2026-05-13
+- [x] kapsle [[kapsle-horizontal.jpg]] ✅ 2026-05-13
 - [ ] Coworking sál v odpoledním protisvětle, lidé v soustředění (render Hugo + lidé kompozit)
 - [ ] Obývák se třemi kapslemi v jednom rohu, knihovna a rostlina (render Hugo / Blender, klíčový reframing záběr)
 
 **OG meta a social share:**
-- OG title: *Startovací Hub Klecany*
-- OG description: *Horní kasárny Klecan otevíráme od roku 2026. Bydlení, coworking, dílny, sauna, společná kuchyně. Devět typů pokojů a apartmánů.*
+- OG title: *Startovací Hub - Areál Horních kasáren, Klecany*
+- OG description: *Prostor pro život a tvorbu v Horních kasárnách v Klecanech. Devět možností ubytování, od privátních kapslí po 5+kk apartmány. Coworking, dílny a ateliéry pro práci, sauna a kavárna pro každodenní život. Patnáct minut autobusem z Prahy. Možnost pobytového stipendia.*
 - OG image: jeden z 4 hero záběrů, nejvýraznější (asi #2 dvůr za modré hodiny nebo letecký areál)
 - Twitter card: summary_large_image, stejný obrázek
 
@@ -76,8 +92,8 @@ Finální názvy položek menu, sjednocené s locked sitemap z `SH_Web_Plan.md`:
 - **Okolí** (`/okoli/`)
 - **Doprava** (`/doprava/`)
 - **Stipendia** (`/stipendia/`)
-- **Novinky** (`/novinky/`)
-- **Galerie** (`/galerie/`)
+- ~~**Novinky** (`/novinky/`)~~ ==REPO: STRÁNKA + NAV ODKAZ SMAZÁNY (2026-05-13), zatím není obsah==
+- ~~**Galerie** (`/galerie/`)~~ ==REPO: STRÁNKA + NAV ODKAZ SMAZÁNY (2026-05-13), zatím není obsah==
 - **Rezervace** (primární CTA chip, plum accent, vždy vpravo nahoře, vede na `/rezervace/`)
 
 Vedle loga vlevo: štítek **„V projektové přípravě"** (per Marek 2026-05-12, viz sekce Stav projektu v menu výše).
@@ -88,7 +104,7 @@ Kontakty: nepatří do hlavního menu, jsou ve footer (sekce 0.3 + samostatná s
 
 **Kontakt:**
 - E-mail: `vpd@osa2.cz` (rezervační i obecný kontakt)
-- Telefon: TBD (Marek doplní číslo rezervačního oddělení)
+- Telefon: TBD (Marek doplní číslo rezervačního oddělení) ==REPO: telefon v footeru zatím vůbec nezobrazen (placeholder věta odstraněna). V /kontakty/ použit `org.phone = +420 777 786 476` z `identity.json`.==
 - Adresa: Horní Kasárna Klecany, 250 67 Klecany
 
 **Sociální sítě (URL, pokud existují):**
@@ -98,14 +114,141 @@ Kontakty: nepatří do hlavního menu, jsou ve footer (sekce 0.3 + samostatná s
 
 **Právní řádek (provozovatel, IČO):**
 
-> Provozuje Občanské sdružení Alternativa II, z.s. (OSA II). IČO: TBD (Marek doplní). Předseda: Marek Semerád. Registrováno u Městského soudu v Praze pod TBD. Tento web prezentuje projekt Startovacího Hubu Klecany v rámci záměru VPD1. Nabídka rezervací je nezávazná, slouží k registraci zájmu, není kupní ani nájemní smlouvou.
+> Provozuje Občanské sdružení Alternativa II, z.s. (OSA II). IČO: ~~TBD (Marek doplní)~~ ==REPO: `270 26 345`==. Předseda: Marek Semerád. Registrováno u Městského soudu v Praze pod ~~TBD~~ ==REPO: `L 16540`==. Tento web prezentuje projekt Startovacího Hubu Klecany v rámci záměru VPD1. Nabídka rezervací je nezávazná, slouží k registraci zájmu, není kupní ani nájemní smlouvou. ==REPO: footer plný text říká pouze „Nabídka rezervací je nezávazná. Slouží k registraci zájmu, není kupní ani nájemní smlouvou." - sloučeno do jedné věty, vynechán project descriptor.==
 
 **Vnější linky:**
 - Mateřský web OSA II: [alternativa2.info](https://www.alternativa2.info/)
 - Investiční záměr VPD: [vepde.com](https://vepde.com) (pro investory)
-- /metodika-srovnani/ (vysvětlení srovnání s pražskými cenami, povinné dle § 2980 OZ)
+- ~~/metodika-srovnani/ (vysvětlení srovnání s pražskými cenami, povinné dle § 2980 OZ)~~ ==REPO: STRÁNKA `/metodika-srovnani/` SMAZÁNA 2026-05-13 (na žádost klienta), footer odkaz odstraněn. Pokud bude potřeba kvůli § 2980 OZ při tvrzení srovnání s pražskými cenami, vrátit.==
 - /gdpr/ (zásady ochrany osobních údajů)
-- /cookies/ (cookies prohlášení, pokud zavedeme analytics)
+- ~~/cookies/ (cookies prohlášení, pokud zavedeme analytics)~~ ==REPO: stránka `/cookies/` neexistuje, cookies info je vloženo do `/gdpr/` (sekce „Cookies"). Vault zmiňuje jako podmíněně.==
+
+### 0.4 Landing - obsah pod hero
+
+Čtyři bloky, které se zobrazují pod hero (sekce 0.1) na hlavní stránce `/`. Aktuální Astro implementace v `src/pages/index.astro`.
+
+#### 0.4.1 „Co Hub nabízí" - 4 amenity karty
+
+**Eyebrow:** Co Hub nabízí ==REPO: eyebrow odstraněn, „Co Hub nabízí" povýšeno na hlavní H2==
+
+**H2:** Bydlení, práce, komunita, doprava. ==REPO: tato věta jako samostatný podnadpis odstraněna==
+
+Čtyři karty v 2-sloupcovém gridu (mobile 1 sloupec). Každá karta: title, lede (1-2 věty), horizontal scroll-snap gallery 4 fotek (peek next na pravé), footer link → detail sekce. ==REPO: layout přepsán na zig-zag (alternující foto + text řady) s Gallery komponentou (chevron buttony + dot pagination); nejde o 2-col grid karty.==
+
+**Karta 1 - Ubytování** (→ `/ubytovani/`)
+
+Lede:
+> Devět typů, od privátní kapsle pro jednoho po byt 5+kk pro skupinu.
+
+Fotky (per `SH_Web_Visualization_List.md` §1.2):
+- [x] [[1kk-a4-a6.jpg]] ✅ 2026-05-13
+- [x] [[vetsi-pokoj-a.jpg]] ✅ 2026-05-13
+- [x] [[kapsle-horizontal 1.jpg]] ✅ 2026-05-13
+- [x] [[1kk-1.jpg]] ✅ 2026-05-13
+- [ ] 1+kk ranní rituál: káva u okna, denní světlo, postel ustlaná v pozadí
+- [ ] Větší privátní apartmán (3+kk/4+kk): jídelní stůl, kuchyňský kout, postel
+- [ ] Kapsle ve společném pokoji s knihovnou a rostlinou
+- [ ] Dvoulůžko v privátním pokoji pro pár: manželská postel, prostor pro práci
+
+Foot link: „Možnosti ubytování →"
+
+**Karta 2 - Coworking** (→ `/coworking/`)
+
+Lede:
+> Volný stůl v sále zdarma pro rezidenty. Fixní stůl, ateliéry, dílny s těžkými stroji za hodinovou sazbu.
+
+Fotky:
+- [ ] 
+- [x] [[move_camera_bit_further,_from_202605122013.jpeg]] ✅ 2026-05-13
+- [x] cowork [[Interior_of_a_coworking_hall_202605122000.jpeg]] ✅ 2026-05-13
+- [ ] Coworkingový sál v 1. NP budovy C, pevné stoly a kávovar v rohu
+- [ ] Fixní stůl: dva monitory, ergonomická klávesnice, rostlina
+- [ ] Zasedací místnost se 6-člennou skupinou a AV technikou
+- [ ] Ateliér v D1 nebo dílna v H1 až H3, tvůrce u pracovního stolu
+
+Foot link: „Coworking, dílny a ateliéry →"
+
+**Karta 3 - Komunita** (→ `/komunita/`)
+
+Lede:
+> Wellness, sport, gastro, kultura. Bazén, sauna, kantýna v budově B, klubovna, komunitní zahrádky.
+
+Fotky:
+- [x] ext - pizza b - [[Inner_courtyard_of_revitalized_former_202605121957.jpeg]] ✅ 2026-05-13
+- [x] Jídelna v budově B, dřevěné stoly, lavice [[change_angle,_photorealistic,_lunch_time,_202605122005.jpeg]] ✅ 2026-05-13
+- [x] minipivovar exterier [[trznice-pivovar.jpg]] ✅ 2026-05-13
+- [ ] Klubovna v budově C s eventem (quiz noc, přednáška, projektor) 
+- [ ] Bazén v centrálním dvoře areálu, sluneční terasa
+
+Foot link: „Komunitní program →"
+
+**Karta 4 - Doprava** (→ `/doprava/`)
+
+Lede:
+> Hub-shuttle do metra Kobylisy, 5 jízd v ceně. Bus 374 a Hub-taxi. Cyklostezka EuroVelo 7 podél Vltavy.
+
+Fotky:
+- [x] zastávka [[tram-zastavka.jpg]] ✅ 2026-05-13
+- [ ] Hub-shuttle dodávka před hlavním vstupem, 3 rezidenti nastupují
+- [ ] Autobus 374 přijíždí na zastávku U Kostela v Klecanech
+- [ ] Hub-taxi, menší auto s lokálním logem, řidič a rezident
+- [ ] Cyklostezka EuroVelo 7 podél Vltavy, jezdec na kole
+
+Foot link: „Jak se sem dostanete →"
+
+#### 0.4.2 „Sekce" - 6 icon cards (==REPO: bylo 8, nyní 6 po smazání Novinky + Galerie==)
+
+==REPO: eyebrow „Sekce" a h2 „Šest dalších stránek." odstraněny, sekce začíná rovnou icon-card gridem. Layout přepsán z 4-col plochého gridu na 2-col icon cards (Lucide ikona v plum-tinted boxu + label + hint + plum šipka).==
+
+6-položkový grid (2 sloupce desktop, 1 mobile), Lucide ikona + label + jednořádkový hint per položka:
+
+| Label | Ikona | Hint |
+|---|---|---|
+| Ubytování | bed-double | 9 typů pokojů a apartmánů |
+| Coworking | briefcase | 5 tarifů od volného stolu po dílnu |
+| Komunita | users | Wellness, sport, gastro, kultura |
+| Okolí | map-pin | Klecany, 15 km severně od Prahy |
+| Doprava | bus | Hub-shuttle, bus 374, Hub-taxi |
+| Stipendia | sparkles | Pobytové stipendium, 4 role |
+| ~~Novinky~~ | - | ==REPO: STRÁNKA SMAZÁNA== |
+| ~~Galerie~~ | - | ==REPO: STRÁNKA SMAZÁNA== |
+
+#### 0.4.3 „Místo" - masterplan blok
+
+**Stav: stub, navržená copy k revizi.**
+
+Dvou-sloupcový blok (text vlevo, fotorealistický masterplan vpravo).
+
+**Eyebrow:** Místo
+
+**H2:** Horní kasárny, 15 km severně od centra Prahy.
+
+**Text (2 odstavce):**
+
+> Areál horních kasáren v Klecanech leží nad pravým břehem Vltavy. Patnáct kilometrů severně od Václavského náměstí, dvanáct minut autobusem 374 od metra Kobylisy.
+>
+> Bývalý vojenský areál, který otevíráme po etapách od roku 2026. Hub je první obyvatelná fáze záměru VPD1.
+
+**Obrázek:**
+- [ ] `masterplan_fotoreal.jpg` - fotorealistický masterplan s popisky budov A1-A6, B, C, D1-D2, H1-H3, plus bazén a venkovní prostory
+
+**Spodní odkazy:** „Co je v okolí →" /okoli/ · „Jak se sem dostanete →" /doprava/
+
+#### 0.4.4 Finální CTA panel
+
+**Stav: stub, navržená copy k revizi.**
+
+Plum accent background, centrovaný blok.
+
+**Eyebrow:** Rezervujte si místo
+
+**H2:** Bydlete tady měsíc, nebo rok.
+
+**Lede:**
+
+> Rezervace je nezávazná. Vyplníte konfiguraci pokoje, datum nástupu a kontakt. Z rezervačního oddělení vám zavoláme do 24 hodin s detailem dostupnosti a ceny.
+
+**Button:** „Rezervace" → `/rezervace/`
 
 ---
 
@@ -113,7 +256,7 @@ Kontakty: nepatří do hlavního menu, jsou ve footer (sekce 0.3 + samostatná s
 
 **Úvod pro celou sekci (1 odstavec, prodává proč):**
 
-V Hubu nabízíme devět typů bydlení. Čtyři varianty co-livingu (od kapsle pro jednoho po dvoulůžkový pokoj pro pár) a pět privátních apartmánů (1+kk až 5+kk). Energie, internet, úklid společných prostor, pět jízd Hub-shuttle do metra Kobylis měsíčně a poukaz do sauny v ceně. Najmete si pokoj na měsíc nebo na rok; čím déle zůstanete, tím nižší nájem.
+V Hubu nabízíme devět typů bydlení. Čtyři varianty co-livingu (od kapsle pro jednoho po dvoulůžkový pokoj pro pár) a pět privátních apartmánů (1+kk až 5+kk). Energie, internet, úklid společných prostor, pět jízd Hub-shuttle do metra Kobylis měsíčně a poukaz do sauny v ceně. 
 
 **Hlavní obrázek sekce (volitelně):**
 - [ ] Mozaika devíti hero záběrů, jeden za každý formát (z Tier A produkce, doplníme až po dokončení individuálních hero záběrů kapsle / pokojů / apartmánů)
@@ -902,7 +1045,7 @@ Pro externí návštěvníky Klecan: klubovna nabízí pronájem pro spolky a so
 
 ### 3.5 K upřesnění s Markem (amenity z původního návrhu, na masterplánu nedoložené)
 
-Tato podsekce na webu zveřejněna nebude. Slouží jako interní seznam, co Marek potvrdí jako reálné ve fázi 1, fázi 2 nebo úplně vypustí:
+Tato podsekce na webu zveřejněna nebude. Slouží jako interní seznam, co Marek potvrdí jako reálné ve fázi 1, fázi 2 nebo úplně vypustí: ==REPO: tato sekce byla omylem renderována na `/komunita/` stránce s nadpisem „Položky čekající na potvrzení" a 6 bullets. 2026-05-13 odstraněna kompletně, interní note nepatřila na public web.==
 
 - **U-rampa, pump-rampa, skate-park** - v sousedství je Skate hala Klecany v Dolních Kasárnách (verified), ale samostatný outdoor skate-program v Hubu na masterplánu není.
 - **Tělocvična na vzduchu (outdoor workout)** - v sousedství obce je workout park u fotbalu (verified), v Hubu samostatně není.
@@ -1169,7 +1312,7 @@ Pro plnou právní strukturu a daňový rámec viz interní rešerše `SH_Web_Re
 
 ---
 
-## 7. Galerie
+## 7. Galerie ==REPO: STRÁNKA `/galerie/` SMAZÁNA 2026-05-13. Nav odkaz + landing teaser odstraněny. Zatím chybí Tier A fotky pro samostatnou galerii; foto-galerie momentálně žijí jen jako embedded ve zig-zag amenity sekci na landingu a v sekcích jednotlivých detail pages. Vrátit po dodání obsahu.==
 
 **Úvod:**
 
@@ -1239,7 +1382,7 @@ Důkaz, že komunita reálně žije, ne jen v marketingových slibech.
 
 ---
 
-## 8. Novinky
+## 8. Novinky ==REPO: STRÁNKA `/novinky/` SMAZÁNA 2026-05-13. Nav odkaz + landing teaser odstraněny. Zatím nemáme reálné články; vrátit jakmile bude co publikovat (např. první post o spuštění rezervací, postup rekonstrukce, otevření první budovy).==
 
 **Úvod:**
 
@@ -1297,20 +1440,35 @@ Vyhýbám se: „jsme nadšeni, že", „s hrdostí oznamujeme", „revoluční 
 
 ## 9. Rezervace
 
-> Tato sekce řídí formulář. Konfigurátor je pětikrokový průvodce (viz `SH_Web_Plan.md` sekce „Reservation configurator"). Backend: Cloudflare Worker + Turnstile + Resend + D1 EU jurisdikce. Zatím není napojený, ale struktura textu a polí je locked.
+> Tato sekce řídí formulář. Konfigurátor je ~~pětikrokový~~ ==REPO 2026-05-13: ČTYŘkrokový== průvodce (viz `SH_Web_Plan.md` sekce „Reservation configurator"). Backend: Cloudflare Worker + Turnstile + Resend + D1 EU jurisdikce. Zatím není napojený, ale struktura textu a polí je locked.
 
 ### 9.1 Vstupní text pod hlavičkou
 
-**Úvod (proč si rezervovat, jak rychle reagujeme):**
+**Eyebrow:** Rezervace
 
-Sestav si bydlení podle toho, jak chceš v Hubu žít. Vyber typ, termín, délku pobytu a kontakt. Do 24 hodin se ti ozveme telefonicky a probereme detaily. Rezervace je nezávazná, neuzavíráš ji jako smlouvu, jen nám říkáš, že tě to zajímá.
+**H1:** Rezervace bydlení.
+
+**Lede:**
+
+Vyplň konfiguraci pokoje, termín a kontakt. Není to závazek, jen ti zavoláme. Do 24 hodin se ti ozve někdo z rezervačního oddělení s detailem dostupnosti a ceny.
+
+==REPO 2026-05-13: Web má ještě starý H1 „Registrace zájmu o bydlení." a vykání („vyplníte", „vám zavoláme"). Vault synchronizován s locked decision 2026-05-12 (rename na „Rezervace") a s vault-wide tykáním. Sync pending na sh-web/index.astro.==
 
 ### 9.2 Pole formuláře
+
+==REPO 2026-05-13: Pětikrokový průvodce zkrácen na ČTYŘkrokový. Krok 5 (Rekapitulace + GDPR) byl vypuštěn úplně, GDPR checkbox a tlačítko „Odeslat" sloučeny do kroku 4 (Osobní profil). Karty v kroku 2 mají nově thumbnail + Detail link otvírající `/ubytovani/.../<slug>/` v novém tabu.==
 
 Pětikrokový průvodce, struktura locked dle `SH_Web_Plan.md` „Reservation configurator":
 
 **Krok 1: Koncept bydlení**
-- Tři karty (radio): Privátní apartmán / Co-living / Nevím, poradíme
+
+Tři karty (radio) s krátkou ledou:
+
+- **Privátní apartmán** - *Vlastní byt, vlastní koupelna a kuchyň. Od 9 500 Kč/měsíc.*
+- **Co-living** - *Vlastní lůžko nebo kapsle, společná kuchyň. Od 2 250 Kč/měsíc při ročním závazku.*
+- **Nevím ještě** - *Tři otázky, doporučíme variantu, ozveme se.*
+
+==REPO 2026-05-13: Třetí karta na webu je „Nevím, poradíme" - „poradíme" je trochu paternalistic. Vault přejmenován na „Nevím ještě" (peer voice pro target audience 22-35). Sync pending na sh-web.==
 
 **Krok 2: Konfigurace prostoru** (podmínečné na kroku 1)
 - Pokud Privátní: 5 karet (1+kk, 2+kk, 3+kk, 4+kk, 5+kk) s cenou za jednotku, cenou za osobu, plochou, lůžky
@@ -1329,15 +1487,15 @@ Pětikrokový průvodce, struktura locked dle `SH_Web_Plan.md` „Reservation co
 - E-mail (povinné)
 - Poznámka (volitelná, do 500 znaků)
 
-**Krok 5: Rekapitulace + GDPR**
-- Souhrn: typ, termín, cena, vše v ceně (energie, internet, úklid, 5 jízd Hub-shuttle, 1 jízda Hub-taxi, coworking, sauna)
-- GDPR checkbox: „Souhlasím se zpracováním osobních údajů pro účely vyřízení registrace zájmu. Viz [Zásady ochrany](/gdpr/)."
-- Button: „Odeslat nezávaznou registraci"
+~~**Krok 5: Rekapitulace + GDPR**~~ ==REPO: KROK 5 VYPUŠTĚN. Rekapitulace odstraněna úplně. GDPR checkbox + tlačítko Odeslat přesunuty do konce Kroku 4 (Osobní profil).==
+- ~~Souhrn: typ, termín, cena, vše v ceně (energie, internet, úklid, 5 jízd Hub-shuttle, 1 jízda Hub-taxi, coworking, sauna)~~
+- GDPR checkbox: „Souhlasím se zpracováním osobních údajů pro účely vyřízení registrace zájmu. Viz [Zásady ochrany](/gdpr/)." ==(nyní v Kroku 4)==
+- Button: ~~„Odeslat nezávaznou registraci"~~ ==REPO: „Odeslat nezávaznou rezervaci" (nyní v Kroku 4)==
 
-**Stálý postranní panel** (přilepený na desktopu, rozbalitelný spodní panel na mobilu):
+**Stálý postranní panel** (přilepený na desktopu, na mobilu se zobrazí nad formulářem `order: -1`): ==REPO: na mobilu pod 960 px sidebar přesunut NAD form (ne pod), aby uživatel rovnou viděl cenu při výběru.==
 - Aktuální cena (mění se s konfigurací)
-- Kontrolní seznam „vše v ceně" (energie, internet, úklid, Hub-shuttle 5 jízd, Hub-taxi 1 jízda, coworking, sauna)
-- 4 amenity pilíře (Wellness, Sport, Gastro, Komunita) s popisky o tom, co spadá do každého
+- Kontrolní seznam „vše v ceně" (energie, internet, úklid, Hub-shuttle 5 jízd, Hub-taxi 1 jízda, coworking, sauna) ==REPO: zobrazený seznam je zkrácený, NEOBSAHUJE „energie, internet, úklid". Stojí: „5 jízd Hub-shuttle do metra Kobylis měsíčně / 1 jízda Hub-taxi lokálně měsíčně / Volný stůl v coworkingovém sále 24/7 / Poukaz do sauny 1× týdně". Doplnit „Energie, internet, úklid společných prostor" na první řádek.==
+- ~~4 amenity pilíře (Wellness, Sport, Gastro, Komunita) s popisky o tom, co spadá do každého~~ ==REPO: amenity pilíře v sidebaru nejsou; sidebar drží jen cenu + „vše v ceně" + poznámku.==
 
 ### 9.3 Po odeslání - success copy
 
@@ -1347,7 +1505,7 @@ Děkujeme, dorazilo. Zavoláme vám do 24 hodin.
 
 **Co bude následovat (kdo, kdy, jak volá):**
 
-Marek nebo někdo z rezervačního týmu se vám ozve telefonicky během příštího pracovního dne, většinou rychleji. Probereme, kdy chcete přijet na prohlídku, jaké jsou detaily kolem termínu nástupu a jak postupujeme dál. Když nestihnete, zavoláme znovu nebo napíšeme.
+Marek nebo někdo z rezervačního týmu se vám ozve telefonicky během příštího pracovního dne, většinou rychleji. Probereme, kdy chcete přijet na prohlídku, jaké jsou detaily kolem termínu nástupu a jak postupujeme dál. Když nestihnete, zavoláme znovu nebo napíšeme. ==REPO: „Marek nebo někdo" → „Někdo" (Marek attribution dropped per pravidlo „bez zmínek čekání na Marka"). Poslední věta o „Když nestihnete" v repu chybí.==
 
 Toto je nezávazná registrace zájmu. Žádný závazek z vaší strany, žádný účet od nás. Pokud se rozhodnete jinak, prostě nám to dejte vědět nebo neodpovídejte, nic nezačne běžet.
 
@@ -1382,12 +1540,16 @@ Hub a celý záměr VPD1 provozuje občanské sdružení Alternativa II, z.s. (O
 
 ### 10.1 Provozovatel
 
+==REPO 2026-05-13: Org údaje doplněné z `src/content/org/identity.json`. „TBD (Marek doplní)" placeholdery odstraněny ze všech polí kde data existují; zbývající (rezervační oddělení jméno+telefon, GPS) zobrazeny jako neutrální „bude doplněno".==
+
 - **Název organizace:** Občanské sdružení Alternativa II, z.s. (OSA II)
-- **IČO:** TBD (Marek doplní)
+- **IČO:** ~~TBD (Marek doplní)~~ ==REPO: `270 26 345`==
+- **DIČ:** ==REPO: `CZ 270 26 345` (v identity.json)==
 - **Adresa:** Horní Kasárna Klecany, 250 67 Klecany
 - **E-mail:** `vpd@osa2.cz`
-- **Telefon:** TBD (Marek doplní číslo rezervačního oddělení)
-- **Datová schránka:** TBD
+- **Telefon:** ~~TBD (Marek doplní číslo rezervačního oddělení)~~ ==REPO: `+420 777 786 476` (org phone z identity.json, ne dedikovaná linka rezervačního oddělení)==
+- **Datová schránka:** ~~TBD~~ ==REPO: `xen5zi3`==
+- **Spisová značka:** ==REPO: `L 16540, Městský soud v Praze`==
 - **Mateřský web:** [alternativa2.info](https://www.alternativa2.info/)
 
 ### 10.2 Osoby
@@ -1396,39 +1558,42 @@ Hub a celý záměr VPD1 provozuje občanské sdružení Alternativa II, z.s. (O
 
 **Jméno:** Marek Semerád
 **Funkce:** Předseda občanského sdružení Alternativa II, z.s. (OSA II), vedoucí záměru VPD1 a Startovacího Hubu Klecany
-**E-mail:** `vpd@osa2.cz`
-**Telefon:** TBD
+**E-mail:** ~~`vpd@osa2.cz`~~ ==REPO: `marek.semerad@osa2.cz`==
+**Telefon:** ~~TBD~~ ==REPO: `+420 602 849 342`==
 **Foto (volitelně):**
 - [ ] Portrét, neutrální pozadí, denní světlo
+
+==REPO 2026-05-13: PŘIDÁNO 10.2.1bis Štěpán Říha, místopředseda OSA II==
+==Jméno: Štěpán Říha · Funkce: Místopředseda OSA II, technické a provozní otázky · E-mail: `stepan.riha@osa2.cz` · Telefon: `+420 725 307 798`. Renderuje se v `/kontakty/` jako druhá osoba pod Markem. Vault dosud Štěpána nezmiňoval, doplnit do strukturované verze nebo se rozhodnout zda zobrazovat veřejně.==
 
 #### 10.2.2 Rezervační oddělení
 
 **Funkce:** Zájemci o bydlení, plánování prohlídek areálu, ceník a podmínky
-**Jméno:** TBD (Marek doplní jméno koordinátora rezervací)
+**Jméno:** ~~TBD (Marek doplní jméno koordinátora rezervací)~~ ==REPO: „bude doplněno"==
 **E-mail:** `vpd@osa2.cz` (společný)
-**Telefon:** TBD
+**Telefon:** ~~TBD~~ ==REPO: „bude doplněno"==
 
 #### 10.2.3 Stipendijní program
 
 **Funkce:** Otázky kolem pobytového stipendia, výběrový proces (otevírá se po pilotu podzim 2026)
-**Jméno:** TBD
-**E-mail:** `stipendium@startovacihub.cz` (návrh, k upřesnění) nebo `vpd@osa2.cz`
-**Telefon:** TBD
+**Jméno:** ~~TBD~~ ==REPO: „bude doplněno"==
+**E-mail:** `stipendium@startovacihub.cz` (návrh, k upřesnění) nebo `vpd@osa2.cz` ==REPO: zobrazeno jen „stipendium@startovacihub.cz (návrh) nebo vpd@osa2.cz", bez „k upřesnění"==
+**Telefon:** ==REPO: políčko Telefon u stipendijního programu vůbec nezobrazeno (jen e-mail).==
 
 #### 10.2.4 Tisk a média
 
 **Funkce:** Médiové žádosti, rozhovory, podklady pro novináře
-**Jméno:** TBD
+**Jméno:** ~~TBD~~ ==REPO: „bude doplněno"==
 **E-mail:** `tisk@startovacihub.cz` (návrh) nebo `vpd@osa2.cz`
-**Telefon:** TBD
+**Telefon:** ==REPO: políčko Telefon u tisku vůbec nezobrazeno.==
 
 ### 10.3 Kde nás najdeš (adresa a mapa)
 
 **Adresa:** Horní Kasárna Klecany, 250 67 Klecany
 
-**GPS:** TBD (Marek doplní souřadnice hlavního vstupu V z masterplánu)
+**GPS:** ~~TBD (Marek doplní souřadnice hlavního vstupu V z masterplánu)~~ ==REPO: „bude doplněno"==
 
-**Otevírací doba kanceláře OSA II v Hubu:** TBD (návrh Po-Pá 9:00-17:00, k upřesnění)
+**Otevírací doba kanceláře OSA II v Hubu:** ~~TBD (návrh Po-Pá 9:00-17:00, k upřesnění)~~ ==REPO: „Po až Pá 9:00 až 17:00" bez „TBD" a „k upřesnění" placeholderu==
 
 **Hlavní vstup do areálu:** vrátnice V (viz masterplan), označený „Hlavní vstup". Z autobusové zastávky „Klecany, U hřbitova" pěšky 4 minuty.
 
@@ -1476,19 +1641,19 @@ Hub a celý projekt jsou nekomerční záměr nestátního občanského sdružen
 
 **Otázka:** Mazlíček ano nebo ne?
 
-**Odpověď:** Předběžně ano, ale s dohodou. V privátních apartmánech bez většího omezení (jen u sousedů zajistit dohodu o klidu). V co-livingu (kapsle, lůžka, dvoulůžka) dle dohody s ostatními rezidenty patra. Při registraci zájmu napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily. Definitivní pravidla doladíme s prvním kolem rezidentů.
+**Odpověď:** Předběžně ano, ale s dohodou. V privátních apartmánech bez většího omezení (jen u sousedů zajistit dohodu o klidu). V co-livingu (kapsle, lůžka, dvoulůžka) dle dohody s ostatními rezidenty patra. Při registraci zájmu napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily. ~~Definitivní pravidla doladíme s prvním kolem rezidentů.~~ ==REPO: poslední věta o „doladění s prvním kolem rezidentů" odstraněna (pravidlo bez zmínek o budoucích úpravách).==
 
 #### A.6 Jak funguje stipendium? Kdy se otvírá?
 
 **Otázka:** Slyšel jsem o pobytovém stipendiu. Co to je a jak se přihlásit?
 
-**Odpověď:** Stipendium pokrývá nebo zvýhodňuje pobyt výměnou za hmatatelný vstup do života Hubu. Čtyři role: rezident-tvůrce (vlastní projekt), správce na výměnu (operativní role), stavitel-rezident (účast na rekonstrukci), rezident-programátor (vývoj digitální infrastruktury Hubu). První otevřená výzva: podzim 2026, pilot 8-12 míst, primárně rezident-tvůrce. V registraci zájmu o bydlení zaškrtnete přepínač „Mám zájem o pobytové stipendium", ozveme se, jakmile otevřeme výzvu. Konkrétní podmínky a daňový rámec finalizujeme s právníkem před první výzvou.
+**Odpověď:** Stipendium pokrývá nebo zvýhodňuje pobyt výměnou za hmatatelný vstup do života Hubu. Čtyři role: rezident-tvůrce (vlastní projekt), správce na výměnu (operativní role), stavitel-rezident (účast na rekonstrukci), rezident-programátor (vývoj digitální infrastruktury Hubu). První otevřená výzva: podzim 2026, pilot 8-12 míst, primárně rezident-tvůrce. V registraci zájmu o bydlení zaškrtnete přepínač „Mám zájem o pobytové stipendium", ozveme se, jakmile otevřeme výzvu. ~~Konkrétní podmínky a daňový rámec finalizujeme s právníkem před první výzvou.~~ ==REPO: poslední věta o „finalizujeme s právníkem" odstraněna (pravidlo bez zmínek o čekání/budoucích úpravách).==
 
 #### A.7 Můžu si v Hubu zaregistrovat sídlo OSVČ?
 
 **Otázka:** Jsem živnostník, můžu si v Hubu zaregistrovat sídlo firmy?
 
-**Odpověď:** Pracujeme na tom. Pro registraci sídla je třeba souhlas vlastníka prostor, který jako provozovatel poskytneme za drobný poplatek (cca 99 Kč/měs, k upřesnění) jen pro rezidenty Hubu. Sídlo nebude exklusivně využíváno, slouží jako poštovní adresa s skenováním pošty na e-mail. Pro detailní podmínky se ozvěte na `vpd@osa2.cz` při registraci zájmu.
+**Odpověď:** Pracujeme na tom. Pro registraci sídla je třeba souhlas vlastníka prostor, který jako provozovatel poskytneme za drobný poplatek (cca 99 Kč/měs ~~, k upřesnění~~ ==REPO: parenthetical „k upřesnění" odstraněn==) jen pro rezidenty Hubu. Sídlo nebude exklusivně využíváno, slouží jako poštovní adresa s~~ ~~==REPO: se== skenováním pošty na e-mail. Pro detailní podmínky se ozvěte na `vpd@osa2.cz` při registraci zájmu.
 
 #### A.8 Co se stane, když Hub nestihne otevřít, jak slibujete?
 
@@ -1515,4 +1680,4 @@ Hub a celý projekt jsou nekomerční záměr nestátního občanského sdružen
 
 > Tady já (Claude) budu průběžně udržovat seznam neznámých. Ty se k tomu vracíš a doplňuješ. Já tu udržuju aktuální TODO.
 
-- [ ] (zatím nic — vyplníme po první dávce)
+- [ ] (zatím nic, vyplníme po první dávce)

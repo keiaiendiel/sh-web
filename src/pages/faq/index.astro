@@ -12,8 +12,8 @@ const faq = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.or
     <p class="page-stub__eyebrow">FAQ</p>
     <h1>Deset nejčastějších otázek.</h1>
     <p class="page-stub__lede">
-      Otázky, které dostáváme nejčastěji. Pokud něco chybí, ozvěte se na vpd@osa2.cz nebo
-      v <a href={withBase('/rezervace/')}>registraci zájmu</a> napište do poznámky.
+      Otázky, které dostáváme nejčastěji. Když něco chybí, napište na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>
+      nebo to dejte do poznámky při <a href={withBase('/rezervace/')}>registraci zájmu</a>.
     </p>
   </article>
 
@@ -42,9 +42,9 @@ const faq = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.or
     <div class="sec-cta__inner">
       <h2 class="sec-cta__title">Něco tu chybí?</h2>
       <p class="sec-cta__lede">
-        Napište nám na vpd@osa2.cz nebo to dejte do poznámky při registraci zájmu.
+        Napište na <a href="mailto:vpd@osa2.cz" style="color:#fff;text-decoration:underline">vpd@osa2.cz</a>, nebo to dejte do poznámky při registraci zájmu.
       </p>
-      <a class="sec-cta__button" href={withBase('/rezervace/')}>Rezervace</a>
+      <a class="sec-cta__button" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
     </div>
   </section>
 </Base>
