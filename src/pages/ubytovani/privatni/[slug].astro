@@ -108,7 +108,12 @@ const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['1kk'];
   .apt-gallery__eyebrow:hover, .apt-gallery__eyebrow:focus-visible { border-bottom-color: currentColor; outline: none; }
   .apt-gallery__title { font: 600 clamp(1.75rem, 3vw, 2.25rem) / 1.15 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0; }
   .apt-gallery__lede { font-size: var(--text-md); line-height: 1.55; margin: var(--space-2) 0 var(--space-4); color: var(--fg-soft, var(--fg)); max-width: 38ch; }
+  /* Price block: hlavní anchor (od X Kč/měsíc) na jednom řádku,
+     per-osoba breakdown (4 750 Kč/osobu při dvou) na samostatném
+     řádku pod, menší font, fg-muted. flex-basis 100% na .apt-gallery__per
+     ho přerolí na nový řádek bez wrap-na-nemožné-přerušení. */
   .apt-gallery__price { display: flex; align-items: baseline; gap: 6px; margin: 0 0 var(--space-4); flex-wrap: wrap; }
+  .apt-gallery__per { flex-basis: 100%; margin-top: 2px; padding-left: 0; }
   .apt-gallery__prefix { font: 500 var(--text-md) / 1 var(--font-sans); color: var(--fg-soft, var(--fg)); }
   .apt-gallery__num { font: 600 clamp(1.75rem, 3vw, 2.25rem) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-tight); }
   .apt-gallery__unit { font: 500 var(--text-md) / 1 var(--font-sans); color: var(--fg-soft, var(--fg)); }

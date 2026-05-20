@@ -112,7 +112,7 @@ const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['jedno-luzko'];
   .apt-gallery__prefix { font: 500 var(--text-md) / 1 var(--font-sans); color: var(--fg-soft, var(--fg)); }
   .apt-gallery__num { font: 600 clamp(1.75rem, 3vw, 2.25rem) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-tight); }
   .apt-gallery__unit { font: 500 var(--text-md) / 1 var(--font-sans); color: var(--fg-soft, var(--fg)); }
-  .apt-gallery__per { font: 500 var(--text-sm) / 1 var(--font-sans); color: var(--fg-muted, var(--fg)); }
+  .apt-gallery__per { font: 500 var(--text-sm) / 1 var(--font-sans); color: var(--fg-muted, var(--fg)); flex-basis: 100%; margin-top: 2px; padding-left: 0; }
   .apt-gallery__cta { display: inline-flex; align-items: center; gap: 6px; padding: 12px 22px; font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--accent-on); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--radius-input); text-decoration: none; width: fit-content; transition: background 200ms ease, color 200ms ease; }
   .apt-gallery__cta:hover, .apt-gallery__cta:focus-visible { background: transparent; color: var(--accent); outline: none; }
   /* Media wrapper: position relative + overflow visible aby ribbon mohl
