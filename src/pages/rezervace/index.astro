@@ -727,13 +727,14 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   }
 
   /* ---------- Panel + animovaný slide ---------- */
-  .rez__form { position: relative; display: grid; }
+  .rez__form { position: relative; display: grid; min-width: 0; }
   .rez__panel {
     grid-column: 1;
     grid-row: 1;
     display: flex;
     flex-direction: column;
     gap: var(--space-5);
+    min-width: 0;
     opacity: 0;
     transform: translateX(40px);
     pointer-events: none;
@@ -741,6 +742,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       opacity 320ms cubic-bezier(0.32, 0.72, 0, 1),
       transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
   }
+  .rez__panel > * { min-width: 0; }
   .rez__panel.is-current {
     opacity: 1;
     transform: translateX(0);
@@ -780,12 +782,17 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   }
 
   /* Intro wrapper, h1 + hint stack uvnitř jednoho gridového cellu. Na
-     mobilu se chová jako běžný blok, na desktopu sedí v levém sloupci. */
+     mobilu se chová jako běžný blok, na desktopu sedí v levém sloupci.
+     min-width 0 zajistí, že wrapper nezachvátí víc než parent dovoluje
+     (jinak by velmi dlouhý h1 mohl udělat horizontal overflow na úzkém
+     viewportu). */
   .rez__panel-intro {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+    min-width: 0;
   }
+  .rez__panel-intro > * { min-width: 0; max-width: 100%; }
 
   /* ---------- Desktop 2-col panel: intro vlevo, body vpravo ---------- */
   /* Na širokém viewportu rozkládáme každý panel do gridu: rez__panel-intro
