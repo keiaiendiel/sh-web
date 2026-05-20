@@ -747,6 +747,34 @@ const tiles = [
     .lp-tile--rose .lp-tile__ribbon path  { stroke-width: 14; }
     .lp-tile--deep .lp-tile__ribbon path  { stroke-width: 38; }
     .lp-tile--ink .lp-tile__ribbon path   { stroke-width: 30; }
+
+    /* Telefonní šachovnice: prohozená barevnost Komunitní zázemí (3.)
+       a Stipendijní programy (4.) oproti desktopu, aby v 2-col mobile
+       gridu vznikla cross diagonal cream/ink, ne sloupcový blok cream
+       vlevo + ink vpravo. */
+    .lp-tiles__grid > .lp-tile:nth-child(3) {
+      background: var(--plum-deep);
+      color: var(--cream);
+    }
+    .lp-tiles__grid > .lp-tile:nth-child(3) .lp-tile__title { color: var(--cream); }
+    .lp-tiles__grid > .lp-tile:nth-child(3) .lp-tile__ribbon path { stroke: var(--rose); }
+    .lp-tiles__grid > .lp-tile:nth-child(4) {
+      background: var(--cream);
+      color: var(--fg);
+      border: 1px solid var(--accent-rule);
+    }
+    .lp-tiles__grid > .lp-tile:nth-child(4) .lp-tile__title { color: var(--fg); }
+    .lp-tiles__grid > .lp-tile:nth-child(4) .lp-tile__ribbon path { stroke: var(--accent); }
+    /* Arrow hover/idle flip: na cream → cream svg po vyplnění,
+       na ink → plum-deep svg po vyplnění. */
+    .lp-tiles__grid > .lp-tile:nth-child(3):hover .lp-tile__arrow :global(svg),
+    .lp-tiles__grid > .lp-tile:nth-child(3):focus-visible .lp-tile__arrow :global(svg) {
+      color: var(--plum-deep);
+    }
+    .lp-tiles__grid > .lp-tile:nth-child(4):hover .lp-tile__arrow :global(svg),
+    .lp-tiles__grid > .lp-tile:nth-child(4):focus-visible .lp-tile__arrow :global(svg) {
+      color: var(--cream);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
