@@ -79,6 +79,7 @@ const sections: Section[] = [
       { src: withBase('/images/hub/ubytovani/02-1kk.jpg'), alt: 'Privátní apartmán 1+kk, postel u okna, kuchyňský kout a jídelní stůl.' },
       { src: withBase('/images/hub/ubytovani/03-ext.jpg'), alt: 'Privátní apartmány v parteru za soumraku, alej bříz, teplá světla v oknech.' },
       { src: withBase('/images/hub/ubytovani/04-int.jpg'), alt: 'Interiér privátního apartmánu, večerní atmosféra s teplým světlem.' },
+      { src: withBase('/images/hub/ubytovani/05-kapsle-wide.jpg'), alt: 'Co-living kapsle, široký pohled na chodbu s lavicí a kapslemi v patrech.' },
     ],
   },
   {
@@ -174,10 +175,10 @@ const tiles = [
   <section class="lp-hero" aria-label="Startovací Hub Klecany, hero galerie">
     <div class="lp-hero__rotation" aria-hidden="true">
       {heroSlides.map((slide, i) => (
-        <div class="lp-hero__slide" data-slide={i} style={`animation-delay: ${i * 5}s`}>
+        <div class="lp-hero__slide" data-slide={i} style={`animation-delay: ${i * 5 - 1}s`}>
           <picture>
             <source media="(max-width: 768px)" srcset={slide.phone} />
-            <img class="lp-hero__bg" src={slide.desktop} alt={slide.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+            <img class="lp-hero__bg" src={slide.desktop} alt={slide.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" fetchpriority={i === 0 ? 'high' : undefined} />
           </picture>
         </div>
       ))}
@@ -384,7 +385,10 @@ const tiles = [
        starší prohlížeče. Header je position: fixed (overlay variant),
        takže hero může jít plně pod něj. Horizontální gutter je na
        __inner aby content alignoval s header bar pattern (max-width +
-       padding-x + margin auto). */
+       padding-x + margin auto).
+       Background image fallback (h00 desktop): vyplní hero okamžitě
+       z CSS než se IMG slide dolaďí, žádný plum-deep flash při cold
+       reload. Slide carousel se layeruje navrch přes z-index -2. */
     min-height: 100vh;
     min-height: 100dvh;
     display: flex;
@@ -392,8 +396,14 @@ const tiles = [
     justify-content: center;
     padding: var(--space-9) 0;
     color: #fff;
-    background: var(--plum-deep);
+    background-color: var(--plum-deep);
+    background-image: url('/sh-web/images/hub/hero/h00.jpg');
+    background-size: cover;
+    background-position: center;
     overflow: hidden;
+  }
+  @media (max-width: 768px) {
+    .lp-hero { background-image: url('/sh-web/images/hub/hero/h00-phone.jpg'); }
   }
   .lp-hero__rotation {
     position: absolute;
