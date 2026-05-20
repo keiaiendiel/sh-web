@@ -307,9 +307,10 @@ const isHome = current === withBase('/');
   .hub-header--dark .hub-header__link:hover,
   .hub-header--dark .hub-header__link[aria-current='page'] { color: #fff; }
 
-  /* Overlay (transparent, nad hero): aktivní link je bílý + bílý underline.
-     Po scrollu pod hero (is-stuck) se vrací k plum přes původní rule výš. */
-  .hub-header--overlay:not(.is-stuck) .hub-header__link[aria-current='page'] {
+  /* Overlay (transparent, nad hero): aktivní link je bílý + bílý underline,
+     ALE jen na dark hero. Na light hero (cream/rose) drží plum.
+     :global(body:not...) zachytí oba případy v rámci scoped CSS pravidla. */
+  :global(body:not([data-hero-tone="light"])) .hub-header--overlay:not(.is-stuck) .hub-header__link[aria-current='page'] {
     color: #fff;
     border-bottom-color: #fff;
   }

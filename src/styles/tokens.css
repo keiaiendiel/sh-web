@@ -53,21 +53,23 @@
      primary scale; K05 / K20 / K60 / K80 are interleaved rungs added for
      Hub-page surface tones (subtle backgrounds, hairline borders, muted
      captions) so component CSS doesn't depend on hex fallbacks. */
+  /* Monochromatic škála je tónovaná na náš brand --hue (240), aby tmavé
+     odstíny nikdy nepůsobily jako neutrální šedá / černá. Saturace stoupá
+     s tmavostí, takže nejtmavší rungy mají výrazný modrý tint sjednocený
+     s --plum-deep. Světlé rungy zůstávají téměř neutrální. */
   --k-0:    #ffffff;
-  --k-05:   #f6f6f6;
-  --k-10:   #e6e6e6;
-  --k-15:   #dddddd;   /* hairline rung — between k-10 and k-20, replaces
-                          k-30 as the default soft rule across components */
-  --k-20:   #d4d4d4;
-  --k-30:   #bebebe;
-  --k-50:   #969696;
-  --k-60:   #878787;
-  --k-70:   #787878;
-  --k-80:   #585858;
-  --k-90:   #3c3c3c;
-  /* k-100: nejhlubší rung, sjednocený s --plum-deep, aby celý web držel
-     jemný modrý nádech místo neutrální černé. Veškeré "nejtmavší" povrchy
-     (text, bg-inverse, border, rule) tím dědí brand tint. */
+  --k-05:   hsl(var(--hue) 14% 97%);
+  --k-10:   hsl(var(--hue) 12% 91%);
+  --k-15:   hsl(var(--hue) 12% 87%);
+  --k-20:   hsl(var(--hue) 12% 83%);
+  --k-30:   hsl(var(--hue) 12% 74%);
+  --k-50:   hsl(var(--hue) 10% 59%);
+  --k-60:   hsl(var(--hue) 10% 53%);
+  --k-70:   hsl(var(--hue) 12% 47%);
+  --k-80:   hsl(var(--hue) 14% 35%);
+  --k-90:   hsl(var(--hue) 18% 24%);
+  /* k-100 = plum-deep, sjednoceno tak, aby všechen text, border a inverse
+     surface měl konzistentní brand tint. */
   --k-100:  hsl(var(--hue) 41% 13%);
 
   /* ---------- Project accent palette (sub-projects only) ----------

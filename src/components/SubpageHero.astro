@@ -134,15 +134,8 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
       ribbon-snake-draw 2.8s var(--ease-snake) forwards,
       ribbon-breathe 7s ease-in-out 2.8s infinite;
   }
-  /* Hover: ribbon se posune 14 px doprava + zastaví breathing + zvýší opacity.
-     Z 00-SPEC.html § Photo backdrop (řádky 420-421). */
-  .subpage-hero:hover .subpage-hero__bg {
-    transform: translateX(14px);
-  }
-  .subpage-hero:hover .subpage-hero__bg[data-ribbon-reveal].is-revealed path {
-    animation-play-state: paused;
-    opacity: 0.85;
-  }
+  /* Subpage hero ribbon je statický, žádný hover effect. Pohyblivý ribbon
+     žije jen na landingu při hoveru CTA tlačítek (lp-section). */
 
   .subpage-hero__inner {
     position: relative;

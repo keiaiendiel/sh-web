@@ -148,14 +148,16 @@ const sections: Section[] = [
    sjednocen s CrossLinkPair komponentou: 4 varianty (deep, cream, rose, ink)
    rotují tak aby žádné dva sousedy neměly stejnou. Eyebrow (uppercase small caps)
    + bold title, vpravo dole 36×36 kruhová šipka. Ribbon arc zůstává v pozadí. */
+/* Tile variant zigzag: 1, 3, 5 cream + 2, 4, 6 ink. Stejný ribbon stroke
+   napříč ink tiles, stejný ribbon stroke napříč cream tiles. */
 const tiles = [
   { eyebrow: 'Apartmány, kapsle, lůžka',     title: 'Ubytovací služby',     href: '#ubytovani', variant: 'cream',
     path: 'M 60 240 C 220 100, 380 320, 540 200 C 660 100, 720 260, 760 340' },
   { eyebrow: 'Sál, ateliér, dílna',          title: 'Coworking',            href: '#coworking', variant: 'ink',
     path: 'M 80 120 C 240 280, 400 80, 560 240 C 680 360, 740 200, 760 320' },
-  { eyebrow: 'Bazén, sauna, jídelna',        title: 'Komunitní zázemí',     href: '#komunita',  variant: 'rose',
+  { eyebrow: 'Bazén, sauna, jídelna',        title: 'Komunitní zázemí',     href: '#komunita',  variant: 'cream',
     path: 'M 80 200 C 240 80, 420 280, 580 160 C 700 80, 740 240, 760 320' },
-  { eyebrow: 'Pobyt zdarma za projekt', title: 'Stipendijní programy', href: '#stipendia', variant: 'deep',
+  { eyebrow: 'Pobyt zdarma za projekt',      title: 'Stipendijní programy', href: '#stipendia', variant: 'ink',
     path: 'M 60 240 C 200 100, 380 320, 520 200 C 660 80, 740 240, 760 360' },
   { eyebrow: 'Vltava, bus, cyklostezka',     title: 'Okolí a&nbsp;dostupnost', href: '#okoli',  variant: 'cream',
     path: 'M 80 320 C 200 480, 420 200, 580 360 C 700 480, 740 320, 760 220' },
@@ -215,7 +217,7 @@ const tiles = [
         </a>
       ))}
 
-      <a class="lp-tile lp-tile--deep lp-tile--reserve osa-nolink" href={withBase('/rezervace/')}>
+      <a class="lp-tile lp-tile--ink lp-tile--reserve osa-nolink" href={withBase('/rezervace/')}>
         <span class="lp-tile__ribbon" aria-hidden="true" data-ribbon-reveal>
           <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
             <path d="M 540 80 C 720 100, 760 240, 600 320 C 460 400, 380 280, 540 200" />
@@ -267,11 +269,10 @@ const tiles = [
               {/* === Karta 1: Co-living (krátký souhrn, ne per-varianta breakdown) ===
                   Celá karta je <a> wrapper (desktop), na mobilu se pointer-events
                   vypne na wrapperu a aktivní zůstane jen vnitřní CTA tlačítko. */}
-              <a class="lp-summary__card-link osa-nolink" href={withBase('/ubytovani/#ub-coliving-title')}>
-                <article class="lp-summary__card" aria-labelledby="lp-summary-coliving-h">
+              <a class="lp-summary__card-link osa-nolink lp-summary__card-link--coliving" href={withBase('/ubytovani/#ub-coliving-title')}>
+                <article class="lp-summary__card lp-summary__card--coliving" aria-labelledby="lp-summary-coliving-h">
                   <header class="lp-summary__head">
                     <h3 class="lp-summary__h" id="lp-summary-coliving-h">Co-living</h3>
-                    <p class="lp-summary__sub">Kapsle a&nbsp;lůžka ve&nbsp;sdílených pokojích.</p>
                   </header>
                   <dl class="lp-summary__facts">
                     <div class="lp-summary__row">
@@ -303,11 +304,10 @@ const tiles = [
               </a>
 
               {/* === Karta 2: Privátní apartmány (krátký souhrn) === */}
-              <a class="lp-summary__card-link osa-nolink" href={withBase('/ubytovani/#ub-privatni-title')}>
-                <article class="lp-summary__card" aria-labelledby="lp-summary-privatni-h">
+              <a class="lp-summary__card-link osa-nolink lp-summary__card-link--privatni" href={withBase('/ubytovani/#ub-privatni-title')}>
+                <article class="lp-summary__card lp-summary__card--privatni" aria-labelledby="lp-summary-privatni-h">
                   <header class="lp-summary__head">
                     <h3 class="lp-summary__h" id="lp-summary-privatni-h">Privátní apartmány</h3>
-                    <p class="lp-summary__sub">Vlastní byt, kuchyň, koupelna.</p>
                   </header>
                   <dl class="lp-summary__facts">
                     <div class="lp-summary__row">
@@ -546,12 +546,15 @@ const tiles = [
     scroll-margin-top: 80px;
   }
   .lp-tiles__grid {
+    /* Stejný width pattern jako zbytek obsahu webu (header bar, lp-section,
+       footer): container-wide se 2× gutter padding. Tile karty mírně užší
+       díky větší mezeře v gridu. */
     width: calc(100% - 2 * var(--gutter));
-    max-width: var(--container);
+    max-width: var(--container-wide);
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(12px, 1.6vw, 20px);
+    gap: clamp(16px, 2.4vw, 32px);
   }
 
   /* Tile, mirror cross-link card: 1fr auto grid (text left, arrow circle right),
@@ -781,6 +784,17 @@ const tiles = [
     z-index: 0;
     pointer-events: none;
     opacity: 0.32;
+    transition: transform 600ms var(--ease-quart);
+  }
+  /* Hover CTA tlačítek lehce posune ribbon doprava (na sudých sekcích doleva
+     díky scaleX(-1) flipu). Pohyb je decentní (12 px), dává sekci „dech". */
+  .lp-section:has(.lp-section__cta:hover) .lp-section__ribbon,
+  .lp-section:has(.lp-section__cta:focus-visible) .lp-section__ribbon {
+    transform: translateX(12px);
+  }
+  .lp-section:nth-of-type(even):has(.lp-section__cta:hover) .lp-section__ribbon,
+  .lp-section:nth-of-type(even):has(.lp-section__cta:focus-visible) .lp-section__ribbon {
+    transform: scaleX(-1) translateX(12px);
   }
   .lp-section__ribbon svg {
     width: 100%;
@@ -1001,16 +1015,26 @@ const tiles = [
   .lp-summary__h {
     font: 700 clamp(1.75rem, 3vw, 2.5rem) / 1.05 var(--font-sans);
     letter-spacing: var(--tracking-tight);
-    color: var(--fg);
+    color: var(--accent);
     margin: 0;
     max-width: 22ch;
   }
-  .lp-summary__sub {
-    font: 400 var(--text-md) / 1.4 var(--font-sans);
-    color: var(--fg-soft, var(--fg-subtle));
-    margin: 0;
-    font-style: italic;
-    max-width: 32ch;
+  /* Variantní akcenty pro vizuální odlišení karet. */
+  .lp-summary__card--coliving .lp-summary__h { color: var(--accent); }
+  .lp-summary__card--coliving .lp-summary__dt { color: var(--accent); opacity: 0.85; }
+  .lp-summary__card--coliving .lp-summary__dd--price { color: var(--accent); }
+  .lp-summary__card--coliving .lp-summary__cta { color: var(--accent); border-color: var(--accent); }
+  .lp-summary__card-link--coliving:hover .lp-summary__cta,
+  .lp-summary__card-link--coliving:focus-visible .lp-summary__cta {
+    background: var(--accent); color: var(--accent-on); border-color: var(--accent);
+  }
+  .lp-summary__card--privatni .lp-summary__h { color: var(--plum-deep); }
+  .lp-summary__card--privatni .lp-summary__dt { color: var(--plum-deep); opacity: 0.7; }
+  .lp-summary__card--privatni .lp-summary__dd--price { color: var(--plum-deep); }
+  .lp-summary__card--privatni .lp-summary__cta { color: var(--plum-deep); border-color: var(--plum-deep); }
+  .lp-summary__card-link--privatni:hover .lp-summary__cta,
+  .lp-summary__card-link--privatni:focus-visible .lp-summary__cta {
+    background: var(--plum-deep); color: var(--cream); border-color: var(--plum-deep);
   }
   .lp-summary__facts {
     margin: 0;
