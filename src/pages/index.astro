@@ -160,7 +160,7 @@ const tiles = [
   { eyebrow: 'Pobyt zdarma za projekt',      title: 'Stipendijní programy', href: '#stipendia', variant: 'ink',
     path: 'M 60 240 C 200 100, 380 320, 520 200 C 660 80, 740 240, 760 360' },
   { eyebrow: 'Vltava, bus, cyklostezka',     title: 'Okolí a&nbsp;dostupnost', href: '#okoli',  variant: 'cream',
-    path: 'M 80 320 C 200 480, 420 200, 580 360 C 700 480, 740 320, 760 220' },
+    path: 'M 80 200 C 200 360, 420 80, 580 240 C 700 360, 740 200, 760 100' },
 ];
 ---
 <Base
@@ -217,18 +217,18 @@ const tiles = [
         </a>
       ))}
 
-      <a class="lp-tile lp-tile--ink lp-tile--reserve osa-nolink" href={withBase('/rezervace/')}>
+      <a class="lp-tile lp-tile--reserve osa-nolink" href={withBase('/rezervace/')}>
         <span class="lp-tile__ribbon" aria-hidden="true" data-ribbon-reveal>
           <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
             <path d="M 540 80 C 720 100, 760 240, 600 320 C 460 400, 380 280, 540 200" />
           </svg>
         </span>
+        <span class="lp-tile__pulse" aria-hidden="true"></span>
         <span class="lp-tile__type">
-          <span class="lp-tile__eyebrow">Rezervace</span>
-          <span class="lp-tile__title">Nezávazná, do&nbsp;24&nbsp;h</span>
+          <span class="lp-tile__eyebrow">Nezávazná rezervace</span>
+          <span class="lp-tile__title">Rezervujte si&nbsp;místo</span>
         </span>
-        {/* arrow-right = odkaz pryč na jinou stránku (Rezervace). */}
-        <span class="lp-tile__arrow" aria-hidden="true">
+        <span class="lp-tile__arrow lp-tile__arrow--filled" aria-hidden="true">
           <Icon name="arrow-right" size={18} strokeWidth={2} />
         </span>
       </a>
@@ -246,7 +246,7 @@ const tiles = [
             </svg>
           </span>
           <div class="lp-section__inner">
-            <div class="lp-section__text">
+            <div class="lp-section__text" data-reveal>
               <p class="lp-section__eyebrow">{sec.eyebrow}</p>
               <h2 class="lp-section__title" id={`${sec.id}-title`}>{sec.title}</h2>
               <p class="lp-section__lede">{sec.lede}</p>
@@ -259,7 +259,7 @@ const tiles = [
                 ))}
               </div>
             </div>
-            <div class="lp-section__media">
+            <div class="lp-section__media" data-reveal data-reveal-delay="1">
               <Gallery images={sec.gallery} ariaLabel={sec.eyebrow} aspectRatio="4 / 3" />
             </div>
           </div>
@@ -584,6 +584,58 @@ const tiles = [
   .lp-tile--cream { background: var(--cream); color: var(--fg); border: 1px solid var(--accent-rule); }
   .lp-tile--rose  { background: var(--rose); color: var(--plum-deep); }
   .lp-tile--ink   { background: var(--plum-deep); color: var(--cream); }
+  /* Rezervace tile: CTA varianta s gradient pozadím (plum-deep → rose tint),
+     výraznější titulkem a pulse dot indikátorem. Vizuálně nejnápadnější
+     ze všech 6 tilů, je to primární konverze celé landing. */
+  .lp-tile--reserve {
+    background:
+      radial-gradient(circle at 90% 110%, hsl(calc(var(--hue) + 44) 30% 70% / 0.32) 0%, transparent 55%),
+      linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 22%) 100%);
+    color: #fff;
+    box-shadow: 0 6px 24px hsl(var(--hue) 41% 13% / 0.18);
+  }
+  .lp-tile--reserve .lp-tile__eyebrow { color: var(--rose); }
+  .lp-tile--reserve .lp-tile__title {
+    font-size: clamp(1.25rem, 2vw, 1.625rem);
+    color: #fff;
+  }
+  .lp-tile--reserve .lp-tile__ribbon path { stroke: var(--rose); stroke-width: 28; }
+  /* Pulse dot, 8 px vlevo nahoře, jemný breathing pulse pro „live" cue. */
+  .lp-tile__pulse {
+    position: absolute;
+    top: clamp(16px, 2vw, 22px);
+    right: clamp(16px, 2vw, 22px);
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--rose);
+    z-index: 2;
+    box-shadow: 0 0 0 0 hsl(calc(var(--hue) + 44) 30% 70% / 0.7);
+    animation: lp-tile-pulse 2.4s ease-out infinite;
+  }
+  @keyframes lp-tile-pulse {
+    0%   { box-shadow: 0 0 0 0 hsl(calc(var(--hue) + 44) 30% 70% / 0.6); }
+    70%  { box-shadow: 0 0 0 12px hsl(calc(var(--hue) + 44) 30% 70% / 0); }
+    100% { box-shadow: 0 0 0 0 hsl(calc(var(--hue) + 44) 30% 70% / 0); }
+  }
+  /* Arrow filled: na rezervace tile už defaultně vyplněný kruh rose s plum-deep
+     ikonou. Hover: scale + slide right. */
+  .lp-tile__arrow--filled {
+    background: var(--rose);
+    border-color: var(--rose);
+    opacity: 1;
+    color: var(--plum-deep);
+  }
+  .lp-tile__arrow--filled :global(svg) { color: var(--plum-deep); }
+  .lp-tile--reserve:hover .lp-tile__arrow--filled,
+  .lp-tile--reserve:focus-visible .lp-tile__arrow--filled {
+    background: #fff;
+    border-color: #fff;
+    transform: translateX(4px) scale(1.05);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lp-tile__pulse { animation: none; }
+  }
 
   /* Type stack vlevo, bottom-aligned (grid align-items end). */
   .lp-tile__type {
@@ -712,8 +764,10 @@ const tiles = [
 
   @media (max-width: 760px) {
     .lp-hero {
-      min-height: 70vh;
-      min-height: 70dvh;
+      /* +100 px proti 70dvh (~586 → ~686 px na 812 viewportu) per klientovu
+         žádost; větší plocha pro hero foto, lepší dojem na 6.1" displejích. */
+      min-height: 85vh;
+      min-height: 85dvh;
       padding: var(--space-7) var(--gutter);
     }
     .lp-tiles { padding: var(--space-5) 0 var(--space-6); }
@@ -938,14 +992,23 @@ const tiles = [
   .lp-section__media { min-width: 0; }
 
   @media (max-width: 760px) {
-    .lp-section { padding: var(--space-7) 0; }
+    /* Na mobilu uvolnit overflow, aby mobile section divider (z kit.css)
+       mohl přesahovat hranici sekce. Ribbon-clipping přesouváme na vnitřní
+       wrapper, kde to potřebuje zůstat. Border-bottom přebíjíme, divider
+       z kit.css ::before slouží jako hranice mezi sekcemi a 1 px ruler by
+       se s ním vizuálně bil. */
+    .lp-section {
+      padding: var(--space-7) 0;
+      overflow: visible;
+      border-bottom: 0;
+    }
+    .lp-section__ribbon { overflow: hidden; opacity: 0.32; }
     .lp-section__inner {
       grid-template-columns: 1fr;
       gap: var(--space-5);
     }
     /* Na mobilu vždy text první, pak média (žádný flip). */
     .lp-section:nth-of-type(even) .lp-section__media { order: 0; }
-    .lp-section__ribbon { opacity: 0.32; }
     .lp-section__ribbon path { stroke-width: 32; }
 
     /* CTA na mobilu: arrow + label v jednom inline rowu, menší font. */

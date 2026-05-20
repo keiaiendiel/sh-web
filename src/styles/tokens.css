@@ -120,7 +120,11 @@
      One muted role for body copy (k-80), one for captions/eyebrows (k-60),
      one soft hairline (k-15). Components MUST consume these, never raw
      --k-XX values, so the grey palette stays disciplined as the site grows. */
-  --fg:            var(--k-100);
+  /* Body/heading text používá --c-plum (#2A2A60), ne --k-100. K-100 zůstává
+     vyhrazený pro borders/rules a inverzní povrchy, kde brand-deep tón drží
+     ostrou hierarchii. Text na #2A2A60 čte jako tmavá brand-modrá, ne jako
+     téměř-černá. */
+  --fg:            var(--c-plum);
   --fg-muted:      var(--k-80);   /* secondary copy, body inside dark cards */
   --fg-subtle:     var(--k-60);   /* eyebrows, captions, meta */
   --fg-inverse:    var(--k-0);

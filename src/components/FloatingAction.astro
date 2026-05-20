@@ -39,7 +39,16 @@ const home = withBase('/');
       var el = document.getElementById('floating-action');
       if (!el) return;
       var base = el.getAttribute('href').replace(/\/$/, '');
-      var isHome = window.location.pathname.replace(/\/$/, '') === base;
+      var path = window.location.pathname.replace(/\/$/, '');
+      var isHome = path === base;
+      /* Rezervační formulář (5-step wizard) má vlastní bottom-fixed CTA bar
+         + sticky sidebar, floating action by se s nimi překrýval. Schováme. */
+      var isRezervace = /\/rezervace$/.test(path);
+      if (isRezervace) {
+        el.setAttribute('hidden', '');
+        el.setAttribute('data-fa-disabled', '');
+        return;
+      }
 
       var iconBack = el.querySelector('[data-fa-icon="back"]');
       var iconTop = el.querySelector('[data-fa-icon="top"]');

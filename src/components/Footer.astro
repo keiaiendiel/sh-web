@@ -71,9 +71,13 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       if (el.dataset.mapBound) return;
       el.dataset.mapBound = '1';
       var center = [50.181447, 14.424094];
+      /* Mobile: nižší zoom (14) pro širší kontext, popup label se na malé
+         ploše neúměrně rve. Desktop: zoom 16, plná detail kasárna. */
+      var isMobile = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
+      var initialZoom = isMobile ? 14 : 16;
       /* Stejný styling jako /okoli/ embed, žádný filter ani blend. */
       var map = L.map(el, {
-        center: center, zoom: 16,
+        center: center, zoom: initialZoom,
         zoomControl: false, attributionControl: false,
         scrollWheelZoom: false,
       });
@@ -398,6 +402,25 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     .hub-footer__col--links { min-width: 0; }
     .hub-footer__col--contact p,
     .hub-footer__col--links p { overflow-wrap: anywhere; word-break: break-word; }
+  }
+
+  /* Mobile: popup label „Horní kasárna Klecany" se na malé footer mapě
+     rozplácne přes půlku plochy. Shrink písma + paddingů, dolad i marker
+     velikost a popup min-width aby seděl. */
+  @media (max-width: 760px) {
+    .hub-footer__map :global(.ok-map-popup-wrap .leaflet-popup-content-wrapper) {
+      padding: 2px 4px;
+    }
+    .hub-footer__map :global(.ok-map-popup) {
+      padding: 4px 6px;
+      min-width: 0;
+      gap: 1px;
+    }
+    .hub-footer__map :global(.ok-map-popup strong) { font-size: 11px; }
+    .hub-footer__map :global(.ok-map-popup__cta)   { font-size: 10px; }
+    .hub-footer__map :global(.leaflet-marker-icon svg) {
+      width: 22px !important; height: 30px !important;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

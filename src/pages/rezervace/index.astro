@@ -727,7 +727,17 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   }
 
   /* ---------- Panel + animovaný slide ---------- */
-  .rez__form { position: relative; display: grid; min-width: 0; }
+  /* Non-current panels mají transform: translateX(±40px) pro slide animaci.
+     Bez clip-x by ±40px posun způsobil horizontální overflow viewportu na
+     mobilu (375 + 40 = 415, vyjede scrollbar a obsah se vizuálně rozhodí).
+     overflow-x: clip drží slide motion uvnitř form bounds, vertical zůstává
+     visible aby grid auto-sizing fungoval pro nejvyšší panel. */
+  .rez__form {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    overflow-x: clip;
+  }
   .rez__panel {
     grid-column: 1;
     grid-row: 1;

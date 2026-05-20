@@ -87,6 +87,14 @@ const heroJumps = [
           L.control.attribution({ prefix: false }).addTo(map);
           L.control.zoom({ position: 'bottomright' }).addTo(map);
           el.addEventListener('click', function () { map.scrollWheelZoom.enable(); }, { once: true });
+          /* Po inicializaci forced layout pass: Leaflet někdy spočítá size
+             před tím, než parent container má finální šířku (view transitions,
+             font swap, aspect-ratio reflow). Bez invalidateSize tiles painty
+             jen po manual reflow (resize / reload). Triple beat (rAF + 80ms
+             + 250ms) pokryje cold load i návrat přes SPA navigaci. */
+          requestAnimationFrame(function () { map.invalidateSize(); });
+          setTimeout(function () { map.invalidateSize(); }, 80);
+          setTimeout(function () { map.invalidateSize(); }, 250);
         });
       }
       document.addEventListener('astro:page-load', init);

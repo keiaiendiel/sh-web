@@ -188,9 +188,13 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
                 color 200ms cubic-bezier(0.32, 0.72, 0, 1);
   }
 
-  /* ---------- Variant: deep (plum-deep + plum stroke, SH/01 + SH/07) ---------- */
+  /* ---------- Variant: deep (plum-deep + plum stroke, SH/01 + SH/07) ----------
+     Stroke zesvětlený proti --accent (hsl 240 39% 27%) na hsl 240 32% 44%,
+     aby ribbon na plum-deep bg vynikl podobně jako rose stroke v ink variantě.
+     Komunita (ink) má cream stroke na plum-deep, high contrast; deep ho dříve
+     neměl protože plum-on-plum bylo dim. */
   .subpage-hero--deep { background: var(--plum-deep); color: #fff; }
-  .subpage-hero--deep .subpage-hero__bg path { stroke: var(--accent); }
+  .subpage-hero--deep .subpage-hero__bg path { stroke: hsl(var(--hue) 32% 44%); }
   .subpage-hero--deep .subpage-hero__eyebrow { color: var(--rose); }
   .subpage-hero--deep .subpage-hero__title :global(em) { color: var(--rose); }
   .subpage-hero--deep .subpage-hero__sub { color: rgba(255, 255, 255, 0.82); }

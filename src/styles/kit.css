@@ -445,3 +445,43 @@ textarea:focus-visible {
   margin-right: var(--space-4);
 }
 .page-stub__links a:hover { text-decoration-thickness: 2px; }
+
+/* ---------- mobile section divider ----------
+   Snake-stroke mezi sekcemi na telefonu, brand-deep (#2A2A60) S-curve
+   s 9px stroke-width a 60% opacity. Divider sedí na hranici dvou sekcí,
+   lehce přesahuje nahoru i dolů (top: -16px, height: 36px), aby tvořil
+   dojem volné brand dekorace, ne ostrého řezu. Z-index 5 ho drží nad
+   lp-section__ribbon (z 0) i nad galerií či summary kartou. Pro lp-section
+   posouváme overflow: hidden z .lp-section na .lp-section__ribbon, aby
+   divider mohl volně přesahovat skrz hranici sekce. */
+@media (max-width: 760px) {
+  .lp-section {
+    overflow: visible;
+  }
+  .lp-section__ribbon {
+    overflow: hidden;
+  }
+  .lp-section,
+  .sec-block,
+  .sec-feature {
+    position: relative;
+  }
+  .lp-section::before,
+  .sec-block::before,
+  .sec-feature::before {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(84vw, 460px);
+    height: 36px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 80' preserveAspectRatio='none' fill='none' stroke='%232A2A60' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'><path d='M 30 40 C 220 8, 420 72, 600 40 S 980 8, 1170 40'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 5;
+  }
+}
