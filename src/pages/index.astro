@@ -420,21 +420,25 @@ const tiles = [
     100% { transform: translateX(-100%); }
   }
 
+  /* Brightness 1.0 (předchozí 0.88 dimovalo na 88 %), scrim ztlumený
+     v dolních pixelech (60→30 %) ať atmosféra fotky proteče. Text
+     v dolní třetině má pořád dostatečné podlití pro čitelnost bílého
+     copy, ale fotka je teď viditelně světlejší a barevnější. */
   .lp-hero__bg {
     position: absolute;
     inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: brightness(0.88);
+    filter: brightness(1);
   }
   .lp-hero__scrim {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       to top,
-      rgba(0,0,0,0.75) 0%,
-      rgba(0,0,0,0.45) 35%,
-      rgba(0,0,0,0.05) 75%
+      rgba(0,0,0,0.6) 0%,
+      rgba(0,0,0,0.3) 35%,
+      rgba(0,0,0,0) 70%
     );
     z-index: -1;
   }
