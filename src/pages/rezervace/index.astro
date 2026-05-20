@@ -41,8 +41,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     <form id="rez-form" class="rez__form" novalidate>
       {/* === KROK: Koncept === */}
       <section class="rez__panel is-current" data-panel="koncept" data-panel-index="0">
-        <h1 class="rez__q">Jak chcete v&nbsp;Hubu bydlet?</h1>
-        <p class="rez__q-hint">Doporučíme nejvhodnější formát. Volba není závazná.</p>
+        <div class="rez__panel-intro">
+          <h1 class="rez__q">Jak chcete v&nbsp;Hubu bydlet?</h1>
+          <p class="rez__q-hint">Doporučíme nejvhodnější formát. Volba není závazná.</p>
+        </div>
         <div class="rez__choices rez__choices--3">
           <label class="rez__choice">
             <input type="radio" name="koncept" value="privatni" data-auto-next />
@@ -85,8 +87,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
       {/* === KROK: Formát (privátní) === */}
       <section class="rez__panel" data-panel="format-privatni" data-panel-index="1" data-show-for="privatni" hidden>
-        <h1 class="rez__q">Jaký apartmán?</h1>
-        <p class="rez__q-hint">Pět privátních jednotek 1+kk až 5+kk. Cena za celý byt.</p>
+        <div class="rez__panel-intro">
+          <h1 class="rez__q">Jaký apartmán?</h1>
+          <p class="rez__q-hint">Pět privátních jednotek 1+kk až 5+kk. Cena za celý byt.</p>
+        </div>
         <div class="rez__choices rez__choices--cards rez__choices--3">
           {apartmany.map((a) => (
             <label class="rez__choice rez__choice--card" data-format-slug={a.data.slug}>
@@ -126,8 +130,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
       {/* === KROK: Formát (co-living) === */}
       <section class="rez__panel" data-panel="format-coliving" data-panel-index="1" data-show-for="co-living" hidden>
-        <h1 class="rez__q">Jaká varianta co-livingu?</h1>
-        <p class="rez__q-hint">Čtyři formáty od jednolůžkové kapsle po dvoulůžko ve sdíleném bytě.</p>
+        <div class="rez__panel-intro">
+          <h1 class="rez__q">Jaká varianta co-livingu?</h1>
+          <p class="rez__q-hint">Čtyři formáty od jednolůžkové kapsle po dvoulůžko ve sdíleném bytě.</p>
+        </div>
         <div class="rez__choices rez__choices--cards rez__choices--2">
           {coliving.map((c) => (
             <label class="rez__choice rez__choice--card" data-format-slug={c.data.slug}>
@@ -167,8 +173,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
       {/* === KROK: Nevím (3 otázky) === */}
       <section class="rez__panel" data-panel="format-nevim" data-panel-index="1" data-show-for="nevim" hidden>
-        <h1 class="rez__q">Tři otázky a navrhneme&nbsp;formát.</h1>
-        <p class="rez__q-hint">Ozveme se s konkrétním doporučením.</p>
+        <div class="rez__panel-intro">
+          <h1 class="rez__q">Tři otázky a navrhneme&nbsp;formát.</h1>
+          <p class="rez__q-hint">Ozveme se s konkrétním doporučením.</p>
+        </div>
         <div class="rez__field">
           <label for="nevim-rozpocet">Rozpočet: <output for="nevim-rozpocet" id="nevim-rozpocet-out">9 500 Kč&nbsp;/&nbsp;měs</output></label>
           <input type="range" id="nevim-rozpocet" name="nevim-rozpocet" min="3000" max="25000" step="500" value="9500" />
@@ -208,8 +216,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
       {/* === KROK: Termín === */}
       <section class="rez__panel" data-panel="termin" data-panel-index="2" hidden>
-        <h1 class="rez__q">Kdy chcete nastoupit?</h1>
-        <p class="rez__q-hint">Hub je v projektové přípravě. Termín potvrdíme telefonicky.</p>
+        <div class="rez__panel-intro">
+          <h1 class="rez__q">Kdy chcete nastoupit?</h1>
+          <p class="rez__q-hint">Hub je v projektové přípravě. Termín potvrdíme telefonicky.</p>
+        </div>
         <div class="rez__grid-2">
           <div class="rez__field">
             <label for="mesic">Měsíc nástupu</label>
@@ -272,8 +282,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
       {/* === KROK: Kontakt === */}
       <section class="rez__panel" data-panel="kontakt" data-panel-index="3" hidden>
-        <h1 class="rez__q">Kam vám zavoláme?</h1>
-        <p class="rez__q-hint">Voláme z rezervačního oddělení do 24 hodin.</p>
+        <div class="rez__panel-intro">
+          <h1 class="rez__q">Kam vám zavoláme?</h1>
+          <p class="rez__q-hint">Voláme z rezervačního oddělení do 24 hodin.</p>
+        </div>
         <div class="rez__grid-2">
           <div class="rez__field">
             <label for="jmeno">Křestní jméno</label>
@@ -324,8 +336,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
-        <h1 class="rez__q">Dorazilo. Zavoláme do&nbsp;24&nbsp;hodin.</h1>
-        <p class="rez__q-hint">Probereme termín, detaily nástupu a&nbsp;co dál. Pořád je to nezávazná registrace, žádný závazek.</p>
+        <div class="rez__panel-intro">
+          <h1 class="rez__q">Dorazilo. Zavoláme do&nbsp;24&nbsp;hodin.</h1>
+          <p class="rez__q-hint">Probereme termín, detaily nástupu a&nbsp;co dál. Pořád je to nezávazná registrace, žádný závazek.</p>
+        </div>
       </section>
     </form>
 
@@ -600,11 +614,13 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     color: var(--fg);
     transition: max-width 320ms cubic-bezier(0.32, 0.72, 0, 1);
   }
-  /* Widen the wizard container when a card-grid panel is active so the
-     3-up / 2-up preview cards have room to breathe on desktop. */
-  @media (min-width: 900px) {
+  /* Desktop: wider container + 2-col panel layout (intro left, body right).
+     Mobile zůstává jednoduchý vertikální flow. Card-grid panely se ještě
+     trochu rozšíří pro lepší dech 3-up / 2-up preview karet. */
+  @media (min-width: 1024px) {
+    .rez { max-width: 1180px; }
     .rez:has(.rez__panel.is-current .rez__choices--cards) {
-      max-width: 1040px;
+      max-width: 1320px;
     }
   }
 
@@ -761,6 +777,81 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     color: var(--fg-muted);
     margin: 0;
     max-width: 48ch;
+  }
+
+  /* Intro wrapper, h1 + hint stack uvnitř jednoho gridového cellu. Na
+     mobilu se chová jako běžný blok, na desktopu sedí v levém sloupci. */
+  .rez__panel-intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  /* ---------- Desktop 2-col panel: intro vlevo, body vpravo ---------- */
+  /* Na širokém viewportu rozkládáme každý panel do gridu: rez__panel-intro
+     drží levý sloupec (~320px), všechny choice cards / fields / addons
+     padají do pravého sloupce a mají tak víc dechu. Action row překlene
+     oba sloupce dole. Slide animace zůstává v platnosti díky původním
+     transform/opacity pravidlům výš. */
+  @media (min-width: 1024px) {
+    .rez__panel {
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+      column-gap: clamp(48px, 6vw, 96px);
+      row-gap: var(--space-5);
+      align-items: start;
+    }
+    .rez__panel-intro {
+      grid-column: 1;
+      position: sticky;
+      top: 96px;
+      gap: var(--space-3);
+    }
+    .rez__panel-intro .rez__q,
+    .rez__panel-intro .rez__q-hint { max-width: none; }
+    .rez__panel-intro .rez__q { font-size: clamp(2rem, 3vw, 2.625rem); }
+    .rez__panel-intro .rez__q-hint { font-size: var(--text-md); }
+    /* Vše ostatní (choice grid, single field, grid-2, addons, gdpr, range
+       slider, pills wrapper) sedí v pravém sloupci. */
+    .rez__panel > *:not(.rez__panel-intro):not(.rez__actions) {
+      grid-column: 2;
+    }
+    .rez__actions {
+      grid-column: 1 / -1;
+    }
+    /* Success panel: 1-col centered, žádný sidebar */
+    .rez__panel--success {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+    .rez__panel--success > * {
+      grid-column: 1;
+    }
+    .rez__panel--success .rez__panel-intro {
+      position: static;
+    }
+    /* Lehký vizuální oddělovač mezi sloupci, jen na panelech s body content */
+    .rez__panel:not(.rez__panel--success) {
+      position: relative;
+    }
+    .rez__panel:not(.rez__panel--success)::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      bottom: 64px;
+      left: calc(min(360px, 33%) + clamp(20px, 3vw, 44px));
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        var(--accent-rule) 12%,
+        var(--accent-rule) 88%,
+        transparent 100%);
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+  @media (min-width: 1280px) {
+    .rez__panel-intro .rez__q { font-size: 2.75rem; line-height: 1.05; }
   }
 
   /* ---------- Choice cards ---------- */
