@@ -374,6 +374,3 @@
   color: var(--fg);
 }
 
-/* ---------- Repeating line-pattern backgrounds ----------
-   NOTE: Web build replaces pozadi JPGs with the <SVGPattern /> component
-   (see src/components/SVGPattern.astro in Phase 1). */
