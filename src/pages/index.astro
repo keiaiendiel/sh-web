@@ -174,7 +174,7 @@ const tiles = [
   <section class="lp-hero" aria-label="Startovací Hub Klecany, hero galerie">
     <div class="lp-hero__rotation" aria-hidden="true">
       {heroSlides.map((slide, i) => (
-        <div class="lp-hero__slide" data-slide={i} style={`animation-delay: ${i * 5 - 1}s`}>
+        <div class="lp-hero__slide" data-slide={i} style={`animation-delay: ${i * 5}s`}>
           <picture>
             <source media="(max-width: 768px)" srcset={slide.phone} />
             <img class="lp-hero__bg" src={slide.desktop} alt={slide.alt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
@@ -403,10 +403,11 @@ const tiles = [
   /* 5 slidů jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
      celé fotky doleva. Sousední slide zároveň zprava vplouvá dovnitř,
      takže přechod je jeden plynulý sweep bez cross-fade.
-     Slide N animation-delay = N × 5 s − 1 s (pre-roll, aby slide 0 byl
-     hned na svém místě při page loadu).
-     Smyčka 25 s (5 × 5 s). Keyframes byly škálovány po přidání pátého
-     slidu (h00): swipe-in 4 %, hold 4–20 %, swipe-out 20–24 %. */
+     Slide N animation-delay = N × 5 s. Slide 0 (h00) má delay 0,
+     swipne-in jako první při page loadu (krátká 1 s brand-deep
+     opona předtím než h00 vplouvá zprava).
+     Smyčka 25 s (5 × 5 s). Keyframes: swipe-in 4 %, hold 4–20 %,
+     swipe-out 20–24 %. */
   .lp-hero__slide {
     position: absolute;
     inset: 0;
