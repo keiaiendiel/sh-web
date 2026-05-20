@@ -18,6 +18,11 @@ import { withBase } from '../utils/url';
    <picture> přepíná v zlomu 768 px. */
 const heroSlides = [
   {
+    desktop: withBase('/images/hub/hero/h00.jpg'),
+    phone:   withBase('/images/hub/hero/h00-phone.jpg'),
+    alt: 'Startovací Hub Klecany, hero úvod.',
+  },
+  {
     desktop: withBase('/images/hub/hero/h01.jpg'),
     phone:   withBase('/images/hub/hero/h01-phone.jpg'),
     alt: 'Privátní apartmány v parteru po setmění, lidé před vstupem mezi břízami, teplá světla v oknech.',
@@ -395,28 +400,26 @@ const tiles = [
     inset: 0;
     z-index: -2;
   }
-  /* 4 slidy jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
+  /* 5 slidů jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
      celé fotky doleva. Sousední slide zároveň zprava vplouvá dovnitř,
      takže přechod je jeden plynulý sweep bez cross-fade.
      Slide N animation-delay = N × 5 s − 1 s (pre-roll, aby slide 0 byl
-     hned na svém místě při page loadu). */
+     hned na svém místě při page loadu).
+     Smyčka 25 s (5 × 5 s). Keyframes byly škálovány po přidání pátého
+     slidu (h00): swipe-in 4 %, hold 4–20 %, swipe-out 20–24 %. */
   .lp-hero__slide {
     position: absolute;
     inset: 0;
     transform: translateX(100%);
-    animation: lp-hero-swipe 20s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    animation: lp-hero-swipe 25s cubic-bezier(0.65, 0, 0.35, 1) infinite;
     will-change: transform;
   }
 
   @keyframes lp-hero-swipe {
-    /* 20 s smyčka = 100 %. 0-5 % (1 s): swipe-in zprava. 5-25 % (4 s):
-       hold na středu. 25-30 % (1 s): swipe-out doleva. 30-100 %: hidden
-       off-screen vlevo dokud se animace neresetuje. Boundary teleport
-       z -100 % zpět na 100 % se děje off-screen, uživatel ho nevidí. */
     0%   { transform: translateX(100%); }
-    5%   { transform: translateX(0); }
-    25%  { transform: translateX(0); }
-    30%  { transform: translateX(-100%); }
+    4%   { transform: translateX(0); }
+    20%  { transform: translateX(0); }
+    24%  { transform: translateX(-100%); }
     100% { transform: translateX(-100%); }
   }
 
