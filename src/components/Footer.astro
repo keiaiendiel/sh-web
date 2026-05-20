@@ -8,6 +8,10 @@ const org = orgEntry?.data;
 const buildDate = new Date().toLocaleDateString('cs-CZ', {
   day: 'numeric', month: 'numeric', year: 'numeric',
 });
+
+/* Dev-only map tuner: floating panel se slidery pro filter parametry.
+   Aktivní jen v `pnpm dev`, v produkčním buildu se vůbec nerenderuje. */
+const isDev = import.meta.env.DEV;
 ---
 <footer class="hub-footer">
   <div class="hub-footer__inner">
@@ -46,6 +50,51 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       <p><a href={withBase('/faq/')}>Časté otázky</a></p>
       <p><a href={withBase('/gdpr/')}>Ochrana osobních údajů</a></p>
     </div>
+
+    {isDev && (
+      <aside class="hub-footer__map-tuner" id="map-tuner" aria-label="Dev: ladění barev mapy">
+        <header class="hub-footer__map-tuner-head">
+          <strong>Map tuner</strong>
+          <button type="button" data-tuner-toggle aria-label="Skrýt panel">−</button>
+        </header>
+        <div class="hub-footer__map-tuner-body">
+          <label>
+            <span>Sepia <output data-tuner-out="sepia">0.35</output></span>
+            <input type="range" min="0" max="1" step="0.05" value="0.35" data-tuner="sepia" />
+          </label>
+          <label>
+            <span>Saturate <output data-tuner-out="saturate">0.85</output></span>
+            <input type="range" min="0" max="2" step="0.05" value="0.85" data-tuner="saturate" />
+          </label>
+          <label>
+            <span>Hue rotate <output data-tuner-out="hue">200°</output></span>
+            <input type="range" min="0" max="360" step="5" value="200" data-tuner="hue" />
+          </label>
+          <label>
+            <span>Brightness <output data-tuner-out="brightness">0.94</output></span>
+            <input type="range" min="0.4" max="1.5" step="0.02" value="0.94" data-tuner="brightness" />
+          </label>
+          <label>
+            <span>Contrast <output data-tuner-out="contrast">1.05</output></span>
+            <input type="range" min="0.5" max="1.8" step="0.02" value="1.05" data-tuner="contrast" />
+          </label>
+          <label>
+            <span>Invert <output data-tuner-out="invert">0</output></span>
+            <input type="range" min="0" max="1" step="0.05" value="0" data-tuner="invert" />
+          </label>
+          <div class="hub-footer__map-tuner-preset">
+            <button type="button" data-tuner-preset="palette">Paleta var(--hue)</button>
+            <button type="button" data-tuner-preset="navy">Navy</button>
+            <button type="button" data-tuner-preset="reset">Default</button>
+          </div>
+          <textarea class="hub-footer__map-tuner-out" data-tuner-css readonly aria-label="Výsledný CSS filter"></textarea>
+          <div class="hub-footer__map-tuner-actions">
+            <button type="button" data-tuner-copy>Copy CSS</button>
+            <span class="hub-footer__map-tuner-hint">jen v dev, do produkce se nedostane</span>
+          </div>
+        </div>
+      </aside>
+    )}
 
     <div class="hub-footer__col hub-footer__col--actions">
       <a class:list={['hub-footer__action', 'hub-footer__action--primary']} href={withBase('/rezervace/')}>
@@ -122,6 +171,108 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
   }());
 </script>
 
+{isDev && (
+  <script is:inline>
+    /* Map tuner: čte slidery, propaguje CSS proměnné na .hub-footer__map,
+       generuje výsledný filter string a umí zkopírovat. Jen v dev. */
+    (function () {
+      function bindTuner() {
+        var panel = document.getElementById('map-tuner');
+        if (!panel || panel.dataset.tunerBound) return;
+        panel.dataset.tunerBound = '1';
+        var map = document.querySelector('.hub-footer__map');
+        if (!map) return;
+
+        var inputs = panel.querySelectorAll('input[data-tuner]');
+        var output = panel.querySelector('[data-tuner-css]');
+        var toggle = panel.querySelector('[data-tuner-toggle]');
+        var copyBtn = panel.querySelector('[data-tuner-copy]');
+        var presets = panel.querySelectorAll('[data-tuner-preset]');
+
+        var values = {
+          sepia: 0.35, saturate: 0.85, hue: 200,
+          brightness: 0.94, contrast: 1.05, invert: 0,
+        };
+
+        function updateOutput() {
+          var fs = 'invert(' + values.invert + ') ' +
+                   'sepia(' + values.sepia + ') ' +
+                   'saturate(' + values.saturate + ') ' +
+                   'hue-rotate(' + values.hue + 'deg) ' +
+                   'brightness(' + values.brightness + ') ' +
+                   'contrast(' + values.contrast + ')';
+          if (output) output.value = 'filter: ' + fs + ';';
+        }
+
+        function applyValues() {
+          map.style.setProperty('--map-sepia', String(values.sepia));
+          map.style.setProperty('--map-saturate', String(values.saturate));
+          map.style.setProperty('--map-hue', String(values.hue));
+          map.style.setProperty('--map-brightness', String(values.brightness));
+          map.style.setProperty('--map-contrast', String(values.contrast));
+          map.style.setProperty('--map-invert', String(values.invert));
+          updateOutput();
+        }
+
+        function setFromInputs() {
+          inputs.forEach(function (input) {
+            var key = input.getAttribute('data-tuner');
+            var val = parseFloat(input.value);
+            values[key] = val;
+            var out = panel.querySelector('[data-tuner-out="' + key + '"]');
+            if (out) {
+              if (key === 'hue') out.textContent = val + '°';
+              else out.textContent = val.toString();
+            }
+          });
+          applyValues();
+        }
+
+        inputs.forEach(function (input) {
+          input.addEventListener('input', setFromInputs);
+        });
+
+        toggle.addEventListener('click', function () {
+          panel.classList.toggle('is-collapsed');
+          toggle.textContent = panel.classList.contains('is-collapsed') ? '+' : '−';
+        });
+
+        copyBtn.addEventListener('click', function () {
+          if (!navigator.clipboard) return;
+          navigator.clipboard.writeText(output.value).then(function () {
+            var label = copyBtn.textContent;
+            copyBtn.textContent = 'Zkopírováno';
+            setTimeout(function () { copyBtn.textContent = label; }, 1200);
+          });
+        });
+
+        presets.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var preset = btn.getAttribute('data-tuner-preset');
+            var newVals;
+            if (preset === 'palette') {
+              newVals = { sepia: 0.4, saturate: 0.9, hue: 215, brightness: 0.92, contrast: 1.08, invert: 0 };
+            } else if (preset === 'navy') {
+              newVals = { sepia: 0.6, saturate: 0.7, hue: 195, brightness: 0.85, contrast: 1.15, invert: 0 };
+            } else {
+              newVals = { sepia: 0.35, saturate: 0.85, hue: 200, brightness: 0.94, contrast: 1.05, invert: 0 };
+            }
+            Object.keys(newVals).forEach(function (k) {
+              var input = panel.querySelector('input[data-tuner="' + k + '"]');
+              if (input) input.value = newVals[k];
+            });
+            setFromInputs();
+          });
+        });
+
+        setFromInputs();
+      }
+
+      document.addEventListener('astro:page-load', bindTuner);
+    }());
+  </script>
+)}
+
 <style>
   /* Plum-deep inverted footer. 4-col grid, brand col span 2 na desktopu.
      OSM map iframe s filter invert+desaturate aby zapadla do tmavého bg. */
@@ -180,12 +331,22 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.14);
     margin-top: var(--space-5);
-    /* Map tint: cílíme cool blue/teal, žádné růžové reziduum.
-        CARTO Voyager má warm cream tiles (~30-40° hue). Bez sepia kroku
-        hue-rotate(231deg) zachovává růžové póly. Sepia(0.35) nejdřív
-        flatne paletu do warm yellow, pak hue-rotate(200deg) ji posune
-        do modra ladícího s --hue 240. Saturace zkrocená pro muted tón. */
-    filter: sepia(0.35) saturate(0.85) hue-rotate(200deg) brightness(0.94) contrast(1.05);
+    /* Filter řízený CSS proměnnými, aby šel live-tweakovat z dev tuneru
+        (panel je v pravém dolním rohu jen v `pnpm dev`). Defaulty jsou
+        současný production tint. */
+    --map-sepia: 0.35;
+    --map-saturate: 0.85;
+    --map-hue: 200;
+    --map-brightness: 0.94;
+    --map-contrast: 1.05;
+    --map-invert: 0;
+    filter:
+      invert(var(--map-invert))
+      sepia(var(--map-sepia))
+      saturate(var(--map-saturate))
+      hue-rotate(calc(var(--map-hue) * 1deg))
+      brightness(var(--map-brightness))
+      contrast(var(--map-contrast));
   }
   .hub-footer__map :global(.leaflet-container) {
     width: 100%;
@@ -410,5 +571,90 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
 
   @media (prefers-reduced-motion: reduce) {
     .hub-footer__action, .hub-footer__col a, .hub-footer__col a.hub-footer__chip-link { transition: none; }
+  }
+
+  /* ---------- Dev map tuner (jen v `pnpm dev`) ---------- */
+  .hub-footer__map-tuner {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 60;
+    width: 280px;
+    max-width: calc(100vw - 32px);
+    background: var(--plum-deep);
+    color: #fff;
+    border: 1px solid hsl(var(--hue) 28% 30%);
+    border-radius: 10px;
+    box-shadow: 0 12px 28px hsl(var(--hue) 41% 13% / 0.4);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 12px;
+  }
+  .hub-footer__map-tuner-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-bottom: 1px solid hsl(var(--hue) 28% 22%);
+  }
+  .hub-footer__map-tuner-head strong { font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .hub-footer__map-tuner-head button {
+    width: 22px; height: 22px;
+    background: transparent;
+    border: 1px solid hsl(var(--hue) 28% 30%);
+    border-radius: 4px;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .hub-footer__map-tuner-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .hub-footer__map-tuner.is-collapsed .hub-footer__map-tuner-body { display: none; }
+  .hub-footer__map-tuner label { display: flex; flex-direction: column; gap: 4px; }
+  .hub-footer__map-tuner label span {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+  }
+  .hub-footer__map-tuner output { color: var(--rose); font-variant-numeric: tabular-nums; }
+  .hub-footer__map-tuner input[type="range"] { width: 100%; accent-color: var(--rose); }
+  .hub-footer__map-tuner-preset { display: flex; gap: 6px; flex-wrap: wrap; }
+  .hub-footer__map-tuner-preset button {
+    flex: 1; min-width: 60px;
+    background: hsl(var(--hue) 28% 22%);
+    border: 1px solid hsl(var(--hue) 28% 30%);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+  }
+  .hub-footer__map-tuner-preset button:hover {
+    background: hsl(var(--hue) 28% 28%);
+  }
+  .hub-footer__map-tuner-out {
+    width: 100%;
+    min-height: 60px;
+    background: hsl(var(--hue) 41% 8%);
+    color: var(--rose);
+    border: 1px solid hsl(var(--hue) 28% 22%);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font: 11px var(--font-mono, ui-monospace, monospace);
+    resize: vertical;
+  }
+  .hub-footer__map-tuner-actions { display: flex; align-items: center; gap: 8px; }
+  .hub-footer__map-tuner-actions button {
+    background: var(--rose);
+    color: var(--plum-deep);
+    border: 0;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font: 600 11px var(--font-sans);
+  }
+  .hub-footer__map-tuner-hint { color: rgba(255,255,255,0.55); font-size: 10px; }
+  @media (max-width: 600px) {
+    .hub-footer__map-tuner { width: calc(100vw - 32px); }
   }
 </style>

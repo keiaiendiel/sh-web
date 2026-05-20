@@ -149,15 +149,15 @@ const sections: Section[] = [
    rotují tak aby žádné dva sousedy neměly stejnou. Eyebrow (uppercase small caps)
    + bold title, vpravo dole 36×36 kruhová šipka. Ribbon arc zůstává v pozadí. */
 const tiles = [
-  { eyebrow: 'Ubytování', title: 'Apartmány, kapsle, lůžka',     href: '#ubytovani', variant: 'cream',
+  { eyebrow: 'Apartmány, kapsle, lůžka',     title: 'Ubytovací služby',     href: '#ubytovani', variant: 'cream',
     path: 'M 60 240 C 220 100, 380 320, 540 200 C 660 100, 720 260, 760 340' },
-  { eyebrow: 'Coworking', title: 'Sál, ateliér, dílna',          href: '#coworking', variant: 'ink',
+  { eyebrow: 'Sál, ateliér, dílna',          title: 'Coworking',            href: '#coworking', variant: 'ink',
     path: 'M 80 120 C 240 280, 400 80, 560 240 C 680 360, 740 200, 760 320' },
-  { eyebrow: 'Komunita',  title: 'Bazén, sauna, jídelna',        href: '#komunita',  variant: 'rose',
+  { eyebrow: 'Bazén, sauna, jídelna',        title: 'Komunitní zázemí',     href: '#komunita',  variant: 'rose',
     path: 'M 80 200 C 240 80, 420 280, 580 160 C 700 80, 740 240, 760 320' },
-  { eyebrow: 'Stipendia', title: 'Pobyt zdarma za&nbsp;projekt', href: '#stipendia', variant: 'deep',
+  { eyebrow: 'Pobyt zdarma za projekt', title: 'Stipendijní programy', href: '#stipendia', variant: 'deep',
     path: 'M 60 240 C 200 100, 380 320, 520 200 C 660 80, 740 240, 760 360' },
-  { eyebrow: 'Okolí',     title: 'Vltava, bus, cyklostezka',     href: '#okoli',     variant: 'cream',
+  { eyebrow: 'Vltava, bus, cyklostezka',     title: 'Okolí a&nbsp;dostupnost', href: '#okoli',  variant: 'cream',
     path: 'M 80 320 C 200 480, 420 200, 580 360 C 700 480, 740 320, 760 220' },
 ];
 ---
@@ -225,9 +225,9 @@ const tiles = [
           <span class="lp-tile__eyebrow">Rezervace</span>
           <span class="lp-tile__title">Nezávazná, do&nbsp;24&nbsp;h</span>
         </span>
-        {/* arrow-up-right = odkaz pryč na jinou stránku (Rezervace). */}
+        {/* arrow-right = odkaz pryč na jinou stránku (Rezervace). */}
         <span class="lp-tile__arrow" aria-hidden="true">
-          <Icon name="arrow-up-right" size={18} strokeWidth={2} />
+          <Icon name="arrow-right" size={18} strokeWidth={2} />
         </span>
       </a>
     </div>
@@ -251,7 +251,7 @@ const tiles = [
               <div class="lp-section__ctas">
                 {sec.ctas.map((cta) => (
                   <a class="lp-section__cta osa-nolink" href={withBase(cta.href)}>
-                    <span class="lp-section__cta-arrow" aria-hidden="true">↗</span>
+                    <span class="lp-section__cta-arrow" aria-hidden="true">→</span>
                     <span class="lp-section__cta-label">{cta.label}</span>
                   </a>
                 ))}
@@ -296,7 +296,7 @@ const tiles = [
                     </div>
                   </dl>
                   <span class="lp-summary__cta">
-                    <span class="lp-summary__cta-arrow" aria-hidden="true">↗</span>
+                    <span class="lp-summary__cta-arrow" aria-hidden="true">→</span>
                     <span class="lp-summary__cta-label">Zobrazit kapsle a&nbsp;lůžka</span>
                   </span>
                 </article>
@@ -332,7 +332,7 @@ const tiles = [
                     </div>
                   </dl>
                   <span class="lp-summary__cta">
-                    <span class="lp-summary__cta-arrow" aria-hidden="true">↗</span>
+                    <span class="lp-summary__cta-arrow" aria-hidden="true">→</span>
                     <span class="lp-summary__cta-label">Zobrazit apartmány</span>
                   </span>
                 </article>
@@ -547,7 +547,7 @@ const tiles = [
   }
   .lp-tiles__grid {
     width: calc(100% - 2 * var(--gutter));
-    max-width: var(--container-wide);
+    max-width: var(--container);
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -890,7 +890,7 @@ const tiles = [
   .lp-section__cta-label { line-height: 1; }
   .lp-section__cta:hover .lp-section__cta-arrow,
   .lp-section__cta:focus-visible .lp-section__cta-arrow {
-    transform: translate(2px, -2px);
+    transform: translateX(2px);
   }
   .lp-section__media { min-width: 0; }
 
@@ -991,7 +991,7 @@ const tiles = [
   }
   .lp-summary__card-link:hover .lp-summary__cta-arrow,
   .lp-summary__card-link:focus-visible .lp-summary__cta-arrow {
-    transform: translate(2px, -2px);
+    transform: translateX(2px);
   }
   .lp-summary__head {
     display: flex;
