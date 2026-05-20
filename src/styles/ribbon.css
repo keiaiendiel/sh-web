@@ -1,0 +1,132 @@
+/* =============================================================================
+   Ribbon motif system — v1 (Hub sub-identity)
+   =============================================================================
+   Závazný spec: /Users/kindl/Work/_2026/02 OSA/11 WWW/sh-web-visual-explorations/00-SPEC.html
+   Six principles (cit. spec § 01):
+     1. Plum stroke only (rose allowed as secondary on dark bg).
+     2. Typo zone reserved first; stroke never overlaps letters.
+     3. Round caps + joins everywhere.
+     4. Single hand-tuned Bezier per composition (no Perlin noise).
+     5. Parallel siblings only for gentle wave / S-curve / hill, offset 28-32px.
+     6. Negative space is the hero.
+============================================================================= */
+
+/* ---------- Base ribbon ---------- */
+.ribbon {
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+.ribbon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.ribbon path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Snake-draw reveal — path animates from 0 → full on first viewport entry.
+   pathLength: 1 normalizes stroke-dasharray across any d-form. */
+.ribbon[data-ribbon-reveal] path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  pathLength: 1;
+}
+.ribbon[data-ribbon-reveal].is-revealed path {
+  animation: ribbon-snake-draw 2.6s var(--ease-snake) forwards;
+}
+@keyframes ribbon-snake-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ---------- Stroke color variants ---------- */
+.ribbon--stroke-plum path { stroke: var(--accent); }
+.ribbon--stroke-rose path { stroke: var(--rose); }
+.ribbon--stroke-deep path { stroke: var(--plum-deep); }
+.ribbon--stroke-cream path { stroke: var(--cream); }
+
+/* ---------- Bg variants for banner containers (spec § 04) ---------- */
+.ribbon-bg--cream { background: var(--cream); color: var(--fg); }
+.ribbon-bg--deep  { background: var(--plum-deep); color: #fff; }
+.ribbon-bg--rose  { background: var(--rose); color: var(--plum-deep); }
+.ribbon-bg--ink   { background: var(--k-100); color: var(--cream); }
+
+/* ---------- Banner shell ---------- */
+.ribbon-banner {
+  position: relative;
+  border-radius: var(--radius-input);
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 280ms var(--ease-standard), box-shadow 280ms var(--ease-standard);
+}
+.ribbon-banner__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ribbon-banner__type {
+  position: relative;
+  z-index: 2;
+}
+.ribbon-banner__eyebrow {
+  font: 500 var(--text-2xs) / 1 var(--font-sans);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+.ribbon-banner__h {
+  font: 700 clamp(1.5rem, 2.6vw, 2.6rem) / 1.02 var(--font-sans);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+}
+.ribbon-banner__h em {
+  font-style: italic;
+  font-weight: 500;
+}
+.ribbon-banner__sub {
+  font: 500 clamp(0.9375rem, 1.2vw, 1.0625rem) / 1.45 var(--font-sans);
+  margin: 12px 0 0;
+  max-width: 38ch;
+}
+
+/* On-deep accents: eyebrow + h em should glow rose */
+.ribbon-bg--deep .ribbon-banner__eyebrow,
+.ribbon-bg--ink  .ribbon-banner__eyebrow { color: var(--rose); }
+.ribbon-bg--deep .ribbon-banner__h em,
+.ribbon-bg--ink  .ribbon-banner__h em    { color: var(--rose); }
+.ribbon-bg--deep .ribbon-banner__sub,
+.ribbon-bg--ink  .ribbon-banner__sub     { color: rgba(255, 255, 255, 0.78); }
+.ribbon-bg--rose .ribbon-banner__eyebrow { color: var(--plum-deep); }
+.ribbon-bg--rose .ribbon-banner__h em    { color: var(--plum-deep); }
+.ribbon-bg--rose .ribbon-banner__sub     { color: var(--plum-deep); opacity: 0.7; }
+.ribbon-bg--cream .ribbon-banner__eyebrow { color: var(--accent); }
+.ribbon-bg--cream .ribbon-banner__h em   { color: var(--accent); }
+.ribbon-bg--cream .ribbon-banner__sub    { color: var(--fg-subtle); }
+
+/* Hover */
+a.ribbon-banner:hover,
+a.ribbon-banner:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 48px rgba(90, 42, 95, 0.18);
+  outline: none;
+}
+a.ribbon-banner:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ribbon[data-ribbon-reveal] path,
+  .ribbon[data-ribbon-reveal].is-revealed path {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  a.ribbon-banner { transition: none; }
+}

@@ -1,31 +1,94 @@
 ---
 import Base from '../../layouts/Base.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
 import { withBase } from '../../utils/url';
+
+const heroJumps = [
+  { label: 'Vzdělávání',       href: '#ok-skoly' },
+  { label: 'Zdravotnictví',    href: '#ok-zdravotnictvi' },
+  { label: 'Obchody',          href: '#ok-obchody' },
+  { label: 'Sport',            href: '#ok-sport' },
+  { label: 'Kavárny a kultura', href: '#ok-kavarny' },
+];
 ---
 <Base
   title="Okolí Klecan, co tu je a co tu není · Startovací Hub"
   description="Klecany jsou klidná obec na severním okraji Prahy. Mateřská škola v areálu, skate hala, lékaři, lékárna, obchody, kavárna Klícka, bus 374 do metra Kobylisy."
   headerVariant="overlay">
 
-  <section class="sec-hero">
-    <img class="sec-hero__bg" src={withBase('/images/hub/areal/areal-entry.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
-    <div class="sec-hero__scrim" aria-hidden="true"></div>
-    <div class="sec-hero__inner">
-      <p class="sec-hero__eyebrow">Okolí</p>
-      <h1 class="sec-hero__title">Horní kasárny v&nbsp;Klecanech, 15 km severně od Prahy.</h1>
-      <p class="sec-hero__lede">
-        Klidná obec na severním okraji Prahy. V&nbsp;docházkové nebo krátké dojezdové vzdálenosti
-        školy, lékaři, obchody, sport a kavárny.
+  <SubpageHero
+    eyebrow="Okolí a dostupnost"
+    title="Klecany, <em>15 km</em> od Prahy."
+    sub="Klidná obec na severním okraji Prahy. V docházkové vzdálenosti školy, lékaři, obchody, sport a kavárny."
+    variant="cream"
+    ribbonPath="M 540 380 C 720 360, 760 500, 600 540 C 460 580, 420 440, 580 420"
+    jumps={heroJumps}
+    ariaId="okoli-hero"
+  />
+
+  <section class="ok-map-section" aria-label="Mapa polohy Hubu v Klecanech">
+    <div class="ok-map-section__inner">
+      <header class="ok-map-section__head">
+        <p class="sec-block__eyebrow">Poloha areálu</p>
+        <h2 class="sec-block__title">Horní Kasárna, 250 67 Klecany.</h2>
+        <p class="sec-block__lede">
+          Severní okraj Klecan, 15 minut autobusem na metro Kobylisy, 30 minut do centra Prahy.
+        </p>
+      </header>
+      <div class="ok-map" id="ok-map-frame" data-ok-map role="application" aria-label="Interaktivní mapa areálu Horních kasáren v Klecanech"></div>
+      <p class="ok-map__address">
+        <strong>Horní kasárna Klecany</strong>
+        <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách →</a>
       </p>
-      <nav class="sec-hero__jumps" aria-label="Skok na sekci">
-        <a class="sec-hero__jump" href="#ok-skoly">Vzdělávání</a>
-        <a class="sec-hero__jump" href="#ok-zdravotnictvi">Zdravotnictví</a>
-        <a class="sec-hero__jump" href="#ok-obchody">Obchody</a>
-        <a class="sec-hero__jump" href="#ok-sport">Sport</a>
-        <a class="sec-hero__jump" href="#ok-kavarny">Kavárny a kultura</a>
-      </nav>
     </div>
   </section>
+
+  <script is:inline>
+    (function () {
+      function init() {
+        if (!window.__hubLoadLeaflet) return;
+        window.__hubLoadLeaflet(function () {
+          var el = document.getElementById('ok-map-frame');
+          if (!el || el.dataset.mapBound) return;
+          el.dataset.mapBound = '1';
+          var center = [50.181447, 14.424094];
+          var map = L.map(el, {
+            center: center, zoom: 16,
+            zoomControl: false, attributionControl: false,
+            scrollWheelZoom: false,
+          });
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd', maxZoom: 19,
+          }).addTo(map);
+          var icon = L.divIcon({
+            html:
+              '<svg width="30" height="40" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              '<path d="M14 0C6.27 0 0 6.27 0 14c0 9.33 14 22 14 22S28 23.33 28 14C28 6.27 21.73 0 14 0z" fill="#5A2A5F"/>' +
+              '<circle cx="14" cy="14" r="5" fill="#ffffff"/>' +
+              '</svg>',
+            className: '', iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -42],
+          });
+          var gmaps = 'https://maps.app.goo.gl/vCF6VbW7Z49sggau6';
+          var popupHtml =
+            '<a href="' + gmaps + '" target="_blank" rel="noopener" class="ok-map-popup">' +
+              '<strong>Horní kasárna Klecany</strong>' +
+              '<span class="ok-map-popup__cta">Otevřít v Mapách →</span>' +
+            '</a>';
+          L.marker(center, { icon: icon })
+            .addTo(map)
+            .bindPopup(popupHtml, { className: 'ok-map-popup-wrap' })
+            .openPopup()
+            .on('click', function () { window.open(gmaps, '_blank'); });
+          L.control.attribution({ prefix: false }).addTo(map);
+          L.control.zoom({ position: 'bottomright' }).addTo(map);
+          el.addEventListener('click', function () { map.scrollWheelZoom.enable(); }, { once: true });
+        });
+      }
+      document.addEventListener('astro:page-load', init);
+    }());
+  </script>
 
   <section class="sec-block">
     <div class="sec-block__inner">
@@ -157,11 +220,109 @@ import { withBase } from '../../utils/url';
     </div>
   </section>
 
-  <section class="sec-cta">
-    <div class="sec-cta__inner">
-      <h2 class="sec-cta__title">Bydlení blízko Prahy bez ceny centra.</h2>
-      <p class="sec-cta__lede">Hluboká práce v&nbsp;Klecanech, rušný život v&nbsp;Praze. Rezervace je nezávazná.</p>
-      <a class="sec-cta__button" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
-    </div>
-  </section>
+  <CtaBanner
+    eyebrow="Rezervace"
+    title="Bydlení blízko Prahy <em>bez ceny centra</em>."
+    lede="Hluboká práce v Klecanech, rušný život v Praze. Rezervace je nezávazná."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="cream"
+  />
 </Base>
+
+<style>
+  /* Mapa polohy: Leaflet s CARTO Voyager basemap. Přírodní cream/sand barvy,
+     plum pin, popup, attribution dole vpravo. Address line pod mapou. */
+  .ok-map-section {
+    padding: var(--space-8) 0;
+    background: var(--bg);
+  }
+  .ok-map-section__inner {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    display: grid;
+    gap: var(--space-5);
+  }
+  .ok-map-section__head { display: grid; gap: var(--space-2); max-width: 64ch; }
+
+  .ok-map {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    background: var(--bg-muted);
+    border: 1px solid var(--accent-rule);
+  }
+  .ok-map :global(.leaflet-container) {
+    width: 100%;
+    height: 100%;
+    background: var(--k-05);
+    font-family: var(--font-sans);
+    z-index: 0;
+  }
+  .ok-map :global(.leaflet-control-attribution) {
+    background: rgba(255, 255, 255, 0.92) !important;
+    color: var(--fg-muted) !important;
+    font-size: 10px !important;
+    padding: 1px 6px !important;
+  }
+  .ok-map :global(.leaflet-control-attribution a) { color: var(--fg) !important; }
+  .ok-map :global(.leaflet-control-zoom a) {
+    color: var(--accent) !important;
+    background: #fff !important;
+    border: 1px solid var(--accent-rule) !important;
+  }
+  .ok-map :global(.leaflet-control-zoom a:hover) {
+    background: var(--accent-soft) !important;
+  }
+  .ok-map :global(.ok-map-popup-wrap .leaflet-popup-content-wrapper) {
+    background: #fff;
+    color: var(--fg);
+    border-radius: var(--radius-input);
+    box-shadow: 0 10px 28px rgba(90, 42, 95, 0.18);
+    padding: 4px 8px;
+  }
+  .ok-map :global(.ok-map-popup-wrap .leaflet-popup-tip) {
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(90, 42, 95, 0.18);
+  }
+  .ok-map :global(.ok-map-popup) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--fg);
+    padding: 6px 8px;
+    min-width: 160px;
+  }
+  .ok-map :global(.ok-map-popup strong) {
+    font: 600 13px / 1.3 var(--font-sans);
+    color: var(--fg);
+  }
+  .ok-map :global(.ok-map-popup__cta) {
+    font: 500 12px / 1.3 var(--font-sans);
+    color: var(--accent);
+  }
+
+  .ok-map__address {
+    margin: 0;
+    font: 500 var(--text-sm) / 1.5 var(--font-sans);
+    color: var(--fg-soft, var(--fg));
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .ok-map__address strong { color: var(--fg); }
+  .ok-map__address a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-rule);
+    padding-bottom: 1px;
+  }
+  .ok-map__address a:hover { border-bottom-color: var(--accent); }
+
+  @media (max-width: 760px) {
+    .ok-map { aspect-ratio: 21 / 9; }
+  }
+</style>

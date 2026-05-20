@@ -2,13 +2,15 @@
 import Base from '../../layouts/Base.astro';
 import Gallery from '../../components/Gallery.astro';
 import Icon from '../../components/Icon.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
 import { withBase } from '../../utils/url';
 
 const heroJumps = [
-  { label: 'Wellness',       icon: 'waves',            href: '#km-wellness' },
-  { label: 'Komunitní park', icon: 'trees',            href: '#km-park' },
-  { label: 'Gastro',         icon: 'utensils-crossed', href: '#km-gastro' },
-  { label: 'Klubovna',       icon: 'party-popper',     href: '#km-klubovna' },
+  { label: 'Wellness',       href: '#km-wellness' },
+  { label: 'Komunitní park', href: '#km-park' },
+  { label: 'Gastro',         href: '#km-gastro' },
+  { label: 'Klubovna',       href: '#km-klubovna' },
 ];
 ---
 <Base
@@ -16,22 +18,15 @@ const heroJumps = [
   description="Sauna, bazén, komunitní zahrádky, grilovací místa, kantýna a pekárna, klubovna pro akce. Komunitní program v areálu Hubu Klecany."
   headerVariant="overlay">
 
-  <section class="sec-hero">
-    <img class="sec-hero__bg" src={withBase('/images/hub/komunita/komunita-hero.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
-    <div class="sec-hero__scrim" aria-hidden="true"></div>
-    <div class="sec-hero__inner">
-      <p class="sec-hero__eyebrow">Komunita</p>
-      <h1 class="sec-hero__title">Bazén, sauna, jídelna, klubovna.</h1>
-      <nav class="sec-hero__jumps" aria-label="Skok na sekci">
-        {heroJumps.map((j) => (
-          <a class="sec-hero__jump osa-nolink" href={j.href}>
-            <Icon name={j.icon} size={18} strokeWidth={1.75} />
-            <span>{j.label}</span>
-          </a>
-        ))}
-      </nav>
-    </div>
-  </section>
+  <SubpageHero
+    eyebrow="Komunitní zázemí"
+    title="Bazén, <em>sauna</em>, jídelna, klubovna."
+    sub="Vlastní bazén a sauna, jídelna s minipivovarem, klubovna a komunitní park s grilem. Týdenní vstup do sauny v ceně bydlení."
+    variant="ink"
+    ribbonPath="M 1340 120 C 1640 80, 1900 240, 1860 480 C 1820 720, 1480 760, 1380 580"
+    jumps={heroJumps}
+    ariaId="komunita-hero"
+  />
 
   <section class="sec-feature">
     <div class="sec-feature__inner">
@@ -203,11 +198,11 @@ const heroJumps = [
     </div>
   </section>
 
-  <section class="sec-cta">
-    <div class="sec-cta__inner">
-      <h2 class="sec-cta__title">Bydlení s komunitou pod jednou střechou.</h2>
-      <p class="sec-cta__lede">Rezervace je nezávazná. Z&nbsp;rezervačního oddělení vám zavoláme do 24 hodin.</p>
-      <a class="sec-cta__button" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
-    </div>
-  </section>
+  <CtaBanner
+    eyebrow="Rezervace"
+    title="Bydlení s <em>komunitou</em> pod jednou střechou."
+    lede="Rezervace je nezávazná. Z rezervačního oddělení vám zavoláme do 24 hodin."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="ink"
+  />
 </Base>

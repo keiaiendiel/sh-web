@@ -1,0 +1,171 @@
+---
+/*
+ * RibbonStrip , thin two-column panel with type left + ribbon SVG right.
+ * Sits on detail pages (e.g. between .apt-gallery and .apt-body) to break
+ * up the layout after the hero was removed in the post-restructure pass.
+ *
+ * Variant controls bg + stroke combo per spec § 04:
+ *   cream  → cream bg, plum stroke (default, neutral)
+ *   soft   → plum-soft bg, plum stroke (slightly warmer)
+ *   rose   → rose bg, plum-deep stroke (signature for kapsle / smaller formats)
+ *   deep   → plum-deep bg, plum stroke + rose eyebrow (signature combo, heavy)
+ */
+import Ribbon from './Ribbon.astro';
+
+type Variant = 'cream' | 'soft' | 'rose' | 'deep';
+
+interface Props {
+  eyebrow: string;
+  headline: string;
+  sub?: string;
+  variant?: Variant;
+  pathSeed?: number;
+}
+
+const { eyebrow, headline, sub, variant = 'cream', pathSeed = 0 } = Astro.props;
+
+/* Hand-tuned d-form library. Picked by pathSeed % length. Each form is a
+   single Bezier. viewBox 0 0 800 600 keeps slice composition predictable. */
+const paths = [
+  'M 540 80 C 720 100, 760 240, 600 320 C 460 400, 380 280, 540 200',
+  'M 480 100 C 700 80, 760 220, 600 320 C 460 400, 380 280, 540 200',
+  'M 460 480 C 320 360, 320 240, 500 160 C 660 100, 760 240, 720 380',
+  'M 540 380 C 720 360, 760 500, 600 540 C 460 580, 420 440, 580 420',
+  'M 520 120 C 720 180, 760 360, 580 460 C 420 540, 360 360, 520 280',
+  'M 460 80 C 660 60, 720 200, 620 260 C 540 300, 460 200, 560 140',
+];
+
+const path = paths[Math.abs(pathSeed) % paths.length];
+
+const strokeMap: Record<Variant, 'plum' | 'rose' | 'plum-deep' | 'cream'> = {
+  cream: 'plum',
+  soft: 'plum',
+  rose: 'plum-deep',
+  deep: 'plum',
+};
+const thicknessMap: Record<Variant, number> = {
+  cream: 28,
+  soft: 28,
+  rose: 14,
+  deep: 22,
+};
+---
+<aside class={`ribbon-strip ribbon-strip--${variant}`}>
+  <div class="ribbon-strip__inner">
+    <div class="ribbon-strip__type">
+      <p class="ribbon-strip__eyebrow">{eyebrow}</p>
+      <h2 class="ribbon-strip__h" set:html={headline} />
+      {sub && <p class="ribbon-strip__sub">{sub}</p>}
+    </div>
+    <div class="ribbon-strip__art" aria-hidden="true">
+      <Ribbon
+        path={path}
+        viewBox="0 0 800 600"
+        stroke={strokeMap[variant]}
+        thickness={thicknessMap[variant]}
+        animate="snake"
+        preserveAspectRatio="xMidYMid slice"
+      />
+    </div>
+  </div>
+</aside>
+
+<style>
+  .ribbon-strip {
+    padding: var(--space-6) var(--gutter);
+    background: var(--bg);
+  }
+  .ribbon-strip__inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 56px);
+    align-items: center;
+    border-radius: var(--radius-input);
+    padding: clamp(24px, 3vw, 36px) clamp(24px, 3vw, 40px);
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ribbon-strip__type {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ribbon-strip__eyebrow {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .ribbon-strip__h {
+    font: 700 clamp(1.375rem, 2vw, 1.875rem) / 1.1 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .ribbon-strip__h :global(em) {
+    font-style: italic;
+    font-weight: 500;
+  }
+  .ribbon-strip__sub {
+    font: 500 var(--text-sm) / 1.45 var(--font-sans);
+    margin: 4px 0 0;
+    color: var(--fg-subtle);
+    max-width: 48ch;
+  }
+  .ribbon-strip__art {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    align-self: stretch;
+  }
+  .ribbon-strip__art :global(.ribbon) {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Variants */
+  .ribbon-strip--cream .ribbon-strip__inner {
+    background: var(--cream);
+    border: 1px solid var(--accent-rule);
+  }
+  .ribbon-strip--cream .ribbon-strip__eyebrow { color: var(--accent); }
+  .ribbon-strip--cream .ribbon-strip__h :global(em) { color: var(--accent); }
+
+  .ribbon-strip--soft .ribbon-strip__inner {
+    background: var(--accent-soft);
+  }
+  .ribbon-strip--soft .ribbon-strip__eyebrow { color: var(--accent); }
+  .ribbon-strip--soft .ribbon-strip__h :global(em) { color: var(--accent); }
+
+  .ribbon-strip--rose .ribbon-strip__inner {
+    background: var(--rose);
+    color: var(--plum-deep);
+  }
+  .ribbon-strip--rose .ribbon-strip__eyebrow { color: var(--plum-deep); }
+  .ribbon-strip--rose .ribbon-strip__h { color: var(--plum-deep); }
+  .ribbon-strip--rose .ribbon-strip__h :global(em) { color: var(--plum-deep); }
+  .ribbon-strip--rose .ribbon-strip__sub { color: var(--plum-deep); opacity: 0.75; }
+
+  .ribbon-strip--deep .ribbon-strip__inner {
+    background: var(--plum-deep);
+    color: #fff;
+  }
+  .ribbon-strip--deep .ribbon-strip__eyebrow { color: var(--rose); }
+  .ribbon-strip--deep .ribbon-strip__h { color: #fff; }
+  .ribbon-strip--deep .ribbon-strip__h :global(em) { color: var(--rose); }
+  .ribbon-strip--deep .ribbon-strip__sub { color: rgba(255, 255, 255, 0.78); }
+
+  @media (max-width: 720px) {
+    .ribbon-strip__inner {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+    .ribbon-strip__art {
+      aspect-ratio: 16 / 9;
+      max-height: 160px;
+    }
+  }
+</style>

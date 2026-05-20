@@ -1,0 +1,281 @@
+---
+/*
+ * SubpageHero , poster-style ribbon banner pro subpage hero sekce.
+ * Per spec § 04 (Sedm bannerů per sekce webu) SH/01-SH/07.
+ *
+ *   eyebrow    , short uppercase label
+ *   title      , h1 string s podporou <em> přes set:html
+ *   sub        , optional 1-2 sentence lede
+ *   variant    , 'deep' | 'cream' | 'rose' | 'ink' určuje bg + stroke combo
+ *   ribbonPath , hand-tuned Bezier d-string (viewBox 0 0 2100 900)
+ *   thickness  , px stroke width (default per variant)
+ *   jumps      , optional in-page nav anchor links
+ */
+import { withBase } from '../utils/url';
+
+type Variant = 'deep' | 'cream' | 'rose' | 'ink';
+type Jump = { href: string; label: string };
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  sub?: string;
+  variant: Variant;
+  ribbonPath: string;
+  thickness?: number;
+  jumps?: Jump[];
+  ariaId?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  sub,
+  variant,
+  ribbonPath,
+  thickness,
+  jumps = [],
+  ariaId,
+} = Astro.props;
+
+const defaultThickness: Record<Variant, number> = {
+  deep: 56,
+  cream: 44,
+  rose: 14,
+  ink: 36,
+};
+const strokeWidth = thickness ?? defaultThickness[variant];
+const titleId = ariaId ? `${ariaId}-title` : undefined;
+---
+<section class={`subpage-hero subpage-hero--${variant}`} aria-labelledby={titleId}>
+  <span class="subpage-hero__bg" aria-hidden="true" data-ribbon-reveal>
+    <svg viewBox="0 0 2100 900" preserveAspectRatio="xMidYMid slice">
+      <path d={ribbonPath} stroke-width={strokeWidth} />
+    </svg>
+  </span>
+  <div class="subpage-hero__inner">
+    <p class="subpage-hero__eyebrow">{eyebrow}</p>
+    <h1 class="subpage-hero__title" id={titleId} set:html={title} />
+    {sub && <p class="subpage-hero__sub" set:html={sub} />}
+    {jumps.length > 0 && (
+      <nav class="subpage-hero__jumps" aria-label="Skok na sekci">
+        {jumps.map((j) => (
+          <a class="subpage-hero__jump osa-nolink" href={j.href.startsWith('#') ? j.href : withBase(j.href)}>{j.label}</a>
+        ))}
+      </nav>
+    )}
+  </div>
+</section>
+
+<style>
+  .subpage-hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: clamp(320px, 42vw, 480px);
+    display: grid;
+    align-items: end;
+    padding: var(--space-9) 0 var(--space-7);
+    scroll-margin-top: 80px;
+  }
+  .subpage-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .subpage-hero__bg svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+  .subpage-hero__bg path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .subpage-hero__bg[data-ribbon-reveal] path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  .subpage-hero__bg[data-ribbon-reveal].is-revealed path {
+    animation: ribbon-snake-draw 2.8s var(--ease-snake) forwards;
+  }
+
+  .subpage-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .subpage-hero__eyebrow {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .subpage-hero__title {
+    font: 700 clamp(2.25rem, 5vw, 4rem) / 1.02 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    text-wrap: balance;
+    max-width: 20ch;
+  }
+  .subpage-hero__title :global(em) {
+    font-style: italic;
+    font-weight: 500;
+  }
+  .subpage-hero__sub {
+    font: 500 clamp(1rem, 1.2vw, 1.125rem) / 1.5 var(--font-sans);
+    margin: 0;
+    max-width: 56ch;
+  }
+  .subpage-hero__jumps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+  .subpage-hero__jump {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    border-radius: var(--radius-input);
+    backdrop-filter: blur(2px);
+    text-decoration: none !important;
+    transition: background 200ms cubic-bezier(0.32, 0.72, 0, 1),
+                transform 200ms cubic-bezier(0.32, 0.72, 0, 1),
+                color 200ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  /* ---------- Variant: deep (plum-deep + plum stroke, SH/01 + SH/07) ---------- */
+  .subpage-hero--deep { background: var(--plum-deep); color: #fff; }
+  .subpage-hero--deep .subpage-hero__bg path { stroke: var(--accent); }
+  .subpage-hero--deep .subpage-hero__eyebrow { color: var(--rose); }
+  .subpage-hero--deep .subpage-hero__title :global(em) { color: var(--rose); }
+  .subpage-hero--deep .subpage-hero__sub { color: rgba(255, 255, 255, 0.82); }
+  .subpage-hero--deep .subpage-hero__jump {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
+  .subpage-hero--deep .subpage-hero__jump:hover,
+  .subpage-hero--deep .subpage-hero__jump:focus-visible {
+    background: var(--rose);
+    color: var(--plum-deep);
+    border-color: var(--rose);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  /* ---------- Variant: cream (cream + plum stroke, SH/02 + SH/05) ---------- */
+  .subpage-hero--cream { background: var(--cream); color: var(--fg); }
+  .subpage-hero--cream .subpage-hero__bg path { stroke: var(--accent); }
+  .subpage-hero--cream .subpage-hero__eyebrow { color: var(--accent); }
+  .subpage-hero--cream .subpage-hero__title :global(em) { color: var(--accent); }
+  .subpage-hero--cream .subpage-hero__sub { color: var(--fg-soft, var(--fg-muted)); }
+  .subpage-hero--cream .subpage-hero__jump {
+    color: var(--accent);
+    background: rgba(90, 42, 95, 0.04);
+    border: 1px solid var(--accent-rule);
+  }
+  .subpage-hero--cream .subpage-hero__jump:hover,
+  .subpage-hero--cream .subpage-hero__jump:focus-visible {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  /* ---------- Variant: rose (rose + plum-deep stroke, SH/06) ---------- */
+  .subpage-hero--rose { background: var(--rose); color: var(--plum-deep); }
+  .subpage-hero--rose .subpage-hero__bg path { stroke: var(--plum-deep); }
+  .subpage-hero--rose .subpage-hero__eyebrow { color: var(--plum-deep); }
+  .subpage-hero--rose .subpage-hero__title :global(em) { color: var(--plum-deep); }
+  .subpage-hero--rose .subpage-hero__sub { color: var(--plum-deep); opacity: 0.78; }
+  .subpage-hero--rose .subpage-hero__jump {
+    color: var(--plum-deep);
+    background: rgba(255, 255, 255, 0.30);
+    border: 1px solid rgba(45, 20, 48, 0.20);
+  }
+  .subpage-hero--rose .subpage-hero__jump:hover,
+  .subpage-hero--rose .subpage-hero__jump:focus-visible {
+    background: var(--plum-deep);
+    color: var(--rose);
+    border-color: var(--plum-deep);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  /* ---------- Variant: ink (#111 + rose stroke, SH/04) ---------- */
+  .subpage-hero--ink { background: var(--k-100); color: var(--cream); }
+  .subpage-hero--ink .subpage-hero__bg path { stroke: var(--rose); }
+  .subpage-hero--ink .subpage-hero__eyebrow { color: var(--rose); }
+  .subpage-hero--ink .subpage-hero__title :global(em) { color: var(--rose); }
+  .subpage-hero--ink .subpage-hero__sub { color: rgba(247, 244, 239, 0.74); }
+  .subpage-hero--ink .subpage-hero__jump {
+    color: var(--cream);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
+  .subpage-hero--ink .subpage-hero__jump:hover,
+  .subpage-hero--ink .subpage-hero__jump:focus-visible {
+    background: var(--rose);
+    color: var(--k-100);
+    border-color: var(--rose);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  @media (max-width: 760px) {
+    .subpage-hero { min-height: clamp(280px, 70vw, 380px); padding: var(--space-8) 0 var(--space-6); }
+    .subpage-hero__title { font-size: clamp(1.875rem, 8vw, 2.5rem); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .subpage-hero__bg[data-ribbon-reveal] path,
+    .subpage-hero__bg[data-ribbon-reveal].is-revealed path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .subpage-hero__jump { transition: none; }
+  }
+</style>
+
+<script is:inline define:vars={{ variant }}>
+  /* Set body attribute so global CSS can adapt header text color
+     based on hero tone. Light heroes (cream/rose) → dark header text;
+     dark heroes (deep/ink) → keep default white. */
+  document.body.setAttribute('data-hero-tone', (variant === 'cream' || variant === 'rose') ? 'light' : 'dark');
+</script>
+
+<style is:global>
+  /* Adaptive header text per hero variant via body[data-hero-tone].
+     Light hero → overlay header text dark. Dark hero → keep default white.
+     Po scrollu (.is-stuck) má header solid bg, takže text vždy tmavý. */
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) { color: var(--fg); }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__brand,
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__burger { color: var(--fg); }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link { color: var(--fg); }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link:hover { color: var(--accent); }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__cta {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__cta::after {
+    background: var(--accent);
+  }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__cta:hover,
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__cta:focus-visible,
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__cta[aria-current='page'] {
+    color: #fff;
+  }
+</style>

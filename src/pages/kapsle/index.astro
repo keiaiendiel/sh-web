@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
 
@@ -21,25 +23,19 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   description="Privátní kapsle ve sdíleném pokoji od 3 000 Kč měsíčně. Uzamykatelný modul s vlastním světlem a USB. Pro lidi, kteří potřebují kde spát a kde pracovat."
   headerVariant="overlay">
 
-  <section class="kp-hero">
-    <img class="kp-hero__bg" src={withBase('/images/hub/ubytovani/coliving/kapsle-horizontal.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
-    <div class="kp-hero__scrim" aria-hidden="true"></div>
-    <div class="kp-hero__inner">
-      <p class="kp-hero__eyebrow">Vlastní kapsle od 3 000 Kč</p>
-      <h1 class="kp-hero__title">
-        Kapsle, ne hostel.
-      </h1>
-      <p class="kp-hero__lede">
-        Vlastní uzavíratelná kapsle ve sdíleném pokoji s 2 až 5 dalšími kapslemi.
-        Vlastní světlo, USB, zamykatelná skříň, převlékací kabinka přímo v pokoji.
-        Matrace 210×150 cm, širší než standardní jednolůžko na koleji.
-      </p>
-      <div class="kp-hero__cta-row">
-        <a class="kp-hero__cta kp-hero__cta--primary" href={withBase('/rezervace/?typ=kapsle-single')}>Rezervovat kapsli</a>
-        <a class="kp-hero__cta" href={withBase('/ubytovani/co-living/kapsle-single/')}>Detail kapsle</a>
-      </div>
-    </div>
-  </section>
+  <SubpageHero
+    eyebrow="Vlastní kapsle od 3 000 Kč"
+    title="Kapsle, <em>ne</em> hostel."
+    sub="Uzavíratelná kapsle ve sdíleném pokoji s 2 až 5 dalšími. Vlastní světlo, USB, zamykatelná skříň, převlékací kabinka. Matrace 210×150 cm, širší než standardní jednolůžko."
+    variant="deep"
+    ribbonPath="M 1480 80 C 1660 140, 1880 240, 1900 420 C 1920 580, 1620 720, 1380 600"
+    thickness={56}
+    jumps={[
+      { label: 'Rezervovat kapsli', href: '/rezervace/?typ=kapsle-single' },
+      { label: 'Detail kapsle',     href: '/ubytovani/co-living/kapsle-single/' },
+    ]}
+    ariaId="kapsle-hero"
+  />
 
   {/* Reframing: co je kapsle vs co není */}
   <section class="kp-reframe">
@@ -126,26 +122,20 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     </div>
   </section>
 
-  <section class="kp-cta">
-    <div class="kp-cta__inner">
-      <h2 class="kp-cta__title">Rezervovat kapsli</h2>
-      <p class="kp-cta__lede">
-        Rezervace je nezávazná. Vyberete termín nástupu, délku pobytu a&nbsp;způsob kontaktu.
-        Z&nbsp;rezervačního oddělení vám zavoláme do 24 hodin s&nbsp;detailem dostupnosti.
-      </p>
-      <div class="kp-cta__row">
-        <a class="kp-cta__button" href={withBase('/rezervace/?typ=kapsle-single')}>Jednolůžková od 3 000 Kč</a>
-        <a class="kp-cta__button kp-cta__button--alt" href={withBase('/rezervace/?typ=kapsle-double')}>Dvoulůžková od 4 500 Kč</a>
-      </div>
-    </div>
-  </section>
+  <CtaBanner
+    eyebrow="Rezervovat kapsli"
+    title="Kapsle za <em>3 000 Kč</em> měsíčně."
+    lede="Rezervace je nezávazná. Vyberete termín nástupu, délku pobytu a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/?typ=kapsle-single' }}
+    variant="deep"
+  />
 </Base>
 
 <style>
   .kp-hero { position: relative; isolation: isolate; min-height: 70vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-8); color: #fff; background: var(--k-100); overflow: hidden; }
   .kp-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.6); }
   .kp-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.1) 90%); z-index: -1; }
-  .kp-hero__inner { max-width: var(--container); margin: 0 auto; width: 100%; }
+  .kp-hero__inner { max-width: var(--container-wide); margin: 0 auto; width: 100%; }
   .kp-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-4); padding: 4px 10px; background: rgba(255,255,255,0.08); border: 1px solid var(--accent); border-radius: var(--radius-input); display: inline-block; }
   .kp-hero__title { font: 600 clamp(2.75rem, 6vw, 5rem) / 1.05 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-5); max-width: 16ch; }
   .kp-hero__lede { font-size: clamp(1.1rem, 1.5vw, 1.25rem); line-height: 1.5; margin: 0 0 var(--space-6); max-width: 56ch; color: rgba(255,255,255,0.95); }
@@ -156,7 +146,7 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .kp-hero__cta--primary:hover { background: #fff; color: var(--accent); }
 
   .kp-reframe { padding: var(--space-9) var(--gutter); background: var(--bg); color: var(--fg); }
-  .kp-reframe__inner { max-width: var(--container); margin: 0 auto; }
+  .kp-reframe__inner { max-width: var(--container-wide); margin: 0 auto; }
   .kp-reframe__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
   .kp-reframe__title { font: 600 clamp(2rem, 4vw, 3rem) / 1.1 var(--font-sans); margin: 0 0 var(--space-7); letter-spacing: var(--tracking-tight); max-width: 22ch; }
   .kp-reframe__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
@@ -167,7 +157,7 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   @media (max-width: 760px) { .kp-reframe__grid { grid-template-columns: 1fr; } }
 
   .kp-variants { padding: var(--space-9) var(--gutter); background: var(--bg-muted, var(--bg)); color: var(--fg); }
-  .kp-variants__inner { max-width: var(--container); margin: 0 auto; }
+  .kp-variants__inner { max-width: var(--container-wide); margin: 0 auto; }
   .kp-variants__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
   .kp-variants__title { font: 600 clamp(2rem, 4vw, 3rem) / 1.1 var(--font-sans); margin: 0 0 var(--space-7); letter-spacing: var(--tracking-tight); }
   .kp-variants__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }

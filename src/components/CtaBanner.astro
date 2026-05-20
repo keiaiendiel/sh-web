@@ -1,0 +1,220 @@
+---
+/*
+ * CtaBanner , contained floating banner pattern (per landing lp-cta-banner).
+ * Replaces full-bleed .sec-cta blocks on subpages.
+ *
+ *   eyebrow , short uppercase label
+ *   title   , h2 string s podporou <em>
+ *   lede    , optional sub copy
+ *   cta     , { label, href } button definition
+ *   variant , 'deep' | 'cream' | 'rose' | 'ink' (matches SubpageHero variants)
+ *   ribbonPath , optional Bezier d-string (viewBox 0 0 2100 700)
+ */
+import { withBase } from '../utils/url';
+
+type Variant = 'deep' | 'cream' | 'rose' | 'ink';
+type Cta = { label: string; href: string };
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  cta: Cta;
+  variant: Variant;
+  ribbonPath?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  lede,
+  cta,
+  variant,
+  ribbonPath = 'M 1280 80 C 1580 140, 1900 320, 1920 520 C 1940 680, 1600 720, 1460 540',
+} = Astro.props;
+---
+<section class={`cta-banner-wrap`} aria-label={eyebrow}>
+  <a class={`cta-banner cta-banner--${variant} osa-nolink`} href={withBase(cta.href)} data-ribbon-reveal>
+    <span class="cta-banner__bg" aria-hidden="true">
+      <svg viewBox="0 0 2100 700" preserveAspectRatio="xMidYMid slice">
+        <path d={ribbonPath} />
+      </svg>
+    </span>
+    <span class="cta-banner__type">
+      <span class="cta-banner__eyebrow">{eyebrow}</span>
+      <span class="cta-banner__h" set:html={title} />
+      {lede && <span class="cta-banner__lede" set:html={lede} />}
+    </span>
+    <span class="cta-banner__cta">
+      {cta.label}<span aria-hidden="true"> →</span>
+    </span>
+  </a>
+</section>
+
+<style>
+  .cta-banner-wrap {
+    padding: var(--space-7) 0 var(--space-8);
+    background: var(--bg);
+  }
+  .cta-banner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(20px, 4vw, 56px);
+    align-items: center;
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: clamp(32px, 4vw, 48px) clamp(28px, 4vw, 52px);
+    border-radius: var(--radius-input);
+    text-decoration: none !important;
+    overflow: hidden;
+    transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1),
+                box-shadow 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .cta-banner__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.92;
+  }
+  .cta-banner__bg svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+  .cta-banner__bg path {
+    fill: none;
+    stroke-width: 22;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .cta-banner[data-ribbon-reveal] .cta-banner__bg path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  .cta-banner[data-ribbon-reveal].is-revealed .cta-banner__bg path {
+    animation: ribbon-snake-draw 2.6s var(--ease-snake) forwards;
+  }
+  .cta-banner__type {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 52ch;
+  }
+  .cta-banner__eyebrow {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+  .cta-banner__h {
+    font: 700 clamp(1.5rem, 2.8vw, 2.375rem) / 1.08 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+  .cta-banner__h :global(em) {
+    font-style: italic;
+    font-weight: 500;
+  }
+  .cta-banner__lede {
+    font: 500 var(--text-md) / 1.55 var(--font-sans);
+    max-width: 48ch;
+  }
+  .cta-banner__cta {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 26px;
+    font: 700 var(--text-md) / 1 var(--font-sans);
+    border-radius: var(--radius-input);
+    white-space: nowrap;
+    transition: background 220ms cubic-bezier(0.32, 0.72, 0, 1),
+                transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  /* Variants */
+  .cta-banner--deep { background: var(--plum-deep); color: #fff; }
+  .cta-banner--deep .cta-banner__bg path { stroke: var(--accent); }
+  .cta-banner--deep .cta-banner__eyebrow { color: var(--rose); }
+  .cta-banner--deep .cta-banner__h :global(em) { color: var(--rose); }
+  .cta-banner--deep .cta-banner__lede { color: rgba(255, 255, 255, 0.82); }
+  .cta-banner--deep .cta-banner__cta { background: var(--cream); color: var(--plum-deep); }
+
+  .cta-banner--cream { background: var(--cream); color: var(--fg); border: 1px solid var(--accent-rule); }
+  .cta-banner--cream .cta-banner__bg path { stroke: var(--accent); }
+  .cta-banner--cream .cta-banner__eyebrow { color: var(--accent); }
+  .cta-banner--cream .cta-banner__h :global(em) { color: var(--accent); }
+  .cta-banner--cream .cta-banner__lede { color: var(--fg-soft, var(--fg-muted)); }
+  .cta-banner--cream .cta-banner__cta { background: var(--accent); color: #fff; }
+
+  .cta-banner--rose { background: var(--rose); color: var(--plum-deep); }
+  .cta-banner--rose .cta-banner__bg path { stroke: var(--plum-deep); stroke-width: 14; }
+  .cta-banner--rose .cta-banner__eyebrow { color: var(--plum-deep); }
+  .cta-banner--rose .cta-banner__h :global(em) { color: var(--plum-deep); }
+  .cta-banner--rose .cta-banner__lede { color: var(--plum-deep); opacity: 0.75; }
+  .cta-banner--rose .cta-banner__cta { background: var(--plum-deep); color: var(--rose); }
+
+  .cta-banner--ink { background: var(--k-100); color: var(--cream); }
+  .cta-banner--ink .cta-banner__bg path { stroke: var(--rose); stroke-width: 36; }
+  .cta-banner--ink .cta-banner__eyebrow { color: var(--rose); }
+  .cta-banner--ink .cta-banner__h :global(em) { color: var(--rose); }
+  .cta-banner--ink .cta-banner__lede { color: rgba(247, 244, 239, 0.72); }
+  .cta-banner--ink .cta-banner__cta { background: var(--rose); color: var(--k-100); }
+
+  /* Hover */
+  .cta-banner:hover,
+  .cta-banner:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 24px 56px rgba(45, 20, 48, 0.32);
+    outline: none;
+  }
+  .cta-banner:hover .cta-banner__cta {
+    background: #fff;
+    transform: translateX(2px);
+  }
+  .cta-banner--cream:hover .cta-banner__cta,
+  .cta-banner--cream:focus-visible .cta-banner__cta {
+    background: var(--plum-deep);
+  }
+  .cta-banner--rose:hover .cta-banner__cta,
+  .cta-banner--rose:focus-visible .cta-banner__cta {
+    background: var(--k-100);
+    color: var(--rose);
+  }
+  .cta-banner--ink:hover .cta-banner__cta,
+  .cta-banner--ink:focus-visible .cta-banner__cta {
+    background: #fff;
+    color: var(--k-100);
+  }
+  .cta-banner:focus-visible {
+    outline: 2px solid var(--rose);
+    outline-offset: 3px;
+  }
+  .cta-banner--cream:focus-visible { outline-color: var(--accent); }
+  .cta-banner--rose:focus-visible { outline-color: var(--plum-deep); }
+
+  @media (max-width: 760px) {
+    .cta-banner-wrap { padding: var(--space-6) 0 var(--space-7); }
+    .cta-banner {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 28px 24px;
+    }
+    .cta-banner__cta { justify-self: start; padding: 12px 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-banner, .cta-banner__cta { transition: none; }
+    .cta-banner[data-ribbon-reveal] .cta-banner__bg path,
+    .cta-banner[data-ribbon-reveal].is-revealed .cta-banner__bg path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+  }
+</style>

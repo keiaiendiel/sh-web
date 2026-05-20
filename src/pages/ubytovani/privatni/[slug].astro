@@ -27,6 +27,18 @@ const galleryImages: GalleryItem[] = [
   { placeholder: 'Kuchyňský kout v detailu, indukční deska, dřez, lednice, mikrovlnka', alt: 'Detail kuchyňského koutu.' },
   { placeholder: 'Pohled na celý byt s dispozicí, 24 mm širokoúhlý záběr', alt: 'Dispozice celého bytu.' },
 ];
+
+/* Ribbon arc paths per slug. Ribbon je positioned BEHIND .apt-gallery__media
+   gallery photo (z-index 0), peeká z pod fotky kolem okrajů. Different d-form
+   per slug pro vizuální variace. ViewBox 0 0 800 700, hand-tuned Bezier. */
+const ribbonPaths: Record<string, string> = {
+  '1kk': 'M -40 480 C 140 280, 360 220, 520 360 S 760 580, 840 700',
+  '2kk': 'M -40 560 C 180 320, 380 280, 540 420 S 760 620, 840 720',
+  '3kk': 'M -60 360 C 140 480, 360 200, 540 320 S 780 520, 860 660',
+  '4kk': 'M -40 280 C 180 460, 380 240, 540 380 S 780 540, 860 640',
+  '5kk': 'M -40 600 C 160 380, 380 260, 540 380 S 780 580, 840 720',
+};
+const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['1kk'];
 ---
 <Base
   title={`${data.name} · Startovací Hub Klecany`}
@@ -50,6 +62,11 @@ const galleryImages: GalleryItem[] = [
         </a>
       </aside>
       <div class="apt-gallery__media">
+        <span class="apt-gallery__ribbon" aria-hidden="true" data-ribbon-reveal>
+          <svg viewBox="0 0 800 700" preserveAspectRatio="xMidYMid meet">
+            <path d={stripPath} />
+          </svg>
+        </span>
         <Gallery images={galleryImages} ariaLabel={`Galerie typu ${data.name}`} aspectRatio="4 / 3" />
       </div>
     </div>
@@ -98,14 +115,52 @@ const galleryImages: GalleryItem[] = [
   .apt-gallery__per { font: 500 var(--text-sm) / 1 var(--font-sans); color: var(--fg-muted, var(--fg)); }
   .apt-gallery__cta { display: inline-flex; align-items: center; gap: 6px; padding: 12px 22px; font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--accent-on); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--radius-input); text-decoration: none; width: fit-content; transition: background 200ms ease, color 200ms ease; }
   .apt-gallery__cta:hover, .apt-gallery__cta:focus-visible { background: transparent; color: var(--accent); outline: none; }
-  .apt-gallery__media { min-width: 0; }
+  /* Media wrapper: position relative + overflow visible aby ribbon mohl
+     peekat z pod fotky kolem okrajů (z-index 0 ribbon, z-index 1 Gallery). */
+  .apt-gallery__media { position: relative; min-width: 0; }
+  .apt-gallery__media > :global(.gallery), .apt-gallery__media > :global(figure) {
+    position: relative;
+    z-index: 1;
+  }
+  .apt-gallery__ribbon {
+    position: absolute;
+    /* Extends beyond .apt-gallery__media bounds, peeká kolem okrajů fotky */
+    inset: -8% -14% -10% -6%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.65;
+  }
+  .apt-gallery__ribbon svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .apt-gallery__ribbon path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 56;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .apt-gallery__ribbon[data-ribbon-reveal] path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  .apt-gallery__ribbon[data-ribbon-reveal].is-revealed path {
+    animation: ribbon-snake-draw 3.2s var(--ease-snake) forwards;
+  }
   @media (max-width: 760px) {
     .apt-gallery__inner { grid-template-columns: 1fr; gap: var(--space-5); }
     .apt-gallery__side { position: static; top: auto; }
+    .apt-gallery__ribbon { inset: -6% -8% -8% -4%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .apt-gallery__ribbon[data-ribbon-reveal] path,
+    .apt-gallery__ribbon[data-ribbon-reveal].is-revealed path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
   }
 
   .apt-body { padding: var(--space-8) var(--gutter); background: var(--bg); color: var(--fg); }
-  .apt-body__inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--space-7); max-width: var(--container); margin: 0 auto; }
+  .apt-body__inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--space-7); max-width: var(--container-wide); margin: 0 auto; }
   .apt-body__text :global(p) { line-height: 1.65; margin: 0 0 var(--space-4); font-size: var(--text-md); max-width: 60ch; }
   .apt-body__text :global(p strong) { font-weight: 600; }
   .apt-body__sub { font: 600 var(--text-xl) / 1.2 var(--font-sans); margin: var(--space-7) 0 var(--space-4); letter-spacing: var(--tracking-tight); }

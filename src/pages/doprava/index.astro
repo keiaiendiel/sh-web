@@ -1,32 +1,33 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Gallery from '../../components/Gallery.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
 import { withBase } from '../../utils/url';
+
+const heroJumps = [
+  { label: 'Hub-shuttle', href: '#dp-shuttle' },
+  { label: 'Bus 374',     href: '#dp-374' },
+  { label: 'Hub-taxi',    href: '#dp-taxi' },
+  { label: 'Auto a kolo', href: '#dp-auto' },
+  { label: 'Plánované',   href: '#dp-planned' },
+];
 ---
 <Base
   title="Doprava z Klecan do Prahy · Startovací Hub Klecany"
   description="Patnáct minut autobusem od metra Kobylisy. Hub-shuttle s pěti jízdami v ceně bydlení, PID linka 374, Hub-taxi pro lokální cesty. Plánovaná tramvaj a cyklolávka přes Vltavu."
   headerVariant="overlay">
 
-  <section class="sec-hero">
-    <img class="sec-hero__bg" src={withBase('/images/hub/areal/building-b.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
-    <div class="sec-hero__scrim" aria-hidden="true"></div>
-    <div class="sec-hero__inner">
-      <p class="sec-hero__eyebrow">Doprava</p>
-      <h1 class="sec-hero__title">Patnáct minut autobusem na metro.</h1>
-      <p class="sec-hero__lede">
-        Rezidenti mají v&nbsp;ceně bydlení pět jízd Hub-shuttle a&nbsp;jednu jízdu Hub-taxi měsíčně.
-        PID linka 374 jako záloha.
-      </p>
-      <nav class="sec-hero__jumps" aria-label="Skok na sekci">
-        <a class="sec-hero__jump" href="#dp-shuttle">Hub-shuttle</a>
-        <a class="sec-hero__jump" href="#dp-374">Bus 374</a>
-        <a class="sec-hero__jump" href="#dp-taxi">Hub-taxi</a>
-        <a class="sec-hero__jump" href="#dp-auto">Auto a kolo</a>
-        <a class="sec-hero__jump" href="#dp-planned">Plánované</a>
-      </nav>
-    </div>
-  </section>
+  <SubpageHero
+    eyebrow="Doprava"
+    title="Patnáct minut <em>autobusem</em> na metro."
+    sub="Pět jízd Hub-shuttle v ceně bydlení, PID linka 374 jako záloha, Hub-taxi pro lokální cesty."
+    variant="deep"
+    ribbonPath="M 1180 280 C 1420 220, 1680 380, 1900 280 S 2140 340, 2200 400"
+    thickness={40}
+    jumps={heroJumps}
+    ariaId="doprava-hero"
+  />
 
   <section class="sec-feature">
     <div class="sec-feature__inner">
@@ -235,13 +236,11 @@ import { withBase } from '../../utils/url';
     </div>
   </section>
 
-  <section class="sec-cta">
-    <div class="sec-cta__inner">
-      <h2 class="sec-cta__title">Bydlení blízko Prahy bez ceny centra.</h2>
-      <p class="sec-cta__lede">
-        Rezervace je nezávazná. Z&nbsp;rezervačního oddělení vám zavoláme do 24 hodin.
-      </p>
-      <a class="sec-cta__button" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
-    </div>
-  </section>
+  <CtaBanner
+    eyebrow="Rezervace"
+    title="Bydlení <em>blízko Prahy</em> bez ceny centra."
+    lede="Rezervace je nezávazná. Z rezervačního oddělení vám zavoláme do 24 hodin."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="rose"
+  />
 </Base>

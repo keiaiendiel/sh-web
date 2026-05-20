@@ -5,7 +5,6 @@ import { withBase } from '../utils/url';
 const orgEntry = await getEntry('org', 'identity');
 const org = orgEntry?.data;
 
-/* Build-time stamp. Aktualizováno = den nejnovějšího deployu. */
 const buildDate = new Date().toLocaleDateString('cs-CZ', {
   day: 'numeric', month: 'numeric', year: 'numeric',
 });
@@ -14,113 +13,393 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
   <div class="hub-footer__inner">
     <div class="hub-footer__col hub-footer__col--brand">
       <p class="hub-footer__brand">Startovací Hub Klecany</p>
-      <p class="hub-footer__tagline">Bývalé vojenské kasárny nad Vltavou. Otevíráme postupně od roku 2026.</p>
-      <p class="hub-footer__status">V projektové přípravě</p>
-    </div>
-
-    <div class="hub-footer__col">
-      <p class="hub-footer__label">Kontakt</p>
-      <p><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></p>
-      <p>Horní Kasárna Klecany<br />250 67 Klecany</p>
-      <p class="hub-footer__chip">
-        <a href={withBase('/rezervace/')} class="hub-footer__chip-link">Stavte se na prohlídku →</a>
+      <p class="hub-footer__address">
+        Horní Kasárna<br />
+        250 67 Klecany
+      </p>
+      <div class="hub-footer__map" data-map-frame role="application" aria-label="Mapa Hubu Klecany"></div>
+      <p class="hub-footer__map-address">
+        <strong>Horní kasárna Klecany</strong>
+        <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách <span aria-hidden="true">→</span></a>
       </p>
     </div>
 
-    <div class="hub-footer__col">
-      <p class="hub-footer__label">Související</p>
+    <div class="hub-footer__col hub-footer__col--contact">
+      <p class="hub-footer__label">Kontakt</p>
+      <p class="hub-footer__contact-lede">Stavte se na prohlídku, nebo se zapojte do našich aktivit.</p>
+      <p class="hub-footer__chip">
+        <a href={withBase('/rezervace/')} class="hub-footer__chip-link">Domluvit prohlídku <span aria-hidden="true">→</span></a>
+      </p>
+      <p class="hub-footer__contact-line"><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></p>
+      {org?.predseda?.phone && <p class="hub-footer__contact-line"><a href={`tel:${org.predseda.phone.replace(/\s/g,'')}`}>{org.predseda.phone}</a></p>}
+      <p class="hub-footer__operator">
+        Provozuje Občanské sdružení Alternativa II, z.s.<br />
+        IČO {org?.ico ?? 'bude doplněno'}
+      </p>
+    </div>
+
+    <div class="hub-footer__col hub-footer__col--links">
+      <p class="hub-footer__label">Odkazy</p>
       <p><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a> <span class="hub-footer__hint">mateřský web OSA II</span></p>
       <p><a href="https://vepde.com" rel="noopener">vepde.com</a> <span class="hub-footer__hint">záměr VPD pro investory</span></p>
+      <p><a href={withBase('/kontakty/')}>Kontakty</a></p>
+      <p><a href={withBase('/faq/')}>Časté otázky</a></p>
       <p><a href={withBase('/gdpr/')}>Ochrana osobních údajů</a></p>
     </div>
 
-    <div class="hub-footer__col hub-footer__col--legal">
-      <p class="hub-footer__label">Provozovatel</p>
-      <p>Občanské sdružení Alternativa II, z.s.</p>
-      <p>IČO {org?.ico ?? 'bude doplněno'} · Předseda Marek Semerád</p>
-      <p class="hub-footer__legal">
-        Nabídka rezervací je nezávazná. Slouží k&nbsp;registraci zájmu, není kupní ani nájemní smlouvou.
+    <div class="hub-footer__col hub-footer__col--actions">
+      <a class:list={['hub-footer__action', 'hub-footer__action--primary']} href={withBase('/rezervace/')}>
+        Rezervujte si místo<span aria-hidden="true"> →</span>
+      </a>
+      <span class="hub-footer__action hub-footer__action--soon" aria-disabled="true">
+        Aktuality<span class="hub-footer__action-hint">chystáme</span>
+      </span>
+      <p class="hub-footer__reservation-note">
+        Nabídka rezervací je nezávazná, slouží k registraci zájmu.
       </p>
+      <p class="hub-footer__status">V projektové přípravě</p>
       <p class="hub-footer__updated">Aktualizováno {buildDate}</p>
     </div>
   </div>
 </footer>
 
+<script is:inline>
+  /* Footer map: lazy init až při scrollu k patičce. Reusuje sdílený
+     window.__hubLoadLeaflet z Base.astro (jeden Leaflet pro footer i /okoli/). */
+  (function () {
+    function init(el) {
+      if (el.dataset.mapBound) return;
+      el.dataset.mapBound = '1';
+      var center = [50.181447, 14.424094];
+      var map = L.map(el, {
+        center: center, zoom: 15,
+        zoomControl: false, attributionControl: false,
+        scrollWheelZoom: false, dragging: true,
+      });
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd', maxZoom: 19,
+      }).addTo(map);
+      var icon = L.divIcon({
+        html:
+          '<svg width="28" height="38" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+          '<path d="M14 0C6.27 0 0 6.27 0 14c0 9.33 14 22 14 22S28 23.33 28 14C28 6.27 21.73 0 14 0z" fill="#c89bb0"/>' +
+          '<circle cx="14" cy="14" r="5" fill="#2d1430"/>' +
+          '</svg>',
+        className: 'hub-footer__map-pin',
+        iconSize: [28, 38], iconAnchor: [14, 38], popupAnchor: [0, -40],
+      });
+      var gmaps = 'https://maps.app.goo.gl/vCF6VbW7Z49sggau6';
+      var popupHtml =
+        '<a href="' + gmaps + '" target="_blank" rel="noopener" class="hub-footer__map-popup">' +
+          '<strong>Horní kasárna Klecany</strong>' +
+          '<span>Otevřít v Mapách →</span>' +
+        '</a>';
+      L.marker(center, { icon: icon })
+        .addTo(map)
+        .bindPopup(popupHtml, { className: 'hub-footer__map-popup-wrap' });
+    }
+
+    function bind() {
+      var el = document.querySelector('.hub-footer [data-map-frame]');
+      if (!el || !window.__hubLoadLeaflet) return;
+      if (!('IntersectionObserver' in window)) {
+        window.__hubLoadLeaflet(function () { init(el); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            window.__hubLoadLeaflet(function () { init(el); });
+            io.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '300px 0px' });
+      io.observe(el);
+    }
+
+    document.addEventListener('astro:page-load', bind);
+  }());
+</script>
+
 <style>
+  /* Plum-deep inverted footer. 4-col grid, brand col span 2 na desktopu.
+     OSM map iframe s filter invert+desaturate aby zapadla do tmavého bg. */
   .hub-footer {
-    background: var(--bg);
-    color: var(--fg);
-    border-top: 1px solid var(--border-muted);
-    padding: var(--space-8) var(--gutter) var(--space-7);
+    background: var(--plum-deep);
+    color: #fff;
+    border-top: 1px solid var(--accent);
+    padding: var(--space-8) 0 var(--space-7);
   }
   .hub-footer__inner {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
-    gap: var(--space-7) var(--space-6);
+    width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-7) var(--space-6);
   }
-  .hub-footer__col p { margin: 0 0 6px; line-height: 1.5; font-size: var(--text-sm); }
-  .hub-footer__col a { color: inherit; text-decoration: underline; text-decoration-color: var(--border-muted); text-underline-offset: 3px; }
-  .hub-footer__col a:hover { text-decoration-color: var(--accent); color: var(--accent); }
 
-  .hub-footer__brand { font-weight: 700; font-size: var(--text-lg); margin-bottom: 6px; }
-  .hub-footer__tagline { color: var(--fg-muted); max-width: 36ch; }
-  .hub-footer__status {
-    display: inline-block;
-    margin-top: var(--space-3);
-    padding: 4px 8px;
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid var(--accent-rule);
+  .hub-footer__col p { margin: 0 0 6px; line-height: 1.5; font-size: var(--text-sm); color: rgba(255, 255, 255, 0.85); }
+  .hub-footer__col a {
+    color: var(--cream);
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.28);
+    text-underline-offset: 3px;
+    transition: color 180ms ease, text-decoration-color 180ms ease;
+  }
+  .hub-footer__col a:hover,
+  .hub-footer__col a:focus-visible {
+    color: var(--rose);
+    text-decoration-color: var(--rose);
+    outline: none;
+  }
+  .hub-footer__col a:focus-visible {
+    outline: 2px solid var(--rose);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Column 1: Brand + Address + Map */
+  .hub-footer__brand {
+    font-weight: 700;
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+    color: #fff;
+    letter-spacing: var(--tracking-tight);
+  }
+  .hub-footer__address {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: var(--space-4) !important;
+  }
+  .hub-footer__map {
+    position: relative;
+    aspect-ratio: 16 / 9;
     border-radius: var(--radius-input);
-    background: var(--accent-soft);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    /* Plum tint: jemně desaturovat + posunout hue směrem k plum, mírně
+        ztmavit. Drží CARTO Voyager mapu ale v naší barevnosti, bez
+        zelených dálnic. */
+    filter: hue-rotate(285deg) saturate(0.55) brightness(0.78) contrast(1.08);
+  }
+  .hub-footer__map :global(.leaflet-container) {
+    width: 100%;
+    height: 100%;
+    background: var(--plum-deep);
+    font-family: var(--font-sans);
+    cursor: grab;
+  }
+  .hub-footer__map :global(.leaflet-container:active) { cursor: grabbing; }
+  /* Schovat attribution + report a problem text */
+  .hub-footer__map :global(.leaflet-control-attribution),
+  .hub-footer__map :global(.leaflet-control-zoom),
+  .hub-footer__map :global(.leaflet-bar) { display: none !important; }
+  /* Pin styling */
+  .hub-footer__map :global(.hub-footer__map-pin) {
+    background: transparent;
+    border: 0;
+  }
+  /* Popup: cream bg, plum-deep text */
+  .hub-footer__map :global(.hub-footer__map-popup-wrap .leaflet-popup-content-wrapper) {
+    background: var(--cream);
+    color: var(--plum-deep);
+    border-radius: var(--radius-input);
+    box-shadow: 0 10px 28px rgba(45, 20, 48, 0.32);
+    padding: 4px 6px;
+  }
+  .hub-footer__map :global(.hub-footer__map-popup-wrap .leaflet-popup-tip) {
+    background: var(--cream);
+    box-shadow: 0 10px 28px rgba(45, 20, 48, 0.32);
+  }
+  .hub-footer__map :global(.hub-footer__map-popup) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--plum-deep);
+    padding: 6px 8px;
+    min-width: 160px;
+  }
+  .hub-footer__map :global(.hub-footer__map-popup strong) {
+    font: 600 13px / 1.3 var(--font-sans);
+    color: var(--plum-deep);
+  }
+  .hub-footer__map :global(.hub-footer__map-popup span) {
+    font: 500 12px / 1.3 var(--font-sans);
+    color: var(--accent);
+  }
+  .hub-footer__map :global(.hub-footer__map-popup:hover span) {
+    text-decoration: underline;
   }
 
+  /* Address line pod mapou (matchuje /okoli/ pattern) */
+  .hub-footer__map-address {
+    margin: var(--space-3) 0 0 !important;
+    font: 500 var(--text-sm) / 1.5 var(--font-sans) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    display: flex !important;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .hub-footer__map-address strong { color: #fff; font-weight: 600; }
+  .hub-footer__col a.hub-footer__map-address__link,
+  .hub-footer__col .hub-footer__map-address a {
+    color: var(--rose);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(200, 155, 176, 0.4);
+    padding-bottom: 1px;
+  }
+  .hub-footer__col .hub-footer__map-address a:hover {
+    color: #fff;
+    border-bottom-color: var(--rose);
+  }
+
+  /* Section labels */
   .hub-footer__label {
     font-size: var(--text-2xs);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
-    color: var(--fg-muted);
-    margin-bottom: var(--space-3);
+    color: var(--rose);
+    margin-bottom: var(--space-3) !important;
+    font-weight: 600;
   }
-  .hub-footer__muted { color: var(--fg-muted); font-size: var(--text-xs); }
-  .hub-footer__hint { color: var(--fg-muted); font-size: var(--text-xs); margin-left: 4px; }
-  .hub-footer__legal { font-size: var(--text-xs); color: var(--fg-muted); margin-top: var(--space-3); max-width: 38ch; line-height: 1.4; }
-  .hub-footer__updated { font-size: var(--text-2xs); color: var(--fg-subtle, var(--fg-muted)); margin-top: var(--space-3); letter-spacing: var(--tracking-wider); text-transform: uppercase; font-variant-numeric: tabular-nums; }
 
-  .hub-footer__chip { margin-top: var(--space-3) !important; }
-  .hub-footer__chip-link {
+  /* Column 2: Contact + Operator */
+  .hub-footer__contact-lede {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: var(--space-3) !important;
+    max-width: 30ch;
+  }
+  .hub-footer__contact-line { font-size: var(--text-sm); }
+  .hub-footer__operator {
+    margin-top: var(--space-4) !important;
+    font-size: var(--text-xs) !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Chip CTA */
+  .hub-footer__chip { margin: var(--space-3) 0 var(--space-4) !important; }
+  .hub-footer__col a.hub-footer__chip-link {
     display: inline-flex;
     align-items: center;
-    padding: 10px 14px;
+    gap: 4px;
+    padding: 10px 16px;
     min-height: 40px;
     font: 600 var(--text-xs) / 1 var(--font-sans);
-    color: var(--accent);
-    background: var(--accent-soft);
-    border: 1px solid var(--accent-rule);
+    color: var(--plum-deep);
+    background: var(--rose);
+    border: 1px solid var(--rose);
     border-radius: var(--radius-input);
     text-decoration: none !important;
-    transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+    transition: background 180ms ease, transform 180ms ease;
   }
-  @media (max-width: 640px) {
-    .hub-footer__chip-link { padding: 12px 16px; min-height: 44px; }
-  }
-  .hub-footer__chip-link:hover,
-  .hub-footer__chip-link:focus-visible {
-    background: var(--accent);
-    color: var(--accent-on, #fff) !important;
-    border-color: var(--accent);
+  .hub-footer__col a.hub-footer__chip-link:hover,
+  .hub-footer__col a.hub-footer__chip-link:focus-visible {
+    background: #fff;
+    color: var(--plum-deep);
+    border-color: #fff;
     transform: translateY(-1px);
     outline: none;
   }
+  .hub-footer__col a.hub-footer__chip-link:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
 
+  .hub-footer__hint { color: rgba(255, 255, 255, 0.55); font-size: var(--text-xs); margin-left: 4px; display: inline-block; }
+
+  /* Column 4: Actions (no label, just buttons + status + meta) */
+  .hub-footer__col--actions { display: flex; flex-direction: column; gap: var(--space-2); }
+  .hub-footer__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: 14px 18px;
+    min-height: 48px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    border-radius: var(--radius-input);
+    text-decoration: none !important;
+    transition: background 180ms ease, color 180ms ease, transform 180ms ease, border-color 180ms ease;
+  }
+  .hub-footer__col a.hub-footer__action--primary {
+    color: var(--plum-deep);
+    background: var(--rose);
+    border: 1px solid var(--rose);
+  }
+  .hub-footer__col a.hub-footer__action--primary:hover,
+  .hub-footer__col a.hub-footer__action--primary:focus-visible {
+    background: #fff;
+    color: var(--plum-deep);
+    border-color: #fff;
+    transform: translateY(-1px);
+    outline: none;
+  }
+  .hub-footer__col a.hub-footer__action--primary:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+  .hub-footer__action--soon {
+    color: rgba(255, 255, 255, 0.55);
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.28);
+    cursor: not-allowed;
+  }
+  .hub-footer__action-hint {
+    font-weight: 500;
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-left: var(--space-2);
+  }
+
+  .hub-footer__reservation-note {
+    margin-top: var(--space-3) !important;
+    font-size: var(--text-xs) !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+    line-height: 1.5;
+  }
+
+  .hub-footer__status {
+    display: inline-block;
+    margin-top: var(--space-4) !important;
+    padding: 4px 8px;
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--rose);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius-input);
+    background: rgba(255, 255, 255, 0.08);
+    align-self: flex-start;
+  }
+  .hub-footer__updated {
+    font-size: var(--text-2xs) !important;
+    color: rgba(255, 255, 255, 0.45) !important;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    margin: var(--space-2) 0 0 !important;
+  }
+
+  /* Responsive */
   @media (max-width: 1024px) {
     .hub-footer__inner { grid-template-columns: 1fr 1fr; }
+    .hub-footer__col--brand { grid-column: span 2; }
+    .hub-footer__map { aspect-ratio: 21 / 9; }
   }
   @media (max-width: 600px) {
-    .hub-footer__inner { grid-template-columns: 1fr; }
+    .hub-footer__inner { grid-template-columns: 1fr; gap: var(--space-6); }
+    .hub-footer__col--brand { grid-column: span 1; }
+    .hub-footer__map { aspect-ratio: 21 / 9; }
+    .hub-footer__col a.hub-footer__chip-link { padding: 12px 18px; min-height: 44px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hub-footer__action, .hub-footer__col a, .hub-footer__col a.hub-footer__chip-link { transition: none; }
   }
 </style>

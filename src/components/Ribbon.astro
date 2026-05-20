@@ -1,0 +1,46 @@
+---
+/*
+ * Ribbon , single SVG stroke building block for the Hub ribbon motif.
+ *
+ * Spec: /Users/kindl/Work/_2026/02 OSA/11 WWW/sh-web-visual-explorations/00-SPEC.html
+ * Discipline: ONE hand-tuned Bezier per composition, plum stroke (or rose on
+ * dark bg), round caps + joins, type zone never overlaps the stroke.
+ *
+ * Renders inline <svg> with a single <path>. Layout is the parent's
+ * responsibility, typically position:absolute inset:0 inside a banner shell.
+ *
+ * The `animate="snake"` variant adds [data-ribbon-reveal]; the IntersectionObserver
+ * in Base.astro adds .is-revealed on first viewport entry, which triggers the
+ * stroke-dashoffset animation defined in ribbon.css.
+ */
+type Stroke = 'plum' | 'rose' | 'plum-deep' | 'cream';
+interface Props {
+  path: string;
+  viewBox?: string;
+  stroke?: Stroke;
+  thickness?: number;
+  animate?: 'snake' | 'none';
+  preserveAspectRatio?: string;
+  className?: string;
+  ariaHidden?: boolean;
+}
+
+const {
+  path,
+  viewBox = '0 0 800 600',
+  stroke = 'plum',
+  thickness = 28,
+  animate = 'snake',
+  preserveAspectRatio = 'xMidYMid slice',
+  className = '',
+  ariaHidden = true,
+} = Astro.props;
+
+const classes = ['ribbon', `ribbon--stroke-${stroke}`, className].filter(Boolean).join(' ');
+const reveal = animate === 'snake';
+---
+<span class={classes} aria-hidden={ariaHidden ? 'true' : undefined} data-ribbon-reveal={reveal ? '' : undefined}>
+  <svg viewBox={viewBox} preserveAspectRatio={preserveAspectRatio} role={ariaHidden ? undefined : 'img'}>
+    <path d={path} stroke-width={thickness} />
+  </svg>
+</span>

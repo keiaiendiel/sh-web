@@ -1,27 +1,30 @@
 ---
 import Base from '../../layouts/Base.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
 import { withBase } from '../../utils/url';
+
+const heroJumps = [
+  { label: 'Rezident-tvůrce', href: '#st-tvurce' },
+  { label: 'Správce',         href: '#st-spravce' },
+  { label: 'Stavitel',        href: '#st-stavitel' },
+  { label: 'Programátor',     href: '#st-programator' },
+];
 ---
 <Base
   title="Pobytové stipendium, 4 role · Startovací Hub Klecany"
-  description="Stipendium pro lidi, kteří k Hubu reálně přispějí. Čtyři role: rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor.">
+  description="Stipendium pro lidi, kteří k Hubu reálně přispějí. Čtyři role: rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor."
+  headerVariant="overlay">
 
-  <section class="sec-hero">
-    <div class="sec-hero__inner">
-      <p class="sec-hero__eyebrow">Stipendia</p>
-      <h1 class="sec-hero__title">Pobytové stipendium.</h1>
-      <p class="sec-hero__lede">
-        Bydlení nebo zvýhodněnou cenu za konkrétní vstup do života Hubu: dílny, péče
-        o&nbsp;areál, vlastní projekt s&nbsp;veřejným výstupem, vývoj nástroje pro komunitu.
-      </p>
-      <nav class="sec-hero__jumps" aria-label="Skok na sekci">
-        <a class="sec-hero__jump" href="#st-tvurce">Rezident-tvůrce</a>
-        <a class="sec-hero__jump" href="#st-spravce">Správce</a>
-        <a class="sec-hero__jump" href="#st-stavitel">Stavitel</a>
-        <a class="sec-hero__jump" href="#st-programator">Programátor</a>
-      </nav>
-    </div>
-  </section>
+  <SubpageHero
+    eyebrow="Stipendijní programy"
+    title="Pro lidi <em>s projektem</em>."
+    sub="Bydlení nebo zvýhodněná cena za konkrétní vstup do života Hubu: dílny, péče o areál, vlastní projekt s veřejným výstupem, vývoj nástroje pro komunitu."
+    variant="rose"
+    ribbonPath="M 1480 80 C 1660 60, 1720 200, 1620 260 C 1540 300, 1460 200, 1560 140"
+    jumps={heroJumps}
+    ariaId="stipendia-hero"
+  />
 
   <section class="sec-block">
     <div class="sec-block__inner">
@@ -83,14 +86,11 @@ import { withBase } from '../../utils/url';
     </div>
   </section>
 
-  <section class="sec-cta">
-    <div class="sec-cta__inner">
-      <h2 class="sec-cta__title">Zájem o pobytové stipendium.</h2>
-      <p class="sec-cta__lede">
-        V rezervačním formuláři zaškrtněte „Mám zájem o pobytové stipendium" a&nbsp;my se ozveme
-        s&nbsp;podmínkami a&nbsp;termíny prvního kola.
-      </p>
-      <a class="sec-cta__button" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
-    </div>
-  </section>
+  <CtaBanner
+    eyebrow="Zájem o stipendium"
+    title="Stipendium pro <em>lidi s projektem</em>."
+    lede={'V rezervačním formuláři zaškrtněte „Mám zájem o pobytové stipendium" a my se ozveme s podmínkami a termíny prvního kola.'}
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="deep"
+  />
 </Base>

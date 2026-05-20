@@ -24,6 +24,17 @@ interface Props {
 const { images, ariaLabel, eager = false, aspectRatio = '4 / 3' } = Astro.props;
 const single = images.length <= 1;
 const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in i;
+
+/* Ribbon path library for placeholder backgrounds. One hand-tuned d-form per
+   slot; index % length cycles through. Per ribbon spec § 01 principle 4. */
+const placeholderRibbons = [
+  'M 60 380 C 220 220, 380 480, 540 320 C 660 200, 720 380, 760 480',
+  'M 80 120 C 240 280, 400 80, 560 240 C 680 360, 720 200, 760 320',
+  'M 100 480 C 260 320, 440 540, 600 380 C 720 260, 740 460, 760 540',
+  'M 60 240 C 200 100, 380 320, 520 200 C 660 80, 740 240, 760 360',
+  'M 80 320 C 200 480, 420 200, 580 360 C 700 480, 740 320, 760 220',
+];
+const ribbonFor = (i: number) => placeholderRibbons[i % placeholderRibbons.length];
 ---
 {single ? (
   <figure class="gallery gallery--single" style={`--gallery-aspect: ${aspectRatio};`}>
@@ -36,8 +47,12 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
       />
     ) : (
       <div class="gallery__placeholder" role="img" aria-label={images[0]?.alt ?? ariaLabel}>
+        <svg class="gallery__placeholder-ribbon" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-ribbon-reveal>
+          <path d={ribbonFor(0)} />
+        </svg>
         <span class="gallery__placeholder-icon" aria-hidden="true">▢</span>
         <span class="gallery__placeholder-note">{images[0] && !isImage(images[0]) ? images[0].placeholder : 'Foto doplníme'}</span>
+        <span class="gallery__placeholder-badge">Foto se připravuje</span>
       </div>
     )}
   </figure>
@@ -61,6 +76,9 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
             />
           ) : (
             <div class="gallery__placeholder" role="img" aria-label={img.alt}>
+              <svg class="gallery__placeholder-ribbon" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-ribbon-reveal>
+                <path d={ribbonFor(i)} />
+              </svg>
               <span class="gallery__placeholder-icon" aria-hidden="true">▢</span>
               <span class="gallery__placeholder-note">{img.placeholder}</span>
               <span class="gallery__placeholder-badge">Foto se připravuje</span>
@@ -199,8 +217,11 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
   }
 
   /* Placeholder slide: zobrazuje se ve slotech kde vizualizace zatím
-     není dodaná z vault Visualizations/. Mini text říká, co tam bude. */
+     není dodaná z vault Visualizations/. Mini text říká, co tam bude.
+     Background tvoří faded ribbon SVG (per slot různý d-form per spec
+     princip 4), vyplňuje plochu, drží Hub brand cue místo nudného boxu. */
   .gallery__placeholder {
+    position: relative;
     width: 100%;
     height: 100%;
     display: flex;
@@ -212,18 +233,51 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
     text-align: center;
     background: var(--accent-soft);
     color: var(--accent);
+    overflow: hidden;
+    border-radius: var(--gallery-radius);
+  }
+  .gallery__placeholder-ribbon {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    opacity: 0.22;
+    z-index: 0;
+  }
+  .gallery__placeholder-ribbon path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 56;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .gallery__placeholder-ribbon[data-ribbon-reveal] path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  .gallery__placeholder-ribbon[data-ribbon-reveal].is-revealed path {
+    animation: ribbon-snake-draw 3.2s var(--ease-snake) forwards;
   }
   .gallery__placeholder-icon {
-    font-size: 2rem;
+    position: relative;
+    z-index: 1;
+    font-size: 1.75rem;
     line-height: 1;
-    opacity: 0.45;
+    opacity: 0.32;
   }
   .gallery__placeholder-note {
+    position: relative;
+    z-index: 1;
     font: 500 var(--text-sm) / 1.45 var(--font-sans);
     color: var(--fg);
     max-width: 38ch;
   }
   .gallery__placeholder-badge {
+    position: relative;
+    z-index: 1;
     font: 600 var(--text-2xs) / 1 var(--font-sans);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
@@ -231,7 +285,16 @@ const isImage = (i: GalleryImage): i is { src: string; alt: string } => 'src' in
     padding: 4px 10px;
     border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery__placeholder-ribbon[data-ribbon-reveal] path,
+    .gallery__placeholder-ribbon[data-ribbon-reveal].is-revealed path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
   }
 
   /* Controls row: prev + dots + next sedí na jednom řádku pod obrázkem,

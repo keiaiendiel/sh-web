@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
 
@@ -21,17 +22,17 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 ---
 <Base
   title="Registrace zájmu o bydlení · Startovací Hub Klecany"
-  description="Vyberte typ bydlení, termín a délku pobytu. Do 24 hodin se vám ozveme s dostupností a cenou. Registrace je nezávazná.">
-  <section class="rez-hero">
-    <div class="rez-hero__inner">
-      <p class="rez-hero__eyebrow">Rezervace</p>
-      <h1 class="rez-hero__title">Registrace zájmu o bydlení.</h1>
-      <p class="rez-hero__lede">
-        Vyberete pokoj, termín a&nbsp;způsob kontaktu. Není to závazek, jen vám zavoláme.
-        Z&nbsp;rezervačního oddělení se ozveme do 24 hodin s&nbsp;detailem dostupnosti a&nbsp;ceny.
-      </p>
-    </div>
-  </section>
+  description="Vyberte typ bydlení, termín a délku pobytu. Do 24 hodin se vám ozveme s dostupností a cenou. Registrace je nezávazná."
+  headerVariant="overlay">
+  <SubpageHero
+    eyebrow="Rezervace"
+    title="Rezervujte si <em>místo</em>."
+    sub="Vyberete pokoj, termín a způsob kontaktu. Není to závazek, jen vám zavoláme. Z rezervačního oddělení se ozveme do 24 hodin."
+    variant="deep"
+    ribbonPath="M 1280 80 C 1580 140, 1900 320, 1920 520 C 1940 680, 1600 720, 1460 540"
+    thickness={28}
+    ariaId="rezervace-hero"
+  />
 
   <section class="rez-layout">
     <form id="rez-form" class="rez-form" novalidate>
@@ -491,7 +492,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 <style>
   /* Hero: bez fotky, plum minimální */
   .rez-hero { padding: var(--space-8) var(--gutter) var(--space-6); background: var(--bg); color: var(--fg); border-bottom: 1px solid var(--rule, rgba(0,0,0,0.08)); }
-  .rez-hero__inner { max-width: var(--container); margin: 0 auto; }
+  .rez-hero__inner { max-width: var(--container-wide); margin: 0 auto; }
   .rez-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
   .rez-hero__title { font: 600 clamp(2rem, 4vw, 3rem) / 1.1 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-4); }
   .rez-hero__lede { color: var(--fg-muted); margin: 0; max-width: 60ch; line-height: 1.5; }

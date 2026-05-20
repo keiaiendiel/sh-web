@@ -86,6 +86,25 @@
   --accent-rule: rgba(90, 42, 95, 0.22);   /* plum-tinted hairline — replaces
                                               k-15 on Hub-surface cards & tags */
 
+  /* ---------- Ribbon motif palette (Hub sub-identity, per spec v1) ----------
+     Extension of --accent for the ribbon system. Plum-only discipline:
+     deep + rose + cream are the only sanctioned bg/stroke partners. */
+  --plum-deep: #2d1430;                    /* footer bg, hero banners, signature combo */
+  --rose:      #c89bb0;                    /* on-dark accent, secondary stroke */
+  --cream:     #f7f4ef;                    /* warm canvas under ribbon strokes */
+
+  /* Stroke widths per use-case (ribbon spec § 04):
+     thin   — section dividers, mini-accenty, hover ripple
+     mid    — tile corners, 4:3 banner cards
+     heavy  — full hero banners 21:9, social posters */
+  --ribbon-stroke-thin:  14px;
+  --ribbon-stroke-mid:   28px;
+  --ribbon-stroke-heavy: 56px;
+
+  /* Snake-draw easing (spec § 02). Use for ribbon path reveals only;
+     for general UI motion keep --ease-standard. */
+  --ease-snake: cubic-bezier(0.65, 0, 0.35, 1);
+
   /* ---------- Semantic surface tokens ----------
      One muted role for body copy (k-80), one for captions/eyebrows (k-60),
      one soft hairline (k-15). Components MUST consume these, never raw
@@ -184,9 +203,14 @@
   --dur-base:   200ms;
   --dur-slow:   360ms;
 
-  /* ---------- Layout ---------- */
+  /* ---------- Layout ----------
+     Single canonical width (--container-wide) used across header, footer,
+     landing sections, detail pages. Bumped 2026-05-20 z 1320 → 1480 (+12 %)
+     pro vzdušnější editorial look po ribbon redesignu. --container drží
+     starou hodnotu pro případné reading-width utility classes (.container,
+     .sec-block__inner--narrow v kit.css). */
   --container:      1200px;
-  --container-wide: 1320px;
+  --container-wide: 1480px;
   /* Gutter škáluje: 20 px na malých obrazovkách, max 80 px na FullHD+,
      aby obsah vždy dýchal několik set pixelů od kraje. */
   --gutter:         clamp(20px, 4vw, 80px);

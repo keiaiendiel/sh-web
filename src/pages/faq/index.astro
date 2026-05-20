@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
 import { withBase } from '../../utils/url';
 import { getCollection } from 'astro:content';
 
@@ -38,15 +39,13 @@ const faq = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.or
     </div>
   </section>
 
-  <section class="sec-cta">
-    <div class="sec-cta__inner">
-      <h2 class="sec-cta__title">Něco tu chybí?</h2>
-      <p class="sec-cta__lede">
-        Napište na <a href="mailto:vpd@osa2.cz" style="color:#fff;text-decoration:underline">vpd@osa2.cz</a>, nebo to dejte do poznámky při registraci zájmu.
-      </p>
-      <a class="sec-cta__button" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
-    </div>
-  </section>
+  <CtaBanner
+    eyebrow="Něco tu chybí?"
+    title="Napište nám, <em>nebo se zeptejte</em>."
+    lede="Pošlete dotaz na vpd@osa2.cz, nebo to dejte do poznámky při registraci zájmu."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="cream"
+  />
 </Base>
 
 <style>

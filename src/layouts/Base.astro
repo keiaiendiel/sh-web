@@ -2,9 +2,11 @@
 import '../styles/tokens.css';
 import '../styles/kit.css';
 import '../styles/motion.css';
+import '../styles/ribbon.css';
 import RevealOnScroll from '../components/RevealOnScroll.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FloatingAction from '../components/FloatingAction.astro';
 import { ClientRouter } from 'astro:transitions';
 import { getEntry } from 'astro:content';
 import { withBase } from '../utils/url';
@@ -193,6 +195,7 @@ const breadcrumbJsonLd = crumbs.length > 1
     <Header variant={headerVariant} transition:persist />
     <main id="main" transition:animate="fade"><slot /></main>
     <Footer transition:persist />
+    <FloatingAction transition:persist />
     <RevealOnScroll />
 
     {/*
@@ -226,6 +229,67 @@ const breadcrumbJsonLd = crumbs.length > 1
         // astro:page-load fires on initial load AND after every view transition,
         // so a single binding handles both cold loads and SPA navs.
         document.addEventListener('astro:page-load', run);
+      }());
+    </script>
+
+    {/* Shared Leaflet loader. Načítá leaflet.css + .js z unpkg jen jednou,
+        cachuje promise. Footer mapa + /okoli/ mapa volají
+        window.__hubLoadLeaflet(callback) a init se spustí, jakmile L existuje. */}
+    <script is:inline>
+      window.__hubLoadLeaflet = function (cb) {
+        if (window.L) { cb(); return; }
+        if (window.__hubLeafletPending) {
+          window.__hubLeafletPending.push(cb);
+          return;
+        }
+        window.__hubLeafletPending = [cb];
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        link.crossOrigin = 'anonymous';
+        document.head.appendChild(link);
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.crossOrigin = 'anonymous';
+        script.onload = function () {
+          var queue = window.__hubLeafletPending || [];
+          window.__hubLeafletPending = null;
+          queue.forEach(function (c) { try { c(); } catch (e) {} });
+        };
+        document.head.appendChild(script);
+      };
+    </script>
+
+    {/* Ribbon reveal observer , single IntersectionObserver shared across
+        all [data-ribbon-reveal] elements on the page. Snake-draw is a
+        one-shot reveal (unobserve after firing). Re-binds on every
+        astro:page-load so SPA navs pick up freshly-rendered ribbons. */}
+    <script is:inline>
+      (function () {
+        function bindRibbons() {
+          var targets = document.querySelectorAll('[data-ribbon-reveal]:not([data-ribbon-bound])');
+          if (!targets.length) return;
+          if (!('IntersectionObserver' in window)) {
+            targets.forEach(function (t) {
+              t.dataset.ribbonBound = '1';
+              t.classList.add('is-revealed');
+            });
+            return;
+          }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                io.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
+          targets.forEach(function (t) {
+            t.dataset.ribbonBound = '1';
+            io.observe(t);
+          });
+        }
+        document.addEventListener('astro:page-load', bindRibbons);
       }());
     </script>
   </body>

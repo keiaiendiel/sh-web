@@ -1,7 +1,6 @@
 ---
 import { withBase } from '../utils/url';
 import OsaGlyph from './OsaGlyph.astro';
-import Icon from './Icon.astro';
 
 interface Props {
   variant?: 'light' | 'dark' | 'overlay';
@@ -19,9 +18,9 @@ const nav: NavItem[] = [
   { path: '/ubytovani/', label: 'Ubytování' },
   { path: '/coworking/', label: 'Coworking' },
   { path: '/komunita/',  label: 'Komunita' },
+  { path: '/stipendia/', label: 'Stipendia' },
   { path: '/okoli/',     label: 'Okolí' },
   { path: '/doprava/',   label: 'Doprava' },
-  { path: '/stipendia/', label: 'Stipendia' },
 ];
 
 const current = Astro.url.pathname;
@@ -36,13 +35,8 @@ const isHome = current === withBase('/');
   <div class="hub-header__bar">
     <a
       href={withBase('/')}
-      class:list={['hub-header__brand', { 'hub-header__brand--back': !isHome }]}
+      class="hub-header__brand"
       aria-label={isHome ? 'Startovací Hub Klecany, domů' : 'Zpět na Startovací Hub'}>
-      {!isHome && (
-        <span class="hub-header__back" aria-hidden="true">
-          <Icon name="arrow-left" size={14} strokeWidth={2} />
-        </span>
-      )}
       <span class="hub-header__glyph" aria-hidden="true"><OsaGlyph size="13px" /></span>
       <span class="hub-header__wordmark">Startovací Hub</span>
     </a>
@@ -247,7 +241,10 @@ const isHome = current === withBase('/');
     display: flex;
     align-items: center;
     gap: var(--space-5);
-    padding: 10px var(--gutter);
+    /* Width pattern: content edge aligns s tile grid (1480 max, gutter-aware
+       na menších viewportech). Žádný vlastní padding-x. */
+    padding: 10px 0;
+    width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: 0 auto;
   }
@@ -270,23 +267,7 @@ const isHome = current === withBase('/');
   .hub-header__glyph { display: inline-flex; line-height: 0; margin-bottom: 1px; }
   .hub-header__wordmark { white-space: nowrap; }
 
-  /* Back chip: subtle left-arrow before brand on subpages. Whole brand link
-     leads to /. Arrow nudges left on hover to telegraph "go back". */
-  .hub-header__back {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 2px;
-    color: var(--accent);
-    transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
-  }
-  .hub-header--dark .hub-header__back,
-  .hub-header--overlay:not(.is-stuck) .hub-header__back { color: currentColor; opacity: 0.85; }
-  .hub-header__brand--back:hover .hub-header__back,
-  .hub-header__brand--back:focus-visible .hub-header__back {
-    transform: translateX(-3px);
-  }
   @media (prefers-reduced-motion: reduce) {
-    .hub-header__back { transition: none; }
   }
 
   .hub-header__nav {
@@ -495,11 +476,10 @@ const isHome = current === withBase('/');
     }
   }
 
-  /* Narrow viewports (iPhone SE etc.): hide the OSA glyph from brand so
-     "Startovací Hub" wordmark + back-arrow + Rezervace + burger all fit. */
+  /* Narrow viewports (iPhone SE etc.): shrink brand font slightly. Glyph
+     stays visible, back arrow moved to floating action button. */
   @media (max-width: 380px) {
-    .hub-header__glyph { display: none; }
-    .hub-header__brand { font-size: 14px; }
+    .hub-header__brand { font-size: 14px; gap: 5px; }
   }
 
   @media (min-width: 1025px) {

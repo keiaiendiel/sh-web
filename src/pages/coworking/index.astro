@@ -2,13 +2,15 @@
 import Base from '../../layouts/Base.astro';
 import Gallery from '../../components/Gallery.astro';
 import Icon from '../../components/Icon.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
 import { withBase } from '../../utils/url';
 
 const heroJumps = [
-  { label: 'Coworkingový sál',  icon: 'laptop',       href: '#cw-sal' },
-  { label: 'Sdílená kancelář',  icon: 'users',        href: '#cw-shared' },
-  { label: 'Zasedací místnost', icon: 'presentation', href: '#cw-zasedacka' },
-  { label: 'Ateliéry a dílny',  icon: 'palette',      href: '#cw-ateliery-dilny' },
+  { label: 'Coworkingový sál',  href: '#cw-sal' },
+  { label: 'Sdílená kancelář',  href: '#cw-shared' },
+  { label: 'Zasedací místnost', href: '#cw-zasedacka' },
+  { label: 'Ateliéry a dílny',  href: '#cw-ateliery-dilny' },
 ];
 ---
 <Base
@@ -16,22 +18,15 @@ const heroJumps = [
   description="Pět typů pracovních prostor v budově C: volný stůl, fixní stůl, sdílená kancelář, zasedací místnost, ateliér a dílna. Pro rezidenty Hubu volný stůl v ceně bydlení."
   headerVariant="overlay">
 
-  <section class="sec-hero">
-    <img class="sec-hero__bg" src={withBase('/images/hub/coworking/cowork-hero.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
-    <div class="sec-hero__scrim" aria-hidden="true"></div>
-    <div class="sec-hero__inner">
-      <p class="sec-hero__eyebrow">Coworking</p>
-      <h1 class="sec-hero__title">Sál, fixní stůl, ateliér nebo dílna.</h1>
-      <nav class="sec-hero__jumps" aria-label="Skok na sekci">
-        {heroJumps.map((j) => (
-          <a class="sec-hero__jump osa-nolink" href={j.href}>
-            <Icon name={j.icon} size={18} strokeWidth={1.75} />
-            <span>{j.label}</span>
-          </a>
-        ))}
-      </nav>
-    </div>
-  </section>
+  <SubpageHero
+    eyebrow="Coworking"
+    title="Sál, fixní stůl, <em>ateliér</em> nebo dílna."
+    sub="Volný stůl 24/7 pro rezidenty v ceně bydlení. Pět tarifů, čtyři dílny, jeden ateliér."
+    variant="cream"
+    ribbonPath="M 1280 200 C 1500 80, 1750 320, 1900 200 C 2000 120, 2050 280, 2000 380"
+    jumps={heroJumps}
+    ariaId="coworking-hero"
+  />
 
   <section class="sec-feature">
     <div class="sec-feature__inner">
@@ -226,14 +221,11 @@ const heroJumps = [
     </div>
   </section>
 
-  <section class="sec-cta">
-    <div class="sec-cta__inner">
-      <h2 class="sec-cta__title">Místo pro práci a tvorbu.</h2>
-      <p class="sec-cta__lede">
-        Rezervace je nezávazná, slouží i pro coworking bez bydlení. Z&nbsp;rezervačního oddělení
-        vám zavoláme do 24 hodin.
-      </p>
-      <a class="sec-cta__button" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
-    </div>
-  </section>
+  <CtaBanner
+    eyebrow="Rezervace"
+    title="Místo pro <em>práci a tvorbu</em>."
+    lede="Rezervace je nezávazná, slouží i pro coworking bez bydlení. Z rezervačního oddělení vám zavoláme do 24 hodin."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="deep"
+  />
 </Base>

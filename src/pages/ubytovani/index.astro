@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
 import RoomCard from '../../components/RoomCard.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
 
 const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
 const coliving = (await getCollection('coliving')).sort((a, b) => a.data.order - b.data.order);
@@ -27,19 +29,19 @@ const colivingKapacita: Record<string, string> = {
   description="Čtyři varianty co-livingu od kapsle po dvoulůžkový pokoj, pět privátních apartmánů 1+kk až 5+kk. Energie, internet, úklid, pět jízd Hub-shuttle a poukaz do sauny v ceně."
   headerVariant="overlay">
 
-  <section class="ub-hero">
-    <img class="ub-hero__bg" src={withBase('/images/hub/ubytovani/privatni/1kk-a4-a6.jpg')} alt="" aria-hidden="true" loading="eager" decoding="async" />
-    <div class="ub-hero__scrim" aria-hidden="true"></div>
-    <div class="ub-hero__inner">
-      <p class="ub-hero__eyebrow">Ubytování</p>
-      <h1 class="ub-hero__title">Vlastní apartmán, nebo místo v&nbsp;co-livingu?</h1>
-      <p class="ub-hero__lede">Pět apartmánů 1+kk až&nbsp;5+kk a&nbsp;čtyři co-living formáty. Vyberte typ a&nbsp;klikněte na&nbsp;detail.</p>
-      <nav class="ub-hero__jumps" aria-label="Skok na sekci">
-        <a class="ub-hero__jump" href="#ub-coliving-title">Co-living</a>
-        <a class="ub-hero__jump" href="#ub-privatni-title">Privátní apartmány</a>
-      </nav>
-    </div>
-  </section>
+  <SubpageHero
+    eyebrow="Ubytovací služby"
+    title="Vlastní apartmán, <em>nebo</em> místo v co-livingu?"
+    sub="Pět apartmánů 1+kk až 5+kk a čtyři co-living formáty. V ceně energie, internet, pět jízd Hub-shuttle a týdenní poukaz do sauny."
+    variant="deep"
+    ribbonPath="M 1340 120 C 1640 80, 1900 240, 1860 480 C 1820 720, 1480 760, 1380 580"
+    thickness={64}
+    jumps={[
+      { label: 'Co-living', href: '#ub-coliving-title' },
+      { label: 'Privátní apartmány', href: '#ub-privatni-title' },
+    ]}
+    ariaId="ubytovani-hero"
+  />
 
   {/* ============ CO-LIVING (4 typy) ============ */}
   <section class="ub-section ub-section--coliving" aria-labelledby="ub-coliving-title">
@@ -95,25 +97,20 @@ const colivingKapacita: Record<string, string> = {
     </div>
   </section>
 
-  {/* ============ CTA ============ */}
-  <section class="ub-cta">
-    <div class="ub-cta__inner">
-      <p class="ub-cta__eyebrow">Rezervujte si místo</p>
-      <h2 class="ub-cta__title">Bydlete tady měsíc, nebo rok.</h2>
-      <p class="ub-cta__lede">
-        Rezervace je nezávazná. Vyberete pokoj, termín a způsob kontaktu. Z&nbsp;rezervačního
-        oddělení vám zavoláme do 24 hodin.
-      </p>
-      <a class="ub-cta__button" href={withBase('/rezervace/')}>Nezávazná rezervace</a>
-    </div>
-  </section>
+  <CtaBanner
+    eyebrow="Rezervujte si místo"
+    title="Bydlete tady <em>měsíc, nebo rok</em>."
+    lede="Rezervace je nezávazná. Vyberete pokoj, termín a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="deep"
+  />
 </Base>
 
 <style>
   .ub-hero { position: relative; isolation: isolate; min-height: 50vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-7); color: #fff; background: var(--k-100); overflow: hidden; }
   .ub-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.65); }
   .ub-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.1) 90%); z-index: -1; }
-  .ub-hero__inner { max-width: var(--container); margin: 0 auto; width: 100%; }
+  .ub-hero__inner { max-width: var(--container-wide); margin: 0 auto; width: 100%; }
   .ub-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: rgba(255,255,255,0.85); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
   .ub-hero__title { font: 600 clamp(2.25rem, 5vw, 3.75rem) / 1.05 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-4); max-width: 18ch; }
   .ub-hero__lede { font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.5; margin: 0; max-width: 60ch; color: rgba(255,255,255,0.92); }
