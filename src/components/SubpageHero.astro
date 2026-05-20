@@ -191,9 +191,15 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
   /* ---------- Variant: deep (plum-deep + plum stroke, SH/01 + SH/07) ----------
      Stroke zesvětlený proti --accent (hsl 240 39% 27%) na hsl 240 32% 44%,
      aby ribbon na plum-deep bg vynikl podobně jako rose stroke v ink variantě.
-     Komunita (ink) má cream stroke na plum-deep, high contrast; deep ho dříve
-     neměl protože plum-on-plum bylo dim. */
-  .subpage-hero--deep { background: var(--plum-deep); color: #fff; }
+     Plus brand-warm gradient overlay z lp-tile--reserve paletty: radial rose
+     tint v dolním rohu + diagonál na lehčí plum, dodává hloubku stejně
+     jako rezervace tile. */
+  .subpage-hero--deep {
+    background:
+      radial-gradient(ellipse at 90% 108%, hsl(calc(var(--hue) + 44) 30% 70% / 0.22) 0%, transparent 55%),
+      linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 22%) 100%);
+    color: #fff;
+  }
   .subpage-hero--deep .subpage-hero__bg path { stroke: hsl(var(--hue) 32% 44%); }
   .subpage-hero--deep .subpage-hero__eyebrow { color: var(--rose); }
   .subpage-hero--deep .subpage-hero__title :global(em) { color: var(--rose); }
@@ -252,8 +258,15 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
     outline: none;
   }
 
-  /* ---------- Variant: ink (plum-deep + rose stroke, SH/04) ---------- */
-  .subpage-hero--ink { background: var(--plum-deep); color: var(--cream); }
+  /* ---------- Variant: ink (plum-deep + rose stroke, SH/04) ----------
+     Glow z opačného rohu (top-left) než deep, aby ink a deep hero
+     vedle sebe ve flow visually nezobrazovaly identický pattern. */
+  .subpage-hero--ink {
+    background:
+      radial-gradient(ellipse at 8% 12%, hsl(calc(var(--hue) + 44) 32% 72% / 0.20) 0%, transparent 52%),
+      linear-gradient(140deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 38% 19%) 100%);
+    color: var(--cream);
+  }
   .subpage-hero--ink .subpage-hero__bg path { stroke: var(--rose); }
   .subpage-hero--ink .subpage-hero__eyebrow { color: var(--rose); }
   .subpage-hero--ink .subpage-hero__title :global(em) { color: var(--rose); }

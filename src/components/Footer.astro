@@ -132,8 +132,13 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
 <style>
   /* Plum-deep inverted footer. 4-col grid, brand col span 2 na desktopu.
      OSM map iframe s filter invert+desaturate aby zapadla do tmavého bg. */
+  /* Footer drží stejný brand-warm gradient pattern jako rezervace tile
+     a CtaBanner deep: subtle rose tint v rohu na plum-deep diagonál bg.
+     Sjednocuje dark surfaces napříč webem do jednoho vizuálního jazyka. */
   .hub-footer {
-    background: var(--plum-deep);
+    background:
+      radial-gradient(ellipse at 88% 105%, hsl(calc(var(--hue) + 44) 30% 70% / 0.16) 0%, transparent 50%),
+      linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 17%) 100%);
     color: #fff;
     border-top: 1px solid var(--accent);
     padding: var(--space-8) 0 var(--space-7);

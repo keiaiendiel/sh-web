@@ -52,8 +52,11 @@ const {
 </section>
 
 <style>
+  /* Padding-bottom snížený (space-8 → space-5), aby návazná CrossLinkPair
+     dvojice banerů dýchala v podobné výšce jako mezi banery navzájem,
+     ne v dvojnásobném gap. Top zůstává space-7 pro hrubší oddělení nad. */
   .cta-banner-wrap {
-    padding: var(--space-7) 0 var(--space-8);
+    padding: var(--space-7) 0 var(--space-5);
     background: var(--bg);
   }
   .cta-banner {
@@ -142,8 +145,17 @@ const {
                 transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
   }
 
-  /* Variants */
-  .cta-banner--deep { background: var(--plum-deep); color: #fff; }
+  /* Variants. Deep + ink dostávají brand-warm gradient z lp-tile--reserve
+     paletty: radial rose tint v rohu + linear plum-deep → mírně světlejší
+     plum diagonál. Glow se vrstvý nad solid fill, dodává hloubku stejně
+     jako u rezervace tile. Cream a rose drží solid fill (světlé povrchy
+     nepotřebují další depth, vlastní stroke + border tvoří charakter). */
+  .cta-banner--deep {
+    background:
+      radial-gradient(circle at 92% 108%, hsl(calc(var(--hue) + 44) 30% 70% / 0.28) 0%, transparent 58%),
+      linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 22%) 100%);
+    color: #fff;
+  }
   .cta-banner--deep .cta-banner__bg path { stroke: var(--accent); }
   .cta-banner--deep .cta-banner__eyebrow { color: var(--rose); }
   .cta-banner--deep .cta-banner__h :global(em) { color: var(--rose); }
@@ -164,7 +176,14 @@ const {
   .cta-banner--rose .cta-banner__lede { color: var(--plum-deep); opacity: 0.75; }
   .cta-banner--rose .cta-banner__cta { background: var(--plum-deep); color: var(--rose); }
 
-  .cta-banner--ink { background: var(--plum-deep); color: var(--cream); }
+  /* Ink: stejný gradient pattern, glow z opačného rohu pro variantu
+     a slightly širší dosah (rose stroke je už součást ink charakteru). */
+  .cta-banner--ink {
+    background:
+      radial-gradient(circle at 8% 12%, hsl(calc(var(--hue) + 44) 32% 72% / 0.22) 0%, transparent 55%),
+      linear-gradient(140deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 38% 19%) 100%);
+    color: var(--cream);
+  }
   .cta-banner--ink .cta-banner__bg path { stroke: var(--rose); stroke-width: 36; }
   .cta-banner--ink .cta-banner__eyebrow { color: var(--rose); }
   .cta-banner--ink .cta-banner__h :global(em) { color: var(--rose); }
