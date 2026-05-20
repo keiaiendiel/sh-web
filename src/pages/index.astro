@@ -1040,6 +1040,10 @@ const tiles = [
      uppercase eyebrow labely a tabular-nums na řádku ceny. Mobile stack.
      Stacking fix: position relative + z-index 2 + isolation isolate aby karty
      sedly nad .lp-section__ribbon (který má z-index 0). */
+  /* Width + gap přesně match .lp-section__inner (text + gallery), aby
+     karty Co-living + Privátní apartmány měly stejnou šířku jako gallery
+     foto nahoře. Předchozí gap clamp(20, 2.4vw, 32) byl menší než inner
+     clamp(32, 5vw, 80), karty tak vycházely širší než foto vedle. */
   .lp-summary {
     position: relative;
     z-index: 2;
@@ -1049,7 +1053,7 @@ const tiles = [
     margin: var(--space-7) auto 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(20px, 2.4vw, 32px);
+    gap: clamp(32px, 5vw, 80px);
   }
   /* Desktop: celá karta klikatelná, link wrapper přenese hover styly. */
   .lp-summary__card-link {
