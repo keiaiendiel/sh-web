@@ -20,6 +20,8 @@ pnpm-debug.log*
 
 # Claude Code local harness config (allowlists, per-machine overrides)
 .claude/settings.local.json
+# Claude Code harness lock files
+.claude/*.lock
 
 # macOS-specific files
 .DS_Store
