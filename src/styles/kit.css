@@ -116,6 +116,11 @@ textarea:focus-visible {
   outline: none;
   box-shadow: var(--ring-focus);
 }
+/* Header Rezervace CTA má vlastní hover/focus state (clip-path wipe-fill),
+   universal focus ring tady dělá nečistý double-stroke. Vypneme jen pro něj. */
+.hub-header__cta:focus-visible {
+  box-shadow: none;
+}
 
 /* Skip-to-main link pro screen readery a klávesnici. Visible jen on focus. */
 .skip-link {

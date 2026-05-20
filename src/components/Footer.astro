@@ -180,11 +180,11 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.14);
     margin-top: var(--space-5);
-    /* Map tint: jemně desaturovat + posunout hue ke globálnímu --hue, mírně
-        ztmavit. Drží CARTO Voyager mapu ale v naší barevnosti, bez
-        zelených dálnic. hue-rotate je relativní k tile barvám (cca 9°),
-        proto výsledný shift je (--hue - 9). */
-    filter: hue-rotate(calc((var(--hue) - 9) * 1deg)) saturate(0.55) brightness(0.78) contrast(1.08);
+    /* Map tint: posunout hue ke globálnímu --hue, jemně doladit kontrast.
+        Drží CARTO Voyager mapu v naší barevnosti, bez zelených dálnic.
+        hue-rotate je relativní k tile barvám (cca 9°), proto výsledný shift
+        je (--hue - 9). Saturace mírně nad 1 pro tasteful muted-color tóny. */
+    filter: hue-rotate(calc((var(--hue) - 9) * 1deg)) saturate(1.05) brightness(0.96) contrast(1.04);
   }
   .hub-footer__map :global(.leaflet-container) {
     width: 100%;
@@ -396,10 +396,15 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     .hub-footer__map { aspect-ratio: 21 / 9; }
   }
   @media (max-width: 600px) {
-    .hub-footer__inner { grid-template-columns: 1fr; gap: var(--space-6); }
-    .hub-footer__col--brand { grid-column: span 1; }
+    .hub-footer__inner { grid-template-columns: 1fr 1fr; gap: var(--space-6) var(--space-5); }
+    .hub-footer__col--brand { grid-column: span 2; }
+    .hub-footer__col--actions { grid-column: span 2; }
     .hub-footer__map { aspect-ratio: 21 / 9; }
     .hub-footer__col a.hub-footer__chip-link { padding: 12px 18px; min-height: 44px; }
+    .hub-footer__col--contact,
+    .hub-footer__col--links { min-width: 0; }
+    .hub-footer__col--contact p,
+    .hub-footer__col--links p { overflow-wrap: anywhere; word-break: break-word; }
   }
 
   @media (prefers-reduced-motion: reduce) {

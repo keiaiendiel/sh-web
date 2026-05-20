@@ -58,7 +58,7 @@ const defaultThickness: Record<Variant, number> = {
 const strokeWidth = thickness ?? defaultThickness[variant];
 const titleId = ariaId ? `${ariaId}-title` : undefined;
 ---
-<section class={`subpage-hero subpage-hero--${variant}`} aria-labelledby={titleId}>
+<section class={`subpage-hero subpage-hero--${variant}`} data-hero-variant={variant} aria-labelledby={titleId}>
   <span class="subpage-hero__bg" aria-hidden="true" data-ribbon-reveal>
     <svg viewBox="0 0 2100 900" preserveAspectRatio="xMidYMid slice">
       <path
@@ -292,11 +292,32 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
   }
 </style>
 
-<script is:inline define:vars={{ variant }}>
+<script is:inline>
   /* Set body attribute so global CSS can adapt header text color
      based on hero tone. Light heroes (cream/rose) → dark header text;
-     dark heroes (deep/ink) → keep default white. */
-  document.body.setAttribute('data-hero-tone', (variant === 'cream' || variant === 'rose') ? 'light' : 'dark');
+     dark heroes (deep/ink) → keep default white.
+
+     Must re-run on every astro:page-load because the Header is
+     transition:persist'ed across SPA navigation , if we only set the
+     attribute at HTML parse time, navigating from a dark hero to a
+     light hero would leave the header text white-on-cream (unreadable).
+     Reads the variant from the hero element's data attribute; defaults
+     to 'dark' on pages without a SubpageHero (e.g. landing). */
+  (function(){
+    if (window.__hubHeroToneBound) return;
+    window.__hubHeroToneBound = true;
+    function setTone(){
+      var hero = document.querySelector('.subpage-hero[data-hero-variant]');
+      var tone = 'dark';
+      if (hero) {
+        var v = hero.getAttribute('data-hero-variant');
+        tone = (v === 'cream' || v === 'rose') ? 'light' : 'dark';
+      }
+      document.body.setAttribute('data-hero-tone', tone);
+    }
+    setTone();
+    document.addEventListener('astro:page-load', setTone);
+  }());
 </script>
 
 <style is:global>
@@ -309,6 +330,11 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
   body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__burger { color: var(--accent); }
   body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link { color: var(--accent); }
   body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link:hover { color: var(--plum-deep); }
+  /* Aktivní položka na light hero, držet plum, ne výchozí bílou z overlay rule. */
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link[aria-current='page'] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
   body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__cta {
     color: var(--accent);
     border-color: var(--accent);

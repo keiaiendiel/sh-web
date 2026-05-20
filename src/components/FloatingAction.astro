@@ -44,6 +44,22 @@ const home = withBase('/');
       var iconBack = el.querySelector('[data-fa-icon="back"]');
       var iconTop = el.querySelector('[data-fa-icon="top"]');
 
+      /* Mirror header's is-stuck onto the floating action so when the user has
+         scrolled past the dark hero (white content area below) we switch from
+         white glass to plum glass. Same trigger as the header sticky swap. */
+      var header = document.querySelector('.hub-header--overlay');
+      if (header) {
+        var syncOverlap = function () {
+          if (header.classList.contains('is-stuck')) el.setAttribute('data-overlap', 'light');
+          else el.removeAttribute('data-overlap');
+        };
+        syncOverlap();
+        var mo = new MutationObserver(syncOverlap);
+        mo.observe(header, { attributes: true, attributeFilter: ['class'] });
+      } else {
+        el.removeAttribute('data-overlap');
+      }
+
       if (isHome) {
         /* Scroll-to-top mode: show after 600 px, click → smooth scroll to top. */
         el.setAttribute('aria-label', 'Skrolovat zpátky nahoru');
@@ -119,7 +135,8 @@ const home = withBase('/');
   .floating-action__icon[hidden] { display: none; }
 
   /* Light hero (cream / rose): plum-deep accent místo bílé */
-  :global(body[data-hero-tone="light"]) .floating-action {
+  :global(body[data-hero-tone="light"]) .floating-action,
+  .floating-action[data-overlap="light"] {
     background: hsl(var(--hue) 41% 13% / 0.06);
     border-color: hsl(var(--hue) 41% 13% / 0.22);
     color: var(--plum-deep);
@@ -148,7 +165,9 @@ const home = withBase('/');
     outline: none;
   }
   :global(body[data-hero-tone="light"]) .floating-action:hover,
-  :global(body[data-hero-tone="light"]) .floating-action:focus-visible {
+  :global(body[data-hero-tone="light"]) .floating-action:focus-visible,
+  .floating-action[data-overlap="light"]:hover,
+  .floating-action[data-overlap="light"]:focus-visible {
     background: hsl(var(--hue) 41% 13% / 0.12);
     border-color: hsl(var(--hue) 41% 13% / 0.4);
   }

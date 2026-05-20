@@ -43,18 +43,23 @@
   to { stroke-dashoffset: 0; }
 }
 
-/* Idle breathing — applied to any ribbon-style path after its snake-draw
-   reveal completes. Per 00-SPEC.html § Photo backdrop (řádky 416-419):
-   opacity oscillates 0.42 ↔ 0.72 over 7s ease-in-out infinite.
-   Implementations apply this via animation-name in their own .is-revealed
-   state; here we just expose the keyframe + a generic helper class. */
+/* Idle breathing, dříve oscilovala opacity 0.42 ↔ 0.72. Uživatel hlásil
+   rušivý subtle flicker po několika vteřinách. Keyframy nyní drží
+   konstantní lehčí variantu (0.42), původní animation-name reference
+   napříč komponentami zůstávají v platnosti bez vizuálního pulzování. */
 @keyframes ribbon-breathe {
   0%, 100% { opacity: 0.42; }
-  50%      { opacity: 0.72; }
+  50%      { opacity: 0.42; }
 }
 .ribbon-breathe {
   animation: ribbon-breathe 7s ease-in-out infinite;
 }
+
+/* Universal static opacity na všech ribbon paths, fix viditelného „dropu"
+   z 1.0 na 0.42 v okamžiku, kdy ribbon-breathe kickne po snake-draw
+   reveal delay. Aplikuje se na všech [data-ribbon-reveal] path bez ohledu
+   na komponent, takže pole je konstantní od t=0. */
+[data-ribbon-reveal] path { opacity: 0.42; }
 
 /* ---------- Stroke color variants ---------- */
 .ribbon--stroke-plum path { stroke: var(--accent); }

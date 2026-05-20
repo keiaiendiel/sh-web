@@ -36,12 +36,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       <div class="rez__progress" aria-hidden="true">
         <span class="rez__progress-fill" data-progress-fill></span>
       </div>
-      <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <span>Zpět</span>
-      </button>
     </header>
 
     <form id="rez-form" class="rez__form" novalidate>
@@ -72,22 +66,61 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             </span>
           </label>
         </div>
+        <div class="rez__actions" data-actions>
+          <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Zpět</span>
+          </button>
+          <span class="rez__actions-spacer"></span>
+          <span class="rez__actions-counter" aria-hidden="true">
+            <span data-step-current-mini>1</span><span class="rez__step-sep">/</span><span data-step-total-mini>3</span>
+          </span>
+          <button type="button" class="rez__cta rez__cta--compact" data-next>
+            Pokračovat <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </section>
 
       {/* === KROK: Formát (privátní) === */}
       <section class="rez__panel" data-panel="format-privatni" data-panel-index="1" data-show-for="privatni" hidden>
         <h1 class="rez__q">Jaký apartmán?</h1>
         <p class="rez__q-hint">Pět privátních jednotek 1+kk až 5+kk. Cena za celý byt.</p>
-        <div class="rez__choices rez__choices--3">
+        <div class="rez__choices rez__choices--cards rez__choices--3">
           {apartmany.map((a) => (
-            <label class="rez__choice rez__choice--media" data-format-slug={a.data.slug}>
+            <label class="rez__choice rez__choice--card" data-format-slug={a.data.slug}>
               <input type="radio" name="format" value={a.data.slug} data-auto-next />
+              {a.data.thumbnail && (
+                <span class="rez__choice-thumb" aria-hidden="true">
+                  <img src={withBase(a.data.thumbnail)} alt="" loading="lazy" decoding="async" />
+                </span>
+              )}
               <span class="rez__choice-body">
-                <span class="rez__choice-title">{a.data.name}</span>
-                <span class="rez__choice-meta">{a.data.plocha} · {a.data.kapacita} lůžek · od&nbsp;{fmt(a.data.cena.m12)}&nbsp;/&nbsp;měs</span>
+                <span class="rez__choice-head">
+                  <span class="rez__choice-title">{a.data.shortName}</span>
+                  <span class="rez__choice-price">od&nbsp;{fmt(a.data.cena.anchor)}<span class="rez__choice-price-unit">&nbsp;Kč/měs</span></span>
+                </span>
+                <span class="rez__choice-meta">{a.data.plocha} · {a.data.kapacita} lůžek</span>
+                <span class="rez__choice-desc">{a.data.popis}</span>
               </span>
             </label>
           ))}
+        </div>
+        <div class="rez__actions" data-actions>
+          <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Zpět</span>
+          </button>
+          <span class="rez__actions-spacer"></span>
+          <span class="rez__actions-counter" aria-hidden="true">
+            <span data-step-current-mini>2</span><span class="rez__step-sep">/</span><span data-step-total-mini>3</span>
+          </span>
+          <button type="button" class="rez__cta rez__cta--compact" data-next>
+            Pokračovat <span aria-hidden="true">→</span>
+          </button>
         </div>
       </section>
 
@@ -95,16 +128,40 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       <section class="rez__panel" data-panel="format-coliving" data-panel-index="1" data-show-for="co-living" hidden>
         <h1 class="rez__q">Jaká varianta co-livingu?</h1>
         <p class="rez__q-hint">Čtyři formáty od jednolůžkové kapsle po dvoulůžko ve sdíleném bytě.</p>
-        <div class="rez__choices rez__choices--2">
+        <div class="rez__choices rez__choices--cards rez__choices--2">
           {coliving.map((c) => (
-            <label class="rez__choice rez__choice--media" data-format-slug={c.data.slug}>
+            <label class="rez__choice rez__choice--card" data-format-slug={c.data.slug}>
               <input type="radio" name="format" value={c.data.slug} data-auto-next />
+              {c.data.thumbnail && (
+                <span class="rez__choice-thumb" aria-hidden="true">
+                  <img src={withBase(c.data.thumbnail)} alt="" loading="lazy" decoding="async" />
+                </span>
+              )}
               <span class="rez__choice-body">
-                <span class="rez__choice-title">{c.data.name}</span>
-                <span class="rez__choice-meta">Matrace {c.data.matrace[0]}{c.data.matrace[1] && ` nebo ${c.data.matrace[1]}`} · od&nbsp;{fmt(c.data.cena.m12)}&nbsp;/&nbsp;měs</span>
+                <span class="rez__choice-head">
+                  <span class="rez__choice-title">{c.data.shortName}</span>
+                  <span class="rez__choice-price">od&nbsp;{fmt(c.data.cena.anchor)}<span class="rez__choice-price-unit">&nbsp;Kč/měs</span></span>
+                </span>
+                <span class="rez__choice-meta">Matrace {c.data.matrace[0]}{c.data.matrace[1] && ` nebo ${c.data.matrace[1]}`}</span>
+                <span class="rez__choice-desc">{c.data.popis}</span>
               </span>
             </label>
           ))}
+        </div>
+        <div class="rez__actions" data-actions>
+          <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Zpět</span>
+          </button>
+          <span class="rez__actions-spacer"></span>
+          <span class="rez__actions-counter" aria-hidden="true">
+            <span data-step-current-mini>2</span><span class="rez__step-sep">/</span><span data-step-total-mini>3</span>
+          </span>
+          <button type="button" class="rez__cta rez__cta--compact" data-next>
+            Pokračovat <span aria-hidden="true">→</span>
+          </button>
         </div>
       </section>
 
@@ -132,7 +189,21 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <label class="rez__pill"><input type="radio" name="nevim-uvazek" value="vikendy" /><span>Víkendy</span></label>
           </div>
         </div>
-        <button type="button" class="rez__cta" data-next>Pokračovat <span aria-hidden="true">→</span></button>
+        <div class="rez__actions" data-actions>
+          <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Zpět</span>
+          </button>
+          <span class="rez__actions-spacer"></span>
+          <span class="rez__actions-counter" aria-hidden="true">
+            <span data-step-current-mini>2</span><span class="rez__step-sep">/</span><span data-step-total-mini>3</span>
+          </span>
+          <button type="button" class="rez__cta rez__cta--compact" data-next>
+            Pokračovat <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </section>
 
       {/* === KROK: Termín === */}
@@ -182,7 +253,21 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             </span>
           </label>
         </div>
-        <button type="button" class="rez__cta" data-next>Pokračovat <span aria-hidden="true">→</span></button>
+        <div class="rez__actions" data-actions>
+          <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Zpět</span>
+          </button>
+          <span class="rez__actions-spacer"></span>
+          <span class="rez__actions-counter" aria-hidden="true">
+            <span data-step-current-mini>3</span><span class="rez__step-sep">/</span><span data-step-total-mini>4</span>
+          </span>
+          <button type="button" class="rez__cta rez__cta--compact" data-next>
+            Pokračovat <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </section>
 
       {/* === KROK: Kontakt === */}
@@ -215,9 +300,21 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           <input type="checkbox" name="gdpr" value="ano" required />
           <span>Souhlasím se zpracováním osobních údajů. <a href={withBase('/gdpr/')}>Zásady</a>.</span>
         </label>
-        <button type="submit" class="rez__cta rez__cta--primary" id="rez-submit">
-          Odeslat nezávaznou registraci <span aria-hidden="true">→</span>
-        </button>
+        <div class="rez__actions rez__actions--submit" data-actions>
+          <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Zpět</span>
+          </button>
+          <span class="rez__actions-spacer"></span>
+          <span class="rez__actions-counter" aria-hidden="true">
+            <span data-step-current-mini>4</span><span class="rez__step-sep">/</span><span data-step-total-mini>4</span>
+          </span>
+          <button type="submit" class="rez__cta rez__cta--primary" id="rez-submit">
+            Odeslat nezávaznou registraci <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </section>
 
       {/* === SUCCESS === */}
@@ -286,7 +383,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     var counter = root.querySelector('[data-step-current]');
     var totalEl = root.querySelector('[data-step-total]');
     var progressFill = root.querySelector('[data-progress-fill]');
-    var backBtn = root.querySelector('[data-prev]');
     var afterEl = document.querySelector('[data-rez-after]');
 
     /* State: history stack of panel names. Current panel = last item.
@@ -349,10 +445,22 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       else if (name === 'success')     stepNumber = total;
       else stepNumber = 1;
 
-      counter.textContent = String(Math.min(stepNumber, total));
+      var shownStep = Math.min(stepNumber, total);
+      counter.textContent = String(shownStep);
       totalEl.textContent = String(total);
       progressFill.style.transform = 'scaleX(' + (stepNumber / total) + ')';
-      backBtn.hidden = history.length <= 1 || name === 'success';
+
+      /* Sync per-panel mini counters (right of bottom action row). */
+      var miniCurrent = form.querySelectorAll('[data-step-current-mini]');
+      var miniTotal = form.querySelectorAll('[data-step-total-mini]');
+      miniCurrent.forEach(function (el) { el.textContent = String(shownStep); });
+      miniTotal.forEach(function (el) { el.textContent = String(total); });
+
+      /* Hide Back button on first step or success across all panels. */
+      var hideBack = history.length <= 1 || name === 'success';
+      form.querySelectorAll('[data-prev]').forEach(function (b) {
+        b.hidden = hideBack;
+      });
     }
 
     function next() {
@@ -408,8 +516,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       if (e.target.closest('[data-next]')) { e.preventDefault(); next(); }
       if (e.target.closest('[data-prev]')) { e.preventDefault(); back(); }
     });
-
-    backBtn.addEventListener('click', function (e) { e.preventDefault(); back(); });
 
     /* Range slider live readout */
     var rozpocetIn = document.getElementById('nevim-rozpocet');
@@ -492,12 +598,20 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     margin: 0 auto;
     width: 100%;
     color: var(--fg);
+    transition: max-width 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  /* Widen the wizard container when a card-grid panel is active so the
+     3-up / 2-up preview cards have room to breathe on desktop. */
+  @media (min-width: 900px) {
+    .rez:has(.rez__panel.is-current .rez__choices--cards) {
+      max-width: 1040px;
+    }
   }
 
-  /* ---------- Head: counter + progress bar + back ---------- */
+  /* ---------- Head: counter + progress bar ---------- */
   .rez__head {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: var(--space-3);
   }
@@ -551,6 +665,50 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez__back svg { transform: translateX(0); transition: transform 180ms ease; }
   .rez__back:hover svg { transform: translateX(-2px); }
   .rez__back[hidden] { display: none; }
+
+  /* ---------- Per-panel bottom action row ---------- */
+  /* Layout: [Zpět]   ··· spacer ···   [stepN/total]   [Pokračovat] */
+  .rez__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--accent-rule);
+  }
+  .rez__actions-spacer { flex: 1 1 auto; }
+  .rez__actions-counter {
+    font: 600 var(--text-xs) / 1 var(--font-sans);
+    color: var(--fg-subtle);
+    letter-spacing: var(--tracking-wider);
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    opacity: 0.7;
+  }
+  .rez__actions-counter [data-step-current-mini] { color: var(--accent); }
+  .rez__actions .rez__back {
+    /* Back button on the LEFT of the action row */
+    order: 0;
+  }
+  .rez__actions .rez__cta--compact {
+    /* Compact Continue button on the RIGHT */
+    padding: 10px 20px;
+    font-size: var(--text-sm);
+  }
+  /* Submit step: the primary CTA is larger and stretches on mobile */
+  .rez__actions--submit .rez__cta--primary {
+    align-self: auto;
+    padding: 14px 26px;
+    flex: 1 1 auto;
+  }
+  @media (min-width: 540px) {
+    .rez__actions--submit .rez__cta--primary {
+      flex: 0 0 auto;
+    }
+  }
 
   /* ---------- Panel + animovaný slide ---------- */
   .rez__form { position: relative; display: grid; }
@@ -657,6 +815,107 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez__choice-meta {
     font: 500 var(--text-sm) / 1.4 var(--font-sans);
     color: var(--fg-muted);
+  }
+
+  /* ---------- Card-style choices (format-privatni, format-coliving) ----------
+   * Mobile: compact horizontal row (small thumb left + text right).
+   * Desktop ≥ 900 px: full preview cards with photo on top + body below.
+   */
+  .rez__choices--cards {
+    gap: var(--space-3);
+  }
+  .rez__choice--card {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 14px;
+    align-items: stretch;
+    padding: 12px;
+  }
+  .rez__choice--card .rez__choice-thumb {
+    display: block;
+    overflow: hidden;
+    border-radius: calc(var(--radius-input) - 2px);
+    background: var(--accent-soft);
+    aspect-ratio: 4 / 3;
+    width: 100%;
+  }
+  .rez__choice--card .rez__choice-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .rez__choice--card:hover .rez__choice-thumb img {
+    transform: scale(1.03);
+  }
+  .rez__choice--card .rez__choice-body {
+    gap: 6px;
+    min-width: 0;
+  }
+  .rez__choice-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .rez__choice-price {
+    font: 700 var(--text-sm) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-tight);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .rez__choice-price-unit {
+    font-weight: 500;
+    color: var(--fg-muted);
+  }
+  .rez__choice-desc {
+    font: 500 var(--text-sm) / 1.45 var(--font-sans);
+    color: var(--fg-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-wrap: pretty;
+  }
+  /* On mobile hide the longer description, keep title + meta + price. */
+  @media (max-width: 899px) {
+    .rez__choice--card .rez__choice-desc { display: none; }
+  }
+  /* Desktop: stack vertically into a proper preview card grid. */
+  @media (min-width: 900px) {
+    .rez__choices--cards.rez__choices--3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .rez__choices--cards.rez__choices--2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .rez__choice--card {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      padding: 0;
+      gap: 0;
+    }
+    .rez__choice--card .rez__choice-thumb {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: calc(var(--radius-input) - 1px) calc(var(--radius-input) - 1px) 0 0;
+    }
+    .rez__choice--card .rez__choice-body {
+      padding: 14px 16px 16px;
+      gap: 8px;
+    }
+    .rez__choice--card .rez__choice-desc {
+      -webkit-line-clamp: 3;
+    }
+  }
+  /* On wider screens give privátní cards a bit more breathing room. */
+  @media (min-width: 1100px) {
+    .rez__choices--cards.rez__choices--3 {
+      gap: var(--space-4);
+    }
   }
 
   /* ---------- Fields ---------- */
