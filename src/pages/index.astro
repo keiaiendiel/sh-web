@@ -144,21 +144,20 @@ const sections: Section[] = [
 ];
 
 /* === RIBBON TILES (pod hero) ===
-   Pět scroll dlaždic + Rezervace tile (6 celkem, 3×2 grid). Per spec § 04
-   banner influence: bez čísel, větší typo, větší ribbon arc jako pozadí,
-   plakátovější. Pět variant rotuje (cream / rose / plum-soft / sand / soft)
-   pro vizuální rozmanitost napříč grídem, žádné dva sousedy nejsou stejné.
-   Plnější colorize přijde až do subpage hero sekcí. */
+   Pět scroll dlaždic + Rezervace tile (6 celkem, 3×2 grid). Vizuální jazyk
+   sjednocen s CrossLinkPair komponentou: 4 varianty (deep, cream, rose, ink)
+   rotují tak aby žádné dva sousedy neměly stejnou. Eyebrow (uppercase small caps)
+   + bold title, vpravo dole 36×36 kruhová šipka. Ribbon arc zůstává v pozadí. */
 const tiles = [
-  { label: 'Ubytovací služby', sub: 'Apartmány, kapsle, lůžka',  href: '#ubytovani', variant: 'cream',
+  { eyebrow: 'Ubytování', title: 'Apartmány, kapsle, lůžka',     href: '#ubytovani', variant: 'cream',
     path: 'M 60 240 C 220 100, 380 320, 540 200 C 660 100, 720 260, 760 340' },
-  { label: 'Coworking',         sub: 'Sál, ateliér, dílna',      href: '#coworking', variant: 'rose',
+  { eyebrow: 'Coworking', title: 'Sál, ateliér, dílna',          href: '#coworking', variant: 'ink',
     path: 'M 80 120 C 240 280, 400 80, 560 240 C 680 360, 740 200, 760 320' },
-  { label: 'Komunitní zázemí',  sub: 'Bazén, sauna, jídelna',    href: '#komunita',  variant: 'plum-soft',
+  { eyebrow: 'Komunita',  title: 'Bazén, sauna, jídelna',        href: '#komunita',  variant: 'rose',
     path: 'M 80 200 C 240 80, 420 280, 580 160 C 700 80, 740 240, 760 320' },
-  { label: 'Stipendijní programy', sub: 'Pobyt zdarma za projekt', href: '#stipendia', variant: 'sand',
+  { eyebrow: 'Stipendia', title: 'Pobyt zdarma za&nbsp;projekt', href: '#stipendia', variant: 'deep',
     path: 'M 60 240 C 200 100, 380 320, 520 200 C 660 80, 740 240, 760 360' },
-  { label: 'Okolí a dostupnost', sub: 'Vltava, bus, cyklostezka', href: '#okoli',    variant: 'soft',
+  { eyebrow: 'Okolí',     title: 'Vltava, bus, cyklostezka',     href: '#okoli',     variant: 'cream',
     path: 'M 80 320 C 200 480, 420 200, 580 360 C 700 480, 740 320, 760 220' },
 ];
 ---
@@ -206,28 +205,28 @@ const tiles = [
             </svg>
           </span>
           <span class="lp-tile__type">
-            <span class="lp-tile__label">{t.label}</span>
-            <span class="lp-tile__sub">{t.sub}</span>
+            <span class="lp-tile__eyebrow">{t.eyebrow}</span>
+            <span class="lp-tile__title" set:html={t.title} />
           </span>
-          {/* Corner šipka dolů = scroll v rámci stránky. Liší se od Rezervace
-              tile, kde je arrow-up-right (= odkaz pryč na jinou stránku). */}
-          <span class="lp-tile__arrow lp-tile__arrow--scroll" aria-hidden="true">
+          {/* Šipka v 36×36 kruhu, chevron-down = scroll v rámci stránky. */}
+          <span class="lp-tile__arrow" aria-hidden="true">
             <Icon name="chevron-down" size={18} strokeWidth={2} />
           </span>
         </a>
       ))}
 
-      <a class="lp-tile lp-tile--reserve osa-nolink" href={withBase('/rezervace/')}>
+      <a class="lp-tile lp-tile--deep lp-tile--reserve osa-nolink" href={withBase('/rezervace/')}>
         <span class="lp-tile__ribbon" aria-hidden="true" data-ribbon-reveal>
           <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
             <path d="M 540 80 C 720 100, 760 240, 600 320 C 460 400, 380 280, 540 200" />
           </svg>
         </span>
         <span class="lp-tile__type">
-          <span class="lp-tile__label">Rezervujte si <em>místo</em></span>
-          <span class="lp-tile__sub">Nezávazná, ozveme se do 24 h.</span>
+          <span class="lp-tile__eyebrow">Rezervace</span>
+          <span class="lp-tile__title">Nezávazná, do&nbsp;24&nbsp;h</span>
         </span>
-        <span class="lp-tile__arrow lp-tile__arrow--cross" aria-hidden="true">
+        {/* arrow-up-right = odkaz pryč na jinou stránku (Rezervace). */}
+        <span class="lp-tile__arrow" aria-hidden="true">
           <Icon name="arrow-up-right" size={18} strokeWidth={2} />
         </span>
       </a>
@@ -240,7 +239,7 @@ const tiles = [
       <>
         <section class="lp-section" id={sec.id} aria-labelledby={`${sec.id}-title`}>
           <span class="lp-section__ribbon" aria-hidden="true" data-ribbon-reveal>
-            <svg viewBox="0 0 1600 600" preserveAspectRatio="none">
+            <svg viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid slice">
               <path d={sec.ribbonPath} vector-effect="non-scaling-stroke" />
             </svg>
           </span>
@@ -265,73 +264,79 @@ const tiles = [
 
           {sec.id === 'ubytovani' && (
             <div class="lp-summary">
-              {/* === Karta 1: Co-living (krátký souhrn, ne per-varianta breakdown) === */}
-              <article class="lp-summary__card" aria-labelledby="lp-summary-coliving-h">
-                <header class="lp-summary__head">
-                  <h3 class="lp-summary__h" id="lp-summary-coliving-h">Co-living</h3>
-                  <p class="lp-summary__sub">Kapsle a&nbsp;lůžka ve&nbsp;sdílených pokojích.</p>
-                </header>
-                <dl class="lp-summary__facts">
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Počet variant</dt>
-                    <dd class="lp-summary__dd">4 (jednolůžková a&nbsp;dvoulůžková kapsle, jednolůžko a&nbsp;dvoulůžko)</dd>
-                  </div>
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Pro koho</dt>
-                    <dd class="lp-summary__dd">1 osoba nebo pár</dd>
-                  </div>
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Plocha</dt>
-                    <dd class="lp-summary__dd">matrace 200×80 cm až 230×240 cm</dd>
-                  </div>
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Soukromí</dt>
-                    <dd class="lp-summary__dd">uzamykatelný modul nebo vlastní postel v&nbsp;pokoji</dd>
-                  </div>
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Cena od</dt>
-                    <dd class="lp-summary__dd lp-summary__dd--price">3&nbsp;000&nbsp;Kč/měsíc · od 2&nbsp;250&nbsp;Kč při roční smlouvě</dd>
-                  </div>
-                </dl>
-                <a class="lp-summary__cta osa-nolink" href={withBase('/ubytovani/#ub-coliving-title')}>
-                  <span class="lp-summary__cta-arrow" aria-hidden="true">↗</span>
-                  <span class="lp-summary__cta-label">Zobrazit kapsle a&nbsp;lůžka</span>
-                </a>
-              </article>
+              {/* === Karta 1: Co-living (krátký souhrn, ne per-varianta breakdown) ===
+                  Celá karta je <a> wrapper (desktop), na mobilu se pointer-events
+                  vypne na wrapperu a aktivní zůstane jen vnitřní CTA tlačítko. */}
+              <a class="lp-summary__card-link osa-nolink" href={withBase('/ubytovani/#ub-coliving-title')}>
+                <article class="lp-summary__card" aria-labelledby="lp-summary-coliving-h">
+                  <header class="lp-summary__head">
+                    <h3 class="lp-summary__h" id="lp-summary-coliving-h">Co-living</h3>
+                    <p class="lp-summary__sub">Kapsle a&nbsp;lůžka ve&nbsp;sdílených pokojích.</p>
+                  </header>
+                  <dl class="lp-summary__facts">
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Počet variant</dt>
+                      <dd class="lp-summary__dd">4 (jednolůžková a&nbsp;dvoulůžková kapsle, jednolůžko a&nbsp;dvoulůžko)</dd>
+                    </div>
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Pro koho</dt>
+                      <dd class="lp-summary__dd">1 osoba nebo pár</dd>
+                    </div>
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Plocha</dt>
+                      <dd class="lp-summary__dd">matrace 200×80 cm až 230×240 cm</dd>
+                    </div>
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Soukromí</dt>
+                      <dd class="lp-summary__dd">uzamykatelný modul nebo vlastní postel v&nbsp;pokoji</dd>
+                    </div>
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Cena</dt>
+                      <dd class="lp-summary__dd lp-summary__dd--price">od 3&nbsp;000&nbsp;Kč/měsíc</dd>
+                    </div>
+                  </dl>
+                  <span class="lp-summary__cta">
+                    <span class="lp-summary__cta-arrow" aria-hidden="true">↗</span>
+                    <span class="lp-summary__cta-label">Zobrazit kapsle a&nbsp;lůžka</span>
+                  </span>
+                </article>
+              </a>
 
               {/* === Karta 2: Privátní apartmány (krátký souhrn) === */}
-              <article class="lp-summary__card" aria-labelledby="lp-summary-privatni-h">
-                <header class="lp-summary__head">
-                  <h3 class="lp-summary__h" id="lp-summary-privatni-h">Privátní apartmány</h3>
-                  <p class="lp-summary__sub">Vlastní byt, kuchyň, koupelna.</p>
-                </header>
-                <dl class="lp-summary__facts">
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Počet velikostí</dt>
-                    <dd class="lp-summary__dd">5 (1+kk až 5+kk)</dd>
-                  </div>
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Pro koho</dt>
-                    <dd class="lp-summary__dd">2 až 10 osob</dd>
-                  </div>
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Plocha</dt>
-                    <dd class="lp-summary__dd">21 až 105 m²</dd>
-                  </div>
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Soukromí</dt>
-                    <dd class="lp-summary__dd">vlastní vchod, koupelna a&nbsp;kuchyň</dd>
-                  </div>
-                  <div class="lp-summary__row">
-                    <dt class="lp-summary__dt">Cena od</dt>
-                    <dd class="lp-summary__dd lp-summary__dd--price">9&nbsp;500&nbsp;Kč/měsíc · od 7&nbsp;600&nbsp;Kč při roční smlouvě</dd>
-                  </div>
-                </dl>
-                <a class="lp-summary__cta osa-nolink" href={withBase('/ubytovani/#ub-privatni-title')}>
-                  <span class="lp-summary__cta-arrow" aria-hidden="true">↗</span>
-                  <span class="lp-summary__cta-label">Zobrazit apartmány</span>
-                </a>
-              </article>
+              <a class="lp-summary__card-link osa-nolink" href={withBase('/ubytovani/#ub-privatni-title')}>
+                <article class="lp-summary__card" aria-labelledby="lp-summary-privatni-h">
+                  <header class="lp-summary__head">
+                    <h3 class="lp-summary__h" id="lp-summary-privatni-h">Privátní apartmány</h3>
+                    <p class="lp-summary__sub">Vlastní byt, kuchyň, koupelna.</p>
+                  </header>
+                  <dl class="lp-summary__facts">
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Počet velikostí</dt>
+                      <dd class="lp-summary__dd">5 (1+kk až 5+kk)</dd>
+                    </div>
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Pro koho</dt>
+                      <dd class="lp-summary__dd">2 až 10 osob</dd>
+                    </div>
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Plocha</dt>
+                      <dd class="lp-summary__dd">21 až 105 m²</dd>
+                    </div>
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Soukromí</dt>
+                      <dd class="lp-summary__dd">vlastní vchod, koupelna a&nbsp;kuchyň</dd>
+                    </div>
+                    <div class="lp-summary__row">
+                      <dt class="lp-summary__dt">Cena</dt>
+                      <dd class="lp-summary__dd lp-summary__dd--price">od 9&nbsp;500&nbsp;Kč/měsíc</dd>
+                    </div>
+                  </dl>
+                  <span class="lp-summary__cta">
+                    <span class="lp-summary__cta-arrow" aria-hidden="true">↗</span>
+                    <span class="lp-summary__cta-label">Zobrazit apartmány</span>
+                  </span>
+                </article>
+              </a>
             </div>
           )}
 
@@ -549,123 +554,90 @@ const tiles = [
     gap: clamp(12px, 1.6vw, 20px);
   }
 
+  /* Tile, mirror cross-link card: 1fr auto grid (text left, arrow circle right),
+     align-items end, min-height clamp, padding clamp, border-radius input, ribbon
+     arc v pozadí z-index 0, isolation isolate pro bezpečný stacking context. */
   .lp-tile {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    aspect-ratio: 1.7 / 1;
-    padding: clamp(20px, 2.4vw, 32px);
-    border: 1px solid var(--accent-rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(16px, 2vw, 24px);
+    align-items: end;
+    min-height: clamp(140px, 16vw, 200px);
+    padding: clamp(20px, 2.4vw, 28px) clamp(22px, 2.4vw, 32px);
     border-radius: var(--radius-input);
     text-decoration: none !important;
-    color: var(--fg);
     overflow: hidden;
-    transition: transform 240ms var(--ease-standard),
-                border-color 240ms var(--ease-standard),
-                box-shadow 240ms var(--ease-standard);
-  }
-  /* Variant fills, light enough na landing ale rozlišitelné mezi sebou.
-     Soft / plum-soft jsou solid lavender (ne accent-soft alpha) protože tiles
-     přečnívají nad hero a transparent variant by ho prosvítal. Rose a sand
-     dodávají teplo do studené plum škály, držíme všechny v light tonalitě. */
-  .lp-tile--cream { background: var(--cream); }
-  .lp-tile--soft  { background: hsl(var(--hue) 28% 93%); }
-  .lp-tile--rose {
-    background: var(--rose);
-    color: var(--plum-deep);
-    border-color: transparent;
-  }
-  .lp-tile--plum-soft {
-    background: hsl(var(--hue) 28% 88%);
-    color: var(--plum-deep);
-    border-color: transparent;
-  }
-  .lp-tile--sand {
-    background: #EFE9E0;
-    color: var(--plum-deep);
-    border-color: transparent;
-  }
-  /* Sub-label drží legibilní fg-subtle tón i na barevných variantách. */
-  .lp-tile--rose .lp-tile__sub,
-  .lp-tile--plum-soft .lp-tile__sub,
-  .lp-tile--sand .lp-tile__sub {
-    color: var(--fg-subtle);
-  }
-  .lp-tile--reserve {
-    background: var(--plum-deep);
-    color: #fff;
-    border-color: var(--plum-deep);
+    isolation: isolate;
+    transition:
+      transform 320ms var(--ease-quart),
+      box-shadow 320ms var(--ease-quart);
   }
 
-  /* Type stack: bottom-left, fills negative space next to ribbon */
+  /* Varianty zrcadlí cross-link: deep (plum bg + bílý text), cream (kremový bg
+     s tenkým accent borderem), rose (rose bg + plum text), ink (plum bg + cream
+     text). Eyebrow color + ribbon stroke per varianta. */
+  .lp-tile--deep  { background: var(--plum-deep); color: #fff; }
+  .lp-tile--cream { background: var(--cream); color: var(--fg); border: 1px solid var(--accent-rule); }
+  .lp-tile--rose  { background: var(--rose); color: var(--plum-deep); }
+  .lp-tile--ink   { background: var(--plum-deep); color: var(--cream); }
+
+  /* Type stack vlevo, bottom-aligned (grid align-items end). */
   .lp-tile__type {
     position: relative;
     z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    max-width: 22ch;
+    gap: 6px;
+    max-width: 28ch;
+    min-width: 0;
   }
-  .lp-tile__label {
-    font: 700 clamp(1.125rem, 1.55vw, 1.5rem) / 1.05 var(--font-sans);
+  .lp-tile__eyebrow {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+  .lp-tile--deep .lp-tile__eyebrow  { color: var(--rose); }
+  .lp-tile--cream .lp-tile__eyebrow { color: var(--accent); }
+  .lp-tile--rose .lp-tile__eyebrow  { color: var(--plum-deep); }
+  .lp-tile--ink .lp-tile__eyebrow   { color: var(--rose); }
+  .lp-tile__title {
+    font: 700 clamp(1.125rem, 1.8vw, 1.5rem) / 1.1 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     color: inherit;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    text-wrap: balance;
   }
-  .lp-tile__label em {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--accent);
-  }
-  .lp-tile--reserve .lp-tile__label em { color: var(--rose); }
-  .lp-tile__sub {
-    font: 500 var(--text-sm) / 1.35 var(--font-sans);
-    color: var(--fg-subtle);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-  .lp-tile--reserve .lp-tile__sub { color: rgba(255, 255, 255, 0.72); }
 
-  /* Corner šipka v pravém dolním rohu .lp-tile. chevron-down = scroll,
-     arrow-up-right = cross-page (Rezervace). Inherituje currentColor. */
+  /* Arrow: 36×36 kruh, 1px border currentColor, opacity 0.7 idle.
+     Na hover currentColor fill + svg flip na bg barvu karty. */
   .lp-tile__arrow {
-    position: absolute;
+    position: relative;
     z-index: 2;
-    bottom: clamp(16px, 1.8vw, 24px);
-    right: clamp(16px, 1.8vw, 24px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    opacity: 0.7;
     color: inherit;
-    opacity: 0.55;
-    line-height: 0;
-    transition: opacity 220ms var(--ease-standard),
-                transform 220ms var(--ease-standard);
+    transition:
+      opacity 220ms var(--ease-quart),
+      transform 220ms var(--ease-quart),
+      background 220ms var(--ease-quart);
   }
   .lp-tile__arrow :global(svg) { display: block; }
-  .lp-tile--reserve .lp-tile__arrow { color: var(--rose); opacity: 0.85; }
-  .lp-tile:hover .lp-tile__arrow,
-  .lp-tile:focus-visible .lp-tile__arrow {
-    opacity: 1;
-  }
-  .lp-tile:hover .lp-tile__arrow--scroll,
-  .lp-tile:focus-visible .lp-tile__arrow--scroll {
-    transform: translateY(2px);
-  }
-  .lp-tile:hover .lp-tile__arrow--cross,
-  .lp-tile:focus-visible .lp-tile__arrow--cross {
-    transform: translate(2px, -2px);
-  }
 
-  /* Ribbon: big background arc, peeká z pod typo (z-index 0) */
+  /* Ribbon: background arc, position absolute inset 0, z-index 0, opacity 0.92,
+     stejné snake-draw + breathing chování jako cross-link. */
   .lp-tile__ribbon {
     position: absolute;
     inset: 0;
-    pointer-events: none;
     z-index: 0;
-    opacity: 0.55;
-    transition: opacity 240ms var(--ease-standard), transform 360ms var(--ease-standard);
+    pointer-events: none;
+    opacity: 0.92;
+    transition: transform 700ms var(--ease-quart);
   }
   .lp-tile__ribbon svg {
     width: 100%;
@@ -675,62 +647,65 @@ const tiles = [
   }
   .lp-tile__ribbon path {
     fill: none;
-    stroke: var(--accent);
-    stroke-width: 36;
+    stroke-width: 32;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .lp-tile--reserve .lp-tile__ribbon path {
-    stroke: var(--rose);
-    stroke-width: 44;
-  }
-  .lp-tile--reserve .lp-tile__ribbon { opacity: 0.85; }
+  /* Ribbon stroke per varianta, sjednoceno s cross-link. */
+  .lp-tile--deep  .lp-tile__ribbon path { stroke: var(--accent); stroke-width: 38; }
+  .lp-tile--cream .lp-tile__ribbon path { stroke: var(--accent); stroke-width: 32; }
+  .lp-tile--rose  .lp-tile__ribbon path { stroke: var(--plum-deep); stroke-width: 12; }
+  .lp-tile--ink   .lp-tile__ribbon path { stroke: var(--rose); stroke-width: 28; }
+
   .lp-tile__ribbon[data-ribbon-reveal] path {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
     pathLength: 1;
   }
-  /* Po reveal pokračuje breathing infinite loop. Range 0.42-0.72 (na container
-     overlay opacity 0.55 idle → multiplikuje se na path). */
   .lp-tile__ribbon[data-ribbon-reveal].is-revealed path {
     animation:
       ribbon-snake-draw 2.6s var(--ease-snake) forwards,
       ribbon-breathe 7s ease-in-out 2.6s infinite;
   }
 
-  /* Hover: lift + ribbon nice */
+  /* Hover, mirror cross-link: lift translateY -3px + plum shadow + arrow becomes
+     filled (background = currentColor, svg color flips to tile bg). Ribbon slide
+     14 px + pause breathing. */
   .lp-tile:hover,
   .lp-tile:focus-visible {
-    transform: translateY(-2px);
-    border-color: var(--accent);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 32px hsl(var(--hue) 39% 27% / 0.14);
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px hsl(var(--hue) 41% 13% / 0.22);
     outline: none;
   }
-  .lp-tile--reserve:hover,
-  .lp-tile--reserve:focus-visible {
-    border-color: var(--rose);
-    box-shadow: 0 18px 48px hsl(var(--hue) 41% 13% / 0.34);
-  }
-  .lp-tile:hover .lp-tile__ribbon,
-  .lp-tile:focus-visible .lp-tile__ribbon {
-    opacity: 0.85;
+  .lp-tile:hover .lp-tile__ribbon {
     transform: translateX(14px);
   }
-  .lp-tile:hover .lp-tile__ribbon path,
-  .lp-tile:focus-visible .lp-tile__ribbon path {
+  .lp-tile:hover .lp-tile__ribbon path {
     animation-play-state: paused;
+    opacity: 0.85;
   }
-  .lp-tile--reserve:hover .lp-tile__ribbon,
-  .lp-tile--reserve:focus-visible .lp-tile__ribbon {
+  .lp-tile:hover .lp-tile__arrow,
+  .lp-tile:focus-visible .lp-tile__arrow {
     opacity: 1;
+    transform: translateX(3px);
+    background: currentColor;
   }
+  /* Šipka flip: svg color = bg color karty. */
+  .lp-tile--deep:hover .lp-tile__arrow :global(svg),
+  .lp-tile--deep:focus-visible .lp-tile__arrow :global(svg)  { color: var(--plum-deep); }
+  .lp-tile--cream:hover .lp-tile__arrow :global(svg),
+  .lp-tile--cream:focus-visible .lp-tile__arrow :global(svg) { color: var(--cream); }
+  .lp-tile--rose:hover .lp-tile__arrow :global(svg),
+  .lp-tile--rose:focus-visible .lp-tile__arrow :global(svg)  { color: var(--rose); }
+  .lp-tile--ink:hover .lp-tile__arrow :global(svg),
+  .lp-tile--ink:focus-visible .lp-tile__arrow :global(svg)   { color: var(--plum-deep); }
+
   .lp-tile:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-  .lp-tile--reserve:focus-visible {
     outline: 2px solid var(--rose);
+    outline-offset: 3px;
   }
+  .lp-tile--cream:focus-visible { outline-color: var(--accent); }
+  .lp-tile--rose:focus-visible  { outline-color: var(--plum-deep); }
 
   @media (max-width: 760px) {
     .lp-hero {
@@ -739,48 +714,45 @@ const tiles = [
       padding: var(--space-7) var(--gutter);
     }
     .lp-tiles { padding: var(--space-5) 0 var(--space-6); }
+    /* Mobile: 2 sloupce (3×2 → 2×3) aby každý tile měl dost šířky pro cross-link
+       layout (1fr auto), tj. text vlevo + 32 px arrow kruh vpravo bez overlapu. */
     .lp-tiles__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
     .lp-tile {
-      aspect-ratio: 1 / 1.05;
-      padding: 14px 12px;
+      min-height: 108px;
+      padding: 14px 16px;
+      gap: 12px;
     }
-    .lp-tile__type { max-width: none; gap: 2px; }
-    /* Mobile: 3-col compact tiles, label se zalamuje na max 2 řádky (žádné
-       text-overflow ellipsis, žádný truncate). Desktop drží nowrap pro
-       konzistentní 1-line look. */
-    .lp-tile__label {
+    .lp-tile__type { max-width: none; gap: 4px; min-width: 0; }
+    .lp-tile__title {
       font-size: 0.9375rem;
-      line-height: 1.1;
-      white-space: normal;
-      text-overflow: clip;
-      overflow: visible;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-    .lp-tile__sub {
-      font-size: 11px;
       line-height: 1.2;
-      white-space: normal;
-      text-overflow: clip;
-      overflow: visible;
+      text-wrap: pretty;
     }
-    .lp-tile__ribbon path { stroke-width: 44; }
-    .lp-tile--reserve .lp-tile__ribbon path { stroke-width: 52; }
-  }
-  @media (max-width: 420px) {
-    .lp-tile__sub { display: none; }
+    .lp-tile__eyebrow {
+      font-size: 10px;
+    }
+    .lp-tile__arrow {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    .lp-tile__ribbon path { stroke-width: 32; }
+    .lp-tile--rose .lp-tile__ribbon path  { stroke-width: 14; }
+    .lp-tile--deep .lp-tile__ribbon path  { stroke-width: 38; }
+    .lp-tile--ink .lp-tile__ribbon path   { stroke-width: 30; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .lp-tile, .lp-tile__ribbon { transition: none; }
+    .lp-tile, .lp-tile__ribbon, .lp-tile__arrow { transition: none; }
     .lp-tile__ribbon[data-ribbon-reveal] path,
     .lp-tile__ribbon[data-ribbon-reveal].is-revealed path {
       stroke-dashoffset: 0;
       animation: none;
     }
+    .lp-tile:hover .lp-tile__ribbon { transform: none; }
   }
 
   /* ============ ZIG-ZAG SEKCE (one-pager) ============ */
@@ -933,34 +905,21 @@ const tiles = [
     .lp-section__ribbon { opacity: 0.32; }
     .lp-section__ribbon path { stroke-width: 32; }
 
-    /* CTA: arrow přesunut na top-left, label pod ním, full-width tlačítko
-       takže se nepere s narrow column. Menší font aby se text vlezl bez
-       překládání. */
-    .lp-section__ctas { flex-direction: column; align-items: stretch; }
+    /* CTA na mobilu: arrow + label v jednom inline rowu, menší font. */
+    .lp-section__ctas { flex-direction: column; align-items: flex-start; }
     .lp-section__cta {
-      display: grid;
-      grid-template-columns: 22px 1fr;
-      grid-template-rows: auto auto;
-      column-gap: 10px;
-      row-gap: 4px;
-      align-items: start;
-      justify-content: start;
-      padding: 12px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
       font-size: 13px;
       letter-spacing: 0;
-      text-align: left;
     }
     .lp-section__cta-arrow {
-      grid-row: 1 / 2;
-      grid-column: 1 / 2;
-      font-size: 18px;
-      justify-content: flex-start;
+      font-size: 16px;
+      line-height: 1;
     }
-    .lp-section__cta-label {
-      grid-row: 2 / 3;
-      grid-column: 1 / 3;
-      line-height: 1.25;
-    }
+    .lp-section__cta-label { line-height: 1; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -975,8 +934,13 @@ const tiles = [
   /* Dvě karty vedle sebe, krátký souhrn dvou produktových košů (Co-living
      vlevo, Privátní apartmány vpravo). Jednoduchá konverzní karta, ne
      per-varianta breakdown. Subtle 2-layer drop shadow, padding, dl s
-     uppercase eyebrow labely a tabular-nums na řádku ceny. Mobile stack. */
+     uppercase eyebrow labely a tabular-nums na řádku ceny. Mobile stack.
+     Stacking fix: position relative + z-index 2 + isolation isolate aby karty
+     sedly nad .lp-section__ribbon (který má z-index 0). */
   .lp-summary {
+    position: relative;
+    z-index: 2;
+    isolation: isolate;
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: var(--space-7) auto 0;
@@ -984,10 +948,17 @@ const tiles = [
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(20px, 2.4vw, 32px);
   }
+  /* Desktop: celá karta klikatelná, link wrapper přenese hover styly. */
+  .lp-summary__card-link {
+    display: block;
+    text-decoration: none !important;
+    color: inherit;
+  }
   .lp-summary__card {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    height: 100%;
     background: var(--bg);
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
@@ -996,13 +967,31 @@ const tiles = [
       0 4px 16px hsl(var(--hue) 41% 13% / 0.06),
       0 12px 32px hsl(var(--hue) 41% 13% / 0.08);
     transition: transform 240ms var(--ease-standard),
-                box-shadow 240ms var(--ease-standard);
+                box-shadow 240ms var(--ease-standard),
+                border-color 240ms var(--ease-standard);
   }
-  .lp-summary__card:hover {
-    transform: translateY(-2px);
+  /* Hover na celé kartě (via wrapper link) lift + shadow + accent border + CTA fill. */
+  .lp-summary__card-link:hover .lp-summary__card,
+  .lp-summary__card-link:focus-visible .lp-summary__card {
+    transform: translateY(-3px);
+    border-color: var(--accent);
     box-shadow:
       0 6px 20px hsl(var(--hue) 41% 13% / 0.08),
       0 18px 44px hsl(var(--hue) 41% 13% / 0.12);
+  }
+  .lp-summary__card-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-input);
+  }
+  .lp-summary__card-link:hover .lp-summary__cta,
+  .lp-summary__card-link:focus-visible .lp-summary__cta {
+    background: var(--accent);
+    color: var(--accent-on);
+  }
+  .lp-summary__card-link:hover .lp-summary__cta-arrow,
+  .lp-summary__card-link:focus-visible .lp-summary__cta-arrow {
+    transform: translate(2px, -2px);
   }
   .lp-summary__head {
     display: flex;
@@ -1053,10 +1042,11 @@ const tiles = [
     font-variant-numeric: tabular-nums;
     font-weight: 600;
   }
-  /* CTA mirror outline tónu sekce CTA tlačítka. */
+  /* CTA mirror outline tónu sekce CTA tlačítka. margin-top auto tlačí CTA na
+     spodek karty pro vyrovnanou baseline napříč oběma kartami. */
   .lp-summary__cta {
     align-self: flex-start;
-    margin-top: var(--space-2);
+    margin-top: auto;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -1070,12 +1060,6 @@ const tiles = [
     background: transparent;
     transition: background 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
   }
-  .lp-summary__cta:hover,
-  .lp-summary__cta:focus-visible {
-    background: var(--accent);
-    color: var(--accent-on);
-    outline: none;
-  }
   .lp-summary__cta-arrow {
     display: inline-flex;
     align-items: center;
@@ -1085,10 +1069,6 @@ const tiles = [
     transition: transform 220ms ease;
   }
   .lp-summary__cta-label { line-height: 1; }
-  .lp-summary__cta:hover .lp-summary__cta-arrow,
-  .lp-summary__cta:focus-visible .lp-summary__cta-arrow {
-    transform: translate(2px, -2px);
-  }
 
   @media (max-width: 760px) {
     .lp-summary {
@@ -1096,44 +1076,45 @@ const tiles = [
       gap: var(--space-5);
       margin-top: var(--space-6);
     }
+    /* Mobile: link wrapper se chová jako passive container, klikatelné zůstává
+       jen CTA tlačítko vespod. */
+    .lp-summary__card-link {
+      pointer-events: none;
+    }
     .lp-summary__card {
-      padding: clamp(20px, 5vw, 28px);
+      padding: clamp(16px, 4vw, 22px);
+    }
+    .lp-summary__h {
+      font-size: clamp(1.4rem, 6vw, 1.75rem);
     }
     .lp-summary__row {
       grid-template-columns: minmax(0, 1fr);
-      gap: 4px;
+      gap: 2px;
     }
-    /* CTA: arrow top-left, label below, sjednocený s .lp-section__cta mobile. */
+    .lp-summary__facts {
+      gap: var(--space-2);
+    }
+    /* CTA: inline arrow + label, klikatelné aktivní jako jediné. */
     .lp-summary__cta {
-      display: grid;
-      grid-template-columns: 22px 1fr;
-      grid-template-rows: auto auto;
-      column-gap: 10px;
-      row-gap: 4px;
-      align-items: start;
-      justify-content: start;
-      padding: 12px 14px;
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
       font-size: 13px;
       letter-spacing: 0;
-      text-align: left;
     }
     .lp-summary__cta-arrow {
-      grid-row: 1 / 2;
-      grid-column: 1 / 2;
-      font-size: 18px;
-      justify-content: flex-start;
+      font-size: 16px;
+      line-height: 1;
     }
-    .lp-summary__cta-label {
-      grid-row: 2 / 3;
-      grid-column: 1 / 3;
-      line-height: 1.25;
-    }
+    .lp-summary__cta-label { line-height: 1; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .lp-summary__card,
     .lp-summary__cta { transition: none; }
-    .lp-summary__card:hover { transform: none; }
+    .lp-summary__card-link:hover .lp-summary__card { transform: none; }
   }
 
 

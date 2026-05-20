@@ -65,7 +65,10 @@
   --k-70:   #787878;
   --k-80:   #585858;
   --k-90:   #3c3c3c;
-  --k-100:  #000000;
+  /* k-100: nejhlubší rung, sjednocený s --plum-deep, aby celý web držel
+     jemný modrý nádech místo neutrální černé. Veškeré "nejtmavší" povrchy
+     (text, bg-inverse, border, rule) tím dědí brand tint. */
+  --k-100:  hsl(var(--hue) 41% 13%);
 
   /* ---------- Project accent palette (sub-projects only) ----------
      8 colors derived from the Czech tricolor (manual §2.4). Reserved for
@@ -124,11 +127,11 @@
   --bg-elevated:   var(--k-0);
   --bg-muted:      var(--k-05);
   --bg-inverse:    var(--k-100);
-  --bg-inverse-2:  var(--k-90);   /* slightly softer than pure black */
+  --bg-inverse-2:  var(--k-90);   /* slightly softer than --k-100 plum tint */
 
   --border:        var(--k-100);
   --border-muted:  var(--k-15);   /* default hairline — feels lighter than k-30 */
-  --rule:          var(--k-100);  /* hairline rules - 1px solid black */
+  --rule:          var(--k-100);  /* hairline rules, 1px solid plum-deep tint */
 
   /* ---------- Type scale (rem assumes 16px root) ----------
      Anchored to the manual's body recommendation (9-12pt body, 1:1.33 lh).

@@ -72,7 +72,7 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       el.dataset.mapBound = '1';
       var center = [50.181447, 14.424094];
       var map = L.map(el, {
-        center: center, zoom: 13,
+        center: center, zoom: 14,
         zoomControl: false, attributionControl: false,
         scrollWheelZoom: false, dragging: true,
       });
@@ -180,11 +180,12 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.14);
     margin-top: var(--space-5);
-    /* Map tint: posunout hue ke globálnímu --hue, jemně doladit kontrast.
-        Drží CARTO Voyager mapu v naší barevnosti, bez zelených dálnic.
-        hue-rotate je relativní k tile barvám (cca 9°), proto výsledný shift
-        je (--hue - 9). Saturace mírně nad 1 pro tasteful muted-color tóny. */
-    filter: hue-rotate(calc((var(--hue) - 9) * 1deg)) saturate(1.05) brightness(0.96) contrast(1.04);
+    /* Map tint: cílíme cool blue/teal, žádné růžové reziduum.
+        CARTO Voyager má warm cream tiles (~30-40° hue). Bez sepia kroku
+        hue-rotate(231deg) zachovává růžové póly. Sepia(0.35) nejdřív
+        flatne paletu do warm yellow, pak hue-rotate(200deg) ji posune
+        do modra ladícího s --hue 240. Saturace zkrocená pro muted tón. */
+    filter: sepia(0.35) saturate(0.85) hue-rotate(200deg) brightness(0.94) contrast(1.05);
   }
   .hub-footer__map :global(.leaflet-container) {
     width: 100%;

@@ -80,8 +80,7 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           </header>
           <dl class="kp-variant__meta">
             <div><dt>Matrace</dt><dd>{single.data.matrace.join(' nebo ')}</dd></div>
-            <div><dt>Cena</dt><dd>{formatCena(single.data.cena.anchor)}/měs (anchor)</dd></div>
-            <div><dt>Sleva 12+ měs</dt><dd>{formatCena(single.data.cena.m12)}/měs</dd></div>
+            <div><dt>Cena</dt><dd>od {formatCena(single.data.cena.anchor)}/měs</dd></div>
           </dl>
           <a class="kp-variant__cta" href={withBase('/ubytovani/co-living/kapsle-single/')}>Detail jednolůžkové kapsle →</a>
         </article>
@@ -93,8 +92,7 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           </header>
           <dl class="kp-variant__meta">
             <div><dt>Matrace</dt><dd>{double.data.matrace.join(' nebo ')}</dd></div>
-            <div><dt>Cena</dt><dd>{formatCena(double.data.cena.anchor)}/měs (anchor, {double.data.cena.perOsoba})</dd></div>
-            <div><dt>Sleva 12+ měs</dt><dd>{formatCena(double.data.cena.m12)}/měs ({double.data.cena.perOsoba12})</dd></div>
+            <div><dt>Cena</dt><dd>od {formatCena(double.data.cena.anchor)}/měs ({double.data.cena.perOsoba})</dd></div>
           </dl>
           <a class="kp-variant__cta" href={withBase('/ubytovani/co-living/kapsle-double/')}>Detail dvoulůžkové kapsle →</a>
         </article>
@@ -132,7 +130,7 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 </Base>
 
 <style>
-  .kp-hero { position: relative; isolation: isolate; min-height: 70vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-8); color: #fff; background: var(--k-100); overflow: hidden; }
+  .kp-hero { position: relative; isolation: isolate; min-height: 70vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-8); color: #fff; background: var(--plum-deep); overflow: hidden; }
   .kp-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.6); }
   .kp-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.1) 90%); z-index: -1; }
   .kp-hero__inner { max-width: var(--container-wide); margin: 0 auto; width: 100%; }
@@ -141,7 +139,7 @@ const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .kp-hero__lede { font-size: clamp(1.1rem, 1.5vw, 1.25rem); line-height: 1.5; margin: 0 0 var(--space-6); max-width: 56ch; color: rgba(255,255,255,0.95); }
   .kp-hero__cta-row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
   .kp-hero__cta { display: inline-flex; align-items: center; padding: 12px 22px; font: 600 var(--text-sm) / 1 var(--font-sans); color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: var(--radius-input); text-decoration: none; transition: background 200ms ease, color 200ms ease; }
-  .kp-hero__cta:hover { background: #fff; color: var(--k-100); }
+  .kp-hero__cta:hover { background: #fff; color: var(--plum-deep); }
   .kp-hero__cta--primary { background: var(--accent); border-color: var(--accent); }
   .kp-hero__cta--primary:hover { background: #fff; color: var(--accent); }
 
