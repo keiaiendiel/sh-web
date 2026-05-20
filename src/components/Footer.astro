@@ -104,6 +104,21 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
         .bindPopup(popupHtml, { className: 'ok-map-popup-wrap' })
         .openPopup();
       L.control.attribution({ prefix: false }).addTo(map);
+      /* Stejný invalidateSize beat jako /okoli/ embed: cold load + SPA
+         návrat + pozdější resize (font swap, image reflow). ResizeObserver
+         + window.load fallback. */
+      requestAnimationFrame(function () { map.invalidateSize(); });
+      setTimeout(function () { map.invalidateSize(); }, 80);
+      setTimeout(function () { map.invalidateSize(); }, 250);
+      setTimeout(function () { map.invalidateSize(); }, 800);
+      if ('ResizeObserver' in window) {
+        var ro = new ResizeObserver(function () { map.invalidateSize(); });
+        ro.observe(el);
+      }
+      window.addEventListener('load', function () { map.invalidateSize(); }, { once: true });
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) map.invalidateSize();
+      });
     }
 
     function bind() {

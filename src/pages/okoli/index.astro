@@ -87,14 +87,25 @@ const heroJumps = [
           L.control.attribution({ prefix: false }).addTo(map);
           L.control.zoom({ position: 'bottomright' }).addTo(map);
           el.addEventListener('click', function () { map.scrollWheelZoom.enable(); }, { once: true });
-          /* Po inicializaci forced layout pass: Leaflet někdy spočítá size
-             před tím, než parent container má finální šířku (view transitions,
-             font swap, aspect-ratio reflow). Bez invalidateSize tiles painty
-             jen po manual reflow (resize / reload). Triple beat (rAF + 80ms
-             + 250ms) pokryje cold load i návrat přes SPA navigaci. */
+          /* Po inicializaci forced layout pass. Triple beat (rAF + 80 + 250 ms)
+             pokrývá cold load + SPA navigaci. ResizeObserver navíc reaguje
+             na pozdější změny šířky (font swap, image reflow, view transitions
+             dokončení), kdy Leaflet nakreslil dlaždice na starou velikost
+             a nové tiles už nestáhnul. Při každém resize zavoláme invalidateSize,
+             což Leaflet přinutí přepočítat viditelnou plochu a stáhnout chybějící
+             tiles. Window load + visibility change fallback pro extra jistotu. */
           requestAnimationFrame(function () { map.invalidateSize(); });
           setTimeout(function () { map.invalidateSize(); }, 80);
           setTimeout(function () { map.invalidateSize(); }, 250);
+          setTimeout(function () { map.invalidateSize(); }, 800);
+          if ('ResizeObserver' in window) {
+            var ro = new ResizeObserver(function () { map.invalidateSize(); });
+            ro.observe(el);
+          }
+          window.addEventListener('load', function () { map.invalidateSize(); }, { once: true });
+          document.addEventListener('visibilitychange', function () {
+            if (!document.hidden) map.invalidateSize();
+          });
         });
       }
       document.addEventListener('astro:page-load', init);
