@@ -47,6 +47,36 @@ pnpm deploy
 #    → Triggers → Custom Domains → Add Custom Domain → form.startovacihub.cz
 ```
 
+## Lokální test
+
+```bash
+pnpm dev   # wrangler dev na http://127.0.0.1:8787
+```
+
+`wrangler dev` čte `wrangler.toml`, secrets si přidá z `.dev.vars` (lokální soubor v gitignore, formát `KEY=value` po řádcích). D1 lze testovat přes `--local` flag pro emulaci.
+
+## Smoke test po deploy
+
+```bash
+curl -X POST https://form.startovacihub.cz/submit \
+  -H "Content-Type: application/json" \
+  -H "Origin: https://startovacihub.cz" \
+  -d '{
+    "koncept": "privatni",
+    "format": "1kk",
+    "mesic": "2026-09",
+    "delka": "6-12",
+    "jmeno": "Test",
+    "prijmeni": "Test",
+    "telefon": "+420 000 000 000",
+    "email": "test@example.com",
+    "gdpr": true,
+    "cf-turnstile-response": "XXXX.DUMMY.TOKEN.XXXX"
+  }'
+```
+
+Bez platného Turnstile tokenu vrátí 400. Pro plný E2E test použijte frontend `/rezervace/` přímo (po dokončení Phase 5b wiring).
+
 ## Front-end napojení (Phase 5b)
 
 `src/pages/rezervace/index.astro` aktuálně dělá `console.log(payload)` v submit

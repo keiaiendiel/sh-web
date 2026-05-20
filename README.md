@@ -1,135 +1,181 @@
-# sh-web — Startovací Hub Klecany
+# sh-web
 
-Static site for **Startovací Hub Klecany**, the first phase of the VPD1 záměr by VPD under OSA II, z.s.
-
-**Live preview:** https://keiaiendiel.github.io/sh-web/ (GitHub Pages, auto-deployed on every push to master)
-**Future canonical:** `startovacihub.cz` (after DNS cutover)
-
-> **Status (2026-05-13):** post-restructure, 6 fází + vault sync dokončeno. 26 stránek, kompletní obsah ze Site_Copy.md, Cloudflare Worker scaffold pro form backend (deploy pending). Detail v `CLAUDE.md`. Master copy a strategy v `/Users/kindl/kindl-vault/Projects/SH_Web/`, lokální mirror v `CONTENT.md`.
+Statický web Startovacího Hubu Klecany. Astro 6, deploy na GitHub Pages, kanonická doména po DNS cutoveru: `startovacihub.cz`.
 
 ## Stack
 
-- Astro 6.1.8, static output, Czech-only.
-- Atyp Special font, K0–K100 monochrome scale, **plum accent `#5A2A5F`** (1 of 8 OSA tricolor accent colors).
-- Light radii (`--radius-input: 7px`) for inputs, CTA buttons, and cards; sharp `0` everywhere else.
-- MDX content collections: `apartmany` (5 privátních), `coliving` (4 typy), `faq` (10), `org` (OSA II identita).
-- Vanilla CSS, no client framework, no React island. Tiny inline `<script is:inline>` islands pro header drawer a 5-step wizard.
-- Cloudflare Worker scaffold v `worker/` pro form backend (Turnstile + Resend + D1 EU), deploy přes Wrangler. Detail v `worker/README.md`.
+- Astro 6.1.8, static output, čeština.
+- `@astrojs/mdx` + `@astrojs/sitemap`.
+- Vanilla CSS s design tokens. Žádný framework, žádný bundler na klientu.
+- `lucide-static` pro ikony (server-side rendered SVG).
+- `sharp` pro image optimalizaci (dev script).
+- Atyp Special font, WOFF2 self-hosted v `public/fonts/`.
+- Leaflet 1.9.4 z unpkg CDN (jen `/okoli/` a mapa v patičce).
+- Cloudflare Worker v `worker/` pro form backend — Turnstile + Resend + D1.
 
-## Pages (26)
+## Repo layout
 
-**Landing + core:**
-- `/` Landing — hero rotace 5 záběrů (5 s/slide, cross-fade), „Co Hub nabízí" 4 karty s horizontal scroll-snap gallery (Ubytování / Coworking / Komunita / Doprava), 8-section nav grid, masterplan, finální plum CTA. Site-wide badge „V projektové přípravě" v hlavičce per Marek 2026-05-12 (neutralizuje vábivou reklamu podle Přílohy č. 1 písm. d) ZOOS).
-- `/ubytovani/` Overview s 9 kartami ve 2 skupinách: 4 co-living (kapsle 1L, jedno lůžko, kapsle 2L, dvoulůžko) + 5 privátních apartmánů (1+kk až 5+kk).
+```
+sh-web/
+├── astro.config.mjs        # site + transitional base /sh-web/
+├── tsconfig.json           # extends astro/tsconfigs/strict
+├── package.json            # 4 prod deps, Node ≥22.12
+├── public/
+│   ├── fonts/              # Atyp Special WOFF2
+│   ├── images/hub/         # produkční fotky (areal, hero, ubytovani, …)
+│   ├── favicon.svg, apple-touch-icon.png, manifest.webmanifest
+│   ├── robots.txt          # disallow /druzstvo/ a /rezervace/?
+│   └── CNAME               # GitHub Pages domain pin
+├── src/
+│   ├── content.config.ts   # Zod schémata 4 collections
+│   ├── content/
+│   │   ├── apartmany/      # 5 MDX (1+kk až 5+kk)
+│   │   ├── coliving/       # 4 MDX (kapsle, lůžka)
+│   │   ├── faq/            # 1 JSON (10 otázek)
+│   │   └── org/            # 1 JSON (OSA II identita pro JSON-LD)
+│   ├── components/         # Astro komponenty (Gallery, Icon, SubpageHero, …)
+│   ├── layouts/Base.astro  # html/head, JSON-LD LocalBusiness, BreadcrumbList
+│   ├── pages/              # 23 stránek (viz Routes níže)
+│   ├── styles/             # tokens.css, kit.css, motion.css, ribbon.css
+│   └── utils/url.ts        # withBase() helper pro transitional base path
+├── scripts/                # lint + image pipeline (Node ESM)
+├── worker/                 # Cloudflare Worker scaffold (form backend)
+├── .github/workflows/      # deploy-pages.yml
+└── _incoming/              # staging area pro klientovy fotky (gitignored)
+```
 
-**9 detail pages s plnou cenovkou + per-osoba ekvivalentem:**
-- `/ubytovani/co-living/<slug>/` × 4: `kapsle-single` (3 000 Kč), `jedno-luzko` (3 500 Kč), `kapsle-double` (4 500 Kč), `dvouluzko` (6 000 Kč). Cenovka anchor + 3-tier slevy (3+/6+/12+ měs).
-- `/ubytovani/privatni/<slug>/` × 5: `1kk` (9 500 Kč), `2kk` (14 000), `3kk` (18 000), `4kk` (22 000), `5kk` (25 000).
-- `/kapsle/` dedikovaný A/B test landing per Plan.md (reframing kapsle, ne hostel).
+## Content collections (`src/content.config.ts`)
 
-**8 obsahových sekcí (Phase 4):**
-- `/coworking/` — 5 tarifů (sál 2 900 Kč/měs rezidenti zdarma, fixní stůl 4 200, kancelář pro 4 15 000, zasedačka 350/hod, ateliér 6 500, dílna 490 + 150/hod CNC).
-- `/komunita/` — wellness (bazén + sauna), park (zahrádky, gril, hřiště), gastro (kantýna, restaurace, pekárna v B), klubovna v C.
-- `/okoli/` — 9 podsekcí Klecan (vzdělávání, zdravotnictví, obchody, doprava, sport, brigády, kavárny+kultura, co tu není).
-- `/doprava/` — Hub-shuttle 5 jízd v ceně, bus 374 PID, Hub-taxi 1 jízda v ceně, auto+parkování, kolo+pěšky, plánovaná tramvaj 2029-2030 + cyklolávka 2027-2028.
-- `/stipendia/` — 4 role: rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor. Pilot podzim 2026.
-- `/galerie/` — 4 foto-skupiny (z výstavby, areál v ročních obdobích, tváře komunity, akce 2026+). Fotky se postupně doplňují.
-- `/novinky/` — blog model, šablona prvního článku, rytmus dalších.
-- `/kontakty/` — OSA II identita (IČO 270 26 345) + 4 osoby (Marek, rezervační, stipendijní, tisk) + adresa + GDPR.
-
-**Service + legal:**
-- `/rezervace/` — 5-step wizard (koncept → konfigurace → termín → kontakt → GDPR) s živým sidebar (cena podle vybraného formátu + délky, „vše v ceně" checklist). URL pre-fill `?typ=<slug>`. Backend `worker/` (scaffold).
-- `/faq/` — 10 nejčastějších otázek (A.1-A.10 z Site_Copy.md).
-- `/metodika-srovnani/` — povinná metodika cenového srovnání per § 2980 OZ.
-- `/gdpr/` — zásady zpracování osobních údajů.
-- `/druzstvo/` (skrytá, `noindex`) — manuální nasměrování pro vlastnické bydlení.
-- `/404`.
-
-Sub-page hero pattern: eyebrow + H1 + lede na dark image bg s `filter: brightness(0.65-0.7)` a bottom-heavy black scrim.
-
-## Audience
-
-The site funnels **residents** — pracující studenti, OSVČ, mladí kreativci, začínající podnikatelé. Voice = „komunita + kreativa + pragmatic value": Klecany s pražským dosahem, méně než centrum, vlastní kapsle nebo privátní 1+kk. Investors get a footer pointer to the investor microsite [keiaiendiel.github.io/vpd-web/vpd1/](https://keiaiendiel.github.io/vpd-web/vpd1/) — no homepage real estate.
-
-## Pricing (draft, orientační)
-
-| Typ | Max lůžek v ceně | Anchor cena | Sleva 3+ / 6+ / 12+ měs |
+| Collection | Type | Files | Použití |
 |---|---|---|---|
-| Kapsle (jednolůžková, sdílený pokoj) | 1 | od 4 500 Kč/měs | −5 / −15 / −25 % |
-| Dvoulůžková kapsle (sdílený pokoj) | 2 | od 6 500 Kč/měs | −5 / −15 / −25 % |
-| Privátní 1+kk · 2 lůžka (21 m²) | 2 | od 9 500 Kč/měs | −5 / −10 / −20 % |
-| Privátní 1+kk · 3 lůžka (21 m²) | 3 | od 11 500 Kč/měs | −5 / −10 / −20 % |
-| Privátní 2+kk · 4 lůžka (42 m²) | 4 | od 16 000 Kč/měs | −5 / −10 / −20 % |
-| Privátní 3+kk · 6 lůžek (63 m²) | 6 | od 21 000 Kč/měs | −5 / −10 / −20 % |
+| `apartmany` | MDX | 5 | `/ubytovani/privatni/<slug>/` detail pages |
+| `coliving` | MDX | 4 | `/ubytovani/co-living/<slug>/` detail pages |
+| `faq` | JSON | 1 | `/faq/` + landing teaser |
+| `org` | JSON | 1 | JSON-LD na všech stránkách (LocalBusiness) |
 
-Pricing zdroj: Compass deep-research z 5/2026 (50+ pražských referenčních zdrojů — UK/ČVUT/ČZU/VŠCHT/VŠE koleje, FIZZ Holešovice, Youston, Sharedd, Coliving Prague, klasické nájmy P4/P8/P9, Klecany, Roztoky, Zdiby). Klient finalizuje před public launchem.
+Schémata jsou Zod-validovaná v `src/content.config.ts`. Cenová data, slugs, kapacita a galerie žijí ve frontmatteru MDX souborů.
+
+## Routes (23)
+
+| Sekce | Cesty |
+|---|---|
+| Landing | `/` |
+| Ubytování | `/ubytovani/`, `/ubytovani/privatni/<slug>/` ×5, `/ubytovani/co-living/<slug>/` ×4, `/kapsle/` |
+| Obsah | `/coworking/`, `/komunita/`, `/okoli/`, `/doprava/`, `/stipendia/`, `/kontakty/`, `/faq/` |
+| Formulář | `/rezervace/` |
+| Legal | `/gdpr/`, `/metodika-srovnani/` |
+| Skryté | `/druzstvo/` (noindex, manuální linky), `/404` |
+
+Dynamic routes pro detail pages tahají data z odpovídající content collection.
+
+## Styly
+
+| Soubor | Obsah |
+|---|---|
+| `src/styles/tokens.css` | CSS proměnné: barvy (K0–K100 + plum `#5A2A5F`), typografie, spacing, radius (`--radius-input: 7px`). |
+| `src/styles/kit.css` | Reusable patterny: `.sec-feature`, `.sec-table`, `.sec-hero`, `.ub-card`, `.rez-*` (wizard), gallery, buttons, dropdown nav. |
+| `src/styles/motion.css` | Hero carousel, reveal-on-scroll, pulse animace. |
+| `src/styles/ribbon.css` | SVG ribbon dekorace pro placeholder boxy. |
+
+Interaktivita je vanilla JS v malých inline `<script is:inline>` islands přímo v Astro souborech — žádný klientský bundle.
 
 ## Reservation form
 
-3-section flow na `/rezervace/`:
+`/rezervace/` je 5-step wizard (vanilla JS state machine, inline v `<script>`):
 
-1. **Typ ubytování + termín + délka** — radio cards 6 typů + „Ještě nevím, poraďte mi"; month picker; select 1–3 / 3–6 / 6–12 / 12+ měs.
-2. **Kontakt** — jméno, e-mail, telefon (všechno povinné, rezervační oddělení volá), volitelná poznámka, volitelný stipendium checkbox.
-3. **Souhlas** — GDPR checkbox.
+1. Koncept (privátní / co-living / „nevím, poraďte").
+2. Konfigurace prostoru (radio karty per koncept, data z `apartmany` + `coliving` collections).
+3. Termín + stipendium toggle.
+4. Kontakt (telefon povinný).
+5. Rekapitulace + GDPR.
 
-URL pre-fill `?typ=<slug>` z RoomCard tlačítek „Rezervovat termín". Submit `console.log`s payload + zobrazí success state „Zavoláme do 24 hodin". Backend wiring deferred.
+Sidebar zobrazuje aktuální cenu + „vše v ceně" checklist. URL pre-fill: `/rezervace/?typ=<slug>` z RoomCard tlačítek na overview stránce.
 
-## Local development
+Submit zatím dělá `console.log(payload)` a zobrazí success state. Frontend napojení na Worker viz níže.
 
-After cloning the repo:
+## Cloudflare Worker (`worker/`)
+
+TypeScript Worker pro `POST /submit`:
+
+- Turnstile invisible captcha verifikace.
+- Validace povinných polí + e-mail regex + 500-char limit na poznámku.
+- Resend e-mail notifikace na `NOTIFY_EMAIL`.
+- D1 (EU region) persistence per `worker/schema.sql`.
+- SHA-256 hash IP pro rate limiting (GDPR-friendly, raw IP se neukládá).
+- CORS allowlist: `startovacihub.cz`, `www.startovacihub.cz`, `keiaiendiel.github.io`.
+
+Detailní deploy postup je v `worker/README.md`. Pre-deploy checklist:
+
+1. `wrangler login`
+2. `wrangler d1 create sh-web-rezervace` → zkopírovat `database_id` do `worker/wrangler.toml` (oba placeholdery `REPLACE_WITH_D1_ID`).
+3. `pnpm --filter=./worker d1:init` (inicializuje schema).
+4. Vytvořit Turnstile site v Cloudflare dashboardu (hostnames `startovacihub.cz`, `keiaiendiel.github.io`, mode invisible).
+5. `wrangler secret put TURNSTILE_SECRET` / `RESEND_API_KEY` / `NOTIFY_EMAIL`.
+6. Verifikovat doménu v Resend dashboardu (DKIM + SPF).
+7. `pnpm --filter=./worker deploy`.
+8. V CF dashboardu `Workers > sh-web-form > Triggers > Custom Domains` přidat `form.startovacihub.cz`.
+
+Frontend wiring (po deploy Workeru) — `src/pages/rezervace/index.astro`:
+
+- Přidat Turnstile widget script + DOM placeholder.
+- Nahradit `console.log(payload)` za `fetch('https://form.startovacihub.cz/submit', { method: 'POST', body: JSON.stringify({ ...payload, 'cf-turnstile-response': token }) })`.
+- Větvit success/error state podle response statusu.
+
+## Lokální vývoj
 
 ```bash
-pnpm install         # install dependencies (once)
-pnpm dev             # start the dev server on http://localhost:4321
+pnpm install
+pnpm dev        # http://localhost:4321 (4322 přes .claude/launch.json)
+pnpm build      # writes dist/
+pnpm preview    # serves dist/
 ```
 
-The repo carries `.claude/launch.json` so the Claude Code agent can spin up the same dev server via the `mcp__Claude_Preview__preview_start` tool with `name: "sh-web"` (binds to port 4322 by default).
+## Scripts
 
-### Other scripts
-
-| | |
+| Příkaz | Co dělá |
 |---|---|
-| `pnpm build` | Static build to `dist/` |
-| `pnpm preview` | Serve `dist/` (post-build verification) |
-| `pnpm migrate:images` | One-shot image migration from `../../12 Startovaci Hub/image/` |
-| `pnpm optimize:images` | Idempotent re-encode of `aerial/ exterior/ interior/ hero/` files > 600 KB to JPEG q=80 mozjpeg, max edge 1600 px (auto-renames `.png` → `.jpg`). |
-| `pnpm lint` | Run editorial + links lints |
-| `pnpm lint:editorial` | Voice/style lint over `src/content/**/*.mdx` and page bodies |
-| `pnpm lint:links` | HEAD-check external URLs |
-| `pnpm lint:weight` | Per-page eager-weight budget against `dist/` |
+| `pnpm lint` | `lint:editorial` + `lint:links` |
+| `pnpm lint:editorial` | Voice/style lint na MDX + Astro page bodies (`scripts/lint-editorial.mjs`) |
+| `pnpm lint:links` | HEAD check externích URLs |
+| `pnpm lint:weight` | Per-page eager-load budget na `dist/` |
+| `pnpm migrate:images` | One-shot import fotek z externí složky |
+| `pnpm optimize:images` | Re-encode >600 KB na q=80 mozjpeg, max edge 1600 px, auto `.png` → `.jpg` |
 
-All three lints run on every CI push to master. They must pass; the deploy-pages workflow also blocks on them.
+CI volá `lint:editorial` + `build` + `lint:weight`. Všechny tři musí projít, jinak deploy spadne.
 
-## Pushing to GitHub
+## CI / Deploy
 
-The `master` branch is the deploy branch — every push triggers `.github/workflows/deploy-pages.yml` which lints, builds, and deploys to GitHub Pages at `keiaiendiel.github.io/sh-web/`.
+`.github/workflows/deploy-pages.yml` — push na `master` spustí:
 
-```bash
-# 1. Verify locally
-pnpm build && pnpm lint:editorial && pnpm lint:weight
+1. `pnpm install`
+2. `pnpm lint:editorial`
+3. `pnpm build` (s `base: /sh-web/`)
+4. `pnpm lint:weight`
+5. `actions/deploy-pages@v4`
 
-# 2. Stage specific files (avoid `git add -A`)
-git status
-git add src/pages/index.astro src/components/Header.astro    # …or whichever files changed
+Node 22, všechny actions `@v4`.
 
-# 3. Commit with a conventional-commit prefix
-git commit -m "feat(hub): describe what changed and why"
+## DNS cutover (startovacihub.cz)
 
-# 4. Push — CI runs and deploys in ~2 minutes
-git push origin master
-```
+Až bude doména připravená:
 
-Watch the action at [github.com/keiaiendiel/sh-web/actions](https://github.com/keiaiendiel/sh-web/actions). Recent commits use the prefixes `feat(hub):`, `docs(hub):`, `fix(hub):`, `refactor(hub):`, `content(hub):`, `style(hub):`, `ci(hub):` — match these for consistency.
+1. `astro.config.mjs` — `site: 'https://startovacihub.cz'`, smazat řádek `base: '/sh-web/'`.
+2. `src/styles/tokens.css` — find/replace `/sh-web/fonts/` → `/fonts/`.
+3. `public/CNAME` — obsah na `startovacihub.cz`.
+4. `src/utils/url.ts` — `withBase()` se stane no-op (vrací path beze změny).
+5. Worker CORS whitelist obsahuje `startovacihub.cz` (už ano).
 
-## Deferred to a programmer
+## Konvence
 
-- **Form submission backend** — validation, anti-spam (e.g. honeypot or hCaptcha), autoresponse, storage. The reservation payload shape is documented in [src/components/ResidentForm.astro](src/components/ResidentForm.astro).
-- **Analytics + cookie consent** — Plausible or GoatCounter. Out of scope for v1.
-- **DNS cutover to `startovacihub.cz`** — flip `site` in `astro.config.mjs`, drop the `base` line, find/replace `/sh-web/fonts/` → `/fonts/` in `tokens.css`. CI auto-deploys.
+- Conventional commits s `(hub)` scopem: `feat(hub):`, `fix(hub):`, `refactor(hub):`, `docs(hub):`, `content(hub):`, `style(hub):`, `ci(hub):`, `chore(hub):`.
+- Vždy `git add <konkrétní soubory>`, nikdy `git add -A` (kvůli image staging adresářům a `.DS_Store` risku).
+- `master` je deploy branch — každý push triggeruje CI + deploy.
+- Žádný klientský framework (žádný React, Vue, htmx). Interaktivita = malé inline `<script is:inline>` islands.
 
-## Operator credit
+## Co zbývá pro public launch
 
-Marek Semerád, předseda OSA II, z.s. — `vpd@osa2.cz`.
-Parent organisation: [alternativa2.info](https://www.alternativa2.info/).
-
-For deep operational context (decisions, gotchas, layout details, polish history) see [CLAUDE.md](CLAUDE.md).
+1. Cloudflare Worker — deploy podle postupu výše.
+2. Frontend wiring formuláře na Worker endpoint.
+3. DNS cutover na `startovacihub.cz`.
+4. Doplnit chybějící produkční fotky (placeholder slots v Gallery).
+5. Analytics (Plausible / GoatCounter — out of scope v1, otázka pro klienta).
