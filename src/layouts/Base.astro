@@ -7,6 +7,7 @@ import RevealOnScroll from '../components/RevealOnScroll.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingAction from '../components/FloatingAction.astro';
+import HueSlider from '../components/HueSlider.astro';
 import { ClientRouter } from 'astro:transitions';
 import { getEntry } from 'astro:content';
 import { withBase } from '../utils/url';
@@ -196,6 +197,7 @@ const breadcrumbJsonLd = crumbs.length > 1
     <main id="main" transition:animate="fade"><slot /></main>
     <Footer transition:persist />
     <FloatingAction transition:persist />
+    <HueSlider transition:persist />
     <RevealOnScroll />
 
     {/*
@@ -297,11 +299,19 @@ const breadcrumbJsonLd = crumbs.length > 1
 <style is:global>
   *, *::before, *::after { box-sizing: border-box; }
   html {
-    background: var(--bg, var(--k-0));
+    /* Pozadí html ladí s aktuálním hero, aby macOS / iOS overscroll bounce
+       nahoře neukazoval bílou plochu „za stránkou". Default plum-deep
+       (landing tmavé hero + footer), na light heroes (cream variant) html
+       bg = cream přes :has(). */
+    background: var(--plum-deep);
     color: var(--fg, var(--k-100));
-    /* Smooth scroll pro #main skip-link target a anchor links. */
     scroll-behavior: smooth;
     scroll-padding-top: 80px;
+    overscroll-behavior-y: none;
+  }
+  html:has(body[data-hero-tone="light"]) { background: var(--cream); }
+  body {
+    background: var(--bg);
   }
   body {
     margin: 0;

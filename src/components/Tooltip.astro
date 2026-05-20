@@ -14,7 +14,7 @@ const id = `tt-${Math.random().toString(36).slice(2, 9)}`;
 <style>
   .hub-tt { position: relative; display: inline-block; margin-left: 6px; }
   .hub-tt__trigger { width: 18px; height: 18px; border-radius: 999px; border: 1px solid var(--border-muted); background: transparent; font-size: 11px; cursor: pointer; line-height: 1; }
-  .hub-tt__bubble { position: absolute; top: calc(100% + 6px); left: 0; min-width: 240px; max-width: 320px; padding: 12px 14px; background: var(--k-100); color: var(--bg); font-size: 13px; line-height: 1.45; border-radius: var(--radius-input); box-shadow: 0 6px 24px rgba(0,0,0,0.18); display: none; z-index: 5; }
+  .hub-tt__bubble { position: absolute; top: calc(100% + 6px); left: 0; min-width: 240px; max-width: 320px; padding: 12px 14px; background: var(--plum-deep); color: var(--bg); font-size: 13px; line-height: 1.45; border-radius: var(--radius-input); box-shadow: 0 6px 24px rgba(0,0,0,0.18); display: none; z-index: 5; }
   .hub-tt[data-open='true'] .hub-tt__bubble { display: block; }
   @media (hover: hover) and (pointer: fine) {
     .hub-tt:hover .hub-tt__bubble { display: block; }

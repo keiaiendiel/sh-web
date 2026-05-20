@@ -43,6 +43,19 @@
   to { stroke-dashoffset: 0; }
 }
 
+/* Idle breathing — applied to any ribbon-style path after its snake-draw
+   reveal completes. Per 00-SPEC.html § Photo backdrop (řádky 416-419):
+   opacity oscillates 0.42 ↔ 0.72 over 7s ease-in-out infinite.
+   Implementations apply this via animation-name in their own .is-revealed
+   state; here we just expose the keyframe + a generic helper class. */
+@keyframes ribbon-breathe {
+  0%, 100% { opacity: 0.42; }
+  50%      { opacity: 0.72; }
+}
+.ribbon-breathe {
+  animation: ribbon-breathe 7s ease-in-out infinite;
+}
+
 /* ---------- Stroke color variants ---------- */
 .ribbon--stroke-plum path { stroke: var(--accent); }
 .ribbon--stroke-rose path { stroke: var(--rose); }
@@ -53,7 +66,7 @@
 .ribbon-bg--cream { background: var(--cream); color: var(--fg); }
 .ribbon-bg--deep  { background: var(--plum-deep); color: #fff; }
 .ribbon-bg--rose  { background: var(--rose); color: var(--plum-deep); }
-.ribbon-bg--ink   { background: var(--k-100); color: var(--cream); }
+.ribbon-bg--ink   { background: var(--plum-deep); color: var(--cream); }
 
 /* ---------- Banner shell ---------- */
 .ribbon-banner {
@@ -113,7 +126,7 @@
 a.ribbon-banner:hover,
 a.ribbon-banner:focus-visible {
   transform: translateY(-3px);
-  box-shadow: 0 18px 48px rgba(90, 42, 95, 0.18);
+  box-shadow: 0 18px 48px hsl(var(--hue) 39% 27% / 0.18);
   outline: none;
 }
 a.ribbon-banner:focus-visible {
@@ -128,5 +141,6 @@ a.ribbon-banner:focus-visible {
     stroke-dashoffset: 0;
     animation: none;
   }
+  .ribbon-breathe { animation: none; }
   a.ribbon-banner { transition: none; }
 }

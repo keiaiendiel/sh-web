@@ -5,6 +5,7 @@ import { withBase } from '../../utils/url';
 import RoomCard from '../../components/RoomCard.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
+import CrossLinkPair from '../../components/CrossLinkPair.astro';
 
 const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
 const coliving = (await getCollection('coliving')).sort((a, b) => a.data.order - b.data.order);
@@ -35,7 +36,10 @@ const colivingKapacita: Record<string, string> = {
     sub="Pět apartmánů 1+kk až 5+kk a čtyři co-living formáty. V ceně energie, internet, pět jízd Hub-shuttle a týdenní poukaz do sauny."
     variant="deep"
     ribbonPath="M 1340 120 C 1640 80, 1900 240, 1860 480 C 1820 720, 1480 760, 1380 580"
+    ribbonPathSecondary="M 220 220 C 480 160, 720 380, 900 280 C 1080 200, 1240 320, 1180 480"
     thickness={64}
+    thicknessSecondary={36}
+    opacitySecondary={0.5}
     jumps={[
       { label: 'Co-living', href: '#ub-coliving-title' },
       { label: 'Privátní apartmány', href: '#ub-privatni-title' },
@@ -104,10 +108,17 @@ const colivingKapacita: Record<string, string> = {
     cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
     variant="deep"
   />
+
+  <CrossLinkPair
+    items={[
+      { eyebrow: 'Komunita',  title: 'Bazén, <em>sauna</em>, jídelna a&nbsp;klubovna.', href: '/komunita/', variant: 'ink' },
+      { eyebrow: 'Okolí',     title: 'Klecany, <em>15 km</em> od&nbsp;Prahy.',         href: '/okoli/',    variant: 'cream' },
+    ]}
+  />
 </Base>
 
 <style>
-  .ub-hero { position: relative; isolation: isolate; min-height: 50vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-7); color: #fff; background: var(--k-100); overflow: hidden; }
+  .ub-hero { position: relative; isolation: isolate; min-height: 50vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-7); color: #fff; background: var(--plum-deep); overflow: hidden; }
   .ub-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.65); }
   .ub-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.1) 90%); z-index: -1; }
   .ub-hero__inner { max-width: var(--container-wide); margin: 0 auto; width: 100%; }
@@ -136,7 +147,7 @@ const colivingKapacita: Record<string, string> = {
   .ub-hero__jump:hover,
   .ub-hero__jump:focus-visible {
     background: #fff;
-    color: var(--k-100);
+    color: var(--plum-deep);
     border-color: #fff;
     outline: none;
   }

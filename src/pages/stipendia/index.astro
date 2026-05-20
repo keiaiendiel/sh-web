@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
+import CrossLinkPair from '../../components/CrossLinkPair.astro';
 import { withBase } from '../../utils/url';
 
 const heroJumps = [
@@ -20,8 +21,9 @@ const heroJumps = [
     eyebrow="Stipendijní programy"
     title="Pro lidi <em>s projektem</em>."
     sub="Bydlení nebo zvýhodněná cena za konkrétní vstup do života Hubu: dílny, péče o areál, vlastní projekt s veřejným výstupem, vývoj nástroje pro komunitu."
-    variant="rose"
-    ribbonPath="M 1480 80 C 1660 60, 1720 200, 1620 260 C 1540 300, 1460 200, 1560 140"
+    variant="cream"
+    ribbonPath="M 1080 180 C 1340 80, 1640 240, 1860 180 C 2020 140, 2080 360, 1920 460 C 1740 560, 1480 460, 1480 580"
+    thickness={36}
     jumps={heroJumps}
     ariaId="stipendia-hero"
   />
@@ -92,5 +94,12 @@ const heroJumps = [
     lede={'V rezervačním formuláři zaškrtněte „Mám zájem o pobytové stipendium" a my se ozveme s podmínkami a termíny prvního kola.'}
     cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
     variant="deep"
+  />
+
+  <CrossLinkPair
+    items={[
+      { eyebrow: 'Ubytování', title: 'Apartmán, <em>nebo</em> co-living.', href: '/ubytovani/', variant: 'deep' },
+      { eyebrow: 'Coworking', title: 'Sál, ateliér, <em>dílna</em>.',      href: '/coworking/', variant: 'cream' },
+    ]}
   />
 </Base>

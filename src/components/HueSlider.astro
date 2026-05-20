@@ -1,0 +1,248 @@
+---
+/*
+ * HueSlider , dev tool pro tuning --hue CSS variable. Floating widget
+ * bottom-left, pull-tab pro show/hide. Hodnoty 0-360 (default 294 = plum).
+ * Po dokončení tuningu klient řekne přesnou hodnotu, zafixujeme v tokens.css
+ * a komponentu odstraníme z Base.astro.
+ */
+---
+<aside class="hue-slider" data-hue-slider hidden>
+  <button type="button" class="hue-slider__tab" data-hue-tab aria-controls="hue-slider-panel" aria-expanded="false">
+    Tint
+  </button>
+  <div class="hue-slider__panel" id="hue-slider-panel" hidden>
+    <header class="hue-slider__head">
+      <span class="hue-slider__title">Hue tint</span>
+      <button type="button" class="hue-slider__reset" data-hue-reset aria-label="Reset na výchozí (294)">Reset</button>
+    </header>
+    <label class="hue-slider__row">
+      <input type="range" min="0" max="360" step="1" value="240" class="hue-slider__input" data-hue-input />
+    </label>
+    <div class="hue-slider__meta">
+      <span class="hue-slider__value" data-hue-value>240</span>
+      <span class="hue-slider__hint">deg</span>
+    </div>
+    <div class="hue-slider__swatches" aria-hidden="true">
+      <span class="hue-slider__swatch" style="background: hsl(var(--hue) 39% 27%)" title="--accent"></span>
+      <span class="hue-slider__swatch" style="background: hsl(var(--hue) 41% 13%)" title="--plum-deep"></span>
+      <span class="hue-slider__swatch" style="background: hsl(calc(var(--hue) + 44) 30% 70%)" title="--rose"></span>
+    </div>
+  </div>
+</aside>
+
+<script is:inline>
+  (function () {
+    if (window.__hubHueBound) return;
+    window.__hubHueBound = true;
+
+    var STORAGE_KEY = 'hub-hue';
+    var DEFAULT_HUE = 240;
+
+    function applyHue(h) {
+      document.documentElement.style.setProperty('--hue', String(h));
+    }
+
+    function bind() {
+      var root = document.querySelector('[data-hue-slider]');
+      if (!root || root.dataset.bound === '1') return;
+      root.dataset.bound = '1';
+      root.removeAttribute('hidden');
+
+      var tab = root.querySelector('[data-hue-tab]');
+      var panel = root.querySelector('#hue-slider-panel');
+      var input = root.querySelector('[data-hue-input]');
+      var value = root.querySelector('[data-hue-value]');
+      var resetBtn = root.querySelector('[data-hue-reset]');
+
+      var saved = parseInt(localStorage.getItem(STORAGE_KEY) || '', 10);
+      var initial = Number.isFinite(saved) ? saved : DEFAULT_HUE;
+      input.value = String(initial);
+      value.textContent = String(initial);
+      applyHue(initial);
+
+      tab.addEventListener('click', function () {
+        var open = tab.getAttribute('aria-expanded') === 'true';
+        tab.setAttribute('aria-expanded', open ? 'false' : 'true');
+        if (open) panel.setAttribute('hidden', '');
+        else panel.removeAttribute('hidden');
+      });
+
+      input.addEventListener('input', function () {
+        var h = input.value;
+        value.textContent = h;
+        applyHue(h);
+        try { localStorage.setItem(STORAGE_KEY, h); } catch (e) {}
+      });
+
+      resetBtn.addEventListener('click', function () {
+        input.value = String(DEFAULT_HUE);
+        value.textContent = String(DEFAULT_HUE);
+        applyHue(DEFAULT_HUE);
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      });
+    }
+
+    document.addEventListener('astro:page-load', bind);
+
+    // Eager apply z localStorage před page-load, aby se nepřebliklo z default.
+    try {
+      var pre = parseInt(localStorage.getItem(STORAGE_KEY) || '', 10);
+      if (Number.isFinite(pre)) applyHue(pre);
+    } catch (e) {}
+  }());
+</script>
+
+<style>
+  /* Slider defaultně skrytý. Aktivace: smazat tuto display:none rule
+     nebo přidat .is-on class. Klient si vybral --hue 240 a tuning už
+     není potřeba, komponenta zůstává v repu pro budoucí re-tuning. */
+  .hue-slider {
+    display: none;
+    position: fixed;
+    left: clamp(12px, 2vw, 24px);
+    bottom: clamp(12px, 2vw, 24px);
+    z-index: 50;
+    font-family: var(--font-sans);
+    align-items: flex-end;
+    gap: 8px;
+    pointer-events: auto;
+  }
+  .hue-slider.is-on { display: flex; }
+  .hue-slider__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: hsl(var(--hue) 41% 13% / 0.92);
+    color: #fff;
+    font: 600 11px / 1 var(--font-sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid hsl(var(--hue) 39% 27% / 0.6);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: background 200ms ease, transform 200ms ease;
+  }
+  .hue-slider__tab:hover { transform: translateY(-1px); }
+  .hue-slider__tab[aria-expanded="true"] {
+    background: hsl(var(--hue) 39% 27%);
+  }
+  .hue-slider__panel {
+    background: hsl(var(--hue) 41% 13% / 0.94);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    border-radius: 10px;
+    border: 1px solid hsl(var(--hue) 39% 27% / 0.6);
+    padding: 12px 14px 14px;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 12px 32px hsl(var(--hue) 41% 13% / 0.4);
+  }
+  .hue-slider__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .hue-slider__title {
+    font: 600 11px / 1 var(--font-sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rose);
+  }
+  .hue-slider__reset {
+    font: 500 11px / 1 var(--font-sans);
+    color: rgba(255, 255, 255, 0.7);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 180ms ease, background 180ms ease;
+  }
+  .hue-slider__reset:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .hue-slider__row {
+    display: flex;
+    align-items: center;
+  }
+  .hue-slider__input {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(
+      to right,
+      hsl(0 60% 50%),
+      hsl(60 60% 50%),
+      hsl(120 60% 50%),
+      hsl(180 60% 50%),
+      hsl(240 60% 50%),
+      hsl(300 60% 50%),
+      hsl(360 60% 50%)
+    );
+    outline: none;
+    cursor: pointer;
+  }
+  .hue-slider__input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid hsl(var(--hue) 41% 13%);
+    box-shadow: 0 2px 6px hsl(var(--hue) 41% 13% / 0.6);
+    cursor: grab;
+  }
+  .hue-slider__input::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid hsl(var(--hue) 41% 13%);
+    box-shadow: 0 2px 6px hsl(var(--hue) 41% 13% / 0.6);
+    cursor: grab;
+  }
+  .hue-slider__meta {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .hue-slider__value {
+    font: 600 16px / 1 var(--font-mono, var(--font-sans));
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+  .hue-slider__hint {
+    font: 500 11px / 1 var(--font-sans);
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .hue-slider__swatches {
+    display: flex;
+    gap: 6px;
+  }
+  .hue-slider__swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  @media (max-width: 760px) {
+    .hue-slider { bottom: 84px; left: 12px; } /* zvednout nad FloatingAction (bottom-right) */
+    .hue-slider__panel { min-width: 200px; }
+  }
+
+  @media print {
+    .hue-slider { display: none; }
+  }
+</style>

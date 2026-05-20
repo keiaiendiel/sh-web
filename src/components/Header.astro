@@ -156,7 +156,7 @@ const isHome = current === withBase('/');
       var header = document.querySelector('.hub-header--overlay');
       if (!header || !('IntersectionObserver' in window)) return;
       if (header.dataset.overlayBound === '1') return;
-      var hero = document.querySelector('.lp-hero, .ub-hero, .sec-hero, .apt-hero, .kp-hero');
+      var hero = document.querySelector('.lp-hero, .ub-hero, .sec-hero, .apt-hero, .kp-hero, .subpage-hero');
       if (!hero) {
         header.classList.add('is-stuck');
         return;
@@ -185,7 +185,7 @@ const isHome = current === withBase('/');
     color: var(--fg);
   }
   .hub-header--dark {
-    background: var(--k-100);
+    background: var(--plum-deep);
     color: var(--k-0);
   }
 
@@ -207,7 +207,7 @@ const isHome = current === withBase('/');
   .hub-header--overlay .hub-header__cta::after { background: #fff; }
   .hub-header--overlay .hub-header__cta:hover,
   .hub-header--overlay .hub-header__cta:focus-visible,
-  .hub-header--overlay .hub-header__cta[aria-current='page'] { color: var(--k-100); }
+  .hub-header--overlay .hub-header__cta[aria-current='page'] { color: var(--plum-deep); }
   .hub-header--overlay .hub-header__burger { color: #fff; }
 
   .hub-header--overlay.is-stuck {
@@ -337,7 +337,7 @@ const isHome = current === withBase('/');
   .hub-header--dark .hub-header__cta:hover,
   .hub-header--dark .hub-header__cta:focus-visible,
   .hub-header--dark .hub-header__cta[aria-current='page'] {
-    color: var(--k-100);
+    color: var(--plum-deep);
     outline: none;
   }
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta { color: var(--accent); border-color: var(--accent); }

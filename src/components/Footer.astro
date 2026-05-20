@@ -72,7 +72,7 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       el.dataset.mapBound = '1';
       var center = [50.181447, 14.424094];
       var map = L.map(el, {
-        center: center, zoom: 15,
+        center: center, zoom: 13,
         zoomControl: false, attributionControl: false,
         scrollWheelZoom: false, dragging: true,
       });
@@ -96,7 +96,8 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
         '</a>';
       L.marker(center, { icon: icon })
         .addTo(map)
-        .bindPopup(popupHtml, { className: 'hub-footer__map-popup-wrap' });
+        .bindPopup(popupHtml, { className: 'hub-footer__map-popup-wrap' })
+        .openPopup();
     }
 
     function bind() {
@@ -178,10 +179,12 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     overflow: hidden;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.14);
-    /* Plum tint: jemně desaturovat + posunout hue směrem k plum, mírně
+    margin-top: var(--space-5);
+    /* Map tint: jemně desaturovat + posunout hue ke globálnímu --hue, mírně
         ztmavit. Drží CARTO Voyager mapu ale v naší barevnosti, bez
-        zelených dálnic. */
-    filter: hue-rotate(285deg) saturate(0.55) brightness(0.78) contrast(1.08);
+        zelených dálnic. hue-rotate je relativní k tile barvám (cca 9°),
+        proto výsledný shift je (--hue - 9). */
+    filter: hue-rotate(calc((var(--hue) - 9) * 1deg)) saturate(0.55) brightness(0.78) contrast(1.08);
   }
   .hub-footer__map :global(.leaflet-container) {
     width: 100%;
@@ -205,12 +208,12 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     background: var(--cream);
     color: var(--plum-deep);
     border-radius: var(--radius-input);
-    box-shadow: 0 10px 28px rgba(45, 20, 48, 0.32);
+    box-shadow: 0 10px 28px hsl(var(--hue) 41% 13% / 0.32);
     padding: 4px 6px;
   }
   .hub-footer__map :global(.hub-footer__map-popup-wrap .leaflet-popup-tip) {
     background: var(--cream);
-    box-shadow: 0 10px 28px rgba(45, 20, 48, 0.32);
+    box-shadow: 0 10px 28px hsl(var(--hue) 41% 13% / 0.32);
   }
   .hub-footer__map :global(.hub-footer__map-popup) {
     display: flex;

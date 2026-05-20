@@ -4,6 +4,7 @@ import Gallery from '../../components/Gallery.astro';
 import Icon from '../../components/Icon.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
+import CrossLinkPair from '../../components/CrossLinkPair.astro';
 import { withBase } from '../../utils/url';
 
 const heroJumps = [
@@ -23,7 +24,8 @@ const heroJumps = [
     title="Bazén, <em>sauna</em>, jídelna, klubovna."
     sub="Vlastní bazén a sauna, jídelna s minipivovarem, klubovna a komunitní park s grilem. Týdenní vstup do sauny v ceně bydlení."
     variant="ink"
-    ribbonPath="M 1340 120 C 1640 80, 1900 240, 1860 480 C 1820 720, 1480 760, 1380 580"
+    ribbonPath="M 180 580 C 380 720, 620 540, 820 660 C 1020 780, 1240 620, 1340 720"
+    thickness={48}
     jumps={heroJumps}
     ariaId="komunita-hero"
   />
@@ -204,5 +206,12 @@ const heroJumps = [
     lede="Rezervace je nezávazná. Z rezervačního oddělení vám zavoláme do 24 hodin."
     cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
     variant="ink"
+  />
+
+  <CrossLinkPair
+    items={[
+      { eyebrow: 'Ubytování', title: 'Apartmán, <em>nebo</em> co-living.', href: '/ubytovani/', variant: 'deep' },
+      { eyebrow: 'Coworking', title: 'Sál, ateliér, <em>dílna</em>.',      href: '/coworking/', variant: 'cream' },
+    ]}
   />
 </Base>

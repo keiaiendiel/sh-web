@@ -227,6 +227,11 @@ const tiles = [
             <span class="lp-tile__label">{t.label}</span>
             <span class="lp-tile__sub">{t.sub}</span>
           </span>
+          {/* Corner šipka dolů = scroll v rámci stránky. Liší se od Rezervace
+              tile, kde je arrow-up-right (= odkaz pryč na jinou stránku). */}
+          <span class="lp-tile__arrow lp-tile__arrow--scroll" aria-hidden="true">
+            <Icon name="chevron-down" size={18} strokeWidth={2} />
+          </span>
         </a>
       ))}
 
@@ -238,7 +243,10 @@ const tiles = [
         </span>
         <span class="lp-tile__type">
           <span class="lp-tile__label">Rezervujte si <em>místo</em></span>
-          <span class="lp-tile__sub">Nezávazná. Ozveme se do 24 hodin.</span>
+          <span class="lp-tile__sub">Nezávazná, ozveme se do 24 h.</span>
+        </span>
+        <span class="lp-tile__arrow lp-tile__arrow--cross" aria-hidden="true">
+          <Icon name="arrow-up-right" size={18} strokeWidth={2} />
         </span>
       </a>
     </div>
@@ -403,7 +411,7 @@ const tiles = [
     justify-content: center;
     padding: var(--space-9) 0;
     color: #fff;
-    background: var(--k-100);
+    background: var(--plum-deep);
     overflow: hidden;
   }
   .lp-hero__rotation {
@@ -583,9 +591,11 @@ const tiles = [
                 border-color 240ms var(--ease-standard),
                 box-shadow 240ms var(--ease-standard);
   }
-  /* Variant fills, light enough na landing ale rozlišitelné mezi sebou */
+  /* Variant fills, light enough na landing ale rozlišitelné mezi sebou.
+     Soft je solid lavender (ne accent-soft alpha) protože tiles přečnívají
+     nad hero a transparent variant by ho prosvítal. */
   .lp-tile--cream { background: var(--cream); }
-  .lp-tile--soft  { background: var(--accent-soft); }
+  .lp-tile--soft  { background: hsl(var(--hue) 28% 93%); }
   .lp-tile--reserve {
     background: var(--plum-deep);
     color: #fff;
@@ -602,10 +612,12 @@ const tiles = [
     max-width: 22ch;
   }
   .lp-tile__label {
-    font: 700 clamp(1.25rem, 1.7vw, 1.625rem) / 1.05 var(--font-sans);
+    font: 700 clamp(1.125rem, 1.55vw, 1.5rem) / 1.05 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     color: inherit;
-    text-wrap: balance;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .lp-tile__label em {
     font-style: italic;
@@ -616,8 +628,39 @@ const tiles = [
   .lp-tile__sub {
     font: 500 var(--text-sm) / 1.35 var(--font-sans);
     color: var(--fg-subtle);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .lp-tile--reserve .lp-tile__sub { color: rgba(255, 255, 255, 0.72); }
+
+  /* Corner šipka v pravém dolním rohu .lp-tile. chevron-down = scroll,
+     arrow-up-right = cross-page (Rezervace). Inherituje currentColor. */
+  .lp-tile__arrow {
+    position: absolute;
+    z-index: 2;
+    bottom: clamp(16px, 1.8vw, 24px);
+    right: clamp(16px, 1.8vw, 24px);
+    color: inherit;
+    opacity: 0.55;
+    line-height: 0;
+    transition: opacity 220ms var(--ease-standard),
+                transform 220ms var(--ease-standard);
+  }
+  .lp-tile__arrow :global(svg) { display: block; }
+  .lp-tile--reserve .lp-tile__arrow { color: var(--rose); opacity: 0.85; }
+  .lp-tile:hover .lp-tile__arrow,
+  .lp-tile:focus-visible .lp-tile__arrow {
+    opacity: 1;
+  }
+  .lp-tile:hover .lp-tile__arrow--scroll,
+  .lp-tile:focus-visible .lp-tile__arrow--scroll {
+    transform: translateY(2px);
+  }
+  .lp-tile:hover .lp-tile__arrow--cross,
+  .lp-tile:focus-visible .lp-tile__arrow--cross {
+    transform: translate(2px, -2px);
+  }
 
   /* Ribbon: big background arc, peeká z pod typo (z-index 0) */
   .lp-tile__ribbon {
@@ -651,8 +694,12 @@ const tiles = [
     stroke-dashoffset: 1;
     pathLength: 1;
   }
+  /* Po reveal pokračuje breathing infinite loop. Range 0.42-0.72 (na container
+     overlay opacity 0.55 idle → multiplikuje se na path). */
   .lp-tile__ribbon[data-ribbon-reveal].is-revealed path {
-    animation: ribbon-snake-draw 2.6s var(--ease-snake) forwards;
+    animation:
+      ribbon-snake-draw 2.6s var(--ease-snake) forwards,
+      ribbon-breathe 7s ease-in-out 2.6s infinite;
   }
 
   /* Hover: lift + ribbon nice */
@@ -660,18 +707,22 @@ const tiles = [
   .lp-tile:focus-visible {
     transform: translateY(-2px);
     border-color: var(--accent);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(90, 42, 95, 0.14);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 32px hsl(var(--hue) 39% 27% / 0.14);
     outline: none;
   }
   .lp-tile--reserve:hover,
   .lp-tile--reserve:focus-visible {
     border-color: var(--rose);
-    box-shadow: 0 18px 48px rgba(45, 20, 48, 0.34);
+    box-shadow: 0 18px 48px hsl(var(--hue) 41% 13% / 0.34);
   }
   .lp-tile:hover .lp-tile__ribbon,
   .lp-tile:focus-visible .lp-tile__ribbon {
     opacity: 0.85;
-    transform: translateX(8px);
+    transform: translateX(14px);
+  }
+  .lp-tile:hover .lp-tile__ribbon path,
+  .lp-tile:focus-visible .lp-tile__ribbon path {
+    animation-play-state: paused;
   }
   .lp-tile--reserve:hover .lp-tile__ribbon,
   .lp-tile--reserve:focus-visible .lp-tile__ribbon {
@@ -700,8 +751,26 @@ const tiles = [
       padding: 14px 12px;
     }
     .lp-tile__type { max-width: none; gap: 2px; }
-    .lp-tile__label { font-size: 0.9375rem; line-height: 1.1; }
-    .lp-tile__sub { font-size: 11px; line-height: 1.2; }
+    /* Mobile: 3-col compact tiles, label se zalamuje na max 2 řádky (žádné
+       text-overflow ellipsis, žádný truncate). Desktop drží nowrap pro
+       konzistentní 1-line look. */
+    .lp-tile__label {
+      font-size: 0.9375rem;
+      line-height: 1.1;
+      white-space: normal;
+      text-overflow: clip;
+      overflow: visible;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .lp-tile__sub {
+      font-size: 11px;
+      line-height: 1.2;
+      white-space: normal;
+      text-overflow: clip;
+      overflow: visible;
+    }
     .lp-tile__ribbon path { stroke-width: 44; }
     .lp-tile--reserve .lp-tile__ribbon path { stroke-width: 52; }
   }
@@ -763,8 +832,11 @@ const tiles = [
     stroke-dashoffset: 1;
     pathLength: 1;
   }
+  /* Reveal + idle breathing. Sekce není klikatelná, takže žádný hover. */
   .lp-section__ribbon[data-ribbon-reveal].is-revealed path {
-    animation: ribbon-snake-draw 3.2s var(--ease-snake) forwards;
+    animation:
+      ribbon-snake-draw 3.2s var(--ease-snake) forwards,
+      ribbon-breathe 7s ease-in-out 3.2s infinite;
   }
   .lp-section:nth-of-type(even) .lp-section__ribbon { transform: scaleX(-1); }
 
@@ -1036,6 +1108,7 @@ const tiles = [
     inset: 0;
     pointer-events: none;
     opacity: 0.92;
+    transition: transform 700ms var(--ease-quart);
   }
   .lp-cta-banner__bg svg {
     width: 100%;
@@ -1056,7 +1129,9 @@ const tiles = [
     pathLength: 1;
   }
   .lp-cta-banner[data-ribbon-reveal].is-revealed .lp-cta-banner__bg path {
-    animation: ribbon-snake-draw 2.6s var(--ease-snake) forwards;
+    animation:
+      ribbon-snake-draw 2.6s var(--ease-snake) forwards,
+      ribbon-breathe 7s ease-in-out 2.6s infinite;
   }
   .lp-cta-banner__type {
     position: relative;
@@ -1103,8 +1178,17 @@ const tiles = [
   .lp-cta-banner:hover,
   .lp-cta-banner:focus-visible {
     transform: translateY(-3px);
-    box-shadow: 0 24px 56px rgba(45, 20, 48, 0.40);
+    box-shadow: 0 24px 56px hsl(var(--hue) 41% 13% / 0.40);
     outline: none;
+  }
+  .lp-cta-banner:hover .lp-cta-banner__bg,
+  .lp-cta-banner:focus-visible .lp-cta-banner__bg {
+    transform: translateX(14px);
+  }
+  .lp-cta-banner:hover .lp-cta-banner__bg path,
+  .lp-cta-banner:focus-visible .lp-cta-banner__bg path {
+    animation-play-state: paused;
+    opacity: 0.85;
   }
   .lp-cta-banner:hover .lp-cta-banner__cta,
   .lp-cta-banner:focus-visible .lp-cta-banner__cta {
@@ -1127,12 +1211,13 @@ const tiles = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .lp-cta-banner { transition: none; }
+    .lp-cta-banner, .lp-cta-banner__bg { transition: none; }
     .lp-cta-banner[data-ribbon-reveal] .lp-cta-banner__bg path,
     .lp-cta-banner[data-ribbon-reveal].is-revealed .lp-cta-banner__bg path {
       stroke-dashoffset: 0;
       animation: none;
     }
+    .lp-cta-banner:hover .lp-cta-banner__bg { transform: none; }
   }
 
   /* Leaflet brand overrides: same plum accent, sharp borders. */
@@ -1163,7 +1248,7 @@ const tiles = [
   :global(.lp-map-popup-wrap .leaflet-popup-content-wrapper) {
     background: var(--bg);
     border: 1px solid var(--accent);
-    box-shadow: 0 8px 32px rgba(90, 42, 95, 0.18);
+    box-shadow: 0 8px 32px hsl(var(--hue) 39% 27% / 0.18);
     border-radius: var(--radius-input);
     padding: 0;
   }

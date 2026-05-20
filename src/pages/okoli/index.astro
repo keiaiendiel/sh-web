@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
+import CrossLinkPair from '../../components/CrossLinkPair.astro';
 import { withBase } from '../../utils/url';
 
 const heroJumps = [
@@ -22,7 +23,9 @@ const heroJumps = [
     title="Klecany, <em>15 km</em> od Prahy."
     sub="Klidná obec na severním okraji Prahy. V docházkové vzdálenosti školy, lékaři, obchody, sport a kavárny."
     variant="cream"
-    ribbonPath="M 540 380 C 720 360, 760 500, 600 540 C 460 580, 420 440, 580 420"
+    ribbonPath="M 280 580 C 420 460, 760 480, 820 600 C 880 720, 460 760, 320 700 C 220 660, 220 620, 280 580"
+    thickness={14}
+    opacityPrimary={0.55}
     jumps={heroJumps}
     ariaId="okoli-hero"
   />
@@ -227,6 +230,13 @@ const heroJumps = [
     cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
     variant="cream"
   />
+
+  <CrossLinkPair
+    items={[
+      { eyebrow: 'Doprava',  title: 'Patnáct minut <em>autobusem</em> na metro.',     href: '/doprava/',  variant: 'deep' },
+      { eyebrow: 'Komunita', title: 'Bazén, <em>sauna</em>, jídelna a&nbsp;klubovna.', href: '/komunita/', variant: 'ink' },
+    ]}
+  />
 </Base>
 
 <style>
@@ -279,12 +289,12 @@ const heroJumps = [
     background: #fff;
     color: var(--fg);
     border-radius: var(--radius-input);
-    box-shadow: 0 10px 28px rgba(90, 42, 95, 0.18);
+    box-shadow: 0 10px 28px hsl(var(--hue) 39% 27% / 0.18);
     padding: 4px 8px;
   }
   .ok-map :global(.ok-map-popup-wrap .leaflet-popup-tip) {
     background: #fff;
-    box-shadow: 0 10px 28px rgba(90, 42, 95, 0.18);
+    box-shadow: 0 10px 28px hsl(var(--hue) 39% 27% / 0.18);
   }
   .ok-map :global(.ok-map-popup) {
     display: flex;

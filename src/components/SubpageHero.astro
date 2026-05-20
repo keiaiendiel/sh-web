@@ -3,13 +3,16 @@
  * SubpageHero , poster-style ribbon banner pro subpage hero sekce.
  * Per spec § 04 (Sedm bannerů per sekce webu) SH/01-SH/07.
  *
- *   eyebrow    , short uppercase label
- *   title      , h1 string s podporou <em> přes set:html
- *   sub        , optional 1-2 sentence lede
- *   variant    , 'deep' | 'cream' | 'rose' | 'ink' určuje bg + stroke combo
- *   ribbonPath , hand-tuned Bezier d-string (viewBox 0 0 2100 900)
- *   thickness  , px stroke width (default per variant)
- *   jumps      , optional in-page nav anchor links
+ *   eyebrow             , short uppercase label
+ *   title               , h1 string s podporou <em> přes set:html
+ *   sub                 , optional 1-2 sentence lede
+ *   variant             , 'deep' | 'cream' | 'rose' | 'ink' určuje bg + stroke combo
+ *   ribbonPath          , hand-tuned Bezier d-string (viewBox 0 0 2100 900)
+ *   ribbonPathSecondary , optional second path (slabší, doplňkový ribbon)
+ *   thickness           , px stroke width (default per variant)
+ *   thicknessSecondary  , px stroke width pro secondary (default 36)
+ *   opacitySecondary    , 0-1 stroke-opacity pro secondary (default 0.5)
+ *   jumps               , optional in-page nav anchor links
  */
 import { withBase } from '../utils/url';
 
@@ -22,7 +25,11 @@ interface Props {
   sub?: string;
   variant: Variant;
   ribbonPath: string;
+  ribbonPathSecondary?: string;
   thickness?: number;
+  thicknessSecondary?: number;
+  opacityPrimary?: number;
+  opacitySecondary?: number;
   jumps?: Jump[];
   ariaId?: string;
 }
@@ -33,7 +40,11 @@ const {
   sub,
   variant,
   ribbonPath,
+  ribbonPathSecondary,
   thickness,
+  thicknessSecondary = 36,
+  opacityPrimary,
+  opacitySecondary = 0.5,
   jumps = [],
   ariaId,
 } = Astro.props;
@@ -50,7 +61,20 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
 <section class={`subpage-hero subpage-hero--${variant}`} aria-labelledby={titleId}>
   <span class="subpage-hero__bg" aria-hidden="true" data-ribbon-reveal>
     <svg viewBox="0 0 2100 900" preserveAspectRatio="xMidYMid slice">
-      <path d={ribbonPath} stroke-width={strokeWidth} />
+      <path
+        class="subpage-hero__bg-path subpage-hero__bg-path--primary"
+        d={ribbonPath}
+        stroke-width={strokeWidth}
+        stroke-opacity={opacityPrimary}
+      />
+      {ribbonPathSecondary && (
+        <path
+          class="subpage-hero__bg-path subpage-hero__bg-path--secondary"
+          d={ribbonPathSecondary}
+          stroke-width={thicknessSecondary}
+          stroke-opacity={opacitySecondary}
+        />
+      )}
     </svg>
   </span>
   <div class="subpage-hero__inner">
@@ -83,6 +107,7 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
     inset: 0;
     z-index: -1;
     pointer-events: none;
+    transition: transform 700ms var(--ease-quart);
   }
   .subpage-hero__bg svg {
     width: 100%;
@@ -100,8 +125,23 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
     stroke-dashoffset: 1;
     pathLength: 1;
   }
+  /* Reveal: snake-draw 2.8s, pak na to navazuje 7s breathing. Použijeme
+     dva animation declarations oddělené čárkou, druhý má delay 2.8s aby
+     navázal hladce. Pro secondary path s inline opacity začínáme z té
+     hodnoty (stroke-opacity přes animation se prolne s elementem). */
   .subpage-hero__bg[data-ribbon-reveal].is-revealed path {
-    animation: ribbon-snake-draw 2.8s var(--ease-snake) forwards;
+    animation:
+      ribbon-snake-draw 2.8s var(--ease-snake) forwards,
+      ribbon-breathe 7s ease-in-out 2.8s infinite;
+  }
+  /* Hover: ribbon se posune 14 px doprava + zastaví breathing + zvýší opacity.
+     Z 00-SPEC.html § Photo backdrop (řádky 420-421). */
+  .subpage-hero:hover .subpage-hero__bg {
+    transform: translateX(14px);
+  }
+  .subpage-hero:hover .subpage-hero__bg[data-ribbon-reveal].is-revealed path {
+    animation-play-state: paused;
+    opacity: 0.85;
   }
 
   .subpage-hero__inner {
@@ -183,7 +223,7 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
   .subpage-hero--cream .subpage-hero__sub { color: var(--fg-soft, var(--fg-muted)); }
   .subpage-hero--cream .subpage-hero__jump {
     color: var(--accent);
-    background: rgba(90, 42, 95, 0.04);
+    background: hsl(var(--hue) 39% 27% / 0.04);
     border: 1px solid var(--accent-rule);
   }
   .subpage-hero--cream .subpage-hero__jump:hover,
@@ -204,7 +244,7 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
   .subpage-hero--rose .subpage-hero__jump {
     color: var(--plum-deep);
     background: rgba(255, 255, 255, 0.30);
-    border: 1px solid rgba(45, 20, 48, 0.20);
+    border: 1px solid hsl(var(--hue) 41% 13% / 0.20);
   }
   .subpage-hero--rose .subpage-hero__jump:hover,
   .subpage-hero--rose .subpage-hero__jump:focus-visible {
@@ -216,7 +256,7 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
   }
 
   /* ---------- Variant: ink (#111 + rose stroke, SH/04) ---------- */
-  .subpage-hero--ink { background: var(--k-100); color: var(--cream); }
+  .subpage-hero--ink { background: var(--plum-deep); color: var(--cream); }
   .subpage-hero--ink .subpage-hero__bg path { stroke: var(--rose); }
   .subpage-hero--ink .subpage-hero__eyebrow { color: var(--rose); }
   .subpage-hero--ink .subpage-hero__title :global(em) { color: var(--rose); }
@@ -229,7 +269,7 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
   .subpage-hero--ink .subpage-hero__jump:hover,
   .subpage-hero--ink .subpage-hero__jump:focus-visible {
     background: var(--rose);
-    color: var(--k-100);
+    color: var(--plum-deep);
     border-color: var(--rose);
     transform: translateY(-1px);
     outline: none;
@@ -241,11 +281,13 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .subpage-hero__bg { transition: none; }
     .subpage-hero__bg[data-ribbon-reveal] path,
     .subpage-hero__bg[data-ribbon-reveal].is-revealed path {
       stroke-dashoffset: 0;
       animation: none;
     }
+    .subpage-hero:hover .subpage-hero__bg { transform: none; }
     .subpage-hero__jump { transition: none; }
   }
 </style>
@@ -259,13 +301,14 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
 
 <style is:global>
   /* Adaptive header text per hero variant via body[data-hero-tone].
-     Light hero → overlay header text dark. Dark hero → keep default white.
-     Po scrollu (.is-stuck) má header solid bg, takže text vždy tmavý. */
-  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) { color: var(--fg); }
+     Light hero → overlay header text plum (matches brand identity).
+     Dark hero → keep default white. Po scrollu (.is-stuck) má header solid bg
+     a tmavý text z výchozího stavu. */
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) { color: var(--accent); }
   body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__brand,
-  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__burger { color: var(--fg); }
-  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link { color: var(--fg); }
-  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link:hover { color: var(--accent); }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__burger { color: var(--accent); }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link { color: var(--accent); }
+  body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__link:hover { color: var(--plum-deep); }
   body[data-hero-tone="light"] .hub-header--overlay:not(.is-stuck) .hub-header__cta {
     color: var(--accent);
     border-color: var(--accent);

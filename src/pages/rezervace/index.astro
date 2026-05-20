@@ -1,20 +1,23 @@
 ---
 import Base from '../../layouts/Base.astro';
-import SubpageHero from '../../components/SubpageHero.astro';
+import CrossLinkPair from '../../components/CrossLinkPair.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
 
-/* Phase 5 wizard frontend. Pět kroků per SH_Web_Plan.md ř. 217-251
-   a Site_Copy § 9.2:
-     1. Koncept bydlení (3 karty)
-     2. Konfigurace prostoru (podmínečně na kroku 1)
-     3. Termín a stipendium
-     4. Kontakt
-     5. GDPR + rekapitulace + odeslat
-
-   Stálý sidebar drží aktuální cenu a „vše v ceně" checklist (per Plan.md
-   ř. 250). Po odeslání placeholder URL na Cloudflare Worker (form.startovacihub.cz),
-   zatím console.log + success state. Backend scaffold v `worker/`. */
+/*
+ * Rezervace , Typeform-style single-question flow.
+ *
+ * Cíle (per /loop conversation 2026-05-20):
+ *   1. Mobile-first, žádná sidebar co kanibalizuje viewport.
+ *   2. Jedna otázka per obrazovka, auto-advance po výběru.
+ *   3. Smart pre-fill z ?typ=<slug>, skip až 2 kroky.
+ *   4. Progress bar (single 1px ruler), ne 4 step chips.
+ *   5. Sticky trust bar dole („Nezávazné · 0 spam · do 24h").
+ *   6. Success state s CrossLinkPair odkazujícím na další podstránky.
+ *
+ * Backend: console.log payload + success UI. Worker scaffold v worker/
+ * deploy pending, frontend bude napojen v Phase 5b.
+ */
 
 const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
 const coliving = (await getCollection('coliving')).sort((a, b) => a.data.order - b.data.order);
@@ -22,864 +25,867 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 ---
 <Base
   title="Registrace zájmu o bydlení · Startovací Hub Klecany"
-  description="Vyberte typ bydlení, termín a délku pobytu. Do 24 hodin se vám ozveme s dostupností a cenou. Registrace je nezávazná."
+  description="Vyberte typ bydlení, termín a způsob kontaktu. Do 24 hodin se vám ozveme z rezervačního oddělení. Registrace je nezávazná."
   headerVariant="overlay">
-  <SubpageHero
-    eyebrow="Rezervace"
-    title="Rezervujte si <em>místo</em>."
-    sub="Vyberete pokoj, termín a způsob kontaktu. Není to závazek, jen vám zavoláme. Z rezervačního oddělení se ozveme do 24 hodin."
-    variant="deep"
-    ribbonPath="M 1280 80 C 1580 140, 1900 320, 1920 520 C 1940 680, 1600 720, 1460 540"
-    thickness={28}
-    ariaId="rezervace-hero"
-  />
 
-  <section class="rez-layout">
-    <form id="rez-form" class="rez-form" novalidate>
-      <ol class="rez-progress" aria-label="Postup průvodce">
-        <li class="rez-progress__step is-active" data-step="1"><span>01</span>Koncept</li>
-        <li class="rez-progress__step" data-step="2"><span>02</span>Konfigurace</li>
-        <li class="rez-progress__step" data-step="3"><span>03</span>Termín</li>
-        <li class="rez-progress__step" data-step="4"><span>04</span>Kontakt</li>
-      </ol>
+  <main class="rez" id="rez" data-rez-root>
+    <header class="rez__head">
+      <p class="rez__step-counter" aria-live="polite">
+        <span data-step-current>1</span><span class="rez__step-sep">/</span><span data-step-total>3</span>
+      </p>
+      <div class="rez__progress" aria-hidden="true">
+        <span class="rez__progress-fill" data-progress-fill></span>
+      </div>
+      <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>Zpět</span>
+      </button>
+    </header>
 
-      {/* === KROK 1: Koncept === */}
-      <fieldset class="rez-step is-current" data-step="1">
-        <legend>
-          <span class="rez-step__num">01</span>
-          <span class="rez-step__title">Jak chcete v Hubu bydlet?</span>
-        </legend>
-        <div class="rez-cards rez-cards--3">
-          <label class="rez-card">
-            <input type="radio" name="koncept" value="privatni" required />
-            <div class="rez-card__body">
-              <h3>Privátní apartmán</h3>
-              <p>Vlastní byt, vlastní koupelna a kuchyň. Od 9 500 Kč/měsíc.</p>
-            </div>
+    <form id="rez-form" class="rez__form" novalidate>
+      {/* === KROK: Koncept === */}
+      <section class="rez__panel is-current" data-panel="koncept" data-panel-index="0">
+        <h1 class="rez__q">Jak chcete v&nbsp;Hubu bydlet?</h1>
+        <p class="rez__q-hint">Doporučíme nejvhodnější formát. Volba není závazná.</p>
+        <div class="rez__choices rez__choices--3">
+          <label class="rez__choice">
+            <input type="radio" name="koncept" value="privatni" data-auto-next />
+            <span class="rez__choice-body">
+              <span class="rez__choice-title">Privátní apartmán</span>
+              <span class="rez__choice-meta">Vlastní byt, kuchyň, koupelna. Od&nbsp;9 500&nbsp;Kč&nbsp;/&nbsp;měsíc.</span>
+            </span>
           </label>
-          <label class="rez-card">
-            <input type="radio" name="koncept" value="co-living" required />
-            <div class="rez-card__body">
-              <h3>Co-living</h3>
-              <p>Vlastní lůžko nebo kapsle, společná kuchyň. Od 2 250 Kč/měsíc při ročním závazku.</p>
-            </div>
+          <label class="rez__choice">
+            <input type="radio" name="koncept" value="co-living" data-auto-next />
+            <span class="rez__choice-body">
+              <span class="rez__choice-title">Co-living</span>
+              <span class="rez__choice-meta">Vlastní lůžko nebo kapsle, sdílená kuchyň. Od&nbsp;2 250&nbsp;Kč&nbsp;/&nbsp;měsíc.</span>
+            </span>
           </label>
-          <label class="rez-card">
-            <input type="radio" name="koncept" value="nevim" required />
-            <div class="rez-card__body">
-              <h3>Nevím ještě</h3>
-              <p>Tři rychlé otázky a doporučíme. Pak vám zavoláme.</p>
-            </div>
+          <label class="rez__choice">
+            <input type="radio" name="koncept" value="nevim" data-auto-next />
+            <span class="rez__choice-body">
+              <span class="rez__choice-title">Nevím, poradíme</span>
+              <span class="rez__choice-meta">Tři rychlé otázky a doporučení od&nbsp;nás.</span>
+            </span>
           </label>
         </div>
-        <div class="rez-nav">
-          <span></span>
-          <button type="button" class="rez-btn" data-next>Pokračovat →</button>
+      </section>
+
+      {/* === KROK: Formát (privátní) === */}
+      <section class="rez__panel" data-panel="format-privatni" data-panel-index="1" data-show-for="privatni" hidden>
+        <h1 class="rez__q">Jaký apartmán?</h1>
+        <p class="rez__q-hint">Pět privátních jednotek 1+kk až 5+kk. Cena za celý byt.</p>
+        <div class="rez__choices rez__choices--3">
+          {apartmany.map((a) => (
+            <label class="rez__choice rez__choice--media" data-format-slug={a.data.slug}>
+              <input type="radio" name="format" value={a.data.slug} data-auto-next />
+              <span class="rez__choice-body">
+                <span class="rez__choice-title">{a.data.name}</span>
+                <span class="rez__choice-meta">{a.data.plocha} · {a.data.kapacita} lůžek · od&nbsp;{fmt(a.data.cena.m12)}&nbsp;/&nbsp;měs</span>
+              </span>
+            </label>
+          ))}
         </div>
-      </fieldset>
+      </section>
 
-      {/* === KROK 2: Konfigurace (3 podstavy podle kroku 1) === */}
-      <fieldset class="rez-step" data-step="2" hidden>
-        <legend>
-          <span class="rez-step__num">02</span>
-          <span class="rez-step__title">Konkrétní formát</span>
-        </legend>
+      {/* === KROK: Formát (co-living) === */}
+      <section class="rez__panel" data-panel="format-coliving" data-panel-index="1" data-show-for="co-living" hidden>
+        <h1 class="rez__q">Jaká varianta co-livingu?</h1>
+        <p class="rez__q-hint">Čtyři formáty od jednolůžkové kapsle po dvoulůžko ve sdíleném bytě.</p>
+        <div class="rez__choices rez__choices--2">
+          {coliving.map((c) => (
+            <label class="rez__choice rez__choice--media" data-format-slug={c.data.slug}>
+              <input type="radio" name="format" value={c.data.slug} data-auto-next />
+              <span class="rez__choice-body">
+                <span class="rez__choice-title">{c.data.name}</span>
+                <span class="rez__choice-meta">Matrace {c.data.matrace[0]}{c.data.matrace[1] && ` nebo ${c.data.matrace[1]}`} · od&nbsp;{fmt(c.data.cena.m12)}&nbsp;/&nbsp;měs</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </section>
 
-        <div class="rez-sub" data-show-for="privatni" hidden>
-          <p class="rez-sub__hint">Pět privátních apartmánů. Cena za celou jednotku.</p>
-          <div class="rez-cards rez-cards--3">
-            {apartmany.map((a) => (
-              <div class="rez-card rez-card--media" data-card data-format={a.data.slug}>
-                <input type="radio" name="format" value={a.data.slug} class="rez-card__radio" tabindex="-1" aria-hidden="true" />
-                <div class="rez-card__thumb">
-                  {a.data.thumbnail ? (
-                    <img src={withBase(a.data.thumbnail)} alt="" loading="lazy" decoding="async" />
-                  ) : (
-                    <div class="rez-card__thumb-empty" aria-hidden="true">▢</div>
-                  )}
-                </div>
-                <div class="rez-card__body">
-                  <h3>{a.data.name}</h3>
-                  <p>{a.data.plocha} · {a.data.kapacita} lůžek</p>
-                  <p class="rez-card__price">od {fmt(a.data.cena.m12)}/měsíc<small> (12+ měs)</small></p>
-                  <a class="rez-card__detail" href={withBase(`/ubytovani/privatni/${a.data.slug}/`)} target="_blank" rel="noopener" data-no-select>Detail →</a>
-                </div>
-              </div>
-            ))}
+      {/* === KROK: Nevím (3 otázky) === */}
+      <section class="rez__panel" data-panel="format-nevim" data-panel-index="1" data-show-for="nevim" hidden>
+        <h1 class="rez__q">Tři otázky a navrhneme&nbsp;formát.</h1>
+        <p class="rez__q-hint">Ozveme se s konkrétním doporučením.</p>
+        <div class="rez__field">
+          <label for="nevim-rozpocet">Rozpočet: <output for="nevim-rozpocet" id="nevim-rozpocet-out">9 500 Kč&nbsp;/&nbsp;měs</output></label>
+          <input type="range" id="nevim-rozpocet" name="nevim-rozpocet" min="3000" max="25000" step="500" value="9500" />
+        </div>
+        <div class="rez__field">
+          <label>Preferujete spíš:</label>
+          <div class="rez__pills">
+            <label class="rez__pill"><input type="radio" name="nevim-soukromi" value="soukromi" /><span>Soukromí</span></label>
+            <label class="rez__pill"><input type="radio" name="nevim-soukromi" value="komunita" /><span>Komunitu</span></label>
+            <label class="rez__pill"><input type="radio" name="nevim-soukromi" value="balanc" /><span>Záleží na ceně</span></label>
           </div>
         </div>
-
-        <div class="rez-sub" data-show-for="co-living" hidden>
-          <p class="rez-sub__hint">Čtyři varianty co-livingu. Cena na osobu (kapsle pro 1), nebo na kapsli/pokoj (pro pár).</p>
-          <div class="rez-cards rez-cards--2">
-            {coliving.map((c) => (
-              <div class="rez-card rez-card--media" data-card data-format={c.data.slug}>
-                <input type="radio" name="format" value={c.data.slug} class="rez-card__radio" tabindex="-1" aria-hidden="true" />
-                <div class="rez-card__thumb">
-                  {c.data.thumbnail ? (
-                    <img src={withBase(c.data.thumbnail)} alt="" loading="lazy" decoding="async" />
-                  ) : (
-                    <div class="rez-card__thumb-empty" aria-hidden="true">▢</div>
-                  )}
-                </div>
-                <div class="rez-card__body">
-                  <h3>{c.data.name}</h3>
-                  <p>Matrace {c.data.matrace[0]}{c.data.matrace[1] && ` nebo ${c.data.matrace[1]}`}</p>
-                  <p class="rez-card__price">od {fmt(c.data.cena.m12)}/měsíc<small> (12+ měs)</small></p>
-                  <a class="rez-card__detail" href={withBase(`/ubytovani/co-living/${c.data.slug}/`)} target="_blank" rel="noopener" data-no-select>Detail →</a>
-                </div>
-              </div>
-            ))}
+        <div class="rez__field">
+          <label>Jak budete v&nbsp;Hubu reálně být:</label>
+          <div class="rez__pills">
+            <label class="rez__pill"><input type="radio" name="nevim-uvazek" value="full-time" /><span>Full-time</span></label>
+            <label class="rez__pill"><input type="radio" name="nevim-uvazek" value="hybrid" /><span>Hybrid</span></label>
+            <label class="rez__pill"><input type="radio" name="nevim-uvazek" value="vikendy" /><span>Víkendy</span></label>
           </div>
         </div>
+        <button type="button" class="rez__cta" data-next>Pokračovat <span aria-hidden="true">→</span></button>
+      </section>
 
-        <div class="rez-sub" data-show-for="nevim" hidden>
-          <p class="rez-sub__hint">Tři rychlé otázky, ozveme se s konkrétním návrhem.</p>
-          <div class="rez-field">
-            <label for="nevim-rozpocet">Rozpočet (Kč/měsíc)</label>
-            <input type="range" id="nevim-rozpocet" name="nevim-rozpocet" min="3000" max="25000" step="500" value="9500" />
-            <output for="nevim-rozpocet" id="nevim-rozpocet-out">9 500 Kč/měs</output>
-          </div>
-          <div class="rez-field">
-            <label for="nevim-soukromi">Preferujete spíš:</label>
-            <select id="nevim-soukromi" name="nevim-soukromi">
-              <option value="soukromi">Soukromí (vlastní byt nebo pokoj)</option>
-              <option value="komunita">Komunitu (sdílený byt, kapsle s ostatními)</option>
-              <option value="balanc">Záleží na ceně</option>
+      {/* === KROK: Termín === */}
+      <section class="rez__panel" data-panel="termin" data-panel-index="2" hidden>
+        <h1 class="rez__q">Kdy chcete nastoupit?</h1>
+        <p class="rez__q-hint">Hub je v projektové přípravě. Termín potvrdíme telefonicky.</p>
+        <div class="rez__grid-2">
+          <div class="rez__field">
+            <label for="mesic">Měsíc nástupu</label>
+            <select id="mesic" name="mesic" required>
+              <option value="">Vyberte měsíc</option>
+              <option value="2026-09">09 / 2026</option>
+              <option value="2026-10">10 / 2026</option>
+              <option value="2026-11">11 / 2026</option>
+              <option value="2026-12">12 / 2026</option>
+              <option value="2027-01">01 / 2027</option>
+              <option value="2027-02">02 / 2027</option>
+              <option value="2027-03">03 / 2027</option>
+              <option value="2027-Q2">Q2 / 2027</option>
+              <option value="2027-Q3">Q3 / 2027</option>
+              <option value="2027-Q4">Q4 / 2027</option>
             </select>
           </div>
-          <div class="rez-field">
-            <label for="nevim-uvazek">Jak budete v Hubu reálně být?</label>
-            <select id="nevim-uvazek" name="nevim-uvazek">
-              <option value="full-time">Full-time (bydlím a pracuji tady)</option>
-              <option value="hybrid">Hybrid (pár dní v týdnu)</option>
-              <option value="vikendy">Víkendy a krátké pobyty</option>
-            </select>
+          <div class="rez__field">
+            <label>Délka pobytu</label>
+            <div class="rez__pills">
+              <label class="rez__pill"><input type="radio" name="delka" value="1-2" required /><span>1&ndash;2&nbsp;měs</span></label>
+              <label class="rez__pill"><input type="radio" name="delka" value="3-5" /><span>3&ndash;5&nbsp;měs</span></label>
+              <label class="rez__pill"><input type="radio" name="delka" value="6-11" /><span>6&ndash;11&nbsp;měs</span></label>
+              <label class="rez__pill"><input type="radio" name="delka" value="12+" /><span>12+&nbsp;měs</span></label>
+            </div>
           </div>
         </div>
-
-        <div class="rez-nav">
-          <button type="button" class="rez-btn rez-btn--ghost" data-prev>← Zpět</button>
-          <button type="button" class="rez-btn" data-next>Pokračovat →</button>
-        </div>
-      </fieldset>
-
-      {/* === KROK 3: Termín + stipendium === */}
-      <fieldset class="rez-step" data-step="3" hidden>
-        <legend>
-          <span class="rez-step__num">03</span>
-          <span class="rez-step__title">Termín nástupu a délka pobytu</span>
-        </legend>
-
-        <div class="rez-field">
-          <label for="mesic">Měsíc nástupu</label>
-          <select id="mesic" name="mesic" required>
-            <option value="">Vyberte měsíc</option>
-            <option value="2026-09">09/2026</option>
-            <option value="2026-10">10/2026</option>
-            <option value="2026-11">11/2026</option>
-            <option value="2026-12">12/2026</option>
-            <option value="2027-01">01/2027</option>
-            <option value="2027-02">02/2027</option>
-            <option value="2027-03">03/2027</option>
-            <option value="2027-04">04/2027</option>
-            <option value="2027-05">05/2027</option>
-            <option value="2027-06">06/2027</option>
-            <option value="2027-Q3">Q3 2027</option>
-            <option value="2027-Q4">Q4 2027</option>
-          </select>
-        </div>
-
-        <div class="rez-field">
-          <label>Předpokládaná délka pobytu</label>
-          <div class="rez-radio-row">
-            <label class="rez-pill"><input type="radio" name="delka" value="1-2" required /><span>1 až 2 měsíce</span></label>
-            <label class="rez-pill"><input type="radio" name="delka" value="3-5" /><span>3 až 5 měsíců</span></label>
-            <label class="rez-pill"><input type="radio" name="delka" value="6-11" /><span>6 až 11 měsíců</span></label>
-            <label class="rez-pill"><input type="radio" name="delka" value="12+" /><span>12+ měsíců</span></label>
-          </div>
-        </div>
-
-        <div class="rez-field rez-field--check">
-          <label class="rez-check">
+        <div class="rez__addons">
+          <label class="rez__addon">
             <input type="checkbox" name="prodlouzeni" value="ano" />
-            <span>Chci si vyhradit právo prodloužit pobyt o další období. Cena s touto opcí je přibližně o 5 až 10 % vyšší.</span>
+            <span class="rez__addon-body">
+              <strong>Právo prodloužit pobyt</strong>
+              <small>Přibližně +5 až 10 % k základní ceně.</small>
+            </span>
           </label>
-        </div>
-
-        <div class="rez-field rez-field--check">
-          <label class="rez-check">
+          <label class="rez__addon">
             <input type="checkbox" name="stipendium" value="ano" />
-            <span>Mám zájem o pobytové stipendium. Oznámíme vám příští výzvu.</span>
+            <span class="rez__addon-body">
+              <strong>Mám zájem o pobytové stipendium</strong>
+              <small>Oznámíme vám příští výzvu.</small>
+            </span>
           </label>
         </div>
+        <button type="button" class="rez__cta" data-next>Pokračovat <span aria-hidden="true">→</span></button>
+      </section>
 
-        <div class="rez-nav">
-          <button type="button" class="rez-btn rez-btn--ghost" data-prev>← Zpět</button>
-          <button type="button" class="rez-btn" data-next>Pokračovat →</button>
-        </div>
-      </fieldset>
-
-      {/* === KROK 4: Kontakt === */}
-      <fieldset class="rez-step" data-step="4" hidden>
-        <legend>
-          <span class="rez-step__num">04</span>
-          <span class="rez-step__title">Kontakt</span>
-        </legend>
-
-        <div class="rez-grid-2">
-          <div class="rez-field">
-            <label for="jmeno">Křestní jméno <span aria-hidden="true">*</span></label>
+      {/* === KROK: Kontakt === */}
+      <section class="rez__panel" data-panel="kontakt" data-panel-index="3" hidden>
+        <h1 class="rez__q">Kam vám zavoláme?</h1>
+        <p class="rez__q-hint">Voláme z rezervačního oddělení do 24 hodin.</p>
+        <div class="rez__grid-2">
+          <div class="rez__field">
+            <label for="jmeno">Křestní jméno</label>
             <input type="text" id="jmeno" name="jmeno" required autocomplete="given-name" />
           </div>
-          <div class="rez-field">
-            <label for="prijmeni">Příjmení <span aria-hidden="true">*</span></label>
+          <div class="rez__field">
+            <label for="prijmeni">Příjmení</label>
             <input type="text" id="prijmeni" name="prijmeni" required autocomplete="family-name" />
           </div>
         </div>
-
-        <div class="rez-field">
-          <label for="telefon">Telefon <span aria-hidden="true">*</span></label>
+        <div class="rez__field">
+          <label for="telefon">Telefon</label>
           <input type="tel" id="telefon" name="telefon" required autocomplete="tel" inputmode="tel" placeholder="+420" />
-          <p class="rez-field__hint">Zavoláme do 24 hodin pro potvrzení detailů. Číslo nikomu jinému nepředáme.</p>
         </div>
-
-        <div class="rez-field">
-          <label for="email">E-mail <span aria-hidden="true">*</span></label>
+        <div class="rez__field">
+          <label for="email">E-mail</label>
           <input type="email" id="email" name="email" required autocomplete="email" placeholder="vy@example.cz" />
         </div>
-
-        <div class="rez-field">
+        <div class="rez__field">
           <label for="poznamka">Poznámka (volitelné)</label>
-          <textarea id="poznamka" name="poznamka" rows="4" maxlength="500" placeholder="Cokoli speciálního, co bychom měli vědět (mazlíček, partner, preference spolubydlícího, atd.)"></textarea>
+          <textarea id="poznamka" name="poznamka" rows="3" maxlength="500" placeholder="Mazlíček, partner, preference spolubydlícího"></textarea>
         </div>
+        <label class="rez__gdpr">
+          <input type="checkbox" name="gdpr" value="ano" required />
+          <span>Souhlasím se zpracováním osobních údajů. <a href={withBase('/gdpr/')}>Zásady</a>.</span>
+        </label>
+        <button type="submit" class="rez__cta rez__cta--primary" id="rez-submit">
+          Odeslat nezávaznou registraci <span aria-hidden="true">→</span>
+        </button>
+      </section>
 
-        <div class="rez-field rez-field--check">
-          <label class="rez-check">
-            <input type="checkbox" name="gdpr" value="ano" required />
-            <span>Souhlasím se zpracováním osobních údajů pro účely vyřízení registrace zájmu. Viz <a href={withBase('/gdpr/')}>Zásady ochrany osobních údajů</a>.</span>
-          </label>
+      {/* === SUCCESS === */}
+      <section class="rez__panel rez__panel--success" data-panel="success" data-panel-index="4" hidden>
+        <div class="rez__success-mark" aria-hidden="true">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </div>
-
-        <div class="rez-nav">
-          <button type="button" class="rez-btn rez-btn--ghost" data-prev>← Zpět</button>
-          <button type="submit" class="rez-btn rez-btn--primary">Odeslat nezávaznou rezervaci</button>
-        </div>
-      </fieldset>
-
-      <div class="rez-success" id="rez-success" hidden>
-        <h2>Děkujeme, dorazilo.</h2>
-        <p>Zavoláme vám do 24 hodin, většinou dřív. Probereme termín prohlídky, detaily kolem nástupu a&nbsp;co dál.</p>
-        <p>Pořád je to nezávazná registrace zájmu. Žádný závazek z&nbsp;vaší strany, žádný účet od nás. Pokud změníte rozhodnutí, dejte vědět, nebo prostě neodpovězte. Nic nezačne běžet.</p>
-      </div>
+        <h1 class="rez__q">Dorazilo. Zavoláme do&nbsp;24&nbsp;hodin.</h1>
+        <p class="rez__q-hint">Probereme termín, detaily nástupu a&nbsp;co dál. Pořád je to nezávazná registrace, žádný závazek.</p>
+      </section>
     </form>
 
-    {/* Stálý sidebar */}
-    <aside class="rez-side">
-      <div class="rez-side__inner">
-        <p class="rez-side__eyebrow">Vaše konfigurace</p>
-        <div class="rez-side__price" id="rez-side-price">
-          <span class="rez-side__price-label">Předpokládaná cena</span>
-          <span class="rez-side__price-value" id="rez-side-price-value">vyplníte v průvodci</span>
-        </div>
-        <div class="rez-side__check">
-          <p class="rez-side__check-title">Vše v ceně bydlení</p>
-          <ul>
-            <li>Energie, internet, úklid společných prostor</li>
-            <li>5 jízd Hub-shuttle do metra Kobylisy měsíčně</li>
-            <li>1 jízda Hub-taxi lokálně měsíčně</li>
-            <li>Volný stůl v coworkingovém sále 24/7</li>
-            <li>Poukaz do sauny 1× týdně</li>
-          </ul>
-        </div>
-        <p class="rez-side__note">
-          Cenu upřesníme při telefonu podle aktuální dostupnosti a&nbsp;délky pobytu. Registrace
-          je nezávazná, není to smlouva.
-        </p>
-      </div>
-    </aside>
-  </section>
+    <footer class="rez__trust" aria-label="Naše záruky">
+      <span class="rez__trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Nezávazné
+      </span>
+      <span class="rez__trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+          <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        Odpověď do 24&nbsp;hodin
+      </span>
+      <span class="rez__trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+        Bez spamu, bez závazku
+      </span>
+    </footer>
+  </main>
 
-  {/* Mini-FAQ pod formulářem */}
-  <section class="sec-block sec-block--alt">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Mini FAQ</p>
-        <h2 class="sec-block__title">Časté otázky kolem registrace.</h2>
-      </header>
-      <details class="faq-mini">
-        <summary>Co znamená „nezávazná registrace zájmu"?</summary>
-        <p>K ničemu vás nezavazuje. Není to nájemní ani ubytovací smlouva, jen nám říkáte, že vás formát zajímá a chcete podrobnosti. Když se rozhodnete nepokračovat, neodpovězte na další kontakt. Bez storno poplatku, bez zálohy.</p>
-      </details>
-      <details class="faq-mini">
-        <summary>Kdy můžu reálně do Hubu nastoupit?</summary>
-        <p>Hub je v&nbsp;projektové přípravě. Termíny otevření jednotlivých budov upřesňujeme s&nbsp;postupem rekonstrukce. V&nbsp;registraci vyberete měsíc nástupu a&nbsp;při telefonu vám řekneme, jestli je to v&nbsp;té době reálné. Když ne, navrhneme alternativu, nebo se ozveme, až bude.</p>
-      </details>
-      <details class="faq-mini">
-        <summary>Můžu napřed přijet a podívat se?</summary>
-        <p>Ano, pravidelně otevíráme prohlídky areálu. Prohlídka není závazná, jen nám usnadní, abychom věděli, koho čekat. Když chcete přijet bez registrace, napište na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a> nebo zavolejte. Domluvíme termín.</p>
-      </details>
-    </div>
-  </section>
+  {/* CrossLinkPair zobrazený pouze v success state (toggle přes class) */}
+  <div class="rez-after" data-rez-after hidden>
+    <CrossLinkPair
+      sectionLabel="Než se vám ozveme"
+      items={[
+        { eyebrow: 'Komunita',  title: 'Bazén, <em>sauna</em>, jídelna a&nbsp;klubovna.', href: '/komunita/', variant: 'ink' },
+        { eyebrow: 'Okolí',     title: 'Klecany, <em>15&nbsp;km</em> od&nbsp;Prahy.',     href: '/okoli/',    variant: 'cream' },
+      ]}
+    />
+  </div>
 </Base>
 
 <script is:inline define:vars={{
-  apartmanyData: apartmany.map((a) => ({ slug: a.data.slug, name: a.data.name, cena: a.data.cena })),
-  colivingData: coliving.map((c) => ({ slug: c.data.slug, name: c.data.name, cena: c.data.cena })),
+  apartmanySlug: apartmany.map((a) => a.data.slug),
+  colivingSlug: coliving.map((c) => c.data.slug),
 }}>
-  /* Wizard state + step controller. State persists in form data
-     (FormData API), no global mutable object. Sidebar se průběžně
-     aktualizuje z form data při změnách. */
+  /* Typeform-style controller.
+   *   - Steps: [koncept, format-<branch>, termin, kontakt, success]
+   *   - Auto-advance: po radio change s data-auto-next → next() s 250ms delay
+   *   - Smart pre-fill z ?typ=<slug>: skip koncept + format → start na termin
+   *   - Animace: translateX slide-in z práva při forward, z leva při back
+   */
   (function () {
+    var root = document.querySelector('[data-rez-root]');
+    if (!root) return;
     var form = document.getElementById('rez-form');
-    if (!form) return;
+    var panels = form.querySelectorAll('.rez__panel');
+    var counter = root.querySelector('[data-step-current]');
+    var totalEl = root.querySelector('[data-step-total]');
+    var progressFill = root.querySelector('[data-progress-fill]');
+    var backBtn = root.querySelector('[data-prev]');
+    var afterEl = document.querySelector('[data-rez-after]');
 
-    var steps = form.querySelectorAll('.rez-step');
-    var progressItems = form.querySelectorAll('.rez-progress__step');
-    var sidePrice = document.getElementById('rez-side-price-value');
-    var success = document.getElementById('rez-success');
-    var TOTAL_STEPS = 4;
+    /* State: history stack of panel names. Current panel = last item.
+     * Routing rules:
+     *   - koncept choice "privatni" → format-privatni
+     *   - koncept choice "co-living" → format-coliving
+     *   - koncept choice "nevim" → format-nevim
+     *   - format-* → termin
+     *   - termin → kontakt
+     *   - kontakt submit → success
+     */
+    var history = ['koncept'];
 
-    var allFormats = {};
-    apartmanyData.forEach(function (a) { allFormats[a.slug] = a; });
-    colivingData.forEach(function (c) { allFormats[c.slug] = c; });
-
-    function fmt(n) { return n.toLocaleString('cs-CZ') + ' Kč'; }
-
-    function getCurrent() {
-      var c = form.querySelector('.rez-step.is-current');
-      return c ? parseInt(c.dataset.step, 10) : 1;
+    function panelByName(name) {
+      return form.querySelector('.rez__panel[data-panel="' + name + '"]');
     }
 
-    function showStep(n) {
-      steps.forEach(function (s) {
-        var stepNum = parseInt(s.dataset.step, 10);
-        s.classList.toggle('is-current', stepNum === n);
-        s.hidden = stepNum !== n;
-      });
-      progressItems.forEach(function (p) {
-        var stepNum = parseInt(p.dataset.step, 10);
-        p.classList.toggle('is-active', stepNum === n);
-        p.classList.toggle('is-done', stepNum < n);
-      });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function totalSteps() {
+      /* Total = 3 for pre-filled (termin, kontakt, success). 4 for full flow
+       * (koncept, format-X, termin, kontakt, with success implicit). */
+      var first = history[0];
+      return first === 'termin' ? 2 : 4;
     }
 
-    function validateStep(n) {
-      var step = form.querySelector('.rez-step[data-step="' + n + '"]');
-      if (!step) return true;
-      var required = step.querySelectorAll('input[required], select[required]');
-      var ok = true;
-      var msg = '';
-      required.forEach(function (el) {
-        if (el.type === 'radio') {
-          var group = form.querySelectorAll('input[name="' + el.name + '"]');
-          var anyChecked = Array.prototype.some.call(group, function (x) { return x.checked; });
-          if (!anyChecked) { ok = false; msg = 'Vyberte prosím jednu z možností'; }
-        } else if (!el.value || (el.type === 'checkbox' && !el.checked)) {
-          ok = false;
-          el.focus();
-          msg = 'Vyplňte prosím povinné pole';
+    function showPanel(name, direction) {
+      direction = direction || 'forward';
+      var target = panelByName(name);
+      if (!target) return;
+      panels.forEach(function (p) {
+        if (p === target) return;
+        if (p.classList.contains('is-current')) {
+          p.classList.remove('is-current');
+          p.classList.add(direction === 'forward' ? 'is-leaving-left' : 'is-leaving-right');
+          setTimeout(function () {
+            p.hidden = true;
+            p.classList.remove('is-leaving-left', 'is-leaving-right');
+          }, 320);
         }
       });
-      if (!ok && msg) alert(msg);
-      return ok;
+      target.hidden = false;
+      target.classList.add(direction === 'forward' ? 'is-entering-right' : 'is-entering-left');
+      requestAnimationFrame(function () {
+        target.classList.add('is-current');
+        target.classList.remove('is-entering-right', 'is-entering-left');
+      });
+      var firstInput = target.querySelector('input:not([type="radio"]):not([type="checkbox"]), select, textarea');
+      if (firstInput && direction === 'forward') {
+        setTimeout(function () { try { firstInput.focus(); } catch (e) {} }, 360);
+      }
+      updateProgress(name);
+    }
+
+    function updateProgress(name) {
+      var stepNumber, total;
+      total = totalSteps();
+      if (name === 'koncept')          stepNumber = 1;
+      else if (name.indexOf('format-') === 0) stepNumber = 2;
+      else if (name === 'termin')      stepNumber = history[0] === 'termin' ? 1 : 3;
+      else if (name === 'kontakt')     stepNumber = history[0] === 'termin' ? 2 : 4;
+      else if (name === 'success')     stepNumber = total;
+      else stepNumber = 1;
+
+      counter.textContent = String(Math.min(stepNumber, total));
+      totalEl.textContent = String(total);
+      progressFill.style.transform = 'scaleX(' + (stepNumber / total) + ')';
+      backBtn.hidden = history.length <= 1 || name === 'success';
     }
 
     function next() {
-      var cur = getCurrent();
-      if (!validateStep(cur)) return;
-      if (cur === 1) handleStep1Branch();
-      if (cur < TOTAL_STEPS) showStep(cur + 1);
-    }
-    function prev() {
-      var cur = getCurrent();
-      if (cur > 1) showStep(cur - 1);
-    }
-
-    function handleStep1Branch() {
-      var koncept = form.querySelector('input[name="koncept"]:checked');
-      if (!koncept) return;
-      var subs = form.querySelectorAll('.rez-sub');
-      subs.forEach(function (s) {
-        s.hidden = s.dataset.showFor !== koncept.value;
-      });
-      var step2Required = form.querySelectorAll('.rez-step[data-step="2"] input[type="radio"]');
-      step2Required.forEach(function (r) { r.required = false; });
-      var activeRadios = form.querySelectorAll('.rez-sub[data-show-for="' + koncept.value + '"] input[type="radio"]');
-      if (koncept.value !== 'nevim') {
-        activeRadios.forEach(function (r) { r.required = true; });
+      var cur = history[history.length - 1];
+      if (cur === 'koncept') {
+        var koncept = form.querySelector('input[name="koncept"]:checked');
+        if (!koncept) return;
+        var route = 'format-' + (koncept.value === 'co-living' ? 'coliving' : koncept.value);
+        history.push(route);
+        showPanel(route, 'forward');
+      } else if (cur.indexOf('format-') === 0) {
+        history.push('termin');
+        showPanel('termin', 'forward');
+      } else if (cur === 'termin') {
+        if (!validateTermin()) return;
+        history.push('kontakt');
+        showPanel('kontakt', 'forward');
       }
     }
 
-    function updateSidePrice() {
-      var format = form.querySelector('input[name="format"]:checked');
-      var koncept = form.querySelector('input[name="koncept"]:checked');
-      if (koncept && koncept.value === 'nevim') {
-        var rozpocet = form.querySelector('input[name="nevim-rozpocet"]');
-        if (rozpocet) {
-          sidePrice.textContent = 'cíl ' + fmt(parseInt(rozpocet.value, 10));
-          return;
-        }
-      }
-      if (!format) {
-        sidePrice.textContent = 'vyberte formát';
-        return;
-      }
-      var data = allFormats[format.value];
-      if (!data) { sidePrice.textContent = 'vyberte formát'; return; }
-      sidePrice.textContent = fmt(data.cena.anchor) + '/měs';
+    function back() {
+      if (history.length <= 1) return;
+      history.pop();
+      showPanel(history[history.length - 1], 'back');
     }
 
-    /* Event handlers */
-    form.addEventListener('click', function (e) {
-      if (e.target.matches('[data-next]')) { e.preventDefault(); next(); return; }
-      if (e.target.matches('[data-prev]')) { e.preventDefault(); prev(); return; }
+    function validateTermin() {
+      var mesic = form.querySelector('select[name="mesic"]');
+      var delka = form.querySelector('input[name="delka"]:checked');
+      if (!mesic.value) { mesic.focus(); flashInvalid(mesic); return false; }
+      if (!delka) { flashInvalid(form.querySelector('input[name="delka"]').closest('.rez__field')); return false; }
+      return true;
+    }
 
-      /* Karty bez <label>: klik kdekoliv kromě Detail linku označí radio. */
-      var card = e.target.closest('[data-card]');
-      if (card && !e.target.closest('[data-no-select]')) {
-        var radio = card.querySelector('input[type="radio"]');
-        if (radio) {
-          radio.checked = true;
-          radio.dispatchEvent(new Event('change', { bubbles: true }));
-        }
+    function flashInvalid(el) {
+      if (!el) return;
+      el.classList.add('is-invalid');
+      setTimeout(function () { el.classList.remove('is-invalid'); }, 800);
+    }
+
+    /* Auto-advance po radio výběru. Debounce 250ms tak aby user mohl změnit
+     * volbu, než se přepneme. */
+    var autoNextTimer = null;
+    form.addEventListener('change', function (e) {
+      var t = e.target;
+      if (t.matches('input[data-auto-next]') && t.checked) {
+        clearTimeout(autoNextTimer);
+        autoNextTimer = setTimeout(next, 280);
       }
     });
-    form.addEventListener('change', updateSidePrice);
-    form.addEventListener('input', updateSidePrice);
 
+    form.addEventListener('click', function (e) {
+      if (e.target.closest('[data-next]')) { e.preventDefault(); next(); }
+      if (e.target.closest('[data-prev]')) { e.preventDefault(); back(); }
+    });
+
+    backBtn.addEventListener('click', function (e) { e.preventDefault(); back(); });
+
+    /* Range slider live readout */
     var rozpocetIn = document.getElementById('nevim-rozpocet');
     var rozpocetOut = document.getElementById('nevim-rozpocet-out');
     if (rozpocetIn && rozpocetOut) {
+      var fmtCZ = function (n) { return n.toLocaleString('cs-CZ') + ' Kč / měs'; };
       rozpocetIn.addEventListener('input', function () {
-        rozpocetOut.textContent = fmt(parseInt(rozpocetIn.value, 10)) + '/měs';
-        updateSidePrice();
+        rozpocetOut.textContent = fmtCZ(parseInt(rozpocetIn.value, 10));
       });
     }
 
+    /* Submit */
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (!validateStep(TOTAL_STEPS)) return;
+      var required = form.querySelectorAll('.rez__panel[data-panel="kontakt"] input[required]');
+      var allOk = true;
+      required.forEach(function (el) {
+        if (el.type === 'checkbox') {
+          if (!el.checked) { allOk = false; flashInvalid(el.closest('.rez__gdpr')); }
+        } else if (!el.value) {
+          allOk = false;
+          flashInvalid(el);
+          if (el === document.activeElement || !document.activeElement) el.focus();
+        }
+      });
+      if (!allOk) return;
       var fd = new FormData(form);
       var payload = {};
       fd.forEach(function (v, k) { payload[k] = v; });
       console.log('[Hub Rezervace] payload:', payload);
-      /* POST endpoint Phase 5b: form.startovacihub.cz/submit. Backend
-         scaffold v `worker/` v repu, deploy přes Wrangler. */
-      form.style.display = 'none';
-      success.hidden = false;
+      /* Cloudflare Worker endpoint (form.startovacihub.cz) deploy pending,
+         Phase 5b. Pro teď success state + log. */
+      history.push('success');
+      showPanel('success', 'forward');
+      if (afterEl) afterEl.removeAttribute('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    /* URL pre-fill: ?typ=<slug> z karet (RoomCard / Detail page CTAs) */
+    /* URL pre-fill: ?typ=<slug> → skip rovnou na termin */
     var url = new URL(window.location.href);
     var typ = url.searchParams.get('typ');
     if (typ) {
-      var formatRadio = form.querySelector('input[name="format"][value="' + typ + '"]');
-      if (formatRadio) {
-        formatRadio.checked = true;
-        var isPrivatni = !!apartmanyData.find(function (a) { return a.slug === typ; });
-        var konceptRadio = form.querySelector('input[name="koncept"][value="' + (isPrivatni ? 'privatni' : 'co-living') + '"]');
+      var isPrivatni = apartmanySlug.indexOf(typ) >= 0;
+      var isColiving = colivingSlug.indexOf(typ) >= 0;
+      if (isPrivatni || isColiving) {
+        var konceptValue = isPrivatni ? 'privatni' : 'co-living';
+        var konceptRadio = form.querySelector('input[name="koncept"][value="' + konceptValue + '"]');
+        var formatRadio = form.querySelector('input[name="format"][value="' + typ + '"]');
         if (konceptRadio) konceptRadio.checked = true;
-        handleStep1Branch();
-        updateSidePrice();
+        if (formatRadio) formatRadio.checked = true;
+        history = ['termin'];
+        var konceptPanel = panelByName('koncept');
+        if (konceptPanel) {
+          konceptPanel.hidden = true;
+          konceptPanel.classList.remove('is-current');
+        }
+        showPanel('termin', 'forward');
       }
+    } else {
+      updateProgress('koncept');
     }
   }());
 </script>
 
 <style>
-  /* Hero: bez fotky, plum minimální */
-  .rez-hero { padding: var(--space-8) var(--gutter) var(--space-6); background: var(--bg); color: var(--fg); border-bottom: 1px solid var(--rule, rgba(0,0,0,0.08)); }
-  .rez-hero__inner { max-width: var(--container-wide); margin: 0 auto; }
-  .rez-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
-  .rez-hero__title { font: 600 clamp(2rem, 4vw, 3rem) / 1.1 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-4); }
-  .rez-hero__lede { color: var(--fg-muted); margin: 0; max-width: 60ch; line-height: 1.5; }
+  /* =========================================================================
+     /rezervace/ Typeform-style flow
+     Single column, mobile-first, animated slide transitions.
+     ========================================================================= */
 
-  /* Layout: form + sticky sidebar */
-  .rez-layout {
+  .rez {
+    /* Vyplnit prostor pod sticky header (80px), nechat trust footer dole. */
+    min-height: calc(100vh - 64px);
+    min-height: calc(100dvh - 64px);
+    padding: clamp(80px, 14vh, 120px) var(--gutter) clamp(80px, 12vh, 100px);
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
-    gap: var(--space-7);
-    max-width: var(--container-wide);
+    grid-template-rows: auto 1fr auto;
+    gap: var(--space-6);
+    max-width: 720px;
     margin: 0 auto;
-    padding: var(--space-7) var(--gutter);
-  }
-  @media (max-width: 960px) {
-    .rez-layout { grid-template-columns: 1fr; gap: 0; }
-    .rez-side { position: sticky; top: 56px; order: -1; z-index: 10; }
-    .rez-side__inner {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      padding: var(--space-3) var(--space-4);
-      border-radius: 0;
-      border-left: 0;
-      border-right: 0;
-      margin: 0 calc(-1 * var(--gutter));
-    }
-    .rez-side__eyebrow { margin: 0; flex-shrink: 0; }
-    .rez-side__price { padding: 0; border: 0; display: flex; align-items: baseline; gap: var(--space-2); }
-    .rez-side__price-label { display: none; }
-    .rez-side__price-value { font-size: var(--text-lg); }
-    .rez-side__check,
-    .rez-side__note { display: none; }
-  }
-
-  /* Progress: clickable looking pill steps, plum fill na aktivním kroku */
-  .rez-progress {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 var(--space-7);
-    display: flex;
-    gap: var(--space-2);
-    flex-wrap: wrap;
-    font-size: var(--text-xs);
-  }
-  .rez-progress__step {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
-    color: var(--fg-subtle);
-    background: var(--bg);
-    transition: border-color 220ms ease, color 220ms ease, background 220ms ease;
-  }
-  .rez-progress__step span {
-    font-weight: 700;
-    color: var(--fg-subtle);
-    font-variant-numeric: tabular-nums;
-    transition: color 220ms ease;
-  }
-  .rez-progress__step.is-active,
-  .rez-progress__step.is-active span {
-    color: var(--accent);
-    border-color: var(--accent);
-    background: var(--accent-soft);
-  }
-  .rez-progress__step.is-done,
-  .rez-progress__step.is-done span {
-    color: var(--accent);
-    border-color: var(--accent-rule);
-  }
-  .rez-progress__step.is-done::after {
-    content: "✓";
-    margin-left: 4px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  /* Step + smooth entrance animation */
-  .rez-step { border: 0; padding: 0; margin: 0; }
-  .rez-step legend {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-3);
-    margin-bottom: var(--space-5);
     width: 100%;
+    color: var(--fg);
   }
-  .rez-step__num {
+
+  /* ---------- Head: counter + progress bar + back ---------- */
+  .rez__head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .rez__step-counter {
+    margin: 0;
     font: 600 var(--text-sm) / 1 var(--font-sans);
     color: var(--accent);
     letter-spacing: var(--tracking-wider);
     font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
-  .rez-step__title {
-    font: 600 clamp(1.5rem, 2.5vw, 2rem) / 1.15 var(--font-sans);
+  .rez__step-sep { color: var(--fg-subtle); opacity: 0.5; }
+  .rez__step-counter [data-step-total] { color: var(--fg-subtle); }
+  .rez__progress {
+    height: 2px;
+    background: var(--accent-rule);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .rez__progress-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform-origin: left center;
+    transform: scaleX(0.25);
+    transition: transform 480ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .rez__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: var(--radius-input);
+    border: 1px solid var(--accent-rule);
+    background: transparent;
+    color: var(--accent);
+    font: 600 var(--text-xs) / 1 var(--font-sans);
+    cursor: pointer;
+    transition: background 180ms ease, border-color 180ms ease;
+  }
+  .rez__back:hover,
+  .rez__back:focus-visible {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    outline: none;
+  }
+  .rez__back svg { transform: translateX(0); transition: transform 180ms ease; }
+  .rez__back:hover svg { transform: translateX(-2px); }
+  .rez__back[hidden] { display: none; }
+
+  /* ---------- Panel + animovaný slide ---------- */
+  .rez__form { position: relative; display: grid; }
+  .rez__panel {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    opacity: 0;
+    transform: translateX(40px);
+    pointer-events: none;
+    transition:
+      opacity 320ms cubic-bezier(0.32, 0.72, 0, 1),
+      transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .rez__panel.is-current {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .rez__panel.is-leaving-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    pointer-events: none;
+  }
+  .rez__panel.is-leaving-right {
+    opacity: 0;
+    transform: translateX(40px);
+    pointer-events: none;
+  }
+  .rez__panel.is-entering-right {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  .rez__panel.is-entering-left {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+
+  .rez__q {
+    font: 700 clamp(1.625rem, 3.5vw, 2.25rem) / 1.1 var(--font-sans);
     letter-spacing: var(--tracking-tight);
+    margin: 0;
+    text-wrap: balance;
+    max-width: 22ch;
   }
-  .rez-step.is-current {
-    animation: rez-step-in 340ms cubic-bezier(0.2, 0, 0, 1);
-  }
-  @keyframes rez-step-in {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .rez-step.is-current { animation: none; }
+  .rez__q-hint {
+    font: 500 var(--text-md) / 1.55 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+    max-width: 48ch;
   }
 
-  /* Cards: simple koncept karty + media karty (s thumbnailem + Detail linkem) */
-  .rez-cards { display: grid; gap: var(--space-4); }
-  .rez-cards--2 { grid-template-columns: repeat(2, 1fr); }
-  .rez-cards--3 { grid-template-columns: repeat(3, 1fr); }
-  @media (max-width: 760px) { .rez-cards--2, .rez-cards--3 { grid-template-columns: 1fr; } }
-
-  .rez-card {
+  /* ---------- Choice cards ---------- */
+  .rez__choices {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .rez__choices--2 { grid-template-columns: 1fr; }
+  .rez__choices--3 { grid-template-columns: 1fr; }
+  @media (min-width: 720px) {
+    .rez__choices--2 { grid-template-columns: 1fr 1fr; }
+    .rez__choices--3 { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .rez__choice {
     position: relative;
     display: block;
-    background: var(--bg);
-    border: 1px solid var(--border-muted);
+    padding: clamp(16px, 2.2vw, 24px) clamp(18px, 2.4vw, 28px);
+    border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
+    background: var(--bg);
     cursor: pointer;
-    transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
-    overflow: hidden;
+    transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
   }
-  .rez-card:hover {
+  .rez__choice:hover {
     border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    background: var(--accent-soft);
+    transform: translateY(-1px);
   }
-  .rez-card input {
+  .rez__choice input[type="radio"] {
     position: absolute;
     opacity: 0;
     pointer-events: none;
   }
-  .rez-card:has(input:checked) {
+  .rez__choice:has(input:checked) {
     border-color: var(--accent);
     background: var(--accent-soft);
-    box-shadow: 0 0 0 2px var(--accent), 0 8px 24px rgba(90, 42, 95, 0.12);
+    box-shadow: 0 0 0 1px var(--accent) inset;
   }
-  .rez-card > input + div,
-  .rez-card > input + .rez-card__body,
-  .rez-card > .rez-card__body { padding: var(--space-5); }
-  .rez-card h3 {
-    font: 600 var(--text-lg) / 1.2 var(--font-sans);
-    margin: 0 0 var(--space-2);
+  .rez__choice:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .rez__choice-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .rez__choice-title {
+    font: 700 clamp(1rem, 1.5vw, 1.125rem) / 1.2 var(--font-sans);
     letter-spacing: var(--tracking-tight);
   }
-  .rez-card p {
-    font-size: var(--text-sm);
-    line-height: 1.5;
+  .rez__choice-meta {
+    font: 500 var(--text-sm) / 1.4 var(--font-sans);
     color: var(--fg-muted);
-    margin: 0;
   }
-  .rez-card__price {
-    font: 600 var(--text-md) / 1.2 var(--font-sans);
+
+  /* ---------- Fields ---------- */
+  .rez__field { display: grid; gap: 8px; }
+  .rez__field > label {
+    font: 600 var(--text-sm) / 1.2 var(--font-sans);
     color: var(--fg);
-    margin-top: var(--space-2) !important;
-    font-variant-numeric: tabular-nums;
   }
-  .rez-card__price small {
-    font-weight: 400;
-    font-size: var(--text-xs);
-    color: var(--fg-muted);
-    margin-left: 4px;
-  }
-
-  /* Media variant: thumbnail nahoře, body s Detail linkem dole */
-  .rez-card--media { padding: 0; }
-  .rez-card--media .rez-card__body { padding: var(--space-4); }
-  .rez-card__thumb {
-    aspect-ratio: 4 / 3;
-    background: var(--bg-muted);
-    overflow: hidden;
-  }
-  .rez-card__thumb img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 420ms cubic-bezier(0.2, 0, 0, 1);
-  }
-  .rez-card--media:hover .rez-card__thumb img { transform: scale(1.03); }
-  .rez-card__thumb-empty {
-    display: grid;
-    place-items: center;
-    height: 100%;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 2rem;
-  }
-  .rez-card__detail {
-    display: inline-block;
-    margin-top: var(--space-3);
-    font: 600 var(--text-xs) / 1 var(--font-sans);
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid var(--accent-rule);
-    padding-bottom: 2px;
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    transition: border-color 200ms ease;
-    position: relative;
-    z-index: 2;
-  }
-  .rez-card__detail:hover,
-  .rez-card__detail:focus-visible {
-    border-color: var(--accent);
-    outline: none;
-  }
-
-  /* Fields */
-  .rez-sub { margin-bottom: var(--space-5); }
-  .rez-sub__hint { color: var(--fg-muted); font-size: var(--text-sm); margin: 0 0 var(--space-4); }
-  .rez-field { display: grid; gap: var(--space-2); margin-bottom: var(--space-4); }
-  .rez-field label { font: 600 var(--text-sm) / 1.3 var(--font-sans); color: var(--fg); }
-  .rez-field input[type="text"],
-  .rez-field input[type="tel"],
-  .rez-field input[type="email"],
-  .rez-field select,
-  .rez-field textarea {
-    font: 400 var(--text-md) / 1.4 var(--font-sans);
-    padding: 14px 14px;
-    min-height: 48px;
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
+  .rez__field input[type="text"],
+  .rez__field input[type="tel"],
+  .rez__field input[type="email"],
+  .rez__field select,
+  .rez__field textarea {
+    appearance: none;
+    -webkit-appearance: none;
+    font: 500 var(--text-md) / 1.4 var(--font-sans);
+    color: var(--fg);
     background: var(--bg);
-    color: var(--fg);
-    transition: border-color 180ms ease, box-shadow 180ms ease;
-  }
-  .rez-field textarea { min-height: 96px; }
-  .rez-field input:focus,
-  .rez-field select:focus,
-  .rez-field textarea:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-  }
-  .rez-field__hint { color: var(--fg-muted); font-size: var(--text-xs); margin: 4px 0 0; }
-  .rez-field--check { margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-muted); }
-  .rez-field input[type="range"] { padding: 0; }
-  .rez-field output { font-weight: 600; color: var(--accent); font-size: var(--text-sm); font-variant-numeric: tabular-nums; }
-
-  .rez-radio-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
-  .rez-pill {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 18px;
-    min-height: 44px;
-    border: 1px solid var(--border-muted);
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: var(--text-sm);
-    transition: background 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
-  }
-  .rez-pill:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .rez-pill input { position: absolute; opacity: 0; }
-  .rez-pill:has(input:checked) {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
-
-  .rez-check { display: grid; grid-template-columns: 28px 1fr; gap: var(--space-3); align-items: start; font-size: var(--text-sm); line-height: 1.5; cursor: pointer; padding: 8px 0; }
-  .rez-check input { width: 22px; height: 22px; margin-top: 0; accent-color: var(--accent); }
-  .rez-check a { color: var(--accent); text-decoration: underline; }
-
-  .rez-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
-  @media (max-width: 600px) { .rez-grid-2 { grid-template-columns: 1fr; } }
-
-  /* Navigation */
-  .rez-nav {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-3);
-    margin-top: var(--space-6);
-    padding-top: var(--space-5);
-    border-top: 1px solid var(--border-muted);
-  }
-  .rez-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 12px 22px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: var(--fg);
-    background: transparent;
-    border: 1px solid var(--fg);
-    border-radius: var(--radius-input);
-    cursor: pointer;
-    transition: background 200ms ease, color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
-  }
-  .rez-btn:hover {
-    background: var(--fg);
-    color: var(--bg);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-  .rez-btn--primary {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-    padding: 14px 28px;
-  }
-  .rez-btn--primary:hover {
-    background: var(--k-100);
-    color: #fff;
-    border-color: var(--k-100);
-    box-shadow: 0 6px 18px rgba(90, 42, 95, 0.18);
-  }
-  .rez-btn--ghost {
-    background: transparent;
-    border: 0;
-    color: var(--fg);
-    padding-left: 0;
-  }
-  .rez-btn--ghost:hover {
-    background: transparent;
-    color: var(--accent);
-    transform: translateX(-2px);
-    box-shadow: none;
-  }
-
-  /* Sticky sidebar */
-  .rez-side { position: sticky; top: calc(64px + var(--space-4)); align-self: start; }
-  .rez-side__inner {
-    background: var(--bg-muted);
-    border: 1px solid var(--border-muted);
-    padding: var(--space-5);
-    border-radius: var(--radius-input);
-  }
-  .rez-side__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
-  .rez-side__price { display: grid; gap: 4px; padding: var(--space-3) 0; border-bottom: 1px solid var(--rule, rgba(0,0,0,0.1)); }
-  .rez-side__price-label { font-size: var(--text-xs); color: var(--fg-muted); }
-  .rez-side__price-value { font: 600 var(--text-2xl) / 1.1 var(--font-sans); color: var(--accent); }
-  .rez-side__check { padding-top: var(--space-4); }
-  .rez-side__check-title { font: 600 var(--text-sm) / 1.2 var(--font-sans); margin: 0 0 var(--space-3); }
-  .rez-side__check ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-2); font-size: var(--text-xs); color: var(--fg); }
-  .rez-side__check li { padding-left: 14px; position: relative; line-height: 1.5; }
-  .rez-side__check li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
-  .rez-side__note { font-size: var(--text-xs); color: var(--fg-muted); margin: var(--space-4) 0 0; line-height: 1.45; }
-
-  /* Success state with checkmark pulse animation */
-  .rez-success {
-    padding: var(--space-7);
-    background: var(--accent-soft);
     border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
-    animation: rez-success-in 480ms cubic-bezier(0.2, 0, 0, 1);
+    padding: 12px 14px;
+    width: 100%;
+    transition: border-color 180ms ease, background 180ms ease;
   }
-  .rez-success h2 {
-    font: 600 var(--text-3xl) / 1.15 var(--font-sans);
-    margin: 0 0 var(--space-4);
-    letter-spacing: var(--tracking-tight);
+  .rez__field input:focus,
+  .rez__field select:focus,
+  .rez__field textarea:focus {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent-soft);
+    outline-offset: 0;
+  }
+  .rez__field textarea { resize: vertical; min-height: 80px; }
+  .rez__field input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: var(--accent-rule);
+    border-radius: 999px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .rez__field input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px hsl(var(--hue) 41% 13% / 0.25);
+    cursor: grab;
+  }
+  .rez__field input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid #fff;
+    cursor: grab;
+  }
+  .rez__field output {
+    font: 500 var(--text-sm) / 1.2 var(--font-sans);
     color: var(--accent);
+    font-variant-numeric: tabular-nums;
   }
-  .rez-success h2::before {
-    content: "✓ ";
-    display: inline-block;
-    margin-right: 8px;
-    animation: rez-success-check 720ms cubic-bezier(0.2, 0, 0, 1);
+  .rez__field.is-invalid input,
+  .rez__field.is-invalid select { border-color: var(--c-red); animation: rez-shake 320ms ease; }
+
+  .rez__grid-2 {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr;
   }
-  .rez-success p { line-height: 1.6; margin: 0 0 var(--space-3); max-width: 60ch; }
-  @keyframes rez-success-in {
-    from { opacity: 0; transform: scale(0.96) translateY(8px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
+  @media (min-width: 540px) { .rez__grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  /* ---------- Pills (multi-select horizontal) ---------- */
+  .rez__pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .rez__pill {
+    position: relative;
+    display: inline-flex;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--accent-rule);
+    background: var(--bg);
+    cursor: pointer;
+    font: 500 var(--text-sm) / 1 var(--font-sans);
+    transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
   }
-  @keyframes rez-success-check {
-    0%   { opacity: 0; transform: scale(0); }
-    60%  { opacity: 1; transform: scale(1.25); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .rez-success { animation: none; }
-    .rez-success h2::before { animation: none; }
+  .rez__pill input { position: absolute; opacity: 0; pointer-events: none; }
+  .rez__pill:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .rez__pill:has(input:checked) {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
   }
 
-  /* Mini-FAQ */
-  .faq-mini { padding: 0; border-top: 1px solid var(--rule, rgba(0,0,0,0.08)); }
-  .faq-mini:first-of-type { border-top: 0; }
-  .faq-mini summary {
-    font: 600 var(--text-md) / 1.3 var(--font-sans);
+  /* ---------- Addons (checkbox cards) ---------- */
+  .rez__addons { display: grid; gap: 10px; }
+  .rez__addon {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
     cursor: pointer;
-    padding: 14px 0;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
+    transition: border-color 180ms ease, background 180ms ease;
   }
-  .faq-mini summary::-webkit-details-marker { color: var(--accent); }
-  .faq-mini p { color: var(--fg-muted); line-height: 1.6; margin: 0 0 var(--space-4); max-width: 70ch; }
+  .rez__addon:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .rez__addon:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .rez__addon input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    margin-top: 2px;
+  }
+  .rez__addon-body { display: flex; flex-direction: column; gap: 2px; }
+  .rez__addon-body strong { font: 600 var(--text-md) / 1.3 var(--font-sans); }
+  .rez__addon-body small { font: 500 var(--text-sm) / 1.4 var(--font-sans); color: var(--fg-muted); }
+
+  /* ---------- GDPR checkbox ---------- */
+  .rez__gdpr {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 12px;
+    font: 500 var(--text-sm) / 1.5 var(--font-sans);
+    color: var(--fg-muted);
+  }
+  .rez__gdpr input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--accent);
+    margin-top: 2px;
+  }
+  .rez__gdpr a { color: var(--accent); text-decoration: underline; }
+  .rez__gdpr.is-invalid {
+    color: var(--c-red);
+    animation: rez-shake 320ms ease;
+  }
+
+  /* ---------- CTA ---------- */
+  .rez__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    align-self: flex-start;
+    padding: 14px 26px;
+    border-radius: var(--radius-input);
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font: 700 var(--text-md) / 1 var(--font-sans);
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, transform 200ms ease;
+  }
+  .rez__cta:hover,
+  .rez__cta:focus-visible {
+    background: var(--accent);
+    color: #fff;
+    outline: none;
+    transform: translateY(-1px);
+  }
+  .rez__cta--primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 30px;
+    align-self: stretch;
+    justify-content: space-between;
+  }
+  .rez__cta--primary:hover,
+  .rez__cta--primary:focus-visible {
+    background: var(--plum-deep);
+    transform: translateY(-1px);
+  }
+
+  /* ---------- Success ---------- */
+  .rez__panel--success { align-items: flex-start; text-align: left; }
+  .rez__success-mark {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    animation: rez-pop 480ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  /* ---------- Trust bar ---------- */
+  .rez__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(12px, 2vw, 24px);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--accent-rule);
+  }
+  .rez__trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 500 var(--text-xs) / 1 var(--font-sans);
+    color: var(--fg-muted);
+    letter-spacing: var(--tracking-wide);
+  }
+  .rez__trust-item svg { color: var(--accent); flex-shrink: 0; }
+
+  /* ---------- CrossLinkPair po success ---------- */
+  .rez-after { background: var(--bg); }
+  .rez-after[hidden] { display: none; }
+
+  /* ---------- Animations ---------- */
+  @keyframes rez-pop {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  @keyframes rez-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rez__panel,
+    .rez__progress-fill,
+    .rez__cta,
+    .rez__choice,
+    .rez__pill,
+    .rez__addon,
+    .rez__back svg { transition: none; }
+    .rez__success-mark { animation: none; }
+  }
 </style>

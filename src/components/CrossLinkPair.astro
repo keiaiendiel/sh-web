@@ -1,0 +1,247 @@
+---
+/*
+ * CrossLinkPair , dvě karty vedle sebe pod main CtaBanner na podstránkách.
+ * Propojuje podstránku s 2 tematicky blízkými. Vychází z 00-SPEC § Photo
+ * backdrop pattern (gradient plate + ribbon arc + breathing + hover slide).
+ *
+ *   items , přesně 2 položky { eyebrow, title, href, variant, ribbonPath? }
+ *   sectionLabel , aria-label pro <section> wrapper (default "Pokračujte na další sekce")
+ */
+import { withBase } from '../utils/url';
+
+type Variant = 'deep' | 'cream' | 'rose' | 'ink';
+type Item = {
+  eyebrow: string;
+  title: string;
+  href: string;
+  variant: Variant;
+  ribbonPath?: string;
+};
+
+interface Props {
+  items: [Item, Item];
+  sectionLabel?: string;
+}
+
+const { items, sectionLabel = 'Pokračujte na další sekce' } = Astro.props;
+
+const defaultRibbon: Record<Variant, string> = {
+  deep:  'M 1180 120 C 1380 80, 1560 240, 1480 380 C 1420 480, 1240 480, 1180 360',
+  cream: 'M 200 360 C 360 240, 580 360, 700 280 C 820 200, 920 320, 880 460',
+  rose:  'M 1080 140 C 1240 100, 1380 240, 1320 360 C 1280 440, 1140 440, 1100 340',
+  ink:   'M 160 380 C 320 280, 540 380, 660 320 C 780 260, 900 380, 860 480',
+};
+
+const defaultThickness: Record<Variant, number> = {
+  deep: 38,
+  cream: 32,
+  rose: 12,
+  ink: 28,
+};
+---
+<section class="cross-link-pair" aria-label={sectionLabel}>
+  <div class="cross-link-pair__grid">
+    {items.map((it) => (
+      <a
+        class={`cross-link cross-link--${it.variant} osa-nolink`}
+        href={withBase(it.href)}
+        data-ribbon-reveal>
+        <span class="cross-link__bg" aria-hidden="true">
+          <svg viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+            <path
+              d={it.ribbonPath ?? defaultRibbon[it.variant]}
+              stroke-width={defaultThickness[it.variant]}
+            />
+          </svg>
+        </span>
+        <span class="cross-link__type">
+          <span class="cross-link__eyebrow">{it.eyebrow}</span>
+          <span class="cross-link__title" set:html={it.title} />
+        </span>
+        <span class="cross-link__arrow" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M5 12h14m0 0l-6-6m6 6l-6 6"
+              stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .cross-link-pair {
+    padding: 0 0 var(--space-8);
+    background: var(--bg);
+  }
+  .cross-link-pair__grid {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2vw, 24px);
+  }
+  @media (max-width: 760px) {
+    .cross-link-pair__grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+
+  /* Karta */
+  .cross-link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(16px, 2vw, 24px);
+    align-items: end;
+    min-height: clamp(140px, 16vw, 200px);
+    padding: clamp(20px, 2.4vw, 28px) clamp(22px, 2.4vw, 32px);
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    isolation: isolate;
+    text-decoration: none !important;
+    transition:
+      transform 320ms var(--ease-quart),
+      box-shadow 320ms var(--ease-quart);
+  }
+  .cross-link__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.92;
+    transition: transform 700ms var(--ease-quart);
+  }
+  .cross-link__bg svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+  .cross-link__bg path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .cross-link[data-ribbon-reveal] .cross-link__bg path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  .cross-link[data-ribbon-reveal].is-revealed .cross-link__bg path {
+    animation:
+      ribbon-snake-draw 2.6s var(--ease-snake) forwards,
+      ribbon-breathe 7s ease-in-out 2.6s infinite;
+  }
+
+  .cross-link__type {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 28ch;
+  }
+  .cross-link__eyebrow {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+  .cross-link__title {
+    font: 700 clamp(1.125rem, 1.8vw, 1.5rem) / 1.1 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+  .cross-link__title :global(em) {
+    font-style: italic;
+    font-weight: 500;
+  }
+  .cross-link__arrow {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    opacity: 0.7;
+    transition:
+      opacity 220ms var(--ease-quart),
+      transform 220ms var(--ease-quart),
+      background 220ms var(--ease-quart);
+  }
+  .cross-link__arrow svg { display: block; }
+
+  /* Variants */
+  .cross-link--deep { background: var(--plum-deep); color: #fff; }
+  .cross-link--deep .cross-link__bg path { stroke: var(--accent); }
+  .cross-link--deep .cross-link__eyebrow { color: var(--rose); }
+
+  .cross-link--cream { background: var(--cream); color: var(--fg); border: 1px solid var(--accent-rule); }
+  .cross-link--cream .cross-link__bg path { stroke: var(--accent); }
+  .cross-link--cream .cross-link__eyebrow { color: var(--accent); }
+
+  .cross-link--rose { background: var(--rose); color: var(--plum-deep); }
+  .cross-link--rose .cross-link__bg path { stroke: var(--plum-deep); }
+  .cross-link--rose .cross-link__eyebrow { color: var(--plum-deep); }
+
+  .cross-link--ink { background: var(--plum-deep); color: var(--cream); }
+  .cross-link--ink .cross-link__bg path { stroke: var(--rose); }
+  .cross-link--ink .cross-link__eyebrow { color: var(--rose); }
+
+  /* Hover */
+  .cross-link:hover,
+  .cross-link:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px hsl(var(--hue) 41% 13% / 0.22);
+    outline: none;
+  }
+  .cross-link:hover .cross-link__bg {
+    transform: translateX(14px);
+  }
+  .cross-link:hover .cross-link__bg path {
+    animation-play-state: paused;
+    opacity: 0.85;
+  }
+  .cross-link:hover .cross-link__arrow,
+  .cross-link:focus-visible .cross-link__arrow {
+    opacity: 1;
+    transform: translateX(3px);
+    background: currentColor;
+  }
+  .cross-link:hover .cross-link__arrow svg,
+  .cross-link:focus-visible .cross-link__arrow svg {
+    color: var(--accent);
+  }
+  .cross-link--deep:hover .cross-link__arrow svg,
+  .cross-link--deep:focus-visible .cross-link__arrow svg { color: var(--plum-deep); }
+  .cross-link--cream:hover .cross-link__arrow svg,
+  .cross-link--cream:focus-visible .cross-link__arrow svg { color: var(--cream); }
+  .cross-link--rose:hover .cross-link__arrow svg,
+  .cross-link--rose:focus-visible .cross-link__arrow svg { color: var(--rose); }
+  .cross-link--ink:hover .cross-link__arrow svg,
+  .cross-link--ink:focus-visible .cross-link__arrow svg { color: var(--plum-deep); }
+
+  .cross-link:focus-visible {
+    outline: 2px solid var(--rose);
+    outline-offset: 3px;
+  }
+  .cross-link--cream:focus-visible { outline-color: var(--accent); }
+  .cross-link--rose:focus-visible { outline-color: var(--plum-deep); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cross-link, .cross-link__bg, .cross-link__arrow { transition: none; }
+    .cross-link[data-ribbon-reveal] .cross-link__bg path,
+    .cross-link[data-ribbon-reveal].is-revealed .cross-link__bg path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .cross-link:hover .cross-link__bg { transform: none; }
+  }
+</style>

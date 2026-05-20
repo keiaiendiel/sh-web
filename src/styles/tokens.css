@@ -77,21 +77,27 @@
   --c-forest:   #2f5233;
   --c-teal:     #2c6d7a;
   --c-blue:     #11457e;   /* tricolor blue */
-  --c-plum:     #5a2a5f;
+  --c-plum:     hsl(var(--hue) 39% 27%);   /* plum, HSL pro --hue tuning */
+
+  /* ---------- Hub palette tuning ----------
+     Plum = hsl(294, 39%, 27%) byl výchozí, klient si zvolil --hue 240 (modrý
+     tón) pro celkovou identitu. Rose = --hue + 44°. Saturation a lightness
+     staticky drží sílu barev. HueSlider komponenta zůstává v repu, ale je
+     defaultně skrytá (display: none); reaktivace v jejím <style> bloku. */
+  --hue: 240;
 
   /* Hub accent: plum (resident-facing sub-identity) */
   --accent:      var(--c-plum);
   --accent-on:   #ffffff;
-  --accent-soft: rgba(90, 42, 95, 0.12);   /* focus rings, subtle washes */
-  --accent-rule: rgba(90, 42, 95, 0.22);   /* plum-tinted hairline — replaces
-                                              k-15 on Hub-surface cards & tags */
+  --accent-soft: hsl(var(--hue) 39% 27% / 0.12);   /* focus rings, subtle washes */
+  --accent-rule: hsl(var(--hue) 39% 27% / 0.22);   /* plum-tinted hairline */
 
   /* ---------- Ribbon motif palette (Hub sub-identity, per spec v1) ----------
-     Extension of --accent for the ribbon system. Plum-only discipline:
-     deep + rose + cream are the only sanctioned bg/stroke partners. */
-  --plum-deep: #2d1430;                    /* footer bg, hero banners, signature combo */
-  --rose:      #c89bb0;                    /* on-dark accent, secondary stroke */
-  --cream:     #f7f4ef;                    /* warm canvas under ribbon strokes */
+     Plum-only discipline: deep + rose + cream are the only sanctioned partners.
+     Cream je teplá béžová, ne plum derivat, takže není --hue dependent. */
+  --plum-deep: hsl(var(--hue) 41% 13%);             /* footer bg, hero banners */
+  --rose:      hsl(calc(var(--hue) + 44) 30% 70%);  /* on-dark accent, secondary stroke */
+  --cream:     #f7f4ef;                             /* warm canvas under ribbon strokes */
 
   /* Stroke widths per use-case (ribbon spec § 04):
      thin   — section dividers, mini-accenty, hover ripple
@@ -353,7 +359,7 @@
   --fg: var(--k-0);
   --fg-muted: var(--k-30);
   --fg-subtle: var(--k-50);
-  --bg: var(--k-100);
+  --bg: var(--plum-deep);
   --bg-elevated: var(--k-90);
   --bg-muted: var(--k-90);
   --border: var(--k-0);
