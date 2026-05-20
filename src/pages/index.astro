@@ -1128,20 +1128,23 @@ const tiles = [
   .lp-summary__card-link--privatni:focus-visible .lp-summary__cta {
     background: var(--plum-deep); color: var(--cream); border-color: var(--plum-deep);
   }
+  /* Facts list sjednocen s .apt-spec na detail stránkách: 2-col layout
+     1fr / 1.4fr, hairline mezi rows, dt uppercase tiny, dd text-sm.
+     Stejný kompakt styling na desktopu i mobilu, žádný stacking. */
   .lp-summary__facts {
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    padding: var(--space-3) 0 0;
-    border-top: 1px solid var(--border-muted);
+    display: grid;
+    gap: 0;
   }
   .lp-summary__row {
     display: grid;
-    grid-template-columns: minmax(110px, 0.5fr) minmax(0, 1fr);
+    grid-template-columns: 1fr 1.4fr;
     gap: var(--space-3);
+    padding: var(--space-3) 0;
     align-items: baseline;
+    border-top: 1px solid var(--border-muted);
   }
+  .lp-summary__row:first-child { border-top: 0; padding-top: 0; }
   .lp-summary__dt {
     font: 600 var(--text-2xs) / 1.3 var(--font-sans);
     letter-spacing: var(--tracking-wider);
@@ -1150,7 +1153,7 @@ const tiles = [
     margin: 0;
   }
   .lp-summary__dd {
-    font: 500 var(--text-md) / 1.45 var(--font-sans);
+    font: 500 var(--text-sm) / 1.5 var(--font-sans);
     color: var(--fg);
     margin: 0;
   }
@@ -1202,13 +1205,6 @@ const tiles = [
     }
     .lp-summary__h {
       font-size: clamp(1.4rem, 6vw, 1.75rem);
-    }
-    .lp-summary__row {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2px;
-    }
-    .lp-summary__facts {
-      gap: var(--space-2);
     }
     /* CTA: inline arrow + label, klikatelné aktivní jako jediné. */
     .lp-summary__cta {
