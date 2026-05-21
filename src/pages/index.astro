@@ -201,21 +201,21 @@ const tiles = [
     <div class="lp-hero__inner">
       <h1 class="lp-hero__title">Bydlení a&nbsp;coworking na&nbsp;prahu metropole.</h1>
       <p class="lp-hero__lede">Devět typů ubytování od&nbsp;3&nbsp;000&nbsp;Kč měsíčně. Rezervujte si&nbsp;dnes, voláme do&nbsp;24&nbsp;hodin.</p>
-    </div>
 
-    {/* Mode toggle: malé glass-morph tlačítko v rohu, přepíná slides/video.
-        Volba se ukládá do localStorage, drží napříč návštěvami. */}
-    <button class="lp-hero__mode-toggle" type="button" data-hero-mode-toggle aria-label="Přepnout na video">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="play" aria-hidden="true">
-        <polygon points="6 4 20 12 6 20 6 4" fill="currentColor" />
-      </svg>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="image" aria-hidden="true" hidden>
-        <rect x="3" y="5" width="18" height="14" rx="1" />
-        <circle cx="9" cy="11" r="1.5" fill="currentColor" />
-        <path d="M3 16 L9 12 L13 15 L17 11 L21 14" />
-      </svg>
-      <span class="lp-hero__mode-toggle-label" data-toggle-label>Video</span>
-    </button>
+      {/* Mode toggle: malé glass-morph tlačítko zarovnané pod hero textem,
+          přepíná slides/video. Volba se ukládá do localStorage. */}
+      <button class="lp-hero__mode-toggle" type="button" data-hero-mode-toggle aria-label="Přepnout na video">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="play" aria-hidden="true">
+          <polygon points="6 4 20 12 6 20 6 4" fill="currentColor" />
+        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="image" aria-hidden="true" hidden>
+          <rect x="3" y="5" width="18" height="14" rx="1" />
+          <circle cx="9" cy="11" r="1.5" fill="currentColor" />
+          <path d="M3 16 L9 12 L13 15 L17 11 L21 14" />
+        </svg>
+        <span class="lp-hero__mode-toggle-label" data-toggle-label>Video</span>
+      </button>
+    </div>
 
     {/* Scroll cue: kruhový button s chevron-down, jemně poskakuje + pulsing ring,
         klik smooth-scrolluje na jump strip pod hero. */}
@@ -513,12 +513,11 @@ const tiles = [
   .lp-hero[data-hero-mode="video"] {
     background-image: none;
   }
-  /* Mode toggle: malé glass-morph tlačítko v top-right rohu, hover lift.
-     Reverse contrast oproti scroll-cue dole, sjednocený jazyk. */
+  /* Mode toggle: malé glass-morph tlačítko zarovnané pod hero lede textem.
+     Inline-flow (margin-top), align-self start aby šířka byla content-based.
+     Hover lift, persistent volba přes localStorage v JS níže. */
   .lp-hero__mode-toggle {
-    position: absolute;
-    top: clamp(80px, 10vh, 110px);
-    right: clamp(16px, 3vw, 28px);
+    margin-top: var(--space-4);
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -537,7 +536,6 @@ const tiles = [
       background 220ms ease,
       border-color 220ms ease,
       transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
-    z-index: 2;
   }
   .lp-hero__mode-toggle:hover,
   .lp-hero__mode-toggle:focus-visible {
@@ -548,13 +546,6 @@ const tiles = [
   }
   .lp-hero__mode-toggle :global(svg) { display: block; }
   .lp-hero__mode-toggle-label { line-height: 1; }
-  @media (max-width: 760px) {
-    .lp-hero__mode-toggle {
-      top: clamp(72px, 9vh, 90px);
-      padding: 5px 10px;
-      font-size: 10px;
-    }
-  }
   /* 5 slidů jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
      celé fotky doleva. Sousední slide zároveň zprava vplouvá dovnitř,
      takže přechod je jeden plynulý sweep bez cross-fade.
