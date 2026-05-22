@@ -52,25 +52,7 @@
   z-index: 0;
 }
 
-/* Bottom accent rule, gradient fading do stran (místo plné border-bottom). */
-.sec-hued::after {
-  content: '';
-  position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  bottom: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    hsl(var(--section-hue, 240) 55% 50% / 0.35) 50%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Content nad dekorací — bez tohohle by ::before/::after schovaly text. */
+/* Content nad dekorací , bez tohohle by ::before schoval text. */
 .sec-hued > * {
   position: relative;
   z-index: 1;
@@ -133,13 +115,13 @@
   color: hsl(var(--section-hue, 240) 45% 38%);
 }
 
-/* Gallery polish — colored shadow. Box-shadow renderuje mimo overflow:hidden
-   wrapper, takže Gallery internals se nedotčou. Aplikováno na obě varianty
-   (carousel i single). */
-.sec-hued .gallery,
-.sec-hued .gallery--single {
+/* Gallery polish , colored shadow. Aplikováno přímo na image surface
+   (viewport pro multi, img/placeholder pro single), aby shadow nezahrnul
+   dots indikátor pod galerií , tam je gradient bg nepřirozený. */
+.sec-hued .gallery__viewport,
+.sec-hued .gallery--single img,
+.sec-hued .gallery--single .gallery__placeholder {
   box-shadow: 0 4px 18px hsl(var(--section-hue, 240) 50% 40% / 0.16);
-  border-radius: var(--radius-input);
 }
 
 @media (prefers-reduced-motion: reduce) {
