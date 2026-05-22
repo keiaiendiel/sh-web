@@ -9,7 +9,6 @@ import { withBase } from '../../utils/url';
 const heroJumps = [
   { label: 'Pobytové stipendium',  href: '#st-pobytove' },
   { label: 'Projektové stipendium', href: '#st-projektove' },
-  { label: 'Jak požádat',          href: '#st-zadost' },
 ];
 ---
 <Base
@@ -31,95 +30,101 @@ const heroJumps = [
     ariaId="stipendia-hero"
   />
 
-  {/* ============ POBYTOVÉ STIPENDIUM ============ */}
-  <section class="sec-block sec-hued" style="--section-hue: 130;">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Kategorie 1</p>
-        <h2 class="sec-block__title" id="st-pobytove">Pobytové stipendium.</h2>
-        <p class="sec-block__lede">
-          Nadační fond pokryje část nebo celou cenu bydlení v Hubu výměnou za konkrétní přínos komunitě.
-          Bydlíte v kapsli, sdíleném pokoji nebo privátním apartmánu, po dohodě i s rodinou.
-          Délka pobytu typicky tři měsíce, po dohodě až rok.
-        </p>
-      </header>
+  {/* ============ DVĚ KATEGORIE STIPENDIA SIDE-BY-SIDE ============
+       Mřížka 2 sloupců na desktopu, 1 sloupec na phone. Každá karta
+       má vlastní --section-hue (Pobytové=130 green, Projektové=50 gold)
+       + sec-hued recipe (bg wash + blob), aby byly vizuálně oddělené
+       od sebe a vystihovaly „dvě cesty". */}
+  <section class="stip-types" aria-label="Dvě kategorie stipendia">
+    <div class="stip-types__inner">
 
-      <article class="sec-sub">
-        <h3 class="sec-sub__title">Čtyři role, vyberete si jednu</h3>
-        <p class="sec-sub__lede">
-          Program má čtyři rozdílné role. Při registraci zájmu si vyberete tu, která vám sedí, nebo se vám
-          ozveme s návrhem. Nedělají se všechny zároveň, každá role je vlastní cesta.
-        </p>
-        <ul class="sec-list">
-          <li><strong>Rezident-tvůrce</strong> , umělec, výzkumník, designér nebo autor s vlastním projektem. Tříměsíční pobyt, za to dvě otevřené dílny nebo prezentace a závěrečná dokumentace projektu.</li>
-          <li><strong>Správce na výměnu</strong> , operativní role v provozu Hubu (recepce, koordinace komunitních akcí, péče o sdílené prostory). Měsíční úvazek 32 až 40 hodin, zbytek měsíce vlastní práce na dálku.</li>
-          <li><strong>Stavitel-rezident</strong> , účast na konkrétní rekonstrukční fázi areálu. Týden v měsíci na staveništi, zbytek měsíce vlastní práce. Pro lidi se stavebními dovednostmi a chutí mít na areálu autorský podíl.</li>
-          <li><strong>Rezident-programátor</strong> , vývojář, který staví konkrétní digitální nástroj pro Hub (rezervační systém, komunitní aplikace, dokumentační platforma). Tříměsíční pobyt s deliverable na konci.</li>
-        </ul>
+      {/* === POBYTOVÉ STIPENDIUM === */}
+      <article class="stip-card sec-hued" style="--section-hue: 130;" aria-labelledby="st-pobytove">
+        <header class="stip-card__head">
+          <p class="stip-card__eyebrow">Pobytové stipendium</p>
+          <h2 class="stip-card__title" id="st-pobytove">Bydlíte v Hubu výměnou za přínos komunitě.</h2>
+          <p class="stip-card__lede">
+            Není to dárek. Hub vám sleví nebo dá bydlení zdarma, vy mu vrátíte dovednost, čas
+            nebo projekt s veřejným výstupem. Délka tři měsíce až rok.
+          </p>
+        </header>
+
+        <div class="stip-card__block">
+          <h3 class="stip-card__sub">Pro koho dává smysl</h3>
+          <p>
+            Tvůrci s konkrétním projektem, programátoři, stavebně zruční, praktici předávající
+            dovednost. Studenti na semestrální stáži. Lidé po rodičovské hledající měkký restart.
+          </p>
+        </div>
+
+        <div class="stip-card__block">
+          <h3 class="stip-card__sub">Co dostanete</h3>
+          <ul class="stip-list">
+            <li>Bydlení v jedné z devíti variant (kapsle, sdílený pokoj, apartmán, po dohodě i s rodinou)</li>
+            <li>Všechny rezidentské benefity v ceně</li>
+            <li>U rolí s pracovním závazkem peněžní příspěvek nebo DPP</li>
+          </ul>
+        </div>
+
+        <div class="stip-card__block">
+          <h3 class="stip-card__sub">Čtyři role, vyberete si jednu</h3>
+          <ul class="stip-list stip-list--roles">
+            <li><strong>Rezident-tvůrce</strong> , umělec nebo autor s vlastním projektem. Tříměsíční pobyt za dvě otevřené dílny a závěrečnou dokumentaci.</li>
+            <li><strong>Správce</strong> , 32 až 40 hodin měsíčně v provozu Hubu (recepce, koordinace akcí, péče o sdílené prostory).</li>
+            <li><strong>Stavitel</strong> , týden v měsíci na rekonstrukci areálu, zbytek vlastní práce. Pro lidi se stavebními dovednostmi.</li>
+            <li><strong>Programátor</strong> , postaví konkrétní digitální nástroj pro Hub s deliverable na konci.</li>
+          </ul>
+        </div>
+
+        <a class="stip-card__cta osa-nolink" href={withBase('/rezervace/?cesta=stipendium')}>
+          Požádat o pobytové<span aria-hidden="true"> →</span>
+        </a>
       </article>
 
-      <article class="sec-sub">
-        <h3 class="sec-sub__title">Pro koho dává smysl</h3>
-        <p class="sec-sub__lede">
-          Umělci, výzkumníci, designéři, novináři, řemeslníci s vlastním projektem. Studenti
-          na semestrální stáži. Programátoři, kteří chtějí postavit komunitní nástroj. Lidé
-          po rodičovské, kteří hledají měkký restart kariéry. Praktici, kteří umějí předat
-          dovednost dál.
-        </p>
+      {/* === PROJEKTOVÉ STIPENDIUM === */}
+      <article class="stip-card sec-hued" style="--section-hue: 50;" aria-labelledby="st-projektove">
+        <header class="stip-card__head">
+          <p class="stip-card__eyebrow">Projektové stipendium</p>
+          <h2 class="stip-card__title" id="st-projektove">Fond proplatí materiál, dílny a ateliér konkrétního projektu.</h2>
+          <p class="stip-card__lede">
+            Není to grant na živobytí. Fond pokryje konkrétní náklady projektu výměnou za
+            veřejný výstup a zpětnou vazbu komunitě. Bydlení řešíte zvlášť.
+          </p>
+        </header>
+
+        <div class="stip-card__block">
+          <h3 class="stip-card__sub">Pro koho dává smysl</h3>
+          <p>
+            Tvůrci s konkrétním projektem a rozpočtem do 30 000 Kč. Studenti uměleckých škol
+            dokončující závěrečnou práci. Designéři prototypující malou sérii. Vědci a hackeři
+            potřebující dílenský přístup. Komunitní iniciativy s materiálovými náklady.
+          </p>
+        </div>
+
+        <div class="stip-card__block">
+          <h3 class="stip-card__sub">Co fond proplatí</h3>
+          <ul class="stip-list">
+            <li><strong>Materiál a komponenty</strong> , dřevo, kov, sklo, textil, elektronika, 3D filament, chemie.</li>
+            <li><strong>Dílenský čas</strong> , CNC, laser, 3D tiskárny, svářečka. RFID-billed hodiny v Hub dílnách.</li>
+            <li><strong>Ateliér D1</strong> , kompletní nebo částečné krytí nájmu po dobu projektu.</li>
+            <li><strong>Externí služby</strong> , tisk, řezání, povrchová úprava, fotodokumentace výstupu.</li>
+          </ul>
+        </div>
+
+        <div class="stip-card__block">
+          <h3 class="stip-card__sub">Co se za to očekává</h3>
+          <ul class="stip-list">
+            <li><strong>Veřejný výstup</strong> , výstava, prototyp, publikace, otevřená dokumentace nebo open-source repo.</li>
+            <li><strong>Dva milníky</strong> během projektu a jeden závěrečný report s rozpočtem.</li>
+            <li><strong>Jedna otevřená dílna</strong> nebo workshop, kde projekt ukážete komunitě.</li>
+          </ul>
+        </div>
+
+        <a class="stip-card__cta osa-nolink" href={withBase('/rezervace/?cesta=stipendium')}>
+          Požádat o projektové<span aria-hidden="true"> →</span>
+        </a>
       </article>
 
-      <article class="sec-sub">
-        <h3 class="sec-sub__title">Co stipendium pokrývá</h3>
-        <ul class="sec-list">
-          <li>Bydlení v jedné z devíti variant podle dohody (kapsle, sdílený pokoj, privátní apartmán)</li>
-          <li>Energie, internet, úklid, neomezené jízdy Hub-shuttle a poukaz do sauny v ceně</li>
-          <li>Pro role s pracovní složkou navíc malý peněžní příspěvek nebo dohoda o provedení práce</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  {/* ============ PROJEKTOVÉ STIPENDIUM ============ */}
-  <section class="sec-block sec-block--alt sec-hued" style="--section-hue: 50;">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Kategorie 2</p>
-        <h2 class="sec-block__title" id="st-projektove">Projektové stipendium.</h2>
-        <p class="sec-block__lede">
-          Nadační fond proplatí konkrétní náklady projektu , typicky materiál, dílenský čas
-          a ateliérový nájem. Bydlení žadatel řeší samostatně (může bydlet v Hubu jako běžný
-          rezident, nebo dojíždět). Tahle kategorie je o tvorbě, ne o životním stylu.
-        </p>
-      </header>
-
-      <article class="sec-sub">
-        <h3 class="sec-sub__title">Co fond proplatí</h3>
-        <ul class="sec-list">
-          <li><strong>Materiál a spotřební komponenty</strong> , dřevo, kov, sklo, textil, elektronika, 3D filament, chemie.</li>
-          <li><strong>Dílenský čas na těžkých strojích</strong> , CNC, laser, 3D tiskárny, svářečka. RFID-billed hodiny v Hub dílnách.</li>
-          <li><strong>Ateliérový nájem</strong> , kompletní nebo částečné krytí nájmu ateliéru D1 po dobu projektu.</li>
-          <li><strong>Externí služby</strong> , tisk, řezání, povrchová úprava, fotodokumentace výstupu (po dohodě).</li>
-        </ul>
-      </article>
-
-      <article class="sec-sub">
-        <h3 class="sec-sub__title">Co se za stipendium očekává</h3>
-        <ul class="sec-list">
-          <li><strong>Veřejný výstup</strong> , výstava, prototyp, publikace, otevřená dokumentace nebo open-source repo.</li>
-          <li><strong>Krátká zpráva o postupu</strong> , dva milníky během projektu, jeden závěrečný report s rozpočtem.</li>
-          <li><strong>Otevřená dílna nebo workshop</strong> , jedna veřejná akce, kde projekt ukážete komunitě.</li>
-        </ul>
-      </article>
-
-      <article class="sec-sub">
-        <h3 class="sec-sub__title">Pro koho dává smysl</h3>
-        <p class="sec-sub__lede">
-          Tvůrci s konkrétním projektem a rozpočtem do 30 000 Kč. Studenti uměleckých škol
-          dokončující závěrečnou práci. Designéři prototypující výrobek pro malou sérii.
-          Komunitní iniciativy s materiálovými náklady. Vědci a hackeři, kteří potřebují
-          dílenský přístup.
-        </p>
-      </article>
     </div>
   </section>
 
@@ -128,7 +133,7 @@ const heroJumps = [
     <div class="sec-block__inner">
       <header class="sec-block__head">
         <p class="sec-block__eyebrow">Postup</p>
-        <h2 class="sec-block__title" id="st-zadost">Jak požádat.</h2>
+        <h2 class="sec-block__title">Jak požádat.</h2>
         <p class="sec-block__lede">
           Žádost je nezávazná. Po podání vás kontaktujeme do týdne, probereme záměr telefonicky
           a domluvíme se na detailech. Můžete žádat o obě kategorie zároveň, pokud váš projekt
@@ -187,6 +192,122 @@ const heroJumps = [
 </Base>
 
 <style>
+  /* === 2 KATEGORIE SIDE-BY-SIDE === */
+  .stip-types {
+    padding: var(--space-7) var(--gutter);
+    background: var(--bg);
+  }
+  .stip-types__inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 1.8vw, 24px);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .stip-types__inner { grid-template-columns: 1fr; }
+  }
+
+  .stip-card {
+    padding: clamp(20px, 2.4vw, 32px);
+    border-radius: var(--radius-input);
+    border: 1px solid hsl(var(--section-hue, 240) 30% 82%);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .stip-card__head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: var(--space-1);
+  }
+  .stip-card__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: hsl(var(--section-hue, 240) 50% 30%);
+    margin: 0;
+  }
+  .stip-card__title {
+    font: 600 clamp(1.25rem, 2.2vw, 1.625rem) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    color: var(--fg);
+  }
+  .stip-card__lede {
+    font: 500 var(--text-md) / 1.55 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 8px 0 0;
+  }
+
+  .stip-card__block {
+    border-top: 1px solid hsl(var(--section-hue, 240) 30% 82%);
+    padding-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .stip-card__sub {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: hsl(var(--section-hue, 240) 45% 38%);
+    margin: 0;
+  }
+  .stip-card__block p {
+    font: 500 var(--text-sm) / 1.55 var(--font-sans);
+    color: var(--fg);
+    margin: 0;
+  }
+
+  .stip-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .stip-list li {
+    font: 500 var(--text-sm) / 1.5 var(--font-sans);
+    color: var(--fg);
+    padding-left: 18px;
+    position: relative;
+  }
+  .stip-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: hsl(var(--section-hue, 240) 50% 50%);
+  }
+  .stip-list strong { color: var(--fg); font-weight: 700; }
+
+  .stip-card__cta {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 20px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--accent-on);
+    background: hsl(var(--section-hue, 240) 50% 32%);
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition: background 200ms ease, transform 200ms ease;
+  }
+  .stip-card__cta:hover,
+  .stip-card__cta:focus-visible {
+    background: hsl(var(--section-hue, 240) 55% 24%);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
   /* Numbered process list, sjednocuje s vizuálním jazykem subpage. */
   .sec-steps {
     list-style: none;
@@ -218,13 +339,4 @@ const heroJumps = [
     color: var(--fg-muted);
     line-height: 1.5;
   }
-
-  .sec-list {
-    margin: 0;
-    padding-left: 1.25rem;
-    display: grid;
-    gap: 6px;
-  }
-  .sec-list li { line-height: 1.55; }
-  .sec-list strong { color: var(--fg); }
 </style>
