@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Gallery from '../../components/Gallery.astro';
+import Icon from '../../components/Icon.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
@@ -33,7 +34,7 @@ const heroJumps = [
     ariaId="doprava-hero"
   />
 
-  <section class="sec-feature">
+  <section class="sec-feature sec-hued" style="--section-hue: 240;">
     <div class="sec-feature__inner">
       <div class="sec-feature__col">
         <div class="sec-feature__head">
@@ -77,7 +78,7 @@ const heroJumps = [
     </div>
   </section>
 
-  <section class="sec-feature sec-feature--alt">
+  <section class="sec-feature sec-feature--alt sec-hued" style="--section-hue: 50;">
     <div class="sec-feature__inner">
       <div class="sec-feature__col">
         <div class="sec-feature__head">
@@ -114,7 +115,7 @@ const heroJumps = [
     </div>
   </section>
 
-  <section class="sec-feature">
+  <section class="sec-feature sec-hued" style="--section-hue: 25;">
     <div class="sec-feature__inner">
       <div class="sec-feature__col">
         <div class="sec-feature__head">
@@ -150,7 +151,7 @@ const heroJumps = [
     </div>
   </section>
 
-  <section class="sec-feature sec-feature--alt">
+  <section class="sec-feature sec-feature--alt sec-hued" style="--section-hue: 130;">
     <div class="sec-feature__inner">
       <div class="sec-feature__col">
         <div class="sec-feature__head">
@@ -158,7 +159,7 @@ const heroJumps = [
           <h2 class="sec-feature__title" id="dp-auto">Vlastní cesta do Prahy.</h2>
         </div>
         <div class="sec-feature__text">
-          <h3>Auto a parkování</h3>
+          <h3 class="sec-hued__sub"><span class="sec-hued__sub-icon"><Icon name="car-front" size={16} /></span>Auto a parkování</h3>
           <p>
             Hub má parkoviště v rámci areálu (dvě plochy: vlevo nahoře a uprostřed). Kapacita
             podle finální projektové dokumentace, bude doplněna. Pro rezidenty Hubu vyhrazené stání
@@ -169,7 +170,7 @@ const heroJumps = [
             Prahy přes Cínoveckou cca 15 minut (ve špičce 25 až 35 minut). P+R Kobylisy 6,8 km
             od Hubu (11 minut autem), pak metro do centra.
           </p>
-          <h3>Kolo a pěšky</h3>
+          <h3 class="sec-hued__sub"><span class="sec-hued__sub-icon"><Icon name="bike" size={16} /></span>Kolo a pěšky</h3>
           <p>
             Cyklostezka EuroVelo 7 prochází podél Vltavy pod Klecanami. Z Hubu na cyklostezku
             cca 30 minut pěšky nebo 10 minut na kole (sestup do údolí Vltavy). Klecany mají
@@ -197,7 +198,7 @@ const heroJumps = [
     </div>
   </section>
 
-  <section class="sec-feature">
+  <section class="sec-feature sec-hued" style="--section-hue: 200;">
     <div class="sec-feature__inner">
       <div class="sec-feature__col">
         <div class="sec-feature__head">
@@ -209,14 +210,14 @@ const heroJumps = [
             Plánované investice se schváleným územním rozhodnutím, ale ještě nejsou postaveny.
             Mluvíme o nich otevřeně v budoucím čase. Hub-shuttle a linka 374 jsou dostupné dnes.
           </p>
-          <h3>Tramvaj Kobylisy až Sedlec (2029 až 2030)</h3>
+          <h3 class="sec-hued__sub"><span class="sec-hued__sub-icon"><Icon name="train-front" size={16} /></span>Tramvaj Kobylisy až Sedlec (2029 až 2030)</h3>
           <p>
             Středočeský kraj a IDSK plánují prodloužení tramvajové linky 17 z Kobylis přes
             Zdiby do Sedlce (5,2 až 5,6 km nové trati). První územní rozhodnutí získalo právní
             moc v lednu 2025, stavba 2027, provoz 2029 až 2030. Z Hubu na tramvajovou zastávku
             v Sedleci pětiminutový lokální autobus, pak tramvaj přímo na centrum Prahy bez přestupu.
           </p>
-          <h3>Cyklolávka přes Vltavu (2027 až 2028)</h3>
+          <h3 class="sec-hued__sub"><span class="sec-hued__sub-icon"><Icon name="route" size={16} /></span>Cyklolávka přes Vltavu (2027 až 2028)</h3>
           <p>
             Plánovaná cyklolávka přes Vltavu mezi Roztoky a Klecany. Po dokončení bude spojení
             Roztoky, vlak na Masarykovo nádraží v Praze trvat 10 až 15 minut na kole plus 14
