@@ -4,6 +4,7 @@ import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
 import Icon from '../../components/Icon.astro';
+import ResidentBenefits from '../../components/ResidentBenefits.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
 
@@ -22,112 +23,17 @@ import { withBase } from '../../utils/url';
 const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
 const coliving = (await getCollection('coliving')).sort((a, b) => a.data.cena.anchor - b.data.cena.anchor);
 
-/* Per-tier metadata , tier badge, room context a featurelist „co tato
-   úroveň přidává navíc" oproti always-included baseline. Pořadí features
-   = pořadí zobrazení v kartě (limit ~5 pro vizuální parity). */
+/* Per-coliving metadata , kontext sdílení pokoje (krátký descriptor
+   pro card facts). Vše ostatní (popis, klicove, spec) čte ceník přímo
+   z content collection, aby detail page a card byly v sync. */
 interface CoMeta {
-  tier: string;       /* krátký label do tier badge */
-  pokoj: string;      /* kontext sdílení pokoje */
-  features: string[]; /* co tato cena přidává oproti always-included */
+  pokoj: string;
 }
 const coMeta: Record<string, CoMeta> = {
-  'kapsle-single': {
-    tier: 'Vstupní úroveň',
-    pokoj: '3 až 6 kapslí v jednom pokoji',
-    features: [
-      'Uzavíratelná kapsle s vlastním zatemněním',
-      'Zamykací skříň + převlékací kabinka v pokoji',
-      'Vlastní světlo a USB-C u lůžka',
-      'Nejnižší vstupní cena v Hubu',
-    ],
-  },
-  'jedno-luzko': {
-    tier: 'Vlastní lůžko',
-    pokoj: 'Dvoulůžkový pokoj sdílený s 1 dalším',
-    features: [
-      'Vlastní lůžko (otevřené, bez kapsle)',
-      'Vlastní noční stolek, lampa a USB-C',
-      'Vlastní skříň a pracovní stůl',
-      'Sdílíte pokoj jen s jednou další osobou',
-    ],
-  },
-  'kapsle-double': {
-    tier: 'Privátní pro pár',
-    pokoj: '2 až 5 dalších kapslí v jednom pokoji',
-    features: [
-      'Uzavíratelná kapsle pro dva',
-      'Velká King+ matrace (210×230 nebo 230×240)',
-      'Zamykací skříň + převlékací kabinka v pokoji',
-      'Dvě čtecí lampy, dva USB-C porty',
-    ],
-  },
-  'dvouluzko': {
-    tier: 'Celý pokoj',
-    pokoj: 'Žádný další spolubydlící v místnosti',
-    features: [
-      'Vlastní uzavřený pokoj pro pár',
-      'Manželská postel nebo 2 jednolůžka',
-      'Vlastní skříň, stůl a lampy',
-      'Sdílíte jen koupelnu a kuchyň patra',
-    ],
-  },
-};
-
-interface AptMeta {
-  tier: string;
-  features: string[];
-}
-const aptMeta: Record<string, AptMeta> = {
-  '1kk': {
-    tier: 'Až 2 lůžka',
-    features: [
-      'Vlastní vchod, vlastní klíče',
-      'Vlastní kuchyňský kout',
-      'Vlastní koupelna a WC',
-      'Postel podle výběru (manželská nebo 2× jednolůžko)',
-      'Žádné sdílení uvnitř bytu',
-    ],
-  },
-  '2kk': {
-    tier: 'Až 4 lůžka',
-    features: [
-      'Vlastní vchod, vlastní klíče',
-      'Oddělená ložnice a obývací pokoj',
-      'Plnohodnotná kuchyň',
-      'Vlastní koupelna + samostatné WC',
-      'Pro pár, rodinu nebo 4 spolubydlící',
-    ],
-  },
-  '3kk': {
-    tier: 'Až 6 lůžek',
-    features: [
-      'Vlastní vchod, vlastní klíče',
-      'Tři pokoje + obývák',
-      'Plnohodnotná kuchyň',
-      'Koupelna se sprchou nebo vanou',
-      'Samostatné WC',
-    ],
-  },
-  '4kk': {
-    tier: 'Až 8 lůžek',
-    features: [
-      'Vlastní vchod, vlastní klíče',
-      'Čtyři pokoje + velký obývák',
-      'Velká kuchyň',
-      'Vlastní koupelna + samostatné WC',
-      'Pro startup, sportovní tým nebo soubor',
-    ],
-  },
-  '5kk': {
-    tier: 'Až 10 lůžek',
-    features: [
-      'Vlastní vchod, vlastní klíče',
-      'Pět pokojů + velký obývák',
-      'Velká kuchyň',
-      'Dvě koupelny (po dohodě)',
-      'Pro velkou skupinu nebo 2 rodiny pohromadě',
-    ],
-  },
+  'kapsle-single': { pokoj: '3 až 6 kapslí v jednom pokoji' },
+  'jedno-luzko':   { pokoj: 'Sdílíte pokoj jen s 1 další osobou' },
+  'kapsle-double': { pokoj: '2 až 5 dalších kapslí v jednom pokoji' },
+  'dvouluzko':     { pokoj: 'Žádný další spolubydlící v místnosti' },
 };
 
 const fmt = (n: number) => n.toLocaleString('cs-CZ');
@@ -139,6 +45,7 @@ interface CowPlan {
   price: string;
   forResidents: string;
   features: string[];
+  hue: 25 | 50 | 130 | 200 | 240; /* per-card hue, matchuje /coworking/ section hues */
 }
 const cowPlans: CowPlan[] = [
   {
@@ -147,6 +54,7 @@ const cowPlans: CowPlan[] = [
     price: '2 900 Kč/měs',
     forResidents: 'V ceně bydlení',
     features: ['30 až 40 míst', '2 kávovary, voda, čaj', '4 telefonní budky', 'Tiskárna za kredit'],
+    hue: 200,
   },
   {
     name: 'Fixní stůl',
@@ -154,6 +62,7 @@ const cowPlans: CowPlan[] = [
     price: '4 200 Kč/měs',
     forResidents: 'Cena platí i pro rezidenty',
     features: ['Dva monitory 27"', 'Uzamykatelná skříňka', '24/7 přístup', 'Smlouva od 3 měsíců'],
+    hue: 50,
   },
   {
     name: 'Sdílená kancelář pro 4',
@@ -161,6 +70,7 @@ const cowPlans: CowPlan[] = [
     price: '15 000 Kč/měs',
     forResidents: '3 750 Kč na osobu při plném obsazení',
     features: ['15 až 20 m²', 'Whiteboard 1,5 × 1,2 m', '24/7 přístup', 'Smlouva od 6 měsíců'],
+    hue: 130,
   },
   {
     name: 'Zasedací místnost',
@@ -168,6 +78,7 @@ const cowPlans: CowPlan[] = [
     price: '350 Kč/hod',
     forResidents: '4 hodiny v měsíci zdarma',
     features: ['1 200 Kč/půlden', '2 000 Kč/den', '07:00 až 22:00', 'Rezervace přes aplikaci'],
+    hue: 240,
   },
 ];
 
@@ -190,7 +101,7 @@ const miscGroups: MiscGroup[] = [
     eyebrow: 'Tvořivá práce',
     title: 'Ateliéry a dílny.',
     lede: 'Pro řemeslníky, tvůrce a lidi, kteří potřebují postavit něco většího než vejde do bytu.',
-    hue: 30,           /* warm amber , kreativní práce */
+    hue: 25,           /* orange , kreativní práce */
     rows: [
       { icon: 'palette', label: 'Ateliér D1',          detail: 'Vlastní zámek, 15 až 25 m², denní světlo, 16 A zásuvka', price: '6 500 Kč/měs za 20 m² (~325 Kč/m²)' },
       { icon: 'hammer',  label: 'Dílna členství',      detail: 'Ruční nářadí, pracovní stoly, pájecí stanice, elektrické nářadí', price: '490 Kč/měs' },
@@ -199,14 +110,13 @@ const miscGroups: MiscGroup[] = [
   },
   {
     eyebrow: 'Úložiště a parking',
-    title: 'Sklady, kontejnery, stání.',
-    lede: 'Pro sezónní věci, kola, materiál nebo větší kontejner na projektové vybavení.',
-    hue: 210,          /* cool blue-gray , utility */
+    title: 'Kontejner, parkování, úložna kol.',
+    lede: 'Parkování a úložna kol jsou pro rezidenty zdarma. Pro stěhování nebo projektové vybavení si můžete dlouhodobě pronajmout 20stopý kontejner.',
+    hue: 50,           /* yellow , utility/parking */
     rows: [
-      { icon: 'package',    label: 'Sklad malý',         detail: 'Uzamykatelný box 2 m², pro sezónní věci a kola',                     price: '290 Kč/měs (~145 Kč/m²)' },
-      { icon: 'package-2',  label: 'Sklad velký',        detail: 'Box 6 až 10 m², pro nábytek, materiál nebo projektové vybavení',     price: '690 Kč/měs (~70 až 115 Kč/m²)' },
-      { icon: 'container',  label: 'Kontejnerový sklad', detail: '20stopý kontejner v areálu, vlastní zámek, ~14 m². Pro stěhování nebo projektové vybavení.', price: 'Cena na vyžádání' },
-      { icon: 'car-front',  label: 'Parkovací stání',    detail: 'V areálu, vyhrazené místo. Pro rezidenty bez doplatku.',             price: 'Pro rezidenty zdarma' },
+      { icon: 'container',     label: 'Kontejnerový sklad', detail: '20stopý kontejner v areálu, vlastní zámek, ~14 m². Pro stěhování nebo projektové vybavení.', price: 'Cena na vyžádání' },
+      { icon: 'parking-circle', label: 'Parkovací stání',   detail: 'V areálu, vyhrazené místo pro rezidenty. Externí návštěvníci dle dohody.',                  price: 'Pro rezidenty zdarma' },
+      { icon: 'bike',           label: 'Úložna kol',        detail: 'Krytá uzamykatelná místnost pro kola a koloběžky, přístup čipem.',                          price: 'Pro rezidenty zdarma' },
     ],
   },
   {
@@ -222,8 +132,8 @@ const miscGroups: MiscGroup[] = [
   {
     eyebrow: 'Wellness pro externí',
     title: 'Sauna a bazén pro návštěvníky.',
-    lede: 'Rezidenti s tarifem 12+ měsíců mají sauna 1× týdně v ceně bydlení. Pro externí návštěvníky a krátkodobé pobyty platí samostatný vstup.',
-    hue: 195,          /* water blue , wellness */
+    lede: 'Rezidenti mají bazén zdarma a saunu 1× týdně v ceně tarifu 12+. Pro externí návštěvníky a krátkodobé pobyty platí samostatný vstup.',
+    hue: 200,          /* water blue , wellness */
     rows: [
       { icon: 'droplets', label: 'Vstup sauna (externí)', detail: 'Veřejná sauna pro 6 až 8 osob, harmonogram čtvrtek až sobota večer.', price: 'Cena na vyžádání' },
       { icon: 'waves',    label: 'Vstup bazén (externí)', detail: 'Vlastní bazén areálu, samostatný objekt vedle sauny a wellness zóny.', price: 'Cena na vyžádání' },
@@ -233,7 +143,7 @@ const miscGroups: MiscGroup[] = [
     eyebrow: 'Recepce a administrativa',
     title: 'Služby kanceláře Hubu.',
     lede: 'Recepce funguje 7 dní v týdnu. Některé administrativní věci vyřídíte přímo s námi, ne přes prahu městského úřadu.',
-    hue: 285,          /* plum , brand */
+    hue: 240,          /* brand indigo , admin */
     rows: [
       { icon: 'inbox',          label: 'Příjem balíků',                  detail: 'Sběrné místo pro zásilky, oznámení do aplikace, uložení až 14 dní.', price: 'Pro rezidenty zdarma' },
       { icon: 'building',       label: 'Virtuální sídlo OSVČ nebo s.r.o.', detail: 'Adresa Hubu jako fakturační a evidenční sídlo, příjem úředních zásilek, sken na e-mail.', price: 'Cena na vyžádání' },
@@ -267,6 +177,9 @@ const miscGroups: MiscGroup[] = [
     ariaId="cenik-hero"
   />
 
+  {/* ============ VŽDY V CENĚ, 8 chip karet sdílených napříč Ceníkem a detail page ============ */}
+  <ResidentBenefits />
+
   {/* ============ CO-LIVING (4 varianty) ============ */}
   <section class="ck-sec" aria-labelledby="ck-coliving-h">
     <div class="ck-sec__inner">
@@ -289,18 +202,18 @@ const miscGroups: MiscGroup[] = [
                 <h3 class="ck-card__name" id={`ck-co-${c.data.slug}-h`}>{c.data.shortName}</h3>
                 <p class="ck-card__hook">{c.data.popis}</p>
               </header>
-              <p class="ck-card__tier">{meta?.tier}</p>
               <div class="ck-card__price">
                 <span class="ck-card__price-prefix">od</span>
                 <span class="ck-card__price-num">{fmt(c.data.cena.anchor)}</span>
                 <span class="ck-card__price-unit">Kč<span class="ck-card__price-period">/měs</span></span>
               </div>
               <dl class="ck-card__facts">
-                <div><dt>Matrace</dt><dd>{c.data.matrace[0]}{c.data.matrace[1] ? ` nebo ${c.data.matrace[1]}` : ''}</dd></div>
+                <div><dt>Matrace</dt><dd>{c.data.matrace.join(' / ')}</dd></div>
+                <div><dt>Plocha pokoje</dt><dd>{c.data.spec.plochaPokoj}</dd></div>
                 <div><dt>Pokoj</dt><dd>{meta?.pokoj}</dd></div>
               </dl>
-              <ul class="ck-card__features" aria-label={`Co ${c.data.shortName} přidává`}>
-                {meta?.features.map((f) => (
+              <ul class="ck-card__features" aria-label={`Co ${c.data.shortName} obsahuje`}>
+                {c.data.klicove.slice(0, 5).map((f) => (
                   <li><span class="ck-card__check"><Icon name="check" size={14} /></span><span>{f}</span></li>
                 ))}
               </ul>
@@ -330,7 +243,6 @@ const miscGroups: MiscGroup[] = [
 
       <div class="ck-grid ck-grid--cards ck-grid--5">
         {apartmany.map((a) => {
-          const meta = aptMeta[a.data.slug];
           const perPerson = Math.round(a.data.cena.anchor / a.data.kapacita);
           return (
             <article class="ck-card" aria-labelledby={`ck-apt-${a.data.slug}-h`}>
@@ -338,7 +250,6 @@ const miscGroups: MiscGroup[] = [
                 <h3 class="ck-card__name" id={`ck-apt-${a.data.slug}-h`}>{a.data.shortName}</h3>
                 <p class="ck-card__hook">{a.data.popis}</p>
               </header>
-              <p class="ck-card__tier">{meta?.tier}</p>
               <div class="ck-card__price">
                 <span class="ck-card__price-prefix">od</span>
                 <span class="ck-card__price-num">{fmt(a.data.cena.anchor)}</span>
@@ -347,9 +258,10 @@ const miscGroups: MiscGroup[] = [
               <dl class="ck-card__facts">
                 <div><dt>Plocha</dt><dd>{a.data.plocha}</dd></div>
                 <div><dt>Kapacita</dt><dd>{a.data.kapacita} lůžek · {fmt(perPerson)} Kč na osobu</dd></div>
+                <div><dt>Koupelna</dt><dd>{a.data.koupelna}</dd></div>
               </dl>
               <ul class="ck-card__features" aria-label={`Co ${a.data.shortName} obsahuje`}>
-                {meta?.features.map((f) => (
+                {a.data.klicove.slice(0, 5).map((f) => (
                   <li><span class="ck-card__check"><Icon name="check" size={14} /></span><span>{f}</span></li>
                 ))}
               </ul>
@@ -377,7 +289,7 @@ const miscGroups: MiscGroup[] = [
       </header>
       <div class="ck-grid ck-grid--4">
         {cowPlans.map((c) => (
-          <article class="ck-mini">
+          <article class="ck-mini" style={`--card-hue: ${c.hue};`}>
             <h3 class="ck-mini__name">{c.name}</h3>
             <p class="ck-mini__hook">{c.hook}</p>
             <p class="ck-mini__price"><strong>{c.price}</strong></p>
@@ -496,15 +408,14 @@ const miscGroups: MiscGroup[] = [
 
   /* ============ GRID ============ */
   .ck-grid { display: grid; gap: clamp(14px, 1.6vw, 20px); align-items: stretch; }
-  /* Subgrid karty mají 7 sjednocených řádků: head / tier / price / facts / features / cta + buffer */
+  /* Subgrid karty mají 5 sjednocených řádků: head / price / facts / features / cta */
   .ck-grid--cards {
     grid-template-rows:
       auto  /* 1: head (name + hook) */
-      auto  /* 2: tier badge */
-      auto  /* 3: price */
-      auto  /* 4: facts (matrace, kapacita) */
-      auto  /* 5: features list */
-      auto; /* 6: cta */
+      auto  /* 2: price */
+      auto  /* 3: facts */
+      auto  /* 4: features list */
+      auto; /* 5: cta */
   }
   .ck-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .ck-grid--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
@@ -527,7 +438,7 @@ const miscGroups: MiscGroup[] = [
   .ck-card {
     display: grid;
     grid-template-rows: subgrid;
-    grid-row: span 6;
+    grid-row: span 5;
     row-gap: var(--space-3);
     padding: clamp(18px, 2vw, 24px);
     background: var(--bg);
@@ -567,25 +478,8 @@ const miscGroups: MiscGroup[] = [
     margin: 0;
   }
 
-  .ck-card__tier {
-    grid-row: 2;
-    align-self: start;
-    justify-self: start;
-    max-width: 100%;
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    color: var(--accent);
-    background: hsl(var(--hue) 39% 27% / 0.08);
-    padding: 6px 12px;
-    border-radius: 999px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   .ck-card__price {
-    grid-row: 3;
+    grid-row: 2;
     display: flex;
     align-items: baseline;
     gap: 4px;
@@ -608,7 +502,7 @@ const miscGroups: MiscGroup[] = [
   }
 
   .ck-card__facts {
-    grid-row: 4;
+    grid-row: 3;
     margin: 0;
     display: grid;
     gap: 10px;
@@ -633,7 +527,7 @@ const miscGroups: MiscGroup[] = [
   }
 
   .ck-card__features {
-    grid-row: 5;
+    grid-row: 4;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -658,7 +552,7 @@ const miscGroups: MiscGroup[] = [
   }
 
   .ck-card__actions {
-    grid-row: 6;
+    grid-row: 5;
     align-self: end;
     display: flex;
     align-items: center;
@@ -705,15 +599,42 @@ const miscGroups: MiscGroup[] = [
     .ck-card__cta { margin-top: auto; }
   }
 
-  /* ============ MINI (coworking) ============ */
+  /* ============ MINI (coworking) ============
+     Per-card --card-hue (200/50/130/240) matchuje /coworking/ section
+     hues. Hover lift + radial gradient overlay sjednocuje s .ck-mini-card
+     v sekci Doplňky a služby. */
   .ck-mini {
     padding: 18px;
     background: var(--bg);
-    border: 1px solid var(--border-muted);
+    border: 1px solid hsl(var(--card-hue, 240) 30% 82%);
     border-radius: var(--radius-input);
     display: flex;
     flex-direction: column;
     gap: 6px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 200ms ease, transform 220ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 220ms ease;
+  }
+  .ck-mini::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at 100% 0%, hsl(var(--card-hue, 240) 60% 60% / 0.10) 0%, transparent 65%);
+    opacity: 0;
+    transition: opacity 280ms ease;
+    pointer-events: none;
+  }
+  .ck-mini:hover {
+    border-color: hsl(var(--card-hue, 240) 40% 45%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px hsl(var(--card-hue, 240) 30% 20% / 0.08);
+  }
+  .ck-mini:hover::before { opacity: 1; }
+  .ck-mini > * { position: relative; }
+  @media (prefers-reduced-motion: reduce) {
+    .ck-mini { transition: none; }
+    .ck-mini:hover { transform: none; }
   }
   .ck-mini__name {
     font: 700 var(--text-md) / 1.2 var(--font-sans);

@@ -1,0 +1,202 @@
+---
+/*
+ * ResidentBenefits , reusable pruh chip karet připomínajících benefity,
+ * které dostává každý rezident bez ohledu na typ ubytování. Žije nahoře
+ * v Ceníku a v každém detailu ubytování (privátní + co-living), aby
+ * klient měl přidanou hodnotu vidět všude, kde se rozhoduje.
+ *
+ * Každý chip má vlastní --section-hue (z locked paletky 25/50/130/200/240)
+ * pro vizuální variace; ikona-pill stejný recept jako .sec-hued__sub-icon.
+ *
+ * Props:
+ *   - heading: nadpis (default „Vždy v ceně bydlení")
+ *   - lede: krátký popis pod nadpisem
+ *   - compact: true → bez header bloku, jen grid (pro detail page sidebar)
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  heading?: string;
+  lede?: string;
+  compact?: boolean;
+}
+const {
+  heading = 'Vždy v ceně bydlení',
+  lede = 'Co dostává každý rezident bez ohledu na typ ubytování. Zdarma znamená zdarma.',
+  compact = false,
+} = Astro.props;
+
+interface Benefit {
+  hue: 25 | 50 | 130 | 200 | 240;
+  icon: string;
+  label: string;
+  detail: string;
+}
+const benefits: Benefit[] = [
+  { hue: 50,  icon: 'zap',         label: 'Energie a internet',  detail: 'Plně pokryto'              },
+  { hue: 240, icon: 'van',         label: 'Hub-shuttle',         detail: 'Sdílená kyvadlovka neomezeně' },
+  { hue: 25,  icon: 'car-front',   label: 'Hub-taxi',            detail: '1× lokální jízda měsíčně' },
+  { hue: 200, icon: 'waves',       label: 'Bazén',               detail: 'Vstup zdarma'             },
+  { hue: 50,  icon: 'thermometer', label: 'Sauna',               detail: '1× týdně v ceně (tarif 12+)' },
+  { hue: 240, icon: 'laptop',      label: 'Coworking sál',       detail: 'Volný stůl 24/7'          },
+  { hue: 130, icon: 'parking-circle', label: 'Parkování',         detail: 'Vyhrazené stání'          },
+  { hue: 130, icon: 'bike',        label: 'Úložna kol',          detail: 'Krytá, uzamykatelná'      },
+];
+---
+
+<section class={`rb${compact ? ' rb--compact' : ''}`} aria-label={heading}>
+  <div class="rb__inner">
+    {!compact && (
+      <header class="rb__head">
+        <p class="rb__eyebrow">Vše v ceně</p>
+        <h2 class="rb__title">{heading}</h2>
+        <p class="rb__lede">{lede}</p>
+      </header>
+    )}
+    <ul class="rb__grid">
+      {benefits.map((b) => (
+        <li class="rb__chip" style={`--section-hue: ${b.hue};`}>
+          <span class="rb__icon" aria-hidden="true"><Icon name={b.icon} size={18} /></span>
+          <div class="rb__txt">
+            <p class="rb__label">{b.label}</p>
+            <p class="rb__detail">{b.detail}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rb {
+    padding: var(--space-7) var(--gutter);
+    background: var(--bg);
+  }
+  .rb--compact {
+    padding: 0;
+    background: transparent;
+  }
+  .rb__inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+  .rb__head {
+    max-width: 60ch;
+    margin: 0 0 var(--space-5);
+  }
+  .rb__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-2);
+  }
+  .rb__title {
+    font: 600 clamp(1.375rem, 2.4vw, 1.75rem) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--space-2);
+  }
+  .rb__lede {
+    font: 500 var(--text-sm) / 1.55 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+  }
+
+  .rb__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(8px, 1vw, 12px);
+  }
+  @media (max-width: 1180px) {
+    .rb__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .rb__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 420px) {
+    .rb__grid { grid-template-columns: 1fr; }
+  }
+
+  /* Chip recipe sdílí logiku s .sec-hued__sub-icon (hue 25/50/130/200/240).
+     Každý chip má vlastní --section-hue inline, takže ikona pill + jemný
+     hued gradient v rohu se přizpůsobí. Hover lift jemný + icon scale. */
+  .rb__chip {
+    --h: var(--section-hue, 240);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid hsl(var(--h) 30% 85%);
+    border-radius: var(--radius-input);
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 220ms cubic-bezier(0.32, 0.72, 0, 1),
+      border-color 220ms ease,
+      box-shadow 220ms ease;
+  }
+  .rb__chip::before {
+    content: '';
+    position: absolute;
+    top: -24px;
+    right: -24px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, hsl(var(--h) 60% 60% / 0.18) 0%, transparent 65%);
+    pointer-events: none;
+    transition: opacity 280ms ease;
+    opacity: 0.7;
+  }
+  .rb__chip:hover {
+    transform: translateY(-2px);
+    border-color: hsl(var(--h) 45% 55%);
+    box-shadow: 0 6px 16px hsl(var(--h) 40% 30% / 0.10);
+  }
+  .rb__chip:hover::before { opacity: 1; }
+  .rb__chip > * { position: relative; z-index: 1; }
+
+  .rb__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: hsl(var(--h) 55% 55% / 0.16);
+    color: hsl(var(--h) 50% 28%);
+    flex-shrink: 0;
+    transition: transform 220ms ease, background 220ms ease;
+  }
+  .rb__chip:hover .rb__icon {
+    background: hsl(var(--h) 55% 55% / 0.22);
+    transform: scale(1.06) rotate(-2deg);
+  }
+
+  .rb__txt {
+    min-width: 0;
+    display: grid;
+    gap: 1px;
+  }
+  .rb__label {
+    font: 700 var(--text-sm) / 1.2 var(--font-sans);
+    color: var(--fg);
+    margin: 0;
+    letter-spacing: var(--tracking-tight);
+  }
+  .rb__detail {
+    font: 500 var(--text-2xs) / 1.4 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rb__chip,
+    .rb__chip::before,
+    .rb__icon { transition: none; }
+    .rb__chip:hover { transform: none; }
+    .rb__chip:hover .rb__icon { transform: none; }
+  }
+</style>

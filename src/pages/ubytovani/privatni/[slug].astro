@@ -1,6 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import Gallery from '../../../components/Gallery.astro';
+import ResidentBenefits from '../../../components/ResidentBenefits.astro';
 import { getCollection, render } from 'astro:content';
 import { withBase } from '../../../utils/url';
 
@@ -74,6 +75,8 @@ const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['1kk'];
       </div>
     </div>
   </section>
+
+  <ResidentBenefits />
 
   <section class="apt-body">
     <div class="apt-body__inner">
