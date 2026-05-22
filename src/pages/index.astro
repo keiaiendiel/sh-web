@@ -583,8 +583,19 @@ const tiles = [
     outline: none;
   }
   @media (max-width: 540px) {
-    .lp-hero__quick { flex-direction: column; gap: 8px; }
-    .lp-hero__quick-btn { width: 100%; justify-content: center; }
+    /* Mobile: úzká vertikální řada nalevo, ne full-width. Tlačítka jen tak
+     * široká kolik vyžaduje text + minimal padding , čitelné ale subtle. */
+    .lp-hero__quick {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .lp-hero__quick-btn {
+      width: auto;
+      align-self: flex-start;
+      padding: 7px 14px;
+      font-size: 0.8125rem;
+    }
   }
   /* 5 slidů jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
      celé fotky doleva. Sousední slide zároveň zprava vplouvá dovnitř,
@@ -736,6 +747,11 @@ const tiles = [
     border-bottom: 1px solid var(--border-muted);
     scroll-margin-top: 80px;
   }
+  /* Mobile: ribbon wave nad první sekcí dělá visual break sám,
+   * 1px linka pod ní vypadá redundantně. Desktop ji drží jako jemný rule. */
+  @media (max-width: 540px) {
+    .lp-tiles { border-bottom: 0; }
+  }
   .lp-tiles__grid {
     /* Stejný width pattern jako zbytek obsahu webu (header bar, lp-section,
        footer): container-wide se 2× gutter padding. Tile karty mírně užší
@@ -786,10 +802,9 @@ const tiles = [
     box-shadow: 0 6px 24px hsl(var(--hue) 41% 13% / 0.18);
   }
   .lp-tile--reserve .lp-tile__eyebrow { color: var(--rose); }
-  .lp-tile--reserve .lp-tile__title {
-    font-size: clamp(1.25rem, 2vw, 1.625rem);
-    color: #fff;
-  }
+  /* Title font-size dědí ze .lp-tile__title (sjednocený s ostatními tily),
+   * jen color override na bílou pro kontrast s plum-deep bg. */
+  .lp-tile--reserve .lp-tile__title { color: #fff; }
   .lp-tile--reserve .lp-tile__ribbon path { stroke: var(--rose); stroke-width: 28; }
   /* Pulse dot, 8 px vlevo nahoře, jemný breathing pulse pro „live" cue. */
   .lp-tile__pulse {

@@ -179,21 +179,21 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         </div>
         <div class="rez__choices rez__choices--2">
           <label class="rez__choice">
-            <input type="radio" name="stipendium-typ" value="pobytove" data-auto-next />
+            <input type="radio" name="stipendium-typ" value="pobytove" />
             <span class="rez__choice-body">
               <span class="rez__choice-title">Pobytové stipendium</span>
               <span class="rez__choice-meta">Nadace pokryje část nebo celé bydlení v&nbsp;Hubu výměnou za&nbsp;přínos komunitě: dílny, workshopy, péče o&nbsp;areál nebo vlastní projekt s&nbsp;veřejným výstupem.</span>
             </span>
           </label>
           <label class="rez__choice">
-            <input type="radio" name="stipendium-typ" value="projektove" data-auto-next />
+            <input type="radio" name="stipendium-typ" value="projektove" />
             <span class="rez__choice-body">
               <span class="rez__choice-title">Projektové stipendium</span>
               <span class="rez__choice-meta">Nadace proplatí konkrétní náklady projektu: materiál, ateliérový nájem, CNC strojochodiny, dílenský čas. Bydlení žadatel řeší samostatně.</span>
             </span>
           </label>
           <label class="rez__choice">
-            <input type="radio" name="stipendium-typ" value="oboji" data-auto-next />
+            <input type="radio" name="stipendium-typ" value="oboji" />
             <span class="rez__choice-body">
               <span class="rez__choice-title">Obě kategorie</span>
               <span class="rez__choice-meta">Bydlení i&nbsp;náklady projektu. Probereme s&nbsp;vámi, co dává smysl.</span>
@@ -432,19 +432,40 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       return 4;
     }
 
+    /* Pending hide timers per panel. Bez WeakMap by stale setTimeout
+     * z předchozí showPanel volání mohl skrýt target panel poté co se k němu
+     * uživatel vrátil přes Back (zde reprodukováno: koncept → privátní →
+     * Back v 300ms → koncept zůstane is-current, ale hidden=true → Pokračovat
+     * tlačítko nedostupné). Při každém showPanel zrušíme pending timer
+     * pro target a odstraníme stale is-leaving-* třídy. */
+    var pendingHide = new WeakMap();
+
     function showPanel(name, direction) {
       direction = direction || 'forward';
       var target = panelByName(name);
       if (!target) return;
+
+      /* Cancel pending hide pro target (rapid back during transition fix) */
+      var pendingId = pendingHide.get(target);
+      if (pendingId) {
+        clearTimeout(pendingId);
+        pendingHide.delete(target);
+      }
+      /* Strip stale leaving classes , CSS source order by jinak nechal
+       * .is-leaving-* override .is-current (opacity 0, pointer-events none). */
+      target.classList.remove('is-leaving-left', 'is-leaving-right');
+
       panels.forEach(function (p) {
         if (p === target) return;
         if (p.classList.contains('is-current')) {
           p.classList.remove('is-current');
           p.classList.add(direction === 'forward' ? 'is-leaving-left' : 'is-leaving-right');
-          setTimeout(function () {
+          var id = setTimeout(function () {
             p.hidden = true;
             p.classList.remove('is-leaving-left', 'is-leaving-right');
+            pendingHide.delete(p);
           }, 320);
+          pendingHide.set(p, id);
         }
       });
       target.hidden = false;
@@ -491,17 +512,32 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     }
 
     function next() {
+      /* Manual advance přebírá kontrolu , zruš případný auto-advance timer. */
+      clearTimeout(autoNextTimer);
       var cur = history[history.length - 1];
       if (cur === 'koncept') {
         var koncept = form.querySelector('input[name="koncept"]:checked');
-        if (!koncept) return;
+        if (!koncept) {
+          flashInvalid(form.querySelector('input[name="koncept"]').closest('.rez__choices'));
+          return;
+        }
         var route = 'format-' + (koncept.value === 'co-living' ? 'coliving' : koncept.value);
         history.push(route);
         showPanel(route, 'forward');
       } else if (cur === 'format-stipendium') {
+        var typ = form.querySelector('input[name="stipendium-typ"]:checked');
+        if (!typ) {
+          flashInvalid(form.querySelector('input[name="stipendium-typ"]').closest('.rez__choices'));
+          return;
+        }
         history.push('termin');
         showPanel('termin', 'forward');
       } else if (cur.indexOf('format-') === 0) {
+        var format = form.querySelector('input[name="format"]:checked');
+        if (!format) {
+          flashInvalid(form.querySelector('input[name="format"]').closest('.rez__choices'));
+          return;
+        }
         history.push('termin');
         showPanel('termin', 'forward');
       } else if (cur === 'termin') {
@@ -512,6 +548,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     }
 
     function back() {
+      /* Zruš pending auto-advance , jinak by zombie next() override-oval naši back. */
+      clearTimeout(autoNextTimer);
       if (history.length <= 1) return;
       history.pop();
       showPanel(history[history.length - 1], 'back');
@@ -906,11 +944,15 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     display: grid;
     gap: var(--space-3);
   }
+  /* Non-card volby (koncept + stipendium-typ) , vždy stackované vertikálně.
+   * Důvod: na desktopu byly 3 úzké buňky a delší meta text se zbytečně
+   * lámal. Vertikální stack s bohatším rytmem = lepší čitelnost + dýchání. */
   .rez__choices--2 { grid-template-columns: 1fr; }
   .rez__choices--3 { grid-template-columns: 1fr; }
+  /* Card-style overrides , obnoví grid na desktopu pro format-* panely. */
   @media (min-width: 720px) {
-    .rez__choices--2 { grid-template-columns: 1fr 1fr; }
-    .rez__choices--3 { grid-template-columns: 1fr 1fr 1fr; }
+    .rez__choices--cards.rez__choices--2 { grid-template-columns: 1fr 1fr; }
+    .rez__choices--cards.rez__choices--3 { grid-template-columns: 1fr 1fr 1fr; }
   }
   .rez__choice {
     position: relative;
@@ -920,7 +962,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     border-radius: var(--radius-input);
     background: var(--bg);
     cursor: pointer;
-    transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
+    transition: border-color 200ms ease, background 200ms ease, transform 200ms ease, box-shadow 200ms ease;
   }
   .rez__choice:hover {
     border-color: var(--accent);
@@ -953,6 +995,54 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez__choice-meta {
     font: 500 var(--text-sm) / 1.4 var(--font-sans);
     color: var(--fg-muted);
+  }
+
+  /* Non-card volby na desktopu , dech a typografická hierarchie.
+   * Title větší (vyšší vizuální váha jako tlačítko/CTA), meta s wide
+   * max-width pro krásnou linkulinu. Padding bohatší aby řádek vypadal
+   * jako proper card-row, ne button. Subtle arrow „>" v pravém horním
+   * rohu pro affordance. */
+  @media (min-width: 720px) {
+    .rez__choices:not(.rez__choices--cards) {
+      gap: 12px;
+    }
+    .rez__choices:not(.rez__choices--cards) .rez__choice {
+      padding: 22px 28px;
+    }
+    .rez__choices:not(.rez__choices--cards) .rez__choice-body {
+      gap: 6px;
+      padding-right: 36px; /* room for arrow indicator */
+    }
+    .rez__choices:not(.rez__choices--cards) .rez__choice-title {
+      font: 700 1.1875rem / 1.25 var(--font-sans);
+    }
+    .rez__choices:not(.rez__choices--cards) .rez__choice-meta {
+      font: 500 0.9375rem / 1.5 var(--font-sans);
+      max-width: 64ch;
+    }
+    .rez__choices:not(.rez__choices--cards) .rez__choice::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 24px;
+      width: 12px;
+      height: 12px;
+      border-top: 2px solid var(--fg-subtle);
+      border-right: 2px solid var(--fg-subtle);
+      transform: translateY(-50%) rotate(45deg);
+      opacity: 0.5;
+      transition: opacity 200ms ease, right 220ms cubic-bezier(0.32, 0.72, 0, 1), border-color 200ms ease;
+    }
+    .rez__choices:not(.rez__choices--cards) .rez__choice:hover::after,
+    .rez__choices:not(.rez__choices--cards) .rez__choice:focus-within::after {
+      opacity: 1;
+      right: 20px;
+      border-color: var(--accent);
+    }
+    .rez__choices:not(.rez__choices--cards) .rez__choice:has(input:checked)::after {
+      opacity: 1;
+      border-color: var(--accent);
+    }
   }
 
   /* ---------- Card-style choices (format-privatni, format-coliving) ----------
