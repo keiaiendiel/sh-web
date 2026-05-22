@@ -230,7 +230,10 @@ const {
   .cta-banner--rose:focus-visible { outline-color: var(--plum-deep); }
 
   @media (max-width: 760px) {
-    .cta-banner-wrap { padding: var(--space-6) 0 var(--space-7); }
+    /* Bottom padding sjednocený s CrossLinkPair internal gap (14px), aby
+       mezera mezi Rezervace bannerem a 2 cross-link banery byla shodná
+       s mezerou mezi cross-link banery navzájem. */
+    .cta-banner-wrap { padding: var(--space-6) 0 14px; }
     .cta-banner {
       grid-template-columns: 1fr;
       gap: 16px;

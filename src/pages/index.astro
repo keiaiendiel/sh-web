@@ -380,16 +380,16 @@ const tiles = [
                       <dd class="lp-summary__dd">4 (jednolůžková a&nbsp;dvoulůžková kapsle, jednolůžko a&nbsp;dvoulůžko)</dd>
                     </div>
                     <div class="lp-summary__row">
-                      <dt class="lp-summary__dt">Pro koho</dt>
+                      <dt class="lp-summary__dt">Kapacita</dt>
                       <dd class="lp-summary__dd">1 osoba nebo pár</dd>
                     </div>
                     <div class="lp-summary__row">
-                      <dt class="lp-summary__dt">Plocha</dt>
-                      <dd class="lp-summary__dd">matrace 200×80 cm až 230×240 cm</dd>
+                      <dt class="lp-summary__dt">Matrace</dt>
+                      <dd class="lp-summary__dd">200×80 cm až 230×240 cm</dd>
                     </div>
                     <div class="lp-summary__row">
                       <dt class="lp-summary__dt">Soukromí</dt>
-                      <dd class="lp-summary__dd">uzamykatelný modul nebo vlastní postel v&nbsp;pokoji</dd>
+                      <dd class="lp-summary__dd">uzamykatelný modul nebo lůžko ve&nbsp;sdíleném pokoji</dd>
                     </div>
                     <div class="lp-summary__row">
                       <dt class="lp-summary__dt">Cena</dt>
@@ -415,7 +415,7 @@ const tiles = [
                       <dd class="lp-summary__dd">5 (1+kk až 5+kk)</dd>
                     </div>
                     <div class="lp-summary__row">
-                      <dt class="lp-summary__dt">Pro koho</dt>
+                      <dt class="lp-summary__dt">Kapacita</dt>
                       <dd class="lp-summary__dd">2 až 10 osob</dd>
                     </div>
                     <div class="lp-summary__row">
@@ -981,10 +981,13 @@ const tiles = [
   @media (max-width: 760px) {
     .lp-hero {
       /* +100 px proti 70dvh (~586 → ~686 px na 812 viewportu) per klientovu
-         žádost; větší plocha pro hero foto, lepší dojem na 6.1" displejích. */
+         žádost; větší plocha pro hero foto, lepší dojem na 6.1" displejích.
+         Horizontální padding ponechán na 0, .lp-hero__inner si bere gutter
+         přes width: calc(100% , 2*gutter), aby content alignoval s tile gridem
+         a zbytkem stránky (jinak by byl double-guttered). */
       min-height: 85vh;
       min-height: 85dvh;
-      padding: var(--space-7) var(--gutter);
+      padding: var(--space-7) 0;
     }
     .lp-tiles { padding: var(--space-5) 0 var(--space-6); }
     /* Mobile: 2 sloupce (3×2 → 2×3) aby každý tile měl dost šířky pro cross-link
