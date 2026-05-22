@@ -79,7 +79,7 @@ const sections: Section[] = [
       { src: withBase('/images/hub/ubytovani/02-1kk.jpg'), alt: 'Privátní apartmán 1+kk, postel u okna, kuchyňský kout a jídelní stůl.' },
       { src: withBase('/images/hub/ubytovani/03-ext.jpg'), alt: 'Privátní apartmány v parteru za soumraku, alej bříz, teplá světla v oknech.' },
       { src: withBase('/images/hub/ubytovani/04-int.jpg'), alt: 'Interiér privátního apartmánu, večerní atmosféra s teplým světlem.' },
-      { src: withBase('/images/hub/ubytovani/05-kapsle-wide.jpg'), alt: 'Co-living kapsle, široký pohled na chodbu s lavicí a kapslemi v patrech.' },
+      { src: withBase('/images/hub/ubytovani/05-4kk-family.jpg'), alt: 'Privátní apartmán 4+kk: rodina v obývacím pokoji s otevřenou kuchyní, dlouhý jídelní stůl pro osm.' },
     ],
   },
   {
@@ -172,7 +172,7 @@ const tiles = [
   headerVariant="overlay">
 
   {/* ============ HERO ROTATION ============ */}
-  <section class="lp-hero" data-hero-mode="slides" aria-label="Startovací Hub Klecany, hero galerie">
+  <section class="lp-hero" data-hero-mode="video" aria-label="Startovací Hub Klecany, hero galerie">
     <div class="lp-hero__rotation" aria-hidden="true">
       {heroSlides.map((slide, i) => (
         <div class="lp-hero__slide" data-slide={i} style={`animation-delay: ${i * 5 - 1}s`}>
@@ -194,18 +194,18 @@ const tiles = [
       muted
       loop
       playsinline
-      preload="none"
+      preload="auto"
       aria-hidden="true"></video>
     <div class="lp-hero__scrim" aria-hidden="true"></div>
 
     <div class="lp-hero__inner">
       {/* Mode toggle: kruhová ikona nad titulkem, přepíná slides/video.
           Žádný text label, jen play/image ikona. Volba se ukládá do localStorage. */}
-      <button class="lp-hero__mode-toggle" type="button" data-hero-mode-toggle aria-label="Přepnout na video">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="play" aria-hidden="true">
+      <button class="lp-hero__mode-toggle" type="button" data-hero-mode-toggle aria-label="Přepnout na fotky">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="play" aria-hidden="true" hidden>
           <polygon points="6 4 20 12 6 20 6 4" fill="currentColor" />
         </svg>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="image" aria-hidden="true" hidden>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="image" aria-hidden="true">
           <rect x="3" y="5" width="18" height="14" rx="1" />
           <circle cx="9" cy="11" r="1.5" fill="currentColor" />
           <path d="M3 16 L9 12 L13 15 L17 11 L21 14" />
@@ -231,11 +231,11 @@ const tiles = [
   </section>
 
   <script is:inline>
-    /* Hero mode toggle: přepíná .lp-hero[data-hero-mode] mezi „slides"
-       (default, 5 IMG carousel) a „video" (loop reel). Volba se ukládá
-       do localStorage pod klíčem 'sh:hero-mode'. Video je preload="none",
-       src se nastaví až při prvním přepnutí (žádný bandwidth overhead
-       pro uživatele, kteří nikdy nepřepnou). */
+    /* Hero mode toggle: přepíná .lp-hero[data-hero-mode] mezi „video"
+       (default, loop reel) a „slides" (5 IMG carousel). Volba se ukládá
+       do localStorage pod klíčem 'sh:hero-mode'. Default je video, ale
+       uživatelé s prefers-reduced-motion: reduce dostanou slides (bez
+       autoplaying motion). */
     (function () {
       if (window.__hubHeroToggleBound) return;
       window.__hubHeroToggleBound = true;
@@ -272,7 +272,14 @@ const tiles = [
 
         var stored = null;
         try { stored = window.localStorage.getItem('sh:hero-mode'); } catch (e) {}
-        applyMode(stored === 'video' ? 'video' : 'slides');
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var initial;
+        if (stored === 'video' || stored === 'slides') {
+          initial = stored;
+        } else {
+          initial = prefersReducedMotion ? 'slides' : 'video';
+        }
+        applyMode(initial);
 
         btn.addEventListener('click', function () {
           var next = hero.dataset.heroMode === 'video' ? 'slides' : 'video';
