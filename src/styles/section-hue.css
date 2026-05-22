@@ -1,0 +1,152 @@
+/*
+ * section-hue.css — per-section colorize + delight utility
+ *
+ * Applied via `.sec-hued` class on a <section>, plus inline
+ * `style="--section-hue: NNN"` (25 / 50 / 130 / 200 / 240, dle
+ * docs/superpowers/specs/2026-05-22-colorize-delight-rollout-design.md
+ * palety). Kompletní recipe v 7 treatments:
+ *
+ *   1. Section background wash (jemný hue tint shora → bílá ve 45 %)
+ *   2. Decorative blob v rohu nahoře vpravo (radial gradient, ~18 %)
+ *   3. Section bottom accent rule (2px gradient, fading do stran)
+ *   4. Eyebrow text v hue (přepisuje existující var(--accent))
+ *   5. Subsection icon pill (.sec-hued__sub + .sec-hued__sub-icon)
+ *   6. Dl polish (dt color + separator border-top v hue)
+ *   7. Gallery box-shadow v hue
+ *
+ * Použití nezasahuje do layoutu sec-feature/sec-block — jen vrstvy hue
+ * na top + override několika konkrétních selektorů. Pages tedy zůstávají
+ * po struktuře beze změny; přidávají se 2 věci: třída `.sec-hued`
+ * + inline `--section-hue` + subsection h3 obalí span ikona.
+ *
+ * --section-hue má fallback 240 (brand indigo) aby chyba v inline
+ * style nezpůsobila harsh visual break. Brand `--accent` v tokens.css
+ * je hsl(240 39% 27%), takže fallback = neutral brand.
+ */
+
+.sec-hued {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    hsl(var(--section-hue, 240) 45% 98%) 0%,
+    var(--bg) 45%
+  );
+}
+
+/* Decorative blob top-right — drží sekci „dýchat", nepřebije text. */
+.sec-hued::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(
+    circle,
+    hsl(var(--section-hue, 240) 65% 70% / 0.18) 0%,
+    transparent 65%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Bottom accent rule, gradient fading do stran (místo plné border-bottom). */
+.sec-hued::after {
+  content: '';
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--section-hue, 240) 55% 50% / 0.35) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Content nad dekorací — bez tohohle by ::before/::after schovaly text. */
+.sec-hued > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Eyebrow v hue. Override na existující sec-feature__eyebrow / sec-block__eyebrow
+   selektory (které mají barvu = var(--accent)). Specifity bump skrz .sec-hued */
+.sec-hued .sec-feature__eyebrow,
+.sec-hued .sec-block__eyebrow,
+.sec-hued .sec-sub__eyebrow {
+  color: hsl(var(--section-hue, 240) 50% 30%);
+}
+
+/* Subsection icon pill — markup:
+     <h3 class="sec-hued__sub">
+       <span class="sec-hued__sub-icon"><Icon name="..." size={16} /></span>
+       Bazén
+     </h3>
+*/
+.sec-hued__sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sec-hued__sub-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: hsl(var(--section-hue, 240) 55% 55% / 0.16);
+  color: hsl(var(--section-hue, 240) 50% 28%);
+  flex-shrink: 0;
+  transition: background 220ms ease, transform 220ms ease;
+}
+
+.sec-hued__sub-icon svg {
+  display: block;
+}
+
+/* Hover delight: subsection h3 hover → icon „dýchne" jemné scale.
+   Použito jen když h3 má hover affordance (např. interaktivní). */
+.sec-hued__sub:hover .sec-hued__sub-icon {
+  background: hsl(var(--section-hue, 240) 55% 55% / 0.22);
+  transform: scale(1.04);
+}
+
+/* Dl polish — dt v hue, separator čára v hue.
+   Pokrývá tři varianty dl markup: sec-feature__spec, sec-block, sec-table. */
+.sec-hued .sec-feature__spec > div,
+.sec-hued .sec-block__row,
+.sec-hued .sec-table__row {
+  border-top-color: hsl(var(--section-hue, 240) 30% 82%);
+}
+
+.sec-hued .sec-feature__spec dt,
+.sec-hued .sec-block__row dt,
+.sec-hued .sec-table__row dt {
+  color: hsl(var(--section-hue, 240) 45% 38%);
+}
+
+/* Gallery polish — colored shadow. Box-shadow renderuje mimo overflow:hidden
+   wrapper, takže Gallery internals se nedotčou. Aplikováno na obě varianty
+   (carousel i single). */
+.sec-hued .gallery,
+.sec-hued .gallery--single {
+  box-shadow: 0 4px 18px hsl(var(--section-hue, 240) 50% 40% / 0.16);
+  border-radius: var(--radius-input);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sec-hued__sub-icon {
+    transition: none;
+  }
+  .sec-hued__sub:hover .sec-hued__sub-icon {
+    transform: none;
+  }
+}
