@@ -284,6 +284,10 @@ const heroJumps = [
     overflow: hidden;
     background: var(--bg-muted);
     border: 1px solid var(--accent-rule);
+    /* Isolation: isolate vytváří lokální stacking context, takže Leaflet
+       interní z-indexy (panes až 800) se nepokoušejí překrýt mobile drawer
+       menu (z-index 29). Bez isolation Leaflet leakuje skrz parent. */
+    isolation: isolate;
   }
   .ok-map :global(.leaflet-container) {
     width: 100%;

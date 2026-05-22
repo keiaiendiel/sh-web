@@ -209,6 +209,9 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     background: var(--bg-muted);
     border: 1px solid var(--accent-rule);
     margin-top: var(--space-5);
+    /* Isolation: isolate vytváří lokální stacking context, takže Leaflet
+       interní z-indexy (panes až 800) nepřebíjejí mobile drawer (z-index 29). */
+    isolation: isolate;
   }
   .hub-footer__map :global(.leaflet-container) {
     width: 100%;
