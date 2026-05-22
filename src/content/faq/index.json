@@ -14,13 +14,13 @@
   "q3": {
     "audience": "resident",
     "question": "Co všechno je v ceně měsíčního nájmu?",
-    "answer": "Energie, internet, úklid společných prostor, 5 jízd Hub-shuttle do metra Kobylisy, 1 jízda Hub-taxi lokálně, volný stůl v coworkingovém sále 24/7, poukaz do sauny 1× týdně. Za zvýhodněnou cenu nad rámec: další jízdy shuttle a taxi, fixní stůl v coworkingu, ateliér nebo dílna, vybrané kulturní akce za vstupné.",
+    "answer": "Energie, internet, úklid společných prostor, neomezené jízdy Hub-shuttle na metro Kobylisy (kyvadlovka na objednání), 1 jízda Hub-taxi lokálně, volný stůl v coworkingovém sále 24/7, poukaz do sauny 1× týdně. Za zvýhodněnou cenu nad rámec: další jízdy Hub-taxi, fixní stůl v coworkingu, ateliér nebo dílna, vybrané kulturní akce za vstupné.",
     "order": 3
   },
   "q4": {
     "audience": "resident",
     "question": "Je to opravdu 15 minut do Prahy?",
-    "answer": "Z Klecan na metro Kobylisy: Hub-shuttle 12 až 15 minut (vlastní devítimístná dodávka v peak špičce, 5 jízd v ceně pro rezidenty), PID linka 374 14 až 17 minut (standardní jízdenka). Z metra na Florenc 9 minut, na Karlák kolem 12. Z bytu v Hubu na Florenc tedy 25 až 30 minut, na Karlák 30 až 35. Plánovaná tramvaj Kobylisy-Sedlec (2029 až 2030) toto zrychlí.",
+    "answer": "Z Klecan na metro Kobylisy: Hub-shuttle 12 až 15 minut (sdílená devítimístná dodávka na objednání, pro rezidenty neomezeně zdarma, reakce typicky do 15 minut), PID linka 374 14 až 17 minut (standardní jízdenka). Z metra na Florenc 9 minut, na Karlák kolem 12. Z bytu v Hubu na Florenc tedy 25 až 30 minut, na Karlák 30 až 35. Plánovaná tramvaj Kobylisy-Sedlec (2029 až 2030) toto zrychlí.",
     "order": 4
   },
   "q5": {

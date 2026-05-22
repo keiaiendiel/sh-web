@@ -1,0 +1,184 @@
+---
+/**
+ * QuickReserveCtas, tří-tlačítková řada pro rychlou rezervaci s předvybranou
+ * cestou v rezervačním formuláři (?cesta=luzko / ?cesta=apartman / ?cesta=stipendium).
+ *
+ * Varianta:
+ *   - "dark"  (default) , glass styling na tmavém podkladu (hero overlay)
+ *   - "light" , outline styling na světlém podkladu (sekce v body)
+ *
+ * Highlight zvýrazní jednu ze tří akcí (visually primary). Možnosti:
+ *   - "luzko" | "apartman" | "stipendium" | undefined (default: stipendium)
+ *
+ * Eyebrow + intro: krátký nadpis nad CTA řadou pro kontext sekce.
+ */
+interface Props {
+  variant?: 'dark' | 'light';
+  highlight?: 'luzko' | 'apartman' | 'stipendium';
+  eyebrow?: string;
+  title?: string;
+  /** Krátký podpis pod řadou CTA. */
+  hint?: string;
+}
+
+import { withBase } from '../utils/url';
+
+const {
+  variant = 'light',
+  highlight = 'stipendium',
+  eyebrow,
+  title,
+  hint,
+} = Astro.props;
+
+type CtaKey = 'luzko' | 'apartman' | 'stipendium';
+type Cta = {
+  key: CtaKey;
+  href: string;
+  label: string;
+  meta: string;
+};
+const ctas: Cta[] = [
+  { key: 'luzko',      href: '/rezervace/?cesta=luzko',      label: 'Rezervovat lůžko',     meta: 'od 3 000 Kč/měs' },
+  { key: 'apartman',   href: '/rezervace/?cesta=apartman',   label: 'Rezervovat apartmán',  meta: 'od 9 500 Kč/měs' },
+  { key: 'stipendium', href: '/rezervace/?cesta=stipendium', label: 'Požádat o stipendium', meta: 'pobytové nebo projektové' },
+];
+---
+<section class:list={['qr-ctas', `qr-ctas--${variant}`]} aria-label={title ?? 'Rychlá rezervace'}>
+  {(eyebrow || title || hint) && (
+    <header class="qr-ctas__head">
+      {eyebrow && <p class="qr-ctas__eyebrow">{eyebrow}</p>}
+      {title && <h2 class="qr-ctas__title" set:html={title} />}
+      {hint && <p class="qr-ctas__hint">{hint}</p>}
+    </header>
+  )}
+  <div class="qr-ctas__row">
+    {ctas.map((c) => (
+      <a
+        class:list={['qr-ctas__btn osa-nolink', { 'qr-ctas__btn--primary': c.key === highlight }]}
+        href={withBase(c.href)}
+      >
+        <span class="qr-ctas__btn-label">{c.label}</span>
+        <span class="qr-ctas__btn-meta">{c.meta}</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .qr-ctas {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: var(--space-7) 0;
+  }
+  .qr-ctas__head {
+    max-width: 60ch;
+    margin: 0 0 var(--space-5);
+  }
+  .qr-ctas__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-3);
+  }
+  .qr-ctas__title {
+    font: 600 clamp(1.5rem, 3vw, 2.125rem) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--space-3);
+  }
+  .qr-ctas__hint {
+    font: 500 var(--text-md) / 1.5 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+  }
+  .qr-ctas__row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  @media (max-width: 760px) {
+    .qr-ctas__row { grid-template-columns: 1fr; }
+  }
+
+  .qr-ctas__btn {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 20px;
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition:
+      background 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease,
+      transform 200ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .qr-ctas__btn-label {
+    font: 700 var(--text-md) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+  }
+  .qr-ctas__btn-meta {
+    font: 500 var(--text-xs) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    opacity: 0.78;
+  }
+
+  /* Light variant: outlined cards na světlém podkladu */
+  .qr-ctas--light .qr-ctas__btn {
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--accent-rule);
+  }
+  .qr-ctas--light .qr-ctas__btn:hover,
+  .qr-ctas--light .qr-ctas__btn:focus-visible {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    outline: none;
+  }
+  .qr-ctas--light .qr-ctas__btn--primary {
+    background: var(--accent);
+    color: var(--accent-on, #fff);
+    border-color: var(--accent);
+  }
+  .qr-ctas--light .qr-ctas__btn--primary:hover,
+  .qr-ctas--light .qr-ctas__btn--primary:focus-visible {
+    background: var(--plum-deep);
+    border-color: var(--plum-deep);
+    color: #fff;
+  }
+
+  /* Dark variant: glass styling na tmavém podkladu (např. hero overlay) */
+  .qr-ctas--dark .qr-ctas__btn {
+    background: rgba(0, 0, 0, 0.28);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .qr-ctas--dark .qr-ctas__btn:hover,
+  .qr-ctas--dark .qr-ctas__btn:focus-visible {
+    background: #fff;
+    color: var(--plum-deep);
+    border-color: #fff;
+    transform: translateY(-2px);
+    outline: none;
+  }
+  .qr-ctas--dark .qr-ctas__btn--primary {
+    background: var(--rose);
+    color: var(--plum-deep);
+    border-color: var(--rose);
+  }
+  .qr-ctas--dark .qr-ctas__btn--primary:hover,
+  .qr-ctas--dark .qr-ctas__btn--primary:focus-visible {
+    background: #fff;
+    border-color: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qr-ctas__btn { transition: none; }
+  }
+</style>

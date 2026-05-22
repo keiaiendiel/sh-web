@@ -61,10 +61,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             </span>
           </label>
           <label class="rez__choice">
-            <input type="radio" name="koncept" value="nevim" data-auto-next />
+            <input type="radio" name="koncept" value="stipendium" data-auto-next />
             <span class="rez__choice-body">
-              <span class="rez__choice-title">Nevím, poradíme</span>
-              <span class="rez__choice-meta">Tři rychlé otázky a doporučení od&nbsp;nás.</span>
+              <span class="rez__choice-title">Žádost o&nbsp;stipendium</span>
+              <span class="rez__choice-meta">Pobytové (slevy na&nbsp;bydlení za&nbsp;přínos) nebo projektové (úhrada materiálu a&nbsp;dílen).</span>
             </span>
           </label>
         </div>
@@ -171,31 +171,38 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         </div>
       </section>
 
-      {/* === KROK: Nevím (3 otázky) === */}
-      <section class="rez__panel" data-panel="format-nevim" data-panel-index="1" data-show-for="nevim" hidden>
+      {/* === KROK: Stipendium (typ + krátký popis) === */}
+      <section class="rez__panel" data-panel="format-stipendium" data-panel-index="1" data-show-for="stipendium" hidden>
         <div class="rez__panel-intro">
-          <h1 class="rez__q">Tři otázky a navrhneme&nbsp;formát.</h1>
-          <p class="rez__q-hint">Ozveme se s konkrétním doporučením.</p>
+          <h1 class="rez__q">Jaké stipendium vás zajímá?</h1>
+          <p class="rez__q-hint">Dvě hlavní kategorie. Můžete žádat o&nbsp;obě zároveň, pokud váš projekt zapadá.</p>
+        </div>
+        <div class="rez__choices rez__choices--2">
+          <label class="rez__choice">
+            <input type="radio" name="stipendium-typ" value="pobytove" data-auto-next />
+            <span class="rez__choice-body">
+              <span class="rez__choice-title">Pobytové stipendium</span>
+              <span class="rez__choice-meta">Nadace pokryje část nebo celé bydlení v&nbsp;Hubu výměnou za&nbsp;přínos komunitě: dílny, workshopy, péče o&nbsp;areál nebo vlastní projekt s&nbsp;veřejným výstupem.</span>
+            </span>
+          </label>
+          <label class="rez__choice">
+            <input type="radio" name="stipendium-typ" value="projektove" data-auto-next />
+            <span class="rez__choice-body">
+              <span class="rez__choice-title">Projektové stipendium</span>
+              <span class="rez__choice-meta">Nadace proplatí konkrétní náklady projektu: materiál, ateliérový nájem, CNC strojochodiny, dílenský čas. Bydlení žadatel řeší samostatně.</span>
+            </span>
+          </label>
+          <label class="rez__choice">
+            <input type="radio" name="stipendium-typ" value="oboji" data-auto-next />
+            <span class="rez__choice-body">
+              <span class="rez__choice-title">Obě kategorie</span>
+              <span class="rez__choice-meta">Bydlení i&nbsp;náklady projektu. Probereme s&nbsp;vámi, co dává smysl.</span>
+            </span>
+          </label>
         </div>
         <div class="rez__field">
-          <label for="nevim-rozpocet">Rozpočet: <output for="nevim-rozpocet" id="nevim-rozpocet-out">9 500 Kč&nbsp;/&nbsp;měs</output></label>
-          <input type="range" id="nevim-rozpocet" name="nevim-rozpocet" min="3000" max="25000" step="500" value="9500" />
-        </div>
-        <div class="rez__field">
-          <label>Preferujete spíš:</label>
-          <div class="rez__pills">
-            <label class="rez__pill"><input type="radio" name="nevim-soukromi" value="soukromi" /><span>Soukromí</span></label>
-            <label class="rez__pill"><input type="radio" name="nevim-soukromi" value="komunita" /><span>Komunitu</span></label>
-            <label class="rez__pill"><input type="radio" name="nevim-soukromi" value="balanc" /><span>Záleží na ceně</span></label>
-          </div>
-        </div>
-        <div class="rez__field">
-          <label>Jak budete v&nbsp;Hubu reálně být:</label>
-          <div class="rez__pills">
-            <label class="rez__pill"><input type="radio" name="nevim-uvazek" value="full-time" /><span>Full-time</span></label>
-            <label class="rez__pill"><input type="radio" name="nevim-uvazek" value="hybrid" /><span>Hybrid</span></label>
-            <label class="rez__pill"><input type="radio" name="nevim-uvazek" value="vikendy" /><span>Víkendy</span></label>
-          </div>
+          <label for="stipendium-zamer">Pár vět o&nbsp;záměru</label>
+          <textarea id="stipendium-zamer" name="stipendium-zamer" rows="3" maxlength="500" placeholder="Krátký popis projektu nebo přínosu pro komunitu. Detail probereme telefonicky."></textarea>
         </div>
         <div class="rez__actions" data-actions>
           <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
@@ -401,9 +408,9 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
     /* State: history stack of panel names. Current panel = last item.
      * Routing rules:
-     *   - koncept choice "privatni" → format-privatni
-     *   - koncept choice "co-living" → format-coliving
-     *   - koncept choice "nevim" → format-nevim
+     *   - koncept choice "privatni"   → format-privatni
+     *   - koncept choice "co-living"  → format-coliving
+     *   - koncept choice "stipendium" → format-stipendium
      *   - format-* → termin
      *   - termin → kontakt
      *   - kontakt submit → success
@@ -415,10 +422,14 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     }
 
     function totalSteps() {
-      /* Total = 3 for pre-filled (termin, kontakt, success). 4 for full flow
-       * (koncept, format-X, termin, kontakt, with success implicit). */
+      /* Length of remaining flow depends on how deep we entered the wizard:
+       *   typ= deep-link        → history starts at 'termin'      → 2 (termin, kontakt)
+       *   cesta= hero deep-link → history starts at 'format-*'    → 3 (format, termin, kontakt)
+       *   default               → history starts at 'koncept'     → 4 (koncept, format, termin, kontakt) */
       var first = history[0];
-      return first === 'termin' ? 2 : 4;
+      if (first === 'termin') return 2;
+      if (first.indexOf('format-') === 0) return 3;
+      return 4;
     }
 
     function showPanel(name, direction) {
@@ -452,10 +463,12 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     function updateProgress(name) {
       var stepNumber, total;
       total = totalSteps();
+      var first = history[0];
+      var formatEntered = first.indexOf('format-') === 0;
       if (name === 'koncept')          stepNumber = 1;
-      else if (name.indexOf('format-') === 0) stepNumber = 2;
-      else if (name === 'termin')      stepNumber = history[0] === 'termin' ? 1 : 3;
-      else if (name === 'kontakt')     stepNumber = history[0] === 'termin' ? 2 : 4;
+      else if (name.indexOf('format-') === 0) stepNumber = formatEntered ? 1 : 2;
+      else if (name === 'termin')      stepNumber = first === 'termin' ? 1 : formatEntered ? 2 : 3;
+      else if (name === 'kontakt')     stepNumber = first === 'termin' ? 2 : formatEntered ? 3 : 4;
       else if (name === 'success')     stepNumber = total;
       else stepNumber = 1;
 
@@ -485,6 +498,9 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         var route = 'format-' + (koncept.value === 'co-living' ? 'coliving' : koncept.value);
         history.push(route);
         showPanel(route, 'forward');
+      } else if (cur === 'format-stipendium') {
+        history.push('termin');
+        showPanel('termin', 'forward');
       } else if (cur.indexOf('format-') === 0) {
         history.push('termin');
         showPanel('termin', 'forward');
@@ -531,16 +547,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       if (e.target.closest('[data-prev]')) { e.preventDefault(); back(); }
     });
 
-    /* Range slider live readout */
-    var rozpocetIn = document.getElementById('nevim-rozpocet');
-    var rozpocetOut = document.getElementById('nevim-rozpocet-out');
-    if (rozpocetIn && rozpocetOut) {
-      var fmtCZ = function (n) { return n.toLocaleString('cs-CZ') + ' Kč / měs'; };
-      rozpocetIn.addEventListener('input', function () {
-        rozpocetOut.textContent = fmtCZ(parseInt(rozpocetIn.value, 10));
-      });
-    }
-
     /* Submit */
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -568,9 +574,23 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    /* URL pre-fill: ?typ=<slug> → skip rovnou na termin */
+    /* URL pre-fill:
+     *   ?typ=<slug>      → preselect konkrétní format, skip rovnou na termin
+     *   ?cesta=apartman  → preselect privátní koncept, skok na format-privatni
+     *   ?cesta=luzko     → preselect co-living koncept, skok na format-coliving
+     *   ?cesta=stipendium→ preselect stipendium, skok na format-stipendium
+     */
     var url = new URL(window.location.href);
     var typ = url.searchParams.get('typ');
+    var cesta = url.searchParams.get('cesta');
+    var hideKonceptPanel = function () {
+      var konceptPanel = panelByName('koncept');
+      if (konceptPanel) {
+        konceptPanel.hidden = true;
+        konceptPanel.classList.remove('is-current');
+      }
+    };
+
     if (typ) {
       var isPrivatni = apartmanySlug.indexOf(typ) >= 0;
       var isColiving = colivingSlug.indexOf(typ) >= 0;
@@ -581,13 +601,23 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         if (konceptRadio) konceptRadio.checked = true;
         if (formatRadio) formatRadio.checked = true;
         history = ['termin'];
-        var konceptPanel = panelByName('koncept');
-        if (konceptPanel) {
-          konceptPanel.hidden = true;
-          konceptPanel.classList.remove('is-current');
-        }
+        hideKonceptPanel();
         showPanel('termin', 'forward');
+      } else {
+        updateProgress('koncept');
       }
+    } else if (cesta === 'apartman' || cesta === 'luzko' || cesta === 'stipendium') {
+      var map = {
+        apartman:   { konceptVal: 'privatni',   route: 'format-privatni'   },
+        luzko:      { konceptVal: 'co-living',  route: 'format-coliving'   },
+        stipendium: { konceptVal: 'stipendium', route: 'format-stipendium' },
+      };
+      var entry = map[cesta];
+      var konceptRadio2 = form.querySelector('input[name="koncept"][value="' + entry.konceptVal + '"]');
+      if (konceptRadio2) konceptRadio2.checked = true;
+      history = [entry.route];
+      hideKonceptPanel();
+      showPanel(entry.route, 'forward');
     } else {
       updateProgress('koncept');
     }

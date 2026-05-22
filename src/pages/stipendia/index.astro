@@ -3,24 +3,24 @@ import Base from '../../layouts/Base.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
+import QuickReserveCtas from '../../components/QuickReserveCtas.astro';
 import { withBase } from '../../utils/url';
 
 const heroJumps = [
-  { label: 'Rezident-tvůrce', href: '#st-tvurce' },
-  { label: 'Správce',         href: '#st-spravce' },
-  { label: 'Stavitel',        href: '#st-stavitel' },
-  { label: 'Programátor',     href: '#st-programator' },
+  { label: 'Pobytové stipendium',  href: '#st-pobytove' },
+  { label: 'Projektové stipendium', href: '#st-projektove' },
+  { label: 'Jak požádat',          href: '#st-zadost' },
 ];
 ---
 <Base
-  title="Pobytové stipendium, 4 role · Startovací Hub Klecany"
-  description="Stipendium pro lidi, kteří k Hubu reálně přispějí. Čtyři role: rezident-tvůrce, work-trade správce, stavitel-rezident, rezident-programátor."
+  title="Pobytové a projektové stipendium · Startovací Hub Klecany"
+  description="Dvě hlavní kategorie stipendií. Pobytové pokrývá bydlení v Hubu za přínos komunitě. Projektové proplatí materiál, dílenský čas a ateliérový nájem konkrétního projektu."
   headerVariant="overlay">
 
   <SubpageHero
     eyebrow="Stipendijní programy"
-    title="Pro lidi <em>s projektem</em>."
-    sub="Bydlení nebo zvýhodněná cena za konkrétní vstup do života Hubu: dílny, péče o areál, vlastní projekt s veřejným výstupem, vývoj nástroje pro komunitu."
+    title="Pobytové <em>nebo</em> projektové."
+    sub="Dvě hlavní kategorie. Nadační fond Hubu podporuje lidi, kteří mají co dát zpátky: dílny, otevřené prezentace, péče o areál nebo veřejně dostupný výstup projektu."
     variant="cream"
     ribbonPath="M 1080 380 C 1340 280, 1640 460, 1860 400 C 2020 360, 2080 580, 1920 680 C 1740 780, 1480 680, 1480 800"
     thickness={36}
@@ -28,71 +28,146 @@ const heroJumps = [
     ariaId="stipendia-hero"
   />
 
+  {/* ============ POBYTOVÉ STIPENDIUM ============ */}
   <section class="sec-block">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Čtyři role v programu</p>
-        <h2 class="sec-block__title">Vyberte tu, která vám sedí.</h2>
+        <p class="sec-block__eyebrow">Kategorie 1</p>
+        <h2 class="sec-block__title" id="st-pobytove">Pobytové stipendium.</h2>
+        <p class="sec-block__lede">
+          Nadační fond pokryje část nebo celou cenu bydlení v Hubu výměnou za konkrétní přínos komunitě.
+          Bydlíte v kapsli, sdíleném pokoji nebo privátním apartmánu, po dohodě i s rodinou.
+          Délka pobytu typicky tři měsíce, po dohodě až rok.
+        </p>
       </header>
 
       <article class="sec-sub">
-        <h3 class="sec-sub__title" id="st-tvurce">Rezident-tvůrce</h3>
+        <h3 class="sec-sub__title">Co se za stipendium očekává</h3>
+        <ul class="sec-list">
+          <li><strong>Otevřené dílny nebo prezentace</strong> , dvě veřejné akce za pobyt (workshop, přednáška, otevřený ateliér).</li>
+          <li><strong>Veřejně dostupný výstup</strong> , článek, dokumentace, open-source kód, výstava, publikace nebo videoreportáž z pobytu.</li>
+          <li><strong>Provozní role v Hubu</strong> , práce na recepci, koordinace komunitních akcí, péče o sdílené prostory (work-trade, 32 až 40 h měsíčně).</li>
+          <li><strong>Stavební a údržbová účast</strong> , zapojení do konkrétní rekonstrukční fáze areálu (týden v měsíci, zbytek měsíce vlastní práce).</li>
+        </ul>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Pro koho dává smysl</h3>
         <p class="sec-sub__lede">
-          Umělec, výzkumník, designér, autor nebo žurnalista pracující na vlastním projektu.
-          Stipendium pokryje tříměsíční pobyt, za to uděláte v Hubu dvě otevřené dílny
-          nebo prezentace pro komunitu a závěrečnou dokumentaci své práce.
+          Umělci, výzkumníci, designéři, novináři, řemeslníci s vlastním projektem. Studenti
+          na semestrální stáži. Programátoři, kteří chtějí postavit komunitní nástroj. Lidé
+          po rodičovské, kteří hledají měkký restart kariéry. Praktici, kteří umějí předat
+          dovednost dál.
         </p>
       </article>
 
       <article class="sec-sub">
-        <h3 class="sec-sub__title" id="st-spravce">Správce na výměnu (work-trade)</h3>
-        <p class="sec-sub__lede">
-          Operativní role v provozu Hubu: večerní recepce, koordinace komunitních akcí, péče
-          o sdílené prostory, pomoc s návštěvníky. Měsíční úvazek 32 až 40 hodin výměnou
-          za zvýhodněné nebo plně hrazené bydlení.
-        </p>
-      </article>
-
-      <article class="sec-sub">
-        <h3 class="sec-sub__title" id="st-stavitel">Stavitel-rezident</h3>
-        <p class="sec-sub__lede">
-          Účast na konkrétní stavební nebo rekonstrukční fázi Hubu. Týden v měsíci na staveništi,
-          zbytek měsíce vlastní práce. Stipendium pokrývá bydlení plus malý materiálový rozpočet.
-        </p>
-      </article>
-
-      <article class="sec-sub">
-        <h3 class="sec-sub__title" id="st-programator">Rezident-programátor</h3>
-        <p class="sec-sub__lede">
-          Vývojář, který buduje konkrétní digitální nástroj pro Hub: rezervační systém,
-          komunitní aplikaci, dokumentační platformu. Tříměsíční pobyt s konkrétním
-          deliverable na konci.
-        </p>
+        <h3 class="sec-sub__title">Co stipendium pokrývá</h3>
+        <ul class="sec-list">
+          <li>Bydlení v jedné z devíti variant podle dohody (kapsle, sdílený pokoj, privátní apartmán)</li>
+          <li>Energie, internet, úklid, neomezené jízdy Hub-shuttle a poukaz do sauny v ceně</li>
+          <li>Pro role s pracovní složkou navíc malý peněžní příspěvek nebo dohoda o provedení práce</li>
+        </ul>
       </article>
     </div>
   </section>
 
+  {/* ============ PROJEKTOVÉ STIPENDIUM ============ */}
   <section class="sec-block sec-block--alt">
     <div class="sec-block__inner">
       <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Co stipendium pokrývá</p>
-        <h2 class="sec-block__title">Rámec programu.</h2>
+        <p class="sec-block__eyebrow">Kategorie 2</p>
+        <h2 class="sec-block__title" id="st-projektove">Projektové stipendium.</h2>
+        <p class="sec-block__lede">
+          Nadační fond proplatí konkrétní náklady projektu , typicky materiál, dílenský čas
+          a ateliérový nájem. Bydlení žadatel řeší samostatně (může bydlet v Hubu jako běžný
+          rezident, nebo dojíždět). Tahle kategorie je o tvorbě, ne o životním stylu.
+        </p>
       </header>
-      <div class="sec-block__text">
-        <ul>
-          <li>Bydlení v jedné z devíti variant podle dohody (kapsle, sdílený pokoj, privátní apartmán)</li>
-          <li>Sdílené zázemí Hubu v ceně (coworking, sauna 1× týdně, společná kuchyně, Hub-shuttle)</li>
-          <li>Pro role s pracovní složkou (work-trade, stavitel) plus malý peněžní příspěvek nebo dohoda o provedení práce</li>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Co fond proplatí</h3>
+        <ul class="sec-list">
+          <li><strong>Materiál a spotřební komponenty</strong> , dřevo, kov, sklo, textil, elektronika, 3D filament, chemie.</li>
+          <li><strong>Dílenský čas na těžkých strojích</strong> , CNC, laser, 3D tiskárny, svářečka. RFID-billed hodiny v Hub dílnách.</li>
+          <li><strong>Ateliérový nájem</strong> , kompletní nebo částečné krytí nájmu ateliéru D1 po dobu projektu.</li>
+          <li><strong>Externí služby</strong> , tisk, řezání, povrchová úprava, fotodokumentace výstupu (po dohodě).</li>
         </ul>
-      </div>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Co se za stipendium očekává</h3>
+        <ul class="sec-list">
+          <li><strong>Veřejný výstup</strong> , výstava, prototyp, publikace, otevřená dokumentace nebo open-source repo.</li>
+          <li><strong>Krátká zpráva o postupu</strong> , dva milníky během projektu, jeden závěrečný report s rozpočtem.</li>
+          <li><strong>Otevřená dílna nebo workshop</strong> , jedna veřejná akce, kde projekt ukážete komunitě.</li>
+        </ul>
+      </article>
+
+      <article class="sec-sub">
+        <h3 class="sec-sub__title">Pro koho dává smysl</h3>
+        <p class="sec-sub__lede">
+          Tvůrci s konkrétním projektem a rozpočtem do 30 000 Kč. Studenti uměleckých škol
+          dokončující závěrečnou práci. Designéři prototypující výrobek pro malou sérii.
+          Komunitní iniciativy s materiálovými náklady. Vědci a hackeři, kteří potřebují
+          dílenský přístup.
+        </p>
+      </article>
     </div>
   </section>
+
+  {/* ============ JAK POŽÁDAT ============ */}
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Postup</p>
+        <h2 class="sec-block__title" id="st-zadost">Jak požádat.</h2>
+        <p class="sec-block__lede">
+          Žádost je nezávazná. Po podání vás kontaktujeme do týdne, probereme záměr telefonicky
+          a domluvíme se na detailech. Můžete žádat o obě kategorie zároveň, pokud váš projekt
+          zapadá.
+        </p>
+      </header>
+
+      <ol class="sec-steps">
+        <li>
+          <span class="sec-steps__n">1.</span>
+          <div>
+            <h3>Podejte žádost přes rezervační formulář</h3>
+            <p>Vyberte „Žádost o stipendium", upřesněte kategorii a popište projekt v několika větách.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sec-steps__n">2.</span>
+          <div>
+            <h3>Krátký telefonát do týdne</h3>
+            <p>Probereme záměr, rozsah a načasování. Pokud projekt zapadá, pošleme strukturu žádosti k doplnění.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sec-steps__n">3.</span>
+          <div>
+            <h3>Dohoda o stipendiu</h3>
+            <p>U pobytového stipendia podepíšeme dohodu o pobytu a přínosu. U projektového dohodu o pokrytí nákladů s konkrétními milníky.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <QuickReserveCtas
+    variant="light"
+    highlight="stipendium"
+    eyebrow="Kam dál"
+    title="Tři rychlé cesty do formuláře."
+    hint={'Pokud váháte mezi kategoriemi, vyberte „Obě" v dalším kroku. Probereme společně.'}
+  />
 
   <CtaBanner
     eyebrow="Zájem o stipendium"
     title="Stipendium pro <em>lidi s projektem</em>."
-    lede={'V rezervačním formuláři zaškrtněte „Mám zájem o pobytové stipendium" a my se ozveme s podmínkami a termíny prvního kola.'}
-    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    lede="Žádost je nezávazná. Po podání vás kontaktujeme do týdne telefonicky."
+    cta={{ label: 'Požádat o stipendium', href: '/rezervace/?cesta=stipendium' }}
     variant="deep"
   />
 
@@ -103,3 +178,46 @@ const heroJumps = [
     ]}
   />
 </Base>
+
+<style>
+  /* Numbered process list, sjednocuje s vizuálním jazykem subpage. */
+  .sec-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-5);
+  }
+  .sec-steps > li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .sec-steps__n {
+    font: 700 clamp(1.5rem, 3vw, 2rem) / 1 var(--font-sans);
+    color: var(--accent);
+    letter-spacing: var(--tracking-tight);
+    font-variant-numeric: tabular-nums;
+    min-width: 2.5ch;
+  }
+  .sec-steps h3 {
+    font: 600 var(--text-lg) / 1.25 var(--font-sans);
+    margin: 0 0 4px;
+    letter-spacing: var(--tracking-tight);
+  }
+  .sec-steps p {
+    margin: 0;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+
+  .sec-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 6px;
+  }
+  .sec-list li { line-height: 1.55; }
+  .sec-list strong { color: var(--fg); }
+</style>
