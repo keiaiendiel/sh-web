@@ -645,12 +645,22 @@ const tiles = [
   .lp-hero__scrim {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(0,0,0,0.6) 0%,
-      rgba(0,0,0,0.3) 35%,
-      rgba(0,0,0,0) 70%
-    );
+    /* Dvě vrstvy: top scrim pro čitelnost menu nad video bg + bottom scrim
+       pro čitelnost hero title/lede. Stack: top gradient zhasne na 35 %,
+       bottom gradient nabíhá od 70 %, mezi nimi čistá fotka/video. */
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.4) 0%,
+        rgba(0,0,0,0.18) 18%,
+        rgba(0,0,0,0) 35%
+      ),
+      linear-gradient(
+        to top,
+        rgba(0,0,0,0.6) 0%,
+        rgba(0,0,0,0.3) 35%,
+        rgba(0,0,0,0) 70%
+      );
     z-index: -1;
   }
   .lp-hero__inner {
