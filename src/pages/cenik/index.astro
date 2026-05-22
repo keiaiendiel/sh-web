@@ -3,17 +3,18 @@ import Base from '../../layouts/Base.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
+import Icon from '../../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
 
 /**
- * Ceník , subscription-style comparison s reálnými variantami z content
- * collections (žádné vymyšlené Basic/Plus tiery).
+ * Ceník , subscription-style comparison (Notion/Vercel pricing pattern).
+ * Vrchol „vždy v ceně" pruh stanoví floor co dostává každý rezident, karty
+ * pod ním ukazují co každý tier přidává navíc (subscription tier ladder).
  *
- * Pattern: dvě grid sekce karty (co-living + privátní apartmán) v duchu
- * Notion/Vercel pricing , každá karta ukazuje variantu, cenu, plochu,
- * lůžek a klíčové soukromí featury. Kratší pobyt = mírný příplatek,
- * komunikováno jednou poznámkou nad sekcemi (žádný UI toggle).
+ * Cards používají CSS subgrid pro zarovnání řádků napříč tiery , každá
+ * sekce karty se rezervuje stejnou výšku jako odpovídající sekce sousední
+ * karty, takže nadpisy + cena + facts + features + CTA leží na stejné lince.
  *
  * Anchor cena = pobyt 12+ měsíců (per CLAUDE.md pricing lock 2026-05-12).
  */
@@ -21,38 +22,111 @@ import { withBase } from '../../utils/url';
 const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
 const coliving = (await getCollection('coliving')).sort((a, b) => a.data.cena.anchor - b.data.cena.anchor);
 
-/* Per-slug metadata: krátký popis soukromí + bath/kitchen flagy pro feature list.
-   Co-living collection nemá jednotnou strukturu, takže mapujeme ručně. */
+/* Per-tier metadata , tier badge, room context a featurelist „co tato
+   úroveň přidává navíc" oproti always-included baseline. Pořadí features
+   = pořadí zobrazení v kartě (limit ~5 pro vizuální parity). */
 interface CoMeta {
-  soukromi: string;
-  pokoj: string;
-  koupelna: 'sdílená' | 'vlastní';
-  kuchyn: 'sdílená' | 'vlastní';
+  tier: string;       /* krátký label do tier badge */
+  pokoj: string;      /* kontext sdílení pokoje */
+  features: string[]; /* co tato cena přidává oproti always-included */
 }
 const coMeta: Record<string, CoMeta> = {
   'kapsle-single': {
-    soukromi: 'Uzavíratelná kapsle s vlastním světlem a USB',
-    pokoj: 'Kapsle ve sdíleném pokoji se 2 až 5 dalšími',
-    koupelna: 'sdílená',
-    kuchyn: 'sdílená',
+    tier: 'Vstupní úroveň',
+    pokoj: '3 až 6 kapslí v jednom pokoji',
+    features: [
+      'Uzavíratelná kapsle s vlastním zatemněním',
+      'Zamykací skříň + převlékací kabinka v pokoji',
+      'Vlastní světlo a USB-C u lůžka',
+      'Nejnižší vstupní cena v Hubu',
+    ],
   },
   'jedno-luzko': {
-    soukromi: 'Vlastní lůžko bez uzavření, vlastní stůl a skříň',
+    tier: 'Vlastní lůžko',
     pokoj: 'Dvoulůžkový pokoj sdílený s 1 dalším',
-    koupelna: 'sdílená',
-    kuchyn: 'sdílená',
+    features: [
+      'Vlastní lůžko (otevřené, bez kapsle)',
+      'Vlastní noční stolek, lampa a USB-C',
+      'Vlastní skříň a pracovní stůl',
+      'Sdílíte pokoj jen s jednou další osobou',
+    ],
   },
   'kapsle-double': {
-    soukromi: 'Uzavíratelná kapsle pro dva, vlastní zatemnění',
-    pokoj: 'Kapsle ve sdíleném pokoji se 2 až 5 dalšími',
-    koupelna: 'sdílená',
-    kuchyn: 'sdílená',
+    tier: 'Privátní pro pár',
+    pokoj: '2 až 5 dalších kapslí v jednom pokoji',
+    features: [
+      'Uzavíratelná kapsle pro dva',
+      'Velká King+ matrace (210×230 nebo 230×240)',
+      'Zamykací skříň + převlékací kabinka v pokoji',
+      'Dvě čtecí lampy, dva USB-C porty',
+    ],
   },
   'dvouluzko': {
-    soukromi: 'Celý pokoj jen pro vás, vlastní okno a stůl',
-    pokoj: 'Sdílíte pouze koupelnu a kuchyň v rámci patrového bytu',
-    koupelna: 'sdílená',
-    kuchyn: 'sdílená',
+    tier: 'Celý pokoj',
+    pokoj: 'Žádný další spolubydlící v místnosti',
+    features: [
+      'Vlastní uzavřený pokoj pro pár',
+      'Manželská postel nebo 2 jednolůžka',
+      'Vlastní skříň, stůl a lampy',
+      'Sdílíte jen koupelnu a kuchyň patra',
+    ],
+  },
+};
+
+interface AptMeta {
+  tier: string;
+  features: string[];
+}
+const aptMeta: Record<string, AptMeta> = {
+  '1kk': {
+    tier: 'Až 2 lůžka',
+    features: [
+      'Vlastní vchod, vlastní klíče',
+      'Vlastní kuchyňský kout',
+      'Vlastní koupelna a WC',
+      'Postel podle výběru (manželská nebo 2× jednolůžko)',
+      'Žádné sdílení uvnitř bytu',
+    ],
+  },
+  '2kk': {
+    tier: 'Až 4 lůžka',
+    features: [
+      'Vlastní vchod, vlastní klíče',
+      'Oddělená ložnice a obývací pokoj',
+      'Plnohodnotná kuchyň',
+      'Vlastní koupelna + samostatné WC',
+      'Pro pár, rodinu nebo 4 spolubydlící',
+    ],
+  },
+  '3kk': {
+    tier: 'Až 6 lůžek',
+    features: [
+      'Vlastní vchod, vlastní klíče',
+      'Tři pokoje + obývák',
+      'Plnohodnotná kuchyň',
+      'Koupelna se sprchou nebo vanou',
+      'Samostatné WC',
+    ],
+  },
+  '4kk': {
+    tier: 'Až 8 lůžek',
+    features: [
+      'Vlastní vchod, vlastní klíče',
+      'Čtyři pokoje + velký obývák',
+      'Velká kuchyň',
+      'Vlastní koupelna + samostatné WC',
+      'Pro startup, sportovní tým nebo soubor',
+    ],
+  },
+  '5kk': {
+    tier: 'Až 10 lůžek',
+    features: [
+      'Vlastní vchod, vlastní klíče',
+      'Pět pokojů + velký obývák',
+      'Velká kuchyň',
+      'Dvě koupelny (po dohodě)',
+      'Pro velkou skupinu nebo 2 rodiny pohromadě',
+    ],
   },
 };
 
@@ -97,19 +171,76 @@ const cowPlans: CowPlan[] = [
   },
 ];
 
-/* === Ateliéry, dílny, sklady === */
+/* === Doplňky a služby , 5 tematických skupin === */
 interface MiscRow {
   label: string;
   detail: string;
   price: string;
+  icon: string;       /* lucide-static icon name */
 }
-const miscRows: MiscRow[] = [
-  { label: 'Ateliér D1',          detail: 'Vlastní zámek, 15 až 25 m², denní světlo, 16 A zásuvka', price: '6 500 Kč/měs za 20 m² (~325 Kč/m²)' },
-  { label: 'Dílna členství',      detail: 'Ruční nářadí, pracovní stoly, pájecí stanice, elektrické nářadí', price: '490 Kč/měs' },
-  { label: 'Dílna těžké stroje',  detail: 'CNC, laser, 3D tiskárny , RFID zámek a automatické účtování', price: '150 Kč/hod' },
-  { label: 'Sklad malý',          detail: 'Uzamykatelný box 2 m², pro sezónní věci a kola', price: '290 Kč/měs' },
-  { label: 'Sklad velký',         detail: 'Box 6 až 10 m², pro nábytek, materiál nebo projektové vybavení', price: '690 Kč/měs' },
-  { label: 'Parkovací stání',     detail: 'V areálu, vyhrazené místo. Pro rezidenty bez doplatku.', price: 'Pro rezidenty zdarma' },
+interface MiscGroup {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  hue: number;        /* CSS hue pro colorize, ikona + cena přebírají */
+  rows: MiscRow[];
+}
+const miscGroups: MiscGroup[] = [
+  {
+    eyebrow: 'Tvořivá práce',
+    title: 'Ateliéry a dílny.',
+    lede: 'Pro řemeslníky, tvůrce a lidi, kteří potřebují postavit něco většího než vejde do bytu.',
+    hue: 30,           /* warm amber , kreativní práce */
+    rows: [
+      { icon: 'palette', label: 'Ateliér D1',          detail: 'Vlastní zámek, 15 až 25 m², denní světlo, 16 A zásuvka', price: '6 500 Kč/měs za 20 m² (~325 Kč/m²)' },
+      { icon: 'hammer',  label: 'Dílna členství',      detail: 'Ruční nářadí, pracovní stoly, pájecí stanice, elektrické nářadí', price: '490 Kč/měs' },
+      { icon: 'cog',     label: 'Dílna těžké stroje',  detail: 'CNC, laser, 3D tiskárny , RFID zámek a automatické účtování', price: '150 Kč/hod' },
+    ],
+  },
+  {
+    eyebrow: 'Úložiště a parking',
+    title: 'Sklady, kontejnery, stání.',
+    lede: 'Pro sezónní věci, kola, materiál nebo větší kontejner na projektové vybavení.',
+    hue: 210,          /* cool blue-gray , utility */
+    rows: [
+      { icon: 'package',    label: 'Sklad malý',         detail: 'Uzamykatelný box 2 m², pro sezónní věci a kola',                     price: '290 Kč/měs (~145 Kč/m²)' },
+      { icon: 'package-2',  label: 'Sklad velký',        detail: 'Box 6 až 10 m², pro nábytek, materiál nebo projektové vybavení',     price: '690 Kč/měs (~70 až 115 Kč/m²)' },
+      { icon: 'container',  label: 'Kontejnerový sklad', detail: '20stopý kontejner v areálu, vlastní zámek, ~14 m². Pro stěhování nebo projektové vybavení.', price: 'Cena na vyžádání' },
+      { icon: 'car-front',  label: 'Parkovací stání',    detail: 'V areálu, vyhrazené místo. Pro rezidenty bez doplatku.',             price: 'Pro rezidenty zdarma' },
+    ],
+  },
+  {
+    eyebrow: 'Komunitní park',
+    title: 'Záhony a grilovací místa.',
+    lede: 'Záhony v severní části parku, voda, kompost a základní nářadí v ceně. Rezervace na sezónu jaro až podzim.',
+    hue: 130,          /* green , zahrada */
+    rows: [
+      { icon: 'sprout',  label: 'Komunitní záhon',  detail: 'Plocha podle dohody, typicky 2 až 8 m². Voda, kompost a nářadí v ceně.', price: 'Cena na vyžádání podle m²' },
+      { icon: 'flame',   label: 'Grilovací místo',  detail: '3 až 4 stání s pevnými grily, lavičkami a stoly. Rezervace přes aplikaci.', price: 'Pro rezidenty zdarma' },
+    ],
+  },
+  {
+    eyebrow: 'Wellness pro externí',
+    title: 'Sauna a bazén pro návštěvníky.',
+    lede: 'Rezidenti s tarifem 12+ měsíců mají sauna 1× týdně v ceně bydlení. Pro externí návštěvníky a krátkodobé pobyty platí samostatný vstup.',
+    hue: 195,          /* water blue , wellness */
+    rows: [
+      { icon: 'droplets', label: 'Vstup sauna (externí)', detail: 'Veřejná sauna pro 6 až 8 osob, harmonogram čtvrtek až sobota večer.', price: 'Cena na vyžádání' },
+      { icon: 'waves',    label: 'Vstup bazén (externí)', detail: 'Vlastní bazén areálu, samostatný objekt vedle sauny a wellness zóny.', price: 'Cena na vyžádání' },
+    ],
+  },
+  {
+    eyebrow: 'Recepce a administrativa',
+    title: 'Služby kanceláře Hubu.',
+    lede: 'Recepce funguje 7 dní v týdnu. Některé administrativní věci vyřídíte přímo s námi, ne přes prahu městského úřadu.',
+    hue: 285,          /* plum , brand */
+    rows: [
+      { icon: 'inbox',          label: 'Příjem balíků',                  detail: 'Sběrné místo pro zásilky, oznámení do aplikace, uložení až 14 dní.', price: 'Pro rezidenty zdarma' },
+      { icon: 'building',       label: 'Virtuální sídlo OSVČ nebo s.r.o.', detail: 'Adresa Hubu jako fakturační a evidenční sídlo, příjem úředních zásilek, sken na e-mail.', price: 'Cena na vyžádání' },
+      { icon: 'scroll-text',    label: 'Zakládání s.r.o.',               detail: 'Spolupráce s notářem, právní šablona, registrace u rejstříkového soudu.', price: 'Cena na vyžádání' },
+      { icon: 'globe',          label: 'Asistence s pobytem cizinců',    detail: 'Formuláře, překlad, doprovod na úřad. Pro rezidenty se zvýhodněnou sazbou.', price: 'Cena na vyžádání' },
+    ],
+  },
 ];
 ---
 <Base
@@ -120,10 +251,19 @@ const miscRows: MiscRow[] = [
   <SubpageHero
     eyebrow="Ceník"
     title="Co a <em>za kolik</em>."
-    sub="Kompletní přehled. Ceny jsou měsíční při pobytu 12+ měsíců. Kratší pobyty se navyšují přibližně o 5 % (6 měsíců), 10 % (3 měsíce) nebo 20 % (1 měsíc)."
+    sub="Devět typů bydlení, čtyři coworking tarify, ateliéry a dílny. Otevřené ceny bez skrytých poplatků."
     variant="cream"
-    ribbonPath="M 1080 320 C 1280 220, 1500 420, 1720 320 C 1900 240, 2040 460, 1900 620 C 1740 760, 1480 660, 1480 800"
-    thickness={36}
+    ribbonPath="M 1080 180 C 1340 100, 1640 280, 1820 200 C 1980 130, 2080 340, 1920 480 C 1780 600, 1480 560, 1380 720"
+    ribbonPathSecondary="M 100 560 C 280 480, 480 620, 660 540 C 820 470, 940 560, 880 700"
+    thickness={56}
+    thicknessSecondary={32}
+    opacitySecondary={0.45}
+    jumps={[
+      { href: '#ck-coliving-h', label: 'Co-living' },
+      { href: '#ck-apt-h', label: 'Apartmány' },
+      { href: '#ck-cw-h', label: 'Pracovní prostory' },
+      { href: '#ck-misc-h', label: 'Doplňky a služby' },
+    ]}
     ariaId="cenik-hero"
   />
 
@@ -134,13 +274,13 @@ const miscRows: MiscRow[] = [
         <p class="ck-sec__eyebrow">Co-living</p>
         <h2 class="ck-sec__title" id="ck-coliving-h">Lůžka a kapsle ve sdíleném pokoji.</h2>
         <p class="ck-sec__lede">
-          Čtyři varianty seřazené od nejnižší ceny. Hlavní rozdíl: kolik soukromí dostanete
-          (otevřené lůžko, uzavíratelná kapsle, nebo celý pokoj) a pro kolik osob je modul určený.
-          Koupelnu a kuchyň sdílíte se zbytkem patra.
+          Čtyři varianty seřazené od nejnižší ceny. Liší se hlavně mírou soukromí a počtem osob v pokoji.
+          Koupelnu a kuchyň sdílíte se zbytkem patra. Energie, internet, neomezený Hub-shuttle do metra
+          a sauna 1× týdně v ceně každého tarifu.
         </p>
       </header>
 
-      <div class="ck-grid ck-grid--4">
+      <div class="ck-grid ck-grid--cards ck-grid--4">
         {coliving.map((c) => {
           const meta = coMeta[c.data.slug];
           return (
@@ -149,22 +289,25 @@ const miscRows: MiscRow[] = [
                 <h3 class="ck-card__name" id={`ck-co-${c.data.slug}-h`}>{c.data.shortName}</h3>
                 <p class="ck-card__hook">{c.data.popis}</p>
               </header>
+              <p class="ck-card__tier">{meta?.tier}</p>
               <div class="ck-card__price">
                 <span class="ck-card__price-prefix">od</span>
                 <span class="ck-card__price-num">{fmt(c.data.cena.anchor)}</span>
                 <span class="ck-card__price-unit">Kč<span class="ck-card__price-period">/měs</span></span>
               </div>
               <dl class="ck-card__facts">
-                <div><dt>Soukromí</dt><dd>{meta?.soukromi}</dd></div>
-                <div><dt>Pokoj</dt><dd>{meta?.pokoj}</dd></div>
-                <div><dt>Vlastní koupelna</dt><dd class={meta?.koupelna === 'vlastní' ? 'is-yes' : 'is-no'}>{meta?.koupelna === 'vlastní' ? 'Ano' : 'Sdílená'}</dd></div>
-                <div><dt>Vlastní kuchyň</dt><dd class={meta?.kuchyn === 'vlastní' ? 'is-yes' : 'is-no'}>{meta?.kuchyn === 'vlastní' ? 'Ano' : 'Sdílená'}</dd></div>
                 <div><dt>Matrace</dt><dd>{c.data.matrace[0]}{c.data.matrace[1] ? ` nebo ${c.data.matrace[1]}` : ''}</dd></div>
+                <div><dt>Pokoj</dt><dd>{meta?.pokoj}</dd></div>
               </dl>
-              <a class="ck-card__cta osa-nolink" href={withBase(`/rezervace/?typ=${c.data.slug}`)}>
-                <span>Rezervovat</span>
-                <span aria-hidden="true">→</span>
-              </a>
+              <ul class="ck-card__features" aria-label={`Co ${c.data.shortName} přidává`}>
+                {meta?.features.map((f) => (
+                  <li><span class="ck-card__check"><Icon name="check" size={14} /></span><span>{f}</span></li>
+                ))}
+              </ul>
+              <div class="ck-card__actions">
+                <a class="ck-card__detail osa-nolink" href={withBase(`/ubytovani/co-living/${c.data.slug}/`)}>Detail →</a>
+                <a class="ck-card__cta osa-nolink" href={withBase(`/rezervace/?typ=${c.data.slug}`)}>Rezervovat</a>
+              </div>
             </article>
           );
         })}
@@ -180,36 +323,43 @@ const miscRows: MiscRow[] = [
         <h2 class="ck-sec__title" id="ck-apt-h">Vlastní byt s kuchyní a koupelnou.</h2>
         <p class="ck-sec__lede">
           Pět velikostí od 1+kk pro pár až po 5+kk pro desetičlennou skupinu. Cena je za celý byt,
-          v přepočtu na osobu při plném obsazení vychází 2 500 až 4 750 Kč. Vlastní vchod, vlastní
-          koupelna, vlastní kuchyň.
+          v přepočtu na osobu při plném obsazení vychází 2 500 až 4 750 Kč. Vlastní vchod,
+          koupelna a kuchyň , nic v bytě nesdílíte. Hub-shuttle, sauna a coworking v ceně.
         </p>
       </header>
 
-      <div class="ck-grid ck-grid--5">
-        {apartmany.map((a) => (
-          <article class="ck-card" aria-labelledby={`ck-apt-${a.data.slug}-h`}>
-            <header class="ck-card__head">
-              <h3 class="ck-card__name" id={`ck-apt-${a.data.slug}-h`}>{a.data.shortName}</h3>
-              <p class="ck-card__hook">{a.data.popis}</p>
-            </header>
-            <div class="ck-card__price">
-              <span class="ck-card__price-prefix">od</span>
-              <span class="ck-card__price-num">{fmt(a.data.cena.anchor)}</span>
-              <span class="ck-card__price-unit">Kč<span class="ck-card__price-period">/měs</span></span>
-            </div>
-            <dl class="ck-card__facts">
-              <div><dt>Plocha</dt><dd>{a.data.plocha}</dd></div>
-              <div><dt>Kapacita</dt><dd>{a.data.kapacita} lůžek</dd></div>
-              <div><dt>Vlastní koupelna</dt><dd class="is-yes">Ano</dd></div>
-              <div><dt>Vlastní kuchyň</dt><dd class="is-yes">Ano</dd></div>
-              <div><dt>Vlastní vchod</dt><dd class="is-yes">Ano</dd></div>
-            </dl>
-            <a class="ck-card__cta osa-nolink" href={withBase(`/rezervace/?typ=${a.data.slug}`)}>
-              <span>Rezervovat</span>
-              <span aria-hidden="true">→</span>
-            </a>
-          </article>
-        ))}
+      <div class="ck-grid ck-grid--cards ck-grid--5">
+        {apartmany.map((a) => {
+          const meta = aptMeta[a.data.slug];
+          const perPerson = Math.round(a.data.cena.anchor / a.data.kapacita);
+          return (
+            <article class="ck-card" aria-labelledby={`ck-apt-${a.data.slug}-h`}>
+              <header class="ck-card__head">
+                <h3 class="ck-card__name" id={`ck-apt-${a.data.slug}-h`}>{a.data.shortName}</h3>
+                <p class="ck-card__hook">{a.data.popis}</p>
+              </header>
+              <p class="ck-card__tier">{meta?.tier}</p>
+              <div class="ck-card__price">
+                <span class="ck-card__price-prefix">od</span>
+                <span class="ck-card__price-num">{fmt(a.data.cena.anchor)}</span>
+                <span class="ck-card__price-unit">Kč<span class="ck-card__price-period">/měs</span></span>
+              </div>
+              <dl class="ck-card__facts">
+                <div><dt>Plocha</dt><dd>{a.data.plocha}</dd></div>
+                <div><dt>Kapacita</dt><dd>{a.data.kapacita} lůžek · {fmt(perPerson)} Kč na osobu</dd></div>
+              </dl>
+              <ul class="ck-card__features" aria-label={`Co ${a.data.shortName} obsahuje`}>
+                {meta?.features.map((f) => (
+                  <li><span class="ck-card__check"><Icon name="check" size={14} /></span><span>{f}</span></li>
+                ))}
+              </ul>
+              <div class="ck-card__actions">
+                <a class="ck-card__detail osa-nolink" href={withBase(`/ubytovani/privatni/${a.data.slug}/`)}>Detail →</a>
+                <a class="ck-card__cta osa-nolink" href={withBase(`/rezervace/?typ=${a.data.slug}`)}>Rezervovat</a>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -241,28 +391,48 @@ const miscRows: MiscRow[] = [
     </div>
   </section>
 
-  {/* ============ ATELIÉRY, DÍLNY, SKLADY ============ */}
+  {/* ============ DOPLŇKY A SLUŽBY (5 tematických skupin) ============ */}
   <section class="ck-sec ck-sec--alt" aria-labelledby="ck-misc-h">
     <div class="ck-sec__inner">
       <header class="ck-sec__head">
-        <p class="ck-sec__eyebrow">Ateliéry, dílny, sklady</p>
-        <h2 class="ck-sec__title" id="ck-misc-h">Tvořivá práce a úložiště.</h2>
+        <p class="ck-sec__eyebrow">Doplňky a služby</p>
+        <h2 class="ck-sec__title" id="ck-misc-h">Tvořivá práce, sklady, zahrádky, recepce.</h2>
         <p class="ck-sec__lede">
-          Doplňky pro řemeslníky, tvůrce a lidi, kteří potřebují odložit věci nebo postavit
-          něco velkého. Samostatné produkty, lze přidat k bydlení nebo coworkingu.
+          Samostatné produkty nad rámec bydlení a coworkingu. Některé jsou v ceně bydlení 12+ měsíců,
+          další podle aktuálního ceníku nebo na vyžádání.
         </p>
       </header>
-      <div class="ck-list">
-        {miscRows.map((m) => (
-          <div class="ck-list__row">
-            <div class="ck-list__label">
-              <strong>{m.label}</strong>
-              <span>{m.detail}</span>
-            </div>
-            <div class="ck-list__price">{m.price}</div>
+
+      {miscGroups.map((g) => (
+        <div class="ck-misc-group" style={`--card-hue: ${g.hue}`}>
+          <header class="ck-misc-group__head">
+            <p class="ck-misc-group__eyebrow">{g.eyebrow}</p>
+            <h3 class="ck-misc-group__title">{g.title}</h3>
+            {g.lede && <p class="ck-misc-group__lede">{g.lede}</p>}
+          </header>
+          <div class={`ck-mini-grid ck-mini-grid--${g.rows.length}`}>
+            {g.rows.map((m) => (
+              <article class="ck-mini-card">
+                <span class="ck-mini-card__icon" aria-hidden="true"><Icon name={m.icon} size={20} /></span>
+                <h4 class="ck-mini-card__label">{m.label}</h4>
+                <p class="ck-mini-card__detail">{m.detail}</p>
+                <p class="ck-mini-card__price">{m.price}</p>
+              </article>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="ck-disclaimer" aria-label="Poznámka k cenám">
+    <div class="ck-disclaimer__inner">
+      <p>
+        <span class="ck-disclaimer__star" aria-hidden="true">*</span>
+        Všechny ceny jsou měsíční, vč. DPH, při pobytu 12+ měsíců. Kratší pobyty se navyšují
+        přibližně o 5 % (6 měsíců), 10 % (3 měsíce) nebo 20 % (1 měsíc). Aktuální detaily
+        a podmínky doladíme telefonicky před podpisem.
+      </p>
     </div>
   </section>
 
@@ -302,8 +472,40 @@ const miscRows: MiscRow[] = [
   }
   .ck-sec__lede { color: var(--fg-muted); margin: 0; line-height: 1.55; }
 
+  /* ============ DISCLAIMER (pricing footnote) ============ */
+  .ck-disclaimer {
+    padding: var(--space-5) var(--gutter) var(--space-6);
+    background: var(--bg-muted, var(--k-05));
+    border-top: 1px solid var(--border-muted);
+  }
+  .ck-disclaimer__inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+  .ck-disclaimer p {
+    margin: 0;
+    font: 500 var(--text-xs) / 1.55 var(--font-sans);
+    color: var(--fg-muted);
+    max-width: 75ch;
+  }
+  .ck-disclaimer__star {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
   /* ============ GRID ============ */
   .ck-grid { display: grid; gap: clamp(14px, 1.6vw, 20px); align-items: stretch; }
+  /* Subgrid karty mají 7 sjednocených řádků: head / tier / price / facts / features / cta + buffer */
+  .ck-grid--cards {
+    grid-template-rows:
+      auto  /* 1: head (name + hook) */
+      auto  /* 2: tier badge */
+      auto  /* 3: price */
+      auto  /* 4: facts (matrace, kapacita) */
+      auto  /* 5: features list */
+      auto; /* 6: cta */
+  }
   .ck-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .ck-grid--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   @media (max-width: 1180px) {
@@ -318,25 +520,44 @@ const miscRows: MiscRow[] = [
     .ck-grid--5 { grid-template-columns: 1fr; }
   }
 
-  /* ============ CARD (ubytování plán) ============ */
+  /* ============ CARD ============
+     Display: grid + subgrid napojí každý řádek karty na sjednocený track
+     parent gridu. Výsledek: title, badge, cena, facts, features, CTA leží
+     na stejné horizontální linii napříč všemi tiery. */
   .ck-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    padding: clamp(16px, 1.8vw, 22px);
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 6;
+    row-gap: var(--space-3);
+    padding: clamp(18px, 2vw, 24px);
     background: var(--bg);
     border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
-    transition: border-color 200ms ease, transform 200ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 200ms ease;
+    transition: border-color 200ms ease, transform 220ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 220ms ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .ck-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at 100% 0%, hsl(calc(var(--hue) + 44) 30% 70% / 0.12) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 280ms ease;
+    pointer-events: none;
   }
   .ck-card:hover {
     border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px hsl(var(--hue) 41% 13% / 0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px hsl(var(--hue) 41% 13% / 0.10);
   }
-  .ck-card__head { display: flex; flex-direction: column; gap: 6px; }
+  .ck-card:hover::before { opacity: 1; }
+  .ck-card > * { position: relative; margin: 0; }
+
+  .ck-card__head { grid-row: 1; display: flex; flex-direction: column; gap: 6px; }
   .ck-card__name {
-    font: 700 var(--text-lg) / 1.2 var(--font-sans);
+    font: 700 var(--text-xl) / 1.15 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     margin: 0;
   }
@@ -345,7 +566,26 @@ const miscRows: MiscRow[] = [
     color: var(--fg-muted);
     margin: 0;
   }
+
+  .ck-card__tier {
+    grid-row: 2;
+    align-self: start;
+    justify-self: start;
+    max-width: 100%;
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    background: hsl(var(--hue) 39% 27% / 0.08);
+    padding: 6px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .ck-card__price {
+    grid-row: 3;
     display: flex;
     align-items: baseline;
     gap: 4px;
@@ -358,7 +598,7 @@ const miscRows: MiscRow[] = [
     color: var(--fg-muted);
   }
   .ck-card__price-num {
-    font: 700 clamp(1.5rem, 2.4vw, 1.875rem) / 1 var(--font-sans);
+    font: 700 clamp(1.625rem, 2.6vw, 2rem) / 1 var(--font-sans);
     color: var(--accent);
     letter-spacing: var(--tracking-tight);
   }
@@ -366,16 +606,18 @@ const miscRows: MiscRow[] = [
     font: 600 var(--text-sm) / 1 var(--font-sans);
     color: var(--fg-muted);
   }
+
   .ck-card__facts {
+    grid-row: 4;
     margin: 0;
     display: grid;
-    gap: 8px;
+    gap: 10px;
     padding: var(--space-3) 0;
     border-top: 1px solid var(--border-muted);
     border-bottom: 1px solid var(--border-muted);
     font-size: var(--text-sm);
   }
-  .ck-card__facts > div { display: grid; gap: 2px; }
+  .ck-card__facts > div { display: grid; gap: 3px; }
   .ck-card__facts dt {
     font: 600 10px / 1.2 var(--font-sans);
     letter-spacing: var(--tracking-wider);
@@ -387,28 +629,81 @@ const miscRows: MiscRow[] = [
     margin: 0;
     color: var(--fg);
     line-height: 1.4;
+    font-weight: 500;
   }
-  .ck-card__facts dd.is-yes::before {
-    content: '✓ ';
+
+  .ck-card__features {
+    grid-row: 5;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .ck-card__features li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 8px;
+    align-items: start;
+    font: 500 var(--text-sm) / 1.4 var(--font-sans);
+    color: var(--fg);
+  }
+  .ck-card__check {
+    display: inline-grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
     color: var(--accent);
-    font-weight: 700;
+    margin-top: 1px;
   }
-  .ck-card__facts dd.is-no { color: var(--fg-muted); }
-  .ck-card__cta {
-    margin-top: auto;
-    display: inline-flex;
+
+  .ck-card__actions {
+    grid-row: 6;
+    align-self: end;
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    padding: 12px 16px;
-    font: 700 var(--text-sm) / 1 var(--font-sans);
-    text-decoration: none;
-    border-radius: var(--radius-input);
-    background: var(--accent);
-    color: var(--accent-on, #fff);
-    transition: background 200ms ease, transform 200ms ease;
+    gap: 12px;
+    flex-wrap: wrap;
   }
-  .ck-card__cta:hover { background: var(--plum-deep); transform: translateY(-1px); }
+  .ck-card__detail {
+    display: inline-flex;
+    align-items: center;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg);
+    text-decoration: none;
+    padding: 10px 0;
+    min-height: 44px;
+    border-bottom: 1px solid currentColor;
+    transition: color 200ms ease;
+  }
+  .ck-card__detail:hover { color: var(--accent); }
+  .ck-card__cta {
+    display: inline-flex;
+    align-items: center;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--accent-on);
+    background: var(--accent);
+    padding: 12px 18px;
+    min-height: 44px;
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition: background 200ms ease;
+  }
+  .ck-card__cta:hover { background: var(--plum-deep); }
+
+  /* Subgrid fallback for older browsers , graceful: cards just stack
+     naturally without row alignment but everything is still readable. */
+  @supports not (grid-template-rows: subgrid) {
+    .ck-grid--cards { grid-template-rows: none; }
+    .ck-card {
+      grid-template-rows: none;
+      grid-row: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .ck-card__cta { margin-top: auto; }
+  }
 
   /* ============ MINI (coworking) ============ */
   .ck-mini {
@@ -462,36 +757,127 @@ const miscRows: MiscRow[] = [
     font-weight: 700;
   }
 
-  /* ============ LIST (ateliéry, sklady) ============ */
-  .ck-list { display: grid; gap: 8px; }
-  .ck-list__row {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 16px;
-    align-items: baseline;
-    padding: 14px 18px;
-    background: var(--bg);
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-input);
+  /* ============ MISC GROUPS (5 tematických bloků) ============ */
+  .ck-misc-group {
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px dashed var(--accent-rule);
   }
-  .ck-list__label { display: grid; gap: 2px; }
-  .ck-list__label strong {
-    font: 700 var(--text-md) / 1.2 var(--font-sans);
-    color: var(--fg);
-    letter-spacing: var(--tracking-tight);
+  .ck-misc-group:first-of-type {
+    margin-top: var(--space-4);
+    padding-top: 0;
+    border-top: none;
   }
-  .ck-list__label span {
-    font: 500 var(--text-sm) / 1.4 var(--font-sans);
-    color: var(--fg-muted);
-  }
-  .ck-list__price {
-    font: 700 var(--text-md) / 1.2 var(--font-sans);
+  .ck-misc-group__head { max-width: 65ch; margin: 0 0 var(--space-4); }
+  .ck-misc-group__eyebrow {
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
     color: var(--accent);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-2);
   }
-  @media (max-width: 560px) {
-    .ck-list__row { grid-template-columns: 1fr; }
-    .ck-list__price { font-size: var(--text-sm); }
+  .ck-misc-group__title {
+    font: 700 clamp(1.125rem, 1.8vw, 1.375rem) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 6px;
+  }
+  .ck-misc-group__lede {
+    font: 500 var(--text-sm) / 1.55 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+  }
+
+  /* ============ MINI CARD GRID (doplňky a služby) ============
+     Každá subgroup používá vlastní --card-hue pro accent (ikona + cena).
+     Karty mají flat layout (žádný subgrid) , subgrupy mají různý count, takže
+     řádkové zarovnání by tu nedávalo smysl. Místo toho stejná výška cards
+     v rámci jedné subgrupy přes align-items: stretch + flex grow detail. */
+  .ck-mini-grid {
+    display: grid;
+    gap: clamp(10px, 1.4vw, 16px);
+  }
+  .ck-mini-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ck-mini-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ck-mini-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ck-mini-grid--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  @media (max-width: 1180px) {
+    .ck-mini-grid--4,
+    .ck-mini-grid--5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 880px) {
+    .ck-mini-grid--3,
+    .ck-mini-grid--4,
+    .ck-mini-grid--5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 520px) {
+    .ck-mini-grid,
+    .ck-mini-grid--2,
+    .ck-mini-grid--3,
+    .ck-mini-grid--4,
+    .ck-mini-grid--5 { grid-template-columns: 1fr; }
+  }
+
+  .ck-mini-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: clamp(14px, 1.6vw, 18px);
+    background: var(--bg);
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
+    transition: border-color 200ms ease, transform 220ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 220ms ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .ck-mini-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at 100% 0%, hsl(var(--card-hue) 60% 60% / 0.10) 0%, transparent 65%);
+    opacity: 0;
+    transition: opacity 280ms ease;
+    pointer-events: none;
+  }
+  .ck-mini-card:hover {
+    border-color: hsl(var(--card-hue) 40% 45%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px hsl(var(--card-hue) 30% 20% / 0.08);
+  }
+  .ck-mini-card:hover::before { opacity: 1; }
+  .ck-mini-card > * { position: relative; }
+  .ck-mini-card__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: hsl(var(--card-hue) 45% 35%);
+    background: hsl(var(--card-hue) 55% 55% / 0.12);
+    border-radius: 10px;
+    transition: background 220ms ease, transform 220ms ease;
+  }
+  .ck-mini-card:hover .ck-mini-card__icon {
+    background: hsl(var(--card-hue) 55% 55% / 0.18);
+    transform: scale(1.05) rotate(-3deg);
+  }
+  .ck-mini-card__label {
+    font: 700 var(--text-md) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    color: var(--fg);
+  }
+  .ck-mini-card__detail {
+    font: 500 var(--text-sm) / 1.45 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+    flex: 1; /* push price to bottom */
+  }
+  .ck-mini-card__price {
+    margin: 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-muted);
+    font: 700 var(--text-sm) / 1.3 var(--font-sans);
+    color: hsl(var(--card-hue) 50% 32%);
+    font-variant-numeric: tabular-nums;
   }
 </style>

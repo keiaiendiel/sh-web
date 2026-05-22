@@ -22,8 +22,11 @@ const heroJumps = [
     title="Pobytové <em>nebo</em> projektové."
     sub="Dvě hlavní kategorie. Nadační fond Hubu podporuje lidi, kteří mají co dát zpátky: dílny, otevřené prezentace, péče o areál nebo veřejně dostupný výstup projektu."
     variant="cream"
-    ribbonPath="M 1080 380 C 1340 280, 1640 460, 1860 400 C 2020 360, 2080 580, 1920 680 C 1740 780, 1480 680, 1480 800"
-    thickness={36}
+    ribbonPath="M 1080 720 C 1320 600, 1620 480, 1900 320"
+    ribbonPathSecondary="M 1180 800 C 1420 680, 1700 560, 1960 400 M 980 660 C 1240 540, 1540 420, 1820 240 M 820 580 C 1080 440, 1380 300, 1700 120"
+    thickness={44}
+    thicknessSecondary={22}
+    opacitySecondary={0.45}
     jumps={heroJumps}
     ariaId="stipendia-hero"
   />
@@ -42,12 +45,16 @@ const heroJumps = [
       </header>
 
       <article class="sec-sub">
-        <h3 class="sec-sub__title">Co se za stipendium očekává</h3>
+        <h3 class="sec-sub__title">Čtyři role, vyberete si jednu</h3>
+        <p class="sec-sub__lede">
+          Program má čtyři rozdílné role. Při registraci zájmu si vyberete tu, která vám sedí, nebo se vám
+          ozveme s návrhem. Nedělají se všechny zároveň, každá role je vlastní cesta.
+        </p>
         <ul class="sec-list">
-          <li><strong>Otevřené dílny nebo prezentace</strong> , dvě veřejné akce za pobyt (workshop, přednáška, otevřený ateliér).</li>
-          <li><strong>Veřejně dostupný výstup</strong> , článek, dokumentace, open-source kód, výstava, publikace nebo videoreportáž z pobytu.</li>
-          <li><strong>Provozní role v Hubu</strong> , práce na recepci, koordinace komunitních akcí, péče o sdílené prostory (work-trade, 32 až 40 h měsíčně).</li>
-          <li><strong>Stavební a údržbová účast</strong> , zapojení do konkrétní rekonstrukční fáze areálu (týden v měsíci, zbytek měsíce vlastní práce).</li>
+          <li><strong>Rezident-tvůrce</strong> , umělec, výzkumník, designér nebo autor s vlastním projektem. Tříměsíční pobyt, za to dvě otevřené dílny nebo prezentace a závěrečná dokumentace projektu.</li>
+          <li><strong>Správce na výměnu</strong> , operativní role v provozu Hubu (recepce, koordinace komunitních akcí, péče o sdílené prostory). Měsíční úvazek 32 až 40 hodin, zbytek měsíce vlastní práce na dálku.</li>
+          <li><strong>Stavitel-rezident</strong> , účast na konkrétní rekonstrukční fázi areálu. Týden v měsíci na staveništi, zbytek měsíce vlastní práce. Pro lidi se stavebními dovednostmi a chutí mít na areálu autorský podíl.</li>
+          <li><strong>Rezident-programátor</strong> , vývojář, který staví konkrétní digitální nástroj pro Hub (rezervační systém, komunitní aplikace, dokumentační platforma). Tříměsíční pobyt s deliverable na konci.</li>
         </ul>
       </article>
 

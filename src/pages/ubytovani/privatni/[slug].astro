@@ -60,6 +60,9 @@ const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['1kk'];
         <a class="apt-gallery__cta osa-nolink" href={withBase(`/rezervace/?typ=${data.slug}`)}>
           Rezervovat {data.shortName}<span aria-hidden="true"> →</span>
         </a>
+        <a class="apt-gallery__compare osa-nolink" href={withBase('/cenik/#ck-apt-h')}>
+          Srovnání cen v ceníku<span aria-hidden="true"> →</span>
+        </a>
       </aside>
       <div class="apt-gallery__media">
         <span class="apt-gallery__ribbon" aria-hidden="true" data-ribbon-reveal>
@@ -120,6 +123,8 @@ const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['1kk'];
   .apt-gallery__per { font: 500 var(--text-sm) / 1 var(--font-sans); color: var(--fg-muted, var(--fg)); }
   .apt-gallery__cta { display: inline-flex; align-items: center; gap: 6px; padding: 12px 22px; font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--accent-on); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--radius-input); text-decoration: none; width: fit-content; transition: background 200ms ease, color 200ms ease; }
   .apt-gallery__cta:hover, .apt-gallery__cta:focus-visible { background: transparent; color: var(--accent); outline: none; }
+  .apt-gallery__compare { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; padding: 0; font: 500 var(--text-sm) / 1.4 var(--font-sans); color: var(--fg-muted); text-decoration: none; border-bottom: 1px solid transparent; width: fit-content; transition: color 200ms ease, border-color 200ms ease, gap 220ms ease; }
+  .apt-gallery__compare:hover, .apt-gallery__compare:focus-visible { color: var(--accent); border-bottom-color: var(--accent); gap: 8px; outline: none; }
   /* Media wrapper: position relative + overflow visible aby ribbon mohl
      peekat z pod fotky kolem okrajů (z-index 0 ribbon, z-index 1 Gallery). */
   .apt-gallery__media { position: relative; min-width: 0; }
