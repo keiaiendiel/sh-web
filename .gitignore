@@ -42,3 +42,6 @@ public/images/hub/hero/phone/
 # Content brief staging — klient sem dropuje obrázky před zařazením.
 # Vlastní obsah složky je ignorovaný přes _incoming/.gitignore;
 # složka sama (s README.txt) je v repu, aby existovala hned po klonu.
+
+# Header screenshot verification artifacts (scripts/screenshot-header.mjs)
+_tmp/

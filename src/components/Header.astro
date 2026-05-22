@@ -1,6 +1,6 @@
 ---
 import { withBase } from '../utils/url';
-import OsaGlyph from './OsaGlyph.astro';
+import BrandLogo from './BrandLogo.astro';
 
 interface Props {
   variant?: 'light' | 'dark' | 'overlay';
@@ -37,8 +37,7 @@ const isHome = current === withBase('/');
       href={withBase('/')}
       class="hub-header__brand"
       aria-label={isHome ? 'Startovací Hub Klecany, domů' : 'Zpět na Startovací Hub'}>
-      <span class="hub-header__glyph" aria-hidden="true"><OsaGlyph size="13px" /></span>
-      <span class="hub-header__wordmark">Startovací Hub</span>
+      <BrandLogo class="hub-header__logo" />
     </a>
 
     <nav class="hub-header__nav" aria-label="Hlavní navigace">
@@ -261,21 +260,17 @@ const isHome = current === withBase('/');
 
   .hub-header__brand {
     display: inline-flex;
-    align-items: flex-end;
-    gap: 6px;
+    align-items: center;
     color: inherit;
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: var(--text-base);
-    letter-spacing: var(--tracking-tight);
-    line-height: 1;
     text-decoration: none;
     position: relative;
     z-index: 35;
     flex-shrink: 0;
+    line-height: 0;
   }
-  .hub-header__glyph { display: inline-flex; line-height: 0; margin-bottom: 1px; }
-  .hub-header__wordmark { white-space: nowrap; }
+  /* :global() because BrandLogo's SVG has its own component scope and the
+     class on it isn't tagged with Header's scoped data-astro-cid. */
+  :global(.hub-header__logo) { display: block; height: 18px; width: auto; flex-shrink: 0; }
 
   @media (prefers-reduced-motion: reduce) {
   }
@@ -520,10 +515,9 @@ const isHome = current === withBase('/');
     .hub-header__cta { padding: 5px 12px; font-size: 13px; }
   }
 
-  /* Narrow viewports (iPhone SE etc.): shrink brand font slightly. Glyph
-     stays visible, back arrow moved to floating action button. */
+  /* Narrow viewports (iPhone SE etc.): shrink brand logo slightly. */
   @media (max-width: 380px) {
-    .hub-header__brand { font-size: 14px; gap: 5px; }
+    :global(.hub-header__logo) { height: 16px; }
   }
 
   @media (min-width: 1025px) {
