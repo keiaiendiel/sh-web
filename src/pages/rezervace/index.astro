@@ -57,7 +57,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <input type="radio" name="koncept" value="co-living" data-auto-next />
             <span class="rez__choice-body">
               <span class="rez__choice-title">Co-living</span>
-              <span class="rez__choice-meta">Vlastní lůžko nebo kapsle, sdílená kuchyň. Od&nbsp;2 250&nbsp;Kč&nbsp;/&nbsp;měsíc.</span>
+              <span class="rez__choice-meta">Vlastní lůžko nebo kapsle, sdílená kuchyň. Od&nbsp;3 000&nbsp;Kč&nbsp;/&nbsp;měsíc.</span>
             </span>
           </label>
           <label class="rez__choice">
@@ -148,7 +148,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
                   <span class="rez__choice-title">{c.data.shortName}</span>
                   <span class="rez__choice-price">od&nbsp;{fmt(c.data.cena.anchor)}<span class="rez__choice-price-unit">&nbsp;Kč/měs</span></span>
                 </span>
-                <span class="rez__choice-meta">Matrace {c.data.matrace[0]}{c.data.matrace[1] && ` nebo ${c.data.matrace[1]}`}</span>
+                <span class="rez__choice-meta">Matrace {c.data.matrace.join(' / ')}</span>
                 <span class="rez__choice-desc">{c.data.popis}</span>
               </span>
             </label>
