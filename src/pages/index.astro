@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Gallery from '../components/Gallery.astro';
 import Icon from '../components/Icon.astro';
+import ResidentBenefits from '../components/ResidentBenefits.astro';
 import { withBase } from '../utils/url';
 
 /* Phase 2 landing per SH_Web_Site_Copy.md § 0.1 + SH_Web_Visualization_List
@@ -437,6 +438,12 @@ const tiles = [
                   </span>
                 </article>
               </a>
+            </div>
+          )}
+
+          {sec.id === 'ubytovani' && (
+            <div class="lp-section__benefits">
+              <ResidentBenefits eyebrow={false} />
             </div>
           )}
 
@@ -1286,6 +1293,14 @@ const tiles = [
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(32px, 5vw, 80px);
+  }
+  /* ResidentBenefits pruh pod lp-summary uvnitř ubytovani sekce. Vlastní
+     padding má ResidentBenefits sám (var(--space-6) var(--gutter)), wrap
+     jen přidává margin-top kvůli oddělení od lp-summary karet. */
+  .lp-section__benefits {
+    position: relative;
+    z-index: 2;
+    margin-top: var(--space-5);
   }
   /* Desktop: celá karta klikatelná, link wrapper přenese hover styly. */
   .lp-summary__card-link {

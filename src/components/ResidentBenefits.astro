@@ -2,27 +2,29 @@
 /*
  * ResidentBenefits , reusable pruh chip karet připomínajících benefity,
  * které dostává každý rezident bez ohledu na typ ubytování. Žije nahoře
- * v Ceníku a v každém detailu ubytování (privátní + co-living), aby
- * klient měl přidanou hodnotu vidět všude, kde se rozhoduje.
+ * v Ceníku, v každém detailu ubytování (privátní + co-living) a na
+ * landingu pod lp-summary kartami.
  *
  * Každý chip má vlastní --section-hue (z locked paletky 25/50/130/200/240)
  * pro vizuální variace; ikona-pill stejný recept jako .sec-hued__sub-icon.
+ * Detail (drobný text pod labelem) je volitelný , uvádíme ho jen tam,
+ * kde má smysl upřesnit (Hub-shuttle, Hub-taxi, sauna, coworking sál).
  *
  * Props:
  *   - heading: nadpis (default „Vždy v ceně bydlení")
- *   - lede: krátký popis pod nadpisem
+ *   - eyebrow: krátký label nad nadpisem (default „Benefity", false = skrýt)
  *   - compact: true → bez header bloku, jen grid (pro detail page sidebar)
  */
 import Icon from './Icon.astro';
 
 interface Props {
   heading?: string;
-  lede?: string;
+  eyebrow?: string | false;
   compact?: boolean;
 }
 const {
   heading = 'Vždy v ceně bydlení',
-  lede = 'Co dostává každý rezident bez ohledu na typ ubytování. Zdarma znamená zdarma.',
+  eyebrow = 'Benefity',
   compact = false,
 } = Astro.props;
 
@@ -30,17 +32,17 @@ interface Benefit {
   hue: 25 | 50 | 130 | 200 | 240;
   icon: string;
   label: string;
-  detail: string;
+  detail?: string;
 }
 const benefits: Benefit[] = [
-  { hue: 50,  icon: 'zap',         label: 'Energie a internet',  detail: 'Plně pokryto'              },
-  { hue: 240, icon: 'van',         label: 'Hub-shuttle',         detail: 'Sdílená kyvadlovka neomezeně' },
-  { hue: 25,  icon: 'car-front',   label: 'Hub-taxi',            detail: '1× lokální jízda měsíčně' },
-  { hue: 200, icon: 'waves',       label: 'Bazén',               detail: 'Vstup zdarma'             },
-  { hue: 50,  icon: 'thermometer', label: 'Sauna',               detail: '1× týdně v ceně (tarif 12+)' },
-  { hue: 240, icon: 'laptop',      label: 'Coworking sál',       detail: 'Volný stůl 24/7'          },
-  { hue: 130, icon: 'parking-circle', label: 'Parkování',         detail: 'Vyhrazené stání'          },
-  { hue: 130, icon: 'bike',        label: 'Úložna kol',          detail: 'Krytá, uzamykatelná'      },
+  { hue: 50,  icon: 'zap',            label: 'Energie a internet' },
+  { hue: 240, icon: 'van',            label: 'Hub-shuttle',   detail: 'Sdílená kyvadlovka neomezeně' },
+  { hue: 25,  icon: 'car-front',      label: 'Hub-taxi',      detail: '1× lokální jízda měsíčně' },
+  { hue: 200, icon: 'waves',          label: 'Bazén' },
+  { hue: 50,  icon: 'thermometer',    label: 'Sauna',         detail: '1× týdně (tarif 12+)' },
+  { hue: 240, icon: 'laptop',         label: 'Coworking sál', detail: 'Volný stůl 24/7' },
+  { hue: 130, icon: 'parking-circle', label: 'Parkování' },
+  { hue: 130, icon: 'bike',           label: 'Úložna kol' },
 ];
 ---
 
@@ -48,18 +50,17 @@ const benefits: Benefit[] = [
   <div class="rb__inner">
     {!compact && (
       <header class="rb__head">
-        <p class="rb__eyebrow">Vše v ceně</p>
+        {eyebrow && <p class="rb__eyebrow">{eyebrow}</p>}
         <h2 class="rb__title">{heading}</h2>
-        <p class="rb__lede">{lede}</p>
       </header>
     )}
     <ul class="rb__grid">
       {benefits.map((b) => (
-        <li class="rb__chip" style={`--section-hue: ${b.hue};`}>
+        <li class={`rb__chip${b.detail ? '' : ' rb__chip--bare'}`} style={`--section-hue: ${b.hue};`}>
           <span class="rb__icon" aria-hidden="true"><Icon name={b.icon} size={18} /></span>
           <div class="rb__txt">
             <p class="rb__label">{b.label}</p>
-            <p class="rb__detail">{b.detail}</p>
+            {b.detail && <p class="rb__detail">{b.detail}</p>}
           </div>
         </li>
       ))}
