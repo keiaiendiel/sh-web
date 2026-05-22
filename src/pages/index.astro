@@ -233,12 +233,15 @@ const tiles = [
   <script is:inline>
     /* Hero mode toggle: přepíná .lp-hero[data-hero-mode] mezi „video"
        (default, loop reel) a „slides" (5 IMG carousel). Volba se ukládá
-       do localStorage pod klíčem 'sh:hero-mode'. Default je video, ale
+       do localStorage pod klíčem 'sh:hero-mode-v2'. Default je video,
        uživatelé s prefers-reduced-motion: reduce dostanou slides (bez
-       autoplaying motion). */
+       autoplaying motion). Klíč je v2 namespace — předchozí 'sh:hero-mode'
+       z éry slides-default je ignorovaný, aby nový default platil pro
+       všechny (toggle dál funguje normálně). */
     (function () {
       if (window.__hubHeroToggleBound) return;
       window.__hubHeroToggleBound = true;
+      var STORAGE_KEY = 'sh:hero-mode-v2';
       function bind() {
         var hero = document.querySelector('.lp-hero');
         var btn = document.querySelector('[data-hero-mode-toggle]');
@@ -271,7 +274,7 @@ const tiles = [
         }
 
         var stored = null;
-        try { stored = window.localStorage.getItem('sh:hero-mode'); } catch (e) {}
+        try { stored = window.localStorage.getItem(STORAGE_KEY); } catch (e) {}
         var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var initial;
         if (stored === 'video' || stored === 'slides') {
@@ -283,7 +286,7 @@ const tiles = [
 
         btn.addEventListener('click', function () {
           var next = hero.dataset.heroMode === 'video' ? 'slides' : 'video';
-          try { window.localStorage.setItem('sh:hero-mode', next); } catch (e) {}
+          try { window.localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
           applyMode(next);
         });
       }
