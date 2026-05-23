@@ -52,66 +52,83 @@ const heroJumps = [
 
   <script is:inline>
     (function () {
-      function init() {
-        if (!window.__hubLoadLeaflet) return;
-        window.__hubLoadLeaflet(function () {
-          var el = document.getElementById('ok-map-frame');
-          if (!el || el.dataset.mapBound) return;
-          el.dataset.mapBound = '1';
-          var center = [50.181447, 14.424094];
-          var map = L.map(el, {
-            center: center, zoom: 16,
-            zoomControl: false, attributionControl: false,
-            scrollWheelZoom: false,
-          });
-          L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-            subdomains: 'abcd', maxZoom: 19,
-          }).addTo(map);
-          var icon = L.divIcon({
-            html:
-              '<svg width="30" height="40" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-              '<path d="M14 0C6.27 0 0 6.27 0 14c0 9.33 14 22 14 22S28 23.33 28 14C28 6.27 21.73 0 14 0z" fill="#5A2A5F"/>' +
-              '<circle cx="14" cy="14" r="5" fill="#ffffff"/>' +
-              '</svg>',
-            className: '', iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -42],
-          });
-          var gmaps = 'https://maps.app.goo.gl/vCF6VbW7Z49sggau6';
-          var popupHtml =
-            '<a href="' + gmaps + '" target="_blank" rel="noopener" class="ok-map-popup">' +
-              '<strong>Horní kasárna Klecany</strong>' +
-              '<span class="ok-map-popup__cta">Otevřít v Mapách →</span>' +
-            '</a>';
-          L.marker(center, { icon: icon })
-            .addTo(map)
-            .bindPopup(popupHtml, { className: 'ok-map-popup-wrap' })
-            .openPopup()
-            .on('click', function () { window.open(gmaps, '_blank'); });
-          L.control.attribution({ prefix: false }).addTo(map);
-          L.control.zoom({ position: 'bottomright' }).addTo(map);
-          el.addEventListener('click', function () { map.scrollWheelZoom.enable(); }, { once: true });
-          /* Po inicializaci forced layout pass. Triple beat (rAF + 80 + 250 ms)
-             pokrývá cold load + SPA navigaci. ResizeObserver navíc reaguje
-             na pozdější změny šířky (font swap, image reflow, view transitions
-             dokončení), kdy Leaflet nakreslil dlaždice na starou velikost
-             a nové tiles už nestáhnul. Při každém resize zavoláme invalidateSize,
-             což Leaflet přinutí přepočítat viditelnou plochu a stáhnout chybějící
-             tiles. Window load + visibility change fallback pro extra jistotu. */
-          requestAnimationFrame(function () { map.invalidateSize(); });
-          setTimeout(function () { map.invalidateSize(); }, 80);
-          setTimeout(function () { map.invalidateSize(); }, 250);
-          setTimeout(function () { map.invalidateSize(); }, 800);
-          if ('ResizeObserver' in window) {
-            var ro = new ResizeObserver(function () { map.invalidateSize(); });
-            ro.observe(el);
-          }
-          window.addEventListener('load', function () { map.invalidateSize(); }, { once: true });
-          document.addEventListener('visibilitychange', function () {
-            if (!document.hidden) map.invalidateSize();
-          });
+      function buildMap(el) {
+        if (el.dataset.mapBound) return;
+        el.dataset.mapBound = '1';
+        var center = [50.181447, 14.424094];
+        var map = L.map(el, {
+          center: center, zoom: 16,
+          zoomControl: false, attributionControl: false,
+          scrollWheelZoom: false,
+        });
+        var tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+          subdomains: 'abcd', maxZoom: 19,
+        }).addTo(map);
+        var icon = L.divIcon({
+          html:
+            '<svg width="30" height="40" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+            '<path d="M14 0C6.27 0 0 6.27 0 14c0 9.33 14 22 14 22S28 23.33 28 14C28 6.27 21.73 0 14 0z" fill="#5A2A5F"/>' +
+            '<circle cx="14" cy="14" r="5" fill="#ffffff"/>' +
+            '</svg>',
+          className: '', iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -42],
+        });
+        var gmaps = 'https://maps.app.goo.gl/vCF6VbW7Z49sggau6';
+        var popupHtml =
+          '<a href="' + gmaps + '" target="_blank" rel="noopener" class="ok-map-popup">' +
+            '<strong>Horní kasárna Klecany</strong>' +
+            '<span class="ok-map-popup__cta">Otevřít v Mapách →</span>' +
+          '</a>';
+        L.marker(center, { icon: icon })
+          .addTo(map)
+          .bindPopup(popupHtml, { className: 'ok-map-popup-wrap' })
+          .openPopup()
+          .on('click', function () { window.open(gmaps, '_blank'); });
+        L.control.attribution({ prefix: false }).addTo(map);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        el.addEventListener('click', function () { map.scrollWheelZoom.enable(); }, { once: true });
+        /* Tile-sizing race fix: i s IntersectionObserverem (gating init až do
+           viewportu) leaflet někdy změří kontejner příliš brzy a nakreslí jen
+           1 dlaždici nahoře vlevo („drobný čtvereček"). Pojistka: rAF, několik
+           setTimeoutů, ResizeObserver, tile load event, window.load, visibility
+           change , kdykoli jeden z těchto signálů přijde, force invalidate. */
+        requestAnimationFrame(function () { map.invalidateSize(); });
+        [80, 250, 800, 1600].forEach(function (ms) {
+          setTimeout(function () { map.invalidateSize(); }, ms);
+        });
+        tiles.once('load', function () { map.invalidateSize(); });
+        if ('ResizeObserver' in window) {
+          var ro = new ResizeObserver(function () { map.invalidateSize(); });
+          ro.observe(el);
+        }
+        window.addEventListener('load', function () { map.invalidateSize(); }, { once: true });
+        document.addEventListener('visibilitychange', function () {
+          if (!document.hidden) map.invalidateSize();
         });
       }
-      document.addEventListener('astro:page-load', init);
+
+      function bind() {
+        var el = document.getElementById('ok-map-frame');
+        if (!el || !window.__hubLoadLeaflet) return;
+        /* Defer init dokud se kontejner nedostane k viewportu , při cold loadu
+           layout ještě může „dosedat" (fonty, lazy obrázky výš na stránce),
+           a Leaflet zachytí špatné rozměry. IntersectionObserver garantuje,
+           že init běží až má kontejner finální velikost. */
+        if (!('IntersectionObserver' in window)) {
+          window.__hubLoadLeaflet(function () { buildMap(el); });
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              io.unobserve(e.target);
+              window.__hubLoadLeaflet(function () { buildMap(el); });
+            }
+          });
+        }, { rootMargin: '300px 0px' });
+        io.observe(el);
+      }
+      document.addEventListener('astro:page-load', bind);
     }());
   </script>
 

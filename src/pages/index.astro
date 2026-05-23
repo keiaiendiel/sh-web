@@ -1296,11 +1296,19 @@ const tiles = [
   }
   /* ResidentBenefits pruh pod lp-summary uvnitř ubytovani sekce. Vlastní
      padding má ResidentBenefits sám (var(--space-6) var(--gutter)), wrap
-     jen přidává margin-top kvůli oddělení od lp-summary karet. */
+     jen přidává margin-top kvůli oddělení od lp-summary karet.
+     Background transparent override: defaultně má .rb solid bg, který by
+     vizuálně oddělil benefit pruh od ribbonu sekce nahoře , uvnitř landingu
+     chceme aby ribbon protékal i pod chip karty. */
   .lp-section__benefits {
     position: relative;
     z-index: 2;
     margin-top: var(--space-5);
+  }
+  .lp-section__benefits :global(.rb) {
+    background: transparent;
+    padding-top: 0;
+    padding-bottom: 0;
   }
   /* Desktop: celá karta klikatelná, link wrapper přenese hover styly. */
   .lp-summary__card-link {

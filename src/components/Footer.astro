@@ -81,7 +81,7 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
         zoomControl: false, attributionControl: false,
         scrollWheelZoom: false,
       });
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+      var tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
         subdomains: 'abcd', maxZoom: 19,
       }).addTo(map);
@@ -105,12 +105,13 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
         .openPopup();
       L.control.attribution({ prefix: false }).addTo(map);
       /* Stejný invalidateSize beat jako /okoli/ embed: cold load + SPA
-         návrat + pozdější resize (font swap, image reflow). ResizeObserver
-         + window.load fallback. */
+         návrat + pozdější resize (font swap, image reflow). Tile load event
+         + ResizeObserver + window.load fallback. */
       requestAnimationFrame(function () { map.invalidateSize(); });
-      setTimeout(function () { map.invalidateSize(); }, 80);
-      setTimeout(function () { map.invalidateSize(); }, 250);
-      setTimeout(function () { map.invalidateSize(); }, 800);
+      [80, 250, 800, 1600].forEach(function (ms) {
+        setTimeout(function () { map.invalidateSize(); }, ms);
+      });
+      tiles.once('load', function () { map.invalidateSize(); });
       if ('ResizeObserver' in window) {
         var ro = new ResizeObserver(function () { map.invalidateSize(); });
         ro.observe(el);
