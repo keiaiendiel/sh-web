@@ -19,8 +19,12 @@ import { withBase } from '../../utils/url';
  * deploy pending, frontend bude napojen v Phase 5b.
  */
 
-const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
-const coliving = (await getCollection('coliving')).sort((a, b) => a.data.order - b.data.order);
+const apartmany = (await getCollection('apartmany'))
+  .filter((a) => !a.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+const coliving = (await getCollection('coliving'))
+  .filter((c) => !c.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
 const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 ---
 <Base
@@ -103,7 +107,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
               <span class="rez__choice-body">
                 <span class="rez__choice-head">
                   <span class="rez__choice-title">{a.data.shortName}</span>
-                  <span class="rez__choice-price">od&nbsp;{fmt(a.data.cena.anchor)}<span class="rez__choice-price-unit">&nbsp;Kč/měs</span></span>
+                  <span class="rez__choice-price">od&nbsp;{a.data.cena.anchor.toLocaleString('cs-CZ')}<span class="rez__choice-price-unit">&nbsp;Kč/měs</span></span>
                 </span>
                 <span class="rez__choice-meta">{a.data.plocha} · {a.data.kapacita} lůžek</span>
                 <span class="rez__choice-desc">{a.data.popis}</span>
@@ -146,7 +150,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
               <span class="rez__choice-body">
                 <span class="rez__choice-head">
                   <span class="rez__choice-title">{c.data.shortName}</span>
-                  <span class="rez__choice-price">od&nbsp;{fmt(c.data.cena.anchor)}<span class="rez__choice-price-unit">&nbsp;Kč/měs</span></span>
+                  <span class="rez__choice-price">od&nbsp;{c.data.cena.anchor.toLocaleString('cs-CZ')}<span class="rez__choice-price-unit">&nbsp;Kč/měs</span></span>
                 </span>
                 <span class="rez__choice-meta">Matrace {c.data.matrace.join(' / ')}</span>
                 <span class="rez__choice-desc">{c.data.popis}</span>

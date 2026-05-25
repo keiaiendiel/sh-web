@@ -8,17 +8,23 @@ import CtaBanner from '../../components/CtaBanner.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
 
 const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
-const coliving = (await getCollection('coliving')).sort((a, b) => a.data.order - b.data.order);
+const coliving = (await getCollection('coliving'))
+  .filter((c) => !c.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
 
 /* Co-living items nemají jednotnou „plocha" / „kapacita" pole (capsule vs.
    lůžko vs. dvoulůžko mají odlišnou strukturu). Mapujeme per-slug. */
 const coligvingVelikost: Record<string, string> = {
+  'pokoj-basic':   'lůžko ve sdíleném pokoji',
+  'pokoj-privacy': 'lůžko s dělícími stěnami',
   'kapsle-single': 'kapsle ve sdíleném pokoji',
   'jedno-luzko':   'lůžko ve sdíleném pokoji',
   'kapsle-double': 'kapsle ve sdíleném pokoji',
   'dvouluzko':     'celý pokoj v patrovém bytě',
 };
 const colivingKapacita: Record<string, string> = {
+  'pokoj-basic':   '1 osoba',
+  'pokoj-privacy': '1 osoba',
   'kapsle-single': '1 osoba',
   'jedno-luzko':   '1 osoba',
   'kapsle-double': '1-2 osoby',
@@ -26,8 +32,8 @@ const colivingKapacita: Record<string, string> = {
 };
 ---
 <Base
-  title="Ubytování od 3 000 Kč, 9 typů · Startovací Hub Klecany"
-  description="Čtyři varianty co-livingu od kapsle po dvoulůžkový pokoj, pět privátních apartmánů 1+kk až 5+kk. Energie, internet, úklid, neomezené jízdy Hub-shuttle a poukaz do sauny v ceně."
+  title="Ubytování od 2 400 Kč, 9 typů · Startovací Hub Klecany"
+  description="Čtyři varianty co-livingu od sdíleného lůžka po uzamykatelnou kapsli, pět privátních apartmánů 1+kk až 5+kk. Energie, internet, úklid, neomezené jízdy Hub-shuttle a poukaz do sauny v ceně."
   headerVariant="overlay">
 
   <SubpageHero

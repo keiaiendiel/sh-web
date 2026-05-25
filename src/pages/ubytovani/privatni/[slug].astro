@@ -21,13 +21,16 @@ const heroSrc = data.hero ? withBase(data.hero) : null;
 const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
 type GalleryItem = { src: string; alt: string } | { placeholder: string; alt: string };
-const galleryImages: GalleryItem[] = [
-  ...(heroSrc ? [{ src: heroSrc, alt: data.heroAlt ?? '' } as GalleryItem] : []),
-  { src: withBase('/images/hub/ubytovani/privatni/shared-koupelna.jpg'), alt: 'Privátní koupelna se sprchou, vlastní WC, denní světlo.' },
-  { src: withBase('/images/hub/ubytovani/privatni/shared-chodba.jpg'),   alt: 'Vstupní chodba apartmánu se šatnou a vlastním vchodem.' },
-  { placeholder: 'Kuchyňský kout v detailu, indukční deska, dřez, lednice, mikrovlnka', alt: 'Detail kuchyňského koutu.' },
-  { placeholder: 'Pohled na celý byt s dispozicí, 24 mm širokoúhlý záběr', alt: 'Dispozice celého bytu.' },
-];
+/* Konvence: MDX `gallery` field obsahuje plnou sekvenci slidů, první z nich
+   je vždy hero (== thumbnail na overview kartě). Pokud gallery není zadána,
+   fallback na samostatný hero + placeholder sloty pro chybějící vizualizace. */
+const galleryImages: GalleryItem[] = data.gallery && data.gallery.length > 0
+  ? data.gallery.map((g): GalleryItem => ({ src: withBase(g.src), alt: g.alt }))
+  : [
+      ...(heroSrc ? [{ src: heroSrc, alt: data.heroAlt ?? '' } as GalleryItem] : []),
+      { placeholder: 'Kuchyňský kout v detailu, indukční deska, dřez, lednice, mikrovlnka', alt: 'Detail kuchyňského koutu.' },
+      { placeholder: 'Pohled na celý byt s dispozicí, 24 mm širokoúhlý záběr', alt: 'Dispozice celého bytu.' },
+    ];
 
 /* Ribbon arc paths per slug. Ribbon je positioned BEHIND .apt-gallery__media
    gallery photo (z-index 0), peeká z pod fotky kolem okrajů. Different d-form

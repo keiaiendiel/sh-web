@@ -20,8 +20,12 @@ import { withBase } from '../../utils/url';
  * Anchor cena = pobyt 12+ měsíců (per CLAUDE.md pricing lock 2026-05-12).
  */
 
-const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
-const coliving = (await getCollection('coliving')).sort((a, b) => a.data.cena.anchor - b.data.cena.anchor);
+const apartmany = (await getCollection('apartmany'))
+  .filter((a) => !a.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+const coliving = (await getCollection('coliving'))
+  .filter((c) => !c.data.hidden)
+  .sort((a, b) => a.data.cena.anchor - b.data.cena.anchor);
 
 /* Per-coliving metadata , kontext sdílení pokoje (krátký descriptor
    pro card facts). Vše ostatní (popis, klicove, spec) čte ceník přímo
@@ -30,6 +34,8 @@ interface CoMeta {
   pokoj: string;
 }
 const coMeta: Record<string, CoMeta> = {
+  'pokoj-basic':   { pokoj: 'Sdílíte pokoj se 3 dalšími rezidenty, bez příček' },
+  'pokoj-privacy': { pokoj: '4 až 6 lůžek s dělícími stěnami v jednom pokoji' },
   'kapsle-single': { pokoj: '3 až 6 kapslí v jednom pokoji' },
   'jedno-luzko':   { pokoj: 'Sdílíte pokoj jen s 1 další osobou' },
   'kapsle-double': { pokoj: '2 až 5 dalších kapslí v jednom pokoji' },

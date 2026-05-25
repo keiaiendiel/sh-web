@@ -7,10 +7,12 @@ import { withBase } from '../../../utils/url';
 
 export async function getStaticPaths() {
   const coliving = await getCollection('coliving');
-  return coliving.map((entry) => ({
-    params: { slug: entry.data.slug },
-    props: { entry },
-  }));
+  return coliving
+    .filter((entry) => !entry.data.hidden)
+    .map((entry) => ({
+      params: { slug: entry.data.slug },
+      props: { entry },
+    }));
 }
 
 const { entry } = Astro.props;
@@ -21,16 +23,23 @@ const heroSrc = data.hero ? withBase(data.hero) : null;
 const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
 type GalleryItem = { src: string; alt: string } | { placeholder: string; alt: string };
-const galleryImages: GalleryItem[] = [
-  ...(heroSrc ? [{ src: heroSrc, alt: data.heroAlt ?? '' } as GalleryItem] : []),
-  { placeholder: 'Společný pokoj nebo lounge před kapslemi, lavice, rostliny, knihovna', alt: 'Společný prostor s pody.' },
-  { placeholder: 'Sdílená koupelna a kuchyňka pro coliving rezidenty', alt: 'Sdílené zázemí coliving patra.' },
-];
+/* Konvence: MDX `gallery` field obsahuje plnou sekvenci slidů, první z nich
+   je vždy hero (== thumbnail na overview kartě). Pokud gallery není zadána,
+   fallback na hero + placeholder sloty (sdílené zázemí coliving patra). */
+const galleryImages: GalleryItem[] = data.gallery && data.gallery.length > 0
+  ? data.gallery.map((g): GalleryItem => ({ src: withBase(g.src), alt: g.alt }))
+  : [
+      ...(heroSrc ? [{ src: heroSrc, alt: data.heroAlt ?? '' } as GalleryItem] : []),
+      { placeholder: 'Společný pokoj nebo lounge před kapslemi, lavice, rostliny, knihovna', alt: 'Společný prostor s pody.' },
+      { placeholder: 'Sdílená koupelna a kuchyňka pro coliving rezidenty', alt: 'Sdílené zázemí coliving patra.' },
+    ];
 
 /* Ribbon arc paths per slug. Ribbon je positioned BEHIND .apt-gallery__media
    gallery photo (z-index 0), peeká z pod fotky kolem okrajů. Different d-form
    per slug pro vizuální variace. */
 const ribbonPaths: Record<string, string> = {
+  'pokoj-basic':   'M -60 420 C 160 240, 380 460, 540 320 S 780 500, 860 620',
+  'pokoj-privacy': 'M -40 320 C 180 480, 360 260, 540 400 S 760 580, 840 680',
   'kapsle-single': 'M -40 480 C 140 280, 360 220, 520 360 S 760 580, 840 700',
   'jedno-luzko':   'M -60 360 C 140 480, 360 200, 540 320 S 780 520, 860 660',
   'kapsle-double': 'M -40 560 C 180 320, 380 280, 540 420 S 760 620, 840 720',

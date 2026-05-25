@@ -108,9 +108,9 @@ const sections: Section[] = [
     gallery: [
       { src: withBase('/images/hub/komunita/01-bazen.jpg'), alt: 'Bazén v centrálním dvoře areálu, letní odpoledne, sluneční terasa, relax po práci.' },
       { src: withBase('/images/hub/komunita/02-minipivovar.jpg'), alt: 'Minipivovar v budově B, večerní provoz, lidé u stolů u baru.' },
-      { src: withBase('/images/hub/komunita/03-kantyna-busy.jpg'), alt: 'Kantýna v budově B v plném provozu, dlouhé stoly, otevřená kuchyně, lidé u oběda.' },
-      { src: withBase('/images/hub/komunita/04-cowork-small-event.jpg'), alt: 'Komunitní small-event v klubovně, lidé u stolů, kulturní život uvnitř Hubu.' },
-      { src: withBase('/images/hub/komunita/02-sauna.jpg'), alt: 'Sauna v jádře areálu, dřevěný interiér, relax po práci.' },
+      { src: withBase('/images/hub/komunita/03-grilovaci-misto.jpg'), alt: 'Grilovací místo v parku, dřevěné stoly, parta lidí u večerního grilování.' },
+      { src: withBase('/images/hub/komunita/04-klubovna.jpg'), alt: 'Klubovna v budově C, společenský prostor pro 30 až 50 osob.' },
+      { src: withBase('/images/hub/komunita/05-komunitni-zahrady.jpg'), alt: 'Komunitní zahrádky v severní části parku, sezónní záhony pro rezidenty.' },
     ],
   },
   {
@@ -121,10 +121,9 @@ const sections: Section[] = [
     ctas: [{ href: '/stipendia/', label: 'Pobytová stipendia' }],
     ribbonPath: 'M -60 420 C 160 540, 380 260, 600 400 S 960 520, 1140 380 S 1380 240, 1560 380',
     gallery: [
-      { src: withBase('/images/hub/stipendia/resident-atelier.jpg'), alt: 'Ateliér s rezidentem-tvůrcem v práci, denní světlo, velký stůl.' },
-      { placeholder: 'Skupinový moment u stolu, společné plánování nebo večeře rezidentů', alt: 'Skupinový moment u stolu, společné plánování rezidentů.' },
-      { placeholder: 'Rezident se stará o pozemek areálu', alt: 'Rezident se stará o pozemek areálu.' },
-      { placeholder: 'Rezident-programátor u stolu s monitorem, kód na obrazovce', alt: 'Rezident-programátor u stolu s monitorem.' },
+      { src: withBase('/images/hub/stipendia/01-atelier.jpg'), alt: 'Ateliér s rezidentem-tvůrcem v práci, denní světlo, velký stůl.' },
+      { src: withBase('/images/hub/stipendia/02-rezident.jpg'), alt: 'Rezident u rozdělané práce, soustředění v denním světle.' },
+      { src: withBase('/images/hub/stipendia/03-rezidenti.jpg'), alt: 'Skupina rezidentů u společného stolu, plánování nebo večeře.' },
     ],
   },
   {
@@ -138,11 +137,10 @@ const sections: Section[] = [
     ],
     ribbonPath: 'M -80 460 C 180 300, 380 460, 600 340 S 980 460, 1160 380 S 1380 280, 1560 380',
     gallery: [
-      { src: withBase('/images/hub/okoli/01-topview.jpg'), alt: 'Letecký pohled na areál Horních kasáren a obec Klecany v širším krajinném kontextu.' },
-      { src: withBase('/images/hub/okoli/02-exterier-3.jpg'), alt: 'Exteriér areálu s budovami v alejovém parteru.' },
-      { src: withBase('/images/hub/okoli/03-cyklostezka.jpg'), alt: 'Cyklostezka Praha až Klecany podél Vltavy.' },
-      { src: withBase('/images/hub/okoli/04-exterier-1.jpg'), alt: 'Exteriér areálu s privátními apartmány v parteru a alejí bříz.' },
-      { src: withBase('/images/hub/okoli/05-exterier-4.jpg'), alt: 'Detailní pohled na exteriér areálu, dřevěný obklad a parter.' },
+      { src: withBase('/images/hub/okoli/01-areal-dostupnost.jpg'), alt: 'Mapa dostupnosti areálu, vzdálenosti na metro a do centra Prahy.' },
+      { src: withBase('/images/hub/okoli/02-cyklostezka.jpg'), alt: 'Cyklostezka EuroVelo 7 podél Vltavy z Prahy do Klecan.' },
+      { src: withBase('/images/hub/okoli/03-exterier-1.jpg'), alt: 'Exteriér areálu s privátními apartmány v parteru a alejí bříz.' },
+      { src: withBase('/images/hub/okoli/04-topview-update.jpg'), alt: 'Letecký pohled na areál Horních kasáren a obec Klecany v krajinném kontextu.' },
     ],
   },
 ];
@@ -169,7 +167,7 @@ const tiles = [
 ---
 <Base
   title="Startovací Hub Klecany · Bydlení a coworking 15 min od Prahy"
-  description="Devět typů bydlení od kapsle po byt 5+kk, coworking, dílny, sauna a kavárna. Horní kasárna Klecany, patnáct minut autobusem od metra Kobylisy. Od 3 000 Kč měsíčně, energie a internet v ceně."
+  description="Devět typů bydlení od sdíleného lůžka po byt 5+kk, coworking, dílny, sauna a kavárna. Horní kasárna Klecany, patnáct minut autobusem od metra Kobylisy. Od 2 400 Kč měsíčně, energie a internet v ceně."
   headerVariant="overlay">
 
   {/* ============ HERO ROTATION ============ */}
@@ -214,7 +212,7 @@ const tiles = [
       </button>
 
       <h1 class="lp-hero__title">Bydlení a&nbsp;coworking na&nbsp;prahu metropole.</h1>
-      <p class="lp-hero__lede">Devět typů ubytování od&nbsp;3&nbsp;000&nbsp;Kč měsíčně. Rezervujte si&nbsp;dnes, voláme do&nbsp;24&nbsp;hodin.</p>
+      <p class="lp-hero__lede">Devět typů ubytování od&nbsp;2&nbsp;400&nbsp;Kč měsíčně. Rezervujte si&nbsp;dnes, voláme do&nbsp;24&nbsp;hodin.</p>
 
       {/* Tři rychlá CTA do rezervačního formuláře s předvyplněnou cestou. */}
       <div class="lp-hero__quick">
@@ -378,7 +376,7 @@ const tiles = [
                   <dl class="lp-summary__facts">
                     <div class="lp-summary__row">
                       <dt class="lp-summary__dt">Počet variant</dt>
-                      <dd class="lp-summary__dd">4 (jednolůžková a&nbsp;dvoulůžková kapsle, jednolůžko a&nbsp;dvoulůžko)</dd>
+                      <dd class="lp-summary__dd">4 (lůžko bez nebo se&nbsp;zvýšeným soukromím, jednolůžková a&nbsp;dvoulůžková kapsle)</dd>
                     </div>
                     <div class="lp-summary__row">
                       <dt class="lp-summary__dt">Kapacita</dt>
@@ -386,7 +384,7 @@ const tiles = [
                     </div>
                     <div class="lp-summary__row">
                       <dt class="lp-summary__dt">Matrace</dt>
-                      <dd class="lp-summary__dd">200×80 cm až 230×240 cm</dd>
+                      <dd class="lp-summary__dd">200×90 cm až 230×240 cm</dd>
                     </div>
                     <div class="lp-summary__row">
                       <dt class="lp-summary__dt">Soukromí</dt>
@@ -394,7 +392,7 @@ const tiles = [
                     </div>
                     <div class="lp-summary__row">
                       <dt class="lp-summary__dt">Cena</dt>
-                      <dd class="lp-summary__dd lp-summary__dd--price">od 3&nbsp;000&nbsp;Kč/měsíc</dd>
+                      <dd class="lp-summary__dd lp-summary__dd--price">od 2&nbsp;400&nbsp;Kč/měsíc</dd>
                     </div>
                   </dl>
                   <span class="lp-summary__cta">
@@ -1376,13 +1374,13 @@ const tiles = [
   .lp-summary__card-link--coliving:focus-visible .lp-summary__cta {
     background: var(--accent); color: var(--accent-on); border-color: var(--accent);
   }
-  .lp-summary__card--privatni .lp-summary__h { color: var(--plum-deep); }
-  .lp-summary__card--privatni .lp-summary__dt { color: var(--plum-deep); opacity: 0.7; }
-  .lp-summary__card--privatni .lp-summary__dd--price { color: var(--plum-deep); }
-  .lp-summary__card--privatni .lp-summary__cta { color: var(--plum-deep); border-color: var(--plum-deep); }
+  .lp-summary__card--privatni .lp-summary__h { color: var(--accent); }
+  .lp-summary__card--privatni .lp-summary__dt { color: var(--accent); opacity: 0.85; }
+  .lp-summary__card--privatni .lp-summary__dd--price { color: var(--accent); }
+  .lp-summary__card--privatni .lp-summary__cta { color: var(--accent); border-color: var(--accent); }
   .lp-summary__card-link--privatni:hover .lp-summary__cta,
   .lp-summary__card-link--privatni:focus-visible .lp-summary__cta {
-    background: var(--plum-deep); color: var(--cream); border-color: var(--plum-deep);
+    background: var(--accent); color: var(--accent-on); border-color: var(--accent);
   }
   /* Facts list sjednocen s .apt-spec na detail stránkách: 2-col layout
      1fr / 1.4fr, hairline mezi rows, dt uppercase tiny, dd text-sm.

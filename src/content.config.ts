@@ -1,18 +1,28 @@
 /*
  * Astro 6 Content Collections pro Startovací Hub Klecany.
  *
- * Phase 3 (2026-05-13): nové schémata pro 9 typů ubytování per Site_Copy.md
- * § 1.1 (privátní apartmány 1+kk až 5+kk) a § 1.2 (co-living: kapsle single,
- * kapsle double, jedno lůžko, dvoulůžko).
+ * Phase 3 (2026-05-13): schémata pro 11 typů ubytování per Site_Copy.md
+ * § 1.1 (privátní apartmány 1+kk až 5+kk) a § 1.2 (co-living: pokoj-basic,
+ * pokoj-privacy, kapsle single, kapsle double, jedno lůžko, dvoulůžko).
+ *
+ * Phase 5 (2026-05-25): rozšíření coliving enum o pokoj-basic a pokoj-privacy
+ * + přidán gallery field do obou kolekcí pro multi-image slideshow na detail
+ * stránkách (předtím gallery hardcoded v [slug].astro template).
  *
  * Collections:
  *   - apartmany → src/content/apartmany/*.mdx (5 typů privátních)
- *   - coliving  → src/content/coliving/*.mdx (4 typy co-living)
+ *   - coliving  → src/content/coliving/*.mdx (6 typů co-living)
  *   - faq       → src/content/faq/index.json (10 FAQ otázek, Phase 4)
  *   - org       → src/content/org/identity.json (OSA II identita, JSON-LD)
  */
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
+
+/* === Gallery field (sdílený pro apartmány i coliving) === */
+const galleryItem = z.object({
+  src: z.string().startsWith('/'),
+  alt: z.string(),
+});
 
 /* === APARTMÁNY (privátní 1+kk až 5+kk) === */
 const apartmanySlug = z.enum(['1kk', '2kk', '3kk', '4kk', '5kk']);
@@ -43,11 +53,20 @@ const apartmany = defineCollection({
     thumbnail: z.string().startsWith('/').optional(),
     hero: z.string().startsWith('/').optional(),
     heroAlt: z.string().optional(),
+    gallery: z.array(galleryItem).optional(),
+    hidden: z.boolean().optional(),
   }),
 });
 
-/* === CO-LIVING (kapsle single/double, jedno lůžko, dvoulůžko) === */
-const colivingSlug = z.enum(['kapsle-single', 'kapsle-double', 'jedno-luzko', 'dvouluzko']);
+/* === CO-LIVING (6 formátů) === */
+const colivingSlug = z.enum([
+  'pokoj-basic',
+  'pokoj-privacy',
+  'kapsle-single',
+  'kapsle-double',
+  'jedno-luzko',
+  'dvouluzko',
+]);
 
 const coliving = defineCollection({
   loader: glob({ pattern: '*.mdx', base: './src/content/coliving' }),
@@ -77,6 +96,8 @@ const coliving = defineCollection({
     thumbnail: z.string().startsWith('/').optional(),
     hero: z.string().startsWith('/').optional(),
     heroAlt: z.string().optional(),
+    gallery: z.array(galleryItem).optional(),
+    hidden: z.boolean().optional(),
   }),
 });
 
