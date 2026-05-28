@@ -31,6 +31,11 @@ const org = orgEntry?.data;
           v Klecanech, IČO {org?.ico ?? 'bude doplněno'}. Kontakt pro otázky kolem ochrany
           údajů: <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.
         </p>
+        <p>
+          Pověřence pro ochranu osobních údajů (DPO) nejmenujeme. Pro náš rozsah a povahu
+          zpracování ho čl. 37 GDPR nevyžaduje. Veškerou agendu kolem ochrany údajů řešíme
+          přímo přes výše uvedený e-mail.
+        </p>
       </div>
     </div>
   </section>
@@ -52,7 +57,7 @@ const org = orgEntry?.data;
           <li>Preferovaný typ bydlení, měsíc nástupu, délka pobytu</li>
           <li>Volitelnou poznámku, kterou nám napíšete</li>
           <li>Volitelný zájem o pobytové stipendium</li>
-          <li>SHA-256 hash IP adresy (anonymizovaný, prvních 32 znaků) pro rate-limiting</li>
+          <li>SHA-256 hash IP adresy (pseudonymizovaný, prvních 32 znaků hashe) pro rate-limiting</li>
         </ul>
         <p>
           Při e-mailovém kontaktu (mimo formulář) zpracováváme jméno, e-mail a obsah zprávy,
@@ -63,6 +68,30 @@ const org = orgEntry?.data;
   </section>
 
   <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Právní titul</p>
+        <h2 class="sec-block__title">Na čem zpracování stojí.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Zpracování opíráme o dva právní tituly podle čl. 6 GDPR:
+        </p>
+        <ul>
+          <li><strong>Souhlas</strong> (čl. 6 odst. 1 písm. a) GDPR) pro samotnou registraci zájmu. Souhlas dáváte odesláním formuláře a kdykoli ho odvoláte na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.</li>
+          <li><strong>Oprávněný zájem správce</strong> (čl. 6 odst. 1 písm. f) GDPR) pro rate-limiting přes pseudonymizovaný hash IP. Naším zájmem je ochrana formuláře před zneužitím a spamem.</li>
+        </ul>
+        <p>
+          Pokud později uzavřete nájemní nebo ubytovací smlouvu, údaje k té smlouvě přejdou na
+          titul <strong>plnění smlouvy</strong> (čl. 6 odst. 1 písm. b) GDPR) a <strong>plnění
+          právní povinnosti</strong> (čl. 6 odst. 1 písm. c) GDPR) podle účetní a archivační
+          legislativy.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-block sec-block--alt">
     <div class="sec-block__inner">
       <header class="sec-block__head">
         <p class="sec-block__eyebrow">Účel</p>
@@ -83,8 +112,30 @@ const org = orgEntry?.data;
           smluvními ustanoveními).
         </p>
         <p>
+          Oba zpracovatele používáme na základě smluv o zpracování osobních údajů (DPA) podle
+          čl. 28 GDPR. Servery máme nakonfigurované na EU region. Pokud by při edge routingu
+          mimo naši kontrolu nastalo krátké předání mimo EU, opíráme se o standardní smluvní
+          doložky (SCC) podle čl. 46 GDPR.
+        </p>
+        <p>
           Údaje <strong>nepoužíváme pro marketingové e-maily nebo spam</strong>. Pokud zájem opustíte, můžete
           si vyžádat smazání všech údajů na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Automatizované rozhodování</p>
+        <h2 class="sec-block__title">Žádné profilování.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Neprovádíme profilování ani automatizované rozhodování podle čl. 22 GDPR. Každou
+          registraci zájmu čte a vyřizuje konkrétní člověk z týmu Hubu, typicky telefonem
+          do 24 hodin od odeslání formuláře.
         </p>
       </div>
     </div>
@@ -102,6 +153,10 @@ const org = orgEntry?.data;
           automaticky mažeme. Pokud během této doby uzavřete reálnou nájemní nebo ubytovací
           smlouvu, údaje přejdou pod novou smluvní dobu (10 let podle archivačních povinností
           plynoucích z účetní legislativy ČR).
+        </p>
+        <p>
+          E-mailovou korespondenci mimo formulář držíme po dobu nezbytnou pro vyřízení vašeho
+          dotazu, nejdéle 12 měsíců od poslední zprávy. Pak ji mažeme.
         </p>
         <p>
           Anonymizovaná statistika poptávky (bez jména, e-mailu, telefonu) zůstává delší dobu
@@ -143,6 +198,22 @@ const org = orgEntry?.data;
         <p>
           Web aktuálně neukládá cookies pro analytiku ani marketing. Používáme jen technické
           cookies nezbytné pro fungování formuláře (CSRF ochrana, Cloudflare Turnstile, anti-bot).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-block">
+    <div class="sec-block__inner">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Verze</p>
+        <h2 class="sec-block__title">Účinnost zásad.</h2>
+      </header>
+      <div class="sec-block__text">
+        <p>
+          Tyto zásady jsou účinné od 28. května 2026. Při změnách zveřejníme novou verzi
+          s novým datem účinnosti na této stránce. Předchozí verzi pošleme na vyžádání na
+          <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.
         </p>
       </div>
     </div>
