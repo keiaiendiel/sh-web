@@ -116,7 +116,7 @@ const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['jedno-luzko'];
      extrahuj společné styly do `kit.css` jako .apt-* utility classes. Pro Phase 3
      držíme inline a kopii. */
   /* === GALERIE === */
-  .apt-gallery { padding: var(--space-8) var(--gutter); background: var(--bg-muted); color: var(--fg); }
+  .apt-gallery { padding: var(--space-8) var(--gutter); background: var(--bg-muted); color: var(--fg); overflow-x: clip; }
   .apt-gallery__inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: clamp(28px, 4vw, 56px); max-width: var(--container-wide); margin: 0 auto; align-items: start; }
   .apt-gallery__side { display: flex; flex-direction: column; gap: var(--space-3); }
   .apt-gallery__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: var(--accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0; display: inline-flex; align-items: center; gap: 4px; width: fit-content; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 200ms ease; }
