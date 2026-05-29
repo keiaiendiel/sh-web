@@ -198,19 +198,6 @@ const tiles = [
     <div class="lp-hero__scrim" aria-hidden="true"></div>
 
     <div class="lp-hero__inner">
-      {/* Mode toggle: kruhová ikona nad titulkem, přepíná slides/video.
-          Žádný text label, jen play/image ikona. Volba se ukládá do localStorage. */}
-      <button class="lp-hero__mode-toggle" type="button" data-hero-mode-toggle aria-label="Přepnout na fotky">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="play" aria-hidden="true" hidden>
-          <polygon points="6 4 20 12 6 20 6 4" fill="currentColor" />
-        </svg>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-toggle-icon="image" aria-hidden="true">
-          <rect x="3" y="5" width="18" height="14" rx="1" />
-          <circle cx="9" cy="11" r="1.5" fill="currentColor" />
-          <path d="M3 16 L9 12 L13 15 L17 11 L21 14" />
-        </svg>
-      </button>
-
       <h1 class="lp-hero__title">Bydlení a&nbsp;coworking na&nbsp;prahu metropole.</h1>
       <p class="lp-hero__lede">Devět typů ubytování od&nbsp;3&nbsp;000&nbsp;Kč měsíčně. Rezervujte si&nbsp;dnes, voláme do&nbsp;24&nbsp;hodin.</p>
     </div>
@@ -232,64 +219,26 @@ const tiles = [
   </section>
 
   <script is:inline>
-    /* Hero mode toggle: přepíná .lp-hero[data-hero-mode] mezi „video"
-       (default, loop reel) a „slides" (5 IMG carousel). Volba se ukládá
-       do localStorage pod klíčem 'sh:hero-mode-v2'. Default je video,
-       uživatelé s prefers-reduced-motion: reduce dostanou slides (bez
-       autoplaying motion). Klíč je v2 namespace, předchozí 'sh:hero-mode'
-       z éry slides-default je ignorovaný, aby nový default platil pro
-       všechny (toggle dál funguje normálně). */
+    /* Hero video: default loop reel. Uživatelé s prefers-reduced-motion: reduce
+       dostanou statické slides (bez autoplaying motion). Žádný toggle, žádný
+       localStorage. Video src se nastaví lazily podle viewportu. */
     (function () {
-      if (window.__hubHeroToggleBound) return;
-      window.__hubHeroToggleBound = true;
-      var STORAGE_KEY = 'sh:hero-mode-v2';
+      if (window.__hubHeroVideoBound) return;
+      window.__hubHeroVideoBound = true;
       function bind() {
         var hero = document.querySelector('.lp-hero');
-        var btn = document.querySelector('[data-hero-mode-toggle]');
         var video = document.querySelector('[data-hero-video]');
-        if (!hero || !btn || !video) return;
-
-        function ensureVideoSrc() {
-          if (video.src) return;
+        if (!hero || !video) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          hero.dataset.heroMode = 'slides';
+          return;
+        }
+        hero.dataset.heroMode = 'video';
+        if (!video.src) {
           var isPhone = window.matchMedia('(max-width: 768px)').matches;
-          var src = isPhone ? video.dataset.srcPhone : video.dataset.srcDesktop;
-          video.src = src;
+          video.src = isPhone ? video.dataset.srcPhone : video.dataset.srcDesktop;
         }
-
-        function applyMode(mode) {
-          hero.dataset.heroMode = mode;
-          var playIcon = btn.querySelector('[data-toggle-icon="play"]');
-          var imageIcon = btn.querySelector('[data-toggle-icon="image"]');
-          if (mode === 'video') {
-            ensureVideoSrc();
-            video.play().catch(function () {});
-            btn.setAttribute('aria-label', 'Přepnout na fotky');
-            if (playIcon) playIcon.hidden = true;
-            if (imageIcon) imageIcon.hidden = false;
-          } else {
-            video.pause();
-            btn.setAttribute('aria-label', 'Přepnout na video');
-            if (playIcon) playIcon.hidden = false;
-            if (imageIcon) imageIcon.hidden = true;
-          }
-        }
-
-        var stored = null;
-        try { stored = window.localStorage.getItem(STORAGE_KEY); } catch (e) {}
-        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        var initial;
-        if (stored === 'video' || stored === 'slides') {
-          initial = stored;
-        } else {
-          initial = prefersReducedMotion ? 'slides' : 'video';
-        }
-        applyMode(initial);
-
-        btn.addEventListener('click', function () {
-          var next = hero.dataset.heroMode === 'video' ? 'slides' : 'video';
-          try { window.localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
-          applyMode(next);
-        });
+        video.play().catch(function () {});
       }
       document.addEventListener('astro:page-load', bind);
     }());
@@ -533,37 +482,6 @@ const tiles = [
   .lp-hero[data-hero-mode="video"] {
     background-image: none;
   }
-  /* Mode toggle: kruhové ikonové tlačítko nad hero titulkem, žádný text label,
-     glass-morph styling. Volba se ukládá do localStorage v JS níže. */
-  .lp-hero__mode-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    margin: 0 0 var(--space-4);
-    padding: 0;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    background: rgba(0, 0, 0, 0.28);
-    color: #fff;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition:
-      background 220ms ease,
-      border-color 220ms ease,
-      transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
-  }
-  .lp-hero__mode-toggle:hover,
-  .lp-hero__mode-toggle:focus-visible {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: #fff;
-    transform: translateY(-1px);
-    outline: none;
-  }
-  .lp-hero__mode-toggle :global(svg) { display: block; }
-
   /* Tři rychlá CTA pod hero lede textem: lůžko, apartmán, stipendium.
      Sjednocený glass-morph styling, jednořádkové bez podtextu. */
   .lp-hero__quick {
@@ -606,6 +524,10 @@ const tiles = [
      content edge (stejná šířka jako header bar). Tlačítka mají rovný díl šířky
      a větší, h3-ish font. Sedí nad scroll-cue chevronem. */
   @media (min-width: 769px) {
+    /* Hero text o kus výš (po odebrání mode-toggle nad titulkem). */
+    .lp-hero__inner {
+      transform: translateY(-6vh);
+    }
     .lp-hero__quick {
       position: absolute;
       left: var(--gutter);
@@ -613,14 +535,15 @@ const tiles = [
       bottom: clamp(96px, 12vh, 140px);
       margin: 0 auto;
       flex-wrap: nowrap;
-      gap: clamp(12px, 1.4vw, 22px);
+      justify-content: space-between;
+      gap: clamp(20px, 3vw, 56px);
     }
     .lp-hero__quick-btn {
-      flex: 1 1 0;
+      flex: 0 1 auto;
       justify-content: center;
       text-align: center;
-      padding: clamp(16px, 1.6vw, 22px) clamp(18px, 1.8vw, 30px);
-      font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+      padding: clamp(13px, 1.3vw, 18px) clamp(26px, 2.6vw, 44px);
+      font-size: clamp(1rem, 1.3vw, 1.25rem);
       line-height: 1.15;
     }
   }
