@@ -539,10 +539,14 @@ const tiles = [
       gap: clamp(20px, 3vw, 56px);
     }
     .lp-hero__quick-btn {
+      /* Rovná šířka (mezi obsahem a full-third) → symetrie, prostřední
+         tlačítko sedí přesně na střed = zarovnané se scroll-cue šipkou.
+         flex-shrink povolen, ať se na užším desktopu vejdou bez overflow. */
       flex: 0 1 auto;
+      width: clamp(250px, 22vw, 330px);
       justify-content: center;
       text-align: center;
-      padding: clamp(13px, 1.3vw, 18px) clamp(26px, 2.6vw, 44px);
+      padding: clamp(13px, 1.3vw, 18px) 20px;
       font-size: clamp(1rem, 1.3vw, 1.25rem);
       line-height: 1.15;
     }
