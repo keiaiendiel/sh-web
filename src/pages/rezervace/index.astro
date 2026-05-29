@@ -607,9 +607,9 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       var fd = new FormData(form);
       var payload = {};
       fd.forEach(function (v, k) { payload[k] = v; });
-      console.log('[Hub Rezervace] payload:', payload);
       /* Cloudflare Worker endpoint (form.startovacihub.cz) deploy pending,
-         Phase 5b. Pro teď success state + log. */
+         Phase 5b. Sem patří fetch na /submit + Turnstile token. Pro teď
+         jen success state (žádný PII log do konzole). */
       history.push('success');
       showPanel('success', 'forward');
       if (afterEl) afterEl.removeAttribute('hidden');

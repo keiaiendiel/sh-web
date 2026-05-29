@@ -7,12 +7,17 @@
  * flaking CI on slow third parties.
  */
 import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const CONTENT = resolve(process.cwd(), 'src/content/sub_projects');
 const TIMEOUT_MS = 8000;
 
 async function extractUrls() {
+  if (!existsSync(CONTENT)) {
+    console.log('link lint: no sub_projects collection, skipping');
+    return [];
+  }
   const urls = [];
   const entries = await readdir(CONTENT);
   for (const f of entries) {
