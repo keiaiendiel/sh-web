@@ -213,13 +213,15 @@ const tiles = [
 
       <h1 class="lp-hero__title">Bydlení a&nbsp;coworking na&nbsp;prahu metropole.</h1>
       <p class="lp-hero__lede">Devět typů ubytování od&nbsp;3&nbsp;000&nbsp;Kč měsíčně. Rezervujte si&nbsp;dnes, voláme do&nbsp;24&nbsp;hodin.</p>
+    </div>
 
-      {/* Tři rychlá CTA do rezervačního formuláře s předvyplněnou cestou. */}
-      <div class="lp-hero__quick">
-        <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=luzko')}>Rezervovat lůžko</a>
-        <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=apartman')}>Rezervovat apartmán</a>
-        <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=stipendium')}>Požádat o&nbsp;stipendium</a>
-      </div>
+    {/* Tři rychlá CTA do rezervačního formuláře s předvyplněnou cestou.
+        Desktop: full-width pruh u spodního okraje hero, zarovnaný na content
+        edge (stejná šířka jako header bar). Mobil/tablet: in-flow pod textem. */}
+    <div class="lp-hero__quick">
+      <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=luzko')}>Rezervovat lůžko</a>
+      <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=apartman')}>Rezervovat apartmán</a>
+      <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=stipendium')}>Požádat o&nbsp;stipendium</a>
     </div>
 
     {/* Scroll cue: kruhový button s chevron-down, jemně poskakuje + pulsing ring,
@@ -565,10 +567,13 @@ const tiles = [
   /* Tři rychlá CTA pod hero lede textem: lůžko, apartmán, stipendium.
      Sjednocený glass-morph styling, jednořádkové bez podtextu. */
   .lp-hero__quick {
+    /* Width pattern: matches header bar + tile grid (container-wide, gutter-aware). */
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: var(--space-5) auto 0;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: var(--space-5);
   }
   .lp-hero__quick-btn {
     display: inline-flex;
@@ -596,6 +601,28 @@ const tiles = [
     border-color: #fff;
     transform: translateY(-1px);
     outline: none;
+  }
+  /* Desktop: tři CTA jako full-width pruh u spodní hrany hero, centrovaný na
+     content edge (stejná šířka jako header bar). Tlačítka mají rovný díl šířky
+     a větší, h3-ish font. Sedí nad scroll-cue chevronem. */
+  @media (min-width: 769px) {
+    .lp-hero__quick {
+      position: absolute;
+      left: var(--gutter);
+      right: var(--gutter);
+      bottom: clamp(96px, 12vh, 140px);
+      margin: 0 auto;
+      flex-wrap: nowrap;
+      gap: clamp(12px, 1.4vw, 22px);
+    }
+    .lp-hero__quick-btn {
+      flex: 1 1 0;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(16px, 1.6vw, 22px) clamp(18px, 1.8vw, 30px);
+      font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+      line-height: 1.15;
+    }
   }
   @media (max-width: 540px) {
     /* Mobile: úzká vertikální řada nalevo, ne full-width. Tlačítka jen tak
