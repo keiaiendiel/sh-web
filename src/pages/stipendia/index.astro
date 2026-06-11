@@ -14,11 +14,11 @@ type Action = { label: string; href: string; kind: 'reserve' | 'detail' | 'link'
 const actionsBySlug: Record<string, Action[]> = {
   'pobytove-stipendium': [
     { label: 'Požádat o stipendium', href: '/rezervace/?cesta=stipendium', kind: 'reserve' },
-    { label: 'Stát se donátorem', href: 'mailto:vpd@osa2.cz?subject=Donátorství%20–%20pobytové%20stipendium', kind: 'link', external: true },
+    { label: 'Stát se donátorem', href: 'mailto:vpd@osa2.cz?subject=Donátorství%20pobytové%20stipendium', kind: 'link', external: true },
   ],
   'projektove-stipendium': [
     { label: 'Požádat o stipendium', href: '/rezervace/?cesta=stipendium', kind: 'reserve' },
-    { label: 'Stát se donátorem', href: 'mailto:vpd@osa2.cz?subject=Donátorství%20–%20projektové%20stipendium', kind: 'link', external: true },
+    { label: 'Stát se donátorem', href: 'mailto:vpd@osa2.cz?subject=Donátorství%20projektové%20stipendium', kind: 'link', external: true },
   ],
   'nadace-vpd': [
     { label: 'Stát se donátorem', href: 'mailto:vpd@osa2.cz?subject=Donátorství%20Nadace%20VPD', kind: 'reserve', external: true },

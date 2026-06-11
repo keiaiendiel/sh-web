@@ -1,8 +1,29 @@
 ---
 import Base from '../../layouts/Base.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
+import Icon from '../../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
+
+/* Sekundární rozcestník: vše ostatní rezervovatelné. Zatím jen pro přihlášené
+   (přihlášení + rezervace zázemí teprve připravujeme). Grid slepých tlačítek
+   pod 3 hlavními konverzními volbami , „kvantový skok" co web unese. */
+const reservables: { label: string; icon: string }[] = [
+  { label: 'Coworkingový sál', icon: 'monitor' },
+  { label: 'Fixní stůl', icon: 'briefcase' },
+  { label: 'Zasedací místnost', icon: 'users' },
+  { label: 'Dílna', icon: 'hammer' },
+  { label: 'Ateliér', icon: 'palette' },
+  { label: 'Podcastové studio', icon: 'mic' },
+  { label: 'Filmové studio', icon: 'film' },
+  { label: 'Sauna a wellness', icon: 'waves' },
+  { label: 'Sdílená kuchyně', icon: 'utensils' },
+  { label: 'Grilovací místo', icon: 'flame' },
+  { label: 'Společenský sál', icon: 'party-popper' },
+  { label: 'Sdílená mobilita', icon: 'bus' },
+  { label: 'Sklad a kóje', icon: 'container' },
+  { label: 'Parkovací místo', icon: 'parking-circle' },
+];
 
 /*
  * Rezervace , Typeform-style single-question flow.
@@ -60,7 +81,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           <label class="rez__choice">
             <input type="radio" name="koncept" value="co-living" data-auto-next />
             <span class="rez__choice-body">
-              <span class="rez__choice-title">Co-living</span>
+              <span class="rez__choice-title">Sdílené pokoje</span>
               <span class="rez__choice-meta">Vlastní lůžko nebo kapsle, sdílená kuchyň. Od&nbsp;3 000&nbsp;Kč&nbsp;/&nbsp;měsíc.</span>
             </span>
           </label>
@@ -72,6 +93,22 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             </span>
           </label>
         </div>
+
+        <div class="rez__more">
+          <p class="rez__more-head">Nebo si rovnou rezervujte konkrétní zázemí</p>
+          <div class="rez__more-grid">
+            {reservables.map((r) => (
+              <button type="button" class="rez__more-item" data-reserve-locked aria-label={`Rezervovat ${r.label}, zatím jen pro přihlášené`}>
+                <span class="rez__more-icon" aria-hidden="true"><Icon name={r.icon} size={20} /></span>
+                <span class="rez__more-label">{r.label}</span>
+              </button>
+            ))}
+          </div>
+          <p class="rez__more-msg" data-reserve-msg hidden role="status">
+            Rezervace konkrétního zázemí je zatím jen pro přihlášené uživatele. Přihlášení i rezervaci zázemí teprve připravujeme, zatím sbíráme zájem o bydlení výše.
+          </p>
+        </div>
+
         <div class="rez__actions" data-actions>
           <button type="button" class="rez__back" data-prev hidden aria-label="Předchozí krok">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -135,7 +172,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       {/* === KROK: Formát (co-living) === */}
       <section class="rez__panel" data-panel="format-coliving" data-panel-index="1" data-show-for="co-living" hidden>
         <div class="rez__panel-intro">
-          <h1 class="rez__q">Jaká varianta co-livingu?</h1>
+          <h1 class="rez__q">Jaké sdílené ubytování?</h1>
           <p class="rez__q-hint">Čtyři formáty od jednolůžkové kapsle po dvoulůžko ve sdíleném bytě.</p>
         </div>
         <div class="rez__choices rez__choices--cards rez__choices--2">
@@ -383,12 +420,83 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     <CrossLinkPair
       sectionLabel="Než se vám ozveme"
       items={[
-        { eyebrow: 'Komunita',  title: 'Bazén, <em>sauna</em>, jídelna a&nbsp;klubovna.', href: '/komunita/', variant: 'ink' },
-        { eyebrow: 'Okolí',     title: 'Klecany, <em>15&nbsp;km</em> od&nbsp;Prahy.',     href: '/okoli/',    variant: 'cream' },
+        { eyebrow: 'Zázemí',  title: 'Bazén, <em>sauna</em>, jídelna a&nbsp;klubovna.', href: '/zazemi/komunita/', variant: 'ink' },
+        { eyebrow: 'Doprava', title: 'Jak se sem <em>dostanete</em>.',                   href: '/doprava/',        variant: 'cream' },
       ]}
     />
   </div>
 </Base>
+
+<script is:inline>
+  /* Sekundární rozcestník: slepá tlačítka rezervace zázemí , zatím jen pro
+     přihlášené. Klik odhalí zprávu, žádná navigace. Re-bind na page-load. */
+  (function () {
+    function bind() {
+      var btns = document.querySelectorAll('[data-reserve-locked]:not([data-locked-bound])');
+      var msg = document.querySelector('[data-reserve-msg]');
+      if (!btns.length) return;
+      btns.forEach(function (b) {
+        b.dataset.lockedBound = '1';
+        b.addEventListener('click', function () {
+          if (msg) { msg.hidden = false; }
+          b.classList.add('is-poked');
+          setTimeout(function () { b.classList.remove('is-poked'); }, 400);
+        });
+      });
+    }
+    document.addEventListener('astro:page-load', bind);
+  }());
+</script>
+
+<style>
+  .rez__more {
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-muted);
+  }
+  .rez__more-head {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    margin: 0 0 var(--space-3);
+  }
+  .rez__more-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-2);
+  }
+  .rez__more-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 12px 14px;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+    color: var(--fg-muted);
+    font: 600 var(--text-sm) / 1.2 var(--font-sans);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 160ms ease, color 160ms ease, transform 120ms ease;
+  }
+  .rez__more-item:hover { border-color: var(--accent); color: var(--accent); }
+  .rez__more-item.is-poked { transform: scale(0.97); }
+  .rez__more-icon { display: inline-flex; color: var(--accent); flex-shrink: 0; opacity: 0.85; }
+  .rez__more-label { min-width: 0; }
+  .rez__more-msg {
+    margin: var(--space-4) 0 0;
+    padding: 12px 16px;
+    border-radius: var(--radius-input);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font: 500 var(--text-sm) / 1.5 var(--font-sans);
+  }
+  .rez__more-msg[hidden] { display: none; }
+  @media (max-width: 540px) {
+    .rez__more-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
 
 <script is:inline define:vars={{
   apartmanySlug: apartmany.map((a) => a.data.slug),
