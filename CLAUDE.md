@@ -19,20 +19,36 @@ Statický web Startovacího Hubu Klecany pro OSA II, z.s. Auto-deployed na GitHu
 | Deploy | GH Pages, `base: '/sh-web/'` (transitional). CI: `.github/workflows/deploy-pages.yml` |
 | Form backend | Cloudflare Worker v `worker/` (Turnstile + Resend + D1 EU), deploy pending |
 
-## Pages (23)
+## Fraktální systém (od 2026-06-11, větev feat/fractal-restructure)
+
+Web byl přestavěn na fraktální vzor: **každá stránka = `SubpageHero` → N× `Section` (zig-zag) → `CtaBanner` → `CrossLinkPair`**. Video na pozadí jen na `/`. Plný spec + handoff: `docs/superpowers/specs/2026-06-11-fractal-restructure-design.md`.
+
+**Unifikované komponenty (postaveny jednou, používej je):** `Arrow.astro` (jednotná šipka ze 2 tahů, nahrazuje glyf →), `Section.astro` (zig-zag blok: title/lede/blocks/actions/media/priceRows), `PriceTable.astro`, `FractalPage.astro` (layout, který skládá celý vzor + auto-alternuje strany). Recyklováno: `SubpageHero`, `Gallery`, `CtaBanner`, `CrossLinkPair`, `Icon`, `ResidentBenefits`, `Ribbon`.
+
+**Strom zázemí je data-driven** přes kolekci `zazemi` (6 JSON souborů per kategorie). Přidat provoz = editovat data, ne psát stránku. `/zazemi/[category].astro` renderuje L2 smyčkou přes `items`.
+
+**Co-living jako dělící pojem ZRUŠEN.** Kolekce `coliving` → `sdilenePokoje` (6 variant). Dělení jen: Privátní apartmány vs Sdílené pokoje.
+
+## Pages (~33)
 
 ```
-/                              landing (hero swipe carousel, „Co Hub nabízí" zig-zag, …)
-/ubytovani/                    overview, 2 skupiny × 9 karet
-/ubytovani/privatni/<slug>/    1kk, 2kk, 3kk, 4kk, 5kk
-/ubytovani/co-living/<slug>/   kapsle-single, jedno-luzko, kapsle-double, dvouluzko
-/kapsle/                       dedikovaný A/B landing pro kapsle
-/coworking/, /komunita/, /okoli/, /doprava/, /stipendia/, /kontakty/, /faq/
-/rezervace/                    5-step wizard
-/gdpr/, /metodika-srovnani/
-/druzstvo/                     SKRYTÁ (noindex), manuální linky
+/                              landing (video hero + 6 dlaždic + zig-zag: Ubytování/Zázemí/Doprava/Stipendia + Galerie/Ceník/Novinky teaser)
+/ubytovani/                    L1: 2 srovnávací tabulky (sdílené + privátní) + ubytovací zázemí/služby
+/ubytovani/privatni/           L2 overview + /ubytovani/privatni/<slug>/ (1kk–5kk) L3 detail
+/ubytovani/sdilene-pokoje/     L2 overview + /<slug>/ L3 detail (pokoj-basic, dvojluzko-basic, pokoj-privacy, dvouluzko, kapsle-single, kapsle-double)
+/zazemi/                       L1: 6 kategorií → /zazemi/{gastronomie,wellness,coworking,komunita,ostatni,okoli}/ L2 (data-driven)
+/doprava/                      L1: sdílená + privátní mobilita (bez L3)
+/stipendia/                    L1: pobytová, projektová, Nadace VPD
+/galerie/                      náhledy po kategoriích
+/cenik/                        speciál mimo zig-zag (6 variant + 5 apartmánů + coworking + doplňky)
+/novinky/                      placeholder
+/rezervace/                    rozcestník (3 CTA + grid rezervovatelného zázemí, login-only) → 3-krok wizard
+/kontakty/, /faq/, /gdpr/, /metodika-srovnani/
+/druzstvo/                     SKRYTÁ (noindex)
 /404
 ```
+
+Staré bespoke stránky (`/coworking/`, `/komunita/`, `/okoli/`, `/kapsle/`) jsou v `_archive/pages/` (nahrazeno `/zazemi/*`).
 
 ## Audience & voice
 

@@ -102,13 +102,19 @@ Top-level menu: **Ubytování · Zázemí · Doprava · Stipendia · Galerie · 
 
 Lowercase vy/váš, bez ty-formy, bez em-dash/en-dash/výpustky (`!` povolen), bez hype, imperativ v CTA. Ověření: `pnpm lint:editorial && pnpm lint:links && pnpm build`. Počet stránek vyroste z 23 na ~40+.
 
-## 8. Fáze implementace
+## 8. Fáze implementace , stav 2026-06-11
 
-- [ ] **F0 Foundation** — `Arrow`, `Section`, `PriceTable`, `FractalPage`; přepis Header/Footer/FloatingAction/hero; kolekce (`sdilene-pokoje` rename + `dvojluzko-basic`, nová `zazemi`); nav IA.
-- [ ] **F1 Landing** — video hero text, 6 dlaždic na nové sekce, zig-zag Ubytování (2 srovnávací tabulky) · Zázemí · Doprava · Stipendia + náhledy Galerie/Ceník/Novinky, footer CTA.
-- [ ] **F2 Strom** — `/ubytovani/` + `privatni`/`sdilene-pokoje` (L2+L3); `/zazemi/` + 6 L2; `/doprava/`; `/stipendia/`; `/galerie/`; `/novinky/`; `/cenik/` (vč. nových variant).
-- [ ] **F3 Rezervace** — rozcestník + grid + 3-krok + post-submit upsell.
-- [ ] **F4 Review & build** — lints, build, adversariální review, oprava kontrastu/responzivity.
+- [x] **F0 Foundation** — `Arrow`, `Section`, `PriceTable`, `FractalPage`; přepis Header (rozbalení shora) + Footer (3 CTA, světlejší mapa); kolekce (`sdilene-pokoje` rename + `dvojluzko-basic`, nová `zazemi`); nav IA.
+- [x] **F1 Landing** — video hero text (kratší, na prahu metropole, energie/internet), 6 dlaždic na nové sekce, zig-zag Ubytování (2 srovnávací tabulky) · Zázemí · Doprava · Stipendia + Galerie/Ceník/Novinky teaser, footer CTA, jednotná šipka.
+- [x] **F2 Strom** — `/ubytovani/` + `privatni`/`sdilene-pokoje` (L2+L3); `/zazemi/` + 6 L2 (data-driven); `/doprava/`; `/stipendia/`; `/galerie/`; `/novinky/`; `/cenik/` (6 variant).
+- [~] **F3 Rezervace** — HOTOVO: rozcestník (3 CTA + grid 14 rezervovatelných položek, login-only stub) + 3-krok wizard + co-living→sdílené labely. ZBÝVÁ: post-submit upsell (otázky po jedné s živou cenou , výměna prádla/parking/sklad/cowork/sauna/concierge).
+- [x] **F4 Review & build** — lint:editorial + lint:links + lint:weight + build vše zelené (33 stránek). Vizuální kontrola: landing, ubytování, zázemí, rezervace, menu (desktop i mobil).
+
+### Zbývající follow-upy (další iterace)
+- Post-submit upsell v rezervaci (interaktivní doplňky s živou cenou).
+- Leaflet mapa na `/zazemi/okoli/` (byla v archivovaném `/okoli/`, datová verze ji zatím nemá).
+- Sjednotit ceny MDX vs CLAUDE.md locked tabulka (klient potvrdí kanonický zdroj).
+- Klientské flagy: cena dvojlůžka bez soukromí, družstva (Alt/Altstav), donátorská větev Nadace VPD (vepde.com?), Novinky veřejné vs login, 24h provozy + tramvaj jako výhled, reálné minutáže okolí/cyklostezky.
 
 ## 9. Otevřené otázky pro klienta (flagy, ne blokery)
 
