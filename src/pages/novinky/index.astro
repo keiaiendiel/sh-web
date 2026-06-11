@@ -1,0 +1,35 @@
+---
+/*
+ * Novinky , placeholder. Reálné články zatím nemáme; stránka drží místo
+ * v navigaci a vrací se sem teaser, jakmile bude co publikovat (spuštění
+ * rezervací, postup rekonstrukce, otevření první budovy).
+ */
+import FractalPage from '../../layouts/FractalPage.astro';
+---
+<FractalPage
+  title="Novinky · Startovací Hub Klecany"
+  description="Novinky ze Startovacího Hubu Klecany. Spuštění rezervací, postup rekonstrukce a otevření prvních budov připravujeme."
+  hero={{
+    eyebrow: 'Novinky',
+    title: 'Co je <em>nového</em>',
+    sub: 'Spuštění rezervací, postup rekonstrukce a otevření prvních budov. První články připravujeme.',
+    variant: 'cream',
+    ariaId: 'novinky',
+  }}
+  sections={[
+    {
+      id: 'pripravujeme',
+      title: 'Brzy tu budou první články',
+      lede: 'Připravujeme novinky o spuštění rezervací, postupu rekonstrukce areálu a otevření prvních budov. Chcete je dostávat? Zaregistrujte zájem v rezervaci a ozveme se.',
+      blocks: [
+        { subtitle: 'Co tu najdete', text: 'Oznámení o spuštění rezervací, harmonogram rekonstrukce, otevření coworkingu a obytných budov, komunitní akce a farmářské trhy.' },
+      ],
+      actions: [{ label: 'Zaregistrovat zájem', href: '/rezervace/', kind: 'reserve' as const }],
+      media: [{ placeholder: 'Foto z průběhu rekonstrukce nebo z první komunitní akce se připravuje', alt: 'Novinky Hubu' }],
+    },
+  ]}
+  crossLinks={[
+    { eyebrow: 'Ubytování', title: 'Apartmány a <em>sdílené pokoje</em>', href: '/ubytovani/', variant: 'cream' },
+    { eyebrow: 'Zázemí', title: 'Celé <em>zázemí</em> Hubu', href: '/zazemi/', variant: 'ink' },
+  ]}
+/>
