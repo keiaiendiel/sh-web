@@ -1,394 +1,65 @@
 ---
-import Base from '../../layouts/Base.astro';
-import SubpageHero from '../../components/SubpageHero.astro';
-import CtaBanner from '../../components/CtaBanner.astro';
-import CrossLinkPair from '../../components/CrossLinkPair.astro';
-import QuickReserveCtas from '../../components/QuickReserveCtas.astro';
-import { withBase } from '../../utils/url';
+/*
+ * Stipendia , L1. Tři sekce (Pobytové, Projektové, Nadace VPD) s akčními
+ * tlačítky. Obsah z src/data/stipendia.json.
+ *
+ * Pozn.: donátorská CTA zatím vedou na mailto vpd@osa2.cz (nemají cílovou
+ * stránku). Donátorská větev možná patří na vepde.com , k potvrzení s Markem.
+ */
+import FractalPage from '../../layouts/FractalPage.astro';
+import data from '../../data/stipendia.json';
 
-const heroJumps = [
-  { label: 'Pobytové stipendium',  href: '#st-pobytove' },
-  { label: 'Projektové stipendium', href: '#st-projektove' },
-];
+type Action = { label: string; href: string; kind: 'reserve' | 'detail' | 'link'; external?: boolean };
+
+const actionsBySlug: Record<string, Action[]> = {
+  'pobytove-stipendium': [
+    { label: 'Požádat o stipendium', href: '/rezervace/?cesta=stipendium', kind: 'reserve' },
+    { label: 'Stát se donátorem', href: 'mailto:vpd@osa2.cz?subject=Donátorství%20–%20pobytové%20stipendium', kind: 'link', external: true },
+  ],
+  'projektove-stipendium': [
+    { label: 'Požádat o stipendium', href: '/rezervace/?cesta=stipendium', kind: 'reserve' },
+    { label: 'Stát se donátorem', href: 'mailto:vpd@osa2.cz?subject=Donátorství%20–%20projektové%20stipendium', kind: 'link', external: true },
+  ],
+  'nadace-vpd': [
+    { label: 'Stát se donátorem', href: 'mailto:vpd@osa2.cz?subject=Donátorství%20Nadace%20VPD', kind: 'reserve', external: true },
+    { label: 'Stát se členem správní rady', href: 'mailto:vpd@osa2.cz?subject=Správní%20rada%20Nadace%20VPD', kind: 'link', external: true },
+  ],
+};
+
+const sections = data.items.map((it) => {
+  const blocks = [...(it.blocks ?? [])];
+  if (it.priceNote) blocks.push({ subtitle: 'Co to pokrývá', text: it.priceNote });
+  return {
+    id: it.slug,
+    jumpLabel: it.name,
+    title: it.name,
+    lede: it.lede,
+    blocks,
+    actions: actionsBySlug[it.slug] ?? [],
+    media: it.images ?? [],
+  };
+});
 ---
-<Base
-  title="Pobytové a projektové stipendium · Startovací Hub Klecany"
-  description="Dvě hlavní kategorie stipendií. Pobytové pokrývá bydlení v Hubu za přínos komunitě. Projektové proplatí materiál, dílenský čas a ateliérový nájem konkrétního projektu."
-  headerVariant="overlay">
-
-  <SubpageHero
-    eyebrow="Stipendijní programy"
-    title="Pobytové <em>nebo</em> projektové."
-    sub="Dvě hlavní kategorie. Nadační fond Hubu podporuje lidi, kteří mají co dát zpátky: dílny, otevřené prezentace, péče o areál nebo veřejně dostupný výstup projektu."
-    variant="cream"
-    ribbonPath="M 1200 720 C 1380 380, 1740 240, 2080 380"
-    ribbonPathSecondary="M 1280 780 C 1460 460, 1780 320, 2080 460 M 1140 680 C 1340 320, 1740 180, 2080 320 M 1080 640 C 1300 260, 1740 100, 2080 240"
-    thickness={48}
-    thicknessSecondary={26}
-    opacitySecondary={0.4}
-    jumps={heroJumps}
-    ariaId="stipendia-hero"
-  />
-
-  {/* ============ DVĚ KATEGORIE STIPENDIA SIDE-BY-SIDE ============
-       Mřížka 2 sloupců na desktopu, 1 sloupec na phone. Subgrid layout
-       (mirror ceník card pattern): obě karty sdílejí 5 sjednocených řádků
-       (head, pro-koho, hlavní blok, druhý blok, cta), takže nadpisy
-       i tlačítka leží ve stejné rovině napříč oběma kartami. Decentní
-       neutrální paleta , hue zachovaný jen v eyebrow akcentu, zbytek
-       v plum --accent, aby celá stránka nebyla přebarvená. */}
-  <section class="stip-types" aria-label="Dvě kategorie stipendia">
-    <div class="stip-types__inner">
-
-      {/* === POBYTOVÉ STIPENDIUM === */}
-      <article class="stip-card" style="--section-hue: 130;" aria-labelledby="st-pobytove">
-        <header class="stip-card__head">
-          <p class="stip-card__eyebrow">Stipendium</p>
-          <h2 class="stip-card__title" id="st-pobytove">Pobytové stipendium</h2>
-          <p class="stip-card__lede">
-            Bydlíte v Hubu výměnou za přínos komunitě. Pro tříměsíční až roční pobyty,
-            podmínky upřesníme společně.
-          </p>
-        </header>
-
-        <div class="stip-card__block">
-          <h3 class="stip-card__sub">Pro koho dává smysl</h3>
-          <p>
-            Tvůrci, programátoři, stavebně zruční, praktici předávající dovednost.
-            Studenti na semestrální stáži. Lidé po rodičovské hledající měkký restart.
-          </p>
-        </div>
-
-        <div class="stip-card__block">
-          <h3 class="stip-card__sub">Co Hub nabízí</h3>
-          <ul class="stip-list">
-            <li>Pobyt zdarma nebo zvýhodněně v některé z variant ubytování , dle dohody i s rodinou</li>
-            <li>Rezidentské benefity v plném rozsahu (energie, internet, Hub-shuttle, sauna)</li>
-            <li>U rolí s pracovním závazkem případně peněžní příspěvek nebo DPP</li>
-          </ul>
-        </div>
-
-        <div class="stip-card__block">
-          <h3 class="stip-card__sub">Čtyři možné role</h3>
-          <ul class="stip-list stip-list--roles">
-            <li><strong>Rezident-tvůrce</strong> , umělec nebo autor s vlastním projektem.</li>
-            <li><strong>Správce</strong> , část úvazku v provozu Hubu (recepce, koordinace, péče o sdílené prostory).</li>
-            <li><strong>Stavitel</strong> , část měsíce na rekonstrukci areálu pro lidi se stavebními dovednostmi.</li>
-            <li><strong>Programátor</strong> , konkrétní digitální nástroj pro Hub.</li>
-          </ul>
-        </div>
-
-        <a class="stip-card__cta osa-nolink" href={withBase('/rezervace/?cesta=stipendium')}>
-          Požádat o pobytové<span aria-hidden="true"> →</span>
-        </a>
-      </article>
-
-      {/* === PROJEKTOVÉ STIPENDIUM === */}
-      <article class="stip-card" style="--section-hue: 50;" aria-labelledby="st-projektove">
-        <header class="stip-card__head">
-          <p class="stip-card__eyebrow">Stipendium</p>
-          <h2 class="stip-card__title" id="st-projektove">Projektové stipendium</h2>
-          <p class="stip-card__lede">
-            Fond podpoří konkrétní projekt , materiál, dílenský čas nebo ateliér.
-            Není grant na živobytí, bydlení řešíte zvlášť.
-          </p>
-        </header>
-
-        <div class="stip-card__block">
-          <h3 class="stip-card__sub">Pro koho dává smysl</h3>
-          <p>
-            Tvůrci s konkrétním projektem. Studenti uměleckých škol s&nbsp;blížící
-            se závěrečnou prací. Designéři, vědci, hackeři, komunitní iniciativy
-            s materiálovými náklady.
-          </p>
-        </div>
-
-        <div class="stip-card__block">
-          <h3 class="stip-card__sub">Co Hub nabízí</h3>
-          <ul class="stip-list">
-            <li><strong>Materiál a komponenty</strong> v rámci dohodnutého rozpočtu projektu</li>
-            <li><strong>Dílenský čas</strong> v Hub dílnách (CNC, laser, 3D tisk, kovo)</li>
-            <li><strong>Ateliér nebo dílenský prostor</strong> po dobu projektu</li>
-            <li><strong>Externí služby</strong> , tisk, povrchová úprava, fotodokumentace</li>
-          </ul>
-        </div>
-
-        <div class="stip-card__block">
-          <h3 class="stip-card__sub">Co očekáváme</h3>
-          <ul class="stip-list">
-            <li><strong>Veřejný výstup</strong> , výstava, prototyp, publikace nebo otevřená dokumentace</li>
-            <li><strong>Průběžné milníky</strong> a krátký závěrečný report</li>
-            <li><strong>Jedna otevřená dílna</strong> nebo workshop pro komunitu</li>
-          </ul>
-        </div>
-
-        <a class="stip-card__cta osa-nolink" href={withBase('/rezervace/?cesta=stipendium')}>
-          Požádat o projektové<span aria-hidden="true"> →</span>
-        </a>
-      </article>
-
-    </div>
-  </section>
-
-  {/* ============ JAK POŽÁDAT ============ */}
-  <section class="sec-block sec-hued" style="--section-hue: 200;">
-    <div class="sec-block__inner">
-      <header class="sec-block__head">
-        <p class="sec-block__eyebrow">Postup</p>
-        <h2 class="sec-block__title">Jak požádat.</h2>
-        <p class="sec-block__lede">
-          Žádost je nezávazná. Po podání vás kontaktujeme do týdne, probereme záměr telefonicky
-          a domluvíme se na detailech. Můžete žádat o obě kategorie zároveň, pokud váš projekt
-          zapadá.
-        </p>
-      </header>
-
-      <ol class="sec-steps">
-        <li>
-          <span class="sec-steps__n">1.</span>
-          <div>
-            <h3>Podejte žádost přes rezervační formulář</h3>
-            <p>Vyberte „Žádost o stipendium", upřesněte kategorii a popište projekt v několika větách.</p>
-          </div>
-        </li>
-        <li>
-          <span class="sec-steps__n">2.</span>
-          <div>
-            <h3>Krátký telefonát do týdne</h3>
-            <p>Probereme záměr, rozsah a načasování. Pokud projekt zapadá, pošleme strukturu žádosti k doplnění.</p>
-          </div>
-        </li>
-        <li>
-          <span class="sec-steps__n">3.</span>
-          <div>
-            <h3>Dohoda o stipendiu</h3>
-            <p>U pobytového stipendia podepíšeme dohodu o pobytu a přínosu. U projektového dohodu o pokrytí nákladů s konkrétními milníky.</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <QuickReserveCtas
-    variant="light"
-    highlight="stipendium"
-    eyebrow="Kam dál"
-    title="Tři rychlé cesty do formuláře."
-    hint={'Pokud váháte mezi kategoriemi, vyberte „Obě" v dalším kroku. Probereme společně.'}
-  />
-
-  <CtaBanner
-    eyebrow="Zájem o stipendium"
-    title="Stipendium pro <em>lidi s projektem</em>."
-    lede="Žádost je nezávazná. Po podání vás kontaktujeme do týdne telefonicky."
-    cta={{ label: 'Požádat o stipendium', href: '/rezervace/?cesta=stipendium' }}
-    variant="deep"
-  />
-
-  <CrossLinkPair
-    items={[
-      { eyebrow: 'Ubytování', title: 'Apartmán, <em>nebo</em> co-living.', href: '/ubytovani/', variant: 'deep' },
-      { eyebrow: 'Coworking', title: 'Sál, ateliér, <em>dílna</em>.',      href: '/coworking/', variant: 'cream' },
-    ]}
-  />
-</Base>
-
-<style>
-  /* === 2 KATEGORIE SIDE-BY-SIDE ===
-     Subgrid 5 řádků (head / pro-koho / hlavní blok / druhý blok / cta) tak,
-     aby protější texty obou karet ležely ve stejných liniích a tlačítka
-     na stejné baseline. Stejný recept jako ck-grid--cards v Ceníku. */
-  .stip-types {
-    padding: var(--space-7) var(--gutter);
-    background: var(--bg);
-  }
-  .stip-types__inner {
-    max-width: var(--container-wide);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows:
-      auto  /* 1: head (eyebrow + h2 + lede) */
-      auto  /* 2: Pro koho */
-      auto  /* 3: Co Hub nabízí */
-      auto  /* 4: Role / Co očekáváme */
-      auto; /* 5: CTA */
-    gap: clamp(20px, 2.2vw, 32px);
-    align-items: stretch;
-  }
-  @media (max-width: 880px) {
-    .stip-types__inner {
-      grid-template-columns: 1fr;
-      grid-template-rows: none;
-    }
-  }
-
-  /* Karta jako subgrid: 5 řádků mapovaných na parent. Decentní neutrální
-     paleta , border z --accent-rule, padding clamped. Hover lift jen
-     jemný (žádný color swap, žádný blob). */
-  .stip-card {
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-row: span 5;
-    row-gap: var(--space-4);
-    padding: clamp(20px, 2.4vw, 32px);
-    border-radius: var(--radius-input);
-    border: 1px solid var(--accent-rule);
-    background: var(--bg);
-    transition: border-color 200ms ease, transform 220ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 220ms ease;
-  }
-  .stip-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 22px hsl(var(--hue) 41% 13% / 0.07);
-  }
-  .stip-card > * { margin: 0; }
-
-  .stip-card__head {
-    grid-row: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  /* Eyebrow drží jediný hue akcent na kartě , drobný textový label,
-     neutrální zbytek karty. Hue rozdíl mezi pobytovým (130 green) a
-     projektovým (50 gold) tak zůstává jako jemné rozlišení. */
-  .stip-card__eyebrow {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    color: hsl(var(--section-hue, 240) 35% 38%);
-    margin: 0;
-  }
-  .stip-card__title {
-    font: 700 clamp(1.375rem, 2.4vw, 1.75rem) / 1.15 var(--font-sans);
-    letter-spacing: var(--tracking-tight);
-    margin: 0;
-    color: var(--fg);
-  }
-  .stip-card__lede {
-    font: 500 var(--text-md) / 1.55 var(--font-sans);
-    color: var(--fg-muted);
-    margin: 8px 0 0;
-  }
-
-  /* Bloky mapované na řádky 2-4 subgridu, vlastní vnitřní layout. */
-  .stip-card__block {
-    border-top: 1px solid var(--border-muted);
-    padding-top: var(--space-3);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-  .stip-card > .stip-card__block:nth-of-type(1) { grid-row: 2; }
-  .stip-card > .stip-card__block:nth-of-type(2) { grid-row: 3; }
-  .stip-card > .stip-card__block:nth-of-type(3) { grid-row: 4; }
-
-  .stip-card__sub {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    color: var(--fg-subtle);
-    margin: 0;
-  }
-  .stip-card__block p {
-    font: 500 var(--text-sm) / 1.55 var(--font-sans);
-    color: var(--fg);
-    margin: 0;
-  }
-
-  .stip-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 8px;
-  }
-  .stip-list li {
-    font: 500 var(--text-sm) / 1.5 var(--font-sans);
-    color: var(--fg);
-    padding-left: 16px;
-    position: relative;
-  }
-  .stip-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.65em;
-    width: 5px;
-    height: 5px;
-    border-radius: 2px;
-    background: var(--accent);
-    opacity: 0.7;
-  }
-  .stip-list strong { color: var(--fg); font-weight: 700; }
-
-  /* CTA na řádku 5, baseline-zarovnaná napříč oběma kartami. Sjednocený
-     plum --accent na obou kartách , žádný hue swap. */
-  .stip-card__cta {
-    grid-row: 5;
-    align-self: end;
-    justify-self: start;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 12px 20px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: var(--accent-on);
-    background: var(--accent);
-    border-radius: var(--radius-input);
-    text-decoration: none;
-    transition: background 200ms ease, transform 200ms ease;
-  }
-  .stip-card__cta:hover,
-  .stip-card__cta:focus-visible {
-    background: var(--plum-deep);
-    transform: translateY(-1px);
-    outline: none;
-  }
-
-  /* Subgrid fallback: bez subgridu se karty chovají jako flex column,
-     žádné row alignment napříč kartami, ale layout zůstane čitelný. */
-  @supports not (grid-template-rows: subgrid) {
-    .stip-types__inner { grid-template-rows: none; }
-    .stip-card {
-      grid-template-rows: none;
-      grid-row: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .stip-card__cta { margin-top: auto; }
-  }
-
-  /* Numbered process list, sjednocuje s vizuálním jazykem subpage. */
-  .sec-steps {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-5);
-  }
-  .sec-steps > li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--space-4);
-    align-items: start;
-  }
-  .sec-steps__n {
-    font: 700 clamp(1.5rem, 3vw, 2rem) / 1 var(--font-sans);
-    color: var(--accent);
-    letter-spacing: var(--tracking-tight);
-    font-variant-numeric: tabular-nums;
-    min-width: 2.5ch;
-  }
-  .sec-steps h3 {
-    font: 600 var(--text-lg) / 1.25 var(--font-sans);
-    margin: 0 0 4px;
-    letter-spacing: var(--tracking-tight);
-  }
-  .sec-steps p {
-    margin: 0;
-    color: var(--fg-muted);
-    line-height: 1.5;
-  }
-</style>
+<FractalPage
+  title="Stipendia , pobytové a projektové · Startovací Hub Klecany"
+  description={data.intro.lede}
+  hero={{
+    eyebrow: 'Stipendia',
+    title: 'Pobytové, nebo <em>projektové</em>',
+    sub: data.intro.lede,
+    variant: 'rose',
+    ariaId: 'stipendia',
+  }}
+  sections={sections}
+  cta={{
+    eyebrow: 'Žádost',
+    title: 'Požádejte o <em>stipendium</em>',
+    lede: 'Při registraci zájmu zaškrtnete přepínač stipendia. Jakmile otevřeme první kolo, ozveme se s konkrétními podmínkami.',
+    cta: { label: 'Požádat o stipendium', href: '/rezervace/?cesta=stipendium' },
+    variant: 'deep',
+  }}
+  crossLinks={[
+    { eyebrow: 'Ubytování', title: 'Kde budete <em>bydlet</em>', href: '/ubytovani/', variant: 'cream' },
+    { eyebrow: 'Zázemí', title: 'Dílny, ateliéry a <em>komunita</em>', href: '/zazemi/', variant: 'ink' },
+  ]}
+/>

@@ -1,293 +1,108 @@
 ---
-import Base from '../../layouts/Base.astro';
+/*
+ * L1 Ubytování , dvě srovnávací tabulky (Sdílené pokoje + Privátní apartmány)
+ * generované přímo z kolekcí, plus upsell sekce Ubytovací zázemí a Ubytovací
+ * služby (z src/data/landing.json). Tabulky vždy sedí na reálné varianty.
+ */
+import FractalPage from '../../layouts/FractalPage.astro';
 import { getCollection } from 'astro:content';
-import { withBase } from '../../utils/url';
-import RoomCard from '../../components/RoomCard.astro';
-import SubpageHero from '../../components/SubpageHero.astro';
-import CtaBanner from '../../components/CtaBanner.astro';
-import CrossLinkPair from '../../components/CrossLinkPair.astro';
+import landing from '../../data/landing.json';
 
-const apartmany = (await getCollection('apartmany')).sort((a, b) => a.data.order - b.data.order);
-const coliving = (await getCollection('sdilenePokoje'))
-  .filter((c) => !c.data.hidden)
+const sdilene = (await getCollection('sdilenePokoje'))
+  .filter((e) => !e.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+const privatni = (await getCollection('apartmany'))
+  .filter((e) => !e.data.hidden)
   .sort((a, b) => a.data.order - b.data.order);
 
-/* Co-living items nemají jednotnou „plocha" / „kapacita" pole (capsule vs.
-   lůžko vs. dvoulůžko mají odlišnou strukturu). Mapujeme per-slug. */
-const coligvingVelikost: Record<string, string> = {
-  'pokoj-basic':   'lůžko ve sdíleném pokoji',
-  'pokoj-privacy': 'lůžko s dělícími stěnami',
-  'kapsle-single': 'kapsle ve sdíleném pokoji',
-  'jedno-luzko':   'lůžko ve sdíleném pokoji',
-  'kapsle-double': 'kapsle ve sdíleném pokoji',
-  'dvouluzko':     'celý pokoj v patrovém bytě',
-};
-const colivingKapacita: Record<string, string> = {
-  'pokoj-basic':   '1 osoba',
-  'pokoj-privacy': '1 osoba',
-  'kapsle-single': '1 osoba',
-  'jedno-luzko':   '1 osoba',
-  'kapsle-double': '1-2 osoby',
-  'dvouluzko':     '1-2 osoby',
-};
+const beds = (name: string) => (/dvojl/i.test(name) ? '2 lůžka' : '1 lůžko');
+
+const sdileneRows = sdilene.map((e) => {
+  const d = e.data;
+  const area = d.spec.plochaKapsle || d.spec.plochaPokoj;
+  return {
+    label: d.name,
+    note: `${area.split('(')[0].trim()} · ${beds(d.name)} · matrace ${d.matrace[0]}`,
+    price: d.cena.anchor,
+    priceNote: d.pricePending ? 'orientační' : undefined,
+    flag: !!d.pricePending,
+  };
+});
+const privatniRows = privatni.map((e) => {
+  const d = e.data;
+  return {
+    label: d.name,
+    note: `${d.plocha} · ${d.kapacita} lůžek`,
+    price: d.cena.anchor,
+  };
+});
+
+const zazemiItem = landing.items.find((i) => i.slug === 'ubytovaci-zazemi');
+const sluzbyItem = landing.items.find((i) => i.slug === 'ubytovaci-sluzby');
+
+const sections = [
+  {
+    id: 'sdilene',
+    jumpLabel: 'Sdílené pokoje',
+    title: 'Sdílené pokoje',
+    lede: 'Platíte za lůžko nebo kapsli, ne za celý byt. Koupelnu a kuchyň sdílíte s ostatními rezidenty. Šest formátů od otevřeného lůžka po uzamykatelnou kapsli, seřazené od nejnižší ceny.',
+    actions: [
+      { label: 'Sdílené pokoje', href: '/ubytovani/sdilene-pokoje/', kind: 'detail' as const },
+      { label: 'Rezervovat lůžko', href: '/rezervace/?cesta=luzko', kind: 'reserve' as const },
+    ],
+    media: [
+      { src: '/images/hub/ubytovani/coliving/pokoj-basic-01.jpg', alt: 'Sdílený pokoj se světlým dubovým nábytkem' },
+      { src: '/images/hub/ubytovani/coliving/pokoj-privacy-01.jpg', alt: 'Lůžkové boxy s posuvnými dveřmi' },
+      { src: '/images/hub/ubytovani/coliving/kapsle-single-01.jpg', alt: 'Privátní uzamykatelná kapsle' },
+    ],
+    priceRows: sdileneRows,
+    priceCaption: 'Anchor cena za měsíc',
+  },
+  {
+    id: 'privatni',
+    jumpLabel: 'Privátní apartmány',
+    title: 'Privátní apartmány',
+    lede: 'Celý byt jen pro vás: vlastní koupelna, kuchyň i vchod. Pět velikostí od 1+kk pro pár po 5+kk pro skupinu deseti. Cena platí za celý byt, takže čím víc vás bude, tím nižší nájem na osobu.',
+    actions: [
+      { label: 'Privátní apartmány', href: '/ubytovani/privatni/', kind: 'detail' as const },
+      { label: 'Rezervovat apartmán', href: '/rezervace/?cesta=apartman', kind: 'reserve' as const },
+    ],
+    media: [
+      { src: '/images/hub/ubytovani/privatni/02-1kk.jpg', alt: 'Privátní apartmán 1+kk' },
+      { src: '/images/hub/ubytovani/privatni/03-ext.jpg', alt: 'Exteriér obytné budovy' },
+      { src: '/images/hub/ubytovani/privatni/05-4kk-family.jpg', alt: 'Větší apartmán pro skupinu' },
+    ],
+    priceRows: privatniRows,
+    priceCaption: 'Anchor cena za celý byt a měsíc',
+  },
+  ...(zazemiItem
+    ? [{ id: 'zazemi', jumpLabel: 'Ubytovací zázemí', title: zazemiItem.name, lede: zazemiItem.lede, blocks: zazemiItem.blocks ?? [], actions: [{ label: 'Zázemí areálu', href: '/zazemi/', kind: 'detail' as const }] }]
+    : []),
+  ...(sluzbyItem
+    ? [{ id: 'sluzby', jumpLabel: 'Ubytovací služby', title: sluzbyItem.name, lede: sluzbyItem.lede, blocks: sluzbyItem.blocks ?? [] }]
+    : []),
+];
 ---
-<Base
-  title="Ubytování od 3 000 Kč, 9 typů · Startovací Hub Klecany"
-  description="Čtyři varianty co-livingu od sdíleného lůžka po uzamykatelnou kapsli, pět privátních apartmánů 1+kk až 5+kk. Energie, internet, úklid, neomezené jízdy Hub-shuttle a poukaz do sauny v ceně."
-  headerVariant="overlay">
-
-  <SubpageHero
-    eyebrow="Ubytovací služby"
-    title="Vlastní apartmán, <em>nebo</em> místo v co-livingu?"
-    sub="Pět apartmánů 1+kk až 5+kk a čtyři co-living formáty. V ceně energie, internet, neomezené jízdy Hub-shuttle a týdenní poukaz do sauny."
-    variant="deep"
-    ribbonPath="M 1340 120 C 1640 80, 1900 240, 1860 480 C 1820 720, 1480 760, 1380 580"
-    ribbonPathSecondary="M 220 220 C 480 160, 720 380, 900 280 C 1080 200, 1240 320, 1180 480"
-    thickness={64}
-    thicknessSecondary={36}
-    opacitySecondary={0.5}
-    jumps={[
-      { label: 'Co-living', href: '#ub-coliving-title' },
-      { label: 'Privátní apartmány', href: '#ub-privatni-title' },
-    ]}
-    ariaId="ubytovani-hero"
-  />
-
-  {/* ============ CO-LIVING (4 typy) ============ */}
-  <section class="ub-section ub-section--coliving" aria-labelledby="ub-coliving-title">
-    {/* Section-level ribbon na pozadí, peeká pod card gridem stejně jako
-        lp-section na landingu. Sjednocuje vizuální jazyk. */}
-    <span class="ub-section__ribbon" aria-hidden="true" data-ribbon-reveal>
-      <svg viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid slice">
-        <path d="M -60 400 C 180 280, 380 480, 580 360 S 960 460, 1140 360 S 1380 280, 1560 380" vector-effect="non-scaling-stroke" />
-      </svg>
-    </span>
-    <div class="ub-section__inner">
-      <header class="ub-section__head">
-        <p class="ub-section__eyebrow">Co-living</p>
-        <h2 class="ub-section__title" id="ub-coliving-title">Vlastní lůžko nebo kapsle, sdílené zázemí.</h2>
-      </header>
-
-      <div class="ub-grid">
-        {coliving.map((c) => (
-          <RoomCard
-            eyebrow={c.data.shortName}
-            name={c.data.name}
-            velikost={coligvingVelikost[c.data.slug] ?? 've sdíleném pokoji'}
-            kapacita={colivingKapacita[c.data.slug] ?? '1 osoba'}
-            popis={c.data.popis}
-            cenaAnchor={c.data.cena.anchor}
-            perOsoba={c.data.cena.perOsoba}
-            thumbnail={c.data.thumbnail}
-            detailHref={withBase(`/ubytovani/co-living/${c.data.slug}/`)}
-            reserveHref={withBase(`/rezervace/?typ=${c.data.slug}`)}
-          />
-        ))}
-      </div>
-    </div>
-  </section>
-
-  {/* ============ PRIVÁTNÍ APARTMÁNY (5 typů) ============ */}
-  <section class="ub-section ub-section--privatni" aria-labelledby="ub-privatni-title">
-    <span class="ub-section__ribbon" aria-hidden="true" data-ribbon-reveal>
-      <svg viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid slice">
-        <path d="M -60 240 C 180 380, 380 200, 580 360 S 960 240, 1140 380 S 1380 320, 1560 220" vector-effect="non-scaling-stroke" />
-      </svg>
-    </span>
-    <div class="ub-section__inner">
-      <header class="ub-section__head">
-        <p class="ub-section__eyebrow">Privátní apartmány</p>
-        <h2 class="ub-section__title" id="ub-privatni-title">Vlastní byt, vlastní koupelna, vlastní kuchyň.</h2>
-      </header>
-
-      <div class="ub-grid">
-        {apartmany.map((a) => (
-          <RoomCard
-            eyebrow={a.data.shortName}
-            name={a.data.name}
-            velikost={a.data.plocha}
-            kapacita={`${a.data.kapacita} lůžek`}
-            popis={a.data.popis}
-            cenaAnchor={a.data.cena.anchor}
-            perOsoba={a.data.cena.perOsoba}
-            thumbnail={a.data.thumbnail}
-            detailHref={withBase(`/ubytovani/privatni/${a.data.slug}/`)}
-            reserveHref={withBase(`/rezervace/?typ=${a.data.slug}`)}
-          />
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <CtaBanner
-    eyebrow="Rezervujte si místo"
-    title="Bydlete tady <em>měsíc, nebo rok</em>."
-    lede="Rezervace je nezávazná. Vyberete pokoj, termín a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin."
-    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
-    variant="deep"
-  />
-
-  <CrossLinkPair
-    items={[
-      { eyebrow: 'Komunita',  title: 'Bazén, <em>sauna</em>, jídelna a&nbsp;klubovna.', href: '/komunita/', variant: 'ink' },
-      { eyebrow: 'Okolí',     title: 'Klecany, <em>15 km</em> od&nbsp;Prahy.',         href: '/okoli/',    variant: 'cream' },
-    ]}
-  />
-</Base>
-
-<style>
-  .ub-hero { position: relative; isolation: isolate; min-height: 50vh; display: grid; align-items: end; padding: var(--space-9) var(--gutter) var(--space-7); color: #fff; background: var(--plum-deep); overflow: hidden; }
-  .ub-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.65); }
-  .ub-hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.1) 90%); z-index: -1; }
-  .ub-hero__inner { max-width: var(--container-wide); margin: 0 auto; width: 100%; }
-  .ub-hero__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: rgba(255,255,255,0.85); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
-  .ub-hero__title { font: 600 clamp(2.25rem, 5vw, 3.75rem) / 1.05 var(--font-sans); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-4); max-width: 18ch; }
-  .ub-hero__lede { font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.5; margin: 0; max-width: 60ch; color: rgba(255,255,255,0.92); }
-
-  /* Quick-jump nav pod hero lede: 2 outline buttony pro skok na sekce. */
-  .ub-hero__jumps {
-    display: flex;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-    margin-top: var(--space-5);
-  }
-  .ub-hero__jump {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 18px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    border-radius: var(--radius-input);
-    text-decoration: none;
-    transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
-  }
-  .ub-hero__jump:hover,
-  .ub-hero__jump:focus-visible {
-    background: #fff;
-    color: var(--plum-deep);
-    border-color: #fff;
-    outline: none;
-  }
-
-  /* Sekce: jemné rozlišení backgrounds (co-living muted, privátní bílá),
-     1 px hairline na vrchu jako oddělovač. Žádný velký marker, žádná dark
-     inverze, žádný chunky plum rule. */
-  .ub-section {
-    position: relative;
-    padding: var(--space-9) var(--gutter);
-    background: var(--bg);
-    color: var(--fg);
-    border-top: 1px solid var(--border-muted);
-    overflow: hidden;
-    isolation: isolate;
-  }
-  .ub-section--coliving { background: var(--bg-muted, var(--k-05)); }
-  .ub-section--privatni { background: var(--bg); }
-
-  /* Section ribbon na pozadí, peeká za card gridem. Sjednocuje vizuální
-     jazyk s lp-section na landingu. Coliving běží zleva doprava, privátní
-     druhým směrem (scaleX flip) pro variantu. Reveal snake-draw, idle
-     breathing. */
-  .ub-section__ribbon {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.22;
-  }
-  .ub-section__ribbon svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-    overflow: visible;
-  }
-  .ub-section__ribbon path {
-    fill: none;
-    stroke: var(--accent);
-    stroke-width: 36;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  .ub-section__ribbon[data-ribbon-reveal] path {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    pathLength: 1;
-  }
-  .ub-section__ribbon[data-ribbon-reveal].is-revealed path {
-    animation:
-      ribbon-snake-draw 3s var(--ease-snake) forwards,
-      ribbon-breathe 7s ease-in-out 3s infinite;
-  }
-  .ub-section--privatni .ub-section__ribbon { transform: scaleX(-1); }
-  @media (prefers-reduced-motion: reduce) {
-    .ub-section__ribbon[data-ribbon-reveal] path,
-    .ub-section__ribbon[data-ribbon-reveal].is-revealed path {
-      stroke-dashoffset: 0;
-      animation: none;
-    }
-  }
-
-  .ub-section__inner { position: relative; z-index: 1; max-width: var(--container-wide); margin: 0 auto; }
-  .ub-section__head {
-    margin-bottom: var(--space-7);
-    max-width: 65ch;
-  }
-  .ub-section__eyebrow {
-    font: 600 var(--text-2xs) / 1 var(--font-sans);
-    color: var(--accent);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    margin: 0 0 var(--space-3);
-  }
-  .ub-section__title {
-    font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans);
-    margin: 0 0 var(--space-4);
-    letter-spacing: var(--tracking-tight);
-    scroll-margin-top: 90px;
-  }
-  .ub-section__lede {
-    color: var(--fg-muted);
-    margin: 0 0 var(--space-3);
-    line-height: 1.6;
-    font-size: var(--text-md);
-  }
-  .ub-section__lede:last-child { margin-bottom: 0; }
-
-  .ub-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-  }
-  @media (max-width: 960px) { .ub-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 600px) {
-    .ub-grid {
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      padding-bottom: var(--space-3);
-      margin-inline: calc(-1 * var(--gutter));
-      padding-inline: var(--gutter);
-      scroll-padding-inline-start: var(--gutter);
-    }
-    .ub-grid::-webkit-scrollbar { display: none; }
-    .ub-grid > :global(*) {
-      flex: 0 0 85%;
-      min-width: 0;
-      scroll-snap-align: start;
-    }
-  }
-
-  .ub-cta { padding: var(--space-9) var(--gutter); background: var(--accent); color: #fff; text-align: center; }
-  .ub-cta__inner { max-width: 640px; margin: 0 auto; }
-  .ub-cta__eyebrow { font: 600 var(--text-2xs) / 1 var(--font-sans); color: rgba(255,255,255,0.85); letter-spacing: var(--tracking-wider); text-transform: uppercase; margin: 0 0 var(--space-3); }
-  .ub-cta__title { font: 600 clamp(1.75rem, 3.5vw, 2.5rem) / 1.15 var(--font-sans); margin: 0 0 var(--space-4); letter-spacing: var(--tracking-tight); }
-  .ub-cta__lede { font-size: var(--text-md); line-height: 1.5; margin: 0 0 var(--space-5); opacity: 0.92; }
-  .ub-cta__button { display: inline-block; padding: 14px 32px; font: 700 var(--text-md) / 1 var(--font-sans); color: var(--accent); background: #fff; border: 1px solid #fff; border-radius: var(--radius-input); text-decoration: none; transition: background 200ms ease, color 200ms ease; }
-  .ub-cta__button:hover { background: transparent; color: #fff; }
-</style>
+<FractalPage
+  title="Ubytování , privátní apartmány a sdílené pokoje · Startovací Hub Klecany"
+  description="Šest formátů sdílených pokojů od 3 000 Kč a pět privátních apartmánů 1+kk až 5+kk. Energie, internet a coworking v ceně. Srovnejte ceny a rezervujte si místo."
+  hero={{
+    eyebrow: 'Ubytování',
+    title: 'Privátní apartmán, nebo <em>sdílený pokoj</em>',
+    sub: 'Šest formátů sdílených pokojů od 3 000 Kč a pět privátních apartmánů 1+kk až 5+kk. Energie, internet a coworking v ceně.',
+    variant: 'cream',
+    ariaId: 'ubytovani',
+  }}
+  sections={sections}
+  cta={{
+    eyebrow: 'Rezervace',
+    title: 'Rezervujte si <em>místo</em>',
+    lede: 'Vyberete formát, termín a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin. Nezávazná registrace zájmu.',
+    cta: { label: 'Nezávazná rezervace', href: '/rezervace/' },
+    variant: 'deep',
+  }}
+  crossLinks={[
+    { eyebrow: 'Zázemí', title: 'Coworking, wellness a <em>gastro</em>', href: '/zazemi/', variant: 'ink' },
+    { eyebrow: 'Stipendia', title: 'Bydlení <em>za přínos</em> komunitě', href: '/stipendia/', variant: 'rose' },
+  ]}
+/>

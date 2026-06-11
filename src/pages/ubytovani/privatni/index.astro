@@ -1,0 +1,54 @@
+---
+/*
+ * L2 Privátní apartmány , zig-zag 5 apartmánů z kolekce apartmany. Každý
+ * odkazuje na L3 detail a předvyplněnou rezervaci.
+ */
+import FractalPage from '../../../layouts/FractalPage.astro';
+import { getCollection } from 'astro:content';
+
+const apartmany = (await getCollection('apartmany'))
+  .filter((e) => !e.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const sections = apartmany.map((e) => {
+  const d = e.data;
+  return {
+    id: d.slug,
+    jumpLabel: d.shortName,
+    title: d.name,
+    lede: d.popis,
+    blocks: [{ subtitle: 'Dispozice', text: `${d.plocha}, ${d.kapacita} lůžek. ${d.konfigurace}` }],
+    priceRows: [
+      { label: 'Anchor cena', note: 'za celý byt a měsíc', price: d.cena.anchor, priceNote: d.cena.perOsoba },
+    ],
+    actions: [
+      { label: 'Detail', href: `/ubytovani/privatni/${d.slug}/`, kind: 'detail' as const },
+      { label: 'Rezervovat', href: `/rezervace/?typ=${d.slug}`, kind: 'reserve' as const },
+    ],
+    media: (d.gallery ?? []).map((g) => ({ src: g.src, placeholder: g.placeholder, alt: g.alt })),
+  };
+});
+---
+<FractalPage
+  title="Privátní apartmány 1+kk až 5+kk · Startovací Hub Klecany"
+  description="Pět velikostí privátních apartmánů od 1+kk po 5+kk. Vlastní koupelna, kuchyň i vchod. Cena za celý byt, čím víc vás bude, tím nižší nájem na osobu."
+  hero={{
+    eyebrow: 'Ubytování · Privátní apartmány',
+    title: 'Privátní <em>apartmány</em>',
+    sub: 'Celý byt jen pro vás: vlastní koupelna, kuchyň i vchod. Pět velikostí od 1+kk pro pár po 5+kk pro skupinu deseti lidí.',
+    variant: 'cream',
+    ariaId: 'privatni',
+  }}
+  sections={sections}
+  cta={{
+    eyebrow: 'Rezervace',
+    title: 'Rezervujte si <em>apartmán</em>',
+    lede: 'Vyberte velikost, termín a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin.',
+    cta: { label: 'Rezervovat apartmán', href: '/rezervace/?cesta=apartman' },
+    variant: 'deep',
+  }}
+  crossLinks={[
+    { eyebrow: 'Sdílené pokoje', title: 'Lůžka a <em>kapsle</em> od 3 000 Kč', href: '/ubytovani/sdilene-pokoje/', variant: 'ink' },
+    { eyebrow: 'Ceník', title: 'Srovnání <em>všech cen</em>', href: '/cenik/', variant: 'rose' },
+  ]}
+/>

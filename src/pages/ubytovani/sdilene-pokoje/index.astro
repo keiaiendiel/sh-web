@@ -1,0 +1,61 @@
+---
+/*
+ * L2 Sdílené pokoje , zig-zag 6 variant z kolekce sdilenePokoje. Každá
+ * odkazuje na L3 detail a předvyplněnou rezervaci.
+ */
+import FractalPage from '../../../layouts/FractalPage.astro';
+import { getCollection } from 'astro:content';
+
+const varianty = (await getCollection('sdilenePokoje'))
+  .filter((e) => !e.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const sections = varianty.map((e) => {
+  const d = e.data;
+  const area = d.spec.plochaKapsle || d.spec.plochaPokoj;
+  return {
+    id: d.slug,
+    jumpLabel: d.shortName,
+    title: d.name,
+    lede: d.popis,
+    blocks: [{ subtitle: 'Dispozice', text: `${area}. Matrace ${d.matrace.join(' / ')}.` }],
+    priceRows: [
+      {
+        label: 'Anchor cena',
+        note: 'za měsíc',
+        price: d.cena.anchor,
+        priceNote: d.pricePending ? 'orientační, k potvrzení' : d.cena.perOsoba,
+        flag: !!d.pricePending,
+      },
+    ],
+    actions: [
+      { label: 'Detail', href: `/ubytovani/sdilene-pokoje/${d.slug}/`, kind: 'detail' as const },
+      { label: 'Rezervovat', href: `/rezervace/?typ=${d.slug}`, kind: 'reserve' as const },
+    ],
+    media: (d.gallery ?? []).map((g) => ({ src: g.src, placeholder: g.placeholder, alt: g.alt })),
+  };
+});
+---
+<FractalPage
+  title="Sdílené pokoje , lůžka a kapsle od 3 000 Kč · Startovací Hub Klecany"
+  description="Šest formátů sdílených pokojů od otevřeného lůžka po uzamykatelnou kapsli. Platíte za lůžko nebo kapsli, koupelnu a kuchyň sdílíte s ostatními rezidenty."
+  hero={{
+    eyebrow: 'Ubytování · Sdílené pokoje',
+    title: 'Sdílené <em>pokoje</em>',
+    sub: 'Platíte za lůžko nebo kapsli, ne za celý byt. Šest formátů podle míry soukromí, od otevřeného lůžka po uzamykatelnou kapsli pro dva.',
+    variant: 'ink',
+    ariaId: 'sdilene-pokoje',
+  }}
+  sections={sections}
+  cta={{
+    eyebrow: 'Rezervace',
+    title: 'Rezervujte si <em>lůžko</em>',
+    lede: 'Vyberte formát, termín a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin.',
+    cta: { label: 'Rezervovat lůžko', href: '/rezervace/?cesta=luzko' },
+    variant: 'deep',
+  }}
+  crossLinks={[
+    { eyebrow: 'Privátní apartmány', title: 'Celý byt <em>jen pro vás</em>', href: '/ubytovani/privatni/', variant: 'cream' },
+    { eyebrow: 'Ceník', title: 'Srovnání <em>všech cen</em>', href: '/cenik/', variant: 'rose' },
+  ]}
+/>

@@ -1,260 +1,44 @@
 ---
-import Base from '../../layouts/Base.astro';
-import Gallery from '../../components/Gallery.astro';
-import Icon from '../../components/Icon.astro';
-import SubpageHero from '../../components/SubpageHero.astro';
-import CtaBanner from '../../components/CtaBanner.astro';
-import CrossLinkPair from '../../components/CrossLinkPair.astro';
-import { withBase } from '../../utils/url';
+/*
+ * Doprava , L1 „landing dopravního startupu". Dvě sekce (Sdílená mobilita,
+ * Privátní mobilita), bez L3. Obsah z src/data/doprava.json.
+ */
+import FractalPage from '../../layouts/FractalPage.astro';
+import data from '../../data/doprava.json';
 
-const heroJumps = [
-  { label: 'Hub-shuttle', href: '#dp-shuttle' },
-  { label: 'Bus 374',     href: '#dp-374' },
-  { label: 'Hub-taxi',    href: '#dp-taxi' },
-  { label: 'Auto a kolo', href: '#dp-auto' },
-  { label: 'Plánované',   href: '#dp-planned' },
-];
+const sections = data.items.map((it) => {
+  const blocks = [...(it.blocks ?? [])];
+  if (it.priceNote) blocks.push({ subtitle: 'V ceně bydlení', text: it.priceNote });
+  return {
+    id: it.slug,
+    jumpLabel: it.name,
+    title: it.name,
+    lede: it.lede,
+    blocks,
+    media: it.images ?? [],
+  };
+});
 ---
-<Base
-  title="Doprava z Klecan do Prahy · Startovací Hub Klecany"
-  description="Patnáct minut autobusem od metra Kobylisy. Hub-shuttle s pěti jízdami v ceně bydlení, PID linka 374, Hub-taxi pro lokální cesty. Plánovaná tramvaj a cyklolávka přes Vltavu."
-  headerVariant="overlay">
-
-  <SubpageHero
-    eyebrow="Doprava"
-    title="Hub-shuttle na <em>zavolání</em>, do 15 minut na metro."
-    sub="Sdílená kyvadlovka na objednání, pro rezidenty neomezeně zdarma. PID linka 374 jako záloha, Hub-taxi pro lokální cesty mimo Prahu."
-    variant="deep"
-    ribbonPath="M 1180 460 C 1420 400, 1680 560, 1900 460 S 2140 520, 2200 580"
-    ribbonPathSecondary="M 1180 280 C 1420 220, 1680 380, 1900 280 S 2140 340, 2200 400 M 1180 640 C 1420 580, 1680 740, 1900 640 S 2140 700, 2200 760"
-    thickness={40}
-    thicknessSecondary={28}
-    opacitySecondary={0.5}
-    jumps={heroJumps}
-    ariaId="doprava-hero"
-  />
-
-  <section class="sec-feature sec-hued" style="--section-hue: 240;">
-    <div class="sec-feature__inner">
-      <div class="sec-feature__col">
-        <div class="sec-feature__head">
-          <p class="sec-feature__eyebrow">Hub-shuttle (pro rezidenty neomezeně zdarma)</p>
-          <h2 class="sec-feature__title" id="dp-shuttle">Sdílená kyvadlovka na zavolání.</h2>
-        </div>
-        <div class="sec-feature__text">
-          <p>
-            Vlastní dopravní služba Hubu, dvě devítimístné dodávky mezi Hubem a metrem Kobylisy.
-            Funguje jako sdílené taxi: napíšete čas odjezdu přes aplikaci nebo formulář, dopravce
-            potvrdí slot a vyzvedne vás v areálu. Pro rezidenty Hubu neomezeně v ceně bydlení.
-          </p>
-          <p>
-            Reakce typicky do 15 minut. Dopravce může mírně posunout odjezd (max. 10 minut),
-            aby do dodávky efektivně zapadly další jízdy z areálu , díky tomu zůstává služba
-            zdarma. Ve špičce jezdí dodávka kontinuálně, mimo špičku po hodině nebo na zavolání.
-          </p>
-          <p>
-            Cesta trvá 12 až 15 minut, mimo provoz i deset, přímou trasou bez zastávek ve Zdibech,
-            Veltěži a Přemyšlení. Pro externí návštěvníky a hosty zvýhodněná sazba kolem 60 Kč
-            za jízdu.
-          </p>
-        </div>
-      </div>
-      <div class="sec-feature__col">
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { src: withBase('/images/hub/doprava/hub-shuttle-zastavka.jpg'), alt: 'Zastávka Hub-shuttle v areálu, místo vyzvedávání rezidentů.' },
-            ]}
-            ariaLabel="Hub-shuttle" />
-        </div>
-        <dl class="sec-feature__spec">
-          <div><dt>Provoz</dt><dd>Na objednání přes aplikaci, ve špičce kontinuálně</dd></div>
-          <div><dt>Reakční doba</dt><dd>Do 15 minut typicky</dd></div>
-          <div><dt>Pro rezidenty</dt><dd>Neomezeně zdarma</dd></div>
-          <div><dt>Pro externí</dt><dd>Cca 60 Kč za jízdu</dd></div>
-          <div><dt>Cesta na Kobylisy</dt><dd>12 až 15 minut, přímo bez zastávek</dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec-feature sec-feature--alt sec-hued" style="--section-hue: 50;">
-    <div class="sec-feature__inner">
-      <div class="sec-feature__col">
-        <div class="sec-feature__head">
-          <p class="sec-feature__eyebrow">Linka 374 PID</p>
-          <h2 class="sec-feature__title" id="dp-374">Záloha v rámci pražského tarifu.</h2>
-        </div>
-        <div class="sec-feature__text">
-          <p>
-            Pražská integrovaná doprava. Trasa Klecany, Zdiby, Veltěž, Přemyšlení, Kobylisy. Ve
-            špičce 14 až 17 minut s dedikovanými autobusovými pruhy na Cínovecké, mimo špičku 12
-            až 14 minut.
-          </p>
-          <p>
-            Frekvence: ve špičce každých 15 minut, mimo špičku 30 minut, večer a o víkendech 30
-            až 60 minut. Poslední bus z Kobylis kolem 22:50.
-          </p>
-        </div>
-      </div>
-      <div class="sec-feature__col">
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { placeholder: 'dp03 Zastávka autobusu 374 v Klecanech, U hřbitova', alt: 'Zastávka autobusu 374 jako záložní spoj na Kobylisy.' },
-            ]}
-            ariaLabel="Linka 374" />
-        </div>
-        <dl class="sec-feature__spec">
-          <div><dt>Zastávky u Hubu</dt><dd>„Klecany, U hřbitova" (300 m od vstupu)</dd></div>
-          <div><dt>Frekvence ve špičce</dt><dd>Cca 15 minut</dd></div>
-          <div><dt>Frekvence mimo špičku</dt><dd>Cca 30 minut</dd></div>
-          <div><dt>Tarif</dt><dd>3 pásma PID, měsíční předplatné 1 488 Kč</dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec-feature sec-hued" style="--section-hue: 25;">
-    <div class="sec-feature__inner">
-      <div class="sec-feature__col">
-        <div class="sec-feature__head">
-          <p class="sec-feature__eyebrow">Hub-taxi (v ceně 1 jízda měsíčně)</p>
-          <h2 class="sec-feature__title" id="dp-taxi">Lokální doprava v Klecanech a okolí.</h2>
-        </div>
-        <div class="sec-feature__text">
-          <p>
-            Lokální doprava v Klecanech a okolí (Roztoky, Zdiby, Dolní Chabry). Volá se přes
-            aplikaci Hubu. Provoz zajišťuje smluvní lokální dopravce nebo platforma typu Bolt
-            Business.
-          </p>
-          <p>
-            Hodí se na: večerní návrat z Lidlu ve Zdibech, stěhování věcí na vlak, výjezd na
-            Roztoky-Žalov, lékař na Kobylisích po skončení autobusu, doprava v nemoci.
-          </p>
-        </div>
-      </div>
-      <div class="sec-feature__col">
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { placeholder: 'dp04 Hub-taxi vůz před areálem, večerní scéna', alt: 'Hub-taxi pro lokální cesty v Klecanech a okolí.' },
-            ]}
-            ariaLabel="Hub-taxi" />
-        </div>
-        <dl class="sec-feature__spec">
-          <div><dt>Dostupnost</dt><dd>Nonstop, krátká reakce</dd></div>
-          <div><dt>Pro rezidenty</dt><dd>1 jízda zdarma za měsíc</dd></div>
-          <div><dt>Po vyčerpání</dt><dd>Cca 80 až 150 Kč za jízdu</dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec-feature sec-feature--alt sec-hued" style="--section-hue: 130;">
-    <div class="sec-feature__inner">
-      <div class="sec-feature__col">
-        <div class="sec-feature__head">
-          <p class="sec-feature__eyebrow">Auto, kolo, pěšky</p>
-          <h2 class="sec-feature__title" id="dp-auto">Vlastní cesta do Prahy.</h2>
-        </div>
-        <div class="sec-feature__text">
-          <h3 class="sec-hued__sub"><span class="sec-hued__sub-icon"><Icon name="car-front" size={16} /></span>Auto a parkování</h3>
-          <p>
-            Hub má parkoviště v rámci areálu (dvě plochy: vlevo nahoře a uprostřed). Kapacita
-            podle finální projektové dokumentace, bude doplněna. Pro rezidenty Hubu vyhrazené stání
-            zdarma, pro hosty dohodou.
-          </p>
-          <p>
-            Z Hubu na D8 sjezd Zdiby (MÚK Zdiby) 3 km, cca 5 minut autem. Z MÚK Zdiby na centrum
-            Prahy přes Cínoveckou cca 15 minut (ve špičce 25 až 35 minut). P+R Kobylisy 6,8 km
-            od Hubu (11 minut autem), pak metro do centra.
-          </p>
-          <h3 class="sec-hued__sub"><span class="sec-hued__sub-icon"><Icon name="bike" size={16} /></span>Kolo a pěšky</h3>
-          <p>
-            Cyklostezka EuroVelo 7 prochází podél Vltavy pod Klecanami. Z Hubu na cyklostezku
-            cca 30 minut pěšky nebo 10 minut na kole (sestup do údolí Vltavy). Klecany mají
-            vlastní pěší a cyklistickou infrastrukturu: chodníky kolem ulic centrem, polní
-            cesty kolem areálu, navazují na turistické trasy podél Vltavy.
-          </p>
-        </div>
-      </div>
-      <div class="sec-feature__col">
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { src: withBase('/images/hub/doprava/cyklostezka.jpg'), alt: 'Cyklista v motion bluru na cyklostezce Praha až Klecany.' },
-              { placeholder: 'dp05 Parkoviště areálu, vyhrazená stání pro rezidenty', alt: 'Parkování v areálu Hubu.' },
-            ]}
-            ariaLabel="Auto, kolo, pěšky" />
-        </div>
-        <dl class="sec-feature__spec">
-          <div><dt>D8 sjezd Zdiby</dt><dd>3 km, 5 minut autem</dd></div>
-          <div><dt>P+R Kobylisy</dt><dd>6,8 km, 11 minut autem</dd></div>
-          <div><dt>Parkování rezidenti</dt><dd>Vyhrazené stání zdarma</dd></div>
-          <div><dt>EuroVelo 7</dt><dd>10 minut na kole z Hubu</dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec-feature sec-hued" style="--section-hue: 200;">
-    <div class="sec-feature__inner">
-      <div class="sec-feature__col">
-        <div class="sec-feature__head">
-          <p class="sec-feature__eyebrow">Plánováno 2027 až 2030</p>
-          <h2 class="sec-feature__title" id="dp-planned">Tramvaj a cyklolávka přes Vltavu.</h2>
-        </div>
-        <div class="sec-feature__text">
-          <p>
-            Plánované investice se schváleným územním rozhodnutím, ale ještě nejsou postaveny.
-            Mluvíme o nich otevřeně v budoucím čase. Hub-shuttle a linka 374 jsou dostupné dnes.
-          </p>
-          <h3 class="sec-hued__sub"><span class="sec-hued__sub-icon"><Icon name="train-front" size={16} /></span>Tramvaj Kobylisy až Sedlec (2029 až 2030)</h3>
-          <p>
-            Středočeský kraj a IDSK plánují prodloužení tramvajové linky 17 z Kobylis přes
-            Zdiby do Sedlce (5,2 až 5,6 km nové trati). První územní rozhodnutí získalo právní
-            moc v lednu 2025, stavba 2027, provoz 2029 až 2030. Z Hubu na tramvajovou zastávku
-            v Sedleci pětiminutový lokální autobus, pak tramvaj přímo na centrum Prahy bez přestupu.
-          </p>
-          <h3 class="sec-hued__sub"><span class="sec-hued__sub-icon"><Icon name="route" size={16} /></span>Cyklolávka přes Vltavu (2027 až 2028)</h3>
-          <p>
-            Plánovaná cyklolávka přes Vltavu mezi Roztoky a Klecany. Po dokončení bude spojení
-            Roztoky, vlak na Masarykovo nádraží v Praze trvat 10 až 15 minut na kole plus 14
-            minut vlakem, tedy 25 až 30 minut na centrum Prahy z Hubu, mimo metro Kobylisy.
-          </p>
-        </div>
-      </div>
-      <div class="sec-feature__col">
-        <div class="sec-feature__media">
-          <Gallery
-            images={[
-              { placeholder: 'dp06 Vizualizace cyklolávky přes Vltavu, Roztoky-Klecany', alt: 'Plánovaná cyklolávka přes Vltavu.' },
-            ]}
-            ariaLabel="Plánovaná doprava" />
-        </div>
-        <dl class="sec-feature__spec">
-          <div><dt>Tramvaj provoz</dt><dd>2029 až 2030</dd></div>
-          <div><dt>Tramvaj trasa</dt><dd>Kobylisy až Sedlec, 5,2 km</dd></div>
-          <div><dt>Cyklolávka</dt><dd>2027 až 2028</dd></div>
-          <div><dt>Roztoky + vlak</dt><dd>25 až 30 minut na centrum</dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <CtaBanner
-    eyebrow="Rezervace"
-    title="Bydlení <em>blízko Prahy</em> bez ceny centra."
-    lede="Rezervace je nezávazná. Z rezervačního oddělení vám zavoláme do 24 hodin."
-    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
-    variant="rose"
-  />
-
-  <CrossLinkPair
-    items={[
-      { eyebrow: 'Okolí',     title: 'Klecany, <em>15 km</em> od&nbsp;Prahy.',         href: '/okoli/',     variant: 'cream' },
-      { eyebrow: 'Ubytování', title: 'Apartmán, <em>nebo</em> co-living.',             href: '/ubytovani/', variant: 'deep' },
-    ]}
-  />
-</Base>
+<FractalPage
+  title="Doprava , kyvadlová doprava, MHD, kolo a auto · Startovací Hub Klecany"
+  description={data.intro.lede}
+  hero={{
+    eyebrow: 'Doprava',
+    title: 'Jak se sem <em>dostanete</em>',
+    sub: data.intro.lede,
+    variant: 'ink',
+    ariaId: 'doprava',
+  }}
+  sections={sections}
+  cta={{
+    eyebrow: 'Rezervace',
+    title: 'Bydlete <em>na prahu</em> metropole',
+    lede: 'Vyberte si formát bydlení a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin.',
+    cta: { label: 'Nezávazná rezervace', href: '/rezervace/' },
+    variant: 'deep',
+  }}
+  crossLinks={[
+    { eyebrow: 'Ubytování', title: 'Kde budete <em>bydlet</em>', href: '/ubytovani/', variant: 'cream' },
+    { eyebrow: 'Zázemí', title: 'Celé <em>zázemí</em> Hubu', href: '/zazemi/', variant: 'ink' },
+  ]}
+/>
