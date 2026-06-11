@@ -1,0 +1,73 @@
+---
+/*
+ * L2 stránka kategorie zázemí (gastronomie, wellness, coworking, komunita,
+ * ostatni, okoli). Data-driven z kolekce `zazemi`: každý item = jedna zig-zag
+ * Section. Přidat provoz = editovat JSON, ne tuhle šablonu.
+ */
+import FractalPage from '../../layouts/FractalPage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const cats = await getCollection('zazemi');
+  return cats.map((c) => ({ params: { category: c.id }, props: { id: c.id, cat: c.data } }));
+}
+
+const { id, cat } = Astro.props;
+const variant = cat.variant ?? 'deep';
+
+type Block = { subtitle?: string; text: string };
+
+const sections = (cat.items ?? []).map((it) => {
+  const actions: { label: string; href: string; kind: 'reserve' | 'detail' | 'link' }[] = [];
+  if (it.bookable) {
+    actions.push({ label: 'Rezervovat', href: `/rezervace/?zazemi=${it.slug}`, kind: 'reserve' });
+  }
+
+  const blocks: Block[] = [...(it.blocks ?? [])];
+  const priceRows =
+    typeof it.price === 'number'
+      ? [{ label: 'Cena', price: it.price }]
+      : [];
+  // Textová cenovka (orientační) jako pod-blok, ne do tabulky.
+  if (typeof it.price !== 'number' && it.priceNote) {
+    blocks.push({ subtitle: 'Cena', text: it.priceNote });
+  }
+
+  return {
+    id: it.slug,
+    jumpLabel: it.name,
+    title: it.name,
+    lede: it.lede,
+    blocks,
+    actions,
+    media: it.images ?? [],
+    priceRows,
+  };
+});
+
+const introTitle = cat.intro.title;
+const introLede = cat.intro.lede;
+---
+<FractalPage
+  title={`${introTitle} · Zázemí · Startovací Hub Klecany`}
+  description={introLede}
+  hero={{
+    eyebrow: cat.intro.eyebrow ?? 'Zázemí',
+    title: introTitle,
+    sub: introLede,
+    variant,
+    ariaId: id,
+  }}
+  sections={sections}
+  cta={{
+    eyebrow: 'Rezervace',
+    title: 'Chcete tu <em>bydlet</em>?',
+    lede: 'Vyberte si formát bydlení a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin.',
+    cta: { label: 'Nezávazná rezervace', href: '/rezervace/' },
+    variant: 'deep',
+  }}
+  crossLinks={[
+    { eyebrow: 'Ubytování', title: 'Kde budete <em>bydlet</em>', href: '/ubytovani/', variant: 'cream' },
+    { eyebrow: 'Zázemí', title: 'Celé <em>zázemí</em> Hubu', href: '/zazemi/', variant: 'ink' },
+  ]}
+/>

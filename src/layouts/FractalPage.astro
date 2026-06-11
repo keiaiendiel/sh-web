@@ -1,0 +1,140 @@
+---
+/*
+ * FractalPage , „stránka = skoro identický landing" engine. Skládá fraktální
+ * vzor: SubpageHero (užší banner + jump tlačítka) → N× Section (zig-zag) →
+ * CtaBanner → CrossLinkPair. Auto-alternuje stranu médií a pozadí sekcí.
+ *
+ *   title / description / headerVariant / noindex , prochází do Base
+ *   hero       , props pro SubpageHero (jumps se auto-derivují ze sekcí s `id`)
+ *   sections   , pole Section props (každá smí mít `id`, `jumpLabel`, `mediaSide`, `surface`)
+ *   autoAlternate , default true , střídá mediaSide (sudá vpravo) a surface (lichá muted)
+ *   cta        , props pro CtaBanner (volitelné)
+ *   crossLinks , [Item, Item] pro CrossLinkPair (volitelné)
+ */
+import Base from './Base.astro';
+import SubpageHero from '../components/SubpageHero.astro';
+import Section from '../components/Section.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import CrossLinkPair from '../components/CrossLinkPair.astro';
+
+type Variant = 'deep' | 'cream' | 'rose' | 'ink';
+
+interface HeroInput {
+  eyebrow: string;
+  title: string;
+  sub?: string;
+  variant: Variant;
+  ribbonPath?: string;
+  ribbonPathSecondary?: string;
+  thickness?: number;
+  jumps?: { href: string; label: string }[];
+  ariaId?: string;
+}
+interface SectionInput {
+  id?: string;
+  jumpLabel?: string;
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  blocks?: { subtitle?: string; text: string }[];
+  actions?: { label: string; href: string; kind?: 'reserve' | 'detail' | 'link'; external?: boolean }[];
+  media?: { src?: string; placeholder?: string; alt: string }[];
+  mediaAspect?: string;
+  priceRows?: any[];
+  priceCaption?: string;
+  mediaSide?: 'left' | 'right';
+  surface?: 'default' | 'muted';
+  ribbon?: boolean;
+  ribbonPath?: string;
+  headingLevel?: 2 | 3;
+}
+interface CtaInput {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  cta: { label: string; href: string };
+  variant: Variant;
+  ribbonPath?: string;
+}
+interface CrossItem {
+  eyebrow: string;
+  title: string;
+  href: string;
+  variant: Variant;
+  ribbonPath?: string;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  headerVariant?: 'light' | 'dark' | 'overlay';
+  noindex?: boolean;
+  hero: HeroInput;
+  sections: SectionInput[];
+  autoAlternate?: boolean;
+  cta?: CtaInput;
+  crossLinks?: [CrossItem, CrossItem];
+}
+
+const {
+  title,
+  description,
+  headerVariant = 'overlay',
+  noindex = false,
+  hero,
+  sections,
+  autoAlternate = true,
+  cta,
+  crossLinks,
+} = Astro.props;
+
+const stripTags = (s: string) => s.replace(/<[^>]+>/g, '');
+
+// Jump tlačítka: použij hero.jumps, jinak auto z sekcí s id.
+const jumps =
+  hero.jumps ??
+  sections
+    .filter((s) => s.id)
+    .map((s) => ({ href: `#${s.id}`, label: stripTags(s.jumpLabel ?? s.title) }));
+
+const defaultHeroRibbon =
+  'M 120 720 C 520 420, 980 860, 1380 540 C 1700 300, 1980 560, 2060 420';
+
+// Připrav props pro každou sekci (alternace + odstranění jumpLabel).
+const sectionProps = sections.map((s, i) => {
+  const { jumpLabel, ...rest } = s;
+  const mediaSide = rest.mediaSide ?? (autoAlternate ? (i % 2 === 0 ? 'right' : 'left') : 'right');
+  const surface = rest.surface ?? (autoAlternate ? (i % 2 === 1 ? 'muted' : 'default') : 'default');
+  return { ...rest, mediaSide, surface };
+});
+---
+<Base title={title} description={description} headerVariant={headerVariant} noindex={noindex}>
+  <SubpageHero
+    eyebrow={hero.eyebrow}
+    title={hero.title}
+    sub={hero.sub}
+    variant={hero.variant}
+    ribbonPath={hero.ribbonPath ?? defaultHeroRibbon}
+    ribbonPathSecondary={hero.ribbonPathSecondary}
+    thickness={hero.thickness}
+    jumps={jumps}
+    ariaId={hero.ariaId}
+  />
+
+  {sectionProps.map((s) => <Section {...s} />)}
+
+  {cta && (
+    <CtaBanner
+      eyebrow={cta.eyebrow}
+      title={cta.title}
+      lede={cta.lede}
+      cta={cta.cta}
+      variant={cta.variant}
+      ribbonPath={cta.ribbonPath}
+    />
+  )}
+
+  {crossLinks && <CrossLinkPair items={crossLinks} />}
+
+  <slot />
+</Base>

@@ -75,6 +75,11 @@ const {
 const titleId = id ? `${id}-title` : undefined;
 const hasMedia = media.length > 0;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
+
+// withBase média, aby stránky předávaly syrové cesty z kolekcí.
+const galleryImages = media.map((m) =>
+  m.src ? { src: withBase(m.src), alt: m.alt } : { placeholder: m.placeholder ?? '', alt: m.alt }
+);
 ---
 <section
   class={`zz-section zz-section--media-${mediaSide} zz-section--${surface}${hasMedia ? '' : ' zz-section--no-media'}`}
@@ -123,7 +128,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     </div>
     {hasMedia && (
       <div class="zz-section__media">
-        <Gallery images={media} ariaLabel={eyebrow ?? title.replace(/<[^>]+>/g, '')} aspectRatio={mediaAspect} />
+        <Gallery images={galleryImages} ariaLabel={eyebrow ?? title.replace(/<[^>]+>/g, '')} aspectRatio={mediaAspect} />
         {priceRows.length > 0 && <PriceTable rows={priceRows} caption={priceCaption} />}
       </div>
     )}

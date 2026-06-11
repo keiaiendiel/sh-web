@@ -1,0 +1,57 @@
+---
+/*
+ * L1 Zázemí , rozcestník přes 6 kategorií. Každá kategorie = jedna zig-zag
+ * Section s reprezentativním obrázkem a tlačítkem do L2 detailu.
+ */
+import FractalPage from '../../layouts/FractalPage.astro';
+import { getCollection } from 'astro:content';
+
+const cats = (await getCollection('zazemi')).sort(
+  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99)
+);
+
+// Reprezentativní obrázek kategorie: první item.images se src, jinak placeholder.
+function repImage(cat: (typeof cats)[number]['data']) {
+  for (const it of cat.items ?? []) {
+    for (const im of it.images ?? []) {
+      if (im.src) return { src: im.src, alt: im.alt };
+    }
+  }
+  return {
+    placeholder: `Reprezentativní foto kategorie ${cat.intro.title} se připravuje`,
+    alt: cat.intro.title,
+  };
+}
+
+const sections = cats.map((c) => ({
+  id: c.id,
+  jumpLabel: c.data.intro.title,
+  title: c.data.intro.title,
+  lede: c.data.intro.lede,
+  actions: [{ label: `${c.data.intro.title}`, href: `/zazemi/${c.id}/`, kind: 'detail' as const }],
+  media: [repImage(c.data)],
+}));
+---
+<FractalPage
+  title="Zázemí , gastronomie, wellness, coworking, komunita · Startovací Hub Klecany"
+  description="Gastronomie, wellness, coworking a komunitní program v areálu horních kasáren. Většina zázemí v ceně bydlení nebo za zvýhodněnou sazbu, část otevřená i návštěvníkům."
+  hero={{
+    eyebrow: 'Zázemí',
+    title: 'Všechno <em>zázemí</em> Hubu',
+    sub: 'Gastronomie, wellness, coworking i komunitní program na jednom místě. Většina je pro ubytované v ceně nebo za zvýhodněnou sazbu, část otevřená i návštěvníkům.',
+    variant: 'deep',
+    ariaId: 'zazemi',
+  }}
+  sections={sections}
+  cta={{
+    eyebrow: 'Doprava',
+    title: 'Na prahu <em>metropole</em>',
+    lede: 'Kyvadlová doprava k metru, sdílená kola a auta, taxi. Patnáct minut autobusem na metro Kobylisy.',
+    cta: { label: 'Dopravní dostupnost', href: '/doprava/' },
+    variant: 'ink',
+  }}
+  crossLinks={[
+    { eyebrow: 'Ubytování', title: 'Privátní apartmány a <em>sdílené pokoje</em>', href: '/ubytovani/', variant: 'cream' },
+    { eyebrow: 'Stipendia', title: 'Pobytové a projektové <em>stipendium</em>', href: '/stipendia/', variant: 'rose' },
+  ]}
+/>
