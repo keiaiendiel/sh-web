@@ -1,27 +1,27 @@
 ---
 import { withBase } from '../utils/url';
 import BrandLogo from './BrandLogo.astro';
+import Icon from './Icon.astro';
 
 interface Props {
   variant?: 'light' | 'dark' | 'overlay';
 }
 const { variant = 'light' } = Astro.props;
 
-/* Site-wide nav. Order locked per SH_Web_Plan.md ř. 211 a Site_Copy § 0.2.
-   Rezervace nepatří do nav array, je to samostatný CTA chip vpravo. */
-type NavItem = {
-  path: string;
-  label: string;
-};
+/* Site-wide nav. Vše žije v off-canvas draweru (žádná desktop horizontal nav).
+   „Novinky" je zatím placeholder. Rezervace nepatří do nav array , je to
+   samostatný CTA chip (vpravo, odkrytý po scrollu) + zvýrazněné tlačítko
+   dole v draweru. */
+type NavLink = { path: string; label: string; placeholder?: boolean };
 
-const nav: NavItem[] = [
+const nav: NavLink[] = [
   { path: '/ubytovani/', label: 'Ubytování' },
   { path: '/coworking/', label: 'Coworking' },
   { path: '/komunita/',  label: 'Komunita' },
   { path: '/stipendia/', label: 'Stipendia' },
-  { path: '/okoli/',     label: 'Okolí' },
   { path: '/doprava/',   label: 'Doprava' },
   { path: '/cenik/',     label: 'Ceník' },
+  { path: '#',           label: 'Novinky', placeholder: true },
 ];
 
 const current = Astro.url.pathname;
@@ -41,63 +41,81 @@ const isHome = current === withBase('/');
       <BrandLogo class="hub-header__logo" />
     </a>
 
-    <nav class="hub-header__nav" aria-label="Hlavní navigace">
-      {nav.map((n) => (
-        <a
-          href={withBase(n.path)}
-          class="hub-header__link"
-          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
-      ))}
+    <div class="hub-header__actions">
       <a
         href={withBase('/rezervace/')}
-        class="hub-header__cta osa-nolink"
+        class="hub-header__cta hub-header__reserve osa-nolink"
+        tabindex="-1"
         aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
-    </nav>
 
-    <a
-      href={withBase('/rezervace/')}
-      class="hub-header__cta hub-header__cta--mobile osa-nolink"
-      aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
-
-    <button
-      class="hub-header__burger"
-      type="button"
-      aria-controls="hub-drawer"
-      aria-expanded="false"
-      aria-label="Otevřít menu">
-      <span class="hub-header__burger-box" aria-hidden="true">
-        <span></span><span></span><span></span>
-      </span>
-    </button>
+      <button
+        class="hub-header__burger"
+        type="button"
+        aria-controls="hub-drawer"
+        aria-expanded="false"
+        aria-label="Otevřít menu">
+        <span class="hub-header__burger-box" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+    </div>
   </div>
   <div class="hub-header__rule" role="presentation"></div>
 
-  <div id="hub-drawer" class="hub-drawer" role="dialog" aria-modal="true" aria-label="Hlavní navigace" hidden>
-    <nav class="hub-drawer__nav" aria-label="Mobilní navigace">
-      {nav.map((n) => (
+  <div id="hub-drawer" class="hub-drawer" hidden>
+    <div class="hub-drawer__scrim" data-drawer-close></div>
+    <aside class="hub-drawer__panel" role="dialog" aria-modal="true" aria-label="Hlavní navigace">
+      <div class="hub-drawer__top">
+        <button class="hub-drawer__close" type="button" data-drawer-close aria-label="Zavřít menu">
+          <Icon name="x" size={22} />
+        </button>
+      </div>
+
+      <nav class="hub-drawer__nav" aria-label="Hlavní navigace">
+        {nav.map((item) => (
+          <a
+            href={item.placeholder ? '#' : withBase(item.path)}
+            class:list={['hub-drawer__link', { 'osa-nolink': item.placeholder }]}
+            data-placeholder={item.placeholder ? '' : undefined}
+            aria-current={!item.placeholder && isActive(item.path) ? 'page' : undefined}>{item.label}</a>
+        ))}
+      </nav>
+
+      <div class="hub-drawer__foot">
         <a
-          href={withBase(n.path)}
-          class="hub-drawer__link"
-          aria-current={isActive(n.path) ? 'page' : undefined}>{n.label}</a>
-      ))}
-      <a
-        href={withBase('/rezervace/')}
-        class="hub-drawer__link hub-drawer__link--cta"
-        aria-current={reservationActive ? 'page' : undefined}>Rezervace</a>
-    </nav>
+          href={withBase('/rezervace/')}
+          class="hub-drawer__reserve-btn osa-nolink"
+          aria-current={reservationActive ? 'page' : undefined}>
+          <span>Rezervovat</span>
+          <Icon name="arrow-right" size={18} />
+        </a>
+
+        <div class="hub-drawer__divider" role="presentation"></div>
+
+        <div class="hub-drawer__account">
+          <button type="button" class="hub-drawer__acct" data-placeholder aria-label="Přihlásit se (připravujeme)">
+            <Icon name="log-in" size={18} />
+            <span>Přihlásit se</span>
+          </button>
+          <button type="button" class="hub-drawer__acct" data-placeholder aria-label="Přepnout účet (připravujeme)">
+            <Icon name="arrow-left-right" size={18} />
+            <span>Přepnout účet</span>
+          </button>
+        </div>
+      </div>
+    </aside>
   </div>
 </header>
 
 <script is:inline>
-  /* Burger drawer init. Re-runs na každém astro:page-load, protože header
-     persist nemusí zachovat element napříč navigací (variant prop se mění
-     overlay↔light). Globální guard nestačí, potřebujeme nové handler na
-     novém DOM node. */
+  /* Off-canvas drawer init. Re-runs na každém astro:page-load, protože header
+     persist (transition:persist) nemusí zachovat handler napříč navigací.
+     Guard přes dataset zabrání dvojitému bindu na stejném node. */
   (function () {
-    function bindBurger() {
+    function bindDrawer() {
       var btn = document.querySelector('.hub-header__burger');
-      var panel = document.getElementById('hub-drawer');
-      if (!btn || !panel) return;
+      var drawer = document.getElementById('hub-drawer');
+      if (!btn || !drawer) return;
       if (btn.dataset.burgerBound === '1') return;
       btn.dataset.burgerBound = '1';
 
@@ -105,15 +123,21 @@ const isHome = current === withBase('/');
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         btn.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
         if (open) {
-          panel.hidden = false;
-          requestAnimationFrame(function () { panel.classList.add('open'); });
+          drawer.hidden = false;
+          /* Force reflow, aby slide-in transition naběhl i při prvním otevření
+             (toggle display:none→block + okamžitá class jinak browser zbatchuje
+             a panel skočí bez animace). */
+          void drawer.offsetWidth;
+          drawer.classList.add('open');
           document.documentElement.classList.add('osa-nav-lock');
+          var closeBtn = drawer.querySelector('.hub-drawer__close');
+          if (closeBtn) setTimeout(function () { closeBtn.focus(); }, 60);
         } else {
-          panel.classList.remove('open');
+          drawer.classList.remove('open');
           document.documentElement.classList.remove('osa-nav-lock');
           setTimeout(function () {
-            if (btn.getAttribute('aria-expanded') === 'false') panel.hidden = true;
-          }, 280);
+            if (btn.getAttribute('aria-expanded') === 'false') drawer.hidden = true;
+          }, 340);
         }
       }
 
@@ -122,46 +146,53 @@ const isHome = current === withBase('/');
         setOpen(btn.getAttribute('aria-expanded') !== 'true');
       };
 
-      panel.addEventListener('click', function (e) {
-        if (e.target.closest('a')) setOpen(false);
+      drawer.addEventListener('click', function (e) {
+        if (e.target.closest('[data-drawer-close]')) { setOpen(false); return; }
+        var link = e.target.closest('a');
+        if (link) {
+          if (link.hasAttribute('data-placeholder')) { e.preventDefault(); return; }
+          setOpen(false);
+        }
+      });
+
+      // Placeholder akce (přihlášení / přepnutí účtu) zatím nic nedělají.
+      drawer.querySelectorAll('button[data-placeholder]').forEach(function (el) {
+        el.addEventListener('click', function (e) { e.preventDefault(); });
       });
     }
 
-    // Globální Escape handler, připojen jen jednou.
     if (!window.__hubHeaderEscBound) {
       window.__hubHeaderEscBound = true;
       document.addEventListener('keydown', function (e) {
         var btn = document.querySelector('.hub-header__burger');
-        if (e.key === 'Escape' && btn && btn.getAttribute('aria-expanded') === 'true') {
-          btn.click();
-        }
+        if (e.key === 'Escape' && btn && btn.getAttribute('aria-expanded') === 'true') btn.click();
       });
     }
 
-    bindBurger();
-    document.addEventListener('astro:page-load', bindBurger);
+    bindDrawer();
+    document.addEventListener('astro:page-load', bindDrawer);
   }());
 </script>
 
 <script is:inline>
-  /* Header overlay → opaque switch při scrollu mimo hero.
-     Hledá první image-hero sekci (.lp-hero, .ub-hero, .sec-hero,
-     .apt-hero, .kp-hero) a observuje její spodek. Dokud je hero
-     viditelné, header zůstává transparent. Když hero opustí viewport,
-     přidá se class `is-stuck` (bílé pozadí, tmavé písmo). */
+  /* Scroll past hero → header dostane class `is-stuck`.
+     Dvě role:
+       1. overlay varianta (landing) přepne z transparent na bílé pozadí,
+       2. odkryje Rezervace chip vedle hamburgeru (na všech variantách).
+     Najde první hero sekci a observuje její spodek. Když není hero (krátké
+     stránky), is-stuck nastaví hned, takže chip je vidět. Tear-down na každém
+     astro:page-load , persistent header by jinak observoval odpojený sentinel. */
   (function () {
-    if (window.__hubHeaderOverlayBound) return;
-    window.__hubHeaderOverlayBound = true;
-    function initOverlay() {
-      var header = document.querySelector('.hub-header--overlay');
-      if (!header || !('IntersectionObserver' in window)) return;
-      if (header.dataset.overlayBound === '1') return;
+    if (window.__hubHeaderStuckBound) return;
+    window.__hubHeaderStuckBound = true;
+    function initStuck() {
+      var header = document.querySelector('.hub-header');
+      if (!header) return;
+      if (header.__hubIO) { header.__hubIO.disconnect(); header.__hubIO = null; }
+      header.classList.remove('is-stuck');
+      if (!('IntersectionObserver' in window)) { header.classList.add('is-stuck'); return; }
       var hero = document.querySelector('.lp-hero, .ub-hero, .sec-hero, .apt-hero, .kp-hero, .subpage-hero');
-      if (!hero) {
-        header.classList.add('is-stuck');
-        return;
-      }
-      header.dataset.overlayBound = '1';
+      if (!hero) { header.classList.add('is-stuck'); return; }
       var sentinel = document.createElement('div');
       sentinel.setAttribute('aria-hidden', 'true');
       sentinel.style.cssText = 'position:absolute;left:0;right:0;bottom:1px;height:1px;pointer-events:none;';
@@ -173,8 +204,9 @@ const isHome = current === withBase('/');
         }
       }, { rootMargin: '-80px 0px 0px 0px', threshold: 0 });
       io.observe(sentinel);
+      header.__hubIO = io;
     }
-    document.addEventListener('astro:page-load', initOverlay);
+    document.addEventListener('astro:page-load', initStuck);
   }());
 </script>
 
@@ -189,9 +221,8 @@ const isHome = current === withBase('/');
     color: var(--k-0);
   }
 
-  /* Overlay variant: fixed nad hero, default průhledný, bílý text.
-     Po scrolování přes hero přidá JS class `is-stuck` a header dostane
-     bílé pozadí a tmavý text (= light look). */
+  /* Overlay varianta: fixed nad hero, default průhledný, bílý text.
+     Po scrollu přes hero přidá JS `is-stuck` → bílé pozadí, tmavý text. */
   .hub-header--overlay {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -201,58 +232,27 @@ const isHome = current === withBase('/');
     transition: background 220ms ease, color 220ms ease, border-color 220ms ease;
   }
   .hub-header--overlay .hub-header__rule { display: none; }
-  .hub-header--overlay .hub-header__link { color: rgba(255,255,255,0.95); }
-  .hub-header--overlay .hub-header__link:hover { color: #fff; }
-  .hub-header--overlay .hub-header__cta { color: #fff; border-color: #fff; }
-  .hub-header--overlay .hub-header__cta::after { background: #fff; }
-  .hub-header--overlay .hub-header__cta:hover,
-  .hub-header--overlay .hub-header__cta:focus-visible,
-  .hub-header--overlay .hub-header__cta[aria-current='page'] { color: var(--plum-deep); }
   .hub-header--overlay .hub-header__burger { color: #fff; }
-
   .hub-header--overlay.is-stuck {
     background: var(--bg);
     color: var(--fg);
     border-bottom-color: var(--border-muted);
   }
-  .hub-header--overlay.is-stuck .hub-header__link { color: var(--fg); }
-  .hub-header--overlay.is-stuck .hub-header__link:hover { color: var(--accent); }
-  .hub-header--overlay.is-stuck .hub-header__cta { color: var(--accent); border-color: var(--accent); }
-  .hub-header--overlay.is-stuck .hub-header__cta::after { background: var(--accent); }
-  .hub-header--overlay.is-stuck .hub-header__cta:hover,
-  .hub-header--overlay.is-stuck .hub-header__cta:focus-visible,
-  .hub-header--overlay.is-stuck .hub-header__cta[aria-current='page'] { color: #fff; }
   .hub-header--overlay.is-stuck .hub-header__burger { color: var(--fg); }
-  :global(html.osa-nav-lock) .hub-header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background: var(--bg);
-    color: var(--fg);
-    z-index: 30;
-  }
-  :global(html.osa-nav-lock) .hub-header .hub-header__rule { display: none; }
-  /* Když je drawer otevřený, header se přepne na light look , burger (teď X)
-     musí být tmavý, ne zděděný white z .hub-header--overlay. Aplikujeme i na
-     ostatní elementy v headeru, kterým CSS výš nastavilo bílý color. */
-  :global(html.osa-nav-lock) .hub-header.hub-header__burger,
-  :global(html.osa-nav-lock) .hub-header .hub-header__burger,
-  :global(html.osa-nav-lock) .hub-header.hub-header--overlay .hub-header__burger,
-  :global(html.osa-nav-lock) .hub-header.hub-header--overlay .hub-header__brand,
-  :global(html.osa-nav-lock) .hub-header.hub-header--overlay .hub-header__link { color: var(--fg); }
-  :global(html.osa-nav-lock) .hub-header.hub-header--overlay .hub-header__cta { color: var(--accent); border-color: var(--accent); }
-  :global(html.osa-nav-lock) .hub-header.hub-header--overlay .hub-header__cta::after { background: var(--accent); }
   .hub-header--dark .hub-header__rule { display: none; }
-  .hub-header__rule {
-    height: 1px;
-    background: var(--k-10);
-  }
+  .hub-header__rule { height: 1px; background: var(--k-10); }
+
+  /* Drawer otevřený: zvedni celý header nad FloatingAction (40) i HueSlider (50),
+     ať scrim + panel překryjí veškeré plovoucí UI. Scroll lock na html+body. */
+  :global(html.osa-nav-lock) .hub-header { z-index: 200; }
+  :global(html.osa-nav-lock),
+  :global(html.osa-nav-lock body) { overflow: hidden; }
 
   .hub-header__bar {
     display: flex;
     align-items: center;
-    gap: var(--space-5);
-    /* Width pattern: content edge aligns s tile grid (1480 max, gutter-aware
-       na menších viewportech). Žádný vlastní padding-x. */
+    justify-content: space-between;
+    gap: var(--space-4);
     padding: 10px 0;
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
@@ -265,54 +265,22 @@ const isHome = current === withBase('/');
     color: inherit;
     text-decoration: none;
     position: relative;
-    z-index: 35;
+    z-index: 2;
     flex-shrink: 0;
     line-height: 0;
   }
-  /* :global() because BrandLogo's SVG has its own component scope and the
-     class on it isn't tagged with Header's scoped data-astro-cid. */
   :global(.hub-header__logo) { display: block; height: 18px; width: auto; flex-shrink: 0; }
 
-  @media (prefers-reduced-motion: reduce) {
-  }
-
-  .hub-header__nav {
+  .hub-header__actions {
     display: flex;
     align-items: center;
-    gap: var(--space-5);
-    margin-left: auto;
-  }
-  .hub-header__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    color: var(--fg);
-    padding: 4px 0;
-    border-bottom: 1px solid transparent;
-    text-decoration: none;
-    transition: color var(--dur-fast) linear, border-color var(--dur-fast) linear;
-    white-space: nowrap;
-  }
-  .hub-header--dark .hub-header__link { color: rgba(255, 255, 255, 0.9); }
-  .hub-header__link[aria-current='page'] {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
-  .hub-header__link:hover { color: var(--accent); }
-  .hub-header--dark .hub-header__link:hover,
-  .hub-header--dark .hub-header__link[aria-current='page'] { color: #fff; }
-
-  /* Overlay (transparent, nad hero): aktivní link je bílý + bílý underline,
-     ALE jen na dark hero. Na light hero (cream/rose) drží plum.
-     :global(body:not...) zachytí oba případy v rámci scoped CSS pravidla. */
-  :global(body:not([data-hero-tone="light"])) .hub-header--overlay:not(.is-stuck) .hub-header__link[aria-current='page'] {
-    color: #fff;
-    border-bottom-color: #fff;
+    gap: var(--space-3);
+    position: relative;
+    z-index: 2;
   }
 
-  /* CTA pill , Rezervace.
-     Wipe pattern: outline at rest; fill rises from bottom on hover. */
+  /* CTA pill , Rezervace chip. Wipe pattern: outline v klidu, fill stoupá zdola.
+     Skrytý dokud nejsme za hero (is-stuck), pak fade + jemný posun dolů. */
   .hub-header__cta {
     position: relative;
     isolation: isolate;
@@ -337,44 +305,52 @@ const isHome = current === withBase('/');
   }
   .hub-header__cta:hover::after,
   .hub-header__cta:focus-visible::after,
-  .hub-header__cta[aria-current='page']::after {
-    clip-path: inset(0 0 0 0);
-  }
+  .hub-header__cta[aria-current='page']::after { clip-path: inset(0 0 0 0); }
+
   .hub-header--dark .hub-header__cta::after { background: #fff; }
   .hub-header--dark .hub-header__cta:hover,
   .hub-header--dark .hub-header__cta:focus-visible,
-  .hub-header--dark .hub-header__cta[aria-current='page'] {
-    color: var(--plum-deep);
-    outline: none;
-  }
+  .hub-header--dark .hub-header__cta[aria-current='page'] { color: var(--plum-deep); outline: none; }
+
+  .hub-header--overlay.is-stuck .hub-header__cta { color: var(--accent); border-color: var(--accent); }
+  .hub-header--overlay.is-stuck .hub-header__cta::after { background: var(--accent); }
+  .hub-header--overlay.is-stuck .hub-header__cta:hover,
+  .hub-header--overlay.is-stuck .hub-header__cta:focus-visible,
+  .hub-header--overlay.is-stuck .hub-header__cta[aria-current='page'] { color: #fff; outline: none; }
+
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta { color: var(--accent); border-color: var(--accent); }
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta::after { background: var(--accent); }
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta:hover,
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta:focus-visible,
-  .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta[aria-current='page'] {
-    color: #fff;
-    outline: none;
-  }
-  /* Mobile CTA: stejný styl jako desktop, ale ukazuje se vedle burgeru,
-     ne uvnitř nav. Default skrytý, zobrazí se pod 1024px. */
-  .hub-header__cta--mobile { display: none; margin-left: auto; }
+  .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta[aria-current='page'] { color: #fff; outline: none; }
 
-  @media (prefers-reduced-motion: reduce) {
-    .hub-header__cta,
-    .hub-header__cta::after { transition: none; }
+  /* Reveal chip , skrytý dokud header není za hero. */
+  .hub-header__reserve {
+    opacity: 0;
+    transform: translateY(-6px);
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+  .hub-header.is-stuck .hub-header__reserve {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    pointer-events: auto;
   }
 
-  /* Burger. 44×44 minimum tap target per WCAG 2.5.5; visual hamburger
-     stays 20×17 inside the box via .hub-header__burger-box. */
+  /* Burger , 44×44 tap target (WCAG 2.5.5), vizuální linky 20×17 uvnitř. */
   .hub-header__burger {
-    display: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 44px; height: 44px;
-    padding: 0; margin: 0 -10px 0 0; /* negative margin keeps optical alignment with edge */
+    padding: 0; margin: 0 -10px 0 0;
     background: transparent; border: 0;
     color: inherit;
     cursor: pointer;
     position: relative;
-    z-index: 35;
+    z-index: 2;
   }
   .hub-header__burger-box {
     display: grid;
@@ -386,148 +362,163 @@ const isHome = current === withBase('/');
     display: block;
     height: 1.5px;
     background: currentColor;
-    transition:
-      transform 240ms cubic-bezier(0.25, 1, 0.5, 1),
-      opacity 160ms linear;
+    transition: transform 240ms cubic-bezier(0.25, 1, 0.5, 1), opacity 160ms linear;
     transform-origin: 50% 50%;
   }
-  .hub-header__burger[aria-expanded='true'] .hub-header__burger-box > span:nth-child(1) {
-    transform: translateY(6.5px) rotate(45deg);
-  }
-  .hub-header__burger[aria-expanded='true'] .hub-header__burger-box > span:nth-child(2) {
-    opacity: 0;
-  }
-  .hub-header__burger[aria-expanded='true'] .hub-header__burger-box > span:nth-child(3) {
-    transform: translateY(-6.5px) rotate(-45deg);
-  }
-  .hub-header__burger:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
-  }
+  .hub-header__burger:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
-  /* Mobile drawer , bottom-anchored panel, slides up from bottom.
-     Nezakrývá zbytečně celou stránku: max-height 75vh, scroll uvnitř,
-     scrim nad zbytkem stránky. Položky jsou centered text-align, anchored
-     dolů, fontově trochu tučnější. */
+  /* Off-canvas drawer , vyjíždí zprava, scrim ztmaví zbytek stránky. */
   .hub-drawer {
     position: fixed;
-    left: 0; right: 0; bottom: 0;
-    top: auto;
-    z-index: 29;
-    background: #fff;
-    color: var(--fg);
-    padding: var(--space-7) var(--gutter) calc(var(--space-7) + env(safe-area-inset-bottom, 0px));
-    max-height: 75vh;
-    overflow-y: auto;
-    opacity: 0;
-    transform: translateY(100%);
-    transition:
-      opacity 240ms cubic-bezier(0.25, 1, 0.5, 1),
-      transform 320ms cubic-bezier(0.25, 1, 0.5, 1);
-    border-top: 1px solid hsl(var(--hue) 14% 88%);
-    box-shadow:
-      0 -2px 6px hsl(var(--hue) 41% 13% / 0.04),
-      0 -16px 48px hsl(var(--hue) 41% 13% / 0.12);
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
+    inset: 0;
+    z-index: 100;
   }
-  .hub-drawer.open {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  /* Scrim nad zbytkem stránky, klik mimo zavře drawer. Aplikujeme přes
-     globální html.osa-nav-lock::before, abychom se vyhnuli stacking
-     kontext kolizi v ::before na samotném draweru. */
-  :global(html.osa-nav-lock)::before {
-    content: "";
-    position: fixed;
+  .hub-drawer[hidden] { display: none; }
+
+  .hub-drawer__scrim {
+    position: absolute;
     inset: 0;
     background: hsl(var(--hue) 41% 13% / 0.42);
-    z-index: 28;
-    opacity: 1;
-    pointer-events: auto;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    z-index: 1;
   }
-  .hub-drawer__nav {
-    display: grid;
-    gap: 0;
-    max-width: 420px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .hub-drawer__link {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: var(--text-xl);
-    letter-spacing: var(--tracking-tight);
-    padding: var(--space-3) 0;
-    min-height: 44px;
+  .hub-drawer.open .hub-drawer__scrim { opacity: 1; }
+
+  .hub-drawer__panel {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: min(360px, 86vw);
+    z-index: 2;
     display: flex;
+    flex-direction: column;
+    background: #fff;
+    color: var(--fg);
+    padding: var(--space-4) var(--space-6) calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(100%);
+    transition: transform 340ms cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: -18px 0 56px hsl(var(--hue) 41% 13% / 0.18);
+  }
+  .hub-drawer.open .hub-drawer__panel { transform: translateX(0); }
+
+  .hub-drawer__top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--space-2);
+  }
+  .hub-drawer__close {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid var(--border-muted);
+    width: 44px; height: 44px;
+    margin-right: -8px;
+    border-radius: 8px;
+    color: var(--fg);
+    cursor: pointer;
+    transition: color 160ms ease, background 160ms ease;
+  }
+  .hub-drawer__close:hover { color: var(--accent); background: var(--bg-muted); }
+  .hub-drawer__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .hub-drawer__nav {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+  .hub-drawer__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font: 600 var(--text-xl) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    padding: var(--space-3) 0;
+    min-height: 48px;
     color: var(--fg);
     text-decoration: none;
     transition: color 160ms ease;
   }
-  .hub-drawer__link:last-of-type:not(.hub-drawer__link--cta) { border-bottom: 0; }
   .hub-drawer__link:hover { color: var(--accent); }
   .hub-drawer__link[aria-current='page'] { color: var(--accent); }
+  .hub-drawer__link[data-placeholder] { color: var(--k-50); cursor: default; }
+  .hub-drawer__link[data-placeholder]:hover { color: var(--k-50); }
 
-  .hub-drawer__link--cta {
-    position: relative;
-    margin-top: var(--space-4);
-    color: var(--accent);
-    background: transparent;
-    padding: var(--space-3) var(--space-6);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-input);
-    font-weight: 700;
-    text-align: center;
+  /* Spodní blok , Rezervovat + účty kotvené dolů. */
+  .hub-drawer__foot {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--space-6);
+  }
+  .hub-drawer__divider {
+    height: 1px;
+    background: var(--border-muted);
+    margin: var(--space-4) 0;
+  }
+
+  /* Rezervovat , solidní accent CTA, plná šířka panelu. */
+  .hub-drawer__reserve-btn {
+    display: flex;
+    align-items: center;
     justify-content: center;
-    justify-self: center;
-    width: fit-content;
-    min-width: 180px;
-    transition: background 200ms ease, color 200ms ease;
-  }
-  .hub-drawer__link--cta:hover,
-  .hub-drawer__link--cta:focus-visible {
+    gap: var(--space-2);
+    font: 700 var(--text-md) / 1 var(--font-sans);
+    padding: var(--space-3) var(--space-5);
     background: var(--accent);
-    color: #fff;
+    color: var(--accent-on);
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition: background 180ms ease;
   }
+  .hub-drawer__reserve-btn:hover,
+  .hub-drawer__reserve-btn:focus-visible { background: var(--plum-deep); outline: none; }
+  .hub-drawer__reserve-btn :global(svg) { transition: transform 180ms ease; }
+  .hub-drawer__reserve-btn:hover :global(svg) { transform: translateX(3px); }
 
-  :global(html.osa-nav-lock),
-  :global(html.osa-nav-lock body) { overflow: hidden; }
+  /* Account , placeholdery (přihlášení / přepnutí účtu). Zatím inertní, ztlumené. */
+  .hub-drawer__account {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hub-drawer__acct {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font: 500 var(--text-md) / 1 var(--font-sans);
+    color: var(--fg-subtle);
+    padding: var(--space-3) 0;
+    min-height: 44px;
+    text-align: left;
+    cursor: pointer;
+    transition: color 160ms ease;
+  }
+  .hub-drawer__acct :global(svg) { flex-shrink: 0; transition: color 160ms ease; }
+  .hub-drawer__acct:hover { color: var(--accent); }
 
-  /* Mobile: burger replaces nav, mobile CTA shows next to burger.
-     Breakpoint raised from 720 to 1024 because 8 nav items + brand +
-     status badge + CTA chip don't fit comfortably under ~1100 px. */
-  @media (max-width: 1024px) {
-    .hub-header__nav { display: none; }
-    .hub-header__cta--mobile { display: inline-flex; align-items: center; }
-    .hub-header__burger {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
+  /* Telefon: menu fullscreen (panel přes celou šířku). */
+  @media (max-width: 640px) {
+    .hub-drawer__panel {
+      width: 100%;
+      box-shadow: none;
     }
-    /* Užší header bar na telefonu, méně padding-y a kompaktnější CTA. */
-    .hub-header__bar { padding: 6px 0; gap: var(--space-4); }
-    .hub-header__cta { padding: 5px 12px; font-size: 13px; }
   }
 
-  /* Narrow viewports (iPhone SE etc.): shrink brand logo slightly. */
+  /* Narrow viewports (iPhone SE atd.): menší logo. */
   @media (max-width: 380px) {
     :global(.hub-header__logo) { height: 16px; }
   }
 
-  @media (min-width: 1025px) {
-    .hub-drawer { display: none; }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .hub-drawer,
+    .hub-header--overlay,
+    .hub-header__cta,
+    .hub-header__cta::after,
+    .hub-header__reserve,
     .hub-header__burger-box > span,
-    .hub-header__cta { transition: none; }
+    .hub-drawer__scrim,
+    .hub-drawer__panel,
+    .hub-drawer__reserve-btn,
+    .hub-drawer__reserve-btn :global(svg) { transition: none; }
   }
 </style>

@@ -198,8 +198,8 @@ const tiles = [
     <div class="lp-hero__scrim" aria-hidden="true"></div>
 
     <div class="lp-hero__inner">
-      <h1 class="lp-hero__title">Bydlení a&nbsp;coworking na&nbsp;prahu metropole.</h1>
-      <p class="lp-hero__lede">Devět typů ubytování od&nbsp;3&nbsp;000&nbsp;Kč měsíčně. Rezervujte si&nbsp;dnes, voláme do&nbsp;24&nbsp;hodin.</p>
+      <h1 class="lp-hero__title">Coliving &amp; coworking na prahu metropole.</h1>
+      <p class="lp-hero__lede">Nastartuj svoji budoucnost.</p>
     </div>
 
     {/* Tři rychlá CTA do rezervačního formuláře s předvyplněnou cestou.
@@ -475,6 +475,7 @@ const tiles = [
     z-index: -2;
     display: none;
     pointer-events: none;
+    filter: brightness(0.87);
   }
   .lp-hero[data-hero-mode="video"] .lp-hero__rotation { display: none; }
   .lp-hero[data-hero-mode="video"] .lp-hero__video { display: block; }
@@ -543,11 +544,11 @@ const tiles = [
          tlačítko sedí přesně na střed = zarovnané se scroll-cue šipkou.
          flex-shrink povolen, ať se na užším desktopu vejdou bez overflow. */
       flex: 0 1 auto;
-      width: clamp(250px, 22vw, 330px);
+      width: clamp(210px, 19vw, 290px);
       justify-content: center;
       text-align: center;
-      padding: clamp(13px, 1.3vw, 18px) 20px;
-      font-size: clamp(1rem, 1.3vw, 1.25rem);
+      padding: clamp(11px, 1.1vw, 15px) 18px;
+      font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
       line-height: 1.15;
     }
   }
@@ -590,16 +591,15 @@ const tiles = [
     100% { transform: translateX(-100%); }
   }
 
-  /* Brightness 1.0 (předchozí 0.88 dimovalo na 88 %), scrim ztlumený
-     v dolních pixelech (60→30 %) ať atmosféra fotky proteče. Text
-     v dolní třetině má pořád dostatečné podlití pro čitelnost bílého
-     copy, ale fotka je teď viditelně světlejší a barevnější. */
+  /* Brightness 0.87 (~13 % ztmavení) , hero video/fotka o kus tmavší pro
+     atmosféru a čitelnost bílého copy. Scrim ztlumený v dolních pixelech
+     (60→30 %) ať atmosféra fotky proteče. */
   .lp-hero__bg {
     position: absolute;
     inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: brightness(1);
+    filter: brightness(0.87);
   }
   .lp-hero__scrim {
     position: absolute;
