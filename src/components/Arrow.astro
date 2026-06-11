@@ -1,0 +1,57 @@
+---
+/*
+ * Arrow , jednotná šipka webu. Dvě linie v (téměř) pravém úhlu tvoří hlavu;
+ * varianta `arrow` přidává dřík, varianta `chevron` je jen hlava. currentColor,
+ * takže barvu řídí rodič přes `color`. Nahrazuje glyf → i lucide chevrony
+ * napříč CTA, odkazy a scroll-cue.
+ *
+ *   dir      , 'right' | 'left' | 'up' | 'down' (default 'right')
+ *   variant  , 'arrow' (s dříkem) | 'chevron' (jen hlava) (default 'arrow')
+ *   size     , px (default 20)
+ *   weight   , stroke-width v jednotkách viewBoxu 24 (default 2; `wide` CTA ~2.4)
+ *   class    , extra CSS class
+ */
+type Dir = 'right' | 'left' | 'up' | 'down';
+type Variant = 'arrow' | 'chevron';
+
+interface Props {
+  dir?: Dir;
+  variant?: Variant;
+  size?: number;
+  weight?: number;
+  class?: string;
+}
+
+const { dir = 'right', variant = 'arrow', size = 20, weight = 2, class: cls = '' } = Astro.props;
+
+// Base paths point RIGHT; směr řešíme rotací celého svg.
+const path = variant === 'chevron'
+  ? 'M9 5l7 7l-7 7'                 // dvě linie v pravém úhlu (hlava)
+  : 'M4 12h15m0 0l-6.5-6.5M19 12l-6.5 6.5'; // dřík + dvoutahá hlava
+
+const rot: Record<Dir, number> = { right: 0, down: 90, left: 180, up: 270 };
+---
+<svg
+  class={`osa-arrow ${cls}`}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+  style={`transform: rotate(${rot[dir]}deg)`}>
+  <path
+    d={path}
+    stroke="currentColor"
+    stroke-width={weight}
+    stroke-linecap="round"
+    stroke-linejoin="round" />
+</svg>
+
+<style>
+  .osa-arrow {
+    display: inline-block;
+    flex: 0 0 auto;
+    vertical-align: middle;
+  }
+</style>

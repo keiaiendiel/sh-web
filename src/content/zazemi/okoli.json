@@ -1,0 +1,348 @@
+{
+  "category": "okoli",
+  "route": "/zazemi/okoli/",
+  "order": 6,
+  "variant": "deep",
+  "intro": {
+    "eyebrow": "Zázemí · Okolí",
+    "title": "Co najdete kolem Klecan",
+    "lede": "Klidná obec na severním okraji Prahy. Hlubokou práci zvládnete v Klecanech, rušnější život v Praze máte patnáct minut autobusem. Školy, ordinace, obchody, sport, příroda i pošta máte v docházkové nebo krátké dojezdové vzdálenosti. Adresy, vzdálenosti a otevírací doby ověřujeme a uvádíme s datem poslední kontroly."
+  },
+  "items": [
+    {
+      "name": "Přírodní park a Vltava",
+      "slug": "priroda-vltava",
+      "lede": "Areál leží nad pravým břehem Vltavy. Do údolí řeky sejdete pěšky, podél vody pak vede klidná stezka pro procházky i běh.",
+      "blocks": [
+        {
+          "subtitle": "Údolí Vltavy",
+          "text": "Z areálu sestoupíte do údolí Vltavy, kde navazuje stezka podél řeky směrem na Prahu i na Mělník. Cesta dolů k vodě trvá zhruba deset minut na kole nebo třicet minut pěšky."
+        },
+        {
+          "subtitle": "Procházky a klid",
+          "text": "Okolí Klecan tvoří lesy, pole a břeh řeky. Hodí se na ranní běh, procházku po práci nebo víkendový výlet bez auta."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/02-cyklostezka.jpg",
+          "alt": "Stezka podél Vltavy pod Klecany"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "ověřit minutáž k řece"
+      ],
+      "priceNote": ""
+    },
+    {
+      "name": "Cyklotrasy a EuroVelo 7",
+      "slug": "cyklotrasy",
+      "lede": "Dálková cyklotrasa EuroVelo 7 vede údolím podél Vltavy. Z Hubu na ni dojedete za zhruba deset minut na kole, směrem na Prahu i na Mělník.",
+      "blocks": [
+        {
+          "subtitle": "EuroVelo 7",
+          "text": "Cyklostezka EuroVelo 7 je dostupná nonstop, na kole jste u ní za zhruba deset minut, pěšky asi za třicet. Vede po vltavském nábřeží směrem na Prahu i opačně na Mělník."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/02-cyklostezka.jpg",
+          "alt": "Cyklostezka EuroVelo 7 podél Vltavy"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [],
+      "priceNote": ""
+    },
+    {
+      "name": "Sportoviště Klecany",
+      "slug": "sportoviste",
+      "lede": "Krytý skatepark máte přímo v areálu, fotbalové hřiště a venkovní workout park v centru obce.",
+      "blocks": [
+        {
+          "subtitle": "Skate hala Klecany",
+          "text": "Krytý dřevěný skatepark v bývalém vojenském areálu Dolní Kasárna, zhruba sto metrů od Hubu. Otevřeno Po až Pá 14:00 až 21:00, So a Ne 10:00 až 21:00."
+        },
+        {
+          "subtitle": "Fotbalové hřiště TJ Sokol Klecany",
+          "text": "Na Skalkách 368/33, asi 1,8 km od Hubu, sedm minut na kole. Tréninky podle rozpisu klubu."
+        },
+        {
+          "subtitle": "Workout a gril park",
+          "text": "Veřejně přístupný workout a grilovací park u fotbalového hřiště v centru obce, v posledních letech revitalizovaný."
+        },
+        {
+          "subtitle": "Pumptrack",
+          "text": "Pumptrack se v okolí plánuje. Než ho ověříme přímo na místě, berte tuto zmínku jako orientační."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/03-exterier-1.jpg",
+          "alt": "Sportovní zázemí v areálu Klecany"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "pumptrack ověřit (vault mlčí)"
+      ],
+      "priceNote": ""
+    },
+    {
+      "name": "Obchody a nákupy",
+      "slug": "obchody",
+      "lede": "Samoobsluha máte v dosahu minuty, drobné potraviny a drogerii v centru obce, velký nákup na kole nebo autem v Lidlu Zdiby.",
+      "blocks": [
+        {
+          "subtitle": "Samoobsluha Astrapark",
+          "text": "Nejbližší samoobsluha v sousedním Astraparku, zhruba minutu pěšky. Hodí se na běžný denní nákup."
+        },
+        {
+          "subtitle": "Potraviny a drogerie Klecany",
+          "text": "Potraviny Klecany (V Honech 690/1, asi 1,6 km, otevřeno Po až Ne 7:00 až 19:00, prodávají i jízdenky PID) a Drogerie Och! (Do Klecánek 58, asi 1,1 km, otevřeno od 8:30). Smíšené zboží, drogerii a železářství v centru obce ještě ověříme."
+        },
+        {
+          "subtitle": "Lidl Zdiby",
+          "text": "Ke Zdibsku 272 ve Zdibech, asi 3,5 km. Šest minut autem, patnáct minut na kole, otevřeno Po až Ne do 21:00. Hlavní velký nákup."
+        },
+        {
+          "subtitle": "Hornbach Praha-Čimice",
+          "text": "Nejbližší hobbymarket pro vybavení a kutilské potřeby, v Praze-Čimicích. Dojezd autem ověříme."
+        },
+        {
+          "subtitle": "Donáška domů",
+          "text": "Rohlík.cz a Košík.cz doručují přímo do Klecan, takže velký nákup zvládnete i bez auta."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/01-areal-dostupnost.jpg",
+          "alt": "Dostupnost obchodů a služeb kolem areálu Klecany"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "smíšené zboží / železářství Klecany ověřit",
+        "Hornbach Čimice ověřit minutáž"
+      ],
+      "priceNote": ""
+    },
+    {
+      "name": "Vzdělávání a knihovna",
+      "slug": "vzdelavani",
+      "lede": "Obecní základní i mateřská škola, Montessori školka přímo v areálu, umělecká škola a obecní knihovna. Gymnázia v Praze 8 dojedete busem a metrem.",
+      "blocks": [
+        {
+          "subtitle": "Mateřská škola Astra (Montessori)",
+          "text": "Česko-anglická Montessori školka přímo v areálu Dolní Kasárna (Dolní Kasárna 766), otevřeno Po až Pá 7:00 až 17:00."
+        },
+        {
+          "subtitle": "Základní a mateřská škola Klecany",
+          "text": "Obecní ZŠ a MŠ, U Školky 74, výuka na Sídlišti 375, asi 1,3 km od Hubu, pět minut na kole."
+        },
+        {
+          "subtitle": "Základní umělecká škola",
+          "text": "ZUŠ Klecany, hudební a výtvarné obory, asi 1,4 km od Hubu."
+        },
+        {
+          "subtitle": "Knihovna a církevní ZŠ",
+          "text": "V obci funguje knihovna a ve výstavbě je církevní základní škola. Přesnou adresu, otevírací dobu i termín otevření školy ještě ověříme."
+        },
+        {
+          "subtitle": "Střední školy",
+          "text": "Pro středoškoláky jsou v dosahu gymnázia v Praze 8 (Gymnázium Thomase Manna, Karlínské gymnázium) busem a metrem a Střední škola letecké a výpočetní techniky v Odoleně Vodě."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/01-areal-dostupnost.jpg",
+          "alt": "Vzdělávací instituce v okolí areálu Klecany"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "knihovna Klecany ověřit adresu a hodiny",
+        "církevní ZŠ ve výstavbě ověřit termín"
+      ],
+      "priceNote": ""
+    },
+    {
+      "name": "Poliklinika a zdravotnictví",
+      "slug": "zdravotnictvi",
+      "lede": "Praktičtí lékaři, zubařka a lékárna v jedné budově asi 1,3 km od Hubu, pět minut na kole. Pohotovost a víkendová lékárna v Klecanech nejsou.",
+      "blocks": [
+        {
+          "subtitle": "Praktičtí lékaři",
+          "text": "Ordinace Jach-Ta (Po a Čt do 18:00, online recepty přes Smartmedix) a MUDr. Alice Vosečková (Po až Pá 8:00 až 13:00). Obě na adrese U Školy 17."
+        },
+        {
+          "subtitle": "Zubařka",
+          "text": "MUDr. Michaela Ondráčková, online rezervace. Po 10:00 až 17:00, Út až Čt 8:00 až 15:00, Pá 8:00 až 12:00."
+        },
+        {
+          "subtitle": "Lékárna Klecany",
+          "text": "Otevřeno Po a Út do 16:00, Čt do 18:00, o víkendu zavřeno. Nejbližší 24hodinová lékárna je v centru Prahy, přes metro Kobylisy asi 25 až 30 minut."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/04-topview-update.jpg",
+          "alt": "Pohled na Klecany a dostupnost zdravotnických služeb"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [],
+      "priceNote": ""
+    },
+    {
+      "name": "Spolky a komunita",
+      "slug": "spolky",
+      "lede": "V Klecanech žije pestrý spolkový život: skaut, dobrovolní hasiči, spolek Pravý hradec, jezdecký klub a sportovní oddíly. Klub volného času pořádá workshopy, kurzy i plesy.",
+      "blocks": [
+        {
+          "subtitle": "Spolky a oddíly",
+          "text": "V obci působí skautské středisko, sbor dobrovolných hasičů, komunitní spolek Pravý hradec a Sportovní Jezdecký Klub Klecany (Do Klecánek 25, asi 1,1 km). V okolí se dají najít i oddíly lukostřelby a biatlonu."
+        },
+        {
+          "subtitle": "Klub volného času",
+          "text": "KVČ Klecany pořádá workshopy, kurzy, deskoherní večery, masopust i plesy. Aktuální program zveřejňuje obec."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/03-exterier-1.jpg",
+          "alt": "Komunitní a spolkový život v Klecanech"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "skaut, hasiči, Pravý hradec, lukostřelba, biatlon ověřit (vault mlčí, dle zadání)"
+      ],
+      "priceNote": ""
+    },
+    {
+      "name": "Restaurace, kavárny a kultura",
+      "slug": "gastro-kultura",
+      "lede": "Výběrová kavárna, restaurace u fotbalu a kulturní centrum pro koncerty a plesy. Letní kino za řekou v Roztokách.",
+      "blocks": [
+        {
+          "subtitle": "Kavárna Klícka",
+          "text": "Náměstí Třebízského 54, asi 1,5 km. Výběrová káva Coffee Spot, řemeslné pivo Zichovec, domácí pečivo. Ve čtvrtek otevřeno do 21:00."
+        },
+        {
+          "subtitle": "Sportklub Restaurace",
+          "text": "Na Skalkách 368/33 u fotbalového hřiště, otevřeno Po až Ne 11:00 až 23:00. Denní menu, večer pizza."
+        },
+        {
+          "subtitle": "Kulturní centrum Rychta",
+          "text": "Sál pro 232 osob, koncerty, plesy a kulturní akce podle programu obce. Asi 1,6 km od Hubu."
+        },
+        {
+          "subtitle": "Letní kino Roztoky",
+          "text": "Sezónní letní promítání za řekou v Roztokách, asi 4,5 km přes přívoz Klecánky."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/03-exterier-1.jpg",
+          "alt": "Kavárny, restaurace a kultura v Klecanech"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [],
+      "priceNote": ""
+    },
+    {
+      "name": "Pošta, balíkomaty a banka",
+      "slug": "posta-banka",
+      "lede": "Pošta, výdejní boxy Zásilkovny a Alzy i bankomaty máte zhruba kilometr od Hubu.",
+      "blocks": [
+        {
+          "subtitle": "Pošta a balíkomaty",
+          "text": "Česká pošta Klecany (Do Klecánek 52), Z-BOX Zásilkovna a AlzaBox (oba Do Klecánek 58, nonstop přes aplikaci). Vše zhruba 1,1 km od Hubu."
+        },
+        {
+          "subtitle": "Bankomaty",
+          "text": "Bankomat MONETA Money Bank (U Školky 74, asi 1,3 km, nonstop bezkontaktní) a Komerční banka (Zdibsko 164, asi 2 km, nonstop)."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/01-areal-dostupnost.jpg",
+          "alt": "Pošta, balíkomaty a bankomaty v dosahu areálu"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "hodiny pošty ověřit"
+      ],
+      "priceNote": ""
+    },
+    {
+      "name": "Zastávky MHD",
+      "slug": "zastavky-mhd",
+      "lede": "Autobus PID 374 jezdí z Klecan na metro Kobylisy za 14 až 17 minut. Nejbližší zastávka je zhruba 300 metrů od hlavního vstupu.",
+      "blocks": [
+        {
+          "subtitle": "Zastávky u Hubu",
+          "text": "Klecany, U hřbitova (asi 300 metrů od hlavního vstupu) a Klecany, U Kostela (asi 1,2 km, patnáct minut pěšky). Na trase linky 374 dále navazují Zdiby, Veltěž a Přemyšlení."
+        },
+        {
+          "subtitle": "Linka 374",
+          "text": "Ve špičce jezdí každých 15 minut, mimo špičku každých 30 minut, večer a o víkendu po 30 až 60 minutách. Poslední spoj z Kobylis kolem 22:50. Tarif: tři pásma PID, měsíční předplatné 1 488 Kč."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/01-areal-dostupnost.jpg",
+          "alt": "Autobusová zastávka linky 374 u areálu Klecany"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "víc o spojení na stránce Doprava"
+      ],
+      "priceNote": ""
+    },
+    {
+      "name": "Co v Klecanech zatím není",
+      "slug": "co-zde-neni",
+      "lede": "Přiznáváme rovnou, co tu nečekejte. Pro někoho je to plus, pro jiného věc, kterou je dobré vědět předem.",
+      "blocks": [
+        {
+          "subtitle": "Klidné večery",
+          "text": "Po 23:00 tu nejsou kluby ani noční bary. Bereme to jako rys, ne nedostatek: klid na spánek po práci."
+        },
+        {
+          "subtitle": "Lékárna a velký nákup",
+          "text": "O víkendu nemá Klecany otevřenou lékárnu a v docházkové vzdálenosti není hypermarket. Řešením je donáška Rohlík.cz a Košík.cz nebo cesta do Lidlu Zdiby na kole."
+        },
+        {
+          "subtitle": "Večerní a víkendové spoje",
+          "text": "Linka 374 jezdí večer a o víkendu řidčeji. Tuto mezeru pokrývá Hub-shuttle a Hub-taxi, pět jízd a jedna jízda měsíčně máte v ceně bydlení."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/okoli/04-topview-update.jpg",
+          "alt": "Pohled na klidné Klecany z výšky"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [],
+      "priceNote": ""
+    }
+  ]
+}

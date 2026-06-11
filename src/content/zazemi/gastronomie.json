@@ -1,0 +1,250 @@
+{
+  "category": "gastronomie",
+  "route": "/zazemi/gastronomie/",
+  "order": 1,
+  "variant": "cream",
+  "intro": {
+    "eyebrow": "Zázemí · Gastronomie",
+    "title": "Jídlo a pití v areálu",
+    "lede": "Hlavní gastro zázemí Hubu je kuchyňský blok B v jádře areálu. Jeden objekt, různé režimy provozu: ráno pekárna, v poledne kantýna, večer a o víkendu restaurace. K tomu venkovní grilovací místa v komunitním parku. Další provozy plánujeme po etapách."
+  },
+  "items": [
+    {
+      "name": "Kantýna",
+      "slug": "kantyna",
+      "lede": "Polední menu v pracovní dny v kuchyňském bloku B. Snídaně, obědy i večeře v bufetovém režimu, jednoduchá jídla za rozumnou cenu. Vstup volný pro všechny, žádné průkazky.",
+      "blocks": [
+        {
+          "subtitle": "Co dostanete",
+          "text": "V poledne vybíráte ze tří až čtyř variant hlavního jídla, vždy jedno vegetariánské a jedno levnější s masem, k tomu polévka a salát. Plánujeme i ranní snídaně a večerní výdej, aby kantýna pokryla celý den."
+        },
+        {
+          "subtitle": "Provoz a platba",
+          "text": "Polední menu Po-Pá 11:00-14:00. Platíte kartou v aplikaci nebo přímo u výdeje. Rozsah snídaní a večeří a případnou slevu pro rezidenty s ročním tarifem upřesníme před spuštěním."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/komunita/gastro/01-kantyna.jpg",
+          "alt": "Interiér kantýny v kuchyňském bloku B s dřevěnými stoly"
+        },
+        {
+          "src": "/images/hub/komunita/gastro/03-kantyna-busy.jpg",
+          "alt": "Kantýna v poledne, lidé u výdeje a u stolů"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "priceNote": "Polední menu plánujeme v rozmezí 130-180 Kč, cena zatím není finální.",
+      "flags": [
+        "phase-1",
+        "price-tbd"
+      ]
+    },
+    {
+      "name": "Pekárna",
+      "slug": "pekarna",
+      "lede": "Ranní pekárna v kuchyňském bloku B. Čerstvý chléb, pečivo a jednoduché snídaně k odnesení, pro rezidenty i obyvatele Klecan.",
+      "blocks": [
+        {
+          "subtitle": "Sortiment",
+          "text": "Čerstvý chléb, croissanty, sladké pečivo a káva s sebou. Pekárna otevírá brzy ráno a po poledni prostor přebírá kantýna na výdej obědů."
+        },
+        {
+          "subtitle": "Provoz",
+          "text": "Plánovaná otevírací doba Po-Pá od 6:30 do 10:30, víkendy dopoledne. Konkrétní časy a případnou výhodu pro rezidenty (například kávu v ceně tarifu) doladíme před otevřením."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/komunita/gastro/04-pekarna.jpg",
+          "alt": "Ranní pekárna v kuchyňském bloku B, čerstvé pečivo na pultu"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "priceNote": "Tržní ceny, sladké pečivo zhruba 40-80 Kč, chléb 80-120 Kč.",
+      "flags": [
+        "phase-1",
+        "price-tbd"
+      ]
+    },
+    {
+      "name": "Restaurace",
+      "slug": "restaurace",
+      "lede": "Večerní restaurace v kuchyňském bloku B se sezónním menu a víkendovým brunchem. Vnitřní prostory, privátní salonky a letní zahrádka pro setkání, páry i menší skupiny.",
+      "blocks": [
+        {
+          "subtitle": "Menu a provoz",
+          "text": "Restaurace přebírá kuchyňský blok B večer a o víkendech. Sezónní menu a jednodušší á la carte. Plánujeme večerní výdej Po-Pá 17:00-22:00 a víkendy 11:00-22:00 s brunchem a obědem. Rezervace přes web nebo telefonicky."
+        },
+        {
+          "subtitle": "Salonky a letní zahrádka",
+          "text": "Pro soukromé setkání připravujeme privátní salonky a v sezóně venkovní zahrádku. Hodí se na setkání rezidentů s návštěvou z Prahy nebo pro menší skupiny zhruba do dvanácti lidí. Kapacity a dispozici salonků upřesníme po rekonstrukci."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/komunita/gastro/01-kantyna.jpg",
+          "alt": "Vnitřní prostor restaurace v kuchyňském bloku B"
+        },
+        {
+          "placeholder": "Foto večerní restaurace a letní zahrádky se připravuje.",
+          "alt": "Letní zahrádka restaurace, modrá hodina"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "priceNote": "Hlavní jídlo plánujeme v rozmezí 250-380 Kč, cena zatím není finální.",
+      "flags": [
+        "phase-1",
+        "price-tbd"
+      ]
+    },
+    {
+      "name": "Grilovací místa",
+      "slug": "grilovaci-mista",
+      "lede": "Tři až čtyři vyhrazená grilovací místa s pevnými grily, lavičkami a stoly v komunitním parku. Grilujete vlastní jídlo nebo suroviny zakoupené v kantýně.",
+      "blocks": [
+        {
+          "subtitle": "Jak to funguje",
+          "text": "Místo si zarezervujete přes komunitní aplikaci na konkrétní den a čas, nejdéle den předem. Uhlí, dřevo a podpalovač přinesete vlastní, nebo zakoupíte v kantýně. Po grilování po sobě vyklidíte popel."
+        },
+        {
+          "subtitle": "Komunitní grilování",
+          "text": "V letní sezóně plánujeme pravidelná komunitní grilování, kam si každý přinese jídlo k sdílení. Pro rezidenty je rezervace grilovacího místa zdarma."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/komunita/03-grilovaci-misto.jpg",
+          "alt": "Grilovací místo v komunitním parku s pevným grilem, lavicemi a stoly"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "flags": [
+        "phase-1"
+      ]
+    },
+    {
+      "name": "Minipivovar",
+      "slug": "minipivovar",
+      "lede": "Plánovaný minipivovar s vlastním pivem a posezením v areálu. Místo pro setkání rezidentů a sousedů z Klecan.",
+      "blocks": [
+        {
+          "subtitle": "Stav přípravy",
+          "text": "Minipivovar je ve fázi přípravy. Než potvrdíme provoz, kapacitu a sortiment, berte ho jako plánovaný prvek, ne jako hotové zázemí. Detaily doplníme, jakmile budou jisté."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/komunita/gastro/02-minipivovar.jpg",
+          "alt": "Minipivovar v areálu, exteriér s posezením"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "planned"
+      ]
+    },
+    {
+      "name": "Profesionální kuchyně k pronájmu",
+      "slug": "profesionalni-kuchyne",
+      "lede": "Plánovaná vybavená kuchyně k pronájmu pro komerční vaření, catering a zázemí food-trucků. Pro malé výrobce jídla a začínající gastro projekty.",
+      "blocks": [
+        {
+          "subtitle": "K čemu má sloužit",
+          "text": "Profesionální kuchyni připravujeme jako prostor k pronájmu na hodiny nebo dny: na catering, přípravu jídla pro food-truck nebo rozjezd malé gastro značky bez vlastní provozovny."
+        },
+        {
+          "subtitle": "Stav přípravy",
+          "text": "Provoz, vybavení a sazby pronájmu zatím nejsou potvrzené. Berte tuto kuchyni jako plánovaný prvek. Podmínky upřesníme, jakmile bude dispozice jistá."
+        }
+      ],
+      "images": [
+        {
+          "placeholder": "Foto profesionální kuchyně k pronájmu se připravuje.",
+          "alt": "Profesionální kuchyně k pronájmu, nerezové pracovní plochy"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "planned",
+        "price-tbd"
+      ]
+    },
+    {
+      "name": "Sdílená kuchyně se salonkem",
+      "slug": "sdilena-kuchyne",
+      "lede": "Plánovaná sdílená kuchyně se salonkem pro společné vaření rezidentů a menší soukromé akce.",
+      "blocks": [
+        {
+          "subtitle": "K čemu má sloužit",
+          "text": "Sdílená kuchyně se salonkem má být místo, kde si rezidenti spolu uvaří a sednou. Hodí se na společné večeře, narozeniny nebo malý workshop."
+        },
+        {
+          "subtitle": "Stav přípravy",
+          "text": "Umístění je zatím otevřené, sdílená kuchyně může vzniknout v kuchyňském bloku B nebo ve společných prostorech obytných bloků. Berte ji jako plánovaný prvek, podmínky a rezervaci upřesníme."
+        }
+      ],
+      "images": [
+        {
+          "placeholder": "Foto sdílené kuchyně se salonkem se připravuje.",
+          "alt": "Sdílená kuchyně se salonkem pro společné vaření"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "planned"
+      ]
+    },
+    {
+      "name": "Stanoviště food-trucků a gastro stánků",
+      "slug": "food-trucky",
+      "lede": "Zvažovaná stanoviště pro food-trucky a gastro stánky v areálu. Doplněk ke kuchyňskému bloku během akcí a rušnějších dní.",
+      "blocks": [
+        {
+          "subtitle": "Stav přípravy",
+          "text": "Vyhrazené stanoviště food-trucků zatím není v plánu areálu doložené. Zvažujeme ho jako doplněk během komunitních akcí. Než ho potvrdíme, berte ho jako záměr, ne jako hotové zázemí."
+        }
+      ],
+      "images": [
+        {
+          "placeholder": "Foto stanoviště food-trucků se připravuje.",
+          "alt": "Stanoviště food-trucků a gastro stánků v areálu"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "planned"
+      ]
+    },
+    {
+      "name": "Farmářské trhy",
+      "slug": "farmarske-trhy",
+      "lede": "Plánované farmářské trhy v areálu, kde rezidenti i sousedé z Klecan nakoupí od místních pěstitelů a výrobců.",
+      "blocks": [
+        {
+          "subtitle": "Stav přípravy",
+          "text": "Farmářské trhy připravujeme jako sezónní program v komunitním parku. Termíny, frekvenci a okruh prodejců upřesníme. Zatím je berte jako plánovaný prvek, ne jako pravidelný provoz."
+        }
+      ],
+      "images": [
+        {
+          "placeholder": "Foto farmářských trhů se připravuje.",
+          "alt": "Farmářské trhy v komunitním parku, stánky místních pěstitelů"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "planned"
+      ]
+    }
+  ]
+}

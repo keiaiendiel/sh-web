@@ -23,7 +23,7 @@ import { withBase } from '../../utils/url';
 const apartmany = (await getCollection('apartmany'))
   .filter((a) => !a.data.hidden)
   .sort((a, b) => a.data.order - b.data.order);
-const coliving = (await getCollection('coliving'))
+const coliving = (await getCollection('sdilenePokoje'))
   .filter((c) => !c.data.hidden)
   .sort((a, b) => a.data.cena.anchor - b.data.cena.anchor);
 

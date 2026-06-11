@@ -1,0 +1,279 @@
+---
+/*
+ * Section , unifikovaný zig-zag stavební blok celého webu. Text na jedné straně
+ * (nadpis + popis + volitelné pod-bloky + tlačítka), média na druhé (Gallery +
+ * volitelná cenová tabulka). Strana se střídá přes `mediaSide`. Ribbon ornament
+ * + reveal-on-scroll jako na landingu.
+ *
+ *   id?        , kotva pro SubpageHero jump tlačítka
+ *   eyebrow?   , drobný label (často vynechán , nadpis je konkrétní název)
+ *   title      , h2 string s podporou <em>
+ *   lede?      , hlavní popis (POPIS), podpora <em>/markup
+ *   blocks?    , [{ subtitle?, text }] pod-bloky (PODNADPIS + POPIS)
+ *   actions?   , [{ label, href, kind: 'reserve'|'detail'|'link', external? }]
+ *   media?     , GalleryImage[] (src+alt nebo placeholder+alt)
+ *   mediaAspect, aspect-ratio pro Gallery (default "4 / 3")
+ *   priceRows? , řádky pro PriceTable pod médiem
+ *   priceCaption?
+ *   mediaSide? , 'left' | 'right' (default 'right')
+ *   surface?   , 'default' | 'muted' (alternující pozadí)
+ *   ribbon?    , zobrazit ribbon ornament (default true)
+ *   ribbonPath?, custom Bezier d (viewBox 0 0 1600 600)
+ *   headingLevel, 2 | 3 (default 2)
+ */
+import Gallery from './Gallery.astro';
+import Arrow from './Arrow.astro';
+import PriceTable from './PriceTable.astro';
+import { withBase } from '../utils/url';
+
+type Action = {
+  label: string;
+  href: string;
+  kind?: 'reserve' | 'detail' | 'link';
+  external?: boolean;
+};
+type GalleryImage = { src?: string; placeholder?: string; alt: string };
+type Block = { subtitle?: string; text: string };
+type PriceRow = { label: string; note?: string; price?: number | string; priceNote?: string; flag?: boolean };
+
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  blocks?: Block[];
+  actions?: Action[];
+  media?: GalleryImage[];
+  mediaAspect?: string;
+  priceRows?: PriceRow[];
+  priceCaption?: string;
+  mediaSide?: 'left' | 'right';
+  surface?: 'default' | 'muted';
+  ribbon?: boolean;
+  ribbonPath?: string;
+  headingLevel?: 2 | 3;
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  lede,
+  blocks = [],
+  actions = [],
+  media = [],
+  mediaAspect = '4 / 3',
+  priceRows = [],
+  priceCaption,
+  mediaSide = 'right',
+  surface = 'default',
+  ribbon = true,
+  ribbonPath = 'M -40 380 C 360 180, 760 520, 1160 300 C 1420 160, 1560 360, 1660 260',
+  headingLevel = 2,
+} = Astro.props;
+
+const titleId = id ? `${id}-title` : undefined;
+const hasMedia = media.length > 0;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+---
+<section
+  class={`zz-section zz-section--media-${mediaSide} zz-section--${surface}${hasMedia ? '' : ' zz-section--no-media'}`}
+  id={id}
+  aria-labelledby={titleId}
+  data-reveal>
+  {ribbon && (
+    <span class="zz-section__ribbon" aria-hidden="true" data-ribbon-reveal>
+      <svg viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid slice">
+        <path d={ribbonPath} />
+      </svg>
+    </span>
+  )}
+  <div class="zz-section__inner">
+    <div class="zz-section__text">
+      {eyebrow && <p class="zz-section__eyebrow">{eyebrow}</p>}
+      <Heading class="zz-section__title" id={titleId} set:html={title} />
+      {lede && <p class="zz-section__lede" set:html={lede} />}
+      {blocks.length > 0 && (
+        <div class="zz-section__blocks">
+          {blocks.map((b) => (
+            <div class="zz-section__block">
+              {b.subtitle && <h4 class="zz-section__block-title">{b.subtitle}</h4>}
+              <p class="zz-section__block-text" set:html={b.text} />
+            </div>
+          ))}
+        </div>
+      )}
+      {actions.length > 0 && (
+        <div class="zz-section__actions">
+          {actions.map((a) => {
+            const kind = a.kind ?? 'link';
+            const href = a.external ? a.href : withBase(a.href);
+            return (
+              <a
+                class={`zz-btn zz-btn--${kind} osa-nolink`}
+                href={href}
+                {...(a.external ? { rel: 'noopener', target: '_blank' } : {})}>
+                <span>{a.label}</span>
+                <Arrow dir="right" variant="chevron" size={18} weight={2.4} class="zz-btn__arrow" />
+              </a>
+            );
+          })}
+        </div>
+      )}
+    </div>
+    {hasMedia && (
+      <div class="zz-section__media">
+        <Gallery images={media} ariaLabel={eyebrow ?? title.replace(/<[^>]+>/g, '')} aspectRatio={mediaAspect} />
+        {priceRows.length > 0 && <PriceTable rows={priceRows} caption={priceCaption} />}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .zz-section {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: var(--space-8) 0;
+    background: var(--bg);
+  }
+  .zz-section--muted { background: var(--bg-muted); }
+  .zz-section__ribbon {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.28;
+  }
+  .zz-section--media-left .zz-section__ribbon { transform: scaleX(-1); }
+  .zz-section__ribbon svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .zz-section__ribbon path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 34;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .zz-section__ribbon[data-ribbon-reveal] path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  .zz-section__ribbon[data-ribbon-reveal].is-revealed path {
+    animation:
+      ribbon-snake-draw 3.2s var(--ease-snake) forwards,
+      ribbon-breathe 7s ease-in-out 3.2s infinite;
+  }
+
+  .zz-section__inner {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: center;
+  }
+  .zz-section--no-media .zz-section__inner { grid-template-columns: minmax(0, 1fr); }
+  /* media-left → média v prvním sloupci (vlevo). */
+  .zz-section--media-left .zz-section__media { order: -1; }
+
+  .zz-section__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 56ch;
+    min-width: 0;
+  }
+  .zz-section__eyebrow {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+  .zz-section__title {
+    font: 600 clamp(1.875rem, 3.5vw, 2.75rem) / 1.08 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+    max-width: 22ch;
+    margin: 0;
+    color: var(--fg);
+  }
+  .zz-section__title :global(em) { font-style: italic; font-weight: 500; color: var(--accent); }
+  .zz-section__lede {
+    font: 500 var(--text-md) / 1.6 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+    max-width: 54ch;
+  }
+  .zz-section__blocks { display: grid; gap: var(--space-4); }
+  .zz-section__block { display: grid; gap: 4px; }
+  .zz-section__block-title {
+    font: 600 var(--text-md) / 1.25 var(--font-sans);
+    color: var(--fg);
+    margin: 0;
+  }
+  .zz-section__block-text {
+    font: 500 var(--text-sm) / 1.55 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+    max-width: 54ch;
+  }
+
+  .zz-section__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+  .zz-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    border-radius: var(--radius-input);
+    border: 1px solid transparent;
+    text-decoration: none !important;
+    transition: background 220ms var(--ease-quart), color 220ms var(--ease-quart),
+                border-color 220ms var(--ease-quart), transform 220ms var(--ease-quart);
+  }
+  .zz-btn__arrow { transition: transform 220ms var(--ease-quart); }
+  .zz-btn:hover .zz-btn__arrow,
+  .zz-btn:focus-visible .zz-btn__arrow { transform: translateX(3px); }
+
+  .zz-btn--reserve { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .zz-btn--reserve:hover,
+  .zz-btn--reserve:focus-visible { background: var(--plum-deep); border-color: var(--plum-deep); outline: none; }
+
+  .zz-btn--detail { background: transparent; color: var(--accent); border-color: var(--accent); }
+  .zz-btn--detail:hover,
+  .zz-btn--detail:focus-visible { background: var(--accent); color: #fff; outline: none; }
+
+  .zz-btn--link { background: transparent; color: var(--accent); border-color: transparent; padding-left: 0; padding-right: 0; }
+  .zz-btn--link:hover,
+  .zz-btn--link:focus-visible { color: var(--plum-deep); outline: none; }
+
+  .zz-section__media { min-width: 0; position: relative; z-index: 1; }
+
+  @media (max-width: 760px) {
+    .zz-section { padding: var(--space-7) 0; }
+    .zz-section__inner { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+    /* na mobilu text vždy první, média druhá , bez ohledu na stranu */
+    .zz-section--media-left .zz-section__media { order: 0; }
+    .zz-section__title { font-size: clamp(1.625rem, 7vw, 2.25rem); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .zz-btn, .zz-btn__arrow { transition: none; }
+    .zz-section__ribbon[data-ribbon-reveal] path,
+    .zz-section__ribbon[data-ribbon-reveal].is-revealed path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+  }
+</style>

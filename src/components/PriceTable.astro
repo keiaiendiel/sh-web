@@ -1,0 +1,119 @@
+---
+/*
+ * PriceTable , jednoduchá cenová tabulka pod Section nebo v Ceníku. Data-driven,
+ * aby z toho šlo do budoucna generovat PDF. Cena může být číslo (formátuje se
+ * jako "od N Kč/měs") nebo libovolný string ("zdarma", "50 Kč/h").
+ *
+ *   rows     , [{ label, note?, price?, priceNote?, flag? }]
+ *   caption? , malý titulek nad tabulkou
+ *   unit?    , přípona u číselných cen (default "Kč/měs")
+ *   prefix?  , předpona u číselných cen (default "od ")
+ *   compact? , menší padding (do sidebaru)
+ */
+type Row = {
+  label: string;
+  note?: string;
+  price?: number | string;
+  priceNote?: string;
+  flag?: boolean;
+};
+
+interface Props {
+  rows: Row[];
+  caption?: string;
+  unit?: string;
+  prefix?: string;
+  compact?: boolean;
+}
+
+const { rows, caption, unit = 'Kč/měs', prefix = 'od ', compact = false } = Astro.props;
+
+function fmt(price?: number | string): string {
+  if (price == null || price === '') return '';
+  if (typeof price === 'number') return `${prefix}${price.toLocaleString('cs-CZ')} ${unit}`;
+  return price;
+}
+---
+<div class={`price-table${compact ? ' price-table--compact' : ''}`}>
+  {caption && <p class="price-table__caption">{caption}</p>}
+  <dl class="price-table__rows">
+    {rows.map((r) => (
+      <div class={`price-table__row${r.flag ? ' price-table__row--flag' : ''}`}>
+        <dt class="price-table__label">
+          <span class="price-table__name">{r.label}</span>
+          {r.note && <span class="price-table__note">{r.note}</span>}
+        </dt>
+        <dd class="price-table__price">
+          {fmt(r.price)}
+          {r.priceNote && <span class="price-table__price-note">{r.priceNote}</span>}
+        </dd>
+      </div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  .price-table {
+    width: 100%;
+    margin-top: var(--space-4);
+  }
+  .price-table__caption {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    margin: 0 0 var(--space-2);
+  }
+  .price-table__rows {
+    margin: 0;
+    display: grid;
+    gap: 0;
+  }
+  .price-table__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-4);
+    align-items: baseline;
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--border-muted);
+  }
+  .price-table__row:last-child { border-bottom: 1px solid var(--border-muted); }
+  .price-table--compact .price-table__row { padding: 10px 0; }
+  .price-table__label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .price-table__name {
+    font: 600 var(--text-sm) / 1.25 var(--font-sans);
+    color: var(--fg);
+  }
+  .price-table__note {
+    font: 500 var(--text-2xs) / 1.3 var(--font-sans);
+    color: var(--fg-subtle);
+  }
+  .price-table__price {
+    margin: 0;
+    text-align: right;
+    font: 700 var(--text-sm) / 1.2 var(--font-sans);
+    color: var(--accent);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .price-table__price-note {
+    font: 500 var(--text-2xs) / 1.2 var(--font-sans);
+    color: var(--fg-subtle);
+    white-space: normal;
+    text-align: right;
+  }
+  .price-table__row--flag .price-table__price { color: var(--fg-subtle); }
+  .price-table__row--flag .price-table__name::after {
+    content: ' *';
+    color: var(--rose);
+  }
+</style>

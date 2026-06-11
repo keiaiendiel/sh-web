@@ -1,0 +1,133 @@
+{
+  "category": "ostatni",
+  "route": "/zazemi/ostatni/",
+  "order": 5,
+  "variant": "cream",
+  "intro": {
+    "eyebrow": "Zázemí",
+    "title": "Ostatní zázemí",
+    "lede": "Prostory a služby, které drží každodenní provoz pohromadě. Místo pro akce, uložení věcí, rychlé nákupy i vyzvednutí zásilek. Část z toho je v přípravě, takže parametry upřesňujeme postupně."
+  },
+  "items": [
+    {
+      "name": "Eventové prostory",
+      "slug": "eventove-prostory",
+      "lede": "Místa pro akce uvnitř i venku. Uvnitř počítáme s klubovnou a společenským sálem pro přednášky, promítání, kvízové večery nebo workshopy. Venku slouží komunitní park s grilovacími místy a venkovním posezením a parkovací plochy, které se dají proměnit na prostor pro větší akci nebo farmářské trhy.",
+      "blocks": [
+        {
+          "subtitle": "Indoor",
+          "text": "Klubovna a společenský sál v jádře areálu. Vhodné pro komunitní program, přednášky, promítání s projektorem a menší soukromé akce. Kapacitu a vybavení upřesníme, jakmile bude provoz spuštěný."
+        },
+        {
+          "subtitle": "Outdoor",
+          "text": "Komunitní park s grilovacími místy, venkovním posezením a zahrádkami. Dvě velké zpevněné plochy slouží jako rezerva pro větší akce a stánkový program. Termíny a podmínky pronájmu zveřejníme později."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Areál Startovacího Hubu Klecany, vstupní část",
+          "src": "/images/hub/areal/areal-entry.jpg"
+        },
+        {
+          "alt": "Vizualizace eventového prostoru, připravuje se",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "flags": [
+        "v-pripravive",
+        "kapacita-upresnit"
+      ]
+    },
+    {
+      "name": "Sklady",
+      "slug": "sklady",
+      "lede": "Místo navíc, když se vám věci nevejdou do bytu. Nabízíme dva typy. Sklepní kóje v podzemních podlažích a samostatné kontejnerové sklady v areálu. Hodí se, pokud bydlíte v menším formátu, řešíte sezónní vybavení nebo potřebujete dočasně uskladnit větší objem věcí.",
+      "blocks": [
+        {
+          "subtitle": "Sklepní kóje",
+          "text": "Uzamykatelné kóje v podzemních podlažích budov pod učebnami a coworkingem. Vhodné pro menší objem, sezónní věci a kola. Velikosti a počet upřesníme podle finálního členění prostoru."
+        },
+        {
+          "subtitle": "Kontejnerové sklady",
+          "text": "Samostatné uzamykatelné kontejnery v areálu pro větší objem věcí. Vnitřní rozdělení na jednotlivé sklady řešíme. Dostupnost a ceny doplníme po spuštění provozu."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Areál se servisními a skladovými objekty",
+          "src": "/images/hub/areal/building-s.jpg"
+        },
+        {
+          "alt": "Vizualizace kontejnerového skladu, připravuje se",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "flags": [
+        "v-pripravive",
+        "cena-upresnit"
+      ]
+    },
+    {
+      "name": "Výdejní automaty",
+      "slug": "vydejni-automaty",
+      "lede": "Základní potřeby na dosah, i když je zavřeno. Plánujeme automaty s nápoji, jídlem, hygienickými potřebami a drobnými základními věcmi do domácnosti. Cílem je, abyste si v noci nebo o víkendu obstarali, co zrovna potřebujete, bez cesty mimo areál.",
+      "blocks": [
+        {
+          "subtitle": "Co plánujeme",
+          "text": "Nápoje, balené jídlo a svačiny, hygienické potřeby a základní drogerie. Rozmístění automatů a sortiment ladíme podle poptávky rezidentů."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Vstupní zóna a chodby areálu",
+          "src": "/images/hub/areal/chodba-a-1.jpg"
+        },
+        {
+          "alt": "Vizualizace výdejních automatů, připravuje se",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "v-pripravive"
+      ]
+    },
+    {
+      "name": "Výdejní boxy",
+      "slug": "vydejni-boxy",
+      "lede": "Vyzvednutí balíků a nákupů přímo v areálu. Cílem je, abyste si zásilky a online nákupy vyzvedli na místě a nemuseli za nimi nikam jezdit. Konkrétní provozovatele teprve řešíme, takže to zatím berte jako záměr, ne jako hotovou službu.",
+      "blocks": [
+        {
+          "subtitle": "Záměr",
+          "text": "Počítáme s výdejními boxy pro online nákupy a zásilky tak, aby vyzvednutí bylo otázkou pár minut v rámci areálu."
+        },
+        {
+          "subtitle": "Stav",
+          "text": "Spolupráce s konkrétními přepravci a obchody zatím není uzavřená. Dostupné značky, počet boxů a podmínky doplníme, až budou dohody potvrzené. Do té doby nejde o zajištěnou službu."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Vstup do areálu Startovacího Hubu",
+          "src": "/images/hub/areal/areal-entry.jpg"
+        },
+        {
+          "alt": "Vizualizace výdejních boxů, připravuje se",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "bez-existujicich-dohod",
+        "v-pripravive",
+        "tretí-strany-neuvadet-jako-zajistene"
+      ]
+    }
+  ]
+}

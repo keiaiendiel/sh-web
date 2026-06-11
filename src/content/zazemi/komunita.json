@@ -1,0 +1,280 @@
+{
+  "category": "komunita",
+  "route": "/zazemi/komunita/",
+  "order": 4,
+  "variant": "rose",
+  "intro": {
+    "eyebrow": "Zázemí · Komunita",
+    "title": "Komunita a společné zázemí",
+    "lede": "Společenský sál, venkovní park s posezením a zahrádkami, minifarma a zázemí pro děti i mazlíčky. Místa, kde se v Hubu potkáte se sousedy. Část provozů je v projektové přípravě, u každého uvádíme, co už je v plánu a co teprve doladíme."
+  },
+  "items": [
+    {
+      "name": "Společenský sál a klubovna",
+      "slug": "spolecensky-sal",
+      "lede": "Multifunkční sál pro komunitní akce, deskové hry, projekce i ochotnické divadlo. Rezervujte si ho pro vlastní akci podle volných termínů.",
+      "blocks": [
+        {
+          "subtitle": "K čemu slouží",
+          "text": "Sál pojme zhruba 30 až 50 lidí. Vybavení počítá se stoly a lavicemi, projektorem a plátnem, ozvučením, kávovarem a ledničkou. Plánujeme pravidelný program: kvízový večer, deskoherní setkání a filmový klub. Konkrétní termíny doladíme s prvními rezidenty."
+        },
+        {
+          "subtitle": "Ochotnické divadlo a vlastní akce",
+          "text": "Sál se hodí i pro ochotnické divadlo, menší koncerty, workshopy nebo narozeniny. Rezidenti si ho rezervují přes komunitní aplikaci podle volných termínů. Pro spolky a sousedské akce z Klecan nabízíme pronájem v ceně dohodou s OSA II."
+        },
+        {
+          "subtitle": "Kapacita pro velké formáty",
+          "text": "Sál zvládne menší koncerty a divadlo do své kapacity. Velký koncertní nebo kinosál v plánu fáze 1 zatím není, k tomu se vrátíme v dalších etapách."
+        }
+      ],
+      "priceNote": "Pro rezidenty rezervace přes komunitní aplikaci. Pro spolky a sousedy z Klecan pronájem dohodou s OSA II.",
+      "images": [
+        {
+          "src": "/images/hub/komunita/04-klubovna.jpg",
+          "alt": "Společenský sál Hubu s týmy u stolů během komunitního večera"
+        },
+        {
+          "src": "/images/hub/komunita/klubovna.jpg",
+          "alt": "Interiér klubovny s projektorem, stoly a lavicemi"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "flags": [
+        "kapacita 30-50 osob k upřesnění",
+        "pravidelný program k potvrzení s Markem",
+        "v projektové přípravě"
+      ]
+    },
+    {
+      "name": "Pingpongové a šachové stoly",
+      "slug": "pingpong-sachy",
+      "lede": "Pingpongové stoly a venkovní šachové stoly ve společných prostorech. Místo pro pauzu mezi prací nebo večerní partii se sousedy.",
+      "blocks": [
+        {
+          "subtitle": "Co plánujeme",
+          "text": "V zázemí Hubu počítáme s pingpongovými stoly pro volné využití a s šachovými stoly venku v komunitním parku. Přesné umístění a počet stolů doladíme podle finální dispozice areálu."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Placeholder: pingpongový a venkovní šachový stůl ve společném prostoru Hubu (foto se připravuje)",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "umístění a počet stolů k upřesnění",
+        "v projektové přípravě",
+        "obrázek placeholder"
+      ]
+    },
+    {
+      "name": "Venkovní posezení",
+      "slug": "venkovni-posezeni",
+      "lede": "Posezení s pevnými stoly a lavicemi v komunitním parku. Místo pro neformální setkání, práci venku v sezóně nebo večer se sousedy.",
+      "blocks": [
+        {
+          "subtitle": "Otevřený park bez turniketů",
+          "text": "Venkovní posezení je v zázemí Hubu, v komunitním parku o rozloze 18 000 m². Park je otevřený rezidentům i sousedům z Klecan, žádné turnikety ani vstupné, jen pravidla provozu. Mobiliář tvoří pevné stoly, lavičky a stojany na kola."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/komunita/venkovni-02-gril.jpg",
+          "alt": "Venkovní posezení s pevnými stoly a lavicemi v komunitním parku"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": []
+    },
+    {
+      "name": "Komunitní zahrádky",
+      "slug": "komunitni-zahradky",
+      "lede": "Záhony v komunitním parku, kde si vypěstujete bylinky, zeleninu a květiny. Voda, kompost a nářadí v ceně, sezóna duben až říjen.",
+      "blocks": [
+        {
+          "subtitle": "Jak to funguje",
+          "text": "Plocha v severní části parku je rozdělená na malé záhony, které si rezervujete na sezónu. Voda, kompost a základní nářadí jsou v ceně tarifu Hubu. Pro nováčky otevíráme jednou ročně začátečnický workshop s místním zahradníkem."
+        },
+        {
+          "subtitle": "Sezóna a rezervace",
+          "text": "Záhony rezervujete přes komunitní aplikaci na jaro každého roku. Sezóna trvá zhruba od dubna do října. Velikost záhonu na rezidenta i podmínky pro externí zájemce z Klecan ještě doladíme."
+        }
+      ],
+      "priceNote": "Voda, kompost a základní nářadí v ceně tarifu Hubu.",
+      "images": [
+        {
+          "src": "/images/hub/komunita/05-komunitni-zahrady.jpg",
+          "alt": "Komunitní zahrádky se záhony v ranní rose, rezidenti při práci"
+        },
+        {
+          "src": "/images/hub/komunita/venkovni-01-zahrady.jpg",
+          "alt": "Záhony komunitních zahrádek v komunitním parku Hubu"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "flags": [
+        "velikost záhonu k upřesnění",
+        "podmínky pro externí k upřesnění",
+        "v projektové přípravě"
+      ]
+    },
+    {
+      "name": "Minifarma",
+      "slug": "minifarma",
+      "lede": "Malé hospodářské zázemí v komunitním parku se slepicemi, kozami a prasaty. Místo pro kontakt s domácími zvířaty, zejména pro děti.",
+      "blocks": [
+        {
+          "subtitle": "Co plánujeme",
+          "text": "Minifarma má být součástí venkovního programu Hubu: slepice, kozy a prasata v malém chovu pro radost a vzdělávání. Záměrem je dát dětem i dospělým každodenní kontakt se zvířaty přímo v areálu. Rozsah chovu, péči o zvířata a provozní pravidla připravujeme, je to v rané fázi plánování."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Placeholder: minifarma se slepicemi, kozami a prasaty v komunitním parku (foto se připravuje)",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "rozsah chovu a provoz k upřesnění",
+        "v projektové přípravě",
+        "obrázek placeholder"
+      ]
+    },
+    {
+      "name": "Hotel pro domácí mazlíčky",
+      "slug": "hotel-pro-mazlicky",
+      "lede": "Plánované zázemí pro pohlídání domácího mazlíčka, když odjedete. Doplnění k tomu, že mazlíčka si do Hubu po dohodě přivezete.",
+      "blocks": [
+        {
+          "subtitle": "Co plánujeme",
+          "text": "Hotel pro mazlíčky má pokrýt situace, kdy odjedete a potřebujete o psa nebo kočku na pár dní postarat. Kapacitu, ceny i provozní podmínky teprve připravujeme."
+        },
+        {
+          "subtitle": "Mazlíček přímo u vás",
+          "text": "Mazlíčka si do Hubu předběžně přivezete. V privátních apartmánech bez většího omezení, jen se sousedy zajistíte dohodu o klidu. V co-livingu po dohodě s ostatními rezidenty patra. Při registraci zájmu napište, jakého mazlíčka máte, detaily doladíme."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Placeholder: zázemí hotelu pro domácí mazlíčky (foto se připravuje)",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "kapacita a ceny k upřesnění",
+        "pravidla pro mazlíčky doladíme s prvními rezidenty",
+        "v projektové přípravě",
+        "obrázek placeholder"
+      ]
+    },
+    {
+      "name": "Dětská vnitřní hernička",
+      "slug": "detska-hernicka",
+      "lede": "Krytý prostor pro hru dětí za každého počasí. Zázemí pro rodiny mezi rezidenty Hubu.",
+      "blocks": [
+        {
+          "subtitle": "Co plánujeme",
+          "text": "Vnitřní hernička má dát dětem místo na hru i v zimě a za deště. Vybavení, otevírací dobu a režim provozu připravujeme."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Placeholder: dětská vnitřní hernička (foto se připravuje)",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "vybavení a provoz k upřesnění",
+        "v projektové přípravě",
+        "obrázek placeholder"
+      ]
+    },
+    {
+      "name": "Dětské venkovní hřiště",
+      "slug": "detske-hriste",
+      "lede": "Hřiště v komunitním parku pro hru venku. Typ a vybavení hřiště ještě upřesníme.",
+      "blocks": [
+        {
+          "subtitle": "Co plánujeme",
+          "text": "V komunitním parku počítáme s hřištěm a venkovním posezením pro neformální setkání rezidentů, pro děti i pro práci venku v sezóně. Zda půjde o dětské, sportovní nebo multifunkční hřiště, ještě doladíme s Markem podle finální dispozice parku."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Placeholder: dětské venkovní hřiště v komunitním parku (foto se připravuje)",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "typ hřiště k upřesnění s Markem",
+        "v projektové přípravě",
+        "obrázek placeholder"
+      ]
+    },
+    {
+      "name": "Dětská skupina",
+      "slug": "detska-skupina",
+      "lede": "Plánované místo, kam dáte dítě na pohlídání, včetně menších dětí. Zázemí pro pracující rodiče mezi rezidenty.",
+      "blocks": [
+        {
+          "subtitle": "Co plánujeme",
+          "text": "Dětská skupina má fungovat jako místo pro hlídání dětí, počítáme i s menšími dětmi. Záměrem je dát pracujícím rodičům v Hubu možnost nechat dítě v péči přímo v areálu. Kapacitu, věkové rozpětí, provozní dobu i podmínky teprve připravujeme a doladíme s prvními rodinami."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Placeholder: dětská skupina, zázemí pro hlídání dětí (foto se připravuje)",
+          "placeholder": "FOTO SE PŘIPRAVUJE"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "kapacita, věk a provoz k upřesnění",
+        "v projektové přípravě",
+        "obrázek placeholder"
+      ]
+    },
+    {
+      "name": "Družstevní a spolkové konstrukty",
+      "slug": "druzstva",
+      "lede": "Interní poznámka k právní a vlastnické struktuře záměru. Není to vybavenost Hubu, na webu v1 se pravděpodobně nezveřejní.",
+      "blocks": [
+        {
+          "subtitle": "K čemu to je",
+          "text": "Pod hlavičkou záměru se zvažují družstevní a spolkové konstrukty pro budoucí vlastnickou a provozní strukturu: Alt bytový spolek Klecany, Alt bytové družstvo Klecany, Alt spotřební družstvo Klecany, Alt družstevní záložna Klecany, Altstav stavebně bytové družstvo Klecany a Alterstav výrobní, stavební, odbytové a spotřební družstvo Klecany. Jde o právní entity, ne o prvky vybavení."
+        },
+        {
+          "subtitle": "Stav",
+          "text": "Tyto konstrukty patří do strategické diskuse s Markem, ne do veřejného menu webu. Do verze 1 webu je nezahrnujeme, dokud se role a načasování jednotlivých entit nepotvrdí."
+        }
+      ],
+      "images": [
+        {
+          "alt": "Placeholder: bez obrázku, interní informační blok"
+        }
+      ],
+      "bookable": false,
+      "detail": false,
+      "flags": [
+        "právní entity, ne vybavenost",
+        "k potvrzení s Markem",
+        "možná mimo web v1",
+        "interní, nezveřejňovat ve veřejném menu"
+      ]
+    }
+  ]
+}

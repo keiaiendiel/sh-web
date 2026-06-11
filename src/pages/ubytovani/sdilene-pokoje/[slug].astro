@@ -6,7 +6,7 @@ import { getCollection, render } from 'astro:content';
 import { withBase } from '../../../utils/url';
 
 export async function getStaticPaths() {
-  const coliving = await getCollection('coliving');
+  const coliving = await getCollection('sdilenePokoje');
   return coliving
     .filter((entry) => !entry.data.hidden)
     .map((entry) => ({
@@ -27,7 +27,7 @@ type GalleryItem = { src: string; alt: string } | { placeholder: string; alt: st
    je vždy hero (== thumbnail na overview kartě). Pokud gallery není zadána,
    fallback na hero + placeholder sloty (sdílené zázemí coliving patra). */
 const galleryImages: GalleryItem[] = data.gallery && data.gallery.length > 0
-  ? data.gallery.map((g): GalleryItem => ({ src: withBase(g.src), alt: g.alt }))
+  ? data.gallery.map((g): GalleryItem => (g.src ? { src: withBase(g.src), alt: g.alt } : { placeholder: g.placeholder ?? '', alt: g.alt }))
   : [
       ...(heroSrc ? [{ src: heroSrc, alt: data.heroAlt ?? '' } as GalleryItem] : []),
       { placeholder: 'Společný pokoj nebo lounge před kapslemi, lavice, rostliny, knihovna', alt: 'Společný prostor s pody.' },
@@ -44,6 +44,7 @@ const ribbonPaths: Record<string, string> = {
   'jedno-luzko':   'M -60 360 C 140 480, 360 200, 540 320 S 780 520, 860 660',
   'kapsle-double': 'M -40 560 C 180 320, 380 280, 540 420 S 760 620, 840 720',
   'dvouluzko':     'M -40 280 C 180 460, 380 240, 540 380 S 780 540, 860 640',
+  'dvojluzko-basic': 'M -60 440 C 160 260, 380 480, 540 340 S 780 520, 860 640',
 };
 const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['jedno-luzko'];
 ---
@@ -55,7 +56,7 @@ const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['jedno-luzko'];
   <section class="apt-gallery" aria-label={`Galerie typu ${data.name}`}>
     <div class="apt-gallery__inner">
       <aside class="apt-gallery__side">
-        <a class="apt-gallery__eyebrow osa-nolink" href={withBase('/ubytovani/#ub-coliving-title')}>Co-living<span aria-hidden="true"> →</span></a>
+        <a class="apt-gallery__eyebrow osa-nolink" href={withBase('/ubytovani/sdilene-pokoje/')}>Sdílené pokoje<span aria-hidden="true"> →</span></a>
         <h2 class="apt-gallery__title">{data.name}</h2>
         <p class="apt-gallery__lede">{data.popis}</p>
         <p class="apt-gallery__price">

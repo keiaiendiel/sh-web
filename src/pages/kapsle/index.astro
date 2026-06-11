@@ -13,7 +13,7 @@ import { withBase } from '../../utils/url';
 
    Cena z content collection (kapsle-single + kapsle-double). */
 
-const coliving = await getCollection('coliving');
+const coliving = await getCollection('sdilenePokoje');
 const single = coliving.find((c) => c.data.slug === 'kapsle-single')!;
 const double = coliving.find((c) => c.data.slug === 'kapsle-double')!;
 const formatCena = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;

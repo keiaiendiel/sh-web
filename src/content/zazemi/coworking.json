@@ -1,0 +1,289 @@
+{
+  "category": "coworking",
+  "route": "/zazemi/coworking/",
+  "order": 3,
+  "variant": "ink",
+  "intro": {
+    "eyebrow": "Zázemí",
+    "title": "Coworking, dílny a studia",
+    "lede": "Pracovní zázemí Hubu je v budově C v jádře areálu. Volný stůl ve velkém sále, fixní stůl s vlastní skříňkou, vybavené kanceláře, zasedací místnosti na hodinovou rezervaci, ateliéry a sdílené dílny v samostatných objektech. Pro rezidenty Hubu je volný stůl v sále v ceně bydlení s přístupem 24/7, externí pracovníci z okolí si berou kterýkoli formát za měsíční nebo hodinový tarif. Recepce v budově S k tomu řeší zásilky, tisk a sídla firem. Provoz spouštíme po etapách, část studií a dílen je zatím v přípravě."
+  },
+  "items": [
+    {
+      "name": "Recepce a kancelářské služby",
+      "slug": "recepce",
+      "lede": "Recepce v budově S vyřídí zásilky, tisk a kopírování, virtuální sídlo firmy i schůzky. Část služeb je v přípravě, spouštíme je po etapách s provozem Hubu.",
+      "blocks": [
+        {
+          "subtitle": "Zásilky a tisk",
+          "text": "Na recepci převezmeme a uložíme vaše zásilky, dokud si je nevyzvednete. K dispozici je tisk, kopírování a skenování za drobný kredit."
+        },
+        {
+          "subtitle": "Sídlo firmy",
+          "text": "Plánujeme nabídnout virtuální sídlo pro OSVČ a firmy na adrese Hubu, samostatný poskytovatel sídla v Praze stojí zhruba 135 až 330 Kč měsíčně. K tomu chystáme zakládání ready-made společností a přeposílání pošty. Tyto služby jsou zatím v přípravě, podmínky upřesníme před spuštěním."
+        },
+        {
+          "subtitle": "Asistence",
+          "text": "Počítáme s virtuálními asistenty pro administrativu a s domlouváním schůzek přes recepci. Rozsah těchto služeb teprve dolaďujeme, na webu je uvádíme jako plánované."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/coworking/01-cowork-exterier-c-busy.jpg",
+          "alt": "Exteriér coworkingové budovy C v areálu Hubu, lidé u vchodu"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "priceNote": "Tisk a kopírování za drobný kredit. Sídlo firmy a další služby: ceny upřesníme před spuštěním.",
+      "flags": [
+        "v-priprave"
+      ]
+    },
+    {
+      "name": "Coworkingový sál (volný stůl)",
+      "slug": "coworkingovy-sal",
+      "lede": "Velký společný sál v 1. NP budovy C. Přijdete s notebookem, sednete si, pracujete. Pro rezidenty Hubu zdarma, pro externí 2 900 Kč měsíčně. Přístup 24/7 na čip.",
+      "blocks": [
+        {
+          "subtitle": "Co v sále je",
+          "text": "Otevřený prostor s denním světlem z velkých oken, dřevěné podlahy, stoly s ergonomickými židlemi, dva kávovary a vodní stanice. Wi-Fi přes celý prostor, voda a čaj zdarma. Kapacita 30 až 40 míst současně, žádné rezervace stolů."
+        },
+        {
+          "subtitle": "Pódium a kuchyňský kout",
+          "text": "Součástí sálu je pódium pro prezentace a menší akce a kuchyňský kout pro přípravu kávy a svačiny. Pohovkový kout slouží pro neformální schůzky."
+        },
+        {
+          "subtitle": "Budky pro telefonování",
+          "text": "Čtyři tiché telefonní budky pro hovory, abyste nerušili ostatní v sále. Tiskárna a skener jsou k dispozici za drobný kredit."
+        },
+        {
+          "subtitle": "Pro externí",
+          "text": "Externí pracovníky z okolí prosíme při registraci o krátký životopis a LinkedIn profil, omezujeme tím transientní využití. Přístup je pak neomezený 24/7 na čip."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/coworking/cowork-interier-sal-c.jpg",
+          "alt": "Coworkingový sál v budově C, lidé u stolů v odpoledním světle"
+        },
+        {
+          "src": "/images/hub/coworking/cowork-interier-sal-c-empty.jpg",
+          "alt": "Prázdný coworkingový sál s volnými stoly a velkými okny"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "priceNote": "Rezidenti zdarma. Externí 2 900 Kč/měsíc, neomezený přístup 24/7.",
+      "flags": [
+        "cena-vs-praha-na-metodiku"
+      ]
+    },
+    {
+      "name": "Sdílené pracovní stoly",
+      "slug": "fixni-stul",
+      "lede": "Váš vlastní fixní stůl v rohu sálu nebo v menší zóně. Vyberete si stůl s technikou (dva monitory, ergonomická židle, lampa) nebo holý stůl jen pro váš notebook. Uzamykatelná skříňka pod stolem. 4 200 Kč měsíčně.",
+      "blocks": [
+        {
+          "subtitle": "Stůl s technikou",
+          "text": "Personalizovaný setup: dva monitory 27 palců (Full HD nebo 4K podle volby), ergonomická židle, lampa s nastavitelným světlem a organizér. Hodí se pro grafiky, programátory a každého, kdo pracuje na dvou obrazovkách."
+        },
+        {
+          "subtitle": "Stůl bez techniky",
+          "text": "Pokud máte vlastní vybavení, vezmete si holý fixní stůl a zapojíte si svoje. Pod stolem je u obou variant uzamykatelná skříňka na nábytek z domova, dokumenty nebo druhý notebook."
+        },
+        {
+          "subtitle": "Pro koho",
+          "text": "Pro lidi, kteří potřebují víc soustředění než ve volném sále, a pro ty, kdo chtějí stálé fyzické zázemí v Hubu i bez bydlení. Cena je stejná pro rezidenty i externí, rezidenti ji platí navíc k bydlení."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/coworking/02-cowork-interier-vlastni-stul.jpg",
+          "alt": "Fixní stůl s dvěma monitory a ergonomickou židlí v coworkingu"
+        },
+        {
+          "src": "/images/hub/coworking/cowork-interier-vlastni-stul-1.jpg",
+          "alt": "Personalizovaný fixní stůl s rostlinou a uzamykatelnou skříňkou"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "priceNote": "4 200 Kč/měsíc. Smlouva minimálně 3 měsíce, výpovědní lhůta 30 dnů. Zasedačka 4 hodiny měsíčně v ceně.",
+      "flags": [
+        "cena-vs-praha-na-metodiku"
+      ]
+    },
+    {
+      "name": "Vybavené kanceláře",
+      "slug": "vybavene-kancelare",
+      "lede": "Privátní kancelář pro čtyřčlenný tým v patře budovy C. Plocha 15 až 20 m², čtyři samostatné stoly nebo dva propojené, whiteboard, vlastní zámek na dveřích. Krátkodobě i dlouhodobě, 15 000 Kč měsíčně za celý prostor.",
+      "blocks": [
+        {
+          "subtitle": "Vybavení",
+          "text": "Čtyři stoly s ergonomickými židlemi, whiteboard 1,5 x 1,2 m, sdílený monitor 27 palců mezi tým a volitelně vlastní wifi router kvůli VPN izolaci. Zasedací místnost v ceně 4 hodiny měsíčně, rezervujete předem."
+        },
+        {
+          "subtitle": "Pro koho",
+          "text": "Pro startupové týmy, agenturní čtyřčlenné týmy, malé inženýrské nebo výzkumné skupiny. Pro tým, který už nezvládá open space a potřebuje soustředění v menší skupině. Cena 3 750 Kč na osobu při plném týmu."
+        },
+        {
+          "subtitle": "Doba pronájmu",
+          "text": "Kancelář si vezmete dlouhodobě i na kratší projekt. Standardní smlouva je minimálně na 6 měsíců, výpovědní lhůta 60 dnů. Pro krátkodobé potřeby se domluvíme individuálně."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/coworking/cowork-interier-pro4.jpg",
+          "alt": "Vybavená kancelář pro čtyři osoby s whiteboardem"
+        },
+        {
+          "src": "/images/hub/coworking/cowork-interier-pro4-busy.jpg",
+          "alt": "Čtyřčlenný tým u společného stolu v privátní kanceláři"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "priceNote": "15 000 Kč/měsíc za celý prostor (3 750 Kč na osobu). Přístup 24/7 na čip.",
+      "flags": [
+        "cena-vs-praha-na-metodiku"
+      ]
+    },
+    {
+      "name": "Zasedací místnosti",
+      "slug": "zasedaci-mistnosti",
+      "lede": "Dvě zasedací místnosti v patře budovy C, každá pro 6 osob. AV technika, tabule, kávovar v rohu. Rezervujete si je na hodinu, půlden nebo celý den. 350 Kč za hodinu, 2 000 Kč za celý den.",
+      "blocks": [
+        {
+          "subtitle": "Vybavení",
+          "text": "Smart TV 65 palců s HDMI, AirPlay a Miracast, konferenční mikrofon a kamera pro hybridní setkání, whiteboard 1,5 x 1,2 m, vlastní zámek, kávovar a voda."
+        },
+        {
+          "subtitle": "Rezervace a sazby",
+          "text": "Rezervujte si místnost přes komunitní aplikaci nebo telefonicky v recepci. Externí platí 350 Kč za hodinu, 1 200 Kč za půlden, 2 000 Kč za celý den. Rezidenti a uživatelé fixního stolu mají 4 hodiny měsíčně zdarma, nad rámec hodinovou sazbu."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/coworking/03-cowork-interior-zasedacka.jpg",
+          "alt": "Zasedací místnost pro šest osob s AV technikou a tabulí"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "priceNote": "350 Kč/hod, 1 200 Kč/půlden, 2 000 Kč/celý den. Rezidenti 4 hodiny měsíčně zdarma. Provoz po rezervaci 07:00 až 22:00.",
+      "flags": [
+        "cena-vs-praha-na-metodiku"
+      ]
+    },
+    {
+      "name": "Ateliéry a sdílené dílny",
+      "slug": "ateliery-dilny",
+      "lede": "Ateliéry pro tvořivou práci v budově D1 a sdílené dílny v objektech H1 až H3, D1 a D2. Ateliér 15 až 25 m² za 6 500 Kč měsíčně, členská dílna 490 Kč měsíčně, těžké stroje za hodinovou sazbu 150 Kč.",
+      "blocks": [
+        {
+          "subtitle": "Ateliéry",
+          "text": "Ateliéry jsou v budově D1, hlavním ateliérovém bloku. Plocha 15 až 25 m², vlastní zámek a přístup 24/7, velká okna pro denní světlo, elektrika 16 A jednofázová (380 V po dohodě), umyvadlo, skladovací prostor v patře. Pro malíře, grafiky, keramiky, řemeslníky s vlastním nářadím, fotografy s vlastním studiem. Cena 6 500 Kč měsíčně za 20 m²."
+        },
+        {
+          "subtitle": "Členská dílna",
+          "text": "Základní členství 490 Kč měsíčně zpřístupní ruční nářadí, pracovní stoly, svěráky, brusky a pájecí stanice (DeWalt, Festool, Bosch). Dílny jsou otevřené 06:00 až 22:00."
+        },
+        {
+          "subtitle": "Těžké stroje",
+          "text": "CNC frézka, laserová řezačka a 3D tiskárny jsou nad rámec za hodinovou sazbu 150 Kč, účtuje se automaticky přes RFID zámek u stroje. Přístup mají jen proškolení, BOZP školení absolvujete jednou při nástupu zdarma (2 hodiny). Provoz 08:00 až 20:00."
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/hub/coworking/cowork-interior-dilna.jpg",
+          "alt": "Sdílená dílna s ručním nářadím a pracovními stoly"
+        },
+        {
+          "src": "/images/hub/coworking/05-cowork-interior-dilna-lidi.jpg",
+          "alt": "Lidé pracující v dílně Hubu u strojů"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "priceNote": "Ateliér 6 500 Kč/měsíc za 20 m². Dílna členství 490 Kč/měsíc, těžké stroje 150 Kč/hod.",
+      "flags": [
+        "cena-vs-praha-na-metodiku"
+      ]
+    },
+    {
+      "name": "Podcastová a střihová studia",
+      "slug": "podcast-strih-studia",
+      "lede": "Pro tvůrce chystáme odhlučněné podcastové studio na nahrávání a střihová pracoviště na postprodukci. Studia jsou v přípravě, vybavení a ceny upřesníme před spuštěním.",
+      "blocks": [
+        {
+          "subtitle": "Podcastové studio",
+          "text": "Plánujeme odhlučněnou místnost pro nahrávání rozhovorů a podcastů s mikrofony, mixem a místem pro několik hostů. Studio je zatím v přípravě, konkrétní vybavení a rezervační podmínky doplníme, jakmile bude provoz blíž."
+        },
+        {
+          "subtitle": "Střihová pracoviště",
+          "text": "Ke studiu chystáme střihová pracoviště pro video a audio postprodukci s výkonnými počítači a kalibrovanými monitory. Také v přípravě, na webu je uvádíme jako plánované."
+        }
+      ],
+      "images": [
+        {
+          "placeholder": "Foto se připravuje: podcastové studio s mikrofony a odhlučněním",
+          "alt": "Podcastové studio Hubu, vizualizace se připravuje"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "v-priprave"
+      ]
+    },
+    {
+      "name": "Filmové studio",
+      "slug": "filmove-studio",
+      "lede": "Pro náročnější produkce plánujeme filmové studio se světly, green screenem a virtuálními kulisami. Studio je v přípravě, parametry a ceny upřesníme před spuštěním.",
+      "blocks": [
+        {
+          "subtitle": "Co chystáme",
+          "text": "Studio s nasvícením, green screenem pro klíčování a virtuálními kulisami pro práci s digitálním pozadím. Hodí se pro natáčení rozhovorů, produktových videí a tvůrčích projektů. Vybavení, plochu a rezervační podmínky doplníme, jakmile bude provoz blíž."
+        }
+      ],
+      "images": [
+        {
+          "placeholder": "Foto se připravuje: filmové studio s green screenem a světly",
+          "alt": "Filmové studio Hubu, vizualizace se připravuje"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "v-priprave"
+      ]
+    },
+    {
+      "name": "Učebny",
+      "slug": "ucebny",
+      "lede": "Učebny jsou v 1. NP budovy U vedle coworkingu. Slouží pro kurzy, workshopy a školení rezidentů i externích lektorů. Konkrétní vybavení a rezervační podmínky upřesňujeme.",
+      "blocks": [
+        {
+          "subtitle": "K čemu slouží",
+          "text": "Učebny doplňují coworkingové zázemí o prostor pro výuku a skupinová setkání: jazykové kurzy, odborná školení, workshopy, přednášky. Najdete je v budově U v 1. NP, sklady jsou v 1. PP."
+        },
+        {
+          "subtitle": "Provoz",
+          "text": "Provoz a kapacitu učeben spouštíme společně se zázemím v budově U. Vybavení (projektor, ozvučení, počet míst) a ceny rezervace doplníme před otevřením."
+        }
+      ],
+      "images": [
+        {
+          "placeholder": "Foto se připravuje: učebna v budově U pro kurzy a workshopy",
+          "alt": "Učebna Hubu, vizualizace se připravuje"
+        }
+      ],
+      "bookable": false,
+      "detail": true,
+      "flags": [
+        "v-priprave"
+      ]
+    }
+  ]
+}

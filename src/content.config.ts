@@ -20,7 +20,8 @@ import { glob, file } from 'astro/loaders';
 
 /* === Gallery field (sdílený pro apartmány i coliving) === */
 const galleryItem = z.object({
-  src: z.string().startsWith('/'),
+  src: z.string().startsWith('/').optional(),
+  placeholder: z.string().optional(),
   alt: z.string(),
 });
 
@@ -58,20 +59,25 @@ const apartmany = defineCollection({
   }),
 });
 
-/* === CO-LIVING (6 formátů) === */
-const colivingSlug = z.enum([
-  'pokoj-basic',
-  'pokoj-privacy',
-  'kapsle-single',
-  'kapsle-double',
-  'jedno-luzko',
-  'dvouluzko',
+/* === SDÍLENÉ POKOJE (6 variant) ===
+ * Bývalá kolekce `coliving`. Pojem co-living z produktové vrstvy zmizel
+ * (celý kampus je co-living), kategorie se jmenuje Sdílené pokoje. Slugy
+ * souborů zůstaly kvůli stabilitě URL + rezervačního prefillu; mění se jen
+ * `name`/`shortName`/`order`. Šest viditelných variant: lůžko/dvojlůžko ve
+ * dvou stupních soukromí + kapslové lůžko/dvojlůžko. */
+const sdilenePokojeSlug = z.enum([
+  'pokoj-basic',     // Lůžko ve sdíleném pokoji
+  'dvojluzko-basic', // Dvojlůžko ve sdíleném pokoji (NOVÝ, cena orientační)
+  'pokoj-privacy',   // Lůžko se zvýšeným soukromím
+  'dvouluzko',       // Dvojlůžko se zvýšeným soukromím
+  'kapsle-single',   // Kapslové lůžko
+  'kapsle-double',   // Kapslové dvojlůžko
 ]);
 
-const coliving = defineCollection({
-  loader: glob({ pattern: '*.mdx', base: './src/content/coliving' }),
+const sdilenePokoje = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: './src/content/sdilene-pokoje' }),
   schema: z.object({
-    slug: colivingSlug,
+    slug: sdilenePokojeSlug,
     name: z.string().min(3).max(80),
     shortName: z.string().min(2).max(40),
     order: z.number().int(),
@@ -93,11 +99,54 @@ const coliving = defineCollection({
       perOsoba: z.string().optional(),
       perOsoba12: z.string().optional(),
     }),
+    pricePending: z.boolean().optional(), // cena orientační, k potvrzení s klientem
     thumbnail: z.string().startsWith('/').optional(),
     hero: z.string().startsWith('/').optional(),
     heroAlt: z.string().optional(),
     gallery: z.array(galleryItem).optional(),
     hidden: z.boolean().optional(),
+  }),
+});
+
+/* === ZÁZEMÍ (data-driven strom provozů) ===
+ * Jeden JSON soubor per kategorie (gastronomie, wellness, coworking, komunita,
+ * ostatni, okoli). Stránky /zazemi/* se renderují smyčkou přes `items`. Přidat
+ * provoz = editovat data, ne psát stránku. */
+const zazemiImage = z.object({
+  src: z.string().optional(),
+  placeholder: z.string().optional(),
+  alt: z.string(),
+});
+const zazemiBlock = z.object({
+  subtitle: z.string().optional(),
+  text: z.string(),
+});
+const zazemiItem = z.object({
+  name: z.string(),
+  slug: z.string(),
+  lede: z.string(),
+  blocks: z.array(zazemiBlock).optional(),
+  images: z.array(zazemiImage).optional(),
+  bookable: z.boolean().optional(),
+  detail: z.boolean().optional(),
+  price: z.union([z.number(), z.string()]).optional(),
+  priceNote: z.string().optional(),
+  order: z.number().int().optional(),
+  flags: z.array(z.string()).optional(),
+});
+const zazemi = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/zazemi' }),
+  schema: z.object({
+    category: z.string(),
+    route: z.string(),
+    order: z.number().int().optional(),
+    variant: z.enum(['deep', 'cream', 'rose', 'ink']).optional(),
+    intro: z.object({
+      eyebrow: z.string().optional(),
+      title: z.string(),
+      lede: z.string(),
+    }),
+    items: z.array(zazemiItem),
   }),
 });
 
@@ -136,4 +185,4 @@ const org = defineCollection({
   }),
 });
 
-export const collections = { apartmany, coliving, faq, org };
+export const collections = { apartmany, sdilenePokoje, zazemi, faq, org };
