@@ -34,12 +34,12 @@ interface CoMeta {
   pokoj: string;
 }
 const coMeta: Record<string, CoMeta> = {
-  'pokoj-basic':   { pokoj: 'Sdílíte pokoj se 3 dalšími rezidenty, bez příček' },
-  'pokoj-privacy': { pokoj: '4 až 6 lůžek s dělícími stěnami v jednom pokoji' },
-  'kapsle-single': { pokoj: '3 až 6 kapslí v jednom pokoji' },
-  'jedno-luzko':   { pokoj: 'Sdílíte pokoj jen s 1 další osobou' },
-  'kapsle-double': { pokoj: '2 až 5 dalších kapslí v jednom pokoji' },
-  'dvouluzko':     { pokoj: 'Žádný další spolubydlící v místnosti' },
+  'pokoj-basic':     { pokoj: 'Sdílíte pokoj se 3 dalšími rezidenty, bez příček' },
+  'dvojluzko-basic': { pokoj: 'Společné dvojlůžko v pokoji s dalšími lůžky, bez příček' },
+  'pokoj-privacy':   { pokoj: '4 až 6 lůžek s dělícími stěnami v jednom pokoji' },
+  'kapsle-single':   { pokoj: '3 až 6 kapslí v jednom pokoji' },
+  'kapsle-double':   { pokoj: '2 až 5 dalších kapslí v jednom pokoji' },
+  'dvouluzko':       { pokoj: 'Žádný další spolubydlící v místnosti' },
 };
 
 const fmt = (n: number) => n.toLocaleString('cs-CZ');
@@ -174,7 +174,7 @@ const miscGroups: MiscGroup[] = [
     thicknessSecondary={32}
     opacitySecondary={0.45}
     jumps={[
-      { href: '#ck-coliving-h', label: 'Co-living' },
+      { href: '#ck-coliving-h', label: 'Sdílené pokoje' },
       { href: '#ck-apt-h', label: 'Apartmány' },
       { href: '#ck-cw-h', label: 'Pracovní prostory' },
       { href: '#ck-misc-h', label: 'Doplňky a služby' },
@@ -189,7 +189,7 @@ const miscGroups: MiscGroup[] = [
   <section class="ck-sec" aria-labelledby="ck-coliving-h">
     <div class="ck-sec__inner">
       <header class="ck-sec__head">
-        <p class="ck-sec__eyebrow">Co-living</p>
+        <p class="ck-sec__eyebrow">Sdílené pokoje</p>
         <h2 class="ck-sec__title" id="ck-coliving-h">Lůžka a kapsle ve sdíleném pokoji.</h2>
         <p class="ck-sec__lede">
           Čtyři varianty seřazené od nejnižší ceny. Liší se hlavně mírou soukromí a počtem osob v pokoji.
@@ -212,6 +212,9 @@ const miscGroups: MiscGroup[] = [
                 <span class="ck-card__price-num">{fmt(c.data.cena.anchor)}</span>
                 <span class="ck-card__price-unit">Kč<span class="ck-card__price-period">/měs</span></span>
               </div>
+              {c.data.pricePending && (
+                <p style="margin:4px 0 0;font-size:var(--text-2xs);color:var(--rose);font-weight:600;">Cena orientační, k potvrzení.</p>
+              )}
               <dl class="ck-card__facts">
                 <div><dt>Matrace</dt><dd>{c.data.matrace.join(' / ')}</dd></div>
                 <div><dt>Plocha pokoje</dt><dd>{c.data.spec.plochaPokoj}</dd></div>
@@ -223,7 +226,7 @@ const miscGroups: MiscGroup[] = [
                 ))}
               </ul>
               <div class="ck-card__actions">
-                <a class="ck-card__detail osa-nolink" href={withBase(`/ubytovani/co-living/${c.data.slug}/`)}>Detail →</a>
+                <a class="ck-card__detail osa-nolink" href={withBase(`/ubytovani/sdilene-pokoje/${c.data.slug}/`)}>Detail →</a>
                 <a class="ck-card__cta osa-nolink" href={withBase(`/rezervace/?typ=${c.data.slug}`)}>Rezervovat</a>
               </div>
             </article>
@@ -363,7 +366,7 @@ const miscGroups: MiscGroup[] = [
 
   <CrossLinkPair
     items={[
-      { eyebrow: 'Ubytování', title: 'Apartmán, <em>nebo</em> co-living.',  href: '/ubytovani/',  variant: 'deep' },
+      { eyebrow: 'Ubytování', title: 'Apartmán, <em>nebo</em> sdílený pokoj.',  href: '/ubytovani/',  variant: 'deep' },
       { eyebrow: 'Stipendia', title: 'Pobytové, <em>nebo</em> projektové.', href: '/stipendia/', variant: 'rose' },
     ]}
   />
