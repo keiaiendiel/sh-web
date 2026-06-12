@@ -11,17 +11,6 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
 });
 ---
 <footer class="hub-footer">
-  <div class="hub-footer__ctas">
-    <a class="hub-footer__cta-btn" href={withBase('/rezervace/?cesta=apartman')}>
-      <span>Rezervovat apartmán</span><Arrow dir="right" variant="chevron" size={18} weight={2.4} />
-    </a>
-    <a class="hub-footer__cta-btn" href={withBase('/rezervace/?cesta=luzko')}>
-      <span>Rezervovat lůžko</span><Arrow dir="right" variant="chevron" size={18} weight={2.4} />
-    </a>
-    <a class="hub-footer__cta-btn" href={withBase('/rezervace/?cesta=stipendium')}>
-      <span>Požádat o stipendium</span><Arrow dir="right" variant="chevron" size={18} weight={2.4} />
-    </a>
-  </div>
   <div class="hub-footer__inner">
     <div class="hub-footer__col hub-footer__col--brand">
       <p class="hub-footer__brand">Startovací Hub Klecany</p>
@@ -60,9 +49,15 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     </div>
 
     <div class="hub-footer__col hub-footer__col--actions">
-      <span class="hub-footer__action hub-footer__action--soon" aria-disabled="true">
-        Aktuality<span class="hub-footer__action-hint">chystáme</span>
-      </span>
+      <a class="hub-footer__act-btn" href={withBase('/rezervace/?cesta=apartman')}>
+        <span>Rezervovat apartmán</span><Arrow dir="right" variant="chevron" size={16} weight={2.4} />
+      </a>
+      <a class="hub-footer__act-btn" href={withBase('/rezervace/?cesta=luzko')}>
+        <span>Rezervovat lůžko</span><Arrow dir="right" variant="chevron" size={16} weight={2.4} />
+      </a>
+      <a class="hub-footer__act-btn" href={withBase('/rezervace/?cesta=stipendium')}>
+        <span>Požádat o stipendium</span><Arrow dir="right" variant="chevron" size={16} weight={2.4} />
+      </a>
       <p class="hub-footer__reservation-note">
         Nabídka rezervací je nezávazná, slouží k registraci zájmu.
       </p>
@@ -168,37 +163,21 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     border-top: 1px solid var(--accent);
     padding: var(--space-8) 0 var(--space-7);
   }
-  /* Tři hlavní konverzní CTA nahoře v patičce. */
-  .hub-footer__ctas {
-    width: calc(100% - 2 * var(--gutter));
-    max-width: var(--container-wide);
-    margin: 0 auto var(--space-7);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
-  }
-  .hub-footer__cta-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: 16px 22px;
-    font: 700 var(--text-md) / 1 var(--font-sans);
-    color: var(--plum-deep);
-    background: var(--rose);
-    border-radius: var(--radius-input);
-    text-decoration: none !important;
+  /* Tři konverzní CTA , stacked v pravém sloupci patičky. */
+  .hub-footer__act-btn {
+    display: inline-flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+    width: 100%;
+    padding: 12px 16px;
+    font: 700 var(--text-sm) / 1 var(--font-sans);
+    color: var(--plum-deep); background: var(--rose);
+    border-radius: var(--radius-input); text-decoration: none !important;
     transition: background 180ms ease, transform 180ms ease;
   }
-  .hub-footer__cta-btn:hover,
-  .hub-footer__cta-btn:focus-visible {
-    background: #fff;
-    transform: translateY(-2px);
-    outline: none;
-  }
-  .hub-footer__cta-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-  .hub-footer__cta-btn :global(svg) { transition: transform 180ms ease; }
-  .hub-footer__cta-btn:hover :global(svg) { transform: translateX(3px); }
+  .hub-footer__act-btn:hover,
+  .hub-footer__act-btn:focus-visible { background: #fff; transform: translateY(-1px); outline: none; }
+  .hub-footer__act-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .hub-footer__act-btn :global(svg) { transition: transform 180ms ease; }
+  .hub-footer__act-btn:hover :global(svg) { transform: translateX(3px); }
 
   .hub-footer__inner {
     width: calc(100% - 2 * var(--gutter));
@@ -478,7 +457,6 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
      rozplácne přes půlku plochy. Shrink písma + paddingů, dolad i marker
      velikost a popup min-width aby seděl. */
   @media (max-width: 760px) {
-    .hub-footer__ctas { grid-template-columns: 1fr; }
     .hub-footer__map :global(.ok-map-popup-wrap .leaflet-popup-content-wrapper) {
       padding: 2px 4px;
     }

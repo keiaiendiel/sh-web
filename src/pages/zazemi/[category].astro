@@ -15,6 +15,17 @@ export async function getStaticPaths() {
 const { id, cat } = Astro.props;
 const variant = cat.variant ?? 'deep';
 
+/* Hero nadpis = konkrétní název kategorie (ne popisná věta z dat). */
+const CATEGORY_NAMES: Record<string, string> = {
+  gastronomie: 'Gastronomie',
+  wellness: 'Wellness & spa',
+  coworking: 'Coworking',
+  komunita: 'Komunitní centrum',
+  ostatni: 'Ostatní zázemí',
+  okoli: 'Okolí areálu',
+};
+const displayTitle = CATEGORY_NAMES[id] ?? cat.intro.title;
+
 type Block = { subtitle?: string; text: string };
 
 const sections = (cat.items ?? []).map((it) => {
@@ -45,15 +56,14 @@ const sections = (cat.items ?? []).map((it) => {
   };
 });
 
-const introTitle = cat.intro.title;
 const introLede = cat.intro.lede;
 ---
 <FractalPage
-  title={`${introTitle} · Zázemí · Startovací Hub Klecany`}
+  title={`${displayTitle} · Zázemí · Startovací Hub Klecany`}
   description={introLede}
   hero={{
-    eyebrow: cat.intro.eyebrow ?? 'Zázemí',
-    title: introTitle,
+    eyebrow: 'Zázemí',
+    title: displayTitle,
     sub: introLede,
     variant,
     ariaId: id,

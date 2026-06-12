@@ -23,14 +23,26 @@ function repImage(cat: (typeof cats)[number]['data']) {
   };
 }
 
-const sections = cats.map((c) => ({
-  id: c.id,
-  jumpLabel: c.data.intro.title,
-  title: c.data.intro.title,
-  lede: c.data.intro.lede,
-  actions: [{ label: `${c.data.intro.title}`, href: `/zazemi/${c.id}/`, kind: 'detail' as const }],
-  media: [repImage(c.data)],
-}));
+const CATEGORY_NAMES: Record<string, string> = {
+  gastronomie: 'Gastronomie',
+  wellness: 'Wellness & spa',
+  coworking: 'Coworking',
+  komunita: 'Komunitní centrum',
+  ostatni: 'Ostatní zázemí',
+  okoli: 'Okolí areálu',
+};
+
+const sections = cats.map((c) => {
+  const name = CATEGORY_NAMES[c.id] ?? c.data.intro.title;
+  return {
+    id: c.id,
+    jumpLabel: name,
+    title: name,
+    lede: c.data.intro.lede,
+    actions: [{ label: 'Zobrazit', href: `/zazemi/${c.id}/`, kind: 'detail' as const }],
+    media: [repImage(c.data)],
+  };
+});
 ---
 <FractalPage
   title="Zázemí , gastronomie, wellness, coworking, komunita · Startovací Hub Klecany"

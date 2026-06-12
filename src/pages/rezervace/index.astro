@@ -94,7 +94,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           </label>
         </div>
 
-        <div class="rez__more">
+        <div class="rez__more" data-reserve-section>
           <p class="rez__more-head">Nebo si rovnou rezervujte konkrétní zázemí</p>
           <div class="rez__more-grid">
             {reservables.map((r) => (
@@ -385,8 +385,24 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           </svg>
         </div>
         <div class="rez__panel-intro">
-          <h1 class="rez__q">Dorazilo. Zavoláme do&nbsp;24&nbsp;hodin.</h1>
-          <p class="rez__q-hint">Probereme termín, detaily nástupu a&nbsp;co dál. Pořád je to nezávazná registrace, žádný závazek.</p>
+          <h1 class="rez__q">Odesláno. Zavoláme do&nbsp;24&nbsp;hodin.</h1>
+          <p class="rez__q-hint">Vše v&nbsp;pořádku, registraci máme. Pořád je to nezávazné, žádný závazek.</p>
+        </div>
+
+        <div class="rez__more rez__more--success" data-reserve-section>
+          <p class="rez__more-head">Chcete si rezervovat i&nbsp;něco dalšího?</p>
+          <p class="rez__more-sub">Wellness, komunitní zahrádku, sklad, coworking stůl nebo dopravu si naklikáte po přihlášení. Přihlášení i&nbsp;rezervaci zázemí teprve připravujeme, ale rádi víme, o&nbsp;co je zájem.</p>
+          <div class="rez__more-grid">
+            {reservables.map((r) => (
+              <button type="button" class="rez__more-item" data-reserve-locked aria-label={`Rezervovat ${r.label}, zatím jen pro přihlášené`}>
+                <span class="rez__more-icon" aria-hidden="true"><Icon name={r.icon} size={20} /></span>
+                <span class="rez__more-label">{r.label}</span>
+              </button>
+            ))}
+          </div>
+          <p class="rez__more-msg" data-reserve-msg hidden role="status">
+            Rezervaci zázemí teprve připravujeme. Zatím jsme zaznamenali váš zájem o&nbsp;bydlení, ozveme se.
+          </p>
         </div>
       </section>
     </form>
@@ -433,11 +449,12 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   (function () {
     function bind() {
       var btns = document.querySelectorAll('[data-reserve-locked]:not([data-locked-bound])');
-      var msg = document.querySelector('[data-reserve-msg]');
       if (!btns.length) return;
       btns.forEach(function (b) {
         b.dataset.lockedBound = '1';
         b.addEventListener('click', function () {
+          var section = b.closest('[data-reserve-section]');
+          var msg = section ? section.querySelector('[data-reserve-msg]') : document.querySelector('[data-reserve-msg]');
           if (msg) { msg.hidden = false; }
           b.classList.add('is-poked');
           setTimeout(function () { b.classList.remove('is-poked'); }, 400);
@@ -460,6 +477,14 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     text-transform: uppercase;
     color: var(--fg-subtle);
     margin: 0 0 var(--space-3);
+  }
+  .rez__more--success { border-top-color: var(--accent-rule); }
+  .rez__more--success .rez__more-head { color: var(--accent); font-size: var(--text-sm); text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .rez__more-sub {
+    margin: 0 0 var(--space-4);
+    font: 500 var(--text-sm) / 1.5 var(--font-sans);
+    color: var(--fg-muted);
+    max-width: 52ch;
   }
   .rez__more-grid {
     display: grid;
@@ -695,6 +720,19 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     form.addEventListener('click', function (e) {
       if (e.target.closest('[data-next]')) { e.preventDefault(); next(); }
       if (e.target.closest('[data-prev]')) { e.preventDefault(); back(); }
+      /* Robustní auto-advance: klik na výběrovou kartu s data-auto-next radiem
+         posune dál i když je radio už zaškrtnuté (re-klik po Zpět nevyvolá
+         change event). setTimeout(0) počká na update checked stavu po kliku. */
+      var choice = e.target.closest('.rez__choice');
+      if (choice && choice.querySelector('input[data-auto-next]')) {
+        setTimeout(function () {
+          var picked = choice.querySelector('input[data-auto-next]');
+          if (picked && picked.checked) {
+            clearTimeout(autoNextTimer);
+            autoNextTimer = setTimeout(next, 200);
+          }
+        }, 0);
+      }
     });
 
     /* Submit */
@@ -933,6 +971,9 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
   }
   .rez__panel > * { min-width: 0; }
+  /* Kontakt krok , pole stála příliš daleko od sebe (space-5). Zúžit. */
+  .rez__panel[data-panel="kontakt"] { gap: var(--space-4); }
+  .rez__panel[data-panel="kontakt"] .rez__panel-intro { margin-bottom: var(--space-1); }
   .rez__panel.is-current {
     opacity: 1;
     transform: translateX(0);

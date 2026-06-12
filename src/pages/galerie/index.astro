@@ -1,44 +1,37 @@
 ---
 /*
- * Galerie , náhledy po kategoriích. Zig-zag sekce, každá s vícefoto galerií
- * a odkazem do příslušné sekce. Kde fotky chybí, Gallery ukáže placeholder.
+ * Galerie , reálná foto-mřížka (ne zig-zag). Každá kategorie: nadpis + dva
+ * obdélníky vedle sebe (desktop), klik otevře lightbox.
  */
-import FractalPage from '../../layouts/FractalPage.astro';
+import Base from '../../layouts/Base.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import PhotoGrid from '../../components/PhotoGrid.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import CrossLinkPair from '../../components/CrossLinkPair.astro';
 
-const sections = [
+const categories = [
   {
-    id: 'privatni',
-    jumpLabel: 'Apartmány',
-    title: 'Privátní apartmány',
-    lede: 'Byty 1+kk až 5+kk, vlastní koupelna a kuchyň.',
-    actions: [{ label: 'Privátní apartmány', href: '/ubytovani/privatni/', kind: 'detail' as const }],
-    media: [
-      { src: '/images/hub/ubytovani/privatni/02-1kk.jpg', alt: 'Apartmán 1+kk' },
-      { src: '/images/hub/ubytovani/privatni/04-int.jpg', alt: 'Interiér apartmánu' },
-      { src: '/images/hub/ubytovani/privatni/05-4kk-family.jpg', alt: 'Větší apartmán' },
-      { src: '/images/hub/ubytovani/privatni/03-ext.jpg', alt: 'Exteriér obytné budovy' },
+    heading: 'Privátní apartmány', group: 'g-privatni', more: '/ubytovani/privatni/',
+    images: [
+      { src: '/images/hub/ubytovani/02-1kk.jpg', alt: 'Privátní apartmán 1+kk' },
+      { src: '/images/hub/ubytovani/04-int.jpg', alt: 'Interiér apartmánu' },
+      { src: '/images/hub/ubytovani/05-4kk-family.jpg', alt: 'Větší apartmán pro skupinu' },
+      { src: '/images/hub/ubytovani/03-ext.jpg', alt: 'Exteriér obytné budovy za soumraku' },
     ],
   },
   {
-    id: 'sdilene',
-    jumpLabel: 'Sdílené pokoje',
-    title: 'Sdílené pokoje',
-    lede: 'Lůžka, boxy a uzamykatelné kapsle ve sdílených pokojích.',
-    actions: [{ label: 'Sdílené pokoje', href: '/ubytovani/sdilene-pokoje/', kind: 'detail' as const }],
-    media: [
+    heading: 'Sdílené pokoje', group: 'g-sdilene', more: '/ubytovani/sdilene-pokoje/',
+    images: [
       { src: '/images/hub/ubytovani/coliving/pokoj-basic-01.jpg', alt: 'Sdílený pokoj bez příček' },
-      { src: '/images/hub/ubytovani/coliving/pokoj-privacy-01.jpg', alt: 'Lůžkové boxy' },
+      { src: '/images/hub/ubytovani/coliving/pokoj-privacy-01.jpg', alt: 'Lůžkové boxy s posuvnými dveřmi' },
       { src: '/images/hub/ubytovani/coliving/kapsle-single-01.jpg', alt: 'Uzamykatelná kapsle' },
       { src: '/images/hub/ubytovani/coliving/kapsle-double-01.jpg', alt: 'Dvoulůžková kapsle' },
     ],
   },
   {
-    id: 'coworking',
-    jumpLabel: 'Coworking',
-    title: 'Coworking a dílny',
-    lede: 'Coworkingový sál, fixní stoly, zasedačky a dílny.',
-    actions: [{ label: 'Coworking', href: '/zazemi/coworking/', kind: 'detail' as const }],
-    media: [
+    heading: 'Coworking a dílny', group: 'g-coworking', more: '/zazemi/coworking/',
+    images: [
       { src: '/images/hub/coworking/cowork-interier-sal-c.jpg', alt: 'Coworkingový sál' },
       { src: '/images/hub/coworking/02-cowork-interier-vlastni-stul.jpg', alt: 'Sdílené pracovní stoly' },
       { src: '/images/hub/coworking/03-cowork-interior-zasedacka.jpg', alt: 'Zasedací místnost' },
@@ -46,25 +39,17 @@ const sections = [
     ],
   },
   {
-    id: 'zazemi',
-    jumpLabel: 'Gastro a wellness',
-    title: 'Gastronomie a wellness',
-    lede: 'Kantýna, pekárna, bazén a sauny v areálu.',
-    actions: [{ label: 'Zázemí', href: '/zazemi/', kind: 'detail' as const }],
-    media: [
+    heading: 'Gastronomie a wellness', group: 'g-gastro', more: '/zazemi/',
+    images: [
       { src: '/images/hub/komunita/gastro/01-kantyna.jpg', alt: 'Kantýna' },
       { src: '/images/hub/komunita/gastro/04-pekarna.jpg', alt: 'Pekárna' },
-      { src: '/images/hub/komunita/wellness/wellness-01-bazen.jpg', alt: 'Venkovní bazén' },
-      { src: '/images/hub/komunita/wellness/wellness-02-sauna.jpg', alt: 'Sauna' },
+      { src: '/images/hub/komunita/wellness-01-bazen.jpg', alt: 'Venkovní bazén' },
+      { src: '/images/hub/komunita/wellness-02-sauna.jpg', alt: 'Sauna' },
     ],
   },
   {
-    id: 'komunita',
-    jumpLabel: 'Komunitní park',
-    title: 'Komunitní park',
-    lede: 'Zahrádky, grilovací místa a společné prostory.',
-    actions: [{ label: 'Komunitní centrum', href: '/zazemi/komunita/', kind: 'detail' as const }],
-    media: [
+    heading: 'Komunitní park', group: 'g-komunita', more: '/zazemi/komunita/',
+    images: [
       { src: '/images/hub/komunita/05-komunitni-zahrady.jpg', alt: 'Komunitní zahrádky' },
       { src: '/images/hub/komunita/03-grilovaci-misto.jpg', alt: 'Grilovací místo' },
       { src: '/images/hub/komunita/04-klubovna.jpg', alt: 'Klubovna' },
@@ -72,12 +57,8 @@ const sections = [
     ],
   },
   {
-    id: 'okoli',
-    jumpLabel: 'Doprava a okolí',
-    title: 'Doprava a okolí',
-    lede: 'Areál, cyklostezka podél Vltavy a dostupnost do Prahy.',
-    actions: [{ label: 'Doprava', href: '/doprava/', kind: 'detail' as const }],
-    media: [
+    heading: 'Areál a okolí', group: 'g-okoli', more: '/doprava/',
+    images: [
       { src: '/images/hub/okoli/01-areal-dostupnost.jpg', alt: 'Areál a dostupnost' },
       { src: '/images/hub/doprava/cyklostezka.jpg', alt: 'Cyklostezka podél Vltavy' },
       { src: '/images/hub/okoli/03-exterier-1.jpg', alt: 'Exteriér areálu' },
@@ -86,26 +67,60 @@ const sections = [
   },
 ];
 ---
-<FractalPage
+<Base
   title="Galerie · Startovací Hub Klecany"
   description="Fotografie a vizualizace areálu: ubytování, coworking, gastronomie, wellness, komunitní park a okolí Hubu v Klecanech."
-  hero={{
-    eyebrow: 'Galerie',
-    title: 'Podívejte se <em>dovnitř</em>',
-    sub: 'Ubytování, coworking, gastronomie, wellness i okolí areálu. Část fotek jsou vizualizace, reálné snímky průběžně doplňujeme.',
-    variant: 'deep',
-    ariaId: 'galerie',
-  }}
-  sections={sections}
-  cta={{
-    eyebrow: 'Rezervace',
-    title: 'Líbí se vám to? <em>Rezervujte</em>',
-    lede: 'Vyberte si formát bydlení a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin.',
-    cta: { label: 'Nezávazná rezervace', href: '/rezervace/' },
-    variant: 'deep',
-  }}
-  crossLinks={[
-    { eyebrow: 'Ubytování', title: 'Apartmány a <em>sdílené pokoje</em>', href: '/ubytovani/', variant: 'cream' },
-    { eyebrow: 'Zázemí', title: 'Celé <em>zázemí</em> Hubu', href: '/zazemi/', variant: 'ink' },
-  ]}
-/>
+  headerVariant="overlay">
+
+  <SubpageHero
+    eyebrow="Galerie"
+    title="Podívejte se <em>dovnitř</em>"
+    sub="Ubytování, coworking, gastronomie, wellness i okolí areálu. Část fotek jsou vizualizace, reálné snímky průběžně doplňujeme."
+    variant="deep"
+    ribbonPath="M 120 720 C 520 420, 980 860, 1380 540 C 1700 300, 1980 560, 2060 420"
+    ariaId="galerie"
+  />
+
+  <div class="gal-wrap">
+    {categories.map((c) => (
+      <PhotoGrid
+        eyebrow="Galerie"
+        heading={c.heading}
+        images={c.images}
+        columns={2}
+        aspect="16 / 10"
+        group={c.group}
+        moreHref={c.more}
+        moreLabel="Více v sekci"
+      />
+    ))}
+  </div>
+
+  <CtaBanner
+    eyebrow="Rezervace"
+    title="Líbí se vám to? <em>Rezervujte</em>"
+    lede="Vyberte si formát bydlení a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="deep"
+  />
+  <CrossLinkPair
+    items={[
+      { eyebrow: 'Ubytování', title: 'Apartmány a <em>sdílené pokoje</em>', href: '/ubytovani/', variant: 'cream' },
+      { eyebrow: 'Zázemí', title: 'Celé <em>zázemí</em> Hubu', href: '/zazemi/', variant: 'ink' },
+    ]}
+  />
+
+  <Lightbox />
+</Base>
+
+<style>
+  .gal-wrap {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: var(--space-8) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+</style>

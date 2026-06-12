@@ -1,23 +1,20 @@
 ---
 /*
- * Doprava , L1 „landing dopravního startupu". Dvě sekce (Sdílená mobilita,
- * Privátní mobilita), bez L3. Obsah z src/data/doprava.json.
+ * Doprava , L1 „landing dopravního startupu". Dvě lehké sekce (Sdílená +
+ * Privátní mobilita) s tlačítkem Detail → L2, kde žije celý fraktál (kyvadlovka,
+ * MHD, taxi, půjčovna, cyklostezka, parkoviště). Obsah z src/data/doprava.json.
  */
 import FractalPage from '../../layouts/FractalPage.astro';
 import data from '../../data/doprava.json';
 
-const sections = data.items.map((it) => {
-  const blocks = [...(it.blocks ?? [])];
-  if (it.priceNote) blocks.push({ subtitle: 'V ceně bydlení', text: it.priceNote });
-  return {
-    id: it.slug,
-    jumpLabel: it.name,
-    title: it.name,
-    lede: it.lede,
-    blocks,
-    media: it.images ?? [],
-  };
-});
+const sections = data.items.map((it) => ({
+  id: it.slug,
+  jumpLabel: it.name,
+  title: it.name,
+  lede: it.lede,
+  actions: [{ label: 'Detail', href: `/doprava/${it.slug}/`, kind: 'detail' as const }],
+  media: it.images ?? [],
+}));
 ---
 <FractalPage
   title="Doprava , kyvadlová doprava, MHD, kolo a auto · Startovací Hub Klecany"

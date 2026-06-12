@@ -4,6 +4,8 @@ import Gallery from '../components/Gallery.astro';
 import Icon from '../components/Icon.astro';
 import Arrow from '../components/Arrow.astro';
 import PriceTable from '../components/PriceTable.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import Lightbox from '../components/Lightbox.astro';
 import ResidentBenefits from '../components/ResidentBenefits.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../utils/url';
@@ -151,35 +153,19 @@ const sections: Section[] = [
       { src: withBase('/images/hub/stipendia/03-rezidenti.jpg'), alt: 'Skupina rezidentů u společného stolu, plánování nebo večeře.' },
     ],
   },
-  {
-    id: 'galerie',
-    eyebrow: 'Galerie',
-    title: 'Podívejte se dovnitř.',
-    lede: 'Fotografie a vizualizace ubytování, coworkingu, gastronomie a okolí areálu. Část snímků jsou rendery, reálné fotky průběžně doplňujeme.',
-    ctas: [{ href: '/galerie/', label: 'Otevřít galerii' }],
-    ribbonPath: 'M -80 520 C 140 360, 360 480, 580 340 S 940 460, 1140 380 S 1380 280, 1560 360',
-    gallery: [
-      { src: withBase('/images/hub/ubytovani/privatni/03-ext.jpg'), alt: 'Exteriér obytné budovy za soumraku.' },
-      { src: withBase('/images/hub/coworking/cowork-interier-sal-c.jpg'), alt: 'Coworkingový sál v budově C.' },
-      { src: withBase('/images/hub/komunita/wellness/wellness-01-bazen.jpg'), alt: 'Venkovní bazén v areálu.' },
-      { src: withBase('/images/hub/areal/areal-entry.jpg'), alt: 'Vstup do areálu Horních kasáren.' },
-    ],
-  },
-  {
-    id: 'vice',
-    eyebrow: 'Ceník a novinky',
-    title: 'Ceny a novinky na jednom místě.',
-    lede: 'Srovnání cen všech formátů ubytování i rezervovatelného zázemí v jednom přehledu. Novinky o spuštění rezervací a postupu rekonstrukce připravujeme.',
-    ctas: [
-      { href: '/cenik/',   label: 'Ceník' },
-      { href: '/novinky/', label: 'Novinky' },
-    ],
-    ribbonPath: 'M -80 460 C 180 300, 380 460, 600 340 S 980 460, 1160 380 S 1380 280, 1560 380',
-    gallery: [
-      { src: withBase('/images/hub/areal/masterplan_update.jpg'), alt: 'Masterplán areálu Horních kasáren.' },
-      { src: withBase('/images/hub/areal/building-c.jpg'), alt: 'Budova C v areálu.' },
-    ],
-  },
+];
+
+/* Landing galerie teaser , reálná foto-mřížka (ne zig-zag). 4×2 fotky, hover
+   zoom, klik → lightbox. Pod zig-zag sekcemi, nad finálním CTA. */
+const landingPhotos = [
+  { src: '/images/hub/ubytovani/03-ext.jpg', alt: 'Privátní apartmány v parteru za soumraku' },
+  { src: '/images/hub/ubytovani/coliving/kapsle-single-01.jpg', alt: 'Uzamykatelná kapsle' },
+  { src: '/images/hub/coworking/cowork-interier-sal-c.jpg', alt: 'Coworkingový sál' },
+  { src: '/images/hub/komunita/wellness-01-bazen.jpg', alt: 'Venkovní bazén' },
+  { src: '/images/hub/komunita/gastro/01-kantyna.jpg', alt: 'Kantýna' },
+  { src: '/images/hub/komunita/05-komunitni-zahrady.jpg', alt: 'Komunitní zahrádky' },
+  { src: '/images/hub/doprava/cyklostezka.jpg', alt: 'Cyklostezka podél Vltavy' },
+  { src: '/images/hub/okoli/04-topview-update.jpg', alt: 'Letecký pohled na areál' },
 ];
 
 /* === RIBBON TILES (pod hero) ===
@@ -394,6 +380,22 @@ const tiles = [
     ))}
   </div>
 
+  {/* ============ GALERIE TEASER (reálná foto-mřížka) ============ */}
+  <section class="lp-gallery">
+    <div class="lp-gallery__inner">
+      <PhotoGrid
+        eyebrow="Galerie"
+        heading="Podívejte se dovnitř"
+        images={landingPhotos}
+        columns={4}
+        aspect="4 / 3"
+        group="lp-gallery"
+        moreHref="/galerie/"
+        moreLabel="Zobrazit více fotografií"
+      />
+    </div>
+  </section>
+
   {/* ============ FINÁLNÍ CTA BANNER ============
        SH/07 ribbon banner styling (plum-deep + plum stroke). Contained,
        ne full-bleed, žije uvnitř container-wide stejně jako landing sekce.
@@ -418,7 +420,18 @@ const tiles = [
       </span>
     </a>
   </section>
+
+  <Lightbox />
 </Base>
+
+<style>
+  .lp-gallery { background: var(--bg); padding: var(--space-8) 0 var(--space-7); }
+  .lp-gallery__inner {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+</style>
 
 <style>
   /* ============ HERO ROTATION ============ */

@@ -49,7 +49,7 @@ const ribbonFor = (i: number) => placeholderRibbons[i % placeholderRibbons.lengt
         <svg class="gallery__placeholder-ribbon" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-ribbon-reveal>
           <path d={ribbonFor(0)} />
         </svg>
-        <span class="gallery__placeholder-icon" aria-hidden="true">▢</span>
+        <span class="gallery__placeholder-icon" aria-hidden="true"><Icon name="image" size={26} strokeWidth={1.75} /></span>
         <span class="gallery__placeholder-note">{images[0] && !isImage(images[0]) ? images[0].placeholder : 'Foto doplníme'}</span>
         <span class="gallery__placeholder-badge">Foto se připravuje</span>
       </div>
@@ -78,7 +78,7 @@ const ribbonFor = (i: number) => placeholderRibbons[i % placeholderRibbons.lengt
               <svg class="gallery__placeholder-ribbon" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-ribbon-reveal>
                 <path d={ribbonFor(i)} />
               </svg>
-              <span class="gallery__placeholder-icon" aria-hidden="true">▢</span>
+              <span class="gallery__placeholder-icon" aria-hidden="true"><Icon name="image" size={26} strokeWidth={1.75} /></span>
               <span class="gallery__placeholder-note">{img.placeholder}</span>
               <span class="gallery__placeholder-badge">Foto se připravuje</span>
             </div>
@@ -230,8 +230,12 @@ const ribbonFor = (i: number) => placeholderRibbons[i % placeholderRibbons.lengt
     gap: 12px;
     padding: clamp(16px, 4vw, 32px);
     text-align: center;
-    background: var(--accent-soft);
-    color: var(--accent);
+    /* Viditelný plum plate (ne 12% wash), aby slot působil jako záměrné
+       „foto se připravuje" místo, ne prázdný box. */
+    background:
+      radial-gradient(ellipse at 85% 110%, hsl(calc(var(--hue) + 44) 28% 74% / 0.35) 0%, transparent 55%),
+      linear-gradient(135deg, hsl(var(--hue) 22% 90%) 0%, hsl(var(--hue) 30% 82%) 100%);
+    color: var(--plum-deep);
     overflow: hidden;
     border-radius: var(--gallery-radius);
   }
@@ -242,12 +246,12 @@ const ribbonFor = (i: number) => placeholderRibbons[i % placeholderRibbons.lengt
     height: 100%;
     pointer-events: none;
     overflow: visible;
-    opacity: 0.22;
+    opacity: 0.4;
     z-index: 0;
   }
   .gallery__placeholder-ribbon path {
     fill: none;
-    stroke: var(--accent);
+    stroke: hsl(var(--hue) 32% 52%);
     stroke-width: 56;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -263,16 +267,17 @@ const ribbonFor = (i: number) => placeholderRibbons[i % placeholderRibbons.lengt
   .gallery__placeholder-icon {
     position: relative;
     z-index: 1;
-    font-size: 1.75rem;
-    line-height: 1;
-    opacity: 0.32;
+    display: inline-flex;
+    color: var(--plum-deep);
+    opacity: 0.5;
   }
   .gallery__placeholder-note {
     position: relative;
     z-index: 1;
-    font: 500 var(--text-sm) / 1.45 var(--font-sans);
-    color: var(--fg);
-    max-width: 38ch;
+    font: 600 var(--text-md) / 1.4 var(--font-sans);
+    color: var(--plum-deep);
+    max-width: 34ch;
+    text-wrap: balance;
   }
   .gallery__placeholder-badge {
     position: relative;

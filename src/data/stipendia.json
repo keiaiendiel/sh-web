@@ -4,118 +4,52 @@
   "intro": {
     "eyebrow": "Stipendijní programy",
     "title": "Pobytové, nebo projektové.",
-    "lede": "Dvě hlavní kategorie stipendia plus nadační fond, který za nimi stojí. Podporujeme lidi, kteří mají co dát zpátky: dílny, otevřené prezentace, péče o areál nebo veřejně dostupný výstup projektu. Žádost je nezávazná, podmínky upřesníme společně. První pilotní kolo plánujeme na podzim 2026."
+    "lede": "Podporujeme lidi, kteří mají co dát zpátky komunitě. Žádost je nezávazná, podmínky upřesníme společně. První kolo plánujeme na podzim 2026."
   },
   "items": [
     {
       "name": "Pobytové stipendium",
       "slug": "pobytove-stipendium",
-      "lede": "Bydlíte v Hubu výměnou za přínos komunitě. Pro tříměsíční až roční pobyty, podmínky upřesníme společně. Žadatel se hlásí přes rezervační formulář, sociální zajištění a sociální situaci řešíme individuálně.",
-      "priceNote": "Pobyt zdarma nebo zvýhodněně podle dohody a zvolené role. U rolí s pracovním závazkem případně peněžní příspěvek nebo DPP.",
-      "bookable": true,
-      "detail": true,
+      "lede": "Bydlíte v Hubu zdarma nebo zvýhodněně výměnou za přínos komunitě. Pro tříměsíční až roční pobyty.",
       "blocks": [
-        {
-          "subtitle": "Pro koho dává smysl",
-          "text": "Tvůrci, programátoři, stavebně zruční, praktici, kteří předávají dovednost. Studenti na semestrální stáži. Lidé, kteří po rodičovské hledají měkký restart. Žadatele posuzujeme i podle sociální situace, ne jen podle projektu."
-        },
-        {
-          "subtitle": "Co Hub nabízí",
-          "text": "Pobyt zdarma nebo zvýhodněně v některé z variant ubytování, podle dohody i s rodinou. Rezidentské benefity v plném rozsahu: energie, internet, pět jízd Hub-shuttle a jedna jízda Hub-taxi měsíčně, poukaz do sauny jednou týdně. U rolí s pracovním závazkem případně peněžní příspěvek nebo dohoda o provedení práce."
-        },
-        {
-          "subtitle": "Čtyři možné role",
-          "text": "Rezident-tvůrce: umělec, výzkumník, designér nebo autor s vlastním projektem, za pobyt udělá dvě otevřené dílny nebo prezentace pro komunitu. Správce na výměnu: část úvazku v provozu Hubu (recepce, koordinace akcí, péče o sdílené prostory), zhruba 8 až 10 hodin týdně. Stavitel-rezident: týden v měsíci na rekonstrukci areálu, pro lidi se stavebními dovednostmi. Rezident-programátor: vyvíjí konkrétní digitální nástroj pro Hub."
-        },
-        {
-          "subtitle": "Jak požádat",
-          "text": "Při registraci zájmu o bydlení zaškrtnete přepínač „Mám zájem o pobytové stipendium\". Není to závazná přihláška, jen signál: jakmile otevřeme první kolo, ozveme se s konkrétními podmínkami, termíny a formulářem."
-        }
+        { "subtitle": "Pro koho", "text": "Tvůrci, programátoři, praktici i studenti na stáži. Posuzujeme i sociální situaci žadatele, ne jen projekt." },
+        { "subtitle": "Co za to", "text": "Dvě otevřené dílny pro komunitu, část úvazku v provozu Hubu, nebo vlastní projekt. K tomu rezidentské benefity v plném rozsahu." }
       ],
       "images": [
-        {
-          "src": "/images/hub/stipendia/01-atelier.jpg",
-          "alt": "Ateliér s rezidentem-tvůrcem při práci, denní světlo"
-        },
-        {
-          "src": "/images/hub/stipendia/02-rezident.jpg",
-          "alt": "Rezident Hubu u pracovního stolu"
-        }
+        { "src": "/images/hub/stipendia/01-atelier.jpg", "alt": "Ateliér s rezidentem-tvůrcem při práci" },
+        { "src": "/images/hub/stipendia/02-rezident.jpg", "alt": "Rezident Hubu u pracovního stolu" }
       ],
-      "flags": [
-        "Výběrový proces, daňový rámec, harmonogram open call a kapacitní strop zatím nedefinujeme. Per locked decision (Content brief §Stipendium, 2026-05-12) jde o měkkou komunikační vrstvu, ne hotový systém. Konkrétní podmínky přijdou po pilotu podzim 2026 a po právní revizi.",
-        "Zmínka podzim 2026 / pilot 8 až 12 míst je v Site_Copy.md i na živé stránce, ale Content brief radí termíny zatím neuvádět. Ke sjednocení s Markem.",
-        "„Sociální zajištění žadatele\" formulováno opatrně , vault tuto roli explicitně nepojmenovává jako kritérium, doplněno na základě zadání. Ověřit s klientem."
-      ]
+      "bookable": true,
+      "priceNote": "Pobyt zdarma nebo zvýhodněně podle dohody a zvolené role.",
+      "flags": ["Konkrétní podmínky a kapacita po pilotu podzim 2026."]
     },
     {
       "name": "Projektové stipendium",
       "slug": "projektove-stipendium",
-      "lede": "Nadační fond podpoří konkrétní projekt: materiál, dílenský čas nebo ateliér. Není to grant na živobytí, bydlení řešíte zvlášť. Důraz je na projekt a jeho veřejně dostupný výstup.",
-      "priceNote": "Pokrytí materiálu a komponent v rámci dohodnutého rozpočtu projektu, dílenský čas a ateliérový prostor po dobu projektu. Bydlení není součástí.",
-      "bookable": true,
-      "detail": true,
+      "lede": "Nadační fond pokryje materiál, dílenský čas nebo ateliér pro konkrétní projekt. Bydlení řešíte zvlášť.",
       "blocks": [
-        {
-          "subtitle": "Pro koho dává smysl",
-          "text": "Tvůrci s konkrétním projektem. Studenti uměleckých škol před závěrečnou prací. Designéři, vědci, hackeři a komunitní iniciativy s materiálovými náklady, kteří potřebují dílnu a rozpočet, ne bydlení."
-        },
-        {
-          "subtitle": "Co Hub nabízí",
-          "text": "Materiál a komponenty v rámci dohodnutého rozpočtu projektu. Dílenský čas v dílnách Hubu (CNC, laser, 3D tisk, kovo). Ateliér nebo dílenský prostor po dobu projektu. Externí služby podle potřeby: tisk, povrchová úprava, fotodokumentace."
-        },
-        {
-          "subtitle": "Co očekáváme",
-          "text": "Veřejný výstup: výstava, prototyp, publikace nebo otevřená dokumentace. Průběžné milníky a krátký závěrečný report. Jednu otevřenou dílnu nebo workshop pro komunitu Hubu."
-        },
-        {
-          "subtitle": "Jak požádat",
-          "text": "Podejte žádost přes rezervační formulář, vyberte „Žádost o stipendium\", upřesněte kategorii a popište projekt v několika větách. Do týdne se ozveme telefonicky, probereme rozsah a načasování. Pokud projekt zapadá, domluvíme dohodu o pokrytí nákladů s konkrétními milníky."
-        }
+        { "subtitle": "Pro koho", "text": "Tvůrci s konkrétním projektem a materiálovými náklady, kteří potřebují dílnu a rozpočet, ne bydlení." },
+        { "subtitle": "Co očekáváme", "text": "Veřejný výstup (výstava, prototyp, dokumentace) a jednu otevřenou dílnu pro komunitu Hubu." }
       ],
       "images": [
-        {
-          "src": "/images/hub/stipendia/03-rezidenti.jpg",
-          "alt": "Skupina rezidentů Hubu u společného stolu při plánování"
-        }
+        { "src": "/images/hub/stipendia/03-rezidenti.jpg", "alt": "Rezidenti Hubu při společném plánování" }
       ],
-      "flags": [
-        "Projektové stipendium jako samostatná kategorie není ve vault §6 (ten popisuje jen pobytové stipendium a čtyři role). Kategorie žije na živé stránce /stipendia/ , zachoval jsem ji a sjednotil tón, ale není v kanonickém copy zdroji. Ověřit s klientem, zda je to schválená druhá kategorie.",
-        "Dílny Hubu (CNC, laser, 3D tisk) jsou zatím v projektové přípravě (per masterplan fáze 1: dílny H1 až H3, D1, D2). Formulovat jako plánované, ne jako hotový provoz."
-      ]
+      "bookable": true,
+      "priceNote": "Pokrytí materiálu a dílenského času v rámci dohodnutého rozpočtu.",
+      "flags": ["Dílny Hubu jsou zatím v projektové přípravě."]
     },
     {
       "name": "Nadace VPD",
       "slug": "nadace-vpd",
-      "lede": "Nadační fond Hubu, ze kterého obě stipendia financujeme. Sdružuje příspěvky donátorů a směruje je k lidem a projektům, které mají co dát komunitě zpátky. Stát se donátorem nebo členem správní rady plánujeme otevřít postupně.",
-      "bookable": false,
-      "detail": true,
+      "lede": "Nadační fond, ze kterého obě stipendia financujeme. Sdružuje příspěvky donátorů a směruje je k lidem a projektům s přínosem pro komunitu.",
       "blocks": [
-        {
-          "subtitle": "K čemu fond slouží",
-          "text": "Fond stojí za pobytovým i projektovým stipendiem. Příspěvky donátorů jdou na zvýhodněné nebo plně hrazené pobyty rezidentů a na materiál, dílenský čas a ateliéry konkrétních projektů. Cílem je dostupné bydlení a tvorba pro pracující studenty, OSVČ a začínající kreativce."
-        },
-        {
-          "subtitle": "Stát se donátorem",
-          "text": "Pokud chcete podpořit dostupné bydlení a tvorbu v Hubu, ozvěte se nám. Strukturu donátorské podpory a daňové náležitosti připravujeme, detaily upřesníme individuálně."
-        },
-        {
-          "subtitle": "Stát se členem správní rady",
-          "text": "Správní rada fondu dohlíží na výběr stipendistů a hospodaření. Obsazení a podmínky členství zatím nastavujeme, zájem můžete ohlásit a ozveme se s detaily."
-        }
+        { "subtitle": "Jak pomoct", "text": "Staňte se donátorem, nebo členem správní rady. Strukturu a daňové náležitosti připravujeme, detaily upřesníme individuálně." }
       ],
       "images": [
-        {
-          "src": "/images/hub/stipendia/02-rezident.jpg",
-          "alt": "Rezident Hubu, kterého fond podporuje"
-        }
+        { "src": "/images/hub/stipendia/02-rezident.jpg", "alt": "Rezident, kterého fond podporuje" }
       ],
-      "flags": [
-        "„Nadace VPD\" jako pojmenovaná entita není ve vault §6 ani v org collection. Vault zná OSA II (Alternativa II, z.s.) jako provozovatele a záměr VPD1 / vepde.com jako investorskou větev. Text napsán opatrně a on-voice, ale název i právní forma („nadace\" vs „nadační fond\" vs „fond v rámci OSA II\") nejsou potvrzené. Vyžaduje potvrzení od Marka.",
-        "Donátorská větev (stát se donátorem) možná patří na vepde.com , vault směruje investorský / donátorský surface do sourozeneckého repu vpd-web, z hubu se na něj odkazuje jen z patičky. Zvážit, zda donátorské CTA nemá vést na vepde.com místo lokální stránky.",
-        "CTA „Stát se donátorem\" a „Stát se členem správní rady\" nemají v repu cílovou stránku ani formulářovou cestu , na rozdíl od stipendijních žádostí (/rezervace/?cesta=stipendium). Doplnit kontakt (vpd@osa2.cz) nebo externí odkaz.",
-        "Daňové náležitosti donátorství a struktura správní rady jsou formulovány jako „připravujeme\" , neuvádět jako hotová fakta."
-      ]
+      "bookable": false,
+      "flags": ["Donátorská větev možná patří na vepde.com, k potvrzení s Markem."]
     }
   ]
 }
