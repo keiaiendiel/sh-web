@@ -34,9 +34,8 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       <p class="hub-footer__contact-line"><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></p>
       {org?.predseda?.phone && <p class="hub-footer__contact-line"><a href={`tel:${org.predseda.phone.replace(/\s/g,'')}`}>{org.predseda.phone}</a></p>}
       <p class="hub-footer__operator">
-        Provozuje Startovací Hub Klecany.<br />
-        Bydlení ve správě stavebně bytového družstva Altstav.<br />
-        Kyvadlovou dopravu MyShelter provozujeme přímo v areálu.
+        Provozuje Startovací Hub Klecany, Občanské sdružení Alternativa II, z.s.<br />
+        IČO {org?.ico ?? 'bude doplněno'}. Bydlení ve správě stavebně bytového družstva Altstav.
       </p>
     </div>
 
