@@ -4,18 +4,18 @@ Operativní handoff pro budoucí Claude sessions. Tenhle soubor se načítá do 
 
 ## Co to je
 
-Statický web Startovacího Hubu Klecany pro OSA II, z.s. Auto-deployed na GitHub Pages, kanonická doména `startovacihub.cz` po DNS cutoveru. Konverzní funnel pro nezávazné rezervace 9 typů ubytování (5 privátních apartmánů 1+kk až 5+kk + 4 co-living varianty kapsle/lůžka). Investor surface žije v sourozeneckém repu `vpd-web`, sem se z hubu odkazuje jen z patičky.
+Statický web Startovacího Hubu Klecany. Provozuje Občanské sdružení Alternativa II, z.s. (potvrzeno 2026-06-12), na webu komunikováno brandem „Startovací Hub", kyvadlová doprava „MyShelter", bydlení „ve správě družstva Altstav". Auto-deployed na GitHub Pages, kanonická doména `startovacihub.cz` po DNS cutoveru. Konverzní funnel pro nezávazné rezervace **11 formátů ubytování: 5 privátních apartmánů 1+kk až 5+kk + 6 sdílených pokojů** (lůžko/dvojlůžko ve dvou stupních soukromí + kapslové lůžko/dvojlůžko). Investor surface žije v sourozeneckém repu `vpd-web`, sem se z hubu odkazuje jen z patičky.
 
 ## Stack snapshot
 
 | | |
 |---|---|
 | Framework | Astro 6.1.8, static output |
-| Content | Astro Content Collections, Zod-validated: `apartmany`, `coliving`, `faq`, `org` |
+| Content | Astro Content Collections, Zod-validated: `apartmany`, `sdilenePokoje`, `zazemi` (data-driven strom), `faq`, `org` |
 | Styling | Vanilla CSS s tokens v `src/styles/`. Plum accent `#5A2A5F`, `--radius-input: 7px` |
 | Fonts | Self-hosted Atyp Special WOFF2 v `public/fonts/` |
 | Client JS | Inline `<script is:inline>` islands, žádný bundle |
-| Map | Leaflet 1.9.4 (CDN unpkg) + CARTO Voyager tiles, jen `/okoli/` a footer |
+| Map | Leaflet 1.9.4 (CDN unpkg) + CARTO Voyager tiles, jen footer (mapa na `/zazemi/okoli/` je open loop) |
 | Deploy | GH Pages, `base: '/sh-web/'` (transitional). CI: `.github/workflows/deploy-pages.yml` |
 | Form backend | Cloudflare Worker v `worker/` (Turnstile + Resend + D1 EU), deploy pending |
 
@@ -48,18 +48,24 @@ Web byl přestavěn na fraktální vzor: **každá stránka = `SubpageHero` → 
 /404
 ```
 
-Staré bespoke stránky (`/coworking/`, `/komunita/`, `/okoli/`, `/kapsle/`) jsou v `_archive/pages/` (nahrazeno `/zazemi/*`).
+Staré bespoke stránky (`/coworking/`, `/komunita/`, `/okoli/`, `/kapsle/`) + mrtvé komponenty (`RoomCard`, `QuickReserveCtas`, `Ribbon`) byly odstraněny; dohledatelné v git historii (commity `feat(hub): foundation` … `archiv starých stránek`). `/zazemi/okoli/` zatím nemá Leaflet mapu, kterou mělo staré `/okoli/`.
 
 ## Audience & voice
 
 - **Primární persona:** pracující studenti, OSVČ, mladí kreativci, začínající podnikatelé.
 - **Voice:** komunita + kreativa + pragmatic value. Lowercase „vy/váš", bez „ty" formy.
-- **Hook:** „Bydlení 15 minut autobusem od metra Kobylisy", levnější než centrum.
-- **Konverzní funnel:** hero → RoomCard → `/rezervace/` → telefon do 24 h.
+- **Hook:** hero „Bydlení a tvorba na prahu metropole", energie a internet v ceně (15 min autobusem od metra Kobylisy , v body textu, ne v hero).
+- **Konverzní funnel:** hero → srovnávací tabulky / zig-zag → `/rezervace/` (rozcestník 3 CTA) → telefon do 24 h.
 
-## Pricing (uzamčeno 2026-05-12)
+## Pricing
 
-Anchor cena za celou jednotku, 3-tier slevy (3+ / 6+ / 12+ měs). Karty + detail pages zobrazují jen anchor, slevy žijí v MDX frontmatteru ale display ignore — komunikuje se „pro pobyt s právem prodloužit počítejte 5–10 % nad anchor".
+⚠️ **Živý zdroj cen = MDX frontmattery v `src/content/{apartmany,sdilene-pokoje}/*.mdx`** (a coworking/doplňky v `src/pages/cenik/index.astro`). Tabulka níže je historická („uzamčeno 2026-05-12") a **liší se** od MDX (např. 1+kk: MDX 10 000 vs tabulka 9 500; kapsle-single MDX 4 000 vs tabulka 3 000). **Sjednocení = open loop**, klient potvrdí kanonický zdroj. Nová varianta `dvojluzko-basic` (Dvojlůžko ve sdíleném pokoji bez soukromí) má cenu **orientační + flag `pricePending`**.
+
+6 sdílených variant: `pokoj-basic` (Lůžko ve sdíleném pokoji), `dvojluzko-basic` (Dvojlůžko, orientační), `pokoj-privacy` (Lůžko se zvýšeným soukromím), `dvouluzko` (Dvojlůžko se zvýšeným soukromím), `kapsle-single` (Kapslové lůžko), `kapsle-double` (Kapslové dvojlůžko).
+
+Anchor cena za celou jednotku, 3-tier slevy (3+ / 6+ / 12+ měs). Karty + detail pages zobrazují jen anchor.
+
+**Historická tabulka (2026-05-12):**
 
 | Formát | Plocha | Lůžek | Anchor | 3+ / 6+ / 12+ |
 |---|---|---|---|---|
@@ -75,23 +81,21 @@ Anchor cena za celou jednotku, 3-tier slevy (3+ / 6+ / 12+ měs). Karty + detail
 
 **Vše v ceně bydlení:** energie, internet, úklid společných prostor, **5 jízd Hub-shuttle do metra Kobylisy měsíčně**, **1 jízda Hub-taxi lokálně měsíčně**, přístup do coworkingového sálu (volný stůl), poukaz do sauny 1× týdně. Další shuttle/taxi za zvýhodněnou sazbu.
 
-Coworking ceny: viz `src/pages/coworking/index.astro` (5 tarifů, vč. sál 2 900 Kč/měs zdarma rezidentům, fixní stůl 4 200 Kč, kancelář pro 4 15 000 Kč, zasedačka 350 Kč/hod, ateliér 6 500 Kč/měs, dílna 490 Kč/měs + 150 Kč/hod CNC).
+Coworking ceny + doplňky: viz `src/pages/cenik/index.astro` (sál 2 900 Kč/měs zdarma rezidentům, fixní stůl 4 200 Kč, kancelář pro 4 15 000 Kč, zasedačka 350 Kč/hod, ateliér 6 500 Kč/měs, dílna 490 Kč/měs + 150 Kč/hod CNC). Klient chce všechny ceny ověřit (open loop).
 
 **Komparativní tvrzení vůči Praze** žijí jen v sekundárním social-proof pruhu, nikdy v body textu, vždy s odkazem na `/metodika-srovnani/` (§ 2980 OZ).
 
 ## Reservation flow
 
-`/rezervace/` je 5-step wizard (Phase 5 hotový), vanilla JS state machine inline v `<script>`:
+`/rezervace/` (vanilla JS state machine inline v `<script>`):
 
-1. Koncept (privátní / co-living / „nevím, poradíme").
-2. Konfigurace prostoru (radio karty per koncept, data z collections).
-3. Termín + stipendium toggle.
-4. Kontakt (telefon povinný).
-5. Rekapitulace + GDPR.
+1. **Rozcestník** (panel „koncept"): 3 hlavní volby (privátní apartmán / sdílené pokoje / stipendium) + pod nimi **grid 14 rezervovatelných položek zázemí** (`reservables` array) , klik → „zatím jen pro přihlášené, připravujeme" (login-only stub, `data-reserve-locked`).
+2. **3-krok wizard**: format → termín → kontakt → success. Auto-advance po výběru (robustní i na re-klik už zaškrtnuté karty). Prefill `/rezervace/?typ=<slug>` a `?cesta=apartman|luzko|stipendium`.
+3. **Post-submit upsell**: po odeslání success („Odesláno, zavoláme do 24 h") + nabídka dalšího rezervovatelného zázemí (stejný grid, `data-reserve-section` → lokální zpráva).
 
-Sidebar dynamicky počítá cenu podle vybraného formátu + délky a zobrazuje „vše v ceně" checklist. URL pre-fill `/rezervace/?typ=<slug>` z RoomCard tlačítek. Submit aktuálně `console.log(payload)` + success state — backend wiring (Worker endpoint + Turnstile widget) je open loop.
+Submit aktuálně success state bez backendu — Worker endpoint + Turnstile je open loop. Pozn.: žádný cenový sidebar (zrušeno).
 
-Voice principle: prezentovat sebevědomě jako fungující, site-wide badge „V projektové přípravě" v headeru neutralizuje vábivou reklamu podle Přílohy č. 1 písm. d) ZOOS, ne per-amenity disclaimery.
+Voice principle: prezentovat sebevědomě jako fungující, badge „V projektové přípravě" v patičce neutralizuje vábivou reklamu (Příloha č. 1 písm. d) ZOOS), ne per-amenity disclaimery.
 
 ## Vault → repo sync workflow
 
@@ -102,21 +106,22 @@ Klient pracuje v `/Users/kindl/kindl-vault/Projects/SH_Web/`. Master copy zdroj 
 
    | Vault § | Repo |
    |---|---|
-   | § 0.x | `src/pages/index.astro` (hero claim, amenity karty) |
-   | § 1.1.x | `src/content/apartmany/*.mdx` (5 souborů) + `/ubytovani/` intro |
-   | § 1.2.x | `src/content/coliving/*.mdx` (4 soubory) + `/ubytovani/` intro |
-   | § 2.x | `src/pages/coworking/` |
-   | § 3.x | `src/pages/komunita/` |
-   | § 4.x | `src/pages/okoli/` |
-   | § 5.x | `src/pages/doprava/` |
-   | § 6.x | `src/pages/stipendia/` |
-   | § 9.x | `src/pages/rezervace/` (success copy, mini-FAQ, field labels) |
+   | § 0.x | `src/pages/index.astro` + `src/data/landing.json` (hero, tabulky, zázemí/služby) |
+   | § 1.1.x | `src/content/apartmany/*.mdx` (5 souborů) |
+   | § 1.2.x | `src/content/sdilene-pokoje/*.mdx` (6 souborů) |
+   | § 2.x (coworking) | `src/content/zazemi/coworking.json` |
+   | § 3.x (wellness/komunita) | `src/content/zazemi/{wellness,komunita}.json` |
+   | § 4.x (okolí) | `src/content/zazemi/okoli.json` |
+   | gastro / ostatní | `src/content/zazemi/{gastronomie,ostatni}.json` |
+   | § 5.x | `src/data/doprava.json` (+ `src/pages/doprava/`) |
+   | § 6.x | `src/data/stipendia.json` (+ `src/pages/stipendia/`) |
+   | § 9.x | `src/pages/rezervace/` (success copy, field labels) |
    | § 10.x | `src/pages/kontakty/` |
    | § A.x | `src/content/faq/index.json` |
 
 3. Voice guardrails (CopyVoice § 4.2): lowercase vy/váš, žádné ty-form, žádný em-dash, žádné „v srdci / objevte / ponořte se", žádné -ící duté gerundium. Source citations (Otiwilium, Bezrealitky, Compass) jen na `/metodika-srovnani/`.
 4. Imperativ pro CTA: „Bydlete tady" / „Najměte si" / „Rezervujte si", ne „Bydlíte tady" / „Najmete si".
-5. Verifikace: `pnpm lint:editorial && pnpm build`. Žádné violations, 23 stránek.
+5. Verifikace: `pnpm lint:editorial && pnpm lint:links && pnpm lint:weight && pnpm build`. Žádné violations, 35 stránek. Po editaci obrázků zkontroluj, že cesty existují v `public/` (časté 404 na špatných cestách).
 6. Commit s prefixem `content(hub):` nebo `fix(hub):`.
 
 Pokud vault přidá novou stránku / amenity, řekni klientovi (musí přidat do Plan.md locked sitemap + Astro route + nav).
@@ -164,12 +169,15 @@ Prefixy: `feat(hub):`, `fix(hub):`, `refactor(hub):`, `docs(hub):`, `content(hub
 
 ## Open loops
 
+- **Ceny k ověření** — sjednotit MDX vs historickou tabulku (viz Pricing); cena `dvojluzko-basic` (orientační); ověřit coworking tarify a doplňky v ceníku.
+- **Frontend wiring formuláře** — `/rezervace/` ukáže success bez backendu. Po Worker deploy připojit `fetch` na `https://form.startovacihub.cz/submit` + Turnstile. Sekundární „rezervace zázemí" jsou login-only stuby (sběr zájmu, bez backendu).
 - **Cloudflare Worker deploy** — `worker/wrangler.toml` má placeholdery `REPLACE_WITH_D1_ID`. Postup v `worker/README.md`.
-- **Frontend wiring formuláře** — `/rezervace/` aktuálně `console.log(payload)`. Po Worker deploy připojit `fetch` na `https://form.startovacihub.cz/submit` + Turnstile widget.
-- **DNS cutover na `startovacihub.cz`** — postup v `README.md`. Otevřená otázka klienta.
-- **Produkční fotky** — některé Gallery sloty drží placeholdery (plum-tinted box + „FOTO SE PŘIPRAVUJE" badge). Klient postupně doplňuje přes vault `Visualizations/` + `_incoming/`.
-- **Otevřené otázky pro Marka** (per vault Plan.md): Hub-shuttle provozovatel, advokát na smluvní šablony (§ 2235 + § 2326 OZ), pojmenovaní rezidenti pro launch, kapacita Hubu v lůžkách, domain timing.
-- **E-mail doména** — JSON-LD odkazuje na `alternativa2.info`, e-maily zatím na `osa2.cz`. Operátor potvrdí samostatně.
+- **Mapa na `/zazemi/okoli/`** — staré `/okoli/` mělo Leaflet mapu; data-driven verze ji zatím nemá (footer mapu má). Dohledat starou v git historii.
+- **Produkční fotky** — řada Gallery/PhotoGrid slotů drží placeholdery (plum plate + popis co tam bude + „FOTO SE PŘIPRAVUJE"). Doplňovat přes `public/images/hub/<sekce>/` + `pnpm optimize:images`.
+- **Novinky** — `/novinky/` je ukázkový styl (3-sloupcový NewsCard grid). Reálné články napojit (kolekce / CMS), zatím `href="#"`.
+- **Klientské flagy** (k potvrzení s Markem): Altstav jako správce bydlení a MyShelter jako značka dopravy (napsáno dle zadání); donátorská větev Nadace VPD (na webu vs vepde.com); družstva v `/zazemi/komunita/`; 24h provozy a tramvaj jen jako výhled; reálné minutáže okolí/cyklostezky.
+- **DNS cutover na `startovacihub.cz`** — postup v `README.md`.
+- **E-mail doména** — JSON-LD odkazuje na `alternativa2.info`, e-maily na `osa2.cz`. Operátor potvrdí.
 
 ## Don't read these (token traps)
 
