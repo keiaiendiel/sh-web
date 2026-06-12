@@ -197,19 +197,21 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           <h1 class="rez__q">Jak chcete v&nbsp;Hubu bydlet?</h1>
           <p class="rez__q-hint">Doporučíme nejvhodnější formát. Volba není závazná.</p>
         </div>
-        <div class="rez__choices rez__choices--3">
+        <div class="rez__choices rez__choices--3 rez__choices--main">
           <label class="rez__choice">
             <input type="radio" name="koncept" value="privatni" data-auto-next />
             <span class="rez__choice-body">
               <span class="rez__choice-title">Privátní apartmán</span>
-              <span class="rez__choice-meta">Vlastní byt, kuchyň, koupelna. Od&nbsp;10 000&nbsp;Kč&nbsp;/&nbsp;měsíc.</span>
+              <span class="rez__choice-meta">Vlastní byt, kuchyň, koupelna. Pět velikostí 1+kk až 5+kk.</span>
+              <span class="rez__choice-price">od&nbsp;10 000&nbsp;Kč<span class="rez__choice-price-unit">/měs</span></span>
             </span>
           </label>
           <label class="rez__choice">
             <input type="radio" name="koncept" value="co-living" data-auto-next />
             <span class="rez__choice-body">
               <span class="rez__choice-title">Sdílené pokoje</span>
-              <span class="rez__choice-meta">Vlastní lůžko nebo kapsle, sdílená kuchyň. Od&nbsp;3 000&nbsp;Kč&nbsp;/&nbsp;měsíc.</span>
+              <span class="rez__choice-meta">Vlastní lůžko, box nebo kapsle, sdílená kuchyň a koupelna.</span>
+              <span class="rez__choice-price">od&nbsp;3 000&nbsp;Kč<span class="rez__choice-price-unit">/měs</span></span>
             </span>
           </label>
           <label class="rez__choice">
@@ -217,6 +219,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <span class="rez__choice-body">
               <span class="rez__choice-title">Žádost o&nbsp;stipendium</span>
               <span class="rez__choice-meta">Pobytové (slevy na&nbsp;bydlení za&nbsp;přínos) nebo projektové (úhrada materiálu a&nbsp;dílen).</span>
+              <span class="rez__choice-price">Nadace&nbsp;VPD</span>
             </span>
           </label>
         </div>
@@ -350,7 +353,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           <h1 class="rez__q">Jaké stipendium vás zajímá?</h1>
           <p class="rez__q-hint">Dvě hlavní kategorie. Můžete žádat o&nbsp;obě zároveň, pokud váš projekt zapadá.</p>
         </div>
-        <div class="rez__choices rez__choices--2">
+        <div class="rez__choices rez__choices--2 rez__choices--main">
           <label class="rez__choice">
             <input type="radio" name="stipendium-typ" value="pobytove" />
             <span class="rez__choice-body">
@@ -476,13 +479,15 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <input type="text" id="prijmeni" name="prijmeni" required autocomplete="family-name" />
           </div>
         </div>
-        <div class="rez__field">
-          <label for="telefon">Telefon</label>
-          <input type="tel" id="telefon" name="telefon" required autocomplete="tel" inputmode="tel" placeholder="+420" />
-        </div>
-        <div class="rez__field">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" required autocomplete="email" placeholder="vy@example.cz" />
+        <div class="rez__grid-2">
+          <div class="rez__field">
+            <label for="telefon">Telefon</label>
+            <input type="tel" id="telefon" name="telefon" required autocomplete="tel" inputmode="tel" placeholder="+420" />
+          </div>
+          <div class="rez__field">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="vy@example.cz" />
+          </div>
         </div>
         <div class="rez__field">
           <label for="poznamka">Poznámka (volitelné)</label>
@@ -923,6 +928,10 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   }
   .rez-survey__hint { margin: 0; }
   .rez-survey__choices { gap: 10px; }
+  /* Desktop: možnosti dotazníku 2-up, efektivnější využití šířky. */
+  @media (min-width: 900px) {
+    .rez-survey__choices { grid-template-columns: 1fr 1fr; }
+  }
   .rez-survey__nav {
     display: flex;
     align-items: center;
@@ -1394,9 +1403,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
   }
   .rez__panel > * { min-width: 0; }
-  /* Kontakt krok , pole stála příliš daleko od sebe (space-5). Zúžit. */
-  .rez__panel[data-panel="kontakt"] { gap: var(--space-4); }
-  .rez__panel[data-panel="kontakt"] .rez__panel-intro { margin-bottom: var(--space-1); }
+  /* Pozn.: žádné per-krok odchylky gapů , identický vertikální rytmus
+     všech kroků je základ anti-jump chování. */
   .rez__panel.is-current {
     opacity: 1;
     transform: translateX(0);
@@ -1422,7 +1430,9 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   }
 
   .rez__q {
-    font: 700 clamp(1.625rem, 3.5vw, 2.25rem) / 1.1 var(--font-sans);
+    /* Jednotná velikost napříč VŠEMI kroky (žádné per-krok přepisy),
+       hlavička tak drží identickou výšku a nic neskáče. */
+    font: 700 clamp(1.625rem, 2.4vw, 2.125rem) / 1.12 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     margin: 0;
     text-wrap: balance;
@@ -1448,71 +1458,47 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   }
   .rez__panel-intro > * { min-width: 0; max-width: 100%; }
 
-  /* ---------- Desktop 2-col panel: intro vlevo, body vpravo ---------- */
-  /* Na širokém viewportu rozkládáme každý panel do gridu: rez__panel-intro
-     drží levý sloupec (~320px), všechny choice cards / fields / addons
-     padají do pravého sloupce a mají tak víc dechu. Action row překlene
-     oba sloupce dole. Slide animace zůstává v platnosti díky původním
-     transform/opacity pravidlům výš. */
+  /* ---------- Desktop: full-width, top-aligned, stabilní ---------- */
+  /* Žádný postranní sloupec ani svislá dělící čára. Hlavička otázky je
+     horizontální pás přes celou šířku s hairline spodní linkou , sedí na
+     IDENTICKÉ pozici v každém kroku (anti-jump). Tělo kroku teče pod ní
+     v plné šířce kontejneru; formulářová pole se drží čitelné šířky,
+     výběrové karty využívají celou šířku. */
   @media (min-width: 1024px) {
-    .rez__panel {
-      display: grid;
-      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
-      column-gap: clamp(48px, 6vw, 96px);
-      row-gap: var(--space-5);
-      align-items: start;
-    }
+    .rez__panel { gap: var(--space-5); }
     .rez__panel-intro {
-      grid-column: 1;
-      position: sticky;
-      top: 96px;
-      gap: var(--space-3);
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: clamp(24px, 4vw, 64px);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--accent-rule);
     }
-    .rez__panel-intro .rez__q,
-    .rez__panel-intro .rez__q-hint { max-width: none; }
-    .rez__panel-intro .rez__q { font-size: clamp(2rem, 3vw, 2.625rem); }
-    .rez__panel-intro .rez__q-hint { font-size: var(--text-md); }
-    /* Vše ostatní (choice grid, single field, grid-2, addons, gdpr, range
-       slider, pills wrapper) sedí v pravém sloupci. */
-    .rez__panel > *:not(.rez__panel-intro):not(.rez__actions) {
-      grid-column: 2;
+    .rez__panel-intro .rez__q {
+      max-width: none;
+      flex: 0 1 auto;
     }
-    .rez__actions {
-      grid-column: 1 / -1;
+    .rez__panel-intro .rez__q-hint {
+      flex: 0 1 auto;
+      max-width: 44ch;
+      text-align: right;
+      font-size: var(--text-md);
     }
-    /* Success panel: 1-col centered, žádný sidebar */
-    .rez__panel--success {
-      grid-template-columns: 1fr;
-      text-align: left;
+    /* Formulářové kroky: pole drží čitelnou šířku, ale layout zůstává
+       levo-zarovnaný se stabilní hranou. */
+    .rez__panel > .rez__field,
+    .rez__panel > .rez__grid-2,
+    .rez__panel > .rez__addons,
+    .rez__panel > .rez__gdpr {
+      width: 100%;
+      max-width: 920px;
     }
-    .rez__panel--success > * {
-      grid-column: 1;
-    }
-    .rez__panel--success .rez__panel-intro {
-      position: static;
-    }
-    /* Lehký vizuální oddělovač mezi sloupci, jen na panelech s body content */
-    .rez__panel:not(.rez__panel--success) {
-      position: relative;
-    }
-    .rez__panel:not(.rez__panel--success)::before {
-      content: "";
-      position: absolute;
-      top: 8px;
-      bottom: 64px;
-      left: calc(min(360px, 33%) + clamp(20px, 3vw, 44px));
-      width: 1px;
-      background: linear-gradient(to bottom,
-        transparent 0%,
-        var(--accent-rule) 12%,
-        var(--accent-rule) 88%,
-        transparent 100%);
-      pointer-events: none;
-      opacity: 0.5;
-    }
-  }
-  @media (min-width: 1280px) {
-    .rez__panel-intro .rez__q { font-size: 2.75rem; line-height: 1.05; }
+    /* Termín: měsíc + délka vedle sebe přes šířku, addons 2-up. */
+    .rez__addons { grid-template-columns: 1fr 1fr; }
+    /* Success: dotazník i shrnutí drží čitelnou šířku. */
+    .rez-survey,
+    .rez-survey__start,
+    .rez-survey__done { max-width: 980px; }
   }
 
   /* ---------- Choice cards ---------- */
@@ -1573,51 +1559,54 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     color: var(--fg-muted);
   }
 
-  /* Non-card volby na desktopu , dech a typografická hierarchie.
-   * Title větší (vyšší vizuální váha jako tlačítko/CTA), meta s wide
-   * max-width pro krásnou linkulinu. Padding bohatší aby řádek vypadal
-   * jako proper card-row, ne button. Subtle arrow „>" v pravém horním
-   * rohu pro affordance. */
-  @media (min-width: 720px) {
-    .rez__choices:not(.rez__choices--cards) {
-      gap: 12px;
+  /* ---------- Hlavní volby (koncept + stipendium-typ): karty vedle sebe ----------
+   * Mobil: 1-col stack. Desktop: rovnoměrný row gridu přes celou šířku,
+   * stejně vysoké karty, radio kroužek vpravo nahoře jako affordance
+   * jednoho výběru. Žádné středové dělící čáry, žádné stackované řádky. */
+  .rez__choices--main .rez__choice {
+    display: flex;
+  }
+  .rez__choices--main .rez__choice-body {
+    flex: 1 1 auto;
+    gap: 8px;
+    padding-right: 30px; /* prostor pro radio indikátor */
+  }
+  .rez__choices--main .rez__choice-meta { max-width: 40ch; }
+  .rez__choices--main .rez__choice .rez__choice-price {
+    margin-top: auto;
+    padding-top: 10px;
+  }
+  /* Radio kroužek , jasná affordance „vyber jednu". */
+  .rez__choices--main .rez__choice::after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--accent-rule);
+    border-radius: 999px;
+    transition: border-color 220ms cubic-bezier(0.32, 0.72, 0, 1), box-shadow 220ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .rez__choices--main .rez__choice:hover::after { border-color: var(--accent); }
+  .rez__choices--main .rez__choice:has(input:checked)::after {
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 4.5px var(--bg), inset 0 0 0 12px var(--accent);
+  }
+  @media (min-width: 900px) {
+    .rez__choices--main {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-3);
     }
-    .rez__choices:not(.rez__choices--cards) .rez__choice {
-      padding: 22px 28px;
+    .rez__choices--main .rez__choice {
+      padding: 24px 26px 22px;
+      min-height: 168px;
     }
-    .rez__choices:not(.rez__choices--cards) .rez__choice-body {
-      gap: 6px;
-      padding-right: 36px; /* room for arrow indicator */
-    }
-    .rez__choices:not(.rez__choices--cards) .rez__choice-title {
+    .rez__choices--main .rez__choice-title {
       font: 700 1.1875rem / 1.25 var(--font-sans);
     }
-    .rez__choices:not(.rez__choices--cards) .rez__choice-meta {
+    .rez__choices--main .rez__choice-meta {
       font: 500 0.9375rem / 1.5 var(--font-sans);
-      max-width: 64ch;
-    }
-    .rez__choices:not(.rez__choices--cards) .rez__choice::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 24px;
-      width: 12px;
-      height: 12px;
-      border-top: 2px solid var(--fg-subtle);
-      border-right: 2px solid var(--fg-subtle);
-      transform: translateY(-50%) rotate(45deg);
-      opacity: 0.5;
-      transition: opacity 200ms ease, right 220ms cubic-bezier(0.32, 0.72, 0, 1), border-color 200ms ease;
-    }
-    .rez__choices:not(.rez__choices--cards) .rez__choice:hover::after,
-    .rez__choices:not(.rez__choices--cards) .rez__choice:focus-within::after {
-      opacity: 1;
-      right: 20px;
-      border-color: var(--accent);
-    }
-    .rez__choices:not(.rez__choices--cards) .rez__choice:has(input:checked)::after {
-      opacity: 1;
-      border-color: var(--accent);
     }
   }
 
@@ -1715,9 +1704,15 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       -webkit-line-clamp: 3;
     }
   }
-  /* On wider screens give privátní cards a bit more breathing room. */
+  /* On wider screens give privátní cards a bit more breathing room.
+     Sdílené pokoje (6 variant, třída --2) jdou na desktopu 3-up: dvě
+     řady místo tří, efektivnější využití šířky kontejneru. */
   @media (min-width: 1100px) {
     .rez__choices--cards.rez__choices--3 {
+      gap: var(--space-4);
+    }
+    .rez__choices--cards.rez__choices--2 {
+      grid-template-columns: repeat(3, 1fr);
       gap: var(--space-4);
     }
   }
