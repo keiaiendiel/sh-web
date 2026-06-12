@@ -39,14 +39,14 @@ const reservableGroups: { title: string; items: Reservable[] }[] = [
   {
     title: 'Doprava',
     items: [
-      { slug: 'kyvadlovka-myshelter', label: 'Místo v kyvadlovém spoji', icon: 'bus',       hue: 240 },
+      { slug: 'kyvadlovka-myshelter', label: 'Kyvadlová doprava', icon: 'bus',       hue: 240 },
       { slug: 'sdilene-taxi',         label: 'Sdílené taxi',             icon: 'car-front', hue: 240 },
       { slug: 'elektroauto',          label: 'Elektroauto',              icon: 'zap',       hue: 130 },
       { slug: 'elektrokolo',          label: 'Elektrokolo',              icon: 'bike',      hue: 130 },
       { slug: 'elektrokolobezka',     label: 'Elektrokoloběžka',         icon: 'scooter',    hue: 130 },
       { slug: 'elektrolongboard',     label: 'Elektrolongboard',         icon: 'circle-dot', hue: 130 },
       { slug: 'onewheel',             label: 'Onewheel',                 icon: 'circle-gauge', hue: 130 },
-      { slug: 'pujcovna',             label: 'Celá půjčovna',            icon: 'key-round', hue: 50 },
+      { slug: 'pujcovna',             label: 'Půjčovna',                 icon: 'key-round', hue: 50 },
       { slug: 'parking',              label: 'Parkovací místo',          icon: 'parking-circle', hue: 50 },
     ],
   },
@@ -523,22 +523,18 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         </div>
         <div class="rez__panel-intro">
           <h1 class="rez__q">Odesláno. Zavoláme do&nbsp;24&nbsp;hodin.</h1>
-          <p class="rez__q-hint">Vše v&nbsp;pořádku, registraci máme. Pořád je to nezávazné, žádný závazek.</p>
+          <p class="rez__q-hint">Registraci máme, je nezávazná. Ještě pár doplňků, ať vám připravíme nabídku na míru. Kdykoli můžete zavřít křížkem.</p>
         </div>
 
-        {/* Start dotazníku: jedna otázka na obrazovku, živá orientační cena. */}
-        <div class="rez-survey__start" data-survey-start>
-          <p class="rez-survey__pitch">Máte dvě minuty? Projděte s námi pár doplňků (úklid, zahrádka, parkování), ať vám rovnou připravíme nabídku na míru. Cena se přepočítává průběžně.</p>
-          <div class="rez-survey__start-row">
-            <button type="button" class="rez__cta rez__cta--primary" data-sv-start>Doladit detaily</button>
-            <button type="button" class="rez__cta" data-sv-later>Teď ne</button>
-          </div>
-        </div>
-
+        {/* Dotazník startuje automaticky po odeslání (event rez:success).
+            Křížek vpravo nahoře = odejít bez doplňků. */}
         <div class="rez-survey" data-survey hidden>
           <div class="rez-survey__head">
             <p class="rez-survey__counter" aria-live="polite"><span data-sv-step>1</span><span class="rez__step-sep">/</span><span data-sv-total>{surveyQuestions.length}</span></p>
             <div class="rez-survey__bar" aria-hidden="true"><span class="rez-survey__bar-fill" data-sv-fill></span></div>
+            <button type="button" class="rez-survey__close" data-sv-close aria-label="Zavřít dotazník, doplňky mě nezajímají">
+              <Icon name="x" size={18} strokeWidth={2} />
+            </button>
           </div>
 
           {surveyQuestions.map((sq, i) => (
@@ -563,17 +559,20 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           ))}
 
           <div class="rez-survey__nav">
-            <button type="button" class="rez__back" data-sv-back>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <button type="button" class="rez-survey__nav-btn" data-sv-back>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               <span>Zpět</span>
             </button>
-            <span class="rez__actions-spacer"></span>
-            <button type="button" class="rez__cta rez__cta--compact" data-sv-skip>Přeskočit</button>
+            <p class="rez-survey__ticker" data-sv-ticker aria-live="polite">Vybrané doplňky: +0 Kč měsíčně (orientačně)</p>
+            <button type="button" class="rez-survey__nav-btn" data-sv-skip>
+              <span>Přeskočit</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
           </div>
-
-          <p class="rez-survey__ticker" data-sv-ticker aria-live="polite">Vybrané doplňky: +0 Kč měsíčně (orientačně)</p>
         </div>
 
         <div class="rez-survey__done" data-survey-done hidden>
@@ -689,7 +688,6 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       if (!panel || panel.dataset.svBound === '1') return;
       panel.dataset.svBound = '1';
 
-      var startBox = panel.querySelector('[data-survey-start]');
       var survey = panel.querySelector('[data-survey]');
       var done = panel.querySelector('[data-survey-done]');
       var after = panel.querySelector('[data-survey-after]');
@@ -749,14 +747,13 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       }
 
       panel.addEventListener('click', function (e) {
-        if (e.target.closest('[data-sv-start]')) {
-          startBox.hidden = true;
-          survey.hidden = false;
-          show(0);
-        }
-        if (e.target.closest('[data-sv-later]')) {
-          startBox.hidden = true;
-          if (after) after.hidden = false;
+        if (e.target.closest('[data-sv-close]')) {
+          /* Křížek = odejít z dotazníku. Pokud už něco vybral, ukážeme
+             shrnutí; jinak rovnou grid dalších rezervací. */
+          clearTimeout(timer);
+          var anyPick = panel.querySelector('.rez-survey__q input:checked');
+          if (anyPick) { finish(); }
+          else { survey.hidden = true; if (after) after.hidden = false; }
         }
         if (e.target.closest('[data-sv-skip]')) {
           clearTimeout(timer);
@@ -774,6 +771,14 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           clearTimeout(timer);
           timer = setTimeout(next, 320);
         }
+      });
+
+      /* Auto-start: dotazník se rozjede hned po odeslání formuláře,
+         žádné mezitlačítko. Event posílá hlavní wizard controller. */
+      document.addEventListener('rez:success', function () {
+        if (!survey.hidden) return;
+        survey.hidden = false;
+        show(0);
       });
     }
     document.addEventListener('astro:page-load', bind);
@@ -865,27 +870,24 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     .rez__more-item { padding: 12px; gap: 10px; flex-direction: column; align-items: flex-start; }
   }
 
-  /* ---------- Post-submit dotazník ---------- */
-  .rez-survey__start { display: grid; gap: var(--space-3); }
-  .rez-survey__pitch {
-    font: 500 var(--text-md) / 1.55 var(--font-sans);
-    color: var(--fg-muted);
-    margin: 0;
-    max-width: 56ch;
-  }
-  .rez-survey__start-row { display: flex; flex-wrap: wrap; gap: 10px; }
-  .rez-survey[hidden], .rez-survey__start[hidden], .rez-survey__done[hidden], [data-survey-after][hidden] { display: none; }
+  /* ---------- Post-submit dotazník ----------
+   * Startuje automaticky po odeslání, jede přes CELOU šířku kontejneru.
+   * Možnosti všech otázek sedí v jednotném 4-sloupcovém gridu (prázdné
+   * sloupce zůstávají prázdné), takže rámečky mají VŽDY stejnou šířku
+   * napříč otázkami. Typografický rytmus: otázka → hint → vzduch →
+   * odpovědi. Křížek vpravo nahoře = odejít bez doplňků. */
+  .rez-survey[hidden], .rez-survey__done[hidden], [data-survey-after][hidden] { display: none; }
   .rez-survey {
     display: grid;
-    gap: var(--space-4);
-    padding: clamp(20px, 2.5vw, 28px);
+    gap: var(--space-5);
+    padding: clamp(20px, 2.5vw, 32px);
     border: 1px solid var(--accent-rule);
     border-radius: var(--radius-input);
     background: var(--bg);
   }
   .rez-survey__head {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: var(--space-3);
   }
@@ -912,38 +914,94 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     transform: scaleX(0);
     transition: transform 380ms cubic-bezier(0.32, 0.72, 0, 1);
   }
+  .rez-survey__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--accent-rule);
+    background: transparent;
+    color: var(--fg-muted);
+    cursor: pointer;
+    transition: border-color 200ms ease, color 200ms ease, background 200ms ease;
+  }
+  .rez-survey__close:hover,
+  .rez-survey__close:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+    outline: none;
+  }
   .rez-survey__q {
     border: 0;
     padding: 0;
     margin: 0;
     display: grid;
-    gap: var(--space-3);
+    gap: 6px;
     min-width: 0;
   }
   .rez-survey__q[hidden] { display: none; }
   .rez-survey__legend {
-    font: 700 clamp(1.25rem, 2.4vw, 1.625rem) / 1.2 var(--font-sans);
+    font: 700 clamp(1.25rem, 2vw, 1.5rem) / 1.2 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     padding: 0;
   }
-  .rez-survey__hint { margin: 0; }
-  .rez-survey__choices { gap: 10px; }
-  /* Desktop: možnosti dotazníku 2-up, efektivnější využití šířky. */
-  @media (min-width: 900px) {
-    .rez-survey__choices { grid-template-columns: 1fr 1fr; }
+  .rez-survey__hint { margin: 0; font-size: var(--text-sm); }
+  /* Vzduch mezi textem otázky a odpověďmi (typografický rytmus). */
+  .rez-survey__choices { gap: 10px; margin-top: var(--space-4); }
+  .rez-survey__opt { display: flex; }
+  .rez-survey__opt .rez__choice-body { flex: 1 1 auto; gap: 6px; }
+  /* Jednotná šířka rámečků: vždy 4 tracky, méně odpovědí = prázdné
+     sloupce. Každá odpověď tak má identickou šířku v každé otázce. */
+  @media (min-width: 1024px) {
+    .rez-survey__choices { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
   }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .rez-survey__choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  /* Nav: Zpět | ticker uprostřed | Přeskočit , obě tlačítka identická. */
   .rez-survey__nav {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 12px;
-    padding-top: var(--space-3);
+    gap: var(--space-3);
+    padding-top: var(--space-4);
     border-top: 1px solid var(--accent-rule);
+  }
+  .rez-survey__nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 42px;
+    min-width: 124px;
+    padding: 0 20px;
+    border-radius: var(--radius-input);
+    border: 1px solid var(--accent-rule);
+    background: transparent;
+    color: var(--accent);
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    cursor: pointer;
+    transition: border-color 200ms ease, background 200ms ease, color 200ms ease;
+  }
+  .rez-survey__nav-btn:hover,
+  .rez-survey__nav-btn:focus-visible {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    outline: none;
   }
   .rez-survey__ticker {
     margin: 0;
+    text-align: center;
     font: 600 var(--text-sm) / 1.3 var(--font-sans);
     color: var(--accent);
     font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 639px) {
+    .rez-survey__nav { grid-template-columns: auto auto; }
+    .rez-survey__ticker { grid-column: 1 / -1; grid-row: 2; text-align: left; }
   }
   .rez-survey__done { display: grid; gap: var(--space-2); }
   .rez-survey__done-h {
@@ -1195,6 +1253,8 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       showPanel('success', 'forward');
       if (afterEl) afterEl.removeAttribute('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      /* Rozjeď doplňkový dotazník (auto-start, žádné mezitlačítko). */
+      document.dispatchEvent(new CustomEvent('rez:success'));
     });
 
     /* URL pre-fill:
@@ -1495,11 +1555,11 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     }
     /* Termín: měsíc + délka vedle sebe přes šířku, addons 2-up. */
     .rez__addons { grid-template-columns: 1fr 1fr; }
-    /* Success: dotazník i shrnutí drží čitelnou šířku. */
-    .rez-survey,
-    .rez-survey__start,
-    .rez-survey__done { max-width: 980px; }
   }
+  /* Success panel: děti roztáhnout na plnou šířku kontejneru (flex-start
+     by jim jinak dal content-based šířku a grid rezervovatelných položek
+     by se zúžil na 2 sloupce a skákal). Kruhová fajfka zůstává malá. */
+  .rez__panel--success > *:not(.rez__success-mark) { width: 100%; }
 
   /* ---------- Choice cards ---------- */
   .rez__choices {
@@ -1704,16 +1764,15 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       -webkit-line-clamp: 3;
     }
   }
-  /* On wider screens give privátní cards a bit more breathing room.
+  /* Jednotný dech karet na desktopu (privátní i sdílené stejný gap).
      Sdílené pokoje (6 variant, třída --2) jdou na desktopu 3-up: dvě
      řady místo tří, efektivnější využití šířky kontejneru. */
+  @media (min-width: 900px) {
+    .rez__choices--cards { gap: var(--space-4); }
+  }
   @media (min-width: 1100px) {
-    .rez__choices--cards.rez__choices--3 {
-      gap: var(--space-4);
-    }
     .rez__choices--cards.rez__choices--2 {
       grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-4);
     }
   }
 

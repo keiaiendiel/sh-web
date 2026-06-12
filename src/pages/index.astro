@@ -223,7 +223,7 @@ const tiles = [
 
     <div class="lp-hero__inner">
       <h1 class="lp-hero__title">Žijte, milujte &amp; tvořte!</h1>
-      <p class="lp-hero__lede">MyShelter · coliving &amp; coworking space</p>
+      <p class="lp-hero__lede">MyShelter · Coliving &amp; coworking space</p>
     </div>
 
     {/* Tři rychlá CTA do rezervačního formuláře s předvyplněnou cestou.
@@ -431,6 +431,11 @@ const tiles = [
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: 0 auto;
+  }
+  /* Landing teaser: fotky těsněji u sebe (cca poloviční gap oproti
+     defaultu PhotoGridu), působí jako kompaktní mozaika. */
+  .lp-gallery__inner :global(.pg__grid) {
+    gap: clamp(5px, 0.7vw, 9px);
   }
 </style>
 

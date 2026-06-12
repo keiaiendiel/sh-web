@@ -4,7 +4,7 @@ Operativní handoff pro budoucí Claude sessions. Tenhle soubor se načítá do 
 
 ## Co to je
 
-Statický web Startovacího Hubu Klecany. Provozuje Občanské sdružení Alternativa II, z.s. (potvrzeno 2026-06-12), na webu komunikováno brandem „Startovací Hub". **MyShelter** je brand celého kampusu (hero pod-slogan „MyShelter · coliving & coworking space") i kyvadlové dopravy; bydlení „ve správě družstva Altstav". **Hero motto: „Žijte, milujte & tvořte!"** (dle klientské tabulky Koncept webu, 12. 6. 2026). „Coliving" je zastřešující pojem kampusu (všichni něco sdílejí), produktové dělení zůstává Privátní apartmány vs Sdílené pokoje. Auto-deployed na GitHub Pages, kanonická doména `startovacihub.cz` po DNS cutoveru. Konverzní funnel pro nezávazné rezervace **11 formátů ubytování: 5 privátních apartmánů 1+kk až 5+kk + 6 sdílených pokojů** (lůžko/dvojlůžko ve třech stupních soukromí: základní bez příček, zvýšená = lůžkový box, vysoká = uzamykatelná kapsle). Investor surface žije v sourozeneckém repu `vpd-web`, sem se z hubu odkazuje jen z patičky.
+Statický web Startovacího Hubu Klecany. Provozuje Občanské sdružení Alternativa II, z.s. (potvrzeno 2026-06-12), na webu komunikováno brandem „Startovací Hub". **MyShelter** je brand celého kampusu (hero pod-slogan „MyShelter · Coliving & coworking space") i kyvadlové dopravy; bydlení „ve správě družstva Altstav". **Hero motto: „Žijte, milujte & tvořte!"** (dle klientské tabulky Koncept webu, 12. 6. 2026). „Coliving" je zastřešující pojem kampusu (všichni něco sdílejí), produktové dělení zůstává Privátní apartmány vs Sdílené pokoje. Auto-deployed na GitHub Pages, kanonická doména `startovacihub.cz` po DNS cutoveru. Konverzní funnel pro nezávazné rezervace **11 formátů ubytování: 5 privátních apartmánů 1+kk až 5+kk + 6 sdílených pokojů** (lůžko/dvojlůžko ve třech stupních soukromí: základní bez příček, zvýšená = lůžkový box, vysoká = uzamykatelná kapsle). Investor surface žije v sourozeneckém repu `vpd-web`, sem se z hubu odkazuje jen z patičky.
 
 **Kanonický zdroj struktury webu** je klientská Excel tabulka „Koncept webu (aktuální)" (Záměr VPD1, list 5): fraktální mapa, hloubka uzlu = sloupec (úrovně 0 až 7, využito 0 až 4), hranaté závorky = meta-anotace (publikum, CTA, fakta, cross-linky). Synchronizováno 12. 6. 2026.
 
@@ -58,7 +58,7 @@ Staré bespoke stránky (`/coworking/`, `/komunita/`, `/okoli/`, `/kapsle/`) + m
 
 - **Primární persona:** pracující studenti, OSVČ, mladí kreativci, začínající podnikatelé.
 - **Voice:** komunita + kreativa + pragmatic value. Lowercase „vy/váš", bez „ty" formy.
-- **Hook:** hero motto „Žijte, milujte & tvořte!" + pod-slogan „MyShelter · coliving & coworking space" (oddělovač středová tečka, NE pomlčka , en-dash je lint-banned). Energie a internet v ceně, 15 min od metra , v body textu, ne v hero.
+- **Hook:** hero motto „Žijte, milujte & tvořte!" + pod-slogan „MyShelter · Coliving & coworking space" (oddělovač středová tečka, NE pomlčka , en-dash je lint-banned). Energie a internet v ceně, 15 min od metra , v body textu, ne v hero.
 - **Konverzní funnel:** hero (3 CTA v pořadí apartmán → lůžko → stipendium) → srovnávací tabulky / zig-zag → `/rezervace/` → telefon do 24 h → post-submit dotazník doplňků.
 - **Menu pořadí:** Ubytování, Zázemí, Stipendia, Doprava, Galerie, Ceník, Novinky (Stipendia PŘED Dopravou, dle tabulky). Header CTA jednotně „Rezervace" (preference klienta, desktop i mobil).
 
