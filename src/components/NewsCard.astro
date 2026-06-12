@@ -21,7 +21,7 @@ interface Props {
   image: { src?: string; placeholder?: string; alt: string };
   href?: string;
 }
-const { date, category, title, excerpt, source = 'OSA II, z.s.', image, href = '#' } = Astro.props;
+const { date, category, title, excerpt, source = 'Startovací Hub', image, href = '#' } = Astro.props;
 const isHash = href === '#';
 ---
 <article class="news-card" data-reveal>

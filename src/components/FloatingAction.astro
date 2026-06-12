@@ -19,7 +19,8 @@ const home = withBase('/');
   id="floating-action"
   class="floating-action"
   href={home}
-  aria-label="Zpět na hlavní stránku"
+  data-fa-home={home}
+  aria-label="O úroveň výš"
   data-fa-mode="back"
   hidden>
   <span class="floating-action__icon" data-fa-icon="back" aria-hidden="true">
@@ -38,7 +39,9 @@ const home = withBase('/');
     function bind() {
       var el = document.getElementById('floating-action');
       if (!el) return;
-      var base = el.getAttribute('href').replace(/\/$/, '');
+      /* Home z neměnného data atributu (href se mezi navigacemi přepisuje
+         na parent / mizí v top mode, takže se z něj base číst nedá). */
+      var base = (el.getAttribute('data-fa-home') || '/').replace(/\/$/, '');
       var path = window.location.pathname.replace(/\/$/, '');
       var isHome = path === base;
       /* Rezervační formulář (5-step wizard) má vlastní bottom-fixed CTA bar
@@ -94,7 +97,13 @@ const home = withBase('/');
         window.addEventListener('scroll', check, { passive: true });
         check();
       } else {
-        /* Back mode: always visible, back arrow shown. */
+        /* Back mode , odkaz o úroveň výš (parent). Vždy viditelný (desktop i mobil). */
+        var trimmed = window.location.pathname.replace(/\/$/, '');
+        var parent = trimmed.slice(0, trimmed.lastIndexOf('/') + 1) || (base + '/');
+        el.setAttribute('href', parent);
+        el.setAttribute('aria-label', 'O úroveň výš');
+        el.setAttribute('role', 'link');
+        el.removeAttribute('tabindex');
         if (iconBack) iconBack.removeAttribute('hidden');
         if (iconTop) iconTop.setAttribute('hidden', '');
         el.removeAttribute('hidden');
@@ -116,7 +125,7 @@ const home = withBase('/');
     right: clamp(20px, 5vw, 32px);
     width: 48px;
     height: 48px;
-    display: none;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 999px;
@@ -151,14 +160,10 @@ const home = withBase('/');
     color: var(--plum-deep);
   }
 
-  /* Desktop: úplně schované. Mobile (< 1025 px): zobrazeno (back mode),
-     nebo zobrazeno až po scrollu > 600 px (top mode přes JS). */
-  @media (max-width: 1024px) {
-    .floating-action { display: inline-flex; }
-    .floating-action[data-fa-mode="top"]:not([hidden]) {
-      display: inline-flex;
-      animation: floating-action-pop 360ms cubic-bezier(0.32, 0.72, 0, 1);
-    }
+  /* Viditelné na desktopu i mobilu. Back mode: vždy (link o úroveň výš).
+     Top mode (landing): až po scrollu > 600 px přes JS, s pop animací. */
+  .floating-action[data-fa-mode="top"]:not([hidden]) {
+    animation: floating-action-pop 360ms cubic-bezier(0.32, 0.72, 0, 1);
   }
   .floating-action[hidden] {
     opacity: 0;

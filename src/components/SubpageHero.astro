@@ -15,6 +15,7 @@
  *   jumps               , optional in-page nav anchor links
  */
 import { withBase } from '../utils/url';
+import Breadcrumb from './Breadcrumb.astro';
 
 type Variant = 'deep' | 'cream' | 'rose' | 'ink';
 type Jump = { href: string; label: string };
@@ -35,7 +36,6 @@ interface Props {
 }
 
 const {
-  eyebrow,
   title,
   sub,
   variant,
@@ -78,7 +78,7 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
     </svg>
   </span>
   <div class="subpage-hero__inner">
-    <p class="subpage-hero__eyebrow">{eyebrow}</p>
+    <Breadcrumb class="subpage-hero__crumbs" />
     <h1 class="subpage-hero__title" id={titleId} set:html={title} />
     {sub && <p class="subpage-hero__sub" set:html={sub} />}
     {jumps.length > 0 && (
