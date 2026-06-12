@@ -21,7 +21,7 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       <div class="hub-footer__map" data-map-frame role="application" aria-label="Mapa Hubu Klecany"></div>
       <p class="hub-footer__map-address">
         <strong>Horní kasárna Klecany</strong>
-        <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách <span aria-hidden="true">→</span></a>
+        <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách <Arrow dir="right" variant="chevron" size={13} weight={2.4} /></a>
       </p>
     </div>
 
@@ -29,7 +29,7 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       <p class="hub-footer__label">Kontakt</p>
       <p class="hub-footer__contact-lede">Stavte se na prohlídku, nebo se zapojte do našich aktivit.</p>
       <p class="hub-footer__chip">
-        <a href={withBase('/rezervace/')} class="hub-footer__chip-link">Domluvit prohlídku <span aria-hidden="true">→</span></a>
+        <a href={withBase('/rezervace/')} class="hub-footer__chip-link">Domluvit prohlídku <Arrow dir="right" variant="chevron" size={14} weight={2.4} /></a>
       </p>
       <p class="hub-footer__contact-line"><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></p>
       {org?.predseda?.phone && <p class="hub-footer__contact-line"><a href={`tel:${org.predseda.phone.replace(/\s/g,'')}`}>{org.predseda.phone}</a></p>}
@@ -164,19 +164,24 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     padding: var(--space-8) 0 var(--space-7);
   }
   /* Tři konverzní CTA , stacked v pravém sloupci patičky. */
-  .hub-footer__act-btn {
+  /* Vyšší specificita než .hub-footer__col a (jinak cream text). Tmavý text
+     na rose, na hover bílé pozadí + tmavý text (jako Domluvit prohlídku). */
+  .hub-footer__col a.hub-footer__act-btn {
     display: inline-flex; align-items: center; justify-content: space-between; gap: var(--space-3);
     width: 100%;
     padding: 12px 16px;
     font: 700 var(--text-sm) / 1 var(--font-sans);
     color: var(--plum-deep); background: var(--rose);
     border-radius: var(--radius-input); text-decoration: none !important;
+    text-decoration-color: transparent;
     transition: background 180ms ease, transform 180ms ease;
   }
-  .hub-footer__act-btn:hover,
-  .hub-footer__act-btn:focus-visible { background: #fff; transform: translateY(-1px); outline: none; }
-  .hub-footer__act-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-  .hub-footer__act-btn :global(svg) { transition: transform 180ms ease; }
+  .hub-footer__col a.hub-footer__act-btn:hover,
+  .hub-footer__col a.hub-footer__act-btn:focus-visible {
+    background: #fff; color: var(--plum-deep); transform: translateY(-1px); outline: none;
+  }
+  .hub-footer__col a.hub-footer__act-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .hub-footer__act-btn :global(svg) { transition: transform 180ms ease; color: var(--plum-deep); }
   .hub-footer__act-btn:hover :global(svg) { transform: translateX(3px); }
 
   .hub-footer__inner {

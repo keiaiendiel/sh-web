@@ -11,6 +11,7 @@
  *   ribbonPath , optional Bezier d-string (viewBox 0 0 2100 700)
  */
 import { withBase } from '../utils/url';
+import Arrow from './Arrow.astro';
 
 type Variant = 'deep' | 'cream' | 'rose' | 'ink';
 type Cta = { label: string; href: string };
@@ -46,7 +47,7 @@ const {
       {lede && <span class="cta-banner__lede" set:html={lede} />}
     </span>
     <span class="cta-banner__cta">
-      {cta.label}<span aria-hidden="true"> →</span>
+      {cta.label}<Arrow dir="right" variant="chevron" size={16} weight={2.4} />
     </span>
   </a>
 </section>

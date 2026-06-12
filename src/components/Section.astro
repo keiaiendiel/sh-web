@@ -108,6 +108,7 @@ const galleryImages = media.map((m) =>
           ))}
         </div>
       )}
+      {priceRows.length > 0 && <PriceTable rows={priceRows} caption={priceCaption} />}
       {actions.length > 0 && (
         <div class="zz-section__actions">
           {actions.map((a) => {
@@ -129,7 +130,6 @@ const galleryImages = media.map((m) =>
     {hasMedia && (
       <div class="zz-section__media">
         <Gallery images={galleryImages} ariaLabel={eyebrow ?? title.replace(/<[^>]+>/g, '')} aspectRatio={mediaAspect} />
-        {priceRows.length > 0 && <PriceTable rows={priceRows} caption={priceCaption} />}
       </div>
     )}
   </div>

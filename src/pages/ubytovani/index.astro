@@ -76,10 +76,19 @@ const sections = [
     priceCaption: 'Anchor cena za celý byt a měsíc',
   },
   ...(zazemiItem
-    ? [{ id: 'zazemi', jumpLabel: 'Ubytovací zázemí', title: zazemiItem.name, lede: zazemiItem.lede, blocks: zazemiItem.blocks ?? [], actions: [{ label: 'Zázemí areálu', href: '/zazemi/', kind: 'detail' as const }] }]
+    ? [{
+        id: 'zazemi', jumpLabel: 'Ubytovací zázemí', title: zazemiItem.name, lede: zazemiItem.lede,
+        blocks: zazemiItem.blocks ?? [],
+        actions: [{ label: 'Zázemí areálu', href: '/zazemi/', kind: 'detail' as const }],
+        media: [{ placeholder: 'Foto ubytovacího zázemí: kočárkárna, sklepní kóje, parkovací místa, prádelna a sauna v budově apartmánů', alt: 'Ubytovací zázemí' }],
+      }]
     : []),
   ...(sluzbyItem
-    ? [{ id: 'sluzby', jumpLabel: 'Ubytovací služby', title: sluzbyItem.name, lede: sluzbyItem.lede, blocks: sluzbyItem.blocks ?? [] }]
+    ? [{
+        id: 'sluzby', jumpLabel: 'Ubytovací služby', title: sluzbyItem.name, lede: sluzbyItem.lede,
+        blocks: sluzbyItem.blocks ?? [],
+        media: [{ placeholder: 'Foto ubytovacích služeb: úklid pokoje, výměna ložního prádla, donáška snídaně na pokoj, concierge', alt: 'Ubytovací služby' }],
+      }]
     : []),
 ];
 ---

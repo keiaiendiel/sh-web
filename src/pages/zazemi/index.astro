@@ -32,17 +32,30 @@ const CATEGORY_NAMES: Record<string, string> = {
   okoli: 'Okolí areálu',
 };
 
-const sections = cats.map((c) => {
-  const name = CATEGORY_NAMES[c.id] ?? c.data.intro.title;
-  return {
-    id: c.id,
-    jumpLabel: name,
-    title: name,
-    lede: c.data.intro.lede,
-    actions: [{ label: 'Zobrazit', href: `/zazemi/${c.id}/`, kind: 'detail' as const }],
-    media: [repImage(c.data)],
-  };
-});
+/* Kyvadlová doprava jako úplně první bod zázemí (detail žije v /doprava/). */
+const shuttleSection = {
+  id: 'kyvadlova-doprava',
+  jumpLabel: 'Kyvadlová doprava',
+  title: 'Zastávka kyvadlové dopravy',
+  lede: 'Vlastní Hub-shuttle vás odveze k metru Kobylisy i k přívozu na vlak do centra Prahy. Pět jízd měsíčně máte v ceně bydlení, cílem je nepřetržitý provoz.',
+  actions: [{ label: 'Doprava', href: '/doprava/', kind: 'detail' as const }],
+  media: [{ src: '/images/hub/doprava/hub-shuttle-zastavka.jpg', alt: 'Zastávka Hub-shuttle v areálu' }],
+};
+
+const sections = [
+  shuttleSection,
+  ...cats.map((c) => {
+    const name = CATEGORY_NAMES[c.id] ?? c.data.intro.title;
+    return {
+      id: c.id,
+      jumpLabel: name,
+      title: name,
+      lede: c.data.intro.lede,
+      actions: [{ label: 'Zobrazit', href: `/zazemi/${c.id}/`, kind: 'detail' as const }],
+      media: [repImage(c.data)],
+    };
+  }),
+];
 ---
 <FractalPage
   title="Zázemí , gastronomie, wellness, coworking, komunita · Startovací Hub Klecany"

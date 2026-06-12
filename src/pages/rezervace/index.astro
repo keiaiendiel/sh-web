@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
 import Icon from '../../components/Icon.astro';
+import Arrow from '../../components/Arrow.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
 
@@ -121,7 +122,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <span data-step-current-mini>1</span><span class="rez__step-sep">/</span><span data-step-total-mini>3</span>
           </span>
           <button type="button" class="rez__cta rez__cta--compact" data-next>
-            Pokračovat <span aria-hidden="true">→</span>
+            Pokračovat <Arrow dir="right" variant="chevron" size={15} weight={2.4} />
           </button>
         </div>
       </section>
@@ -164,7 +165,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <span data-step-current-mini>2</span><span class="rez__step-sep">/</span><span data-step-total-mini>3</span>
           </span>
           <button type="button" class="rez__cta rez__cta--compact" data-next>
-            Pokračovat <span aria-hidden="true">→</span>
+            Pokračovat <Arrow dir="right" variant="chevron" size={15} weight={2.4} />
           </button>
         </div>
       </section>
@@ -207,7 +208,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <span data-step-current-mini>2</span><span class="rez__step-sep">/</span><span data-step-total-mini>3</span>
           </span>
           <button type="button" class="rez__cta rez__cta--compact" data-next>
-            Pokračovat <span aria-hidden="true">→</span>
+            Pokračovat <Arrow dir="right" variant="chevron" size={15} weight={2.4} />
           </button>
         </div>
       </section>
@@ -257,7 +258,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <span data-step-current-mini>2</span><span class="rez__step-sep">/</span><span data-step-total-mini>3</span>
           </span>
           <button type="button" class="rez__cta rez__cta--compact" data-next>
-            Pokračovat <span aria-hidden="true">→</span>
+            Pokračovat <Arrow dir="right" variant="chevron" size={15} weight={2.4} />
           </button>
         </div>
       </section>
@@ -323,7 +324,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <span data-step-current-mini>3</span><span class="rez__step-sep">/</span><span data-step-total-mini>4</span>
           </span>
           <button type="button" class="rez__cta rez__cta--compact" data-next>
-            Pokračovat <span aria-hidden="true">→</span>
+            Pokračovat <Arrow dir="right" variant="chevron" size={15} weight={2.4} />
           </button>
         </div>
       </section>
@@ -372,7 +373,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
             <span data-step-current-mini>4</span><span class="rez__step-sep">/</span><span data-step-total-mini>4</span>
           </span>
           <button type="submit" class="rez__cta rez__cta--primary" id="rez-submit">
-            Odeslat nezávaznou registraci <span aria-hidden="true">→</span>
+            Odeslat nezávaznou registraci <Arrow dir="right" variant="chevron" size={15} weight={2.4} />
           </button>
         </div>
       </section>
