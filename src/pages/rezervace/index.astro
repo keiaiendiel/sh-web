@@ -6,24 +6,150 @@ import Arrow from '../../components/Arrow.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../utils/url';
 
-/* Sekundární rozcestník: vše ostatní rezervovatelné. Zatím jen pro přihlášené
-   (přihlášení + rezervace zázemí teprve připravujeme). Grid slepých tlačítek
-   pod 3 hlavními konverzními volbami , „kvantový skok" co web unese. */
-const reservables: { label: string; icon: string }[] = [
-  { label: 'Coworkingový sál', icon: 'monitor' },
-  { label: 'Fixní stůl', icon: 'briefcase' },
-  { label: 'Zasedací místnost', icon: 'users' },
-  { label: 'Dílna', icon: 'hammer' },
-  { label: 'Ateliér', icon: 'palette' },
-  { label: 'Podcastové studio', icon: 'mic' },
-  { label: 'Filmové studio', icon: 'film' },
-  { label: 'Sauna a wellness', icon: 'waves' },
-  { label: 'Sdílená kuchyně', icon: 'utensils' },
-  { label: 'Grilovací místo', icon: 'flame' },
-  { label: 'Společenský sál', icon: 'party-popper' },
-  { label: 'Sdílená mobilita', icon: 'bus' },
-  { label: 'Sklad a kóje', icon: 'container' },
-  { label: 'Parkovací místo', icon: 'parking-circle' },
+/* Sekundární rozcestník: vše ostatní rezervovatelné (zázemí + doprava, kompletní
+   výčet dle klientské tabulky Koncept webu). Zatím jen pro přihlášené (přihlášení
+   + rezervace zázemí teprve připravujeme), klik sbírá zájem. Hue z locked paletky
+   25/50/130/200/240 (stejný recept jako ResidentBenefits chipy). */
+type Reservable = { slug: string; label: string; icon: string; hue: 25 | 50 | 130 | 200 | 240 };
+const reservableGroups: { title: string; items: Reservable[] }[] = [
+  {
+    title: 'Zázemí',
+    items: [
+      { slug: 'zasedaci-mistnost',  label: 'Zasedací místnost', icon: 'users',          hue: 240 },
+      { slug: 'coworkingovy-sal',   label: 'Coworkingový sál',  icon: 'laptop',         hue: 240 },
+      { slug: 'fixni-stul',         label: 'Fixní stůl',        icon: 'briefcase',      hue: 240 },
+      { slug: 'kancelar',           label: 'Kancelář pro tým',  icon: 'monitor',        hue: 240 },
+      { slug: 'atelier',            label: 'Ateliér',           icon: 'palette',        hue: 25 },
+      { slug: 'dilna',              label: 'Dílna',             icon: 'hammer',         hue: 25 },
+      { slug: 'zkusebna',           label: 'Zkušebna',          icon: 'guitar',         hue: 25 },
+      { slug: 'podcastove-studio',  label: 'Podcastové studio', icon: 'mic',            hue: 25 },
+      { slug: 'strihove-studio',    label: 'Střihové studio',   icon: 'scissors',       hue: 25 },
+      { slug: 'filmove-studio',     label: 'Filmové studio',    icon: 'clapperboard',   hue: 25 },
+      { slug: 'sauna',              label: 'Sauna a wellness',  icon: 'thermometer',    hue: 200 },
+      { slug: 'privatni-koupelna',  label: 'Privátní koupelna', icon: 'bath',           hue: 200 },
+      { slug: 'salonek',            label: 'Salonek',           icon: 'armchair',       hue: 50 },
+      { slug: 'sdilena-kuchyne',    label: 'Sdílená kuchyně',   icon: 'utensils',       hue: 50 },
+      { slug: 'grilovaci-misto',    label: 'Grilovací místo',   icon: 'flame',          hue: 50 },
+      { slug: 'spolecensky-sal',    label: 'Společenský sál',   icon: 'party-popper',   hue: 130 },
+      { slug: 'podium',             label: 'Pódium',            icon: 'speaker',        hue: 130 },
+      { slug: 'zahradka',           label: 'Komunitní zahrádka', icon: 'flower-2',      hue: 130 },
+      { slug: 'sklad',              label: 'Sklad a kóje',      icon: 'container',      hue: 130 },
+    ],
+  },
+  {
+    title: 'Doprava',
+    items: [
+      { slug: 'kyvadlovka-myshelter', label: 'Místo v kyvadlovém spoji', icon: 'bus',       hue: 240 },
+      { slug: 'sdilene-taxi',         label: 'Sdílené taxi',             icon: 'car-front', hue: 240 },
+      { slug: 'elektroauto',          label: 'Elektroauto',              icon: 'zap',       hue: 130 },
+      { slug: 'elektrokolo',          label: 'Elektrokolo',              icon: 'bike',      hue: 130 },
+      { slug: 'elektrokolobezka',     label: 'Elektrokoloběžka',         icon: 'scooter',    hue: 130 },
+      { slug: 'elektrolongboard',     label: 'Elektrolongboard',         icon: 'circle-dot', hue: 130 },
+      { slug: 'onewheel',             label: 'Onewheel',                 icon: 'circle-gauge', hue: 130 },
+      { slug: 'pujcovna',             label: 'Celá půjčovna',            icon: 'key-round', hue: 50 },
+      { slug: 'parking',              label: 'Parkovací místo',          icon: 'parking-circle', hue: 50 },
+    ],
+  },
+];
+
+/* Post-submit dotazník: jedna otázka na obrazovku, živý součet orientační ceny.
+   Renderováno staticky (scoped styles), JS jen přepíná a sčítá. */
+type SurveyOption = { v: string; label: string; price: number; note?: string; desc?: string };
+type SurveyQuestion = { id: string; q: string; hint?: string; options: SurveyOption[] };
+const surveyQuestions: SurveyQuestion[] = [
+  {
+    id: 'uklid',
+    q: 'Chcete pravidelný úklid pokoje?',
+    hint: 'Úklid vašeho pokoje nebo bytu nad rámec společných prostor.',
+    options: [
+      { v: 'ne', label: 'Ne, uklidím si sám', price: 0 },
+      { v: 'mesicne', label: '1× měsíčně', price: 300 },
+      { v: 'tydne', label: '1× týdně', price: 800 },
+      { v: '2tydne', label: '2× týdně', price: 1400 },
+    ],
+  },
+  {
+    id: 'pradlo',
+    q: 'Výměna ložního prádla?',
+    hint: 'Povlečení a ručníky vyměníme za čerstvé.',
+    options: [
+      { v: 'ne', label: 'Ne, vyřeším v prádelně', price: 0 },
+      { v: '14dni', label: '1× za 14 dní', price: 200 },
+      { v: 'tydne', label: '1× týdně', price: 350 },
+    ],
+  },
+  {
+    id: 'prani',
+    q: 'Praní a žehlení osobního prádla?',
+    options: [
+      { v: 'ne', label: 'Ne', price: 0 },
+      { v: 'balicek', label: 'Měsíční balíček', price: 600, desc: 'Vypereme, vyžehlíme a vrátíme připravené.' },
+    ],
+  },
+  {
+    id: 'donaska',
+    q: 'Donáška jídla na pokoj?',
+    hint: 'Z kantýny přímo k vám, korespondenci a balíčky nosíme všem.',
+    options: [
+      { v: 'ne', label: 'Ne, dojdu si', price: 0 },
+      { v: 'snidane', label: 'Snídaně', price: 500 },
+      { v: 'snidane-vecere', label: 'Snídaně a večeře', price: 900 },
+    ],
+  },
+  {
+    id: 'zahradka',
+    q: 'Komunitní zahrádka?',
+    hint: 'Voda, kompost a nářadí v ceně, sezóna duben až říjen.',
+    options: [
+      { v: 'ne', label: 'Ne', price: 0 },
+      { v: 'maly', label: 'Malý záhon', price: 150 },
+      { v: 'velky', label: 'Velký záhon', price: 300 },
+    ],
+  },
+  {
+    id: 'stul',
+    q: 'Pracovní místo navíc?',
+    hint: 'Volný stůl v coworkingovém sále máte v ceně bydlení.',
+    options: [
+      { v: 'ne', label: 'Stačí volný stůl', price: 0, note: 'v ceně' },
+      { v: 'fixni', label: 'Fixní stůl s technikou', price: 4200, desc: 'Dva monitory, ergonomická židle, uzamykatelná skříňka.' },
+    ],
+  },
+  {
+    id: 'sklad',
+    q: 'Sklad navíc?',
+    options: [
+      { v: 'ne', label: 'Ne', price: 0 },
+      { v: 'koje', label: 'Sklepní kóje', price: 400 },
+      { v: 'kontejner', label: 'Kontejnerový sklad', price: 900 },
+    ],
+  },
+  {
+    id: 'parkovani',
+    q: 'Parkovací místo?',
+    options: [
+      { v: 'ne', label: 'Ne, jezdím bez auta', price: 0 },
+      { v: 'ano', label: 'Ano, vyhrazené stání', price: 0, note: 'v ceně bydlení' },
+    ],
+  },
+  {
+    id: 'mobilita',
+    q: 'Jízdy kyvadlovkou MyShelter navíc?',
+    hint: 'Pět jízd měsíčně máte v ceně bydlení.',
+    options: [
+      { v: 'ne', label: 'Pět jízd mi stačí', price: 0, note: 'v ceně' },
+      { v: 'balicek10', label: 'Balíček 10 jízd navíc', price: 500 },
+      { v: 'neomezene', label: 'Neomezené jízdy', price: 900 },
+    ],
+  },
+  {
+    id: 'mazlicek',
+    q: 'Přivezete si mazlíčka?',
+    options: [
+      { v: 'ne', label: 'Ne', price: 0 },
+      { v: 'ano', label: 'Ano', price: 0, note: 'podmínky domluvíme', desc: 'Napište nám pak do poznámky, jakého mazlíčka máte.' },
+    ],
+  },
 ];
 
 /*
@@ -96,15 +222,20 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         </div>
 
         <div class="rez__more" data-reserve-section>
-          <p class="rez__more-head">Nebo si rovnou rezervujte konkrétní zázemí</p>
-          <div class="rez__more-grid">
-            {reservables.map((r) => (
-              <button type="button" class="rez__more-item" data-reserve-locked aria-label={`Rezervovat ${r.label}, zatím jen pro přihlášené`}>
-                <span class="rez__more-icon" aria-hidden="true"><Icon name={r.icon} size={20} /></span>
-                <span class="rez__more-label">{r.label}</span>
-              </button>
-            ))}
-          </div>
+          <p class="rez__more-head">Nebo si rovnou rezervujte konkrétní zázemí a dopravu</p>
+          {reservableGroups.map((g) => (
+            <div class="rez__more-group">
+              <p class="rez__more-group-title">{g.title}</p>
+              <div class="rez__more-grid">
+                {g.items.map((r) => (
+                  <button type="button" class="rez__more-item" data-reserve-locked data-zazemi={r.slug} style={`--tile-hue: ${r.hue};`} aria-label={`Rezervovat ${r.label}, zatím jen pro přihlášené`}>
+                    <span class="rez__more-icon" aria-hidden="true"><Icon name={r.icon} size={22} /></span>
+                    <span class="rez__more-label">{r.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
           <p class="rez__more-msg" data-reserve-msg hidden role="status">
             Rezervace konkrétního zázemí je zatím jen pro přihlášené uživatele. Přihlášení i rezervaci zázemí teprve připravujeme, zatím sbíráme zájem o bydlení výše.
           </p>
@@ -174,7 +305,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
       <section class="rez__panel" data-panel="format-coliving" data-panel-index="1" data-show-for="co-living" hidden>
         <div class="rez__panel-intro">
           <h1 class="rez__q">Jaké sdílené ubytování?</h1>
-          <p class="rez__q-hint">Čtyři formáty od jednolůžkové kapsle po dvoulůžko ve sdíleném bytě.</p>
+          <p class="rez__q-hint">Šest variant podle míry soukromí, od otevřeného lůžka po kapslové dvojlůžko.</p>
         </div>
         <div class="rez__choices rez__choices--cards rez__choices--2">
           {coliving.map((c) => (
@@ -378,7 +509,7 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
         </div>
       </section>
 
-      {/* === SUCCESS === */}
+      {/* === SUCCESS + doplňkový dotazník === */}
       <section class="rez__panel rez__panel--success" data-panel="success" data-panel-index="4" hidden>
         <div class="rez__success-mark" aria-hidden="true">
           <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
@@ -390,17 +521,78 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           <p class="rez__q-hint">Vše v&nbsp;pořádku, registraci máme. Pořád je to nezávazné, žádný závazek.</p>
         </div>
 
-        <div class="rez__more rez__more--success" data-reserve-section>
-          <p class="rez__more-head">Chcete si rezervovat i&nbsp;něco dalšího?</p>
-          <p class="rez__more-sub">Wellness, komunitní zahrádku, sklad, coworking stůl nebo dopravu si naklikáte po přihlášení. Přihlášení i&nbsp;rezervaci zázemí teprve připravujeme, ale rádi víme, o&nbsp;co je zájem.</p>
-          <div class="rez__more-grid">
-            {reservables.map((r) => (
-              <button type="button" class="rez__more-item" data-reserve-locked aria-label={`Rezervovat ${r.label}, zatím jen pro přihlášené`}>
-                <span class="rez__more-icon" aria-hidden="true"><Icon name={r.icon} size={20} /></span>
-                <span class="rez__more-label">{r.label}</span>
-              </button>
-            ))}
+        {/* Start dotazníku: jedna otázka na obrazovku, živá orientační cena. */}
+        <div class="rez-survey__start" data-survey-start>
+          <p class="rez-survey__pitch">Máte dvě minuty? Projděte s námi pár doplňků (úklid, zahrádka, parkování), ať vám rovnou připravíme nabídku na míru. Cena se přepočítává průběžně.</p>
+          <div class="rez-survey__start-row">
+            <button type="button" class="rez__cta rez__cta--primary" data-sv-start>Doladit detaily</button>
+            <button type="button" class="rez__cta" data-sv-later>Teď ne</button>
           </div>
+        </div>
+
+        <div class="rez-survey" data-survey hidden>
+          <div class="rez-survey__head">
+            <p class="rez-survey__counter" aria-live="polite"><span data-sv-step>1</span><span class="rez__step-sep">/</span><span data-sv-total>{surveyQuestions.length}</span></p>
+            <div class="rez-survey__bar" aria-hidden="true"><span class="rez-survey__bar-fill" data-sv-fill></span></div>
+          </div>
+
+          {surveyQuestions.map((sq, i) => (
+            <fieldset class="rez-survey__q" data-sv-index={i} hidden>
+              <legend class="rez-survey__legend">{sq.q}</legend>
+              {sq.hint && <p class="rez__q-hint rez-survey__hint">{sq.hint}</p>}
+              <div class="rez__choices rez-survey__choices">
+                {sq.options.map((o) => (
+                  <label class="rez__choice rez-survey__opt">
+                    <input type="radio" name={`sv-${sq.id}`} value={o.v} data-sv-price={o.price} data-sv-text={o.price > 0 ? `${sq.q.replace('?', '')}: ${o.label}` : ''} data-sv-pick={o.v === 'ne' ? '' : `${o.label}`} />
+                    <span class="rez__choice-body">
+                      <span class="rez__choice-head">
+                        <span class="rez__choice-title">{o.label}</span>
+                        <span class="rez__choice-price">{o.price > 0 ? `+${o.price.toLocaleString('cs-CZ')} Kč/měs` : (o.note ?? '0 Kč')}</span>
+                      </span>
+                      {o.desc && <span class="rez__choice-meta">{o.desc}</span>}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))}
+
+          <div class="rez-survey__nav">
+            <button type="button" class="rez__back" data-sv-back>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M19 12H5m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>Zpět</span>
+            </button>
+            <span class="rez__actions-spacer"></span>
+            <button type="button" class="rez__cta rez__cta--compact" data-sv-skip>Přeskočit</button>
+          </div>
+
+          <p class="rez-survey__ticker" data-sv-ticker aria-live="polite">Vybrané doplňky: +0 Kč měsíčně (orientačně)</p>
+        </div>
+
+        <div class="rez-survey__done" data-survey-done hidden>
+          <h2 class="rez-survey__done-h">Díky, máme to poznamenané.</h2>
+          <p class="rez-survey__done-sum" data-sv-summary></p>
+          <p class="rez__q-hint">Ceny doplňků jsou orientační, vše potvrdíme telefonicky spolu s rezervací.</p>
+        </div>
+
+        <div class="rez__more rez__more--success" data-reserve-section data-survey-after hidden>
+          <p class="rez__more-head">Chcete si rezervovat i&nbsp;něco dalšího?</p>
+          <p class="rez__more-sub">Konkrétní zázemí a dopravu si naklikáte po přihlášení. Přihlášení i&nbsp;rezervaci zázemí teprve připravujeme, ale rádi víme, o&nbsp;co je zájem.</p>
+          {reservableGroups.map((g) => (
+            <div class="rez__more-group">
+              <p class="rez__more-group-title">{g.title}</p>
+              <div class="rez__more-grid">
+                {g.items.map((r) => (
+                  <button type="button" class="rez__more-item" data-reserve-locked data-zazemi={r.slug} style={`--tile-hue: ${r.hue};`} aria-label={`Rezervovat ${r.label}, zatím jen pro přihlášené`}>
+                    <span class="rez__more-icon" aria-hidden="true"><Icon name={r.icon} size={22} /></span>
+                    <span class="rez__more-label">{r.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
           <p class="rez__more-msg" data-reserve-msg hidden role="status">
             Rezervaci zázemí teprve připravujeme. Zatím jsme zaznamenali váš zájem o&nbsp;bydlení, ozveme se.
           </p>
@@ -446,11 +638,12 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
 
 <script is:inline>
   /* Sekundární rozcestník: slepá tlačítka rezervace zázemí , zatím jen pro
-     přihlášené. Klik odhalí zprávu, žádná navigace. Re-bind na page-load. */
+     přihlášené. Klik odhalí zprávu, žádná navigace. Re-bind na page-load.
+     ?zazemi=<slug> prefill: zvýrazní cílovou dlaždici a ukáže zprávu (CTA
+     z dopravních a zázemních stránek sem vedou s tímto parametrem). */
   (function () {
     function bind() {
       var btns = document.querySelectorAll('[data-reserve-locked]:not([data-locked-bound])');
-      if (!btns.length) return;
       btns.forEach(function (b) {
         b.dataset.lockedBound = '1';
         b.addEventListener('click', function () {
@@ -460,6 +653,122 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
           b.classList.add('is-poked');
           setTimeout(function () { b.classList.remove('is-poked'); }, 400);
         });
+      });
+
+      var zazemi = new URL(window.location.href).searchParams.get('zazemi');
+      if (zazemi && !document.body.dataset.zazemiPrefill) {
+        document.body.dataset.zazemiPrefill = '1';
+        var section = document.querySelector('[data-reserve-section]:not([hidden])');
+        if (section) {
+          var tile = section.querySelector('[data-zazemi="' + zazemi + '"]');
+          if (tile) tile.classList.add('is-hot');
+          var msg = section.querySelector('[data-reserve-msg]');
+          if (msg) msg.hidden = false;
+          setTimeout(function () {
+            (tile || section).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 350);
+        }
+      }
+    }
+    document.addEventListener('astro:page-load', bind);
+  }());
+</script>
+
+<script is:inline>
+  /* Post-submit dotazník: jedna otázka na obrazovku, živý součet orientační
+     ceny doplňků. Otázky jsou vyrenderované staticky (fieldsety), JS jen
+     přepíná, sčítá a na konci sestaví shrnutí. */
+  (function () {
+    function bind() {
+      var panel = document.querySelector('.rez__panel--success');
+      if (!panel || panel.dataset.svBound === '1') return;
+      panel.dataset.svBound = '1';
+
+      var startBox = panel.querySelector('[data-survey-start]');
+      var survey = panel.querySelector('[data-survey]');
+      var done = panel.querySelector('[data-survey-done]');
+      var after = panel.querySelector('[data-survey-after]');
+      var qs = Array.prototype.slice.call(panel.querySelectorAll('.rez-survey__q'));
+      var stepEl = panel.querySelector('[data-sv-step]');
+      var fill = panel.querySelector('[data-sv-fill]');
+      var ticker = panel.querySelector('[data-sv-ticker]');
+      var summaryEl = panel.querySelector('[data-sv-summary]');
+      if (!survey || !qs.length) return;
+
+      var idx = 0;
+      var timer = null;
+
+      function fmtKc(n) {
+        return n.toLocaleString('cs-CZ') + ' Kč';
+      }
+      function total() {
+        var sum = 0;
+        panel.querySelectorAll('.rez-survey__q input:checked').forEach(function (i) {
+          sum += parseInt(i.dataset.svPrice || '0', 10) || 0;
+        });
+        return sum;
+      }
+      function updateTicker() {
+        if (ticker) ticker.textContent = 'Vybrané doplňky: +' + fmtKc(total()) + ' měsíčně (orientačně)';
+      }
+      function show(i) {
+        idx = i;
+        qs.forEach(function (q, j) { q.hidden = j !== i; });
+        if (stepEl) stepEl.textContent = String(i + 1);
+        if (fill) fill.style.transform = 'scaleX(' + ((i + 1) / qs.length) + ')';
+        updateTicker();
+      }
+      function finish() {
+        survey.hidden = true;
+        if (done) {
+          var picks = [];
+          panel.querySelectorAll('.rez-survey__q input:checked').forEach(function (i) {
+            if (i.dataset.svPick) picks.push(i.dataset.svPick);
+          });
+          var sum = total();
+          var text;
+          if (picks.length) {
+            text = 'Poznamenali jsme si: ' + picks.join(', ') + '.';
+            if (sum > 0) text += ' Dohromady zhruba +' + fmtKc(sum) + ' měsíčně k ceně bydlení.';
+          } else {
+            text = 'Žádné doplňky zatím nechcete, to je v pořádku. Vše jde přidat kdykoli později.';
+          }
+          if (summaryEl) summaryEl.textContent = text;
+          done.hidden = false;
+        }
+        if (after) after.hidden = false;
+      }
+      function next() {
+        if (idx + 1 >= qs.length) { finish(); return; }
+        show(idx + 1);
+      }
+
+      panel.addEventListener('click', function (e) {
+        if (e.target.closest('[data-sv-start]')) {
+          startBox.hidden = true;
+          survey.hidden = false;
+          show(0);
+        }
+        if (e.target.closest('[data-sv-later]')) {
+          startBox.hidden = true;
+          if (after) after.hidden = false;
+        }
+        if (e.target.closest('[data-sv-skip]')) {
+          clearTimeout(timer);
+          next();
+        }
+        if (e.target.closest('[data-sv-back]')) {
+          clearTimeout(timer);
+          if (idx > 0) show(idx - 1);
+        }
+      });
+
+      panel.addEventListener('change', function (e) {
+        if (e.target.closest('.rez-survey__q')) {
+          updateTicker();
+          clearTimeout(timer);
+          timer = setTimeout(next, 320);
+        }
       });
     }
     document.addEventListener('astro:page-load', bind);
@@ -487,28 +796,55 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
     color: var(--fg-muted);
     max-width: 52ch;
   }
+  .rez__more-group { margin-top: var(--space-4); }
+  .rez__more-group:first-of-type { margin-top: 0; }
+  .rez__more-group-title {
+    font: 700 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg);
+    margin: 0 0 var(--space-2);
+  }
   .rez__more-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     gap: var(--space-2);
   }
+  /* Větší barevné dlaždice s ikonou v hue pill (recept ResidentBenefits).
+     --tile-hue přichází per item z locked paletky 25/50/130/200/240. */
   .rez__more-item {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: 12px 14px;
+    gap: 12px;
+    padding: 14px 16px;
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-input);
     background: var(--bg);
-    color: var(--fg-muted);
-    font: 600 var(--text-sm) / 1.2 var(--font-sans);
+    color: var(--fg);
+    font: 600 var(--text-sm) / 1.25 var(--font-sans);
     text-align: left;
     cursor: pointer;
-    transition: border-color 160ms ease, color 160ms ease, transform 120ms ease;
+    transition: border-color 160ms ease, box-shadow 160ms ease, transform 120ms ease;
   }
-  .rez__more-item:hover { border-color: var(--accent); color: var(--accent); }
+  .rez__more-item:hover {
+    border-color: hsl(var(--tile-hue, var(--hue)) 35% 55%);
+    box-shadow: 0 4px 14px hsl(var(--tile-hue, var(--hue)) 35% 35% / 0.14);
+    transform: translateY(-1px);
+  }
   .rez__more-item.is-poked { transform: scale(0.97); }
-  .rez__more-icon { display: inline-flex; color: var(--accent); flex-shrink: 0; opacity: 0.85; }
+  .rez__more-item.is-hot {
+    border-color: hsl(var(--tile-hue, var(--hue)) 40% 45%);
+    box-shadow: 0 0 0 2px hsl(var(--tile-hue, var(--hue)) 40% 45% / 0.35);
+  }
+  .rez__more-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    background: hsl(var(--tile-hue, var(--hue)) 55% 93%);
+    color: hsl(var(--tile-hue, var(--hue)) 45% 32%);
+  }
   .rez__more-label { min-width: 0; }
   .rez__more-msg {
     margin: var(--space-4) 0 0;
@@ -521,6 +857,95 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
   .rez__more-msg[hidden] { display: none; }
   @media (max-width: 540px) {
     .rez__more-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .rez__more-item { padding: 12px; gap: 10px; flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ---------- Post-submit dotazník ---------- */
+  .rez-survey__start { display: grid; gap: var(--space-3); }
+  .rez-survey__pitch {
+    font: 500 var(--text-md) / 1.55 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+    max-width: 56ch;
+  }
+  .rez-survey__start-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .rez-survey[hidden], .rez-survey__start[hidden], .rez-survey__done[hidden], [data-survey-after][hidden] { display: none; }
+  .rez-survey {
+    display: grid;
+    gap: var(--space-4);
+    padding: clamp(20px, 2.5vw, 28px);
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
+    background: var(--bg);
+  }
+  .rez-survey__head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .rez-survey__counter {
+    margin: 0;
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    gap: 4px;
+  }
+  .rez-survey__bar {
+    height: 2px;
+    background: var(--accent-rule);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .rez-survey__bar-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 380ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .rez-survey__q {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+  .rez-survey__q[hidden] { display: none; }
+  .rez-survey__legend {
+    font: 700 clamp(1.25rem, 2.4vw, 1.625rem) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    padding: 0;
+  }
+  .rez-survey__hint { margin: 0; }
+  .rez-survey__choices { gap: 10px; }
+  .rez-survey__nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--accent-rule);
+  }
+  .rez-survey__ticker {
+    margin: 0;
+    font: 600 var(--text-sm) / 1.3 var(--font-sans);
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .rez-survey__done { display: grid; gap: var(--space-2); }
+  .rez-survey__done-h {
+    font: 700 clamp(1.25rem, 2.4vw, 1.625rem) / 1.2 var(--font-sans);
+    margin: 0;
+  }
+  .rez-survey__done-sum {
+    margin: 0;
+    font: 500 var(--text-md) / 1.6 var(--font-sans);
+    color: var(--fg-muted);
+    max-width: 60ch;
   }
 </style>
 
@@ -820,27 +1245,24 @@ const fmt = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`;
      ========================================================================= */
 
   .rez {
-    /* Vyplnit prostor pod sticky header (80px), nechat trust footer dole. */
+    /* Vyplnit prostor pod sticky header (80px), nechat trust footer dole.
+       Šířka kontejneru je KONSTANTNÍ napříč kroky (klient: žádné dynamické
+       změny šířky mezi panely). */
     min-height: calc(100vh - 64px);
     min-height: calc(100dvh - 64px);
     padding: clamp(80px, 14vh, 120px) var(--gutter) clamp(80px, 12vh, 100px);
     display: grid;
     grid-template-rows: auto 1fr auto;
     gap: var(--space-6);
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto;
     width: 100%;
     color: var(--fg);
-    transition: max-width 320ms cubic-bezier(0.32, 0.72, 0, 1);
   }
-  /* Desktop: wider container + 2-col panel layout (intro left, body right).
-     Mobile zůstává jednoduchý vertikální flow. Card-grid panely se ještě
-     trochu rozšíří pro lepší dech 3-up / 2-up preview karet. */
+  /* Desktop: širší stabilní kontejner + 2-col panel layout (intro vlevo,
+     body vpravo). Mobile zůstává jednoduchý vertikální flow. */
   @media (min-width: 1024px) {
-    .rez { max-width: 1180px; }
-    .rez:has(.rez__panel.is-current .rez__choices--cards) {
-      max-width: 1320px;
-    }
+    .rez { max-width: 1200px; }
   }
 
   /* ---------- Head: counter + progress bar ---------- */

@@ -2,7 +2,7 @@
   "q1": {
     "audience": "resident",
     "question": "Co je Startovací Hub Klecany a kdo za ním stojí?",
-    "answer": "První fáze revitalizace bývalých horních kasáren v Klecanech (sever Prahy). Devět produktových variant ubytování (čtyři co-living formáty a pět privátních apartmánů 1+kk až 5+kk), k tomu coworking, sauna, bazén, dílny, ateliéry, klubovna, kuchyňský blok s pekárnou a restaurací, komunitní park. Provozuje občanské sdružení Alternativa II, z.s. (OSA II) v rámci záměru VPD1. Nekomerční projekt zaměřený na dostupné bydlení a komunitu pro pracující studenty, OSVČ a mladé kreativce.",
+    "answer": "První fáze revitalizace bývalých horních kasáren v Klecanech (sever Prahy). Jedenáct formátů ubytování (šest variant sdílených pokojů a pět privátních apartmánů 1+kk až 5+kk), k tomu coworking, sauna, bazén, dílny, ateliéry, klubovna, kuchyňský blok s pekárnou a restaurací, komunitní park. Provozuje občanské sdružení Alternativa II, z.s. (OSA II) v rámci záměru VPD1. Nekomerční projekt zaměřený na dostupné bydlení a komunitu pro pracující studenty, OSVČ a mladé kreativce.",
     "order": 1
   },
   "q2": {
@@ -14,19 +14,19 @@
   "q3": {
     "audience": "resident",
     "question": "Co všechno je v ceně měsíčního nájmu?",
-    "answer": "Energie, internet, úklid společných prostor, neomezené jízdy Hub-shuttle na metro Kobylisy (kyvadlovka na objednání), 1 jízda Hub-taxi lokálně, volný stůl v coworkingovém sále 24/7, poukaz do sauny 1× týdně. Za zvýhodněnou cenu nad rámec: další jízdy Hub-taxi, fixní stůl v coworkingu, ateliér nebo dílna, vybrané kulturní akce za vstupné.",
+    "answer": "Energie, internet, úklid společných prostor, pět jízd kyvadlové dopravy MyShelter na metro Kobylisy měsíčně, 1 jízda sdíleného taxi lokálně, volný stůl v coworkingovém sále 24/7, poukaz do sauny 1× týdně. Za zvýhodněnou cenu nad rámec: další jízdy MyShelter a sdíleného taxi, fixní stůl v coworkingu, ateliér nebo dílna, vybrané kulturní akce za vstupné.",
     "order": 3
   },
   "q4": {
     "audience": "resident",
     "question": "Je to opravdu 15 minut do Prahy?",
-    "answer": "Z Klecan na metro Kobylisy: Hub-shuttle 12 až 15 minut (sdílená devítimístná dodávka na objednání, pro rezidenty neomezeně zdarma, reakce typicky do 15 minut), PID linka 374 14 až 17 minut (standardní jízdenka). Z metra na Florenc 9 minut, na Karlák kolem 12. Z bytu v Hubu na Florenc tedy 25 až 30 minut, na Karlák 30 až 35. Plánovaná tramvaj Kobylisy-Sedlec (2029 až 2030) toto zrychlí.",
+    "answer": "Z Klecan na metro Kobylisy: kyvadlová doprava MyShelter 12 až 15 minut (jezdí nonstop, ve špičce odjezdy každých 30 minut, pět jízd měsíčně máte v ceně bydlení, další za zvýhodněnou sazbu), PID linka 374 14 až 17 minut (standardní jízdenka). Z metra na Florenc 9 minut, na Karlák kolem 12. Z bytu v Hubu na Florenc tedy 25 až 30 minut, na Karlák 30 až 35. Plánovaná tramvaj Kobylisy-Sedlec (2029 až 2030) toto zrychlí.",
     "order": 4
   },
   "q5": {
     "audience": "resident",
     "question": "Mazlíček ano, nebo ne?",
-    "answer": "Předběžně ano, ale s dohodou. V privátních apartmánech bez většího omezení (jen u sousedů zajistěte dohodu o klidu). V co-livingu (kapsle, lůžka, dvoulůžka) podle dohody s ostatními rezidenty patra. Při registraci napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily.",
+    "answer": "Předběžně ano, ale s dohodou. V privátních apartmánech bez většího omezení (jen u sousedů zajistěte dohodu o klidu). Ve sdílených pokojích (kapsle, lůžka, dvoulůžka) podle dohody s ostatními rezidenty patra. Při registraci napište, jakého mazlíčka máte (pes velikost, kočka), domluvíme detaily.",
     "order": 5
   },
   "q6": {
@@ -49,7 +49,7 @@
   },
   "q9": {
     "audience": "resident",
-    "question": "Co když si v co-livingu nesedneme se spolubydlícím?",
+    "question": "Co když si ve sdíleném pokoji nesedneme se spolubydlícím?",
     "answer": "Při registraci se ptáme na preference (klid, čas spánku, kuřáctví, partner, dítě) a podle toho párujeme. Když první týden něco nefunguje, řešíme to. Přesun do jiné kapsle nebo do jiného pokoje provádíme zdarma, dokud zbývá volné lůžko. Při plné obsazenosti hledáme jiné řešení (změna formátu, krátká přestávka, výpověď bez sankce v případě závažnějšího problému).",
     "order": 9
   },

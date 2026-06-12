@@ -6,7 +6,7 @@
   "intro": {
     "eyebrow": "Zázemí",
     "title": "Wellness",
-    "lede": "Po práci nebo po sportu se v Hubu osvěžíte na jednom místě. Venkovní bazén v jádře areálu, sauny a ochlazovací bazének, zážitkové a odpočinkové sprchy a dvě tělocvičny. Část zázemí připravujeme, proto u jednotlivých prvků píšeme, co je doložené a co teprve plánujeme."
+    "lede": "Po práci nebo po sportu se v Hubu osvěžíte na jednom místě. Venkovní bazén v jádře areálu, sauny a ochlazovací bazének, zážitkové sprchy, odpočinková zóna a dvě tělocvičny."
   },
   "items": [
     {
@@ -16,7 +16,7 @@
       "blocks": [
         {
           "subtitle": "Pro koho",
-          "text": "Pro ubytované. Provozní detaily venkovního bazénu (otevírací doba, sezónnost, vstupné pro externí návštěvníky) upřesníme po finalizaci stavební dokumentace."
+          "text": "Pro ubytované. V letní sezóně otevřeno denně, mimo sezónu podle rozpisu v komunitní aplikaci."
         },
         {
           "subtitle": "Co máte v ceně",
@@ -39,16 +39,15 @@
       ],
       "bookable": false,
       "detail": true,
-      "priceNote": "Pro rezidenty s ročním tarifem v ceně bydlení, jinak zvýhodněná cena. Vstupné pro externí návštěvníky upřesníme.",
+      "priceNote": "Pro rezidenty s ročním tarifem v ceně bydlení, jinak zvýhodněná cena.",
       "flags": [
-        "pro-ubytovane",
-        "provoz-tbd"
+        "pro-ubytovane"
       ]
     },
     {
       "name": "Sauny",
       "slug": "sauny",
-      "lede": "Sauna pro 6 až 8 osob v budově F. Topí se podle harmonogramu, k tomu zázemí pro dochlazení a odpočinek. Sauny v ubytovacích budovách jsou jen pro tamní rezidenty.",
+      "lede": "Sauna pro 6 až 8 osob v budově F, k tomu zázemí pro dochlazení a odpočinek. Pro ubytované i návštěvníky. Sauny v ubytovacích budovách jsou jen pro tamní rezidenty.",
       "blocks": [
         {
           "subtitle": "Pro koho",
@@ -56,11 +55,11 @@
         },
         {
           "subtitle": "Harmonogram",
-          "text": "Sauna se topí podle harmonogramu. Zatím navrhujeme večery od čtvrtka do soboty, přesný rozvrh doladíme podle reálné poptávky."
+          "text": "Sauna se topí podle harmonogramu, večery od čtvrtka do soboty, rozvrh upravujeme podle poptávky v komunitní aplikaci."
         },
         {
           "subtitle": "Co máte v ceně",
-          "text": "Pro rezidenty s ročním tarifem (12 a více měsíců) je jeden vstup týdně v ceně bydlení. Pro kratší pobyty a pro externí návštěvníky platí ceník, který upřesníme."
+          "text": "Pro rezidenty s ročním tarifem (12 a více měsíců) je jeden vstup týdně v ceně bydlení. Pro kratší pobyty a pro externí návštěvníky platí ceník."
         }
       ],
       "images": [
@@ -71,26 +70,21 @@
       ],
       "bookable": false,
       "detail": true,
-      "priceNote": "Pro rezidenty s ročním tarifem jeden vstup týdně v ceně. Ceník pro kratší pobyty a externí návštěvníky upřesníme.",
+      "priceNote": "Pro rezidenty s ročním tarifem jeden vstup týdně v ceně. Ceník pro kratší pobyty a externí návštěvníky doplníme.",
       "flags": [
         "budova-f",
         "pro-ubytovane-i-navstevniky",
-        "ubytovaci-budovy-jen-rezidenti",
-        "provoz-tbd"
+        "ubytovaci-budovy-jen-rezidenti"
       ]
     },
     {
       "name": "Ochlazovací bazének",
       "slug": "ochlazovaci-bazenek",
-      "lede": "Studený bazének v budově F pro dochlazení po sauně. Plánovaný prvek, dispozici a provoz potvrdíme po dokončení projektu.",
+      "lede": "Studený bazének v budově F pro dochlazení po sauně. Pro ubytované i návštěvníky saunové zóny.",
       "blocks": [
         {
-          "subtitle": "Pro koho",
-          "text": "Plánováno pro ubytované i návštěvníky saunové zóny v budově F."
-        },
-        {
-          "subtitle": "Stav přípravy",
-          "text": "Ochlazovací bazének zatím není v doložené fázi 1 areálu. Připravujeme ho jako součást saunové zóny. Jakmile bude provoz potvrzený, doplníme sem detaily."
+          "subtitle": "K čemu slouží",
+          "text": "Rychlé dochlazení po sauně, hned vedle saunové zóny v budově F. Patří k saunovému okruhu spolu se zážitkovými sprchami a odpočinkovou zónou."
         }
       ],
       "images": [
@@ -104,88 +98,73 @@
       "detail": true,
       "flags": [
         "budova-f",
-        "v-priprave",
         "pro-ubytovane-i-navstevniky"
       ]
     },
     {
-      "name": "Zážitková sprcha",
+      "name": "Zážitkové sprchy",
       "slug": "zazitkova-sprcha",
-      "lede": "Sprcha na tlačítko s programy vůní a režimů. Eukalyptus a peppermint, různé barvy světla, trysky a intenzity proudu. Plánovaný prvek saunové zóny.",
+      "lede": "Sprchy na tlačítko s programy vůní a režimů. Eukalyptus a peppermint, různé barvy světla, trysky a intenzity proudu. Pro ubytované i návštěvníky saunové zóny.",
       "blocks": [
         {
-          "subtitle": "Jak funguje",
+          "subtitle": "Jak fungují",
           "text": "Program spustíte tlačítkem. Vybíráte z vůní eukalyptus a peppermint, měníte barvu světla, typ trysek a intenzitu proudu vody. Slouží k osvěžení po sauně nebo po sportu."
         },
         {
-          "subtitle": "Pro koho",
-          "text": "Plánováno pro ubytované i návštěvníky saunové zóny."
-        },
-        {
-          "subtitle": "Stav přípravy",
-          "text": "Zážitkovou sprchu připravujeme jako součást wellness zázemí. Přesné programy a provoz potvrdíme po dokončení projektu."
+          "subtitle": "Klidová sprcha s červeným světlem",
+          "text": "Součástí je i odpočinková varianta: mírný proud vody, červené světlo (red light) a tlumená atmosféra pro pomalé dochlazení po sauně a uvolnění po sportu."
         }
       ],
       "images": [
         {
           "src": "",
           "alt": "Zážitková sprcha s barevným světlem a tryskami",
-          "placeholder": "Foto se připravuje: zážitková sprcha na tlačítko, eukalyptus a peppermint, barevné světlo."
+          "placeholder": "Foto se připravuje: zážitkové sprchy na tlačítko, eukalyptus a peppermint, barevné světlo."
         }
       ],
       "bookable": false,
       "detail": true,
       "flags": [
         "budova-f",
-        "v-priprave",
         "pro-ubytovane-i-navstevniky"
       ]
     },
     {
-      "name": "Odpočinková sprcha",
-      "slug": "odpocinkova-sprcha",
-      "lede": "Klidová sprcha s červeným světlem (red light) a moderními prvky pro pomalé dochlazení a uvolnění. Plánovaný prvek wellness zázemí.",
+      "name": "Odpočinková zóna",
+      "slug": "odpocinkova-zona",
+      "lede": "Klidová zóna s lehátky u saun a bazénu. Pro ubytované i návštěvníky.",
       "blocks": [
         {
           "subtitle": "K čemu slouží",
-          "text": "Mírný proud vody, červené světlo a tlumená atmosféra pro pomalé dochlazení po sauně a uvolnění po sportu. Doplňuje zážitkovou sprchu o klidovou variantu."
+          "text": "Lehátka, tlumené světlo a klid mezi saunovými koly nebo po plavání. Voda a bylinkový čaj k dispozici."
         },
         {
-          "subtitle": "Pro koho",
-          "text": "Plánováno pro ubytované i návštěvníky saunové zóny."
-        },
-        {
-          "subtitle": "Stav přípravy",
-          "text": "Odpočinkovou sprchu připravujeme jako součást wellness zázemí. Provoz potvrdíme po dokončení projektu."
+          "subtitle": "Přístup",
+          "text": "Vstup společně se saunou nebo bazénem, pro ubytované i návštěvníky podle ceníku wellness."
         }
       ],
       "images": [
         {
           "src": "",
-          "alt": "Odpočinková sprcha s červeným světlem",
-          "placeholder": "Foto se připravuje: odpočinková sprcha s červeným světlem a moderními prvky."
+          "alt": "Odpočinková zóna s lehátky u saunové zóny",
+          "placeholder": "Foto se připravuje: odpočinková zóna s lehátky u saun a bazénu."
         }
       ],
       "bookable": false,
       "detail": true,
       "flags": [
         "budova-f",
-        "v-priprave",
         "pro-ubytovane-i-navstevniky"
       ]
     },
     {
       "name": "Venkovní tělocvična",
       "slug": "venkovni-telocvicna",
-      "lede": "Cvičební prvky pod širým nebem v areálu, pro trénink vlastní vahou i protažení po práci. Plánovaný prvek venkovního programu.",
+      "lede": "Cvičební prvky pod širým nebem v areálu, pro trénink vlastní vahou i protažení po práci. Pro ubytované i návštěvníky.",
       "blocks": [
         {
           "subtitle": "Pro koho",
-          "text": "Plánováno pro ubytované. O přístupu pro externí návštěvníky rozhodneme později."
-        },
-        {
-          "subtitle": "Stav přípravy",
-          "text": "Venkovní tělocvična zatím není v doložené fázi 1 areálu. Připravujeme ji jako součást venkovního programu. Vybavení a provoz potvrdíme po dokončení projektu."
+          "text": "Pro ubytované i návštěvníky, volně přístupná přes den."
         }
       ],
       "images": [
@@ -198,22 +177,17 @@
       "bookable": false,
       "detail": true,
       "flags": [
-        "v-priprave",
-        "pro-ubytovane"
+        "pro-ubytovane-i-navstevniky"
       ]
     },
     {
       "name": "Vnitřní tělocvična",
       "slug": "vnitrni-telocvicna",
-      "lede": "Krytý prostor pro cvičení a posilování bez ohledu na počasí. Plánovaný prvek sportovního zázemí Hubu.",
+      "lede": "Krytý prostor pro cvičení a posilování bez ohledu na počasí. Pro ubytované i návštěvníky.",
       "blocks": [
         {
           "subtitle": "Pro koho",
-          "text": "Plánováno pro ubytované. O přístupu pro externí návštěvníky rozhodneme později."
-        },
-        {
-          "subtitle": "Stav přípravy",
-          "text": "Vnitřní tělocvična zatím není v doložené fázi 1 areálu. Připravujeme ji jako součást sportovního zázemí. Vybavení, otevírací dobu a provoz potvrdíme po dokončení projektu."
+          "text": "Pro ubytované i návštěvníky podle ceníku. Rezidenti mají vstup za zvýhodněnou sazbu, rozvrh lekcí a otevírací dobu najdete v komunitní aplikaci."
         }
       ],
       "images": [
@@ -226,8 +200,7 @@
       "bookable": false,
       "detail": true,
       "flags": [
-        "v-priprave",
-        "pro-ubytovane"
+        "pro-ubytovane-i-navstevniky"
       ]
     }
   ]

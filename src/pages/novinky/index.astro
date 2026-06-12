@@ -1,48 +1,23 @@
 ---
 /*
- * Novinky , 3-sloupcový grid karet (obrázek + datum/kategorie + nadpis +
- * perex). Reálné články zatím nemáme, níže je náhled stylu s ukázkovým
- * obsahem. Po dodání reálných článků se sem napojí kolekce / CMS.
+ * Novinky , listing z kolekce `novinky` (3-sloupcový grid NewsCard).
+ * Přidat článek = přidat MDX do src/content/novinky/, šablona se nemění.
+ * Stránka je veřejná (žádný gate), články jsou náhledové, dokud klient
+ * nedodá reálný obsah.
  */
 import Base from '../../layouts/Base.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
 import NewsCard from '../../components/NewsCard.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
+import { getCollection } from 'astro:content';
 
-const news = [
-  {
-    date: '12. června 2026', category: 'Rezervace', title: 'Spouštíme nezávazné rezervace bydlení',
-    excerpt: 'Vyberete si formát, termín a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin. Registrace je nezávazná a slouží k zmapování zájmu.',
-    image: { src: '/images/hub/hero/h03.jpg', alt: 'Vnitřní dvůr areálu za modré hodiny' },
-  },
-  {
-    date: '20. května 2026', category: 'Rekonstrukce', title: 'Postupuje rekonstrukce budovy C',
-    excerpt: 'V budově C vzniká coworkingový sál, zasedací místnosti a dílny. Sledujte postup prací a plánované otevření prvních prostor.',
-    image: { src: '/images/hub/areal/building-c.jpg', alt: 'Budova C v areálu Horních kasáren' },
-  },
-  {
-    date: '28. dubna 2026', category: 'Coworking', title: 'Coworkingový sál otevírá jako první',
-    excerpt: 'Volný stůl v sále, telefonní budky a kuchyňský kout. Pro rezidenty v ceně bydlení, pro veřejnost za zvýhodněnou sazbu.',
-    image: { src: '/images/hub/coworking/cowork-interier-sal-c.jpg', alt: 'Coworkingový sál v budově C' },
-  },
-  {
-    date: '15. března 2026', category: 'Doprava', title: 'Kyvadlová doprava k metru Kobylisy',
-    excerpt: 'Hub-shuttle vás odveze k metru Kobylisy i k přívozu na vlak do centra. Pět jízd měsíčně máte v ceně bydlení.',
-    source: 'MyShelter',
-    image: { src: '/images/hub/doprava/hub-shuttle-zastavka.jpg', alt: 'Zastávka Hub-shuttle v areálu' },
-  },
-  {
-    date: '24. února 2026', category: 'Komunita', title: 'Komunitní zahrádky pro rezidenty',
-    excerpt: 'V severní části parku připravujeme sezónní záhony. Vypěstujte si vlastní bylinky a zeleninu pár kroků od bytu.',
-    image: { src: '/images/hub/komunita/05-komunitni-zahrady.jpg', alt: 'Komunitní zahrádky v parku' },
-  },
-  {
-    date: '10. ledna 2026', category: 'Stipendia', title: 'Pobytová stipendia: první kolo na podzim',
-    excerpt: 'Bydlete v Hubu zdarma nebo zvýhodněně výměnou za přínos komunitě. První pilotní kolo plánujeme na podzim 2026.',
-    image: { src: '/images/hub/stipendia/01-atelier.jpg', alt: 'Ateliér s rezidentem-tvůrcem' },
-  },
-];
+const fmtDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const news = (await getCollection('novinky'))
+  .filter((n) => !n.data.hidden)
+  .sort((a, b) => b.data.date.localeCompare(a.data.date));
 ---
 <Base
   title="Novinky · Startovací Hub Klecany"
@@ -52,16 +27,26 @@ const news = [
   <SubpageHero
     eyebrow="Novinky"
     title="Co je <em>nového</em>"
-    sub="Spuštění rezervací, postup rekonstrukce a otevírání prvních budov. Reálné články doplňujeme průběžně, níže je náhled, jak budou vypadat."
+    sub="Spuštění rezervací, postup rekonstrukce a otevírání prvních budov. Články doplňujeme průběžně."
     variant="cream"
     ribbonPath="M 120 720 C 520 420, 980 860, 1380 540 C 1700 300, 1980 560, 2060 420"
     ariaId="novinky"
   />
 
   <div class="news-wrap">
-    <p class="news-note">Náhled stylu. Ukázkový obsah, reálné články doplníme, jakmile bude co publikovat.</p>
+    <p class="news-note">Náhled stylu s ukázkovým obsahem. Reálné články doplníme, jakmile bude co publikovat.</p>
     <div class="news-grid">
-      {news.map((n) => <NewsCard {...n} href="#" />)}
+      {news.map((n) => (
+        <NewsCard
+          date={fmtDate(n.data.date)}
+          category={n.data.category}
+          title={n.data.title}
+          excerpt={n.data.excerpt}
+          source={n.data.source}
+          image={n.data.image}
+          href={`/novinky/${n.id}/`}
+        />
+      ))}
     </div>
   </div>
 

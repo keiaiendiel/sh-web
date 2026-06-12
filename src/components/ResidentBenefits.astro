@@ -8,7 +8,7 @@
  * Každý chip má vlastní --section-hue (z locked paletky 25/50/130/200/240)
  * pro vizuální variace; ikona-pill stejný recept jako .sec-hued__sub-icon.
  * Detail (drobný text pod labelem) je volitelný , uvádíme ho jen tam,
- * kde má smysl upřesnit (Hub-shuttle, Hub-taxi, sauna, coworking sál).
+ * kde má smysl upřesnit (kyvadlovka MyShelter, sdílené taxi, sauna, coworking sál).
  *
  * Props:
  *   - heading: nadpis (default „Vždy v ceně bydlení")
@@ -36,8 +36,8 @@ interface Benefit {
 }
 const benefits: Benefit[] = [
   { hue: 50,  icon: 'zap',            label: 'Energie a internet' },
-  { hue: 240, icon: 'van',            label: 'Hub-shuttle',   detail: 'Sdílená kyvadlovka neomezeně' },
-  { hue: 25,  icon: 'car-front',      label: 'Hub-taxi',      detail: '1× lokální jízda měsíčně' },
+  { hue: 240, icon: 'van',            label: 'Kyvadlovka MyShelter', detail: '5 jízd k metru měsíčně' },
+  { hue: 25,  icon: 'car-front',      label: 'Sdílené taxi',  detail: '1× lokální jízda měsíčně' },
   { hue: 200, icon: 'waves',          label: 'Bazén' },
   { hue: 50,  icon: 'thermometer',    label: 'Sauna',         detail: '1× týdně (tarif 12+)' },
   { hue: 240, icon: 'laptop',         label: 'Coworking sál', detail: 'Volný stůl 24/7' },

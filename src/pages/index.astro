@@ -31,7 +31,8 @@ const sdileneRows = _sdilene.map((e) => {
 });
 const privatniRows = _privatni.map((e) => {
   const d = e.data;
-  return { label: d.name, note: `${d.plocha} · ${d.kapacita} lůžek`, price: d.cena.anchor };
+  const osob = d.kapacita <= 4 ? 'osoby' : 'osob';
+  return { label: d.name, note: `${d.plocha} · až ${d.kapacita} ${osob}`, price: d.cena.anchor };
 });
 
 /* Phase 2 landing per SH_Web_Site_Copy.md § 0.1 + SH_Web_Visualization_List
@@ -101,7 +102,7 @@ const sections: Section[] = [
     id: 'ubytovani',
     eyebrow: 'Ubytování',
     title: 'Privátní apartmán, nebo sdílený pokoj?',
-    lede: 'Šest formátů sdílených pokojů od otevřeného lůžka po uzamykatelnou kapsli a pět privátních apartmánů 1+kk až 5+kk. V ceně energie, internet, coworkingový sál a pět jízd Hub-shuttle k metru měsíčně.',
+    lede: 'Šest formátů sdílených pokojů od otevřeného lůžka po uzamykatelnou kapsli a pět privátních apartmánů 1+kk až 5+kk. V ceně energie, internet, coworkingový sál a pět jízd kyvadlové dopravy MyShelter k metru měsíčně.',
     ctas: [{ href: '/ubytovani/', label: 'Možnosti ubytování' }],
     ribbonPath: 'M -80 480 C 120 320, 320 240, 540 360 S 940 520, 1120 380 S 1400 280, 1560 360',
     gallery: [
@@ -130,13 +131,13 @@ const sections: Section[] = [
     id: 'doprava',
     eyebrow: 'Doprava',
     title: 'Na prahu metropole.',
-    lede: 'Hub-shuttle k metru Kobylisy, sdílená elektrokola a auta, lokální taxi. Pět jízd shuttle a jednu jízdu taxi máte měsíčně v ceně. Cyklostezka EuroVelo 7 podél Vltavy deset minut na kole.',
+    lede: 'Kyvadlová doprava MyShelter k metru Kobylisy a k přívozu Klecánky, MHD linka 374 minutu od areálu, půjčovna elektrovozidel a sdílené taxi. Pět jízd kyvadlovky a jednu jízdu taxi máte měsíčně v ceně.',
     ctas: [{ href: '/doprava/', label: 'Dopravní dostupnost' }],
     ribbonPath: 'M -80 460 C 180 300, 380 460, 600 340 S 980 460, 1160 380 S 1380 280, 1560 380',
     gallery: [
       { src: withBase('/images/hub/okoli/01-areal-dostupnost.jpg'), alt: 'Mapa dostupnosti areálu, vzdálenosti na metro a do centra Prahy.' },
       { src: withBase('/images/hub/doprava/cyklostezka.jpg'), alt: 'Cyklostezka EuroVelo 7 podél Vltavy z Prahy do Klecan.' },
-      { src: withBase('/images/hub/doprava/hub-shuttle-zastavka.jpg'), alt: 'Zastávka Hub-shuttle v areálu.' },
+      { src: withBase('/images/hub/doprava/hub-shuttle-zastavka.jpg'), alt: 'Zastávka kyvadlové dopravy MyShelter v areálu.' },
       { src: withBase('/images/hub/okoli/04-topview-update.jpg'), alt: 'Letecký pohled na areál Horních kasáren a obec Klecany.' },
     ],
   },
@@ -190,7 +191,7 @@ const tiles = [
 ---
 <Base
   title="Startovací Hub Klecany · Bydlení a coworking 15 min od Prahy"
-  description="Devět typů bydlení od sdíleného lůžka po byt 5+kk, coworking, dílny, sauna a kavárna. Horní kasárna Klecany, patnáct minut autobusem od metra Kobylisy. Od 3 000 Kč měsíčně, energie a internet v ceně."
+  description="Jedenáct formátů bydlení od sdíleného lůžka po byt 5+kk, coworking, dílny, sauna a kavárna. Horní kasárna Klecany, patnáct minut autobusem od metra Kobylisy. Od 3 000 Kč měsíčně, energie a internet v ceně."
   headerVariant="overlay">
 
   {/* ============ HERO ROTATION ============ */}
@@ -221,16 +222,16 @@ const tiles = [
     <div class="lp-hero__scrim" aria-hidden="true"></div>
 
     <div class="lp-hero__inner">
-      <h1 class="lp-hero__title">Bydlení a tvorba na prahu metropole.</h1>
-      <p class="lp-hero__lede">Energie a internet v ceně, coworking a sauna v areálu.</p>
+      <h1 class="lp-hero__title">Žijte, milujte &amp; tvořte!</h1>
+      <p class="lp-hero__lede">MyShelter · coliving &amp; coworking space</p>
     </div>
 
     {/* Tři rychlá CTA do rezervačního formuláře s předvyplněnou cestou.
         Desktop: full-width pruh u spodního okraje hero, zarovnaný na content
         edge (stejná šířka jako header bar). Mobil/tablet: in-flow pod textem. */}
     <div class="lp-hero__quick">
-      <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=luzko')}>Rezervovat lůžko</a>
       <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=apartman')}>Rezervovat apartmán</a>
+      <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=luzko')}>Rezervovat lůžko</a>
       <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=stipendium')}>Požádat o&nbsp;stipendium</a>
     </div>
 
@@ -381,7 +382,7 @@ const tiles = [
   </div>
 
   {/* ============ GALERIE TEASER (reálná foto-mřížka) ============ */}
-  <section class="lp-gallery">
+  <section class="lp-gallery" id="galerie">
     <div class="lp-gallery__inner">
       <PhotoGrid
         eyebrow="Galerie"
@@ -425,7 +426,7 @@ const tiles = [
 </Base>
 
 <style>
-  .lp-gallery { background: var(--bg); padding: var(--space-8) 0 var(--space-7); }
+  .lp-gallery { background: var(--bg); padding: var(--space-8) 0 var(--space-7); scroll-margin-top: 80px; }
   .lp-gallery__inner {
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);

@@ -1,0 +1,70 @@
+---
+/*
+ * ArticleImage , obrázek uvnitř těla článku novinky (MDX). Figure s volitelným
+ * popiskem, zaoblené rohy dle design systému, placeholder varianta pro fotky,
+ * které se teprve připravují.
+ *
+ * Použití v MDX:
+ *   import ArticleImage from '../../components/ArticleImage.astro';
+ *   <ArticleImage src="/images/hub/..." alt="..." caption="..." />
+ *   <ArticleImage placeholder="Popis chystané fotky" alt="..." />
+ */
+import Icon from './Icon.astro';
+import { withBase } from '../utils/url';
+
+interface Props {
+  src?: string;
+  placeholder?: string;
+  alt: string;
+  caption?: string;
+}
+const { src, placeholder, alt, caption } = Astro.props;
+---
+<figure class="art-img">
+  {src ? (
+    <img src={withBase(src)} alt={alt} loading="lazy" decoding="async" />
+  ) : (
+    <div class="art-img__placeholder" role="img" aria-label={alt}>
+      <Icon name="image" size={26} strokeWidth={1.75} />
+      <span>{placeholder ?? 'FOTO SE PŘIPRAVUJE'}</span>
+    </div>
+  )}
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .art-img {
+    margin: var(--space-5) 0;
+    display: grid;
+    gap: 8px;
+  }
+  .art-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-input);
+  }
+  .art-img__placeholder {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: var(--space-5);
+    text-align: center;
+    border-radius: var(--radius-input);
+    color: var(--plum-deep);
+    background:
+      radial-gradient(ellipse at 85% 110%, hsl(calc(var(--hue) + 44) 28% 74% / 0.32) 0%, transparent 55%),
+      linear-gradient(135deg, hsl(var(--hue) 22% 90%) 0%, hsl(var(--hue) 30% 82%) 100%);
+  }
+  .art-img__placeholder span {
+    font: 500 var(--text-sm) / 1.4 var(--font-sans);
+    max-width: 34ch;
+  }
+  .art-img figcaption {
+    font: 500 var(--text-xs) / 1.5 var(--font-sans);
+    color: var(--fg-subtle);
+  }
+</style>

@@ -6,21 +6,21 @@
   "intro": {
     "eyebrow": "Zázemí",
     "title": "Ostatní zázemí",
-    "lede": "Prostory a služby, které drží každodenní provoz pohromadě. Místo pro akce, uložení věcí, rychlé nákupy i vyzvednutí zásilek. Část z toho je v přípravě, takže parametry upřesňujeme postupně."
+    "lede": "Prostory a služby, které drží každodenní provoz pohromadě. Místo pro akce, uložení věcí, rychlé nákupy i vyzvednutí zásilek."
   },
   "items": [
     {
       "name": "Eventové prostory",
       "slug": "eventove-prostory",
-      "lede": "Místa pro akce uvnitř i venku. Uvnitř počítáme s klubovnou a společenským sálem pro přednášky, promítání, kvízové večery nebo workshopy. Venku slouží komunitní park s grilovacími místy a venkovním posezením a parkovací plochy, které se dají proměnit na prostor pro větší akci nebo farmářské trhy.",
+      "lede": "Místa pro akce uvnitř i venku. Uvnitř klubovna a společenský sál pro přednášky, promítání, kvízové večery nebo workshopy. Venku komunitní park s grilovacími místy a venkovním posezením a zpevněné plochy, které se dají proměnit na prostor pro větší akci nebo farmářské trhy.",
       "blocks": [
         {
           "subtitle": "Indoor",
-          "text": "Klubovna a společenský sál v jádře areálu. Vhodné pro komunitní program, přednášky, promítání s projektorem a menší soukromé akce. Kapacitu a vybavení upřesníme, jakmile bude provoz spuštěný."
+          "text": "Klubovna a společenský sál v jádře areálu. Vhodné pro komunitní program, přednášky, promítání s projektorem a menší soukromé akce. Rezervujete přes recepci nebo komunitní aplikaci."
         },
         {
           "subtitle": "Outdoor",
-          "text": "Komunitní park s grilovacími místy, venkovním posezením a zahrádkami. Dvě velké zpevněné plochy slouží jako rezerva pro větší akce a stánkový program. Termíny a podmínky pronájmu zveřejníme později."
+          "text": "Komunitní park s grilovacími místy, venkovním posezením a zahrádkami. Dvě velké zpevněné plochy slouží jako rezerva pro větší akce a stánkový program."
         }
       ],
       "images": [
@@ -35,23 +35,21 @@
       ],
       "bookable": true,
       "detail": true,
-      "flags": [
-        "v-pripravive",
-        "kapacita-upresnit"
-      ]
+      "priceNote": "Sazby pronájmu doplníme.",
+      "flags": []
     },
     {
       "name": "Sklady",
       "slug": "sklady",
-      "lede": "Místo navíc, když se vám věci nevejdou do bytu. Nabízíme dva typy. Sklepní kóje v podzemních podlažích a samostatné kontejnerové sklady v areálu. Hodí se, pokud bydlíte v menším formátu, řešíte sezónní vybavení nebo potřebujete dočasně uskladnit větší objem věcí.",
+      "lede": "Místo navíc, když se vám věci nevejdou do bytu. Nabízíme dva typy: sklepní kóje v podzemních podlažích a samostatné kontejnerové sklady v areálu. Hodí se, pokud bydlíte v menším formátu, řešíte sezónní vybavení nebo potřebujete dočasně uskladnit větší objem věcí.",
       "blocks": [
         {
           "subtitle": "Sklepní kóje",
-          "text": "Uzamykatelné kóje v podzemních podlažích budov pod učebnami a coworkingem. Vhodné pro menší objem, sezónní věci a kola. Velikosti a počet upřesníme podle finálního členění prostoru."
+          "text": "Uzamykatelné kóje v podzemních podlažích budov pod učebnami a coworkingem. Vhodné pro menší objem, sezónní věci a kola."
         },
         {
           "subtitle": "Kontejnerové sklady",
-          "text": "Samostatné uzamykatelné kontejnery v areálu pro větší objem věcí. Vnitřní rozdělení na jednotlivé sklady řešíme. Dostupnost a ceny doplníme po spuštění provozu."
+          "text": "Samostatné uzamykatelné kontejnery v areálu pro větší objem věcí. Velikost si vyberete podle potřeby, rezervace přes recepci."
         }
       ],
       "images": [
@@ -66,18 +64,16 @@
       ],
       "bookable": true,
       "detail": true,
-      "flags": [
-        "v-pripravive",
-        "cena-upresnit"
-      ]
+      "priceNote": "Ceník skladů doplníme.",
+      "flags": []
     },
     {
       "name": "Výdejní automaty",
       "slug": "vydejni-automaty",
-      "lede": "Základní potřeby na dosah, i když je zavřeno. Plánujeme automaty s nápoji, jídlem, hygienickými potřebami a drobnými základními věcmi do domácnosti. Cílem je, abyste si v noci nebo o víkendu obstarali, co zrovna potřebujete, bez cesty mimo areál.",
+      "lede": "Základní potřeby na dosah, i když je zavřeno. Automaty s nápoji, jídlem, hygienickými potřebami a drobnými základními věcmi do domácnosti. V noci nebo o víkendu si obstaráte, co zrovna potřebujete, bez cesty mimo areál.",
       "blocks": [
         {
-          "subtitle": "Co plánujeme",
+          "subtitle": "Sortiment",
           "text": "Nápoje, balené jídlo a svačiny, hygienické potřeby a základní drogerie. Rozmístění automatů a sortiment ladíme podle poptávky rezidentů."
         }
       ],
@@ -93,22 +89,16 @@
       ],
       "bookable": false,
       "detail": false,
-      "flags": [
-        "v-pripravive"
-      ]
+      "flags": []
     },
     {
       "name": "Výdejní boxy",
       "slug": "vydejni-boxy",
-      "lede": "Vyzvednutí balíků a nákupů přímo v areálu. Cílem je, abyste si zásilky a online nákupy vyzvedli na místě a nemuseli za nimi nikam jezdit. Konkrétní provozovatele teprve řešíme, takže to zatím berte jako záměr, ne jako hotovou službu.",
+      "lede": "Vyzvednutí balíků a online nákupů přímo v areálu: Z-BOX Zásilkovny, AlzaBox, boxy DHL a PPL a box Rohlik.cz. Zásilky vyzvednete na místě a nemusíte za nimi nikam jezdit.",
       "blocks": [
         {
-          "subtitle": "Záměr",
-          "text": "Počítáme s výdejními boxy pro online nákupy a zásilky tak, aby vyzvednutí bylo otázkou pár minut v rámci areálu."
-        },
-        {
-          "subtitle": "Stav",
-          "text": "Spolupráce s konkrétními přepravci a obchody zatím není uzavřená. Dostupné značky, počet boxů a podmínky doplníme, až budou dohody potvrzené. Do té doby nejde o zajištěnou službu."
+          "subtitle": "Jak to funguje",
+          "text": "Boxy stojí u vstupu do areálu, vyzvednutí je otázkou pár minut. Větší zásilky a doporučenou poštu za vás převezme recepce."
         }
       ],
       "images": [
@@ -123,11 +113,7 @@
       ],
       "bookable": false,
       "detail": false,
-      "flags": [
-        "bez-existujicich-dohod",
-        "v-pripravive",
-        "tretí-strany-neuvadet-jako-zajistene"
-      ]
+      "flags": []
     }
   ]
 }

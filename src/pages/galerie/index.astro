@@ -10,6 +10,10 @@ import Lightbox from '../../components/Lightbox.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
 
+/* Šest kategorií dle klientské tabulky Koncept webu: Privátní apartmány,
+   Sdílené pokoje, Co-livingové zázemí, Co-workingové zázemí, Sdílená mobilita,
+   Okolí areálu. Coliving je zastřešující pojem kampusu (gastro, wellness,
+   komunita), co-working kryje práci a dílny. */
 const categories = [
   {
     heading: 'Privátní apartmány', group: 'g-privatni', more: '/ubytovani/privatni/',
@@ -23,14 +27,25 @@ const categories = [
   {
     heading: 'Sdílené pokoje', group: 'g-sdilene', more: '/ubytovani/sdilene-pokoje/',
     images: [
-      { src: '/images/hub/ubytovani/coliving/pokoj-basic-01.jpg', alt: 'Sdílený pokoj bez příček' },
+      { src: '/images/hub/ubytovani/coliving/pokoj-basic-01.jpg', alt: 'Sdílený pokoj se základní mírou soukromí' },
       { src: '/images/hub/ubytovani/coliving/pokoj-privacy-01.jpg', alt: 'Lůžkové boxy s posuvnými dveřmi' },
       { src: '/images/hub/ubytovani/coliving/kapsle-single-01.jpg', alt: 'Uzamykatelná kapsle' },
-      { src: '/images/hub/ubytovani/coliving/kapsle-double-01.jpg', alt: 'Dvoulůžková kapsle' },
+      { src: '/images/hub/ubytovani/coliving/kapsle-double-01.jpg', alt: 'Kapslové dvojlůžko' },
     ],
   },
   {
-    heading: 'Coworking a dílny', group: 'g-coworking', more: '/zazemi/coworking/',
+    heading: 'Co-livingové zázemí', group: 'g-coliving', more: '/zazemi/',
+    images: [
+      { src: '/images/hub/komunita/gastro/01-kantyna.jpg', alt: 'Kantýna v kuchyňském bloku B' },
+      { src: '/images/hub/komunita/wellness-01-bazen.jpg', alt: 'Venkovní bazén' },
+      { src: '/images/hub/komunita/wellness-02-sauna.jpg', alt: 'Sauna' },
+      { src: '/images/hub/komunita/gastro/04-pekarna.jpg', alt: 'Pekárna' },
+      { src: '/images/hub/komunita/05-komunitni-zahrady.jpg', alt: 'Komunitní zahrádky' },
+      { src: '/images/hub/komunita/04-klubovna.jpg', alt: 'Společenský sál a klubovna' },
+    ],
+  },
+  {
+    heading: 'Co-workingové zázemí', group: 'g-coworking', more: '/zazemi/coworking/',
     images: [
       { src: '/images/hub/coworking/cowork-interier-sal-c.jpg', alt: 'Coworkingový sál' },
       { src: '/images/hub/coworking/02-cowork-interier-vlastni-stul.jpg', alt: 'Sdílené pracovní stoly' },
@@ -39,30 +54,21 @@ const categories = [
     ],
   },
   {
-    heading: 'Gastronomie a wellness', group: 'g-gastro', more: '/zazemi/',
+    heading: 'Sdílená mobilita', group: 'g-mobilita', more: '/doprava/sdilena-mobilita/',
     images: [
-      { src: '/images/hub/komunita/gastro/01-kantyna.jpg', alt: 'Kantýna' },
-      { src: '/images/hub/komunita/gastro/04-pekarna.jpg', alt: 'Pekárna' },
-      { src: '/images/hub/komunita/wellness-01-bazen.jpg', alt: 'Venkovní bazén' },
-      { src: '/images/hub/komunita/wellness-02-sauna.jpg', alt: 'Sauna' },
+      { src: '/images/hub/doprava/hub-shuttle-zastavka.jpg', alt: 'Zastávka kyvadlové dopravy MyShelter v areálu' },
+      { src: '/images/hub/doprava/cyklostezka.jpg', alt: 'Cyklostezka EuroVelo 7 podél Vltavy' },
+      { src: '/images/hub/okoli/01-areal-dostupnost.jpg', alt: 'Mapa dostupnosti areálu' },
+      { src: '/images/hub/okoli/04-topview-update.jpg', alt: 'Letecký pohled na areál a okolí' },
     ],
   },
   {
-    heading: 'Komunitní park', group: 'g-komunita', more: '/zazemi/komunita/',
+    heading: 'Okolí areálu', group: 'g-okoli', more: '/zazemi/okoli/',
     images: [
-      { src: '/images/hub/komunita/05-komunitni-zahrady.jpg', alt: 'Komunitní zahrádky' },
-      { src: '/images/hub/komunita/03-grilovaci-misto.jpg', alt: 'Grilovací místo' },
-      { src: '/images/hub/komunita/04-klubovna.jpg', alt: 'Klubovna' },
-      { src: '/images/hub/komunita/venkovni-01-zahrady.jpg', alt: 'Venkovní posezení' },
-    ],
-  },
-  {
-    heading: 'Areál a okolí', group: 'g-okoli', more: '/doprava/',
-    images: [
-      { src: '/images/hub/okoli/01-areal-dostupnost.jpg', alt: 'Areál a dostupnost' },
-      { src: '/images/hub/doprava/cyklostezka.jpg', alt: 'Cyklostezka podél Vltavy' },
+      { src: '/images/hub/okoli/02-cyklostezka.jpg', alt: 'Údolí Vltavy pod Klecanami' },
       { src: '/images/hub/okoli/03-exterier-1.jpg', alt: 'Exteriér areálu' },
       { src: '/images/hub/areal/areal-entry.jpg', alt: 'Vstup do areálu' },
+      { src: '/images/hub/komunita/venkovni-01-zahrady.jpg', alt: 'Komunitní park' },
     ],
   },
 ];

@@ -4,59 +4,126 @@
   "intro": {
     "eyebrow": "Dopravní dostupnost",
     "title": "Klecany 15 minut autobusem od metra Kobylisy",
-    "lede": "Z Hubu se dostanete do Prahy kyvadlovou dopravou, městskou hromadnou dopravou i vlastním autem nebo na kole. Pět jízd Hub-shuttle a jednu jízdu Hub-taxi máte měsíčně v ceně bydlení, nad rámec za zvýhodněnou sazbu."
+    "lede": "Z Hubu se dostanete do Prahy kyvadlovou dopravou MyShelter, městskou hromadnou dopravou, vlakem přes přívoz i vlastním autem nebo na kole. Pět jízd kyvadlovky a jednu jízdu sdíleného taxi máte měsíčně v ceně bydlení, nad rámec za zvýhodněnou sazbu."
   },
   "items": [
     {
       "name": "Sdílená mobilita",
       "slug": "sdilena-mobilita",
-      "lede": "Kyvadlová doprava Hub-shuttle, městská hromadná doprava a lokální taxi vás propojí s metrem, vlakem i okolními obcemi. Část služeb máte rovnou v ceně bydlení.",
+      "lede": "Kyvadlová doprava MyShelter jezdí nonstop na metro Kobylisy, k přívozu Klecánky i na hory. Síť doplňuje MHD, sdílené taxi a půjčovna dopravních prostředků. Část jízd máte rovnou v ceně bydlení.",
       "bookable": false,
       "detail": true,
-      "priceNote": "5 jízd Hub-shuttle a 1 jízda Hub-taxi měsíčně v ceně bydlení; nad rámec za zvýhodněnou sazbu",
+      "priceNote": "5 jízd MyShelter a 1 jízda sdíleného taxi měsíčně v ceně bydlení; nad rámec za zvýhodněnou sazbu",
       "flags": [
-        "plan-vychozi-stav-24h",
-        "vault-tbd-vikend-provoz",
-        "vault-tbd-pujcovna-elektrovozidel",
         "komparace-na-metodiku-srovnani"
       ],
-      "blocks": [
+      "sections": [
         {
-          "subtitle": "Kyvadlová doprava Hub-shuttle",
-          "text": "Vlastní dopravní služba Hubu. Dvě devítimístné dodávky vozí rezidenty mezi Hubem a metrem Kobylisy (linka C) v ranní špičce 06:30 až 09:30 a odpolední 15:30 až 18:30, odjezdy každých 30 minut. Cesta trvá 12 až 15 minut, protože shuttle jede přímo bez stavění na zastávkách Zdiby, Veltěž a Přemyšlení. Jízdy si rezervujte v aplikaci Hubu nejpozději 12 hodin předem. Pět jízd měsíčně máte v ceně bydlení, po vyčerpání platíte zvýhodněnou sazbu kolem 60 Kč za jízdu. Provoz o víkendech a svátcích zatím upřesňujeme."
+          "id": "kyvadlovka",
+          "title": "Zastávka kyvadlové dopravy MyShelter",
+          "lede": "Vlastní dopravní služba Hubu v nepřetržitém provozu. Zastávka stojí přímo v areálu, dvě minuty pěšky z každé budovy. Pět jízd měsíčně máte v ceně bydlení, další za zvýhodněnou sazbu kolem 60 Kč. Místo si rezervujete v aplikaci Hubu.",
+          "blocks": [
+            {
+              "subtitle": "Linka metro Kobylisy (C)",
+              "text": "Páteřní spoj na metro, jízda 12 až 18 minut. Po cestě staví na zastávkách Lidl a restaurace Stará Pošta ve Zdibech a Hornbach v Čimicích. Ve špičce jezdí každých 30 minut, mimo špičku na zavolání."
+            },
+            {
+              "subtitle": "Linka Klecánky, přívoz a vlak",
+              "text": "Sveze vás k přívozu přes Vltavu, odkud navazuje vlak z Roztok do centra Prahy (Masarykovo nádraží zhruba za 20 minut). Po cestě staví na zastávkách Klecany U Hřbitova, Sportovní areál, Radnice, Centrum a Farm Table."
+            },
+            {
+              "subtitle": "Linka Špindlerův Mlýn",
+              "text": "Přímý spoj do hor pro ubytované i návštěvníky. Po cestě staví u letiště Aero Vodochody, v Mladé Boleslavi a v Trutnově. Termíny vypisujeme v aplikaci Hubu, místo si rezervujete předem."
+            }
+          ],
+          "actions": [
+            { "label": "Rezervovat jízdu", "href": "/rezervace/?zazemi=kyvadlovka-myshelter", "kind": "reserve" }
+          ],
+          "media": [
+            {
+              "src": "/images/hub/doprava/hub-shuttle-zastavka.jpg",
+              "alt": "Zastávka kyvadlové dopravy MyShelter v areálu Startovacího Hubu Klecany"
+            }
+          ]
         },
         {
-          "subtitle": "Plánovaná linka na přívoz a vlak",
-          "text": "Připravujeme druhou kyvadlovou trasu z Klecánek na přívoz přes Vltavu, odkud navážete na vlak směr Masarykovo nádraží. Jde o plánované rozšíření, spustíme ho podle poptávky rezidentů a sezóny provozu přívozu."
+          "id": "mhd",
+          "title": "Městská hromadná doprava (PID)",
+          "lede": "Linka 374 PID jede z Klecan na metro Kobylisy 14 až 17 minut, ve špičce s dedikovanými pruhy na Cínovecké. Pro Klecany platí tarif na 3 pásma, měsíční předplatné 1 488 Kč podle ceníku Lítačky 2026.",
+          "blocks": [
+            {
+              "subtitle": "BUS Astrapark",
+              "text": "Minutu pěšky od Hubu. Interval ve špičce 15 minut, mimo špičku 30 minut, poslední spoj z Kobylis kolem 22:50."
+            },
+            {
+              "subtitle": "BUS U Hřbitova",
+              "text": "Druhá zastávka linky 374, 300 metrů od hlavního vstupu, zhruba 4 minuty pěšky."
+            },
+            {
+              "subtitle": "TRAM Výzkumný ústav I.",
+              "text": "Tramvajové prodloužení z Kobylis přes Zdiby, základní interval 15 minut. Od areálu čtvrt hodiny pěšky, kyvadlovka MyShelter vás k zastávce sveze za pár minut."
+            },
+            {
+              "subtitle": "VLAK Roztoky",
+              "text": "Přes přívoz Klecánky, kam vás sveze kyvadlovka. Vlak z Roztok jede do Prahy-Bubenče 10 minut, na Masarykovo nádraží kolem 20 minut."
+            }
+          ],
+          "media": [
+            {
+              "src": "/images/hub/okoli/01-areal-dostupnost.jpg",
+              "alt": "Mapa dostupnosti areálu, vzdálenosti na metro a do centra Prahy"
+            }
+          ]
         },
         {
-          "subtitle": "Výhledové dálkové spoje",
-          "text": "Ve výhledu zvažujeme příležitostné kyvadlové jízdy na letiště Vodochody a sezónní spoje na Mladou Boleslav a do Špindlerova Mlýna. Zatím je to záměr v přípravě, ne pevná linka v jízdním řádu."
+          "id": "pujcovna",
+          "title": "Půjčovna dopravních prostředků",
+          "lede": "Nonstop půjčovna přímo v areálu: elektroauta, elektroskútry, elektrokola, elektrokoloběžky, elektrolongboardy i onewheely. Rezervujete v aplikaci Hubu, platíte podle ceníku půjčovny.",
+          "blocks": [
+            {
+              "subtitle": "Na krátké cesty i celý den",
+              "text": "Elektrokolo nebo koloběžka na cestu k přívozu a po okolí, elektroauto na velký nákup nebo služební cestu. Vyzvednutí i vrácení u zastávky MyShelter v areálu."
+            }
+          ],
+          "actions": [
+            { "label": "Rezervovat", "href": "/rezervace/?zazemi=pujcovna", "kind": "reserve" }
+          ],
+          "media": [
+            {
+              "placeholder": "Půjčovna elektrovozidel v areálu: elektrokola, koloběžky, elektroauto. FOTO SE PŘIPRAVUJE",
+              "alt": "Půjčovna dopravních prostředků v areálu Hubu"
+            }
+          ]
         },
         {
-          "subtitle": "Městská hromadná doprava (PID)",
-          "text": "Linka 374 PID slouží jako záloha mimo špičku shuttle: trasa Klecany, Zdiby, Veltěž, Přemyšlení, Kobylisy, cesta 14 až 17 minut ve špičce s dedikovanými pruhy na Cínovecké. Frekvence ve špičce 15 minut, mimo špičku 30 minut, poslední bus z Kobylis kolem 22:50. Zastávka BUS Astrapark je 1 minutu od Hubu, zastávka BUS U hřbitova 300 metrů od hlavního vstupu. Vlakem dojedete přes Roztoky. Tramvaj k Výzkumnému ústavu uvádíme jen jako výhled: plánovaný provoz prodloužení linky z Kobylis přes Zdiby do Sedlce padá na roky 2028 až 2030 a trať zatím nestojí. Pro Klecany potřebujete tarif na 3 pásma PID, měsíční předplatné 1 488 Kč podle ceníku Lítačky 2026."
-        },
-        {
-          "subtitle": "Hub-taxi a zastávka taxislužby",
-          "text": "Lokální doprava v rámci Klecan a okolí (Roztoky, Zdiby, Dolní Chabry). Voláte ji přes aplikaci Hubu, hodí se na večerní návrat z nákupu, odvoz na vlak Roztoky-Žalov nebo k lékaři po skončení autobusu. Jednu jízdu měsíčně máte v ceně bydlení, dál platíte zvýhodněnou sazbu zhruba 80 až 150 Kč podle vzdálenosti. V areálu počítáme s vyhrazenou zastávkou taxislužby. Provozovatele (smluvní lokální dopravce nebo platforma typu Bolt Business) ještě upřesňujeme."
-        },
-        {
-          "subtitle": "Půjčovna elektrovozidel",
-          "text": "V areálu plánujeme půjčovnu elektrovozidel pro krátké cesty po Klecanech a okolí. Konkrétní flotilu, sazby a způsob rezervace doplníme, až provoz potvrdíme."
-        },
-        {
-          "subtitle": "Cílový stav: provoz 24 hodin",
-          "text": "Záměrem je posunout sdílenou mobilitu k nepřetržité dostupnosti, aby vás Hub odvezl i mimo jízdní řády shuttle a městské dopravy. Nonstop provoz uvádíme jako plánovaný cílový stav, ne jako dnešní samozřejmost."
+          "id": "taxi",
+          "title": "Zastávka sdílené taxislužby",
+          "lede": "Sdílené taxi pro Klecany a okolí (Roztoky, Zdiby, Dolní Chabry) s vyhrazenou zastávkou v areálu, v provozu nonstop. Jednu jízdu měsíčně máte v ceně bydlení, dál platíte zvýhodněnou sazbu zhruba 80 až 150 Kč podle vzdálenosti.",
+          "blocks": [
+            {
+              "subtitle": "Kdy se hodí",
+              "text": "Večerní návrat z nákupu, odvoz na vlak Roztoky-Žalov nebo k lékaři po skončení autobusu. Objednáte v aplikaci Hubu nebo přímo na zastávce."
+            }
+          ],
+          "actions": [
+            { "label": "Rezervovat", "href": "/rezervace/?zazemi=sdilene-taxi", "kind": "reserve" },
+            { "label": "Poptat datum, směr a cíl", "href": "mailto:vpd@osa2.cz?subject=Sdílené taxi: poptávka jízdy", "kind": "link", "external": true }
+          ],
+          "media": [
+            {
+              "placeholder": "Zastávka sdílené taxislužby v areálu. FOTO SE PŘIPRAVUJE",
+              "alt": "Zastávka sdílené taxislužby v areálu Hubu"
+            }
+          ]
         }
       ],
       "images": [
         {
           "src": "/images/hub/doprava/hub-shuttle-zastavka.jpg",
-          "alt": "Zastávka Hub-shuttle v areálu Startovacího Hubu Klecany"
+          "alt": "Zastávka kyvadlové dopravy MyShelter v areálu Startovacího Hubu Klecany"
         },
         {
-          "placeholder": "Placeholder: schéma sdílené mobility (Hub-shuttle, linka 374, Hub-taxi) s minutážemi na Kobylisy; doplnit reálnou mapu nebo infografiku",
+          "placeholder": "Schéma sdílené mobility (MyShelter, linka 374, sdílené taxi) s minutážemi na Kobylisy",
           "alt": "Schéma sdílené mobility z Hubu do Prahy"
         }
       ]
@@ -67,25 +134,63 @@
       "lede": "Na kole podél Vltavy, pěšky po okolních cestách, nebo vlastním vozem s parkováním přímo v areálu. Hub počítá s každým způsobem, jak se hýbete sami za sebe.",
       "bookable": false,
       "detail": true,
-      "priceNote": "Vyhrazené stání pro rezidenty zdarma; kapacitu a sazby pro hosty upřesňujeme",
+      "priceNote": "Vyhrazené stání pro rezidenty zdarma; hosté parkují podle ceníku",
       "flags": [
-        "vault-tbd-kapacita-parkoviste",
-        "vault-flag-overit-minutaze-cyklostezka",
         "plan-cyklolavka-2027-2028",
         "komparace-na-metodiku-srovnani"
       ],
-      "blocks": [
+      "sections": [
         {
-          "subtitle": "Cyklostezka do centra Prahy",
-          "text": "Cyklostezka EuroVelo 7 vede podél Vltavy pod Klecanami. Z Hubu na ni sjedete kolem za 10 minut, pěšky to trvá zhruba 30 minut. Plánovaná cyklolávka přes Vltavu mezi Roztoky a Klecany (stavba 2027 až 2028) po dokončení zkrátí cestu na vlak do centra Prahy: kolo k vlaku v Roztokách plus 14 minut vlakem, dohromady kolem 25 až 30 minut do centra. Konkrétní minutáže ještě ověřujeme."
+          "id": "cyklostezka",
+          "title": "Cyklostezka do centra Prahy",
+          "lede": "Cyklostezka EuroVelo 7 vede podél Vltavy pod Klecanami. Z Hubu na ni sjedete za 10 minut a po rovině podél řeky dojedete až do centra.",
+          "blocks": [
+            {
+              "subtitle": "Minutáže z Hubu",
+              "text": "Do pražské ZOO kolem 30 minut, k metru Nádraží Holešovice asi 40 minut, na Staroměstské náměstí kolem 50 minut, na Národní třídu i Václavské náměstí za necelou hodinu. Na elektrokole zhruba o třetinu rychleji."
+            },
+            {
+              "subtitle": "Cyklolávka Roztoky",
+              "text": "Cyklolávka přes Vltavu mezi Roztoky a Klecany (stavba 2027 až 2028) po dokončení zkrátí cestu na vlak: kolo k vlaku v Roztokách plus 14 minut vlakem, dohromady kolem 25 až 30 minut do centra."
+            }
+          ],
+          "media": [
+            {
+              "src": "/images/hub/doprava/cyklostezka.jpg",
+              "alt": "Cyklostezka EuroVelo 7 podél Vltavy pod Klecanami"
+            }
+          ]
         },
         {
-          "subtitle": "Pěší a polní cesty",
-          "text": "Klecany mají chodníky kolem ulic v centru, polní cesty kolem areálu a návaznost na turistické trasy podél Vltavy. Sestup do údolí řeky zvládnete pěšky bez auta."
+          "id": "pesi-cesty",
+          "title": "Pěší a polní cesty",
+          "lede": "Klecany mají chodníky kolem ulic v centru, polní cesty kolem areálu a návaznost na turistické trasy podél Vltavy. Sestup do údolí řeky zvládnete pěšky bez auta.",
+          "media": [
+            {
+              "src": "/images/hub/doprava/cyklostezka.jpg",
+              "alt": "Cesty podél Vltavy pod Klecanami"
+            }
+          ]
         },
         {
-          "subtitle": "Privátní parkoviště",
-          "text": "Hub má parkoviště uvnitř areálu na dvou plochách. Počítáme se stáním pro kola, motocykly, osobní vozy, dodávky, obytné vozy, autobusy i nákladní vozy. Rezidenti mají vyhrazené stání zdarma, pro hosty řešíme parkování dohodou. Finální kapacitu doplníme podle projektové dokumentace. Z Hubu na dálnici D8 (MÚK Zdiby) jsou 3 km, tedy zhruba 5 minut autem; P+R Kobylisy s navázáním na metro je 6,8 km, kolem 11 minut."
+          "id": "parkoviste",
+          "title": "Privátní parkoviště",
+          "lede": "Parkoviště uvnitř areálu na dvou plochách: stání pro kola, motocykly, osobní vozy, dodávky, obytné vozy, autobusy i nákladní vozy. Rezidenti mají vyhrazené stání zdarma, hosté parkují podle ceníku.",
+          "blocks": [
+            {
+              "subtitle": "Napojení autem",
+              "text": "Na dálnici D8 (MÚK Zdiby) jsou to 3 km, zhruba 5 minut autem. P+R Kobylisy s návazností na metro je 6,8 km, kolem 11 minut."
+            }
+          ],
+          "actions": [
+            { "label": "Rezervovat parkovací místo", "href": "/rezervace/?zazemi=parking", "kind": "reserve" }
+          ],
+          "media": [
+            {
+              "placeholder": "Privátní parkoviště areálu s vyznačenými typy stání (kola, dodávky, obytné vozy). FOTO SE PŘIPRAVUJE",
+              "alt": "Privátní parkoviště v areálu Hubu"
+            }
+          ]
         }
       ],
       "images": [
@@ -94,7 +199,7 @@
           "alt": "Cyklostezka podél Vltavy pod Klecanami"
         },
         {
-          "placeholder": "Placeholder: privátní parkoviště areálu s vyznačenými typy stání (kola, dodávky, obytné vozy); doplnit reálnou fotku nebo vizualizaci",
+          "placeholder": "Privátní parkoviště areálu s vyznačenými typy stání (kola, dodávky, obytné vozy)",
           "alt": "Privátní parkoviště v areálu Hubu"
         }
       ]

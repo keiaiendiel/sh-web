@@ -1,10 +1,17 @@
 ---
 /*
- * Doprava , L2 detail (sdilena-mobilita / privatni-mobilita). Fraktál: každý
- * blok z doprava.json (kyvadlovka, MHD, taxi, půjčovna / cyklostezka,
- * parkoviště) = jedna zig-zag Section. Reálná foto kde je, jinak placeholder.
+ * Doprava , L2 detail (sdilena-mobilita / privatni-mobilita). Fraktál úrovně 3
+ * a 4 z doprava.json: každá položka `sections` = jedna zig-zag Section, její
+ * `blocks` nesou úroveň 4 (linky se zastávkami, zastávky MHD). Skládáno ručně
+ * (ne přes FractalPage), aby šel mezi sekce vložit DepartureBoard widget
+ * nejbližších odjezdů (za sekci MHD).
  */
-import FractalPage from '../../layouts/FractalPage.astro';
+import Base from '../../layouts/Base.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
+import Section from '../../components/Section.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import CrossLinkPair from '../../components/CrossLinkPair.astro';
+import DepartureBoard from '../../components/DepartureBoard.astro';
 import data from '../../data/doprava.json';
 
 export async function getStaticPaths() {
@@ -13,53 +20,62 @@ export async function getStaticPaths() {
 
 const { it } = Astro.props;
 
-function mediaFor(sub: string) {
-  const s = (sub || '').toLowerCase();
-  if (s.includes('shuttle') || s.includes('kyvadl')) {
-    return [{ src: '/images/hub/doprava/hub-shuttle-zastavka.jpg', alt: sub }];
-  }
-  if (s.includes('cyklo') || s.includes('kolo') || s.includes('pěš')) {
-    return [{ src: '/images/hub/doprava/cyklostezka.jpg', alt: sub }];
-  }
-  if (s.includes('mhd') || s.includes('hromadn')) {
-    return [{ src: '/images/hub/okoli/01-areal-dostupnost.jpg', alt: sub }];
-  }
-  return [{ placeholder: `${sub} , foto nebo schéma se připravuje`, alt: sub }];
-}
+type SectionDef = {
+  id?: string;
+  title: string;
+  lede?: string;
+  blocks?: { subtitle?: string; text: string }[];
+  actions?: { label: string; href: string; kind?: 'reserve' | 'detail' | 'link'; external?: boolean }[];
+  media?: { src?: string; placeholder?: string; alt: string }[];
+};
 
-const sections = (it.blocks ?? []).map((b, i) => ({
-  id: `blok-${i + 1}`,
-  jumpLabel: b.subtitle ?? `Detail ${i + 1}`,
-  title: b.subtitle ?? '',
-  lede: b.text,
-  media: mediaFor(b.subtitle ?? ''),
+const defs: SectionDef[] = (it as any).sections ?? [];
+
+/* Alternace stran a pozadí jako ve FractalPage. */
+const sections = defs.map((s, i) => ({
+  ...s,
+  mediaSide: (i % 2 === 0 ? 'right' : 'left') as 'right' | 'left',
+  surface: (i % 2 === 1 ? 'muted' : 'default') as 'muted' | 'default',
 }));
 
+const jumps = sections
+  .filter((s) => s.id)
+  .map((s) => ({ href: `#${s.id}`, label: s.title.replace(/<[^>]+>/g, '') }));
+
+const heroRibbon = 'M 120 720 C 520 420, 980 860, 1380 540 C 1700 300, 1980 560, 2060 420';
 const variant = it.slug === 'privatni-mobilita' ? 'cream' : 'ink';
 const crossOther = it.slug === 'privatni-mobilita'
   ? { eyebrow: 'Doprava', title: 'Sdílená <em>mobilita</em>', href: '/doprava/sdilena-mobilita/', variant: 'ink' as const }
   : { eyebrow: 'Doprava', title: 'Privátní <em>mobilita</em>', href: '/doprava/privatni-mobilita/', variant: 'cream' as const };
 ---
-<FractalPage
-  title={`${it.name} · Doprava · Startovací Hub Klecany`}
-  description={it.lede}
-  hero={{
-    eyebrow: 'Doprava',
-    title: it.name,
-    sub: it.lede,
-    variant,
-    ariaId: it.slug,
-  }}
-  sections={sections}
-  cta={{
-    eyebrow: 'Rezervace',
-    title: 'Bydlete <em>na prahu</em> metropole',
-    lede: 'Vyberte si formát bydlení a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin.',
-    cta: { label: 'Nezávazná rezervace', href: '/rezervace/' },
-    variant: 'deep',
-  }}
-  crossLinks={[
+<Base title={`${it.name} · Doprava · Startovací Hub Klecany`} description={it.lede} headerVariant="overlay">
+  <SubpageHero
+    eyebrow="Doprava"
+    title={it.name}
+    sub={it.lede}
+    variant={variant}
+    ribbonPath={heroRibbon}
+    jumps={jumps}
+    ariaId={it.slug}
+  />
+
+  {sections.map((s) => (
+    <>
+      <Section {...s} />
+      {it.slug === 'sdilena-mobilita' && s.id === 'mhd' && <DepartureBoard />}
+    </>
+  ))}
+
+  <CtaBanner
+    eyebrow="Rezervace"
+    title="Bydlete <em>na prahu</em> metropole"
+    lede="Vyberte si formát bydlení a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="deep"
+  />
+
+  <CrossLinkPair items={[
     crossOther,
-    { eyebrow: 'Zázemí', title: 'Celé <em>zázemí</em> Hubu', href: '/zazemi/', variant: 'cream' },
-  ]}
-/>
+    { eyebrow: 'Zázemí', title: 'Celé <em>zázemí</em> Hubu', href: '/zazemi/', variant: it.slug === 'privatni-mobilita' ? 'ink' : 'cream' },
+  ]} />
+</Base>

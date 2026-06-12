@@ -96,7 +96,7 @@ const stripPath = ribbonPaths[data.slug] ?? ribbonPaths['1kk'];
         <h2 class="apt-body__sub">Specifikace</h2>
         <dl class="apt-spec">
           <div><dt>Plocha</dt><dd>{data.plocha}</dd></div>
-          <div><dt>Kapacita</dt><dd>{data.kapacita} lůžek v ceně</dd></div>
+          <div><dt>Kapacita</dt><dd>až {data.kapacita} {data.kapacita <= 4 ? 'osoby' : 'osob'}</dd></div>
           <div><dt>Konfigurace lůžek</dt><dd>{data.konfigurace}</dd></div>
           <div><dt>Vlastní koupelna</dt><dd>{data.koupelna}</dd></div>
           {data.wc && <div><dt>WC</dt><dd>{data.wc}</dd></div>}

@@ -133,6 +133,9 @@ const zazemiItem = z.object({
   priceNote: z.string().optional(),
   order: z.number().int().optional(),
   flags: z.array(z.string()).optional(),
+  /* Viditelný cross-link na jinou sekci webu (např. „Dopravní dostupnost"
+     u zastávek MHD). Renderuje se jako outline action tlačítko sekce. */
+  action: z.object({ label: z.string(), href: z.string() }).optional(),
 });
 const zazemi = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/zazemi' }),
@@ -147,6 +150,27 @@ const zazemi = defineCollection({
       lede: z.string(),
     }),
     items: z.array(zazemiItem),
+  }),
+});
+
+/* === NOVINKY (články) ===
+ * MDX per článek. Listing /novinky/ + detail /novinky/<slug>/ se generují
+ * z kolekce; přidat článek = přidat MDX soubor, žádná šablona se nemění.
+ * Datum ISO (YYYY-MM-DD), formátuje se až v šabloně (cs-CZ). */
+const novinky = defineCollection({
+  loader: glob({ pattern: '*.mdx', base: './src/content/novinky' }),
+  schema: z.object({
+    title: z.string().min(5).max(120),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    category: z.string(),
+    excerpt: z.string().min(20).max(300),
+    source: z.string().optional(),
+    image: z.object({
+      src: z.string().optional(),
+      placeholder: z.string().optional(),
+      alt: z.string(),
+    }),
+    hidden: z.boolean().optional(),
   }),
 });
 
@@ -185,4 +209,4 @@ const org = defineCollection({
   }),
 });
 
-export const collections = { apartmany, sdilenePokoje, zazemi, faq, org };
+export const collections = { apartmany, sdilenePokoje, zazemi, novinky, faq, org };

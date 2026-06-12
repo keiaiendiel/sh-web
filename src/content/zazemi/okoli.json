@@ -6,7 +6,7 @@
   "intro": {
     "eyebrow": "Zázemí · Okolí",
     "title": "Co najdete kolem Klecan",
-    "lede": "Klidná obec na severním okraji Prahy. Hlubokou práci zvládnete v Klecanech, rušnější život v Praze máte patnáct minut autobusem. Školy, ordinace, obchody, sport, příroda i pošta máte v docházkové nebo krátké dojezdové vzdálenosti. Adresy, vzdálenosti a otevírací doby ověřujeme a uvádíme s datem poslední kontroly."
+    "lede": "Klidná obec na severním okraji Prahy. Hlubokou práci zvládnete v Klecanech, rušnější život v Praze máte patnáct minut autobusem. Školy, ordinace, obchody, sport, příroda i pošta máte v docházkové nebo krátké dojezdové vzdálenosti."
   },
   "items": [
     {
@@ -37,19 +37,35 @@
       "priceNote": ""
     },
     {
-      "name": "Cyklotrasy a EuroVelo 7",
-      "slug": "cyklotrasy",
-      "lede": "Dálková cyklotrasa EuroVelo 7 vede údolím podél Vltavy. Z Hubu na ni dojedete za zhruba deset minut na kole, směrem na Prahu i na Mělník.",
+      "name": "Obchody a nákupy",
+      "slug": "obchody",
+      "lede": "Samoobsluhu máte v dosahu minuty, smíšené zboží a drogerii v centru obce, velký nákup kyvadlovou dopravou MyShelter nebo na kole v Lidlu Zdiby.",
       "blocks": [
         {
-          "subtitle": "EuroVelo 7",
-          "text": "Cyklostezka EuroVelo 7 je dostupná nonstop, na kole jste u ní za zhruba deset minut, pěšky asi za třicet. Vede po vltavském nábřeží směrem na Prahu i opačně na Mělník."
+          "subtitle": "Samoobsluha Astrapark",
+          "text": "Nejbližší samoobsluha v sousedním Astraparku, zhruba minutu pěšky. Hodí se na běžný denní nákup."
+        },
+        {
+          "subtitle": "Smíšené zboží, drogerie a železářství Klecany",
+          "text": "Smíšené zboží, drogerie a železářství v centru obce, 8 minut pěšky. Potraviny Klecany (V Honech 690/1, otevřeno Po až Ne 7:00 až 19:00, prodávají i jízdenky PID) a Drogerie Och! (Do Klecánek 58, otevřeno od 8:30)."
+        },
+        {
+          "subtitle": "Lidl Zdiby",
+          "text": "Ke Zdibsku 272 ve Zdibech, asi 3,5 km. Pět minut kyvadlovou dopravou MyShelter (zastávka Lidl Zdiby), deset minut na kole, zhruba půl hodiny pěšky. Otevřeno Po až Ne do 21:00. Hlavní velký nákup."
+        },
+        {
+          "subtitle": "Hornbach Praha-Čimice",
+          "text": "Nejbližší hobbymarket pro vybavení a kutilské potřeby v Praze-Čimicích. Deset minut kyvadlovou dopravou MyShelter (zastávka Hornbach Čimice) nebo MHD."
+        },
+        {
+          "subtitle": "Donáška domů",
+          "text": "Rohlík.cz a Košík.cz doručují přímo do Klecan, takže velký nákup zvládnete i bez auta."
         }
       ],
       "images": [
         {
-          "src": "/images/hub/okoli/02-cyklostezka.jpg",
-          "alt": "Cyklostezka EuroVelo 7 podél Vltavy"
+          "src": "/images/hub/okoli/01-areal-dostupnost.jpg",
+          "alt": "Dostupnost obchodů a služeb kolem areálu Klecany"
         }
       ],
       "bookable": false,
@@ -67,6 +83,10 @@
           "text": "Krytý dřevěný skatepark v bývalém vojenském areálu Dolní Kasárna, zhruba sto metrů od Hubu. Otevřeno Po až Pá 14:00 až 21:00, So a Ne 10:00 až 21:00."
         },
         {
+          "subtitle": "Sportovní areál sever",
+          "text": "Rozsáhlý sportovní areál na severní straně areálu (v přípravě)."
+        },
+        {
           "subtitle": "Fotbalové hřiště TJ Sokol Klecany",
           "text": "Na Skalkách 368/33, asi 1,8 km od Hubu, sedm minut na kole. Tréninky podle rozpisu klubu."
         },
@@ -76,7 +96,7 @@
         },
         {
           "subtitle": "Pumptrack",
-          "text": "Pumptrack se v okolí plánuje. Než ho ověříme přímo na místě, berte tuto zmínku jako orientační."
+          "text": "Pumptrack vzniká v okolí obce."
         }
       ],
       "images": [
@@ -93,43 +113,28 @@
       "priceNote": ""
     },
     {
-      "name": "Obchody a nákupy",
-      "slug": "obchody",
-      "lede": "Samoobsluha máte v dosahu minuty, drobné potraviny a drogerii v centru obce, velký nákup na kole nebo autem v Lidlu Zdiby.",
+      "name": "Cyklotrasy a EuroVelo 7",
+      "slug": "cyklotrasy",
+      "lede": "Dálková cyklotrasa EuroVelo 7 vede údolím podél Vltavy. Z Hubu na ni dojedete za zhruba deset minut na kole, směrem na Prahu i na Mělník.",
       "blocks": [
         {
-          "subtitle": "Samoobsluha Astrapark",
-          "text": "Nejbližší samoobsluha v sousedním Astraparku, zhruba minutu pěšky. Hodí se na běžný denní nákup."
+          "subtitle": "EuroVelo 7",
+          "text": "Cyklostezka EuroVelo 7 je dostupná nonstop, na kole jste u ní za zhruba deset minut, pěšky asi za třicet. Vede po vltavském nábřeží směrem na Prahu i opačně na Mělník."
         },
         {
-          "subtitle": "Potraviny a drogerie Klecany",
-          "text": "Potraviny Klecany (V Honech 690/1, asi 1,6 km, otevřeno Po až Ne 7:00 až 19:00, prodávají i jízdenky PID) a Drogerie Och! (Do Klecánek 58, asi 1,1 km, otevřeno od 8:30). Smíšené zboží, drogerii a železářství v centru obce ještě ověříme."
-        },
-        {
-          "subtitle": "Lidl Zdiby",
-          "text": "Ke Zdibsku 272 ve Zdibech, asi 3,5 km. Šest minut autem, patnáct minut na kole, otevřeno Po až Ne do 21:00. Hlavní velký nákup."
-        },
-        {
-          "subtitle": "Hornbach Praha-Čimice",
-          "text": "Nejbližší hobbymarket pro vybavení a kutilské potřeby, v Praze-Čimicích. Dojezd autem ověříme."
-        },
-        {
-          "subtitle": "Donáška domů",
-          "text": "Rohlík.cz a Košík.cz doručují přímo do Klecan, takže velký nákup zvládnete i bez auta."
+          "subtitle": "Další směry",
+          "text": "Značené trasy vedou z Klecan také směrem na Odolenu Vodu a do Prahy-Letňan."
         }
       ],
       "images": [
         {
-          "src": "/images/hub/okoli/01-areal-dostupnost.jpg",
-          "alt": "Dostupnost obchodů a služeb kolem areálu Klecany"
+          "src": "/images/hub/okoli/02-cyklostezka.jpg",
+          "alt": "Cyklostezka EuroVelo 7 podél Vltavy"
         }
       ],
       "bookable": false,
       "detail": false,
-      "flags": [
-        "smíšené zboží / železářství Klecany ověřit",
-        "Hornbach Čimice ověřit minutáž"
-      ],
+      "flags": [],
       "priceNote": ""
     },
     {
@@ -151,7 +156,7 @@
         },
         {
           "subtitle": "Knihovna a církevní ZŠ",
-          "text": "V obci funguje knihovna a ve výstavbě je církevní základní škola. Přesnou adresu, otevírací dobu i termín otevření školy ještě ověříme."
+          "text": "V obci funguje knihovna a ve výstavbě je církevní základní škola."
         },
         {
           "subtitle": "Střední školy",
@@ -208,7 +213,7 @@
       "blocks": [
         {
           "subtitle": "Spolky a oddíly",
-          "text": "V obci působí skautské středisko, sbor dobrovolných hasičů, komunitní spolek Pravý hradec a Sportovní Jezdecký Klub Klecany (Do Klecánek 25, asi 1,1 km). V okolí se dají najít i oddíly lukostřelby a biatlonu."
+          "text": "V obci působí skautské středisko, sbor dobrovolných hasičů, komunitní spolek Pravý hradec a Sportovní Jezdecký Klub Klecany (Do Klecánek 25, asi 1,1 km). Působí tu i oddíly lukostřelby Klecany a biatlonu Klecany."
         },
         {
           "subtitle": "Klub volného času",
@@ -223,9 +228,7 @@
       ],
       "bookable": false,
       "detail": false,
-      "flags": [
-        "skaut, hasiči, Pravý hradec, lukostřelba, biatlon ověřit (vault mlčí, dle zadání)"
-      ],
+      "flags": [],
       "priceNote": ""
     },
     {
@@ -310,9 +313,11 @@
       ],
       "bookable": false,
       "detail": false,
-      "flags": [
-        "víc o spojení na stránce Doprava"
-      ],
+      "action": {
+        "label": "Dopravní dostupnost",
+        "href": "/doprava/"
+      },
+      "flags": [],
       "priceNote": ""
     },
     {
@@ -330,7 +335,7 @@
         },
         {
           "subtitle": "Večerní a víkendové spoje",
-          "text": "Linka 374 jezdí večer a o víkendu řidčeji. Tuto mezeru pokrývá Hub-shuttle a Hub-taxi, pět jízd a jedna jízda měsíčně máte v ceně bydlení."
+          "text": "Linka 374 jezdí večer a o víkendu řidčeji. Tuto mezeru pokrývá kyvadlová doprava MyShelter a sdílené taxi, pět jízd kyvadlovkou a jednu jízdu taxi měsíčně máte v ceně bydlení."
         }
       ],
       "images": [

@@ -15,8 +15,8 @@ type NavLink = { path: string; label: string; placeholder?: boolean };
 const nav: NavLink[] = [
   { path: '/ubytovani/', label: 'Ubytování' },
   { path: '/zazemi/',    label: 'Zázemí' },
-  { path: '/doprava/',   label: 'Doprava' },
   { path: '/stipendia/', label: 'Stipendia' },
+  { path: '/doprava/',   label: 'Doprava' },
   { path: '/galerie/',   label: 'Galerie' },
   { path: '/cenik/',     label: 'Ceník' },
   { path: '/novinky/',   label: 'Novinky' },
@@ -86,7 +86,7 @@ const isHome = current === withBase('/');
       </nav>
       <div class="hub-menu__foot">
         <a href={withBase('/rezervace/')} class="hub-menu__reserve-btn osa-nolink" aria-current={reservationActive ? 'page' : undefined}>
-          <span>Rezervovat</span>
+          <span>Rezervace</span>
           <Icon name="arrow-right" size={18} />
         </a>
         <button type="button" class="hub-menu__acct" data-placeholder aria-label="Přihlásit se (připravujeme)">

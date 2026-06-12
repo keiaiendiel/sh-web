@@ -30,9 +30,10 @@ const sdileneRows = sdilene.map((e) => {
 });
 const privatniRows = privatni.map((e) => {
   const d = e.data;
+  const osob = d.kapacita <= 4 ? 'osoby' : 'osob';
   return {
     label: d.name,
-    note: `${d.plocha} · ${d.kapacita} lůžek`,
+    note: `${d.plocha} · až ${d.kapacita} ${osob}`,
     price: d.cena.anchor,
   };
 });
@@ -62,7 +63,7 @@ const sections = [
     id: 'privatni',
     jumpLabel: 'Privátní apartmány',
     title: 'Privátní apartmány',
-    lede: 'Celý byt jen pro vás: vlastní koupelna, kuchyň i vchod. Pět velikostí od 1+kk pro pár po 5+kk pro skupinu deseti. Cena platí za celý byt, takže čím víc vás bude, tím nižší nájem na osobu.',
+    lede: 'Celý byt jen pro vás, nejvyšší míra soukromí v Hubu: vlastní koupelna, kuchyň i vchod. Pět velikostí od 1+kk až po 5+kk pro skupinu až patnácti. Cena platí za celý byt, takže čím víc vás bude, tím nižší nájem na osobu.',
     actions: [
       { label: 'Privátní apartmány', href: '/ubytovani/privatni/', kind: 'detail' as const },
       { label: 'Rezervovat apartmán', href: '/rezervace/?cesta=apartman', kind: 'reserve' as const },

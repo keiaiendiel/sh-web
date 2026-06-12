@@ -6,25 +6,25 @@
   "intro": {
     "eyebrow": "Zázemí",
     "title": "Coworking, dílny a studia",
-    "lede": "Pracovní zázemí Hubu je v budově C v jádře areálu. Volný stůl ve velkém sále, fixní stůl s vlastní skříňkou, vybavené kanceláře, zasedací místnosti na hodinovou rezervaci, ateliéry a sdílené dílny v samostatných objektech. Pro rezidenty Hubu je volný stůl v sále v ceně bydlení s přístupem 24/7, externí pracovníci z okolí si berou kterýkoli formát za měsíční nebo hodinový tarif. Recepce v budově S k tomu řeší zásilky, tisk a sídla firem. Provoz spouštíme po etapách, část studií a dílen je zatím v přípravě."
+    "lede": "Pracovní zázemí Hubu je v budově C v jádře areálu. Volný stůl ve velkém sále, fixní stůl s vlastní skříňkou, vybavené kanceláře, zasedací místnosti na hodinovou rezervaci, ateliéry a sdílené dílny v samostatných objektech, k tomu podcastová, střihová a filmová studia a učebny. Pro rezidenty Hubu je volný stůl v sále v ceně bydlení s přístupem 24/7, externí pracovníci z okolí si berou kterýkoli formát za měsíční nebo hodinový tarif. Recepce v budově S k tomu řeší zásilky, tisk a sídla firem."
   },
   "items": [
     {
       "name": "Recepce a kancelářské služby",
       "slug": "recepce",
-      "lede": "Recepce v budově S vyřídí zásilky, tisk a kopírování, virtuální sídlo firmy i schůzky. Část služeb je v přípravě, spouštíme je po etapách s provozem Hubu.",
+      "lede": "Recepce v budově S vyřídí příjem i odesílání zásilek, tisk a kopírování, virtuální sídlo firmy i schůzky.",
       "blocks": [
         {
           "subtitle": "Zásilky a tisk",
-          "text": "Na recepci převezmeme a uložíme vaše zásilky, dokud si je nevyzvednete. K dispozici je tisk, kopírování a skenování za drobný kredit."
+          "text": "Na recepci převezmeme a uložíme vaše zásilky, dokud si je nevyzvednete, a odešleme balíky i doporučenou poštu za vás. K dispozici je tisk, kopírování a skenování za drobný kredit."
         },
         {
           "subtitle": "Sídlo firmy",
-          "text": "Plánujeme nabídnout virtuální sídlo pro OSVČ a firmy na adrese Hubu, samostatný poskytovatel sídla v Praze stojí zhruba 135 až 330 Kč měsíčně. K tomu chystáme zakládání ready-made společností a přeposílání pošty. Tyto služby jsou zatím v přípravě, podmínky upřesníme před spuštěním."
+          "text": "Virtuální sídlo pro OSVČ a firmy na adrese Hubu, k tomu prodej ready-made společností a přeposílání pošty. Srovnatelný samostatný poskytovatel sídla v Praze stojí zhruba 135 až 330 Kč měsíčně."
         },
         {
           "subtitle": "Asistence",
-          "text": "Počítáme s virtuálními asistenty pro administrativu a s domlouváním schůzek přes recepci. Rozsah těchto služeb teprve dolaďujeme, na webu je uvádíme jako plánované."
+          "text": "Služby virtuální asistence: administrativa, domlouvání a potvrzování schůzek přes recepci."
         }
       ],
       "images": [
@@ -35,10 +35,8 @@
       ],
       "bookable": false,
       "detail": true,
-      "priceNote": "Tisk a kopírování za drobný kredit. Sídlo firmy a další služby: ceny upřesníme před spuštěním.",
-      "flags": [
-        "v-priprave"
-      ]
+      "priceNote": "Tisk a kopírování za drobný kredit. Ceník sídel a asistence doplníme.",
+      "flags": []
     },
     {
       "name": "Coworkingový sál (volný stůl)",
@@ -179,11 +177,11 @@
     {
       "name": "Ateliéry a sdílené dílny",
       "slug": "ateliery-dilny",
-      "lede": "Ateliéry pro tvořivou práci v budově D1 a sdílené dílny v objektech H1 až H3, D1 a D2. Ateliér 15 až 25 m² za 6 500 Kč měsíčně, členská dílna 490 Kč měsíčně, těžké stroje za hodinovou sazbu 150 Kč.",
+      "lede": "Ateliéry pro tvořivou práci v budově D1 a sdílené dílny v objektech H1 až H3, D1 a D2, ke krátkodobému i dlouhodobému pronájmu. Ateliér 15 až 25 m² za 6 500 Kč měsíčně, členská dílna 490 Kč měsíčně, těžké stroje za hodinovou sazbu 150 Kč.",
       "blocks": [
         {
           "subtitle": "Ateliéry",
-          "text": "Ateliéry jsou v budově D1, hlavním ateliérovém bloku. Plocha 15 až 25 m², vlastní zámek a přístup 24/7, velká okna pro denní světlo, elektrika 16 A jednofázová (380 V po dohodě), umyvadlo, skladovací prostor v patře. Pro malíře, grafiky, keramiky, řemeslníky s vlastním nářadím, fotografy s vlastním studiem. Cena 6 500 Kč měsíčně za 20 m²."
+          "text": "Ateliéry jsou v budově D1, hlavním ateliérovém bloku. Plocha 15 až 25 m², vlastní zámek a přístup 24/7, velká okna pro denní světlo, elektrika 16 A jednofázová (380 V po dohodě), umyvadlo, skladovací prostor v patře. Pro malíře, grafiky, keramiky, řemeslníky s vlastním nářadím, fotografy s vlastním studiem. Dlouhodobě 6 500 Kč měsíčně za 20 m², krátkodobě na den nebo víkend po dohodě s recepcí."
         },
         {
           "subtitle": "Členská dílna",
@@ -212,78 +210,88 @@
       ]
     },
     {
-      "name": "Podcastová a střihová studia",
-      "slug": "podcast-strih-studia",
-      "lede": "Pro tvůrce chystáme odhlučněné podcastové studio na nahrávání a střihová pracoviště na postprodukci. Studia jsou v přípravě, vybavení a ceny upřesníme před spuštěním.",
+      "name": "Podcastová studia",
+      "slug": "podcastova-studia",
+      "lede": "Odhlučněná studia pro nahrávání rozhovorů a podcastů, ke krátkodobému i dlouhodobému pronájmu.",
       "blocks": [
         {
-          "subtitle": "Podcastové studio",
-          "text": "Plánujeme odhlučněnou místnost pro nahrávání rozhovorů a podcastů s mikrofony, mixem a místem pro několik hostů. Studio je zatím v přípravě, konkrétní vybavení a rezervační podmínky doplníme, jakmile bude provoz blíž."
-        },
-        {
-          "subtitle": "Střihová pracoviště",
-          "text": "Ke studiu chystáme střihová pracoviště pro video a audio postprodukci s výkonnými počítači a kalibrovanými monitory. Také v přípravě, na webu je uvádíme jako plánované."
+          "subtitle": "Vybavení",
+          "text": "Odhlučněná místnost s mikrofony, mixem a místem pro několik hostů. Rezervujete přes komunitní aplikaci na hodiny, pro pravidelné pořady i dlouhodobě."
         }
       ],
       "images": [
         {
           "placeholder": "Foto se připravuje: podcastové studio s mikrofony a odhlučněním",
-          "alt": "Podcastové studio Hubu, vizualizace se připravuje"
+          "alt": "Podcastové studio Hubu"
         }
       ],
-      "bookable": false,
+      "bookable": true,
       "detail": true,
-      "flags": [
-        "v-priprave"
-      ]
+      "priceNote": "Sazby pronájmu doplníme.",
+      "flags": []
     },
     {
-      "name": "Filmové studio",
-      "slug": "filmove-studio",
-      "lede": "Pro náročnější produkce plánujeme filmové studio se světly, green screenem a virtuálními kulisami. Studio je v přípravě, parametry a ceny upřesníme před spuštěním.",
+      "name": "Střihová studia",
+      "slug": "strihova-studia",
+      "lede": "Střihová pracoviště pro video a audio postprodukci, ke krátkodobému i dlouhodobému pronájmu.",
       "blocks": [
         {
-          "subtitle": "Co chystáme",
-          "text": "Studio s nasvícením, green screenem pro klíčování a virtuálními kulisami pro práci s digitálním pozadím. Hodí se pro natáčení rozhovorů, produktových videí a tvůrčích projektů. Vybavení, plochu a rezervační podmínky doplníme, jakmile bude provoz blíž."
+          "subtitle": "Vybavení",
+          "text": "Výkonné počítače se střihovým softwarem a kalibrovanými monitory. Navazují na podcastová a filmová studia, takže natočený materiál zpracujete pod jednou střechou."
+        }
+      ],
+      "images": [
+        {
+          "placeholder": "Foto se připravuje: střihové pracoviště s kalibrovanými monitory",
+          "alt": "Střihové studio Hubu"
+        }
+      ],
+      "bookable": true,
+      "detail": true,
+      "priceNote": "Sazby pronájmu doplníme.",
+      "flags": []
+    },
+    {
+      "name": "Filmová studia",
+      "slug": "filmova-studia",
+      "lede": "Filmová studia se světly, green screenem a virtuálními kulisami, ke krátkodobému i dlouhodobému pronájmu.",
+      "blocks": [
+        {
+          "subtitle": "Vybavení",
+          "text": "Profesionální nasvícení, green screen pro klíčování a virtuální kulisy pro práci s digitálním pozadím. Hodí se pro natáčení rozhovorů, produktových videí a tvůrčích projektů. Rezervujete přes komunitní aplikaci."
         }
       ],
       "images": [
         {
           "placeholder": "Foto se připravuje: filmové studio s green screenem a světly",
-          "alt": "Filmové studio Hubu, vizualizace se připravuje"
+          "alt": "Filmové studio Hubu"
         }
       ],
-      "bookable": false,
+      "bookable": true,
       "detail": true,
-      "flags": [
-        "v-priprave"
-      ]
+      "priceNote": "Sazby pronájmu doplníme.",
+      "flags": []
     },
     {
       "name": "Učebny",
       "slug": "ucebny",
-      "lede": "Učebny jsou v 1. NP budovy U vedle coworkingu. Slouží pro kurzy, workshopy a školení rezidentů i externích lektorů. Konkrétní vybavení a rezervační podmínky upřesňujeme.",
+      "lede": "Učebny v 1. NP budovy U vedle coworkingu, ke krátkodobému pronájmu. Slouží pro kurzy, workshopy a školení rezidentů i externích lektorů.",
       "blocks": [
         {
           "subtitle": "K čemu slouží",
-          "text": "Učebny doplňují coworkingové zázemí o prostor pro výuku a skupinová setkání: jazykové kurzy, odborná školení, workshopy, přednášky. Najdete je v budově U v 1. NP, sklady jsou v 1. PP."
-        },
-        {
-          "subtitle": "Provoz",
-          "text": "Provoz a kapacitu učeben spouštíme společně se zázemím v budově U. Vybavení (projektor, ozvučení, počet míst) a ceny rezervace doplníme před otevřením."
+          "text": "Učebny doplňují coworkingové zázemí o prostor pro výuku a skupinová setkání: jazykové kurzy, odborná školení, workshopy, přednášky. Najdete je v budově U v 1. NP, sklady jsou v 1. PP. Rezervujete přes recepci nebo komunitní aplikaci."
         }
       ],
       "images": [
         {
           "placeholder": "Foto se připravuje: učebna v budově U pro kurzy a workshopy",
-          "alt": "Učebna Hubu, vizualizace se připravuje"
+          "alt": "Učebna Hubu"
         }
       ],
-      "bookable": false,
+      "bookable": true,
       "detail": true,
-      "flags": [
-        "v-priprave"
-      ]
+      "priceNote": "Sazby pronájmu doplníme.",
+      "flags": []
     }
   ]
 }

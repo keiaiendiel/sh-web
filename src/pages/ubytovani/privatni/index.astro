@@ -17,7 +17,7 @@ const sections = apartmany.map((e) => {
     jumpLabel: d.shortName,
     title: d.name,
     lede: d.popis,
-    blocks: [{ subtitle: 'Dispozice', text: `${d.plocha}, ${d.kapacita} lůžek. ${d.konfigurace}` }],
+    blocks: [{ subtitle: 'Dispozice', text: `${d.plocha}, až ${d.kapacita} ${d.kapacita <= 4 ? 'osoby' : 'osob'}. ${d.konfigurace}` }],
     priceRows: [
       { label: 'Anchor cena', note: 'za celý byt a měsíc', price: d.cena.anchor, priceNote: d.cena.perOsoba },
     ],
@@ -35,7 +35,7 @@ const sections = apartmany.map((e) => {
   hero={{
     eyebrow: 'Ubytování · Privátní apartmány',
     title: 'Privátní <em>apartmány</em>',
-    sub: 'Celý byt jen pro vás: vlastní koupelna, kuchyň i vchod. Pět velikostí od 1+kk pro pár po 5+kk pro skupinu deseti lidí.',
+    sub: 'Celý byt jen pro vás, nejvyšší míra soukromí v Hubu: vlastní koupelna, kuchyň i vchod. Pět velikostí od 1+kk až po 5+kk pro skupinu až patnácti lidí.',
     variant: 'cream',
     ariaId: 'privatni',
   }}

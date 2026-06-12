@@ -1,0 +1,279 @@
+---
+/*
+ * DepartureBoard , „Nejbližší odjezdy" panel pro /doprava/sdilena-mobilita/.
+ *
+ * Fáze 1 (teď): časy se počítají client-side ze statického jízdního řádu
+ * v JSON islandu níže (interval ve špičce / mimo špičku). Obnovuje se
+ * každou minutu, takže panel vždy „svítí" aktuálními odjezdy.
+ *
+ * Fáze 2 (pro kodéra): napojení na živá data PID (Golemio API,
+ * https://api.golemio.cz/v2/pid/departureboards). Stačí nahradit funkci
+ * computeDepartures() fetchem , kontejner má data-api="pid-golemio"
+ * a každý stop má data-stop-id pro mapování na PID identifikátory.
+ */
+type Window = [string, string];
+type Service =
+  | { type: 'interval'; start: string; end: string; peak: Window[]; peakEvery: number; every: number }
+  | { type: 'peak-ondemand'; peak: Window[]; every: number; offpeak: string };
+
+type Stop = {
+  id: string;
+  name: string;
+  meta: string;
+  walk: string;
+  service: Service;
+};
+
+const stops: Stop[] = [
+  {
+    id: 'myshelter-areal',
+    name: 'MyShelter, zastávka v areálu',
+    meta: 'směr metro Kobylisy',
+    walk: '2 minuty pěšky',
+    service: {
+      type: 'peak-ondemand',
+      peak: [['06:30', '09:30'], ['15:30', '18:30']],
+      every: 30,
+      offpeak: 'mimo špičku na zavolání, jezdí nonstop',
+    },
+  },
+  {
+    id: 'bus-374-astrapark',
+    name: 'BUS 374, Astrapark',
+    meta: 'směr metro Kobylisy',
+    walk: '1 minuta pěšky',
+    service: {
+      type: 'interval',
+      start: '04:40',
+      end: '23:10',
+      peak: [['06:30', '09:30'], ['15:30', '18:30']],
+      peakEvery: 15,
+      every: 30,
+    },
+  },
+  {
+    id: 'bus-374-u-hrbitova',
+    name: 'BUS 374, U Hřbitova',
+    meta: 'směr metro Kobylisy',
+    walk: '4 minuty pěšky',
+    service: {
+      type: 'interval',
+      start: '04:42',
+      end: '23:12',
+      peak: [['06:30', '09:30'], ['15:30', '18:30']],
+      peakEvery: 15,
+      every: 30,
+    },
+  },
+];
+---
+<section class="dep" aria-label="Nejbližší odjezdy" data-departure-board data-api="pid-golemio">
+  <div class="dep__inner">
+    <header class="dep__head">
+      <p class="dep__eyebrow">Odjezdy</p>
+      <h3 class="dep__title">Nejbližší spoje od&nbsp;Hubu</h3>
+      <p class="dep__note">Časy vycházejí z platného jízdního řádu a počítají se podle vašeho času.</p>
+    </header>
+
+    <div class="dep__rows">
+      {stops.map((s) => (
+        <article class="dep__row" data-stop-id={s.id}>
+          <div class="dep__stop">
+            <span class="dep__dot" aria-hidden="true"></span>
+            <div class="dep__stop-type">
+              <span class="dep__stop-name">{s.name}</span>
+              <span class="dep__stop-meta">{s.meta} · {s.walk}</span>
+            </div>
+          </div>
+          <div class="dep__times" data-times aria-live="polite">
+            <span class="dep__chip dep__chip--wait">načítám&hellip;</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  {/* Statický jízdní řád pro fázi 1; kodér později nahradí PID API. */}
+  <script type="application/json" data-departure-config set:html={JSON.stringify(stops)} />
+</section>
+
+<script is:inline>
+  (function () {
+    function parseHM(s) {
+      var p = s.split(':');
+      return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+    }
+    function fmt(min) {
+      var h = Math.floor(min / 60) % 24;
+      var m = min % 60;
+      return (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m);
+    }
+    function inWindows(min, windows) {
+      for (var i = 0; i < windows.length; i++) {
+        if (min >= parseHM(windows[i][0]) && min <= parseHM(windows[i][1])) return true;
+      }
+      return false;
+    }
+    function intervalDepartures(svc) {
+      var out = [];
+      var t = parseHM(svc.start);
+      var end = parseHM(svc.end);
+      while (t <= end) {
+        out.push(t);
+        t += inWindows(t, svc.peak) ? svc.peakEvery : svc.every;
+      }
+      return out;
+    }
+    function nextThree(svc, now) {
+      if (svc.type === 'peak-ondemand') {
+        var res = [];
+        for (var i = 0; i < svc.peak.length; i++) {
+          var from = parseHM(svc.peak[i][0]);
+          var to = parseHM(svc.peak[i][1]);
+          for (var t = from; t <= to; t += svc.every) {
+            if (t >= now) res.push(t);
+          }
+        }
+        return { times: res.slice(0, 3), fallback: svc.offpeak };
+      }
+      var all = intervalDepartures(svc).filter(function (t) { return t >= now; });
+      return { times: all.slice(0, 3), fallback: 'dnes už nejede, první spoj ráno v ' + svc.start };
+    }
+    function render() {
+      var board = document.querySelector('[data-departure-board]');
+      if (!board) return;
+      var cfgEl = board.querySelector('[data-departure-config]');
+      if (!cfgEl) return;
+      var stops;
+      try { stops = JSON.parse(cfgEl.textContent); } catch (e) { return; }
+      var d = new Date();
+      var now = d.getHours() * 60 + d.getMinutes();
+      stops.forEach(function (s) {
+        var row = board.querySelector('[data-stop-id="' + s.id + '"] [data-times]');
+        if (!row) return;
+        var nx = nextThree(s.service, now);
+        var html = '';
+        nx.times.forEach(function (t, i) {
+          html += '<span class="dep__chip' + (i === 0 ? ' dep__chip--next' : '') + '">' + fmt(t) + '</span>';
+        });
+        if (nx.times.length === 0) {
+          html = '<span class="dep__chip dep__chip--info">' + nx.fallback + '</span>';
+        } else if (s.service.type === 'peak-ondemand') {
+          html += '<span class="dep__chip dep__chip--info">' + s.service.offpeak + '</span>';
+        }
+        row.innerHTML = html;
+      });
+    }
+    function bind() {
+      render();
+      if (window.__depBoardTimer) clearInterval(window.__depBoardTimer);
+      window.__depBoardTimer = setInterval(render, 60000);
+    }
+    document.addEventListener('astro:page-load', bind);
+    if (document.readyState !== 'loading') bind();
+    else document.addEventListener('DOMContentLoaded', bind);
+  }());
+</script>
+
+<style>
+  .dep {
+    background: var(--bg);
+    padding: 0 0 var(--space-7);
+  }
+  .dep__inner {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    background: var(--plum-deep);
+    color: #fff;
+    border-radius: var(--radius-input);
+    padding: clamp(24px, 3vw, 36px) clamp(24px, 3vw, 40px);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .dep__head { display: grid; gap: 6px; }
+  .dep__eyebrow {
+    font: 500 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--rose);
+    margin: 0;
+  }
+  .dep__title {
+    font: 600 clamp(1.25rem, 2vw, 1.625rem) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+  }
+  .dep__note {
+    font: 500 var(--text-xs) / 1.5 var(--font-sans);
+    color: rgba(255, 255, 255, 0.66);
+    margin: 0;
+    max-width: 60ch;
+  }
+  .dep__rows { display: grid; gap: 0; }
+  .dep__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-3) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+  .dep__stop { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .dep__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--rose);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 0 hsl(calc(var(--hue) + 44) 30% 70% / 0.7);
+    animation: dep-pulse 2.4s ease-out infinite;
+  }
+  @keyframes dep-pulse {
+    0%   { box-shadow: 0 0 0 0 hsl(calc(var(--hue) + 44) 30% 70% / 0.55); }
+    70%  { box-shadow: 0 0 0 9px hsl(calc(var(--hue) + 44) 30% 70% / 0); }
+    100% { box-shadow: 0 0 0 0 hsl(calc(var(--hue) + 44) 30% 70% / 0); }
+  }
+  .dep__stop-type { display: grid; gap: 2px; min-width: 0; }
+  .dep__stop-name {
+    font: 600 var(--text-sm) / 1.25 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+  }
+  .dep__stop-meta {
+    font: 500 var(--text-2xs) / 1.35 var(--font-sans);
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .dep__times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .dep__chip {
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #fff;
+  }
+  .dep__chip--next {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: var(--plum-deep);
+  }
+  .dep__chip--info,
+  .dep__chip--wait {
+    font-weight: 500;
+    font-size: var(--text-2xs);
+    color: rgba(255, 255, 255, 0.72);
+    border-style: dashed;
+  }
+  @media (max-width: 640px) {
+    .dep__row { grid-template-columns: 1fr; gap: 10px; }
+    .dep__times { justify-content: flex-start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dep__dot { animation: none; }
+  }
+</style>

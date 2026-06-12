@@ -1,0 +1,180 @@
+---
+/*
+ * Novinky , detail článku. Opakovatelný vzor: hlavička (datum + kategorie +
+ * H1 + perex) → hero foto → tělo článku (MDX prose, uvnitř ArticleImage
+ * komponenty) → další články → CTA. Přidat článek = přidat MDX, tahle
+ * šablona se nemění.
+ */
+import Base from '../../layouts/Base.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import Arrow from '../../components/Arrow.astro';
+import { getCollection, render } from 'astro:content';
+import { withBase } from '../../utils/url';
+
+export async function getStaticPaths() {
+  const news = await getCollection('novinky');
+  return news
+    .filter((n) => !n.data.hidden)
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const fmtDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' });
+
+/* Další články: 3 nejnovější kromě aktuálního. */
+const related = (await getCollection('novinky'))
+  .filter((n) => !n.data.hidden && n.id !== entry.id)
+  .sort((a, b) => b.data.date.localeCompare(a.data.date))
+  .slice(0, 3);
+---
+<Base
+  title={`${data.title} · Novinky · Startovací Hub Klecany`}
+  description={data.excerpt}
+  headerVariant="light">
+
+  <article class="art">
+    <header class="art__head">
+      <a class="art__back osa-nolink" href={withBase('/novinky/')}>
+        <Arrow dir="left" variant="chevron" size={14} weight={2.4} />
+        <span>Všechny novinky</span>
+      </a>
+      <p class="art__meta">{fmtDate(data.date)} · <span class="art__cat">{data.category}</span>{data.source && <> · {data.source}</>}</p>
+      <h1 class="art__title">{data.title}</h1>
+      <p class="art__lede">{data.excerpt}</p>
+    </header>
+
+    {data.image.src && (
+      <div class="art__hero">
+        <img src={withBase(data.image.src)} alt={data.image.alt} loading="eager" decoding="async" fetchpriority="high" />
+      </div>
+    )}
+
+    <div class="art__body">
+      <Content />
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <aside class="art-related" aria-label="Další novinky">
+      <div class="art-related__inner">
+        <h2 class="art-related__h">Další novinky</h2>
+        <div class="art-related__grid">
+          {related.map((n) => (
+            <NewsCard
+              date={fmtDate(n.data.date)}
+              category={n.data.category}
+              title={n.data.title}
+              excerpt={n.data.excerpt}
+              source={n.data.source}
+              image={n.data.image}
+              href={`/novinky/${n.id}/`}
+            />
+          ))}
+        </div>
+      </div>
+    </aside>
+  )}
+
+  <CtaBanner
+    eyebrow="Rezervace"
+    title="Rezervujte si <em>místo</em>"
+    lede="Vyberete formát, termín a způsob kontaktu. Z rezervačního oddělení vám zavoláme do 24 hodin."
+    cta={{ label: 'Nezávazná rezervace', href: '/rezervace/' }}
+    variant="deep"
+  />
+</Base>
+
+<style>
+  .art {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: 860px;
+    margin: 0 auto;
+    padding: var(--space-8) 0 var(--space-7);
+  }
+  .art__head { display: grid; gap: var(--space-3); margin-bottom: var(--space-6); }
+  .art__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    font: 600 var(--text-xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wide);
+    color: var(--accent);
+    text-decoration: none;
+    margin-bottom: var(--space-2);
+  }
+  .art__back:hover, .art__back:focus-visible { color: var(--plum-deep); outline: none; }
+  .art__meta {
+    font: 600 var(--text-2xs) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    margin: 0;
+  }
+  .art__cat { color: var(--accent); }
+  .art__title {
+    font: 700 clamp(1.875rem, 4vw, 2.75rem) / 1.12 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .art__lede {
+    font: 500 clamp(1.0625rem, 1.5vw, 1.1875rem) / 1.6 var(--font-sans);
+    color: var(--fg-muted);
+    margin: 0;
+    max-width: 60ch;
+  }
+  .art__hero {
+    margin: 0 0 var(--space-6);
+    border-radius: var(--radius-input);
+    overflow: hidden;
+  }
+  .art__hero img { width: 100%; height: auto; display: block; aspect-ratio: 16 / 9; object-fit: cover; }
+
+  /* Prose tělo článku: jednotný rytmus pro p / h2 / ul z MDX. */
+  .art__body :global(p) {
+    font: 400 var(--text-md) / 1.7 var(--font-sans);
+    color: var(--fg);
+    margin: 0 0 var(--space-4);
+    max-width: 64ch;
+  }
+  .art__body :global(h2) {
+    font: 600 clamp(1.25rem, 2.2vw, 1.625rem) / 1.25 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: var(--space-6) 0 var(--space-3);
+  }
+  .art__body :global(ul) {
+    margin: 0 0 var(--space-4);
+    padding-left: 1.2em;
+    display: grid;
+    gap: 6px;
+    font: 400 var(--text-md) / 1.6 var(--font-sans);
+  }
+  .art__body :global(a) { color: var(--accent); }
+
+  .art-related {
+    background: var(--bg-muted);
+    padding: var(--space-7) 0;
+  }
+  .art-related__inner {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+  .art-related__h {
+    font: 600 clamp(1.375rem, 2.4vw, 1.75rem) / 1.2 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--space-5);
+  }
+  .art-related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 28px);
+  }
+  @media (max-width: 900px) { .art-related__grid { grid-template-columns: 1fr; } }
+</style>

@@ -4,21 +4,17 @@
   "intro": {
     "eyebrow": "Areál Horních kasáren · Klecany",
     "title": "Startovací Hub",
-    "lede": "Prostor pro život a tvorbu na prahu metropole. Devět typů bydlení, od privátních kapslí po apartmán 5+kk. Energie a internet v ceně, coworking a sauna v areálu, možnost pobytového stipendia."
+    "lede": "Coliving a coworking na prahu metropole. Jedenáct formátů bydlení, od sdíleného lůžka po apartmán 5+kk. Energie a internet v ceně, coworking a sauna v areálu, možnost pobytového stipendia."
   },
   "items": [
     {
       "name": "Hero claim (landing)",
       "slug": "hero",
-      "lede": "Bydlení a tvorba na prahu metropole. Energie i internet v ceně.",
+      "lede": "Žijte, milujte & tvořte! Pod-slogan: MyShelter / coliving & coworking space.",
       "blocks": [
         {
-          "subtitle": "Primární CTA",
-          "text": "Rezervujte si místo (vede na /rezervace/)"
-        },
-        {
-          "subtitle": "Sekundární CTA",
-          "text": "Prohlédněte si možnosti ubytování (vede na /ubytovani/)"
+          "subtitle": "Hlavní konverzní CTA",
+          "text": "Rezervovat apartmán, Rezervovat lůžko, Požádat o stipendium (vedou na /rezervace/ s prefillem ?cesta=)"
         }
       ],
       "images": [
@@ -38,22 +34,21 @@
       "bookable": false,
       "detail": false,
       "flags": [
-        "hero ~10 slov, bez doslovného „15 min od metra“ per zadání",
-        "lede a CTA texty převzaty z vault §0.1; doslovný delší vault lead zkrácen na hero claim"
+        "hero motto a pod-slogan dle klientské tabulky Koncept webu (12. 6. 2026); živý zdroj je src/pages/index.astro"
       ]
     },
     {
-      "name": "Ubytování — úvod sekce",
+      "name": "Ubytování, úvod sekce",
       "slug": "ubytovani-section",
-      "lede": "V Hubu vybíráte z devíti typů bydlení. Šest formátů co-livingu, od sdíleného lůžka po uzamykatelnou kapsli a dvoulůžkový pokoj pro pár, a pět privátních apartmánů 1+kk až 5+kk. V ceně máte energie, internet, úklid společných prostor, jízdy Hub-shuttle do metra Kobylisy a poukaz do sauny.",
+      "lede": "V Hubu vybíráte z jedenácti formátů bydlení. Šest variant sdílených pokojů, od otevřeného lůžka přes lůžkové boxy po uzamykatelnou kapsli, a pět privátních apartmánů 1+kk až 5+kk. V ceně máte energie, internet, úklid společných prostor, jízdy kyvadlové dopravy MyShelter k metru Kobylisy a poukaz do sauny.",
       "blocks": [
         {
           "subtitle": "Privátní apartmány",
-          "text": "Celý byt jen pro vás: vlastní koupelna, vlastní kuchyň, vlastní vchod. Pět velikostí od 1+kk pro pár až po 5+kk pro skupinu deseti lidí. Cena platí za celý byt, takže čím víc vás bude, tím nižší nájem na osobu."
+          "text": "Celý byt jen pro vás, nejvyšší míra soukromí v Hubu: vlastní koupelna, vlastní kuchyň, vlastní vchod. Pět velikostí od 1+kk až po 5+kk pro skupinu až patnácti lidí. Cena platí za celý byt, takže čím víc vás bude, tím nižší nájem na osobu."
         },
         {
-          "subtitle": "Co-living",
-          "text": "Sdílíte koupelnu a kuchyň s ostatními rezidenty a platíte za lůžko nebo kapsli, ne za celý byt. Rozdíl mezi formáty je v míře soukromí: od otevřeného lůžka přes lůžko s dělícími stěnami po plně uzamykatelnou kapsli."
+          "subtitle": "Sdílené pokoje",
+          "text": "Sdílíte koupelnu a kuchyň s ostatními rezidenty a platíte za lůžko nebo kapsli, ne za celý byt. Rozdíl mezi formáty je v míře soukromí: základní (otevřené lůžko), zvýšená (lůžkový box s dělícími stěnami) a vysoká (plně uzamykatelná kapsle)."
         },
         {
           "subtitle": "Prohlédněte si",
@@ -69,73 +64,70 @@
       "bookable": false,
       "detail": true,
       "flags": [
-        "vault §1 úvod uvádí „devět typů, čtyři varianty co-livingu“; živý repos má šest co-living MDX (pokoj-basic, pokoj-privacy, kapsle-single, jedno-luzko, kapsle-double, dvouluzko), proto uvádím „šest formátů co-livingu“ — sjednotit číslo s vault",
         "Praha-komparace záměrně vynechána z body textu, patří jen na /metodika-srovnani/"
       ]
     },
     {
-      "name": "Co-living — srovnávací tabulka (6 formátů)",
+      "name": "Sdílené pokoje, srovnávací tabulka (6 variant)",
       "slug": "tabulka-sdilene",
-      "lede": "Šest formátů co-livingu seřazených od nejnižší ceny. Ceny jsou orientační anchor za měsíc (u párových formátů za celou kapsli nebo pokoj), s delším pobytem klesají.",
+      "lede": "Šest variant sdílených pokojů seřazených od nejnižší ceny. Ceny jsou anchor za měsíc (u párových formátů za celou kapsli nebo dvojlůžko), s delším pobytem klesají. Živý zdroj: src/content/sdilene-pokoje/*.mdx.",
       "blocks": [
         {
-          "subtitle": "Lůžko bez zvýšeného soukromí | cca 22–28 m² pokoj (4 lůžka) | 1 lůžko | matrace 200×90 nebo 200×120 cm | otevřená postel, vše sdílené se 3 spolubydlícími | 3 000 Kč",
-          "text": "Nejdostupnější bydlení v Hubu. Vlastní postel, noční stolek, lampa a zamykatelná skříňka ve čtyřlůžkovém pokoji."
+          "subtitle": "Lůžko ve sdíleném pokoji se základní mírou soukromí | 3 000 Kč",
+          "text": "Vlastní postel, noční stolek, lampa a zamykatelná skříňka ve čtyřlůžkovém pokoji bez příček."
         },
         {
-          "subtitle": "Lůžko se zvýšeným soukromím | cca 25–35 m² pokoj (4–6 lůžek) | 1 lůžko | matrace 200×90 nebo 210×100 cm | dřevěný box s dělícími stěnami a posuvnými dveřmi (bez zámku) | 3 500 Kč",
-          "text": "Vlastní lůžkový box s posuvnými dveřmi, čtecí lampou a poličkou. Více soukromí než otevřená postel, levnější než plná kapsle."
+          "subtitle": "Dvojlůžko ve sdíleném pokoji se základní mírou soukromí | orientačně 5 000 Kč",
+          "text": "Společné dvojlůžko v otevřeném pokoji bez příček, nejdostupnější bydlení pro dva. Cena orientační (pricePending)."
         },
         {
-          "subtitle": "Jednolůžko v pokoji | cca 18–22 m² pokoj (jen vy dva) | 1 lůžko | matrace 200×80 nebo 230×90 cm | celá postel ve dvoulůžkovém pokoji, vlastní stůl a skříň | 3 500 Kč",
-          "text": "Pronajímáte si jedno ze dvou lůžek v pokoji. Vlastní noční stolek, skříň i pracovní stůl, s druhým rezidentem sdílíte jen místnost. Spolubydlící párujeme podle preferencí."
+          "subtitle": "Lůžko ve sdíleném pokoji se zvýšenou mírou soukromí | 3 500 Kč",
+          "text": "Vlastní lůžkový box s dělícími stěnami, posuvnými dveřmi a čtecí lampou."
         },
         {
-          "subtitle": "Privátní jednolůžková kapsle | cca 3–4 m² kapsle ve sdíleném pokoji | 1 lůžko | matrace 210×150 nebo 230×160 cm | uzamykatelný modul, vlastní světlo, větrání a USB-C | 4 000 Kč",
-          "text": "Uzamykatelná kapsle ve sdíleném pokoji se 3 až 6 kapslemi. Matrace o 60 cm širší než standardní jednolůžko na koleji."
+          "subtitle": "Dvojlůžko ve sdíleném pokoji se zvýšenou mírou soukromí | 6 000 Kč",
+          "text": "Dvojlůžkový box s dělícími stěnami a posuvnými dveřmi. Cena za box, vychází 3 000 Kč na osobu."
         },
         {
-          "subtitle": "Privátní dvoulůžková kapsle | cca 5–6 m² kapsle ve sdíleném pokoji | 2 lůžka | matrace 210×230 nebo 230×240 cm (King+) | uzamykatelný modul pro pár, vlastní zatemnění | 5 500 Kč",
-          "text": "Stejný uzamykatelný modul jako jednolůžková, ale pro dva. Dvě čtecí lampy, dva USB-C porty. Cena za celou kapsli, vychází 2 750 Kč na osobu."
+          "subtitle": "Kapslové lůžko s vysokou mírou soukromí | 4 000 Kč",
+          "text": "Uzamykatelná kapsle ve sdíleném pokoji se 3 až 6 kapslemi, vlastní světlo, větrání a USB-C."
         },
         {
-          "subtitle": "Dvoulůžko v pokoji | 18–22 m² celý pokoj v patrovém bytě | 2 lůžka | manželská postel 200×190 nebo 230×200 cm | celý pokoj pro pár bez dalšího spolubydlícího, sdílená kuchyň a koupelna v bytě | 6 000 Kč",
-          "text": "Nejprivátnější formát co-livingu. Celý pokoj pro pár v patrovém bytě s 2 až 4 dalšími pokoji. Cena za pokoj, vychází 3 000 Kč na osobu."
+          "subtitle": "Kapslové dvojlůžko s vysokou mírou soukromí | 5 500 Kč",
+          "text": "Uzamykatelný modul pro dva s King+ matrací. Cena za celou kapsli, vychází 2 750 Kč na osobu."
         }
       ],
       "images": [],
       "bookable": false,
       "detail": false,
-      "priceNote": "Anchor 3 000–6 000 Kč/měsíc. U párových formátů cena za celou kapsli nebo pokoj. S delším pobytem ceny klesají (3+ / 6+ / 12+ měsíců).",
+      "priceNote": "Anchor 3 000 až 6 000 Kč/měsíc. U párových formátů cena za celou kapsli nebo dvojlůžko. S delším pobytem ceny klesají (3+ / 6+ / 12+ měsíců).",
       "flags": [
-        "Ceny převzaty z živých MDX (src/content/coliving) — liší se od staré locked tabulky v CLAUDE.md (kapsle-single 4000 vs 3000, kapsle-double 5500 vs 4500). MDX je zdroj pravdy.",
-        "Zadání žádá variantu „dvojlůžko bez soukromí“ bez ceny → taková varianta v repu ani vaultu NEEXISTUJE. Šestým formátem je reálné „Dvoulůžko v pokoji“ (6 000 Kč). Pokud má vzniknout nová bezpříčková dvojlůžková varianta, klient ji musí doplnit do MDX + Plan.md.",
-        "jedno-luzko a dvouluzko jsou v MDX hidden:true — na overview se aktuálně nezobrazují. Ověřit, zda mají být v tabulce."
+        "Ceny z živých MDX (src/content/sdilene-pokoje), MDX je zdroj pravdy."
       ]
     },
     {
-      "name": "Privátní apartmány — srovnávací tabulka (5 typů)",
+      "name": "Privátní apartmány, srovnávací tabulka (5 typů)",
       "slug": "tabulka-privatni",
-      "lede": "Pět velikostí privátních apartmánů. Cena je orientační anchor za celý byt a měsíc, klesá s délkou pobytu i počtem obyvatel.",
+      "lede": "Pět velikostí privátních apartmánů. Cena je anchor za celý byt a měsíc, klesá s délkou pobytu i počtem obyvatel. Kapacita: až 3 osoby na ložnici (standardně dvě lůžka, třetí na vyžádání). Živý zdroj: src/content/apartmany/*.mdx.",
       "blocks": [
         {
-          "subtitle": "1+kk | 21 m² | 2 lůžka | obytný pokoj s kuchyňským koutem, vlastní koupelna a vchod | 10 000 Kč",
-          "text": "Nejmenší privátní formát pro pár nebo dva spolubydlící. Postel volíte při rezervaci (2× jednolůžko nebo manželská)."
+          "subtitle": "1+kk | 21 m² | až 3 osoby | obytný pokoj s kuchyňským koutem, vlastní koupelna a vchod | 10 000 Kč",
+          "text": "Nejmenší privátní formát. Postel volíte při rezervaci (2× jednolůžko nebo manželská), třetí lůžko na vyžádání."
         },
         {
-          "subtitle": "2+kk | 42 m² | 4 lůžka | oddělená ložnice, obývací pokoj, plnohodnotná kuchyň, koupelna + samostatné WC | 15 000 Kč",
-          "text": "Pro páry s dětmi, dvě dvojice nebo skupinu čtyř kamarádů. Najít tři spolubydlící bývá levnější než vlastní 1+kk."
+          "subtitle": "2+kk | 42 m² | až 6 osob | oddělená ložnice, obývací pokoj, plnohodnotná kuchyň, koupelna + samostatné WC | 15 000 Kč",
+          "text": "Pro páry s dětmi, dvě dvojice nebo partu kamarádů. Najít spolubydlící bývá levnější než vlastní 1+kk."
         },
         {
-          "subtitle": "3+kk | 63 m² | 6 lůžek | tři samostatné pokoje, kuchyň s jídelním stolem, koupelna (sprcha nebo vana) + WC | 19 000 Kč",
-          "text": "Vlastní koupelna a kuchyň pro celou skupinu šesti, bez gangové koupelny. Lze rozdělit na dva páry plus dva singly."
+          "subtitle": "3+kk | 63 m² | až 9 osob | tři samostatné pokoje, kuchyň s jídelním stolem, koupelna (sprcha nebo vana) + WC | 19 000 Kč",
+          "text": "Vlastní koupelna a kuchyň pro celou skupinu, bez gangové koupelny."
         },
         {
-          "subtitle": "4+kk | 84 m² | 8 lůžek | čtyři pokoje, velká kuchyň, koupelna a WC (případně dvě) | 23 000 Kč",
+          "subtitle": "4+kk | 84 m² | až 12 osob | čtyři pokoje, velká kuchyň, koupelna a WC (případně dvě) | 23 000 Kč",
           "text": "Skupinový formát pro startupový tým, sportovní oddíl, taneční nebo divadelní soubor."
         },
         {
-          "subtitle": "5+kk | 105 m² | 10 lůžek | pět pokojů, dvě koupelny, dvě WC, kuchyň s velkým stolem | 27 000 Kč",
+          "subtitle": "5+kk | 105 m² | až 15 osob | pět pokojů, dvě koupelny, dvě WC, kuchyň s velkým stolem | 27 000 Kč",
           "text": "Největší formát. Pro velkou skupinu nebo dvě rodiny pohromadě, s možností rozdělit prostor na dva celky."
         }
       ],
@@ -151,9 +143,9 @@
       ],
       "bookable": false,
       "detail": false,
-      "priceNote": "Anchor 10 000–27 000 Kč/měsíc za celý byt. Při ročním závazku a plné obsazenosti klesá cena na osobu výrazně níž.",
+      "priceNote": "Anchor 10 000 až 27 000 Kč/měsíc za celý byt. Při ročním závazku a plné obsazenosti klesá cena na osobu výrazně níž.",
       "flags": [
-        "Ceny z živých MDX (src/content/apartmany): 1+kk 10000, 2+kk 15000, 3+kk 19000, 4+kk 23000, 5+kk 27000 — jsou VYŠŠÍ než stará locked tabulka v CLAUDE.md (9500/14000/18000/22000/25000). MDX je zdroj pravdy; sjednotit s CLAUDE.md a vault §1.1."
+        "Ceny z živých MDX (src/content/apartmany), MDX je zdroj pravdy. Kapacity dle tabulky Koncept webu (12. 6. 2026): 3 osoby na ložnici."
       ]
     },
     {
@@ -163,11 +155,11 @@
       "blocks": [
         {
           "subtitle": "K privátním apartmánům",
-          "text": "Kočárkárna, sklad v pronájmu (sklepní kóje a kontejnerové sklady), vyhrazená parkovací místa, sauna a wellness v sousedním objektu a sdílená prádelna. Sazby a kapacity doplníme po dokončení projektové dokumentace."
+          "text": "Kočárkárna, sklad v pronájmu (kontejnerové sklady), vyhrazená parkovací místa, sauna a wellness v sousedním objektu a sdílená prádelna."
         },
         {
-          "subtitle": "V co-livingu",
-          "text": "Zamykatelná skříňka u lůžka i v pokoji, převlékací kabinky a privátní sprchové i vanové kóje. Společné jsou sprchy a kuchyňky, k tomu miniledničky u lůžek a velké sdílené lednice v kuchyni."
+          "subtitle": "Ve sdílených pokojích",
+          "text": "Zamykatelná skříňka u lůžka i v pokoji, převlékací kabinky a 100 % privátní sprchové i vanové kóje. Společné jsou sprchy a kuchyňky, k tomu privátní zamykací miniledničky u lůžek, velké sdílené lednice v kuchyni a sklepní kóje na věci, které nepotřebujete denně."
         },
         {
           "subtitle": "Společné v ceně",
@@ -177,19 +169,17 @@
       "images": [
         {
           "src": "/images/hub/ubytovani/coliving/coliving-koupelna.jpg",
-          "alt": "Sdílená koupelna v co-livingu s privátními sprchovými kójemi a převlékacím prostorem."
+          "alt": "Sdílená koupelna s privátními sprchovými kójemi a převlékacím prostorem."
         },
         {
           "src": "/images/hub/ubytovani/coliving/coliving-kuchyn.jpg",
-          "alt": "Společná kuchyňka v co-livingu s velkou sdílenou lednicí."
+          "alt": "Společná kuchyňka sdílených pokojů s velkou sdílenou lednicí."
         }
       ],
       "bookable": false,
       "detail": false,
       "flags": [
-        "Položky kočárkárna, kontejnerové sklady, sklepní kóje, parkovací místa, prádelna NEJSOU ve vaultu Site_Copy.md jako upsell list — napsáno on-voice dle zadání. Ceny/kapacity zázemí jsou TBD (Marek doplní dle PD), proto formulováno opatrně.",
-        "Sauna a prádelna jsou ve vaultu §3 v sousedním objektu u bazénu — fakt potvrzen.",
-        "Miniledničky, vanové kóje a privátní sprchové kóje nejsou explicitně ve vaultu — ověřit s klientem před publikací."
+        "Miniledničky, vanové kóje, sprchové kóje a sklepní kóje potvrzeny klientskou tabulkou Koncept webu (12. 6. 2026)."
       ]
     },
     {
@@ -211,7 +201,7 @@
         },
         {
           "subtitle": "Donáška na pokoj",
-          "text": "Doneseme vám jídlo z kantýny nebo nákup přímo na pokoj."
+          "text": "Doneseme vám snídani, oběd nebo večeři z kantýny, nákup, korespondenci i balíčky přímo na pokoj."
         },
         {
           "subtitle": "Concierge",
@@ -222,8 +212,7 @@
       "bookable": false,
       "detail": false,
       "flags": [
-        "Celý seznam služeb (výměna prádla, úklid, praní/žehlení, donáška, concierge) NENÍ ve vaultu Site_Copy.md — napsáno on-voice dle zadání. Před publikací nutné potvrzení rozsahu a cen s klientem (provoz zatím v přípravě).",
-        "Žádné ceny neuvedeny — klient musí dodat ceník služeb."
+        "Rozsah služeb potvrzen klientskou tabulkou Koncept webu (12. 6. 2026). Ceny služeb doplní klient."
       ]
     }
   ]

@@ -33,6 +33,9 @@ const sections = (cat.items ?? []).map((it) => {
   if (it.bookable) {
     actions.push({ label: 'Rezervovat', href: `/rezervace/?zazemi=${it.slug}`, kind: 'reserve' });
   }
+  if (it.action) {
+    actions.push({ label: it.action.label, href: it.action.href, kind: 'link' });
+  }
 
   const blocks: Block[] = [...(it.blocks ?? [])];
   const priceRows =
