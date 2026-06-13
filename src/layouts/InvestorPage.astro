@@ -1,7 +1,7 @@
 ---
 /*
  * InvestorPage , samostatný layout pod-webu /investori/ (Podklady pro
- * investory, záměr VPD①). Nepoužívá hub Header/Footer ani JSON-LD;
+ * investory, záměr VPD1). Nepoužívá hub Header/Footer ani JSON-LD;
  * sdílí tokens.css (paleta, typografie) + vlastní investor.css.
  *
  * Brána: klientská kontrola localStorage otisku proti allowlistu
@@ -14,6 +14,7 @@ import '../styles/investor.css';
 import { withBase } from '../utils/url';
 import { INVESTOR_ACCESS, INVESTOR_AUTH_KEY } from '../utils/investorAuth';
 import meta from '../data/investori/meta.json';
+import Lightbox from '../components/Lightbox.astro';
 
 interface Props {
   title: string;
@@ -24,12 +25,13 @@ interface Props {
 const { title, active, gate = true } = Astro.props;
 
 const loginUrl = withBase('/investori/');
+/* Menu: jen tři hlavní oddíly. „Koncept smlouvy" a „Poznámky" jsou z menu
+   vyřazené (rozhodnutí klienta 2026-06-13, zatím nepodstatné); stránky
+   zůstávají dostupné přímo přes URL, jen nejsou v navigaci. */
 const nav = [
   { id: 'zamer', href: withBase('/investori/zamer/'), label: 'Investiční záměr' },
   { id: 'vypocty', href: withBase('/investori/udaje-a-vypocty/'), label: 'Údaje & výpočty' },
   { id: 'scenare', href: withBase('/investori/scenare/'), label: 'Scénáře' },
-  { id: 'smlouvy', href: withBase('/investori/smlouvy/'), label: 'Koncept smlouvy' },
-  { id: 'poznamky', href: withBase('/investori/poznamky/'), label: 'Poznámky' },
 ];
 ---
 <!doctype html>
@@ -56,12 +58,26 @@ const nav = [
       </script>
     )}
     <style is:inline>html.inv-wait body { visibility: hidden; }</style>
+    <script is:inline>
+      /* Reveal-on-scroll jen tam, kde to dává smysl a kde to nezablikne:
+         synchronně v <head> zapneme skrytý výchozí stav, observer (na konci
+         body) ho po vstupu do viewportu odhalí. Bez JS / s reduced-motion
+         zůstává obsah rovnou viditelný. */
+      (function () {
+        try {
+          var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!rm && 'IntersectionObserver' in window) {
+            document.documentElement.classList.add('inv-anim');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="inv-body">
     <header class="inv-top">
       <div class="inv-top__inner">
         <a class="inv-top__brand" href={gate ? withBase('/investori/zamer/') : loginUrl}>
-          <strong>VPD&#9312;</strong>
+          <strong>VPD1</strong>
           <span>Podklady pro investory</span>
         </a>
         {gate && (
@@ -101,6 +117,89 @@ const nav = [
         })();
       </script>
     )}
+
+    <script is:inline>
+      (function () {
+        if (!document.documentElement.classList.contains('inv-anim')) return;
+        var els = document.querySelectorAll('.inv-hero, .inv-section');
+        if (!els.length || !('IntersectionObserver' in window)) {
+          document.documentElement.classList.remove('inv-anim');
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+        els.forEach(function (el) { io.observe(el); });
+      })();
+    </script>
+
+    <Lightbox />
+    <script is:inline>
+      (function () {
+        /* 1) Zvětšitelné obrázky: označíme všechny investorské figury a zóny
+              atributy data-lb a probudíme sdílený Lightbox (na pod-webu není
+              ViewTransitions, takže bind ručně vyvoláme astro:page-load). */
+        function tag(el, src, alt, group) {
+          if (!el || el.hasAttribute('data-lb')) return;
+          el.setAttribute('data-lb', '');
+          el.setAttribute('data-lb-src', src);
+          el.setAttribute('data-lb-alt', alt || '');
+          el.setAttribute('data-lb-group', group);
+          el.classList.add('is-zoomable');
+        }
+        document.querySelectorAll('.inv-figure').forEach(function (fig) {
+          var img = fig.querySelector('img'); if (!img) return;
+          var cap = fig.querySelector('figcaption');
+          var grp = (fig.closest('.inv-section') && fig.closest('.inv-section').id) || 'inv';
+          tag(fig, img.src, img.getAttribute('alt') || (cap ? cap.textContent.trim() : ''), grp);
+        });
+        document.querySelectorAll('.inv-zone__img').forEach(function (img) {
+          var grp = (img.closest('.inv-section') && img.closest('.inv-section').id) || 'inv';
+          tag(img, img.src, img.getAttribute('alt') || '', grp);
+        });
+        try { document.dispatchEvent(new Event('astro:page-load')); } catch (e) {}
+
+        /* 2) Vodorovný scroll široké tabulky: rámeček se šipkami + okrajové stíny,
+              aktivní jen když tabulka přetéká. */
+        function arrow(dir) {
+          var pts = dir === 'prev' ? '15 18 9 12 15 6' : '9 18 15 12 9 6';
+          return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="' + pts + '"/></svg>';
+        }
+        document.querySelectorAll('.inv-table-wrap').forEach(function (wrap) {
+          if (wrap.closest('.inv-tscroll')) return;
+          var box = document.createElement('div');
+          box.className = 'inv-tscroll';
+          wrap.parentNode.insertBefore(box, wrap);
+          box.appendChild(wrap);
+          function mk(dir, label) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'inv-tscroll__btn inv-tscroll__btn--' + dir;
+            b.setAttribute('aria-label', label);
+            b.innerHTML = arrow(dir);
+            return b;
+          }
+          var prev = mk('prev', 'Posunout tabulku vlevo');
+          var next = mk('next', 'Posunout tabulku vpravo');
+          box.appendChild(prev);
+          box.appendChild(next);
+          function update() {
+            var max = wrap.scrollWidth - wrap.clientWidth;
+            var x = wrap.scrollLeft;
+            box.classList.toggle('is-scrollable', max > 4);
+            box.classList.toggle('at-start', x <= 2);
+            box.classList.toggle('at-end', x >= max - 2);
+          }
+          prev.addEventListener('click', function () { wrap.scrollBy({ left: -Math.round(wrap.clientWidth * 0.8), behavior: 'smooth' }); });
+          next.addEventListener('click', function () { wrap.scrollBy({ left: Math.round(wrap.clientWidth * 0.8), behavior: 'smooth' }); });
+          wrap.addEventListener('scroll', update, { passive: true });
+          window.addEventListener('resize', update);
+          update();
+        });
+      })();
+    </script>
   </body>
 </html>
 <style is:global>
@@ -119,4 +218,6 @@ const nav = [
   }
   img, svg { display: block; max-width: 100%; }
   ::selection { background: var(--accent); color: var(--accent-on); }
+  /* Lightbox zamkne scroll pozadí (na pod-webu není kit.css, kde to žije jinak) */
+  html.osa-nav-lock, html.osa-nav-lock body { overflow: hidden; }
 </style>

@@ -19,8 +19,9 @@ interface Props {
   occupancy: number; // 0..1
   srcMonthly: string;
   srcYearly: string;
+  source?: string; // kontrolní věta: odkud výchozí hodnoty + výsledek pocházejí
 }
-const { units, rent, occupancy, srcMonthly, srcYearly } = Astro.props;
+const { units, rent, occupancy, srcMonthly, srcYearly, source } = Astro.props;
 const occPct = Math.round(occupancy * 100);
 ---
 <section class="calc" data-calc
@@ -30,9 +31,10 @@ const occPct = Math.round(occupancy * 100);
     <p class="calc__badge" data-no-typograf>Náhled funkce · interaktivní přepočet</p>
     <h3 class="calc__title">Zkuste si přepočítat hlavní provozní příjem</h3>
     <p class="calc__lede">
-      Upravte vstupní parametry a výsledek se přepočítá. Připravujeme takto
-      celé kalkulační tabulky. Výchozí hodnoty i kontrolní výsledek vychází
-      ze zdrojové tabulky.
+      Upravte vstupní parametry a výsledek se přepočítá. Výchozí hodnoty
+      i kontrolní výsledek vycházejí 1:1 ze součtu příjmů jednotlivých budov
+      v tabulce výše, nejde o ilustrační čísla. Takto postupně zpřístupníme
+      celé kalkulační tabulky.
     </p>
   </header>
 
@@ -87,6 +89,7 @@ const occPct = Math.round(occupancy * 100);
         počet jednotek × nájem × obsazenost × 12
       </p>
       <p class="calc__delta" data-delta hidden></p>
+      {source && <p class="calc__source" data-no-typograf>{source}</p>}
     </div>
   </div>
 </section>
@@ -169,11 +172,20 @@ const occPct = Math.round(occupancy * 100);
   }
   .calc__head { margin-bottom: var(--space-5); max-width: 70ch; }
   .calc__badge {
-    font: 600 var(--text-2xs) / 1 var(--font-mono);
+    display: inline-flex;
+    align-items: center;
+    font: 600 var(--text-2xs) / 1 var(--font-sans);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
     color: var(--rose);
     margin: 0 0 var(--space-3);
+  }
+  .calc__badge::before {
+    content: "";
+    width: 2px;
+    height: 12px;
+    background: var(--rose);
+    margin-right: 9px;
   }
   .calc__title {
     font: 700 var(--text-xl) / var(--lh-snug) var(--font-sans);
@@ -293,8 +305,10 @@ const occPct = Math.round(occupancy * 100);
     color: var(--rose);
   }
   .calc__formula {
-    font: 500 var(--text-2xs) / 1.4 var(--font-mono);
-    color: rgba(255, 255, 255, 0.5);
+    font: 500 var(--text-2xs) / 1.4 var(--font-sans);
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: var(--tracking-wide);
+    color: rgba(255, 255, 255, 0.55);
     margin: var(--space-2) 0 0;
     padding-top: var(--space-3);
     border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -306,6 +320,14 @@ const occPct = Math.round(occupancy * 100);
     color: var(--rose);
   }
   .calc__delta[data-dir="down"] { color: hsl(8 60% 72%); }
+  .calc__source {
+    font: 500 var(--text-2xs) / 1.5 var(--font-sans);
+    font-variant-numeric: tabular-nums lining-nums;
+    color: rgba(255, 255, 255, 0.62);
+    margin: var(--space-2) 0 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
 
   @media (max-width: 760px) {
     .calc { padding: var(--space-5); }

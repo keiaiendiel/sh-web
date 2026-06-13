@@ -55,10 +55,10 @@ const stripArrows = (s: string) => s.replace(/[↓↑]/g, '').replace(/\s+/g, ' 
 
 const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
 ---
-<InvestorPage title="Základní údaje &amp; výpočty , podklady pro investory VPD&#9312;" active="vypocty">
+<InvestorPage title="Základní údaje &amp; výpočty , podklady pro investory VPD1" active="vypocty">
   <div class="inv-shell">
     <header class="inv-hero">
-      <p class="inv-hero__eyebrow" data-no-typograf>VPD&#9312; · zdrojová data záměru</p>
+      <p class="inv-hero__eyebrow" data-no-typograf>VPD1 · zdrojová data záměru</p>
       <h1 class="inv-hero__title" data-no-typograf>{v.titul}</h1>
       <p class="inv-hero__sub">
         Kompletní podkladová data: parcely a stavby, smluvní platební
@@ -89,9 +89,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
       </figure>
       <DataTable headers={t1Headers} rows={t1Rows} foot={t1Foot} label={v.parcely.titul1} />
 
-      <div class="inv-section__head" style="margin-top: var(--space-6);">
-        <h2 class="inv-section__title">{v.parcely.titul2}</h2>
-      </div>
+      <h3 class="inv-sub" data-no-typograf>{v.parcely.titul2}</h3>
       <DataTable headers={t2Headers} rows={t2Rows} foot={t2Foot} label={v.parcely.titul2} />
       <p class="inv-note" data-no-typograf>{v.parcely.poznamka}</p>
 
@@ -162,7 +160,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
       <DataTable headers={v.kupniCena.headers} rows={v.kupniCena.rows} markYear label={v.kupniCena.titul} />
       <p class="inv-note" data-no-typograf>{v.kupniCena.footnote}</p>
 
-      <figure class="inv-figure" style="margin-top: var(--space-4); max-width: 880px;">
+      <figure class="inv-figure inv-figure--doc" style="margin-top: var(--space-4);">
         <img src={withBase('/images/investori/smlouva-kupni-cena.jpg')} alt="Výřez z uzavřené Smlouvy: čl. 3 Kupní cena a způsob jejího určení" loading="lazy" decoding="async" />
         <figcaption data-no-typograf>{stripArrows(v.kupniCena.note)}</figcaption>
       </figure>
@@ -176,7 +174,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
 
       <div class="inv-figure-grid" style="margin-bottom: var(--space-6);">
         {['interier-1kk', 'exterier-jadro', 'budova-d'].map((id) => (
-          <figure class="inv-figure">
+          <figure class="inv-figure inv-figure--square">
             <img src={withBase(viz[id].img)} alt={viz[id].titul} loading="lazy" decoding="async" />
             <figcaption data-no-typograf>{viz[id].titul}</figcaption>
           </figure>
@@ -205,6 +203,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
         occupancy={v.najem.params[1].v}
         srcMonthly={v.najem.soucty.BP.d}
         srcYearly={v.najem.soucty.BQ.d}
+        source={`Kontrola odpovídá součtu řádků tabulky výše: ${v.najem.soucty.BO.d} jednotek → ${v.najem.soucty.BP.d}/měs → ${v.najem.soucty.BQ.d}/rok. Plánováno z potenciálních ${v.najem.potencial.d} jednotek.`}
       />
       <div class="inv-ref">
         <p class="inv-note" data-no-typograf>{stripArrows(v.najem.refCaption)}</p>
@@ -213,7 +212,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
           rows={v.najem.refRows}
           label="Odhad tržního nájemného"
         />
-        <figure class="inv-figure">
+        <figure class="inv-figure inv-figure--doc">
           <img src={withBase('/images/investori/podklad-najem-odhad.jpg')} alt="Podklad: odhad tržního nájemného pro jednotku 1+kk, odhad-zdarma.cz" loading="lazy" decoding="async" />
         </figure>
       </div>
@@ -269,7 +268,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
           rows={v.trzniCena.refRows}
           label="Odhad tržní ceny jednotky"
         />
-        <figure class="inv-figure">
+        <figure class="inv-figure inv-figure--doc">
           <img src={withBase('/images/investori/podklad-trzni-cena-odhad.jpg')} alt="Podklad: odhad tržní ceny jednotky 1+kk, odhad-zdarma.cz" loading="lazy" decoding="async" />
         </figure>
       </div>
@@ -338,10 +337,10 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
       <div class="inv-ref">
         <p class="inv-note" data-no-typograf>{stripArrows(v.ubytovaciHub.refCaption)}</p>
         <div class="inv-figure-grid">
-          <figure class="inv-figure">
+          <figure class="inv-figure inv-figure--doc">
             <img src={withBase('/images/investori/podklad-ubytovaci-hub-1.jpg')} alt="Podklad: odhady pro Ubytovací hub, 1. část" loading="lazy" decoding="async" />
           </figure>
-          <figure class="inv-figure">
+          <figure class="inv-figure inv-figure--doc">
             <img src={withBase('/images/investori/podklad-ubytovaci-hub-2.jpg')} alt="Podklad: odhady pro Ubytovací hub, 2. část" loading="lazy" decoding="async" />
           </figure>
         </div>
@@ -355,7 +354,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
       </div>
       <div class="inv-figure-grid" style="margin-bottom: var(--space-6);">
         {['nova-ctvrt', 'nova-ctvrt-2', 'nova-ctvrt-3'].map((id) => (
-          <figure class="inv-figure">
+          <figure class="inv-figure inv-figure--square">
             <img src={withBase(viz[id].img)} alt={viz[id].titul} loading="lazy" decoding="async" />
             <figcaption data-no-typograf>{viz[id].titul}</figcaption>
           </figure>
@@ -398,7 +397,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
       </div>
       <DataTable headers={v.creditas.headers} rows={v.creditas.rows} label={v.creditas.titul} />
       <p class="inv-note" data-no-typograf>{v.creditas.disclaimer}</p>
-      <figure class="inv-figure" style="margin-top: var(--space-4); max-width: 880px;">
+      <figure class="inv-figure inv-figure--doc" style="margin-top: var(--space-4);">
         <img src={withBase('/images/investori/podklad-novostavby.jpg')} alt="Podklad: nabídkové ceny bytů v novostavbách v lokalitě" loading="lazy" decoding="async" />
       </figure>
     </section>
@@ -411,14 +410,7 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
 </InvestorPage>
 
 <style>
-  .inv-sub {
-    font: 700 var(--text-xl) / var(--lh-snug) var(--font-sans);
-    color: var(--fg);
-    margin: var(--space-7) 0 var(--space-4);
-    max-width: 90ch;
-    text-wrap: balance;
-  }
-  .inv-sub:first-of-type { margin-top: 0; }
+  /* .inv-sub je teď unifikovaný v investor.css (akcentní značka) */
   .inv-zones {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -450,7 +442,10 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
     border: 1px dashed var(--k-30);
     border-radius: var(--radius-input);
   }
-  .inv-ref .inv-figure { max-width: 640px; }
+  /* Podkladové výřezy v referenčním boxu jsou malé náhledy (--doc, 340 px);
+     plné rozlišení po kliknutí (lightbox). Větší šířku necháme jen pro
+     případné ne-dokumentové figury. */
+  .inv-ref .inv-figure:not(.inv-figure--doc) { max-width: 640px; }
   @media (max-width: 980px) {
     .inv-cols { grid-template-columns: 1fr; }
   }

@@ -1,23 +1,46 @@
 /* =============================================================================
-   /investori/ — Podklady pro investory (záměr VPD①)
-   Analytický sub-vzhled nad sh-web tokens: stejná paleta (--hue, plum, rose,
-   cream), stejný Atyp Special, ale hustší data-first sazba. Čísla všude
-   tabular-nums, meta údaje v monospace, tabulky s lepkavou hlavičkou.
+   /investori/ — Podklady pro investory (záměr VPD1)
+   ---------------------------------------------------------------------------
+   Analytický pod-vzhled „investiční dossier" nad sh-web tokens. Drží stejnou
+   paletu (--hue, plum, rose, cream) i jediné písmo Atyp Special jako zbytek
+   webu — ŽÁDNÝ monospace. Čísla jsou sázena tabulkově (tabular + lining
+   figures) přímo v brandovém sansu (princip .osa-figs), takže data zarovnají
+   jako v terminálu, ale typograficky patří k webu.
+
+   Tři vrstvy hierarchie:
+     · fakta (inv-facts)   — hustý spec-list label : hodnota
+     · parametry (inv-param) — vstupní hodnoty v rámovaných buňkách
+     · výsledky (inv-kpi)  — headline metriky, největší, akcent
+   Sekce nesou pořadové číslo + vlasovou linku (číslovaný dossier).
 ============================================================================= */
 
 .inv-body {
+  /* lokální helpery, ať se neopakují magické hodnoty napříč souborem */
+  --inv-fig: tabular-nums lining-nums;
+  --inv-hair: 1px solid var(--border-muted);          /* neutrální vlasová linka */
+  --inv-rule: 1px solid var(--accent-rule);           /* plum-tónovaná linka     */
+  --inv-radius: 4px;                                  /* datové plochy: ostřejší */
+  --inv-masthead: 60px;
+
   background: var(--cream);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-variant-numeric: var(--inv-fig);
 }
 .inv-main { flex: 1; }
 
-/* ---------- Top bar ---------- */
+/* Číslicové sloupce / hodnoty: jeden helper, ať je sazba čísel konzistentní. */
+.inv-figs { font-variant-numeric: var(--inv-fig); }
+
+/* =============================================================================
+   Masthead — chrome dossieru (tmavá hlavička jako obálka reportu)
+============================================================================= */
 .inv-top {
-  background: linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 17%) 100%);
+  background: var(--plum-deep);
   color: #fff;
-  border-bottom: 1px solid var(--accent);
+  border-bottom: 1px solid hsl(var(--hue) 30% 30%);
+  box-shadow: inset 0 -1px 0 hsl(calc(var(--hue) + 44) 30% 70% / 0.35);   /* rose vlasová podtržítka */
   position: sticky;
   top: 0;
   z-index: 40;
@@ -27,100 +50,126 @@
   max-width: var(--container-wide);
   margin: 0 auto;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: var(--space-5);
-  min-height: 58px;
+  min-height: var(--inv-masthead);
   flex-wrap: wrap;
-  padding: 8px 0;
 }
 .inv-top__brand {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   color: #fff;
   text-decoration: none;
   white-space: nowrap;
+  align-self: center;
 }
 .inv-top__brand strong {
   font: 700 var(--text-lg) / 1 var(--font-sans);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: 0.04em;
 }
 .inv-top__brand span {
-  font: 500 var(--text-2xs) / 1 var(--font-mono);
+  font: 500 var(--text-2xs) / 1 var(--font-sans);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--rose);
+  padding-left: 12px;
+  border-left: 1px solid hsl(var(--hue) 24% 40%);
 }
 .inv-top__nav {
   display: flex;
-  align-items: center;
-  gap: 2px;
+  align-items: stretch;
+  gap: var(--space-1);
   flex-wrap: wrap;
   margin-left: auto;
 }
 .inv-top__nav a {
+  display: inline-flex;
+  align-items: center;
   font: 600 var(--text-sm) / 1 var(--font-sans);
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.72);
   text-decoration: none;
-  padding: 9px 12px;
-  border-radius: var(--radius-input);
-  transition: background 160ms ease, color 160ms ease;
+  padding: 0 var(--space-2);
+  border-bottom: 2px solid transparent;     /* podtržení = aktivní stav, ne hlučná pilulka */
+  transition: color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
 }
 .inv-top__nav a:hover,
 .inv-top__nav a:focus-visible {
   color: #fff;
-  background: rgba(255, 255, 255, 0.10);
+  border-color: hsl(calc(var(--hue) + 44) 30% 70% / 0.5);
   outline: none;
 }
 .inv-top__nav a[aria-current="page"] {
-  color: var(--plum-deep);
-  background: var(--rose);
+  color: #fff;
+  border-color: var(--rose);
 }
 .inv-top__logout {
+  align-self: center;
+  margin-left: var(--space-2);
   font: 600 var(--text-xs) / 1 var(--font-sans);
+  letter-spacing: var(--tracking-wide);
   color: var(--rose);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  border: 1px solid hsl(var(--hue) 24% 42%);
   border-radius: var(--radius-input);
-  padding: 8px 12px;
+  padding: 7px 12px;
   cursor: pointer;
-  transition: background 160ms ease, color 160ms ease;
+  transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
 }
 .inv-top__logout:hover,
 .inv-top__logout:focus-visible {
-  background: rgba(255, 255, 255, 0.12);
+  background: hsl(calc(var(--hue) + 44) 30% 70% / 0.16);
+  border-color: var(--rose);
   color: #fff;
   outline: none;
 }
 
-/* ---------- Page scaffold ---------- */
+/* =============================================================================
+   Page scaffold
+============================================================================= */
 .inv-shell {
   width: calc(100% - 2 * var(--gutter));
   max-width: var(--container-wide);
   margin: 0 auto;
-  padding: var(--space-7) 0 var(--space-9);
+  padding: var(--space-8) 0 var(--space-9);
+  counter-reset: invsec;           /* číslování sekcí napříč stránkou */
 }
 .inv-shell--narrow { max-width: var(--container); }
 
-.inv-hero { margin-bottom: var(--space-7); }
+/* =============================================================================
+   Hero / page head
+============================================================================= */
+.inv-hero { margin-bottom: var(--space-8); max-width: 80ch; }
 .inv-hero__eyebrow {
-  font: 600 var(--text-2xs) / 1 var(--font-mono);
+  display: inline-flex;
+  align-items: center;
+  font: 600 var(--text-2xs) / 1 var(--font-sans);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--accent);
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-4);
+}
+/* Signaturní brandový proužek (jako .tag na hubu): 2 × 14 px akcent. */
+.inv-hero__eyebrow::before {
+  content: "";
+  width: 2px;
+  height: 13px;
+  background: var(--accent);
+  margin-right: 10px;
 }
 .inv-hero__title {
-  font: 700 clamp(2rem, 3.4vw + 1rem, var(--text-4xl)) / var(--lh-snug) var(--font-sans);
+  font: 700 clamp(2.125rem, 3.6vw + 1rem, var(--text-4xl)) / 1.04 var(--font-sans);
   letter-spacing: var(--tracking-tight);
   color: var(--fg);
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-4);
   text-wrap: balance;
 }
 .inv-hero__sub {
-  font: 500 var(--text-lg) / var(--lh-normal) var(--font-sans);
+  font: 500 var(--text-lg) / var(--lh-relaxed) var(--font-sans);
   color: var(--fg-muted);
-  max-width: 72ch;
-  margin: 0 0 var(--space-4);
+  max-width: 68ch;
+  margin: 0 0 var(--space-5);
+  text-wrap: pretty;
 }
 .inv-hero__meta {
   display: flex;
@@ -129,59 +178,157 @@
   align-items: center;
 }
 
+/* Chips (meta odznaky v hlavičce) */
 .inv-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font: 600 var(--text-2xs) / 1 var(--font-mono);
+  gap: 7px;
+  font: 600 var(--text-2xs) / 1 var(--font-sans);
   letter-spacing: var(--tracking-wide);
-  color: var(--fg-muted);
-  background: #fff;
-  border: 1px solid var(--border-muted);
+  color: var(--fg-subtle);
+  background: var(--k-0);
+  border: var(--inv-hair);
   border-radius: var(--radius-input);
-  padding: 6px 10px;
+  padding: 6px 11px;
   white-space: nowrap;
 }
-.inv-chip--accent { color: var(--accent); border-color: var(--accent-rule); }
+.inv-chip--accent {
+  color: var(--accent);
+  border-color: var(--accent-rule);
+  background: var(--accent-soft);
+}
+.inv-chip--accent::before {
+  content: "";
+  width: 2px;
+  height: 11px;
+  background: var(--accent);
+}
 
-/* ---------- Cards & sections ---------- */
-.inv-section { margin: 0 0 var(--space-8); scroll-margin-top: 84px; }
-.inv-section__head { margin-bottom: var(--space-4); }
+/* =============================================================================
+   Contents / anchor index („na této stránce")
+============================================================================= */
+.inv-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-6) 0 0;
+  padding-top: var(--space-4);
+  border-top: var(--inv-rule);
+}
+.inv-jumps::before {
+  content: "Obsah";
+  font: 600 var(--text-2xs) / 1 var(--font-sans);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-right: var(--space-2);
+}
+.inv-jumps a {
+  font: 600 var(--text-xs) / 1 var(--font-sans);
+  color: var(--accent);
+  background: var(--k-0);
+  border: var(--inv-hair);
+  border-radius: var(--radius-input);
+  padding: 7px 12px;
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+}
+.inv-jumps a:hover,
+.inv-jumps a:focus-visible {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-on);
+  outline: none;
+}
+
+/* =============================================================================
+   Sections — číslovaný dossier
+============================================================================= */
+.inv-section { margin: 0 0 var(--space-9); scroll-margin-top: calc(var(--inv-masthead) + var(--space-4)); }
+.inv-section:last-of-type { margin-bottom: 0; }
+
+.inv-section__head {
+  counter-increment: invsec;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  column-gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--accent-rule);
+}
+/* Pořadové číslo sekce (01, 02 …) — tabulkové, akcentní, vlevo. */
+.inv-section__head::before {
+  content: counter(invsec, decimal-leading-zero);
+  font: 600 var(--text-md) / 1 var(--font-sans);
+  font-variant-numeric: var(--inv-fig);
+  letter-spacing: var(--tracking-wide);
+  color: var(--accent);
+}
 .inv-section__title {
+  grid-column: 2;
   font: 700 var(--text-2xl) / var(--lh-snug) var(--font-sans);
   letter-spacing: var(--tracking-tight);
   color: var(--fg);
-  margin: 0 0 var(--space-2);
+  margin: 0;
   text-wrap: balance;
 }
 .inv-section__sub {
+  grid-column: 2;
   font: 500 var(--text-md) / var(--lh-normal) var(--font-sans);
   color: var(--fg-muted);
-  max-width: 80ch;
-  margin: 0;
+  max-width: 78ch;
+  margin: var(--space-2) 0 0;
+  text-wrap: pretty;
 }
+/* Sekundární nadpis uvnitř sekce (skupiny tabulek) */
+.inv-sub {
+  font: 700 var(--text-xl) / var(--lh-snug) var(--font-sans);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+  margin: var(--space-8) 0 var(--space-4);
+  max-width: 90ch;
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.inv-sub::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 18px;
+  height: 2px;
+  background: var(--accent);
+  transform: translateY(-0.3em);
+}
+.inv-sub:first-of-type { margin-top: 0; }
 
+/* =============================================================================
+   Cards
+============================================================================= */
 .inv-card {
-  background: #fff;
-  border: 1px solid var(--border-muted);
-  border-radius: var(--radius-input);
+  background: var(--k-0);
+  border: var(--inv-hair);
+  border-radius: var(--inv-radius);
   padding: var(--space-5);
 }
 
-/* ---------- Fact rows (label : hodnota) ---------- */
+/* =============================================================================
+   Facts — hustý spec-list (label : hodnota)
+============================================================================= */
 .inv-facts { display: grid; }
 .inv-facts__row {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   gap: var(--space-4);
   align-items: baseline;
-  padding: 10px 10px;
-  border-bottom: 1px solid var(--border-muted);
-  border-radius: 4px;
-  transition: background 140ms ease;
+  padding: 11px var(--space-2);
+  border-bottom: var(--inv-hair);
+  transition: background var(--dur-fast) var(--ease-standard);
 }
 .inv-facts__row:last-child { border-bottom: 0; }
-.inv-facts__row:hover { background: var(--accent-soft); }
+.inv-facts__row:hover { background: hsl(var(--hue) 14% 97%); }
 .inv-facts__label {
   font: 500 var(--text-sm) / var(--lh-normal) var(--font-sans);
   color: var(--fg-muted);
@@ -189,74 +336,139 @@
 }
 .inv-facts__value {
   font: 700 var(--text-md) / var(--lh-normal) var(--font-sans);
-  font-variant-numeric: tabular-nums lining-nums;
+  font-variant-numeric: var(--inv-fig);
   color: var(--fg);
   margin: 0;
   text-align: right;
   overflow-wrap: anywhere;
 }
 .inv-facts__value a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
-.inv-facts__value a:hover { opacity: 0.75; }
-.inv-facts__value--text { font-weight: 600; font-size: var(--text-sm); }
+.inv-facts__value a:hover { opacity: 0.7; }
+.inv-facts__value--text { font-weight: 600; font-size: var(--text-sm); color: var(--fg-muted); }
 
-/* ---------- Footnote ---------- */
+/* =============================================================================
+   Footnote
+============================================================================= */
 .inv-note {
-  font: 500 var(--text-xs) / var(--lh-normal) var(--font-sans);
+  font: 500 var(--text-xs) / var(--lh-relaxed) var(--font-sans);
   color: var(--fg-subtle);
   margin: var(--space-3) 0 0;
   max-width: 100ch;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--border-muted);
 }
 
-/* ---------- Data tables ---------- */
+/* =============================================================================
+   Data tables — analytické jádro (přístroj, ne dashboard)
+============================================================================= */
 .inv-table-wrap {
-  background: #fff;
-  border: 1px solid var(--border-muted);
-  border-radius: var(--radius-input);
+  background: var(--k-0);
+  border: var(--inv-hair);
+  border-radius: var(--inv-radius);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 .inv-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--text-sm);
+  font-size: 0.8125rem;                 /* 13px — hustší sazba, víc dat na šířku */
+  font-variant-numeric: var(--inv-fig);
 }
 .inv-table th {
-  font: 600 var(--text-2xs) / 1.3 var(--font-sans);
+  font: 600 var(--text-2xs) / 1.25 var(--font-sans);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--fg-subtle);
   text-align: left;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-bottom: 2px solid var(--accent-rule);
   background: var(--k-05);
   position: sticky;
   top: 0;
   white-space: normal;
   vertical-align: bottom;
-  min-width: 72px;
+  min-width: 0;                          /* sloupce se smrští na obsah, žádné prázdné bílé pásy */
 }
 .inv-table td {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border-muted);
+  padding: 6px 10px;
+  border-bottom: var(--inv-hair);
   color: var(--fg);
-  font-variant-numeric: tabular-nums lining-nums;
   vertical-align: top;
 }
+/* Velmi jemný zebra pruh pomáhá oko vést přes široké finanční tabulky. */
+.inv-table tbody tr:nth-child(even) td { background: hsl(var(--hue) 14% 98%); }
 .inv-table tbody tr:hover td { background: var(--accent-soft); }
 .inv-table tbody tr:last-child td { border-bottom: 0; }
 .inv-table .num, .inv-table th.num { text-align: right; white-space: nowrap; }
-.inv-table .txt { min-width: 180px; }
+.inv-table .txt { min-width: 140px; }
 .inv-table tfoot td {
   font-weight: 700;
+  color: var(--fg);
   border-top: 2px solid var(--accent-rule);
   border-bottom: 0;
   background: var(--k-05);
 }
-.inv-table tr.is-current td { background: hsl(var(--hue) 39% 27% / 0.07); }
-.inv-table tr.is-current td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.inv-table tbody tr.is-current td { background: var(--accent-soft); }
+.inv-table tbody tr.is-current td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .inv-table a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
 
-/* ---------- Param grid (vstupní parametry výpočtu) ---------- */
+/* ---- Horizontal scroll affordance (vkládá JS island kolem .inv-table-wrap) ----
+   Šipky + okrajové stíny se ukážou jen když tabulka přetéká. */
+.inv-tscroll { position: relative; }
+.inv-tscroll::before,
+.inv-tscroll::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 44px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 180ms var(--ease-standard);
+}
+.inv-tscroll::before { left: 1px; background: linear-gradient(90deg, var(--k-0), transparent); border-radius: var(--inv-radius) 0 0 var(--inv-radius); }
+.inv-tscroll::after { right: 1px; background: linear-gradient(270deg, var(--k-0), transparent); border-radius: 0 var(--inv-radius) var(--inv-radius) 0; }
+.inv-tscroll.is-scrollable:not(.at-start)::before { opacity: 1; }
+.inv-tscroll.is-scrollable:not(.at-end)::after { opacity: 1; }
+.inv-tscroll__btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--accent-rule);
+  background: var(--k-0);
+  color: var(--accent);
+  box-shadow: var(--shadow-card-hover);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+.inv-tscroll__btn:hover,
+.inv-tscroll__btn:focus-visible {
+  background: var(--accent);
+  color: var(--accent-on);
+  border-color: var(--accent);
+  outline: none;
+  transform: translateY(-50%) scale(1.06);
+}
+.inv-tscroll__btn svg { width: 18px; height: 18px; display: block; }
+.inv-tscroll__btn--prev { left: 8px; }
+.inv-tscroll__btn--next { right: 8px; }
+.inv-tscroll.is-scrollable:not(.at-start) .inv-tscroll__btn--prev { display: inline-flex; }
+.inv-tscroll.is-scrollable:not(.at-end) .inv-tscroll__btn--next { display: inline-flex; }
+/* Diskrétní hint „táhněte" jen u přetékajících tabulek, dokud uživatel neposune. */
+.inv-tscroll.is-scrollable.at-start::after { opacity: 1; }
+
+/* =============================================================================
+   Parameters — vstupní hodnoty (rámované spec-buňky, akcent shora)
+============================================================================= */
 .inv-params {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -264,79 +476,104 @@
   margin-bottom: var(--space-4);
 }
 .inv-param {
-  background: #fff;
-  border: 1px solid var(--border-muted);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius-input);
-  padding: 10px 12px;
+  background: var(--k-0);
+  border: var(--inv-hair);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--inv-radius);
+  padding: 12px 14px;
 }
 .inv-param__label {
-  font: 500 var(--text-2xs) / 1.35 var(--font-sans);
+  font: 600 var(--text-2xs) / 1.35 var(--font-sans);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   color: var(--fg-subtle);
-  margin: 0 0 4px;
+  margin: 0 0 6px;
 }
 .inv-param__value {
-  font: 700 var(--text-lg) / 1.15 var(--font-sans);
-  font-variant-numeric: tabular-nums lining-nums;
+  font: 700 var(--text-xl) / 1.1 var(--font-sans);
+  font-variant-numeric: var(--inv-fig);
+  letter-spacing: var(--tracking-tight);
   color: var(--fg);
   margin: 0;
 }
 
-/* ---------- KPI / total band ---------- */
+/* =============================================================================
+   KPI / výsledky — headline metriky (největší, akcent, světlé)
+============================================================================= */
 .inv-kpis {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: var(--space-3);
 }
 .inv-kpi {
-  background: linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 19%) 100%);
-  color: #fff;
-  border-radius: var(--radius-input);
+  background: var(--k-0);
+  border: var(--inv-hair);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--inv-radius);
   padding: var(--space-4) var(--space-5);
 }
 .inv-kpi__label {
-  font: 500 var(--text-xs) / 1.4 var(--font-sans);
-  color: var(--rose);
-  margin: 0 0 6px;
+  font: 600 var(--text-2xs) / 1.4 var(--font-sans);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin: 0 0 7px;
 }
 .inv-kpi__value {
-  font: 700 var(--text-2xl) / 1.05 var(--font-sans);
-  font-variant-numeric: tabular-nums lining-nums;
+  font: 700 var(--text-2xl) / 1.04 var(--font-sans);
+  font-variant-numeric: var(--inv-fig);
   letter-spacing: var(--tracking-tight);
+  color: var(--accent);
   margin: 0;
   overflow-wrap: anywhere;
 }
+/* Tmavá varianta pro jeden „obálkový" výsledek na stránce, je-li potřeba. */
+.inv-kpi--ink {
+  background: var(--plum-deep);
+  border: 0;
+  color: #fff;
+}
+.inv-kpi--ink .inv-kpi__label { color: var(--rose); }
+.inv-kpi--ink .inv-kpi__value { color: #fff; }
 
-/* ---------- Buttons ---------- */
+/* =============================================================================
+   Buttons
+============================================================================= */
 .inv-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: 13px 20px;
+  padding: 13px 22px;
   min-height: 46px;
   font: 700 var(--text-sm) / 1 var(--font-sans);
-  color: #fff;
+  letter-spacing: var(--tracking-wide);
+  color: var(--accent-on);
   background: var(--accent);
   border: 1px solid var(--accent);
   border-radius: var(--radius-input);
   text-decoration: none;
   cursor: pointer;
-  transition: background 160ms ease, transform 160ms ease, color 160ms ease;
+  transition: background var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
 }
 .inv-btn:hover, .inv-btn:focus-visible {
   background: var(--plum-deep);
+  border-color: var(--plum-deep);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-button-hover);
   outline: none;
 }
 .inv-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .inv-btn--ghost {
   color: var(--accent);
   background: transparent;
+  box-shadow: none;
 }
 .inv-btn--ghost:hover, .inv-btn--ghost:focus-visible {
   background: var(--accent-soft);
+  border-color: var(--accent);
   color: var(--accent);
+  box-shadow: none;
 }
 .inv-btn[aria-disabled="true"] {
   color: var(--fg-subtle);
@@ -344,59 +581,77 @@
   border: 1px dashed var(--k-30);
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
-.inv-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
-
-/* ---------- Anchor nav (sekce na stránce) ---------- */
-.inv-jumps {
+.inv-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: var(--space-4) 0 0;
-}
-.inv-jumps a {
-  font: 600 var(--text-xs) / 1 var(--font-sans);
-  color: var(--accent);
-  background: #fff;
-  border: 1px solid var(--accent-rule);
-  border-radius: var(--radius-input);
-  padding: 8px 12px;
-  text-decoration: none;
-  transition: background 160ms ease, color 160ms ease;
-}
-.inv-jumps a:hover, .inv-jumps a:focus-visible {
-  background: var(--accent);
-  color: #fff;
-  outline: none;
+  gap: var(--space-3);
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: var(--inv-rule);
 }
 
-/* ---------- Figure (vizualizace, podklady) ---------- */
+/* =============================================================================
+   Figure (vizualizace, podklady)
+============================================================================= */
 .inv-figure {
-  background: #fff;
-  border: 1px solid var(--border-muted);
-  border-radius: var(--radius-input);
+  position: relative;
+  background: var(--k-0);
+  border: var(--inv-hair);
+  border-radius: var(--inv-radius);
   overflow: hidden;
   margin: 0;
 }
 .inv-figure img { width: 100%; height: auto; display: block; }
+/* Zvětšitelné obrázky (lightbox jako na hlavním webu) */
+.inv-figure[data-lb] img,
+.inv-zone__img[data-lb] { cursor: zoom-in; }
+.inv-figure::after {
+  content: "Zvětšit";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  font: 600 var(--text-2xs) / 1 var(--font-sans);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: #fff;
+  background: hsl(var(--hue) 41% 13% / 0.82);
+  padding: 5px 9px;
+  border-radius: var(--radius-input);
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+  pointer-events: none;
+}
+.inv-figure[data-lb]:hover::after,
+.inv-figure[data-lb]:focus-within::after { opacity: 1; transform: none; }
 .inv-figure figcaption {
   font: 500 var(--text-xs) / var(--lh-normal) var(--font-sans);
-  color: var(--fg-muted);
-  padding: 10px 12px;
-  border-top: 1px solid var(--border-muted);
+  color: var(--fg-subtle);
+  padding: 10px 13px;
+  border-top: var(--inv-hair);
 }
+/* Čtvercové vizualizace ve stejné výšce (foto, ne dokumenty) */
+.inv-figure--square img { aspect-ratio: 1 / 1; object-fit: cover; height: auto; }
+/* Malý náhled dokumentu/výřezu — primárně se čte po zvětšení */
+.inv-figure--doc { max-width: 340px; }
 .inv-figure-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--space-4);
 }
+.inv-zone__img { cursor: zoom-in; }
 
-/* ---------- Patička sub-webu ---------- */
+/* =============================================================================
+   Patička pod-webu
+============================================================================= */
 .inv-footer {
-  background: linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 17%) 100%);
-  color: rgba(255, 255, 255, 0.78);
-  border-top: 1px solid var(--accent);
-  padding: var(--space-6) 0;
+  background: var(--plum-deep);
+  color: rgba(255, 255, 255, 0.72);
+  border-top: 1px solid hsl(calc(var(--hue) + 44) 30% 70% / 0.35);
+  padding: var(--space-7) 0;
   margin-top: auto;
 }
 .inv-footer__inner {
@@ -410,57 +665,82 @@
   font: 500 var(--text-xs) / 1.5 var(--font-sans);
 }
 .inv-footer__badge {
-  font: 600 var(--text-2xs) / 1 var(--font-mono);
+  font: 600 var(--text-2xs) / 1 var(--font-sans);
   letter-spacing: var(--tracking-wide);
   color: var(--rose);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid hsl(calc(var(--hue) + 44) 30% 70% / 0.4);
   border-radius: var(--radius-input);
-  background: rgba(255, 255, 255, 0.08);
-  padding: 6px 10px;
+  background: hsl(calc(var(--hue) + 44) 30% 70% / 0.1);
+  padding: 6px 11px;
   white-space: nowrap;
 }
 .inv-footer a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
 .inv-footer a:hover { color: var(--rose); }
 .inv-footer__spacer { flex: 1; }
 
-/* ---------- Login ---------- */
+/* =============================================================================
+   Login — přístupová brána
+============================================================================= */
 .inv-login {
-  min-height: calc(100vh - 58px);
+  min-height: calc(100vh - var(--inv-masthead));
   display: grid;
   place-items: center;
-  padding: var(--space-7) var(--gutter);
+  padding: var(--space-8) var(--gutter);
 }
 .inv-login__card {
+  position: relative;
   width: 100%;
-  max-width: 420px;
-  background: #fff;
-  border: 1px solid var(--border-muted);
-  border-radius: var(--radius-input);
-  padding: var(--space-6);
+  max-width: 432px;
+  background: var(--k-0);
+  border: var(--inv-hair);
+  border-radius: var(--inv-radius);
+  padding: var(--space-7) var(--space-6) var(--space-6);
   box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+/* Brandový akcentní proužek po horní hraně (ribbon stroke). */
+.inv-login__card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--accent);
 }
 .inv-login__eyebrow {
-  font: 600 var(--text-2xs) / 1 var(--font-mono);
+  display: inline-flex;
+  align-items: center;
+  font: 600 var(--text-2xs) / 1 var(--font-sans);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--accent);
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+.inv-login__eyebrow::before {
+  content: "";
+  width: 2px;
+  height: 12px;
+  background: var(--accent);
+  margin-right: 9px;
 }
 .inv-login__title {
   font: 700 var(--text-2xl) / var(--lh-snug) var(--font-sans);
+  letter-spacing: var(--tracking-tight);
   color: var(--fg);
   margin: 0 0 var(--space-2);
+  text-wrap: balance;
 }
 .inv-login__lede {
-  font: 500 var(--text-sm) / var(--lh-normal) var(--font-sans);
+  font: 500 var(--text-sm) / var(--lh-relaxed) var(--font-sans);
   color: var(--fg-muted);
   margin: 0 0 var(--space-5);
 }
 .inv-login label {
   display: block;
-  font: 600 var(--text-xs) / 1 var(--font-sans);
-  color: var(--fg);
-  margin: 0 0 6px;
+  font: 600 var(--text-2xs) / 1 var(--font-sans);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin: 0 0 7px;
 }
 .inv-login input {
   width: 100%;
@@ -471,15 +751,15 @@
   border-radius: var(--radius-input);
   padding: 12px 14px;
   margin-bottom: var(--space-4);
-  transition: border-color 140ms ease, background 140ms ease;
+  transition: border-color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
 }
 .inv-login input:focus {
   outline: none;
   border-color: var(--accent);
-  background: #fff;
+  background: var(--k-0);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
-.inv-login .inv-btn { width: 100%; }
+.inv-login .inv-btn { width: 100%; margin-top: var(--space-2); }
 .inv-login__error {
   display: none;
   font: 600 var(--text-sm) / var(--lh-normal) var(--font-sans);
@@ -487,18 +767,22 @@
   background: rgba(208, 52, 44, 0.08);
   border: 1px solid rgba(208, 52, 44, 0.25);
   border-radius: var(--radius-input);
-  padding: 10px 12px;
+  padding: 10px 13px;
   margin: 0 0 var(--space-4);
 }
 .inv-login__error.is-visible { display: block; }
 .inv-login__hint {
-  font: 500 var(--text-xs) / var(--lh-normal) var(--font-sans);
+  font: 500 var(--text-xs) / var(--lh-relaxed) var(--font-sans);
   color: var(--fg-subtle);
-  margin: var(--space-4) 0 0;
+  margin: var(--space-5) 0 0;
+  padding-top: var(--space-4);
+  border-top: var(--inv-hair);
 }
 .inv-login__hint a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
-/* ---------- Scénáře karty ---------- */
+/* =============================================================================
+   Scénáře — karty
+============================================================================= */
 .inv-scenarios {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -507,35 +791,39 @@
 .inv-scenario {
   display: flex;
   flex-direction: column;
-  background: #fff;
-  border: 1px solid var(--border-muted);
-  border-top: 4px solid var(--accent);
-  border-radius: var(--radius-input);
+  background: var(--k-0);
+  border: var(--inv-hair);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--inv-radius);
   padding: var(--space-5);
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
 }
-.inv-scenario:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hover); }
+.inv-scenario:hover { transform: translateY(-3px); box-shadow: var(--shadow-card-hover); }
 .inv-scenario--muted { border-top-color: var(--k-30); }
 .inv-scenario__kod {
-  font: 700 var(--text-2xs) / 1 var(--font-mono);
+  font: 700 var(--text-2xs) / 1 var(--font-sans);
+  font-variant-numeric: var(--inv-fig);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--accent);
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--space-3);
 }
+.inv-scenario--muted .inv-scenario__kod { color: var(--fg-subtle); }
 .inv-scenario__title {
   font: 700 var(--text-xl) / var(--lh-snug) var(--font-sans);
+  letter-spacing: var(--tracking-tight);
   color: var(--fg);
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-4);
   white-space: pre-line;
+  text-wrap: balance;
 }
-.inv-scenario dl { margin: 0 0 var(--space-4); display: grid; gap: var(--space-3); }
+.inv-scenario dl { margin: 0 0 var(--space-5); display: grid; gap: var(--space-3); }
 .inv-scenario dt {
   font: 600 var(--text-2xs) / 1.3 var(--font-sans);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--fg-subtle);
-  margin: 0 0 2px;
+  margin: 0 0 3px;
 }
 .inv-scenario dd {
   font: 500 var(--text-sm) / var(--lh-normal) var(--font-sans);
@@ -545,18 +833,21 @@
 }
 .inv-scenario .inv-btn { margin-top: auto; }
 
-/* ---------- Poznámky ---------- */
+/* =============================================================================
+   Poznámky (číslovaný seznam)
+============================================================================= */
 .inv-notes { display: grid; gap: 0; }
 .inv-notes__item {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 40px minmax(0, 1fr);
   gap: var(--space-3);
-  padding: 12px 10px;
-  border-bottom: 1px solid var(--border-muted);
+  padding: 13px var(--space-2);
+  border-bottom: var(--inv-hair);
 }
 .inv-notes__item:last-child { border-bottom: 0; }
 .inv-notes__num {
-  font: 700 var(--text-sm) / var(--lh-normal) var(--font-mono);
+  font: 700 var(--text-sm) / var(--lh-normal) var(--font-sans);
+  font-variant-numeric: var(--inv-fig);
   color: var(--accent);
   text-align: right;
 }
@@ -568,25 +859,53 @@
   overflow-wrap: anywhere;
 }
 
-/* ---------- Prose (delší texty ze zdroje, S1) ---------- */
+/* =============================================================================
+   Prose (delší texty ze zdroje, S1)
+============================================================================= */
 .inv-prose {
   font: 500 var(--text-md) / var(--lh-relaxed) var(--font-sans);
   color: var(--fg);
   white-space: pre-line;
-  max-width: 78ch;
+  max-width: 74ch;
   margin: 0;
+  text-wrap: pretty;
 }
 .inv-prose--sm { font-size: var(--text-sm); }
 
-/* ---------- Responsive ---------- */
+/* =============================================================================
+   Motion — jemné odhalování při scrollu (progresivní vylepšení).
+   Bez JS zůstává vše viditelné; html.inv-anim aktivuje skryté výchozí stavy.
+============================================================================= */
+html.inv-anim .inv-hero,
+html.inv-anim .inv-section {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity var(--dur-slow) var(--ease-standard), transform var(--dur-slow) var(--ease-standard);
+}
+html.inv-anim .inv-hero.is-in,
+html.inv-anim .inv-section.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* =============================================================================
+   Responsive
+============================================================================= */
 @media (max-width: 760px) {
-  .inv-top__inner { gap: var(--space-3); }
-  .inv-top__nav { margin-left: 0; width: 100%; order: 3; }
-  .inv-facts__row { grid-template-columns: 1fr; gap: 2px; }
+  .inv-shell { padding: var(--space-7) 0 var(--space-8); }
+  .inv-top__inner { gap: var(--space-3); padding: var(--space-2) 0; }
+  .inv-top__nav { margin-left: 0; width: 100%; order: 3; gap: var(--space-3); }
+  .inv-top__logout { margin-left: auto; }
+  .inv-section { margin-bottom: var(--space-8); }
+  .inv-section__head { column-gap: var(--space-3); }
+  .inv-facts__row { grid-template-columns: 1fr; gap: 2px; padding: 10px var(--space-2); }
   .inv-facts__value { text-align: left; }
   .inv-card { padding: var(--space-4); }
+  .inv-sub { margin-top: var(--space-7); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .inv-btn, .inv-scenario, .inv-facts__row, .inv-top__nav a { transition: none; }
+  .inv-btn, .inv-scenario, .inv-facts__row, .inv-top__nav a, .inv-login input, .inv-jumps a { transition: none; }
+  html.inv-anim .inv-hero,
+  html.inv-anim .inv-section { opacity: 1; transform: none; transition: none; }
 }

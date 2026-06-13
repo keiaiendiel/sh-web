@@ -7,8 +7,8 @@
   "radky": [
    {
     "label": "Scénář je sestaven k investičnímu záměru:",
-    "d": "VPD①",
-    "v": "VPD①",
+    "d": "VPD1",
+    "v": "VPD1",
     "f": "='Investiční záměr'!B6"
    },
    {
@@ -148,7 +148,7 @@
  "model": {
   "titul": "Ekonometrický model S1 base",
   "infoTitul": "Základní informace k modelu S1 base",
-  "popis": "Ekonometrický model ke scénáři S1 base (dále též i jen \"model\") je účelovým zjednodušením reality. \n\nVšechny výstupy modelu, tj. například Gross Yield, Gross Profit, Project ROI, Project IRR či Equity IRR, naznačují hospodářský potenciál záměru VPD① s ohledem na uvedené limity modelu, zvolená zjednodušení a zadané vstupní parametry.\n\nVeškeré parametry modelu, které jsou autorem modelu nastaveny jako výchozí, předpokládají: (1) precizní projektové řízení, (2) kvalitní marketingovou komunikaci a (3) realizaci scénáře bez komplikací na kritické cestě, přičemž třetí předpoklad je podmíněn úspěšným naplním prvních dvou předpokladů.",
+  "popis": "Ekonometrický model ke scénáři S1 base (dále též i jen \"model\") je účelovým zjednodušením reality. \n\nVšechny výstupy modelu, tj. například Gross Yield, Gross Profit, Project ROI, Project IRR či Equity IRR, naznačují hospodářský potenciál záměru VPD1 s ohledem na uvedené limity modelu, zvolená zjednodušení a zadané vstupní parametry.\n\nVeškeré parametry modelu, které jsou autorem modelu nastaveny jako výchozí, předpokládají: (1) precizní projektové řízení, (2) kvalitní marketingovou komunikaci a (3) realizaci scénáře bez komplikací na kritické cestě, přičemž třetí předpoklad je podmíněn úspěšným naplním prvních dvou předpokladů.",
   "strukturaTitul": "Základní struktura modelu S1 base",
   "strukturaHeaders": [
    "Obsah dějství",

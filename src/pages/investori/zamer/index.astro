@@ -1,6 +1,6 @@
 ---
 /*
- * /investori/zamer/ , Investiční záměr VPD① (vstupní stránka po přihlášení).
+ * /investori/zamer/ , Investiční záměr VPD1 (vstupní stránka po přihlášení).
  * Obsah 1:1 z listu „Investiční záměr" klientské tabulky (zamer.json),
  * ortofotomapa s interaktivní legendou (mapa.json). Texty a čísla se
  * needitují tady, ale v tabulce; pak scripts/import-zamer.py.
@@ -21,7 +21,7 @@ type Radek = {
 
 const isText = (r: Radek) => typeof r.v === 'string';
 ---
-<InvestorPage title="Investiční záměr VPD&#9312; , podklady pro investory" active="zamer">
+<InvestorPage title="Investiční záměr VPD1 , podklady pro investory" active="zamer">
   <div class="inv-shell">
     <header class="inv-hero">
       <p class="inv-hero__eyebrow" data-no-typograf>{zamer.podtitul} · areál Horních kasáren, Klecany u Prahy</p>
@@ -60,6 +60,9 @@ const isText = (r: Radek) => typeof r.v === 'string';
     ))}
 
     <section class="inv-section" id="mapa" aria-label="Ortofotomapa areálu">
+      <div class="inv-section__head">
+        <h2 class="inv-section__title">Ortofotomapa areálu</h2>
+      </div>
       <ArealMap />
     </section>
 

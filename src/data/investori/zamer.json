@@ -1,6 +1,6 @@
 {
  "titul": "INVESTIČNÍ ZÁMĚR",
- "podtitul": "VPD①",
+ "podtitul": "VPD1",
  "sekce": [
   {
    "id": "aktivum",
@@ -76,7 +76,7 @@
   },
   {
    "id": "zakladni",
-   "titul": "Základní informace k záměru VPD①",
+   "titul": "Základní informace k záměru VPD1",
    "radky": [
     {
      "label": "Rozloha všech parcel, které tvoří Areál:",
@@ -203,7 +203,7 @@
   },
   {
    "id": "ostatni",
-   "titul": "Ostatní informace k záměru VPD①",
+   "titul": "Ostatní informace k záměru VPD1",
    "radky": [
     {
      "label": "Vlastníkem 100% obchodního podílu ve společnosti FTV a jediným jednatelem je:",
