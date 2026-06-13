@@ -1,0 +1,66 @@
+{
+ "titul": "Základní investičně-strategické možnosti transformace areálu Horních kasáren v Klecanech u Prahy (dále jen \"Areál\")",
+ "headers": [
+  "Název & cíl",
+  "První transformační krok \n(první developerská fáze)",
+  "Název základního scénáře",
+  "Detail základního scénáře",
+  "První dějství\nzákladního\nscénáře",
+  "Realizace odkupu Areálu\nv rámci základního scénáře",
+  "Odhad kapitálové\nnáročnosti\nprvního dějství",
+  "Název alternativního scénáře,\nodhad kapitálové náročnosti a základní popis"
+ ],
+ "scenare": [
+  {
+   "nazev": "Scénář S1 \n\nCÍL: transformace Areálu\ndo podoby nové městské čtvrti",
+   "krok": "Komplexní rekonstrukce stávajících budov na základě stavebního povolení, a to způsobem, který nebude považován za změnu v území (tj. bez změny účelu užívání či změny původních kapacit)",
+   "kod": "S1 (base)",
+   "detail": "zde",
+   "dejstvi": "Komplexní rekonstrukce A1 až A6 + C, na základě stavebního povolení, pro potřeby projektu Startovací hub",
+   "odkup": "Po pravomocném povolení komplexní rekonstrukce, tj. v rámci prvního transformačního kroku za pomoci bankovního úvěru",
+   "kapital": "„Equity-like“ finance (kreditní linka):\n\n310+ mil. Kč\nna bankou spolufinancovaný odkup Areálu a komplexní rekonstrukci A1 až A6 + C\n(primárně)",
+   "alternativa": "S1 (low): 50+ mil. Kč \n\nScénář S1 (low) je založen na financování odkupu Areálu i komplexní rekonstrukce za pomoci klientů – družstevníků; odkup Areálu v tomto scénáři nastane až po kolaudaci komplexní rekonstrukce."
+  },
+  {
+   "nazev": "Scénář S2\n\nCÍL: transformace Areálu\ndo podoby nové městské čtvrti",
+   "krok": "Dílčí rekonstrukce stávajících budov v režimu drobné stavby – bez stavebního povolení, tj. například bez zásahu do nosných konstrukcí (dílčí rekonstrukce zachová společné sociální zázemí v původních ubytovnách)",
+   "kod": "S2 (base)",
+   "detail": "zde",
+   "dejstvi": "Dílčí rekonstrukce A1 až A6 v režimu drobné stavby bez stavebního povolení,\npro potřeby projektu Ubytovací hub",
+   "odkup": "Například: (1) jakmile se bankovní úvěr na odkup Areálu, získatelný na základě provozních příjmů z dílčí rekonstrukce, stane výhodnějším než odkládání odkupu; (2) po pravomocném povolení zastavět Areál novými stavbami; (3) před propadnutím práva na odkup Areálu v roce 2039",
+   "kapital": "„Equity-like“ finance (kreditní linka):\n\n50+ mil. Kč\nna postupnou dílčí rekonstrukci A1 až A6, určenou na  bude generovat příjmy na zálohy a odkup\n(primárně)",
+   "alternativa": "—"
+  },
+  {
+   "nazev": "Scénář S3\n\nCÍL: transformace Areálu\ndo podoby nové městské čtvrti",
+   "krok": "Uzavření plánovací smlouvy s městem, na jejímž základě dojde k úpravě etapizace ÚP a k následným krokům umožňujícím zastavět Areál novými stavbami bez mezikroku spočívajícího v dílčí či komplexní rekonstrukci",
+   "kod": "S3 (base)",
+   "detail": "zde",
+   "dejstvi": "Vyjednávání s městem za účelem uzavření plánovací smlouvy",
+   "odkup": "Po pravomocném povolení zastavět Areál novými stavbami, nejpozději však před propadnutím práva na odkup Areálu v roce 2039",
+   "kapital": "„Equity-like“ finance (kreditní linka):\n\n3 až 24 mil. Kč p. a.\nna úhradu záloh na kupní cenu Areálu\n(primárně)",
+   "alternativa": "—"
+  },
+  {
+   "nazev": "Scénář Sk",
+   "krok": "[kombinace výše uvedeného]",
+   "kod": "Sk (base)",
+   "detail": "—",
+   "dejstvi": "[kombinace výše uvedeného]",
+   "odkup": "[kombinace výše uvedeného]",
+   "kapital": "[kombinace výše uvedeného]",
+   "alternativa": "—"
+  },
+  {
+   "nazev": "Scénář Sx",
+   "krok": "[bude doplněno]",
+   "kod": "Sx (base)",
+   "detail": "—",
+   "dejstvi": "[bude doplněno]",
+   "odkup": "[bude doplněno]",
+   "kapital": "[bude doplněno]",
+   "alternativa": "[bude doplněno]"
+  }
+ ],
+ "footnote": "*Pokud je použito slovní spojení \"odkup Areálu\" či \"kupní cena Areálu\", je tím myšlen odkup 100 % obchodního podílu ve společnosti FTV Klecany s.r.o., respektive kupní cena za tento podíl."
+}

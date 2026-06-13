@@ -1,0 +1,223 @@
+{
+ "titul": "Investičně-realizační scénář S1 base",
+ "podtitul": "k transformaci areálu Horních kasáren v Klecanech u Prahy (dále jen \"Areál\")",
+ "badge": "[PRACOVNÍ VERZE 2p8iaz5 z 30. 4. 2026]",
+ "zakladniInformace": {
+  "titul": "Základní informace ke scénáři S1 base",
+  "radky": [
+   {
+    "label": "Scénář je sestaven k investičnímu záměru:",
+    "d": "VPD①",
+    "v": "VPD①",
+    "f": "='Investiční záměr'!B6"
+   },
+   {
+    "label": "Pojmenování scénáře:",
+    "d": "Základní scénář",
+    "v": "Základní scénář"
+   },
+   {
+    "label": "Zkratka scénáře:",
+    "d": "S1",
+    "v": "S1"
+   },
+   {
+    "label": "Varianta scénáře:",
+    "d": "base",
+    "v": "base"
+   },
+   {
+    "label": "Podkladové aktivum:",
+    "d": "Areál",
+    "v": "Areál"
+   },
+   {
+    "label": "Cíl scénáře:",
+    "d": "transformace Areálu",
+    "v": "transformace Areálu"
+   },
+   {
+    "label": "Scénář obsahuje:",
+    "d": "tři developerské fáze",
+    "v": "tři developerské fáze"
+   },
+   {
+    "label": "1. developerská fáze se uskuteční pro potřeby projektu:",
+    "d": "Startovací hub",
+    "v": "Startovací hub"
+   },
+   {
+    "label": "Odkup Areálu se uskuteční:",
+    "d": "≈ uprostřed 1. fáze",
+    "v": "≈ uprostřed 1. fáze"
+   },
+   {
+    "label": "V rámci 1. dějství dojde k uskutečnění:",
+    "d": "komplexní rekonstrukce",
+    "v": "komplexní rekonstrukce"
+   },
+   {
+    "label": "Stávající budovy v Areálu, které tvoří předmět 1. fáze:",
+    "d": "A1 až A6 + C",
+    "v": "A1 až A6 + C"
+   },
+   {
+    "label": "HPP, které jsou předmětem 1. fáze:",
+    "d": "10 837 m² HPP",
+    "v": 10837,
+    "f": "='Základní údaje & výpočty'!HPP_všech_potenciálních_ubytovacích_kapacit__Startovací_HUB"
+   },
+   {
+    "label": "Stavební pozemky tvořící Areál, které budou 1. fází zatíženy:",
+    "d": "16 496 m²",
+    "v": 16496,
+    "f": "='Základní údaje & výpočty'!C43"
+   },
+   {
+    "label": "Stavební pozemky tvořící Areál, které nebudou 1. fází zatíženy:",
+    "d": "60 714 m²",
+    "v": 60714,
+    "f": "='Základní údaje & výpočty'!H39-D22"
+   },
+   {
+    "label": "Obsah 1. developerské fáze ve vztahu k Areálu:",
+    "d": "odkup & rekonstrukce",
+    "v": "odkup & rekonstrukce"
+   },
+   {
+    "label": "Obsah 2. developerské fáze ve vztahu k Areálu:",
+    "d": "provoz & lobbing",
+    "v": "provoz & lobbing"
+   },
+   {
+    "label": "Obsah 3. developerské fáze ve vztahu k Areálu:",
+    "d": "výstavba nové čtvrti",
+    "v": "výstavba nové čtvrti"
+   },
+   {
+    "label": "Ke scénáři je sestaven ekonometrický model:",
+    "d": "S1 base",
+    "v": "S1 base",
+    "f": "=\"\"&TEXT(D12,\"\")&\" \"&TEXT(D13,\"\")&\"\""
+   },
+   {
+    "label": "Současné ceny jsou v příslušném ekonometrickém modelu odhadnuty a stanoveny k:",
+    "d": "18. 1. 2026",
+    "v": "2026-01-18"
+   },
+   {
+    "label": "Poslední aktualizace scénáře se uskutečila:",
+    "d": "30. 4. 2026",
+    "v": "2026-04-30"
+   }
+  ]
+ },
+ "projekt": {
+  "titul": "Projekt Startovací hub",
+  "popis": "Projekt Startovací hub (dále též i jen „Projekt“) lze v rámci investičního záměru VPD1 popsat jako kampus zaměřený primárně na uspokojování potřeb pracujících studentů či začínajících mladých kreativců, podnikatelů a živnostníků.\n\nJádro Projektu tvoří coworkingový sál a 331 startovacích a kompletně vybavených byto-kanceláří 1+kk o ploše cca 21 m² v lokalitě Praha-západ uzpůsobených pro dlouhodobé i krátkodobé ubytovávání osob z příslušných cílových skupin.\n\nProjekt počítá s aktivním operátorem (osa2.cz), který bude za pomoci ubytovaných osob tvořit bohatý networkingový program zahrnující\nnapříklad pravidelné přednášky, kurzy, besedy, prezentace, sportovní a kulturní akce, společenská setkání či pre-seed-angel-investorské dny.\n\nProjekt je ucelený ekosystém, jehož provozní ekonomika se opírá primárně o příjmy z ubytovávání osob (colivingu), a jehož atraktivitu u cílových skupin\nzajišťuje zejména zázemí naplňující potřeby příslušných skupin a bohatý společenský, kulturní, sportovní a vzdělávací program, který zde bude\nprodukován za pomoci DIY metod OSA II.",
+  "proUbytovane": "Projekt Startovací hub by měl ve prospěch ubytovaných osob fungovat jako:\n\n   •    vysokoškolské koleje (např. the-fizz.com) bez vazby na konkrétní školu;\n   •    svobodná podnikatelská škola se zaměřením na pracující studenty 18+;\n   •    internátní škola (např. opengate.cz) bez oficiálních vychovatelů, učitelů a osnov;\n   •    sdílené pracovní prostředí (např. impacthub.cz; scottweber.cz);\n   •    projektový generátor, inkubátor i akcelerátor (např. ycombinator.com);\n   •    volnočasový či podnikatelský klub (např. businessclub.cz; eccentricclub.cz);\n   •    zázemí poskytující virtuální sídla i bydliště (např. simplyoffice.cz);\n   •    back-office zajišťující administrativní a provozní podporu ubytovaných osob;\n   •    vzdělávací instituce zaměřená na osobní seberozvoj a sebevzdělávání;\n   •    tinder zajišťující každodenní setkávání a poznávání lidí mimo virtuální prostředí;\n   •    bytové družstvo připravující pro své členy dostupné rodinné bydlení.",
+  "proDevelopera": "Projekt Startovací hub by měl ve prospěch developera fungovat jako:\n\n   •    způsob, jak dosáhnout nejvyšší návratnosti na vlastní kapitál;\n   •    metoda, jak uspíšit realizaci dalších developerských fází v příslušné lokalitě;\n   •    generátor osob ochotných aktivně podporovat rozvoj příslušné lokality;\n   •    generátor osob ochotných aktivně v rámci voleb hlasovat pro rozvoj příslušné lokality;\n   •    generátor osob připravených si najímat developerské produkty v příslušné lokalitě;\n   •    generátor osob připravených kupovat developerské produkty v příslušné lokalitě;\n   •    generátor osob připravených investovat do nabídnutých investičních produktů;\n   •    generátor politické podpory nezbytné pro dynamický rozvoj příslušné lokality;\n   •    zárodek schopný svými vlastnostmi uspíšit vznik budoucí městské čtvrti;\n   •    zárodek schopný vytvořit z příslušné lokality evropské „Silicon Valley“;\n   •    zárodek schopný proměnit okolní pozemky v novou metropoli."
+ },
+ "scenar": {
+  "titul": "Scénář S1 base",
+  "marketingHeader": "Marketingová komunikace",
+  "dejstvi": [
+   {
+    "dejstvi": "Prolog:                Výběr vhodného strategického partnera, který dokáže zajistit finanční krytí nezbytné pro bezpečné uskutečnění záměru.",
+    "marketing": "Příprava podkladů pro partnery, kteří by mohli mít zájem podílet se na financování záměru, dohoda o spolupráci a start spolupráce."
+   },
+   {
+    "dejstvi": "1. developerská fáze začíná objednávkou podkladů potřebných pro získání stavebního povolení na rekonstrukci stávajících staveb pro potřeby projektu Startovací hub; pokračuje získáním stavebního povolení, po jehož získání dojde k odkupu Areálu; a končí kolaudací zrekonstruovaných staveb.",
+    "marketing": "Spuštění kampaně s cílem zajistit pozitivní vnímání záměru a projektu u všech cílových skupin – tj. například u kreativců, studentů, začínajících podnikatelů, drobných investorů, mediálních partnerů, místní veřejnosti a zastupců státní správy i samosprávy."
+   },
+   {
+    "dejstvi": "2. developerská fáze začíná zahájením provozu jednotek vybudovaných v prvním dějství pro potřeby projektu Startovací hub; pokračuje vyjednáním a uzavřením plánovací smlouvy s Městem; a končí nabytím účinnosti nového územního plánu přijatého na základě vyjednané plánovací smlouvy.",
+    "marketing": "Rozšíření kampaně o sportovní, kulturní, vzdělávací a společenské aktivity přímo v Areálu s cílem vybudovat z klientů Projektu aktivní komunitu schopnou s podporou Projektu efektivně prosazovat své zájmy spojené s transformací Areálu a rozvojem příslušné lokality."
+   },
+   {
+    "dejstvi": "3. developerská fáze začíná objednávkou podkladů u vybraných architektonických studií nezbytných pro povolení transformace celého Areálu na plnohodnotnou městskou čtvrť ze strany příslušných úřadů; pokračuje získáním povolení k příslušné transformaci; a končí dokončením této transformace.",
+    "marketing": "Zacílení kampaně na propagaci konkrétních produktů, které se budou v rámci transformace Areálu doručovat na trh – tj. například na produkty uspokojující poptávku po dostupném rodinném bydlení nájemního, družstevního či vlastnického charakteru."
+   },
+   {
+    "dejstvi": "Epilog:               Management kapitálu vzniklého předchozí činností v souladu se zájmy investorů a dohodnutým postupem.",
+    "marketing": "Pokračování kampaně se zaměřením na rozvoj vybudované komunity a nových developerských příležitostí v lokalitě Areálu i mimo ni."
+   }
+  ],
+  "footnote": "*Pokud je použito slovní spojení \"odkup Areálu\" či \"kupní cena Areálu\", je tím myšlen odkup 100 % obchodního podílu ve společnosti FTV Klecany s.r.o., resp. kupní cena za tento podíl."
+ },
+ "model": {
+  "titul": "Ekonometrický model S1 base",
+  "infoTitul": "Základní informace k modelu S1 base",
+  "popis": "Ekonometrický model ke scénáři S1 base (dále též i jen \"model\") je účelovým zjednodušením reality. \n\nVšechny výstupy modelu, tj. například Gross Yield, Gross Profit, Project ROI, Project IRR či Equity IRR, naznačují hospodářský potenciál záměru VPD① s ohledem na uvedené limity modelu, zvolená zjednodušení a zadané vstupní parametry.\n\nVeškeré parametry modelu, které jsou autorem modelu nastaveny jako výchozí, předpokládají: (1) precizní projektové řízení, (2) kvalitní marketingovou komunikaci a (3) realizaci scénáře bez komplikací na kritické cestě, přičemž třetí předpoklad je podmíněn úspěšným naplním prvních dvou předpokladů.",
+  "strukturaTitul": "Základní struktura modelu S1 base",
+  "strukturaHeaders": [
+   "Obsah dějství",
+   "Délka realizace"
+  ],
+  "struktura": [
+   {
+    "faze": "Prolog:                                              výběr vhodného strategického partnera, který dokáže zajistit finanční krytí nezbytné pro bezpečné uskutečnění záměru",
+    "obsah": {
+     "d": "příprava (nyní probíhá)",
+     "v": "příprava (nyní probíhá)"
+    },
+    "delka": {
+     "d": "-",
+     "v": "-",
+     "f": "=F146"
+    }
+   },
+   {
+    "faze": "1. developerská fáze:           odkup Areálu a následná rekonstrukce části areálových budov pro potřeby projektu Startovací hub",
+    "obsah": {
+     "d": "odkup & rekonstrukce",
+     "v": "odkup & rekonstrukce",
+     "f": "=D24"
+    },
+    "delka": {
+     "d": "2,53 let / 926 dní",
+     "v": "2,53 let / 926 dní",
+     "f": "=D306"
+    }
+   },
+   {
+    "faze": "2. developerská fáze:           management zrekonstruovaných budov vzniklých pro potřeby projektu Startovací hub s cílem podporovat transformaci Areálu",
+    "obsah": {
+     "d": "provoz & lobbing",
+     "v": "provoz & lobbing",
+     "f": "=D25"
+    },
+    "delka": {
+     "d": "2,00 let / 730 dní",
+     "v": "2,00 let / 730 dní",
+     "f": "=D458"
+    }
+   },
+   {
+    "faze": "3. developerská fáze:           budování moderní městské čtvrti na pozemcích v Areálu prosazené za opomoci podpory projektu Startovací hub",
+    "obsah": {
+     "d": "výstavba nové čtvrti",
+     "v": "výstavba nové čtvrti",
+     "f": "=D26"
+    },
+    "delka": {
+     "d": "2,30 let / 838 dní",
+     "v": "2,30 let / 838 dní",
+     "f": "=D670"
+    }
+   },
+   {
+    "faze": "Epilog:                                              management kapitálu vzniklý předchozí činností v souladu se zájmy investorů a dohodnutými cíli.",
+    "obsah": {
+     "d": "reflexe (exit či expanze)",
+     "v": "reflexe (exit či expanze)"
+    },
+    "delka": {
+     "d": "Celkem: 6,83 let",
+     "v": 6.830555555555556,
+     "f": "=F150"
+    }
+   }
+  ]
+ }
+}

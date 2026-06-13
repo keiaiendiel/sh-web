@@ -49,6 +49,7 @@ Web byl přestavěn na fraktální vzor: **každá stránka = `SubpageHero` → 
 /rezervace/                    rozcestník (3 hlavní volby + barevný icon-grid všeho rezervovatelného vč. dopravy, ?zazemi=<slug> prefill, login-only stub) → wizard → post-submit dotazník doplňků s živou orientační cenou
 /kontakty/, /faq/, /gdpr/, /metodika-srovnani/
 /druzstvo/                     SKRYTÁ (noindex)
+/investori/                    SKRYTÝ pod-web za přihlášením (noindex, viz sekce Podklady pro investory): login → zamer, udaje-a-vypocty, scenare(+s1), smlouvy, poznamky
 /404
 ```
 
@@ -104,6 +105,24 @@ Coworking ceny + doplňky: viz `src/pages/cenik/index.astro` (sál 2 900 Kč/mě
 Submit aktuálně success state bez backendu — Worker endpoint + Turnstile je open loop. Odpovědi dotazníku se zatím nikam neposílají (frontend-ready pro Worker payload).
 
 Voice principle: prezentovat sebevědomě jako fungující, badge „V projektové přípravě" v patičce neutralizuje vábivou reklamu (Příloha č. 1 písm. d) ZOOS), ne per-amenity disclaimery.
+
+## Podklady pro investory (/investori/)
+
+Pod-web za přihlášením (od 2026-06-13), odkaz v patičce „Podklady pro investory". Vlastní layout `src/layouts/InvestorPage.astro` (bez hub Header/Footer, noindex, mimo sitemapu, robots Disallow), vizuál sdílí tokens (plum/rose/cream, Atyp), ale analytičtější: fact-rows, husté tabulky, mono metadata, KPI dlaždice.
+
+**Zdroj pravdy = klientský Excel** `~/Work/_2026/zamer-vpd1.xlsx` (listy: Investiční záměr, Základní údaje & výpočty, Základní scénáře, S1 (base), Mapa Areálu, Poznámky). Slovní formulace, čísla i vzorce se přenáší 1:1, NIKDY nepřepisovat. Po aktualizaci tabulky od klienta:
+
+```bash
+uv run --with openpyxl scripts/import-zamer.py /cesta/k/zamer-vpd1.xlsx
+```
+
+→ regeneruje `src/data/investori/*.json` (display stringy přesně dle Excel number formátů + raw hodnoty + vzorce `f` klíče pro budoucí interaktivní kalkulace). In-cell obrázky tabulky žijí v `public/images/investori/`.
+
+**Stránky:** `/investori/` login → `/investori/zamer/` (fakta + interaktivní ortofotomapa `ArealMap.astro`: obousměrný hover legenda ↔ zóny, polygony = konstanta POLYGONS v komponentě, orientační obkres) → `/udaje-a-vypocty/` (5 skupin dle listu, read-only) → `/scenare/` (rozcestník karet S1/S2/S3/Sk/Sx) → `/scenare/s1/` (hlavička S1 base) + `/poznamky/` + `/smlouvy/` (placeholder).
+
+**Auth:** klientská brána, SHA-256("email:heslo") allowlist v `src/utils/investorAuth.ts`, localStorage `vpd1-auth`. Default účet marek.semerad@osa2.cz / 8SH!. ⚠️ Měkká ochrana: obsah je ve statickém HTML a v public repu čitelný i bez přihlášení; skutečné zabezpečení = Cloudflare Access (open loop).
+
+**Editorial lint:** zdrojové texty (plné en-dashů atd.) žijí v `src/data/investori/` (lint je neskenuje); UI chrome v `.astro` musí zůstat lint-čistý. Texty na stránky NIKDY nehardcodovat, vždy přes JSON.
 
 ## Vault → repo sync workflow
 
@@ -188,6 +207,10 @@ Prefixy: `feat(hub):`, `fix(hub):`, `refactor(hub):`, `docs(hub):`, `content(hub
 - **Login/účty** — header „Přihlásit se" je stub; tabulka chce i „Odhlásit se" a „Přepnout účet" (fáze 2, až bude auth backend).
 - **DNS cutover na `startovacihub.cz`** — postup v `README.md`.
 - **E-mail doména** — JSON-LD odkazuje na `alternativa2.info`, e-maily na `osa2.cz`. Operátor potvrdí.
+- **Investoři: reálné zabezpečení** — klientská brána je jen měkká (data v HTML + public repo). Až bude vážné: Cloudflare Access / Worker auth + privátní hosting podkladů.
+- **Investoři: interaktivní kalkulace** — klient chce editovatelné vstupní parametry s živým přepočtem (vzorce už jsou v JSON pod `f` klíči); zatím read-only + poznámka „připravujeme". Ekonometrický model S1 (base) (ROI/IRR/CAPEX/OPEX, řádky 74+ listu) zatím není převedený, na stránce S1 je placeholder.
+- **Investoři: zóny ortofotomapy** — POLYGONS v `ArealMap.astro` jsou orientační obkres; klient může dodat přesnější tvary (rozpracovaný HTML návrh z Claude Designu).
+- **Investoři: scénáře S2/S3** — listy „S2 (base)"/„S3 (base)" v tabulce zatím nejsou (hyperlinky vedou do prázdna), karty mají „Detail připravujeme".
 
 **Vyřešeno 2026-06-12 dle rozhodnutí klienta** (už NEJSOU open loops): hero motto + MyShelter brand; kapacity 3 os./ložnice; fakta-jako-realita (24h, tramvaj, zastávky linek, výdejní boxy s partnery); družstva zveřejněna (6 položek v komunita.json); novinky veřejné bez gate; doprava jako rezervační kategorie; „Stát se sponzorem" CTA u Nadace VPD; coliving rehabilitován jako zastřešující pojem.
 

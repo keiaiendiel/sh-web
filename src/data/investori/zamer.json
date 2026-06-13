@@ -1,0 +1,312 @@
+{
+ "titul": "INVESTIČNÍ ZÁMĚR",
+ "podtitul": "VPD①",
+ "sekce": [
+  {
+   "id": "aktivum",
+   "titul": "Podkladové aktivum: areál Horních kasáren v Klecanech u Prahy (dále jen \"Areál\")",
+   "radky": [
+    {
+     "label": "Rozloha všech parcel, které tvoří Areál:",
+     "d": "83 327 m²",
+     "v": 83327,
+     "f": "='Základní údaje & výpočty'!E39"
+    },
+    {
+     "label": "Celková rozloha zastavitelných ploch Areálu dle současného ÚP:",
+     "d": "77 210 m²",
+     "v": 77210,
+     "f": "='Základní údaje & výpočty'!H39"
+    },
+    {
+     "label": "HPP všech budov stojících v Areálu, u kterých lze v souladu se současným ÚP přistoupit ihned k rekonstrukci:",
+     "d": "18 707 m²",
+     "v": 18706.7,
+     "f": "='Základní údaje & výpočty'!S39"
+    },
+    {
+     "label": "Kupní cena Areálu (současná), jejíž splatnost lze odložit až do roku 2039:",
+     "d": "457 829 167 Kč",
+     "v": 457829166.6666667,
+     "f": "=$D$41"
+    },
+    {
+     "label": "Kupní cena Areálu (současná) v přepočtu na jeden m2:",
+     "d": "5 494 Kč/m²",
+     "v": 5494.367571935467,
+     "f": "=D14/D11"
+    },
+    {
+     "label": "Nejzazší termín sjednaný pro odkoupení Areálu na základě uzavřených smluv:",
+     "d": "únor 2039",
+     "v": "únor 2039"
+    },
+    {
+     "label": "Parcely, které tvoří Areál, jsou zapsány na:",
+     "d": "LV 1436; katastrální území: Klecany (vyznačeno na ortofotomapě)",
+     "v": "LV 1436; katastrální území: Klecany (vyznačeno na ortofotomapě)"
+    },
+    {
+     "label": "Majitelem Areálu je SPV společnost:",
+     "d": "FTV Cerhovice s.r.o. (dále jen \"FTV\")",
+     "v": "FTV Cerhovice s.r.o. (dále jen \"FTV\")"
+    },
+    {
+     "label": "Právo odkoupit Areál je smluvně zajištěno na řad SPV společnosti (na řad = smlouvu je možné podstoupit na třetí stranu):",
+     "d": "VPD Klecany s.r.o. (dále jen \"VPD\")",
+     "v": "VPD Klecany s.r.o. (dále jen \"VPD\")"
+    },
+    {
+     "label": "Zástavba Areálu novými stavbami je možná po splnění podmínek v současném ÚP (viz analýza ÚP):",
+     "d": "od roku 2030",
+     "v": "od roku 2030"
+    },
+    {
+     "label": "Nad rámec práva odkupu je k Areálu do února roku 2039 smluvně zajištěno:",
+     "d": "právo užívání / nájmu, právo neomezeného podnájmu, právo stavby, plná moc k jednání za FTV s úřady",
+     "v": "právo užívání / nájmu, právo neomezeného podnájmu, právo stavby, plná moc k jednání za FTV s úřady"
+    },
+    {
+     "label": "Základní investiční záměr s podkladovým aktivem:",
+     "d": "development Areálu do podoby moderní městské čtvrti s komunitním & coworkingovým zázemím",
+     "v": "development Areálu do podoby moderní městské čtvrti s komunitním & coworkingovým zázemím"
+    }
+   ],
+   "footnote": "*pokud je použito slovní spojení \"odkup Areálu\" či \"kupní cena Areálu\", je tím myšlen odkup 100 % obchodního podílu ve společnosti FTV a kupní cena za tento podíl"
+  },
+  {
+   "id": "zakladni",
+   "titul": "Základní informace k záměru VPD①",
+   "radky": [
+    {
+     "label": "Rozloha všech parcel, které tvoří Areál:",
+     "d": "83 327 m²",
+     "v": 83327,
+     "f": "=D11"
+    },
+    {
+     "label": "Rozloha parcel, které v Areálu lze zastavět novostavbami bytových domů dle současného ÚP (plochy SM - smíšené městské):",
+     "d": "77 210 m²",
+     "v": 77210,
+     "f": "=D12"
+    },
+    {
+     "label": "HPP všech budov stojících v Areálu, u kterých lze v souladu se současným ÚP přistoupit ihned k rekonstrukci:",
+     "d": "18 707 m²",
+     "v": 18706.7,
+     "f": "='Základní údaje & výpočty'!S39"
+    },
+    {
+     "label": "Tržní hodnota Areálu byla odhadnuta znalcem k 31. 12. 2024 (viz příslušný znalecký posudek) na:",
+     "d": "536 200 000 Kč",
+     "v": 536200000
+    },
+    {
+     "label": "Kolik procent ze znalcem odhadnuté tržní hodnoty Areálu činí současná kupní cena Areálu:",
+     "d": "85,38 %",
+     "v": 0.8538402959094865,
+     "f": "=D41/D39"
+    },
+    {
+     "label": "Současná kupní cena Areálu po jejím navýšení v roce 2024, 2025 a 2026 (k navýšení dochází každý rok k 10. 3.):",
+     "d": "457 829 167 Kč",
+     "v": 457829166.6666667,
+     "f": "='Základní údaje & výpočty'!AO11"
+    },
+    {
+     "label": "Kupní cena Areálu (současná) v přepočtu na jeden m2 nakupovaných pozemků:",
+     "d": "5 494 Kč/m²",
+     "v": 5494.367571935467,
+     "f": "=D41/D36"
+    },
+    {
+     "label": "Základ kupní ceny Areálu sjednaný 24. 2. 2023 uzavřením SoSB:",
+     "d": "385 000 000 Kč",
+     "v": 385000000
+    },
+    {
+     "label": "Základ kupní ceny Areálu se každoročně k 10. 3., a to pokud inflace CPI za předchozí rok nepřesáhne 5 %, navyšuje o částku:",
+     "d": "19 250 000 Kč",
+     "v": 19250000
+    },
+    {
+     "label": "Pokud inflace CPI za předchozí rok přesáhne 5 %, navýší se k 10. 3. základ kupní ceny o částku, která se získá:",
+     "d": "vynásobením základu kupní ceny s vyhlášenou inflací CPI za předchozí rok",
+     "v": "vynásobením základu kupní ceny s vyhlášenou inflací CPI za předchozí rok"
+    },
+    {
+     "label": "Průměrný smluvený meziroční růst Kupní ceny Areálu vzhledem k jeho Kupní ceně v příslušném roce (při inflaci do 5 %):",
+     "d": "od 2,79 % do max. 4,20 % (navýšení ceny podkladového aktiva se k 10. 3. kapitalizuje do smluvené Kupní ceny)",
+     "v": "od 2,79 % do max. 4,20 % (navýšení ceny podkladového aktiva se k 10. 3. kapitalizuje do smluvené Kupní ceny)"
+    },
+    {
+     "label": "Průměrná výše sjednaných záloh na Kupní cenu vzhledem k výši Kupní ceny v příslušném roce (při inflaci do 5 %):",
+     "d": "od 0,63 % do max. 4,01 % (bazální cash-flow záměru)",
+     "v": "od 0,63 % do max. 4,01 % (bazální cash-flow záměru)"
+    },
+    {
+     "label": "Již uhrazené zálohy na kupní cenu Areálu:",
+     "d": "16 000 000 Kč",
+     "v": 16000000
+    },
+    {
+     "label": "Z kupní ceny Areálu v současnosti zbývá doplatit:",
+     "d": "441 829 167 Kč",
+     "v": 441829166.6666667,
+     "f": "=D41-D48"
+    },
+    {
+     "label": "Zastavitelnost Areálu dle současného ÚP:",
+     "d": "40 %",
+     "v": 0.4
+    },
+    {
+     "label": "Povolená podlažnost v Areálu dle současného ÚP:",
+     "d": "tři nadzemní podlaží plus podkroví",
+     "v": "tři nadzemní podlaží plus podkroví"
+    },
+    {
+     "label": "Podlažnost bytových domů přiléhajících ze severní strany k Areálu:",
+     "d": "až 8 nadzemních podlaží",
+     "v": 8
+    },
+    {
+     "label": "Index zvolený pro níže uvedený výpočet nadzemních HPP, který se držví v mezích současného ÚP:",
+     "d": "3,60",
+     "v": 3.6
+    },
+    {
+     "label": "Index zvolený pro níže uvedený převod HPP na ČPP:",
+     "d": "0,8",
+     "v": 0.8
+    },
+    {
+     "label": "HPP bytových domů (nadzemních podlaží), které lze v Areálu potenciálně umístit bez změny současného ÚP:",
+     "d": "111 182 m²",
+     "v": 111182.40000000001,
+     "f": "=D37*D50*D53"
+    },
+    {
+     "label": "ČPP bytových jednotek, které lze v Areálu potenciálně umístit v souladu se současným ÚP:",
+     "d": "88 946 m²",
+     "v": 88945.92000000001,
+     "f": "=D55*D54"
+    },
+    {
+     "label": "Kupní cena Areálu (současná) v přepočtu na jeden m2 ČPP bytových jednotek, které lze dle současného ÚP v Areálu umístit:",
+     "d": "5 147 Kč/m² ČPP",
+     "v": 5147.275632953896,
+     "f": "=D41/D56"
+    }
+   ],
+   "footnote": "*pokud je použito slovní spojení \"odkup Areálu\" či \"kupní cena Areálu\", je tím myšlen odkup 100 % obchodního podílu ve společnosti FTV a kupní cena za tento podíl"
+  },
+  {
+   "id": "ostatni",
+   "titul": "Ostatní informace k záměru VPD①",
+   "radky": [
+    {
+     "label": "Vlastníkem 100% obchodního podílu ve společnosti FTV a jediným jednatelem je:",
+     "d": "Jaromír Wimmer",
+     "v": "Jaromír Wimmer"
+    },
+    {
+     "label": "Vlastníkem 100% obchodního podílu ve společnosti VPD a jediným jednatelem je:",
+     "d": "Marek Semerád",
+     "v": "Marek Semerád "
+    },
+    {
+     "label": "Nájem Areálu (převoditelný na společnost VPD) je do odkupu Areálu smluvně garantován a uzavřen na spolek:",
+     "d": "Občanské sdružení Alternativa II, z.s. (dále jen \"Spolek\" či \"OSA II\" či \"Partner společnosti VPD\")",
+     "v": "Občanské sdružení Alternativa II, z.s. (dále jen \"Spolek\" či \"OSA II\" či \"Partner společnosti VPD\")"
+    },
+    {
+     "label": "Předsedou spolku OSA II a jediným jednatelem (statutárním zástupcem) je:",
+     "d": "Marek Semerád",
+     "v": "Marek Semerád "
+    },
+    {
+     "label": "Adresa, kde se nalézá Areál (adresa původní armádní klubovny):",
+     "d": "Dolní Kasárna 798, 250 67 Klecany, Česko",
+     "v": "Dolní Kasárna 798, 250 67 Klecany, Česko"
+    },
+    {
+     "label": "Odkaz na Mapy.cz (adresa klubovny):",
+     "d": "https://mapy.com/s/cezodekumo",
+     "v": "https://mapy.com/s/cezodekumo",
+     "h": "https://mapy.com/s/cezodekumo"
+    },
+    {
+     "label": "Odkaz na Google maps (adresa klubovny):",
+     "d": "https://maps.app.goo.gl/1JbSJc5jfT7ELGSZ9",
+     "v": "https://maps.app.goo.gl/1JbSJc5jfT7ELGSZ9",
+     "h": "https://maps.app.goo.gl/1JbSJc5jfT7ELGSZ9"
+    },
+    {
+     "label": "Obec kde se nalézá Areál:",
+     "d": "Klecany (dále též jen \"Obec\" či \"Město\" či \"Nejmenší Město v lokalitě Praha-východ\")",
+     "v": "Klecany (dále též jen \"Obec\" či \"Město\" či \"Nejmenší Město v lokalitě Praha-východ\")"
+    },
+    {
+     "label": "Počet obyvatel Obce k 1. 1. 2025:",
+     "d": "3 938 obyvatel",
+     "v": 3938,
+     "h": "https://csu.gov.cz/docs/107847/96920a0d-b169-ad96-d665-3bbdc2c0dc59/obyv_obce_25.pdf?version=1.0&utm_source=chatgpt.com"
+    },
+    {
+     "label": "Statut obce:",
+     "d": "město",
+     "v": "město"
+    },
+    {
+     "label": "Okres kde se nalézá Areál:",
+     "d": "Praha-východ",
+     "v": "Praha-východ"
+    },
+    {
+     "label": "Správní obvod obce s rozšířenou působností:",
+     "d": "Brandýs nad Labem-Stará Boleslav",
+     "v": "Brandýs nad Labem-Stará Boleslav "
+    },
+    {
+     "label": "Správní obvod obce s pověřeným obecním úřadem:",
+     "d": "Odolena Voda",
+     "v": "Odolena Voda"
+    },
+    {
+     "label": "Poslední volby do zastupitelstva Obce se konaly:",
+     "d": "23.–24. září 2022",
+     "v": "23.–24. září 2022"
+    },
+    {
+     "label": "Počet voličů, kteří vložili do volební urny obálku se svým rozhodnutím ve volbách do zastupitelstva Obce v roce 2022:",
+     "d": "1 228 oprávněných voličů",
+     "v": 1228
+    },
+    {
+     "label": "Odkaz na podrobné volební výsledky v Obci zveřejněné ČSÚ:",
+     "d": "https://www.volby.cz/pls/kv2022/kv1111?xjazyk=CZ&xid=0&xdz=2&xnumnuts=2109&xobec=538311&xstat=0&xvyber=0",
+     "v": "https://www.volby.cz/pls/kv2022/kv1111?xjazyk=CZ&xid=0&xdz=2&xnumnuts=2109&xobec=538311&xstat=0&xvyber=0",
+     "h": "https://www.volby.cz/pls/kv2022/kv1111?xjazyk=CZ&xid=0&xdz=2&xnumnuts=2109&xobec=538311&xstat=0&xvyber=0"
+    },
+    {
+     "label": "Odkaz na podrobné volební výsledky v Obci zpracované a zveřejněné na serveru Seznam.cz:",
+     "d": "https://www.seznamzpravy.cz/p/vysledky-voleb/2022/komunalni-volby/obec/538311-klecany?utm_source=chatgpt.com",
+     "v": "https://www.seznamzpravy.cz/p/vysledky-voleb/2022/komunalni-volby/obec/538311-klecany?utm_source=chatgpt.com",
+     "h": "https://www.seznamzpravy.cz/p/vysledky-voleb/2022/komunalni-volby/obec/538311-klecany?utm_source=chatgpt.com"
+    },
+    {
+     "label": "Příští volby do zastupitelstva Obce se konají:",
+     "d": "23.09. – 24.09.2026",
+     "v": "23.09. – 24.09.2026"
+    },
+    {
+     "label": "Do kdy nejpozději lze přihlásit kandidáty do nejbližších voleb, ve kterých se bude volit nové zastupitelstvo Obce:",
+     "d": "19. července 2022 do 16:00 hod. (66 dní před 23. 9.)",
+     "v": "19. července 2022 do 16:00 hod. (66 dní před 23. 9.)"
+    }
+   ],
+   "footnote": "*pokud je použito slovní spojení \"odkup Areálu\" či \"kupní cena Areálu\", je tím myšlen odkup 100 % obchodního podílu ve společnosti FTV a kupní cena za tento podíl"
+  }
+ ]
+}

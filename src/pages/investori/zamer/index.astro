@@ -1,0 +1,92 @@
+---
+/*
+ * /investori/zamer/ , Investiční záměr VPD① (vstupní stránka po přihlášení).
+ * Obsah 1:1 z listu „Investiční záměr" klientské tabulky (zamer.json),
+ * ortofotomapa s interaktivní legendou (mapa.json). Texty a čísla se
+ * needitují tady, ale v tabulce; pak scripts/import-zamer.py.
+ */
+import InvestorPage from '../../../layouts/InvestorPage.astro';
+import ArealMap from '../../../components/investori/ArealMap.astro';
+import { withBase } from '../../../utils/url';
+import zamer from '../../../data/investori/zamer.json';
+import meta from '../../../data/investori/meta.json';
+
+type Radek = {
+  label: string;
+  d: string;
+  v: unknown;
+  f?: string;
+  h?: string;
+};
+
+const isText = (r: Radek) => typeof r.v === 'string';
+---
+<InvestorPage title="Investiční záměr VPD&#9312; , podklady pro investory" active="zamer">
+  <div class="inv-shell">
+    <header class="inv-hero">
+      <p class="inv-hero__eyebrow" data-no-typograf>{zamer.podtitul} · areál Horních kasáren, Klecany u Prahy</p>
+      <h1 class="inv-hero__title">{zamer.titul}</h1>
+      <div class="inv-hero__meta">
+        <span class="inv-chip inv-chip--accent" data-no-typograf>{meta.badge}</span>
+        <span class="inv-chip" data-no-typograf>{meta.aktualizace}</span>
+      </div>
+      <nav class="inv-jumps" aria-label="Sekce na stránce">
+        <a href="#aktivum">Podkladové aktivum</a>
+        <a href="#mapa">Ortofotomapa</a>
+        <a href="#zakladni">Základní informace</a>
+        <a href="#ostatni">Ostatní informace</a>
+      </nav>
+    </header>
+
+    {zamer.sekce.filter((s) => s.id === 'aktivum').map((sekce) => (
+      <section class="inv-section" id="aktivum" aria-label={sekce.titul}>
+        <div class="inv-section__head">
+          <h2 class="inv-section__title">{sekce.titul}</h2>
+        </div>
+        <div class="inv-card">
+          <div class="inv-facts">
+            {(sekce.radky as Radek[]).map((r) => (
+              <div class="inv-facts__row">
+                <p class="inv-facts__label">{r.label}</p>
+                <p class:list={['inv-facts__value', { 'inv-facts__value--text': isText(r) }]} data-no-typograf>
+                  {r.h ? <a href={r.h} target="_blank" rel="noopener">{r.d}</a> : r.d}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+        {sekce.footnote && <p class="inv-note" data-no-typograf>{sekce.footnote}</p>}
+      </section>
+    ))}
+
+    <section class="inv-section" id="mapa" aria-label="Ortofotomapa areálu">
+      <ArealMap />
+    </section>
+
+    {zamer.sekce.filter((s) => s.id !== 'aktivum').map((sekce) => (
+      <section class="inv-section" id={sekce.id} aria-label={sekce.titul}>
+        <div class="inv-section__head">
+          <h2 class="inv-section__title">{sekce.titul}</h2>
+        </div>
+        <div class="inv-card">
+          <div class="inv-facts">
+            {(sekce.radky as Radek[]).map((r) => (
+              <div class="inv-facts__row">
+                <p class="inv-facts__label">{r.label}</p>
+                <p class:list={['inv-facts__value', { 'inv-facts__value--text': isText(r) }]} data-no-typograf>
+                  {r.h ? <a href={r.h} target="_blank" rel="noopener">{r.d}</a> : r.d}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+        {sekce.footnote && <p class="inv-note" data-no-typograf>{sekce.footnote}</p>}
+      </section>
+    ))}
+
+    <div class="inv-actions">
+      <a class="inv-btn" href={withBase('/investori/udaje-a-vypocty/')}>Základní údaje &amp; výpočty</a>
+      <a class="inv-btn inv-btn--ghost" href={withBase('/investori/scenare/')}>Základní scénáře</a>
+    </div>
+  </div>
+</InvestorPage>

@@ -1,0 +1,203 @@
+---
+/*
+ * ArealMap , ortofotomapa areálu se schématickým zákresem zón a obousměrnou
+ * hover interakcí: najetí na řádek legendy zvýrazní zónu v mapě a najetí
+ * na zónu v mapě zvýrazní řádek legendy. Data (výměry + texty) z mapa.json,
+ * podklad public/images/investori/ortofotomapa.jpg (z klientské tabulky).
+ *
+ * ZÓNY: souřadnice polygonů jsou ORIENTAČNÍ obkres barevného zákresu
+ * v podkladové bitmapě (procenta šířky/výšky, viewBox 0 0 100 100,
+ * preserveAspectRatio="none"). Doladění tvarů = upravit POLYGONS níže,
+ * nic jiného se měnit nemusí.
+ */
+import mapa from '../../data/investori/mapa.json';
+import { withBase } from '../../utils/url';
+
+const POLYGONS: Record<string, string[]> = {
+  // Budoucí městská čtvrť , všechny parcely areálu (tyrkysový zákres)
+  areal: [
+    '18.7,3.2 42.9,5.7 91.8,3.4 91.8,91.3 42.1,92.5 42.1,44.5 24.3,38.4 18.7,36.5',
+  ],
+  // Startovací hub (jádro) , žlutý zákres: pruh minipivovaru, A1 až A6, B, E+F+C, S
+  jadro: [
+    '42.9,5.0 91.8,3.4 91.8,36.5 82.9,36.5 82.9,27.4 61.1,27.4 61.1,10.3 60.4,10.3 60.4,29.7 54.9,29.7 54.9,10.5 42.9,10.5',
+    '56.4,34.5 74.3,34.5 74.3,47 56.4,47',
+    '47.7,37 51,37 51,46.5 47.7,46.5',
+  ],
+  // Startovací hub (zázemí) , zelený zákres: vstupní koridor, komunitní park, bazén
+  zazemi: [
+    '42.9,5.7 54.9,5.7 54.9,36.5 47.1,36.5 47.1,92.5 42.9,92.5',
+    '74.6,36.5 79.3,36.5 79.3,54.8 74.6,54.8',
+    '52.9,36.5 54.9,36.5 54.9,46.8 52.9,46.8',
+  ],
+};
+
+// Barvy legendy ladí s barvami zákresu v bitmapě.
+const COLORS: Record<string, string> = {
+  areal: '#2fc6c0',
+  jadro: '#ddd23e',
+  zazemi: '#56b65c',
+};
+---
+<div class="amap" data-amap>
+  <p class="amap__title">{mapa.titul}</p>
+  <div class="amap__frame">
+    <img
+      src={withBase(mapa.obrazek)}
+      alt="Ortofotomapa areálu Horních kasáren se schématickým zákresem zón: celý areál, jádro a zázemí projektu Startovací hub"
+      width="2000"
+      height="626"
+      loading="lazy"
+      decoding="async"
+    />
+    <svg class="amap__overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      {Object.entries(POLYGONS).map(([zone, polys]) => (
+        <g data-zone={zone} tabindex="-1">
+          {polys.map((points) => (
+            <polygon points={points} vector-effect="non-scaling-stroke" />
+          ))}
+        </g>
+      ))}
+    </svg>
+  </div>
+  <ul class="amap__legend">
+    {mapa.zony.map((z) => (
+      <li>
+        <button type="button" class="amap__row" data-zone-link={z.id}>
+          <span class="amap__swatch" style={`--swatch: ${COLORS[z.id]};`} aria-hidden="true"></span>
+          <span class="amap__value" data-no-typograf>{z.vymera.d}</span>
+          <span class="amap__text">{z.text}</span>
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script is:inline>
+  (function () {
+    document.querySelectorAll('[data-amap]').forEach(function (root) {
+      if (root.dataset.bound) return;
+      root.dataset.bound = '1';
+
+      function setActive(zone) {
+        if (zone) { root.dataset.active = zone; } else { delete root.dataset.active; }
+        root.querySelectorAll('[data-zone-link]').forEach(function (row) {
+          row.classList.toggle('is-active', row.getAttribute('data-zone-link') === zone);
+        });
+      }
+
+      root.querySelectorAll('[data-zone-link]').forEach(function (row) {
+        var zone = row.getAttribute('data-zone-link');
+        row.addEventListener('pointerenter', function () { setActive(zone); });
+        row.addEventListener('pointerleave', function () { setActive(null); });
+        row.addEventListener('focus', function () { setActive(zone); });
+        row.addEventListener('blur', function () { setActive(null); });
+        /* Tap na mobilu: přepínač (druhý tap zhasne). */
+        row.addEventListener('click', function () {
+          setActive(root.dataset.active === zone ? null : zone);
+        });
+      });
+
+      root.querySelectorAll('.amap__overlay [data-zone]').forEach(function (g) {
+        var zone = g.getAttribute('data-zone');
+        g.addEventListener('pointerenter', function () { setActive(zone); });
+        g.addEventListener('pointerleave', function () { setActive(null); });
+      });
+    });
+  })();
+</script>
+
+<style>
+  .amap { display: grid; gap: var(--space-4); }
+  .amap__title {
+    font: 600 var(--text-md) / var(--lh-normal) var(--font-sans);
+    color: var(--fg);
+    margin: 0;
+    max-width: 90ch;
+  }
+  .amap__frame {
+    position: relative;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    background: var(--k-05);
+  }
+  .amap__frame img {
+    width: 100%;
+    height: auto;
+    transition: filter 220ms ease;
+  }
+  .amap[data-active] .amap__frame img {
+    filter: saturate(0.55) brightness(0.8);
+  }
+  .amap__overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .amap__overlay polygon {
+    fill: transparent;
+    stroke: transparent;
+    stroke-width: 2.5px;
+    pointer-events: fill;
+    transition: fill 200ms ease, stroke 200ms ease;
+  }
+  .amap[data-active="areal"] [data-zone="areal"] polygon,
+  .amap[data-active="jadro"] [data-zone="jadro"] polygon,
+  .amap[data-active="zazemi"] [data-zone="zazemi"] polygon {
+    fill: rgba(255, 255, 255, 0.14);
+    stroke: #fff;
+    stroke-dasharray: 6 4;
+  }
+  /* Jádro a zázemí leží nad polygonem celého areálu , vyšší z-pořadí v SVG
+     řeší pořadí v markupu (areal je první). Hit-test jde odshora. */
+
+  .amap__legend { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+  .amap__row {
+    display: grid;
+    grid-template-columns: 18px minmax(110px, auto) 1fr;
+    gap: var(--space-3);
+    align-items: baseline;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-input);
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+  }
+  .amap__row:hover, .amap__row:focus-visible, .amap__row.is-active {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    outline: none;
+    transform: translateX(2px);
+  }
+  .amap__swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--swatch);
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    align-self: center;
+  }
+  .amap__value {
+    font: 700 var(--text-md) / 1.2 var(--font-sans);
+    font-variant-numeric: tabular-nums lining-nums;
+    color: var(--fg);
+    white-space: nowrap;
+  }
+  .amap__text {
+    font: 500 var(--text-sm) / var(--lh-normal) var(--font-sans);
+    color: var(--fg-muted);
+  }
+
+  @media (max-width: 700px) {
+    .amap__row { grid-template-columns: 14px 1fr; }
+    .amap__text { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .amap__frame img, .amap__overlay polygon, .amap__row { transition: none; }
+  }
+</style>

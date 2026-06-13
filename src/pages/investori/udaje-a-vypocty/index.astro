@@ -1,0 +1,448 @@
+---
+/*
+ * /investori/udaje-a-vypocty/ , Základní údaje & výpočty (list 2 tabulky).
+ * Pět skupin přesně dle zdrojového listu: Areál, výpočty z uzavřených
+ * smluv, projekt Startovací hub, projekt Ubytovací hub, projekt Nová čtvrť.
+ * Zatím read-only zrcadlo; editovatelné parametry s živým přepočtem jsou
+ * další fáze (vzorce už v datech jsou, viz f klíče ve vypocty.json).
+ */
+import InvestorPage from '../../../layouts/InvestorPage.astro';
+import DataTable from '../../../components/investori/DataTable.astro';
+import { withBase } from '../../../utils/url';
+import vypocty from '../../../data/investori/vypocty.json';
+import meta from '../../../data/investori/meta.json';
+
+const v = vypocty;
+
+/* Zdrojový list odděluje tabulku č. 1 a č. 2 (sdílí řádky parcel). */
+/* Součtové řádky nesou zdrojové popisky (řádek 38 listu) nad hodnotami. */
+const sum = (col: string) => ({
+  label: (v.parcely.souctyLabels as Record<string, string>)[col],
+  value: (v.parcely.soucty as Record<string, { d: string }>)[col].d,
+});
+
+const t1Headers = v.parcely.headers.slice(0, 6);
+const t1Rows = v.parcely.rows.map((r) => r.slice(0, 6));
+const t1Foot = ['Celkem', '', sum('E'), '', '', sum('H')];
+
+const t2Headers = [v.parcely.headers[0], ...v.parcely.headers.slice(6)];
+const t2Rows = v.parcely.rows.map((r) => [r[0], ...r.slice(6)]);
+const t2Foot = [
+  'Celkem', '',
+  sum('M'), sum('N'), sum('O'),
+  '', '', '',
+  sum('S'), sum('T'), sum('U'), sum('V'), sum('W'), sum('X'),
+];
+
+const najemFoot = [
+  'Celkem', '', '', '', '', '',
+  { label: v.najem.souctyLabels.BO, value: v.najem.soucty.BO.d },
+  { label: v.najem.souctyLabels.BP, value: v.najem.soucty.BP.d },
+  { label: v.najem.souctyLabels.BQ, value: v.najem.soucty.BQ.d },
+];
+const uhFoot = [
+  'Celkem', '', '', '', '',
+  { label: v.ubytovaciHub.souctyLabels.DR, value: v.ubytovaciHub.soucty.DR.d },
+  { label: v.ubytovaciHub.souctyLabels.DT, value: v.ubytovaciHub.soucty.DT.d },
+  { label: v.ubytovaciHub.souctyLabels.DU, value: v.ubytovaciHub.soucty.DU.d },
+  { label: v.ubytovaciHub.souctyLabels.DV, value: v.ubytovaciHub.soucty.DV.d },
+];
+
+/* Excelové směrové šipky (↓↓↓ / ↑↑↑) jsou navigace v listu, na webu je
+   nahrazuje umístění sekce; text mezi nimi zůstává doslovný. */
+const stripArrows = (s: string) => s.replace(/[↓↑]/g, '').replace(/\s+/g, ' ').trim();
+
+const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
+---
+<InvestorPage title="Základní údaje &amp; výpočty , podklady pro investory VPD&#9312;" active="vypocty">
+  <div class="inv-shell">
+    <header class="inv-hero">
+      <p class="inv-hero__eyebrow" data-no-typograf>VPD&#9312; · zdrojová data záměru</p>
+      <h1 class="inv-hero__title" data-no-typograf>{v.titul}</h1>
+      <p class="inv-hero__sub">
+        Kompletní podkladová data: parcely a stavby, smluvní platební
+        kalendář a orientační výpočty tří projektů. Editovatelné parametry
+        se živým přepočtem připravujeme; výpočetní vazby buněk už podklad nese.
+      </p>
+      <div class="inv-hero__meta">
+        <span class="inv-chip inv-chip--accent" data-no-typograf>{meta.badge}</span>
+      </div>
+      <nav class="inv-jumps" aria-label="Sekce na stránce">
+        <a href="#areal">Areál</a>
+        <a href="#smlouvy">Uzavřené smlouvy</a>
+        <a href="#startovaci-hub">Startovací hub</a>
+        <a href="#ubytovaci-hub">Ubytovací hub</a>
+        <a href="#nova-ctvrt">Nová čtvrť</a>
+        <a href="#reference">Reference cen</a>
+      </nav>
+    </header>
+
+    {/* ============ 1 | AREÁL ============ */}
+    <section class="inv-section" id="areal">
+      <div class="inv-section__head">
+        <h2 class="inv-section__title">{v.parcely.titul1}</h2>
+      </div>
+      <figure class="inv-figure" style="margin-bottom: var(--space-4);">
+        <img src={withBase('/images/investori/mapa-zakres-tabulka.jpg')} alt={v.mapaTitul} loading="lazy" decoding="async" />
+        <figcaption data-no-typograf>{v.mapaTitul}</figcaption>
+      </figure>
+      <DataTable headers={t1Headers} rows={t1Rows} foot={t1Foot} label={v.parcely.titul1} />
+
+      <div class="inv-section__head" style="margin-top: var(--space-6);">
+        <h2 class="inv-section__title">{v.parcely.titul2}</h2>
+      </div>
+      <DataTable headers={t2Headers} rows={t2Rows} foot={t2Foot} label={v.parcely.titul2} />
+      <p class="inv-note" data-no-typograf>{v.parcely.poznamka}</p>
+
+      <div class="inv-zones">
+        {[
+          { z: v.zony.jadro, img: 'mapa-jadro.jpg' },
+          { z: v.zony.zazemi, img: null },
+          { z: v.zony.celek, img: 'mapa-jadro-zazemi.jpg' },
+        ].map(({ z, img }) => (
+          <article class="inv-card inv-zone">
+            <h3 class="inv-zone__title" data-no-typograf>{stripArrows(z.titul)}</h3>
+            <div class="inv-facts">
+              <div class="inv-facts__row">
+                <p class="inv-facts__label" data-no-typograf>{z.zatizeneLabel}</p>
+                <p class="inv-facts__value" data-no-typograf>{z.vymera.d}</p>
+              </div>
+              <div class="inv-facts__row">
+                <p class="inv-facts__label" data-no-typograf>{z.podilArealLabel}</p>
+                <p class="inv-facts__value" data-no-typograf>{z.podilAreal.d}</p>
+              </div>
+              <div class="inv-facts__row">
+                <p class="inv-facts__label" data-no-typograf>{z.podilSMLabel}</p>
+                <p class="inv-facts__value" data-no-typograf>{z.podilSM.d}</p>
+              </div>
+            </div>
+            {img && (
+              <img src={withBase(`/images/investori/${img}`)} alt={stripArrows(z.titul)} loading="lazy" decoding="async" class="inv-zone__img" />
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    {/* ============ 2 | UZAVŘENÉ SMLOUVY ============ */}
+    <section class="inv-section" id="smlouvy">
+      <div class="inv-section__head">
+        <h2 class="inv-section__title">{v.skupiny.smlouvy}</h2>
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.zalohy.titul}</h3>
+      <div class="inv-cols">
+        <DataTable headers={v.zalohy.headers} rows={v.zalohy.rows} label={v.zalohy.titul} />
+        <aside class="inv-card">
+          <h4 class="inv-zone__title" data-no-typograf>{v.zalohy.mimoradna.titul}</h4>
+          <p class="inv-prose inv-prose--sm" data-no-typograf>{v.zalohy.mimoradna.popis}</p>
+          <div class="inv-facts" style="margin-top: var(--space-3);">
+            <div class="inv-facts__row">
+              <p class="inv-facts__label">Výše zálohy k uhrazení</p>
+              <p class="inv-facts__value" data-no-typograf>{v.zalohy.mimoradna.vyse.d}</p>
+            </div>
+            <div class="inv-facts__row">
+              <p class="inv-facts__label">Equita na odkup Areálu odložená u majitele (celkem)</p>
+              <p class="inv-facts__value" data-no-typograf>{v.zalohy.mimoradna.celkem.d}</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.kupniCena.titul}</h3>
+      <div class="inv-params">
+        {v.kupniCena.params.map((p) => (
+          <div class="inv-param">
+            <p class="inv-param__label" data-no-typograf>{p.label}</p>
+            <p class="inv-param__value" data-no-typograf>{p.d}</p>
+          </div>
+        ))}
+      </div>
+      <DataTable headers={v.kupniCena.headers} rows={v.kupniCena.rows} markYear label={v.kupniCena.titul} />
+      <p class="inv-note" data-no-typograf>{v.kupniCena.footnote}</p>
+
+      <figure class="inv-figure" style="margin-top: var(--space-4); max-width: 880px;">
+        <img src={withBase('/images/investori/smlouva-kupni-cena.jpg')} alt="Výřez z uzavřené Smlouvy: čl. 3 Kupní cena a způsob jejího určení" loading="lazy" decoding="async" />
+        <figcaption data-no-typograf>{stripArrows(v.kupniCena.note)}</figcaption>
+      </figure>
+    </section>
+
+    {/* ============ 3 | STARTOVACÍ HUB ============ */}
+    <section class="inv-section" id="startovaci-hub">
+      <div class="inv-section__head">
+        <h2 class="inv-section__title" data-no-typograf>{v.skupiny.startovaciHub}</h2>
+      </div>
+
+      <div class="inv-figure-grid" style="margin-bottom: var(--space-6);">
+        {['interier-1kk', 'exterier-jadro', 'budova-d'].map((id) => (
+          <figure class="inv-figure">
+            <img src={withBase(viz[id].img)} alt={viz[id].titul} loading="lazy" decoding="async" />
+            <figcaption data-no-typograf>{viz[id].titul}</figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.najem.titul}</h3>
+      <div class="inv-params">
+        {v.najem.params.map((p) => (
+          <div class="inv-param">
+            <p class="inv-param__label" data-no-typograf>{p.label}</p>
+            <p class="inv-param__value" data-no-typograf>{p.d}</p>
+          </div>
+        ))}
+        <div class="inv-param">
+          <p class="inv-param__label" data-no-typograf>{v.najem.potencialLabel}</p>
+          <p class="inv-param__value" data-no-typograf>{v.najem.potencial.d}</p>
+        </div>
+      </div>
+      <p class="inv-note" style="margin: 0 0 var(--space-2);" data-no-typograf>Sloupce 1.NP / 2.NP / 3.NP: {v.najem.podlaziHeader}</p>
+      <DataTable headers={v.najem.headers} rows={v.najem.rows} foot={najemFoot} label={v.najem.titul} />
+      <div class="inv-ref">
+        <p class="inv-note" data-no-typograf>{stripArrows(v.najem.refCaption)}</p>
+        <DataTable
+          headers={['Odhad nájemného', 'ČPP jednotky', 'Nájemné za m²']}
+          rows={v.najem.refRows}
+          label="Odhad tržního nájemného"
+        />
+        <figure class="inv-figure">
+          <img src={withBase('/images/investori/podklad-najem-odhad.jpg')} alt="Podklad: odhad tržního nájemného pro jednotku 1+kk, odhad-zdarma.cz" loading="lazy" decoding="async" />
+        </figure>
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.rustPrijmu.titul}</h3>
+      <div class="inv-params">
+        {v.rustPrijmu.params.map((p) => (
+          <div class="inv-param">
+            <p class="inv-param__label" data-no-typograf>{p.label}</p>
+            <p class="inv-param__value" data-no-typograf>{p.d}</p>
+          </div>
+        ))}
+      </div>
+      <DataTable headers={v.rustPrijmu.headers} rows={v.rustPrijmu.rows} markYear label={v.rustPrijmu.titul} />
+      <div class="inv-kpis" style="margin-top: var(--space-4);">
+        <div class="inv-kpi">
+          <p class="inv-kpi__label" data-no-typograf>{v.rustPrijmu.totalLabel}</p>
+          <p class="inv-kpi__value" data-no-typograf>{v.rustPrijmu.total.d}</p>
+        </div>
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.porovnani.titul}</h3>
+      <DataTable headers={v.porovnani.headers} rows={v.porovnani.rows} markYear label={v.porovnani.titul} />
+      <div class="inv-kpis" style="margin-top: var(--space-4);">
+        {v.porovnani.totals.map((t) => (
+          <div class="inv-kpi">
+            <p class="inv-kpi__label" data-no-typograf>{t.label}</p>
+            <p class="inv-kpi__value" data-no-typograf>{t.d}</p>
+          </div>
+        ))}
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.trzniCena.titul}</h3>
+      <div class="inv-params">
+        <div class="inv-param">
+          <p class="inv-param__label" data-no-typograf>{v.trzniCena.param.label}</p>
+          <p class="inv-param__value" data-no-typograf>{v.trzniCena.param.d}</p>
+        </div>
+      </div>
+      <DataTable headers={v.trzniCena.headers} rows={v.trzniCena.rows} label={v.trzniCena.titul} />
+      <div class="inv-kpis" style="margin-top: var(--space-4);">
+        {v.trzniCena.totals.map((t) => (
+          <div class="inv-kpi">
+            <p class="inv-kpi__label" data-no-typograf>{t.label}</p>
+            <p class="inv-kpi__value" data-no-typograf>{t.d}</p>
+          </div>
+        ))}
+      </div>
+      <div class="inv-ref">
+        <p class="inv-note" data-no-typograf>{stripArrows(v.trzniCena.refCaption)}</p>
+        <DataTable
+          headers={['Odhad ceny jednotky', 'ČPP jednotky', 'Cena za m²']}
+          rows={v.trzniCena.refRows}
+          label="Odhad tržní ceny jednotky"
+        />
+        <figure class="inv-figure">
+          <img src={withBase('/images/investori/podklad-trzni-cena-odhad.jpg')} alt="Podklad: odhad tržní ceny jednotky 1+kk, odhad-zdarma.cz" loading="lazy" decoding="async" />
+        </figure>
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.trzniRust.titul}</h3>
+      <div class="inv-params">
+        {v.trzniRust.params.map((p) => (
+          <div class="inv-param">
+            <p class="inv-param__label" data-no-typograf>{p.label}</p>
+            <p class="inv-param__value" data-no-typograf>{p.d}</p>
+          </div>
+        ))}
+      </div>
+      <DataTable headers={v.trzniRust.headers} rows={v.trzniRust.rows} markYear label={v.trzniRust.titul} />
+      <div class="inv-kpis" style="margin-top: var(--space-4);">
+        {v.trzniRust.totals.map((t) => (
+          <div class="inv-kpi">
+            <p class="inv-kpi__label" data-no-typograf>{t.label}</p>
+            <p class="inv-kpi__value" data-no-typograf>{t.d}</p>
+          </div>
+        ))}
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.rozdil.titul}</h3>
+      <div class="inv-params">
+        <div class="inv-param">
+          <p class="inv-param__label" data-no-typograf>{v.rozdil.param.label}</p>
+          <p class="inv-param__value" data-no-typograf>{v.rozdil.param.d}</p>
+        </div>
+        <div class="inv-param">
+          <p class="inv-param__label" data-no-typograf>{v.rozdil.param2.label}</p>
+          <p class="inv-param__value" data-no-typograf>{v.rozdil.param2.d}</p>
+        </div>
+      </div>
+      <DataTable headers={v.rozdil.headers} rows={v.rozdil.rows} markYear label={v.rozdil.titul} />
+      <div class="inv-kpis" style="margin-top: var(--space-4);">
+        <div class="inv-kpi">
+          <p class="inv-kpi__label" data-no-typograf>{v.rozdil.totalLabel}</p>
+          <p class="inv-kpi__value" data-no-typograf>{v.rozdil.total.d}</p>
+        </div>
+      </div>
+    </section>
+
+    {/* ============ 4 | UBYTOVACÍ HUB ============ */}
+    <section class="inv-section" id="ubytovaci-hub">
+      <div class="inv-section__head">
+        <h2 class="inv-section__title" data-no-typograf>{v.skupiny.ubytovaciHub}</h2>
+      </div>
+      <div class="inv-figure-grid" style="margin-bottom: var(--space-6); max-width: 720px;">
+        <figure class="inv-figure">
+          <img src={withBase(viz['interier-sdileny'].img)} alt={viz['interier-sdileny'].titul} loading="lazy" decoding="async" />
+          <figcaption data-no-typograf>{viz['interier-sdileny'].titul}</figcaption>
+        </figure>
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.ubytovaciHub.titul}</h3>
+      <div class="inv-params">
+        {v.ubytovaciHub.params.map((p) => (
+          <div class="inv-param">
+            <p class="inv-param__label" data-no-typograf>{p.label}</p>
+            <p class="inv-param__value" data-no-typograf>{p.d}</p>
+          </div>
+        ))}
+      </div>
+      <DataTable headers={v.ubytovaciHub.headers} rows={v.ubytovaciHub.rows} foot={uhFoot} label={v.ubytovaciHub.titul} />
+      <div class="inv-ref">
+        <p class="inv-note" data-no-typograf>{stripArrows(v.ubytovaciHub.refCaption)}</p>
+        <div class="inv-figure-grid">
+          <figure class="inv-figure">
+            <img src={withBase('/images/investori/podklad-ubytovaci-hub-1.jpg')} alt="Podklad: odhady pro Ubytovací hub, 1. část" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="inv-figure">
+            <img src={withBase('/images/investori/podklad-ubytovaci-hub-2.jpg')} alt="Podklad: odhady pro Ubytovací hub, 2. část" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    {/* ============ 5 | NOVÁ ČTVRŤ ============ */}
+    <section class="inv-section" id="nova-ctvrt">
+      <div class="inv-section__head">
+        <h2 class="inv-section__title" data-no-typograf>{v.skupiny.novaCtvrt}</h2>
+      </div>
+      <div class="inv-figure-grid" style="margin-bottom: var(--space-6);">
+        {['nova-ctvrt', 'nova-ctvrt-2', 'nova-ctvrt-3'].map((id) => (
+          <figure class="inv-figure">
+            <img src={withBase(viz[id].img)} alt={viz[id].titul} loading="lazy" decoding="async" />
+            <figcaption data-no-typograf>{viz[id].titul}</figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <h3 class="inv-sub" data-no-typograf>{v.novaCtvrt.titul}</h3>
+      <div class="inv-params">
+        {v.novaCtvrt.params.map((p) => (
+          <div class="inv-param">
+            <p class="inv-param__label" data-no-typograf>{p.label}</p>
+            <p class="inv-param__value" data-no-typograf>{p.d}</p>
+          </div>
+        ))}
+      </div>
+      <DataTable headers={v.novaCtvrt.headers} rows={v.novaCtvrt.rows} markYear label={v.novaCtvrt.titul} />
+      <div class="inv-kpis" style="margin-top: var(--space-4);">
+        <div class="inv-kpi">
+          <p class="inv-kpi__label" data-no-typograf>{v.novaCtvrt.vysledekLabel}</p>
+          <p class="inv-kpi__value" data-no-typograf>{v.novaCtvrt.vysledek.d}</p>
+        </div>
+        <div class="inv-kpi">
+          <p class="inv-kpi__label" data-no-typograf>{v.novaCtvrt.prumCenaLabel} cena bytových jednotek v novostavbě poblíž Areálu</p>
+          <p class="inv-kpi__value" data-no-typograf>{v.novaCtvrt.prumCena.d}</p>
+        </div>
+      </div>
+    </section>
+
+    {/* ============ REFERENCE CEN (Klecanská alej) ============ */}
+    <section class="inv-section" id="reference">
+      <div class="inv-section__head">
+        <h2 class="inv-section__title" data-no-typograf>{v.creditas.titul}</h2>
+        <p class="inv-section__sub" data-no-typograf>{stripArrows(v.novaCtvrt.caption)}</p>
+      </div>
+      <div class="inv-params">
+        <div class="inv-param">
+          <p class="inv-param__label" data-no-typograf>{v.creditas.prumLabel}</p>
+          <p class="inv-param__value" data-no-typograf>{v.creditas.prum.d}</p>
+        </div>
+      </div>
+      <DataTable headers={v.creditas.headers} rows={v.creditas.rows} label={v.creditas.titul} />
+      <p class="inv-note" data-no-typograf>{v.creditas.disclaimer}</p>
+      <figure class="inv-figure" style="margin-top: var(--space-4); max-width: 880px;">
+        <img src={withBase('/images/investori/podklad-novostavby.jpg')} alt="Podklad: nabídkové ceny bytů v novostavbách v lokalitě" loading="lazy" decoding="async" />
+      </figure>
+    </section>
+
+    <div class="inv-actions">
+      <a class="inv-btn" href={withBase('/investori/scenare/')}>Základní scénáře</a>
+      <a class="inv-btn inv-btn--ghost" href={withBase('/investori/zamer/')}>Zpět na investiční záměr</a>
+    </div>
+  </div>
+</InvestorPage>
+
+<style>
+  .inv-sub {
+    font: 700 var(--text-xl) / var(--lh-snug) var(--font-sans);
+    color: var(--fg);
+    margin: var(--space-7) 0 var(--space-4);
+    max-width: 90ch;
+    text-wrap: balance;
+  }
+  .inv-sub:first-of-type { margin-top: 0; }
+  .inv-zones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+  .inv-zone__title {
+    font: 700 var(--text-md) / var(--lh-snug) var(--font-sans);
+    color: var(--fg);
+    margin: 0 0 var(--space-3);
+  }
+  .inv-zone__img {
+    margin-top: var(--space-3);
+    border-radius: 4px;
+    border: 1px solid var(--border-muted);
+  }
+  .inv-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .inv-ref {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: hsl(var(--hue) 14% 97%);
+    border: 1px dashed var(--k-30);
+    border-radius: var(--radius-input);
+  }
+  .inv-ref .inv-figure { max-width: 640px; }
+  @media (max-width: 980px) {
+    .inv-cols { grid-template-columns: 1fr; }
+  }
+</style>

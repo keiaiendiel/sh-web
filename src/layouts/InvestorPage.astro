@@ -1,0 +1,122 @@
+---
+/*
+ * InvestorPage , samostatný layout pod-webu /investori/ (Podklady pro
+ * investory, záměr VPD①). Nepoužívá hub Header/Footer ani JSON-LD;
+ * sdílí tokens.css (paleta, typografie) + vlastní investor.css.
+ *
+ * Brána: klientská kontrola localStorage otisku proti allowlistu
+ * (utils/investorAuth.ts). Gated stránky se před ověřením nevykreslí
+ * (html.inv-wait) a bez platného otisku přesměrují na login s ?next=.
+ * Měkká ochrana, viz poznámka v investorAuth.ts.
+ */
+import '../styles/tokens.css';
+import '../styles/investor.css';
+import { withBase } from '../utils/url';
+import { INVESTOR_ACCESS, INVESTOR_AUTH_KEY } from '../utils/investorAuth';
+import meta from '../data/investori/meta.json';
+
+interface Props {
+  title: string;
+  active?: 'zamer' | 'vypocty' | 'scenare' | 'poznamky' | 'smlouvy';
+  gate?: boolean;
+}
+
+const { title, active, gate = true } = Astro.props;
+
+const loginUrl = withBase('/investori/');
+const nav = [
+  { id: 'zamer', href: withBase('/investori/zamer/'), label: 'Investiční záměr' },
+  { id: 'vypocty', href: withBase('/investori/udaje-a-vypocty/'), label: 'Údaje & výpočty' },
+  { id: 'scenare', href: withBase('/investori/scenare/'), label: 'Scénáře' },
+  { id: 'smlouvy', href: withBase('/investori/smlouvy/'), label: 'Koncept smlouvy' },
+  { id: 'poznamky', href: withBase('/investori/poznamky/'), label: 'Poznámky' },
+];
+---
+<!doctype html>
+<html lang="cs" class={gate ? 'inv-wait' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="Podklady pro investory, záměr VPD. Přístup jen pro přihlášené." />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <title>{title}</title>
+    {gate && (
+      <script is:inline define:vars={{ allow: INVESTOR_ACCESS, key: INVESTOR_AUTH_KEY, loginUrl }}>
+        /* Synchronně před vykreslením: bez platného otisku ven na login. */
+        (function () {
+          var ok = false;
+          try { ok = allow.indexOf(localStorage.getItem(key)) !== -1; } catch (e) {}
+          if (!ok) {
+            location.replace(loginUrl + '?next=' + encodeURIComponent(location.pathname + location.hash));
+          } else {
+            document.documentElement.classList.remove('inv-wait');
+          }
+        })();
+      </script>
+    )}
+    <style is:inline>html.inv-wait body { visibility: hidden; }</style>
+  </head>
+  <body class="inv-body">
+    <header class="inv-top">
+      <div class="inv-top__inner">
+        <a class="inv-top__brand" href={gate ? withBase('/investori/zamer/') : loginUrl}>
+          <strong>VPD&#9312;</strong>
+          <span>Podklady pro investory</span>
+        </a>
+        {gate && (
+          <nav class="inv-top__nav" aria-label="Sekce podkladů">
+            {nav.map((n) => (
+              <a href={n.href} aria-current={active === n.id ? 'page' : undefined}>{n.label}</a>
+            ))}
+            <button type="button" class="inv-top__logout" data-inv-logout>Odhlásit se</button>
+          </nav>
+        )}
+      </div>
+    </header>
+
+    <main class="inv-main" id="main">
+      <slot />
+    </main>
+
+    <footer class="inv-footer">
+      <div class="inv-footer__inner">
+        <span class="inv-footer__badge" data-no-typograf>{meta.badge}</span>
+        <span>{meta.aktualizace}</span>
+        <span class="inv-footer__spacer"></span>
+        <span>Podklady pro jednání o spolupráci, nejde o veřejnou nabídku.</span>
+        <a href={withBase('/')}>startovacihub.cz</a>
+      </div>
+    </footer>
+
+    {gate && (
+      <script is:inline define:vars={{ key: INVESTOR_AUTH_KEY, loginUrl }}>
+        (function () {
+          var btn = document.querySelector('[data-inv-logout]');
+          if (!btn) return;
+          btn.addEventListener('click', function () {
+            try { localStorage.removeItem(key); } catch (e) {}
+            location.href = loginUrl;
+          });
+        })();
+      </script>
+    )}
+  </body>
+</html>
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--lh-normal);
+    color: var(--fg);
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  img, svg { display: block; max-width: 100%; }
+  ::selection { background: var(--accent); color: var(--accent-on); }
+</style>

@@ -1,0 +1,80 @@
+---
+/*
+ * /investori/scenare/ , Základní scénáře jako rozcestník. Karty S1 až Sx
+ * 1:1 z listu „Základní scénáře"; detail vede zatím jen na S1 (base),
+ * ostatní scénářové listy klient teprve připravuje.
+ */
+import InvestorPage from '../../../layouts/InvestorPage.astro';
+import { withBase } from '../../../utils/url';
+import scenare from '../../../data/investori/scenare.json';
+import meta from '../../../data/investori/meta.json';
+
+const H = scenare.headers;
+const detailHref: Record<string, string | null> = {
+  'S1 (base)': withBase('/investori/scenare/s1/'),
+};
+---
+<InvestorPage title="Základní scénáře , podklady pro investory VPD&#9312;" active="scenare">
+  <div class="inv-shell">
+    <header class="inv-hero">
+      <p class="inv-hero__eyebrow" data-no-typograf>VPD&#9312; · investičně-strategické možnosti</p>
+      <h1 class="inv-hero__title" data-no-typograf>{scenare.titul}</h1>
+      <p class="inv-hero__sub">
+        Vyberte scénář a pokračujte do jeho detailu. Každá karta nese první
+        transformační krok, první dějství, načasování odkupu Areálu a odhad
+        kapitálové náročnosti.
+      </p>
+      <div class="inv-hero__meta">
+        <span class="inv-chip inv-chip--accent" data-no-typograf>{meta.badge}</span>
+      </div>
+    </header>
+
+    <div class="inv-scenarios">
+      {scenare.scenare.map((s) => {
+        const href = detailHref[s.kod] ?? null;
+        return (
+          <article class:list={['inv-scenario', { 'inv-scenario--muted': !href }]}>
+            <p class="inv-scenario__kod" data-no-typograf>{s.kod}</p>
+            <h2 class="inv-scenario__title" data-no-typograf>{s.nazev}</h2>
+            <dl>
+              <div>
+                <dt data-no-typograf>{H[1]}</dt>
+                <dd data-no-typograf>{s.krok}</dd>
+              </div>
+              <div>
+                <dt data-no-typograf>{H[4]}</dt>
+                <dd data-no-typograf>{s.dejstvi}</dd>
+              </div>
+              <div>
+                <dt data-no-typograf>{H[5]}</dt>
+                <dd data-no-typograf>{s.odkup}</dd>
+              </div>
+              <div>
+                <dt data-no-typograf>{H[6]}</dt>
+                <dd data-no-typograf>{s.kapital}</dd>
+              </div>
+              {s.alternativa && s.alternativa !== '-' && (
+                <div>
+                  <dt data-no-typograf>{H[7]}</dt>
+                  <dd data-no-typograf>{s.alternativa}</dd>
+                </div>
+              )}
+            </dl>
+            {href ? (
+              <a class="inv-btn" href={href}>Detail scénáře {s.kod}</a>
+            ) : (
+              <span class="inv-btn" aria-disabled="true">Detail připravujeme</span>
+            )}
+          </article>
+        );
+      })}
+    </div>
+
+    <p class="inv-note" data-no-typograf>{scenare.footnote}</p>
+
+    <div class="inv-actions">
+      <a class="inv-btn inv-btn--ghost" href={withBase('/investori/udaje-a-vypocty/')}>Základní údaje &amp; výpočty</a>
+      <a class="inv-btn inv-btn--ghost" href={withBase('/investori/zamer/')}>Zpět na investiční záměr</a>
+    </div>
+  </div>
+</InvestorPage>

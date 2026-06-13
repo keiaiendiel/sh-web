@@ -1,0 +1,39 @@
+---
+/*
+ * /investori/smlouvy/ , koncept smlouvy o spolupráci. Zatím placeholder
+ * dle zadání klienta (podklad vznikne s advokátem); stránka drží místo
+ * v navigaci a vysvětluje, co tu bude.
+ */
+import InvestorPage from '../../../layouts/InvestorPage.astro';
+import { withBase } from '../../../utils/url';
+import meta from '../../../data/investori/meta.json';
+---
+<InvestorPage title="Koncept smlouvy , podklady pro investory VPD&#9312;" active="smlouvy">
+  <div class="inv-shell inv-shell--narrow">
+    <header class="inv-hero">
+      <p class="inv-hero__eyebrow" data-no-typograf>VPD&#9312; · smluvní rámec</p>
+      <h1 class="inv-hero__title">Koncept smlouvy</h1>
+      <div class="inv-hero__meta">
+        <span class="inv-chip inv-chip--accent" data-no-typograf>{meta.badge}</span>
+      </div>
+    </header>
+
+    <div class="inv-card">
+      <p class="inv-prose">
+        Koncept smlouvy o spolupráci se strategickým partnerem připravujeme.
+        Najdete tu navrhované znění smluvní dokumentace včetně struktury
+        společného podniku, rozdělení rolí a mechaniky financování
+        jednotlivých dějství.
+      </p>
+      <p class="inv-prose" style="margin-top: var(--space-3);">
+        Do té doby platí smluvní fakta shrnutá v investičním záměru: právo
+        odkupu Areálu drží VPD Klecany s.r.o., nájem s právem podnájmu drží
+        OSA II, z.s. Detaily rádi projdeme osobně.
+      </p>
+      <div class="inv-actions">
+        <a class="inv-btn" href="mailto:vpd@osa2.cz">Napsat na vpd@osa2.cz</a>
+        <a class="inv-btn inv-btn--ghost" href={withBase('/investori/zamer/')}>Zpět na investiční záměr</a>
+      </div>
+    </div>
+  </div>
+</InvestorPage>

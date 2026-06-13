@@ -1,0 +1,33 @@
+{
+ "titul": "Ortofotomapa areálu Horních kasáren se schématickým zákresem zvažované 1. developerské fáze investičně-realizačního scénáře S1",
+ "zony": [
+  {
+   "id": "areal",
+   "vymera": {
+    "d": "83 327 m²",
+    "v": 83327,
+    "f": "='Základní údaje & výpočty'!E39"
+   },
+   "text": "Budoucí městská čtvrť – parcely tvořící areál určené ke zhodnocení za pomoci developerské činnosti – ihned lze uskutečnit rekonstrukci stávajících staveb – dle platného ÚP lze podmíněně realizovat nové stavby od roku 2030"
+  },
+  {
+   "id": "jadro",
+   "vymera": {
+    "d": "16 496 m²",
+    "v": 16496,
+    "f": "='Základní údaje & výpočty'!C43"
+   },
+   "text": "Startovací hub (jádro) – stavby a pozemky spadající do původní administrativně-rezidenční části areálu, kde zvažujeme rekonstrukcí 10 144 m² HPP stávajících staveb zprovoznit ≈ 331 jednotek 1+kk ≈ 6 730 m² ČPP"
+  },
+  {
+   "id": "zazemi",
+   "vymera": {
+    "d": "18 274 m²",
+    "v": 18273.61,
+    "f": "='Základní údaje & výpočty'!C119"
+   },
+   "text": "Startovací hub (zázemí) – stavby a pozemky spadající do původní administrativně-rezidenční části areálu, kde zvažujeme vybudovat komunitní zázemí a kultivovaný přístup k jednotkám vzniklým rekonstrukcí stávajících staveb"
+  }
+ ],
+ "obrazek": "/images/investori/ortofotomapa.jpg"
+}

@@ -20,7 +20,9 @@ export default defineConfig({
     sitemap({
       changefreq: 'monthly',
       priority: 0.7,
-      filter: (page) => !page.includes('/404'),
+      // /investori/ je privatni sekce za prihlasenim (noindex), drzime ji
+      // mimo sitemapu stejne jako 404.
+      filter: (page) => !page.includes('/404') && !page.includes('/investori/'),
     }),
   ],
 });
