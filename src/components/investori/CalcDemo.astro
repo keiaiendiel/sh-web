@@ -1,0 +1,317 @@
+---
+/*
+ * CalcDemo , náhled budoucí funkce: editovatelné vstupní parametry se živým
+ * přepočtem výsledku. Demonstruje záměr klienta „aby byly přepisovatelné
+ * základní parametry a kalkulační flow dopočítal výsledek".
+ *
+ * Tahle instance počítá hlavní provozní příjem projektu Startovací hub:
+ *   měsíční příjem = počet jednotek × nájem/jednotka × obsazenost
+ *   roční příjem   = měsíční × 12
+ * Výchozí hodnoty i kontrolní výsledek vychází 1:1 ze zdrojové tabulky
+ * (331 jednotek × 13 800 Kč × 95 % = 4 339 410 Kč/měs = 52 072 920 Kč/rok).
+ *
+ * Plný kalkulační engine nad všemi tabulkami je další fáze (vzorce už nese
+ * export v `f` klíčích JSON). Tady jde o ukotvený, ověřitelný proof-of-concept.
+ */
+interface Props {
+  units: number;
+  rent: number;
+  occupancy: number; // 0..1
+  srcMonthly: string;
+  srcYearly: string;
+}
+const { units, rent, occupancy, srcMonthly, srcYearly } = Astro.props;
+const occPct = Math.round(occupancy * 100);
+---
+<section class="calc" data-calc
+  data-units={units} data-rent={rent} data-occ={occPct}
+  aria-label="Interaktivní přepočet příjmu z pronájmu">
+  <header class="calc__head">
+    <p class="calc__badge" data-no-typograf>Náhled funkce · interaktivní přepočet</p>
+    <h3 class="calc__title">Zkuste si přepočítat hlavní provozní příjem</h3>
+    <p class="calc__lede">
+      Upravte vstupní parametry a výsledek se přepočítá. Připravujeme takto
+      celé kalkulační tabulky. Výchozí hodnoty i kontrolní výsledek vychází
+      ze zdrojové tabulky.
+    </p>
+  </header>
+
+  <div class="calc__grid">
+    <div class="calc__inputs">
+      <div class="calc__field">
+        <label for="calc-units">Počet jednotek 1+kk</label>
+        <div class="calc__control">
+          <input type="range" id="calc-units-range" data-bind="units" min="0" max="500" step="1" value={units} aria-hidden="true" tabindex="-1" />
+          <div class="calc__num">
+            <input type="number" id="calc-units" data-bind="units" min="0" max="500" step="1" value={units} inputmode="numeric" />
+            <span class="calc__unit">jednotek</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc__field">
+        <label for="calc-rent">Tržní nájemné za jednotku</label>
+        <div class="calc__control">
+          <input type="range" id="calc-rent-range" data-bind="rent" min="5000" max="30000" step="100" value={rent} aria-hidden="true" tabindex="-1" />
+          <div class="calc__num">
+            <input type="number" id="calc-rent" data-bind="rent" min="0" max="100000" step="100" value={rent} inputmode="numeric" />
+            <span class="calc__unit">Kč&#8202;/&#8202;měs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc__field">
+        <label for="calc-occ">Obsazenost</label>
+        <div class="calc__control">
+          <input type="range" id="calc-occ-range" data-bind="occ" min="0" max="100" step="1" value={occPct} aria-hidden="true" tabindex="-1" />
+          <div class="calc__num">
+            <input type="number" id="calc-occ" data-bind="occ" min="0" max="100" step="1" value={occPct} inputmode="numeric" />
+            <span class="calc__unit">%</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="calc__reset" data-calc-reset>Obnovit zdrojové hodnoty</button>
+    </div>
+
+    <div class="calc__results">
+      <div class="calc__result">
+        <p class="calc__result-label">Měsíční příjem z pronájmu</p>
+        <p class="calc__result-value" data-out="monthly">{srcMonthly}</p>
+      </div>
+      <div class="calc__result calc__result--lg">
+        <p class="calc__result-label">Roční příjem z pronájmu</p>
+        <p class="calc__result-value" data-out="yearly">{srcYearly}</p>
+      </div>
+      <p class="calc__formula" data-no-typograf>
+        počet jednotek × nájem × obsazenost × 12
+      </p>
+      <p class="calc__delta" data-delta hidden></p>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    document.querySelectorAll('[data-calc]').forEach(function (root) {
+      if (root.dataset.bound) return;
+      root.dataset.bound = '1';
+
+      var defaults = {
+        units: +root.dataset.units,
+        rent: +root.dataset.rent,
+        occ: +root.dataset.occ,
+      };
+      var state = Object.assign({}, defaults);
+      var nf = new Intl.NumberFormat('cs-CZ');
+
+      function compute() {
+        var monthly = Math.round(state.units * state.rent * (state.occ / 100));
+        return { monthly: monthly, yearly: monthly * 12 };
+      }
+
+      function render() {
+        var r = compute();
+        root.querySelector('[data-out="monthly"]').textContent = nf.format(r.monthly) + ' Kč';
+        root.querySelector('[data-out="yearly"]').textContent = nf.format(r.yearly) + ' Kč';
+        // sync paired range/number inputs
+        ['units', 'rent', 'occ'].forEach(function (key) {
+          root.querySelectorAll('[data-bind="' + key + '"]').forEach(function (inp) {
+            if (document.activeElement !== inp) inp.value = state[key];
+          });
+        });
+        // odchylka od zdrojových hodnot
+        var base = defaults.units * defaults.rent * (defaults.occ / 100) * 12;
+        var diff = r.yearly - base;
+        var delta = root.querySelector('[data-delta]');
+        var changed = state.units !== defaults.units || state.rent !== defaults.rent || state.occ !== defaults.occ;
+        if (changed && base > 0) {
+          var pct = Math.round((diff / base) * 1000) / 10;
+          var sign = diff >= 0 ? '+' : '';
+          delta.hidden = false;
+          delta.textContent = 'oproti zdroji ' + sign + nf.format(diff) + ' Kč ročně (' + sign + String(pct).replace('.', ',') + ' %)';
+          delta.dataset.dir = diff >= 0 ? 'up' : 'down';
+        } else {
+          delta.hidden = true;
+        }
+      }
+
+      root.querySelectorAll('input[data-bind]').forEach(function (inp) {
+        inp.addEventListener('input', function () {
+          var key = inp.getAttribute('data-bind');
+          var val = +inp.value;
+          if (isNaN(val)) return;
+          state[key] = val;
+          render();
+        });
+      });
+
+      root.querySelector('[data-calc-reset]').addEventListener('click', function () {
+        state = Object.assign({}, defaults);
+        root.querySelectorAll('input[data-bind]').forEach(function (inp) {
+          inp.value = state[inp.getAttribute('data-bind')];
+        });
+        render();
+      });
+
+      render();
+    });
+  })();
+</script>
+
+<style>
+  .calc {
+    margin: var(--space-4) 0 var(--space-2);
+    background: linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 18%) 100%);
+    color: #fff;
+    border-radius: var(--radius-input);
+    padding: var(--space-6);
+  }
+  .calc__head { margin-bottom: var(--space-5); max-width: 70ch; }
+  .calc__badge {
+    font: 600 var(--text-2xs) / 1 var(--font-mono);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--rose);
+    margin: 0 0 var(--space-3);
+  }
+  .calc__title {
+    font: 700 var(--text-xl) / var(--lh-snug) var(--font-sans);
+    color: #fff;
+    margin: 0 0 var(--space-2);
+  }
+  .calc__lede {
+    font: 500 var(--text-sm) / var(--lh-normal) var(--font-sans);
+    color: rgba(255, 255, 255, 0.78);
+    margin: 0;
+  }
+
+  .calc__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .calc__inputs { display: grid; gap: var(--space-4); }
+  .calc__field { display: grid; gap: 8px; }
+  .calc__field label {
+    font: 600 var(--text-xs) / 1.2 var(--font-sans);
+    color: var(--rose);
+  }
+  .calc__control { display: grid; gap: 10px; }
+  .calc__num { display: flex; align-items: center; gap: 10px; }
+  .calc__num input {
+    width: 130px;
+    font: 700 var(--text-lg) / 1.1 var(--font-sans);
+    font-variant-numeric: tabular-nums lining-nums;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius-input);
+    padding: 8px 12px;
+  }
+  .calc__num input:focus {
+    outline: none;
+    border-color: var(--rose);
+    background: rgba(255, 255, 255, 0.14);
+  }
+  .calc__unit {
+    font: 500 var(--text-sm) / 1 var(--font-sans);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Range slider , plum track + rose thumb */
+  .calc input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+  }
+  .calc input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--rose);
+    border: 2px solid #fff;
+    cursor: pointer;
+  }
+  .calc input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--rose);
+    border: 2px solid #fff;
+    cursor: pointer;
+  }
+
+  .calc__reset {
+    justify-self: start;
+    margin-top: var(--space-2);
+    font: 600 var(--text-xs) / 1 var(--font-sans);
+    color: var(--rose);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: var(--radius-input);
+    padding: 9px 14px;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease;
+  }
+  .calc__reset:hover, .calc__reset:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    outline: none;
+  }
+
+  .calc__results {
+    display: grid;
+    gap: var(--space-3);
+    background: rgba(0, 0, 0, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-input);
+    padding: var(--space-5);
+  }
+  .calc__result-label {
+    font: 500 var(--text-xs) / 1.3 var(--font-sans);
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 4px;
+  }
+  .calc__result-value {
+    font: 700 var(--text-xl) / 1.05 var(--font-sans);
+    font-variant-numeric: tabular-nums lining-nums;
+    color: #fff;
+    margin: 0;
+    transition: color 160ms ease;
+  }
+  .calc__result--lg .calc__result-value {
+    font-size: var(--text-3xl);
+    letter-spacing: var(--tracking-tight);
+    color: var(--rose);
+  }
+  .calc__formula {
+    font: 500 var(--text-2xs) / 1.4 var(--font-mono);
+    color: rgba(255, 255, 255, 0.5);
+    margin: var(--space-2) 0 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .calc__delta {
+    font: 600 var(--text-xs) / 1.3 var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+    color: var(--rose);
+  }
+  .calc__delta[data-dir="down"] { color: hsl(8 60% 72%); }
+
+  @media (max-width: 760px) {
+    .calc { padding: var(--space-5); }
+    .calc__grid { grid-template-columns: 1fr; gap: var(--space-5); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .calc__reset, .calc__result-value { transition: none; }
+  }
+</style>

@@ -8,6 +8,7 @@
  */
 import InvestorPage from '../../../layouts/InvestorPage.astro';
 import DataTable from '../../../components/investori/DataTable.astro';
+import CalcDemo from '../../../components/investori/CalcDemo.astro';
 import { withBase } from '../../../utils/url';
 import vypocty from '../../../data/investori/vypocty.json';
 import meta from '../../../data/investori/meta.json';
@@ -197,6 +198,14 @@ const viz = Object.fromEntries(v.vizualizace.map((x) => [x.id, x]));
       </div>
       <p class="inv-note" style="margin: 0 0 var(--space-2);" data-no-typograf>Sloupce 1.NP / 2.NP / 3.NP: {v.najem.podlaziHeader}</p>
       <DataTable headers={v.najem.headers} rows={v.najem.rows} foot={najemFoot} label={v.najem.titul} />
+
+      <CalcDemo
+        units={v.najem.soucty.BO.v}
+        rent={v.najem.params[0].v}
+        occupancy={v.najem.params[1].v}
+        srcMonthly={v.najem.soucty.BP.d}
+        srcYearly={v.najem.soucty.BQ.d}
+      />
       <div class="inv-ref">
         <p class="inv-note" data-no-typograf>{stripArrows(v.najem.refCaption)}</p>
         <DataTable
