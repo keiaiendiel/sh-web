@@ -163,7 +163,7 @@ const tiles = [
     path: 'M 80 120 C 240 280, 400 80, 560 240 C 680 360, 740 200, 760 320' },
   { icon: 'bus',            title: 'Dopravní dostupnost',              href: '#doprava',   variant: 'ink', dy: '26%',
     path: 'M 80 200 C 240 80, 420 280, 580 160 C 700 80, 740 240, 760 320' },
-  { icon: 'images',         title: 'Fotogalerie areálu',               href: '#galerie',   variant: 'cream', dy: '14%',
+  { icon: 'images',         title: 'Galerie',                          href: '#galerie',   variant: 'cream', dy: '14%',
     path: 'M 80 200 C 200 360, 420 80, 580 240 C 700 360, 740 200, 760 100' },
 ];
 ---
@@ -847,7 +847,10 @@ const tiles = [
   .lp-tile--rose .lp-tile__eyebrow  { color: var(--plum-deep); }
   .lp-tile--ink .lp-tile__eyebrow   { color: var(--rose); }
   .lp-tile__title {
-    font: 700 clamp(1.125rem, 1.8vw, 1.5rem) / 1.1 var(--font-sans);
+    /* Font scaluje s šířkou dlaždice (vw), aby i nejdelší popisek
+       („Pobytová & projektová stipendia") padl na jeden řádek na běžném
+       desktopu. Na úzkém okně (pod ~1080 px) graceful zalomí na 2 řádky. */
+    font: 700 clamp(0.8125rem, 1.1vw, 1.1875rem) / 1.12 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     color: inherit;
     text-wrap: balance;
@@ -979,9 +982,16 @@ const tiles = [
     }
     .lp-tile__type { max-width: none; gap: 8px; min-width: 0; }
     .lp-tile__title {
-      font-size: 0.9375rem;
+      /* Scaluje s šířkou telefonu, ať i nejdelší popisek („Pobytová &
+         projektová stipendia") padne do 2 řádků. line-clamp je tvrdý
+         strop 2 řádky pro jistotu i na úzkých displejích. */
+      font-size: clamp(0.72rem, 3.1vw, 0.875rem);
       line-height: 1.2;
       text-wrap: pretty;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
     }
     /* Eyebrows na telefonu skryté, titul stačí jako label. */
     .lp-tile__eyebrow {
