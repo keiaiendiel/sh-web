@@ -154,16 +154,21 @@ const landingPhotos = [
    + bold title, vpravo dole 36×36 kruhová šipka. Ribbon arc zůstává v pozadí. */
 /* Tile variant zigzag: 1, 3, 5 cream + 2, 4, 6 ink. Stejný ribbon stroke
    napříč ink tiles, stejný ribbon stroke napříč cream tiles. */
+/* Titulky mají vynucené zalomení (<br>) do PŘESNĚ 2 řádků, aby 3×2 grid
+   vypadal uniformně i na širokém desktopu (přirozené zalomení by tam
+   krátké popisky stáhlo na 1 řádek). Font scaluje s šířkou dlaždice (vw),
+   takže i nejdelší řádek („Pobytová & projektová") padne na jeden řádek
+   napříč celým desktop rozsahem. */
 const tiles = [
-  { icon: 'bed-double',     title: 'Coliving &amp; bydlení',           href: '#ubytovani', variant: 'cream', dy: '26%',
+  { icon: 'bed-double',     title: 'Coliving<br>&amp; bydlení',              href: '#ubytovani', variant: 'cream', dy: '26%',
     path: 'M 60 240 C 220 100, 380 320, 540 200 C 660 100, 720 260, 760 340' },
-  { icon: 'award',          title: 'Pobytová &amp; projektová stipendia', href: '#stipendia', variant: 'ink', dy: '26%',
+  { icon: 'award',          title: 'Pobytová &amp; projektová<br>stipendia', href: '#stipendia', variant: 'ink', dy: '26%',
     path: 'M 60 240 C 200 100, 380 320, 520 200 C 660 80, 740 240, 760 360' },
-  { icon: 'concierge-bell', title: 'Zázemí &amp; coworking',           href: '#zazemi',    variant: 'cream', dy: '26%',
+  { icon: 'concierge-bell', title: 'Zázemí<br>&amp; coworking',             href: '#zazemi',    variant: 'cream', dy: '26%',
     path: 'M 80 120 C 240 280, 400 80, 560 240 C 680 360, 740 200, 760 320' },
-  { icon: 'bus',            title: 'Dopravní dostupnost',              href: '#doprava',   variant: 'ink', dy: '26%',
+  { icon: 'bus',            title: 'Dopravní<br>dostupnost',                href: '#doprava',   variant: 'ink', dy: '26%',
     path: 'M 80 200 C 240 80, 420 280, 580 160 C 700 80, 740 240, 760 320' },
-  { icon: 'images',         title: 'Galerie',                          href: '#galerie',   variant: 'cream', dy: '14%',
+  { icon: 'images',         title: 'Fotogalerie<br>areálu',                 href: '#galerie',   variant: 'cream', dy: '14%',
     path: 'M 80 200 C 200 360, 420 80, 580 240 C 700 360, 740 200, 760 100' },
 ];
 ---
@@ -289,7 +294,7 @@ const tiles = [
         </span>
         <span class="lp-tile__type">
           <span class="lp-tile__icon" aria-hidden="true"><Icon name="calendar-check" size={22} strokeWidth={1.9} /></span>
-          <span class="lp-tile__title">Nezávazná rezervace</span>
+          <span class="lp-tile__title">Nezávazná<br>rezervace</span>
         </span>
         <span class="lp-tile__arrow lp-tile__arrow--filled" aria-hidden="true">
           <Arrow dir="right" variant="chevron" size={18} weight={2.4} />
@@ -847,10 +852,10 @@ const tiles = [
   .lp-tile--rose .lp-tile__eyebrow  { color: var(--plum-deep); }
   .lp-tile--ink .lp-tile__eyebrow   { color: var(--rose); }
   .lp-tile__title {
-    /* Font scaluje s šířkou dlaždice (vw), aby i nejdelší popisek
-       („Pobytová & projektová stipendia") padl na jeden řádek na běžném
-       desktopu. Na úzkém okně (pod ~1080 px) graceful zalomí na 2 řádky. */
-    font: 700 clamp(0.8125rem, 1.1vw, 1.1875rem) / 1.12 var(--font-sans);
+    /* Mírně větší než předtím; scaluje s šířkou dlaždice (vw), aby i nejdelší
+       řádek („Pobytová & projektová") zůstal na jednom řádku napříč celým
+       desktop rozsahem. Zalomení na 2 řádky řeší <br> v titulku. */
+    font: 700 clamp(0.7rem, 1.35vw, 1.375rem) / 1.16 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     color: inherit;
     text-wrap: balance;
