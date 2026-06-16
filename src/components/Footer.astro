@@ -43,14 +43,9 @@ const sitemapMain = [
   {/* Tři sloupce zarovnané pod tři rezervační tlačítka:
       Adresa & mapa | Obsah + Ostatní | Kontakty. */}
   <div class="hub-footer__inner">
-    {/* Sloupec 1 (pod „Rezervovat apartmán"): Adresa & mapa */}
+    {/* Sloupec 1 (pod „Rezervovat apartmán"): mapa nahoře, adresa drobně pod ní.
+        Brand i plná adresa vypuštěny , adresa je čitelná přímo v mapě. */}
     <div class="hub-footer__col hub-footer__col--brand">
-      <p class="hub-footer__brand">Startovací Hub Klecany</p>
-      <p class="hub-footer__label">Adresa</p>
-      <p class="hub-footer__address">
-        Horní Kasárna<br />
-        250 67 Klecany
-      </p>
       <div class="hub-footer__map" data-map-frame role="application" aria-label="Mapa Hubu Klecany"></div>
       <p class="hub-footer__map-address">
         <strong>Horní kasárna Klecany</strong>
@@ -235,10 +230,13 @@ const sitemapMain = [
     gap: var(--space-7) clamp(10px, 1.4vw, 18px);
   }
   /* Prostřední sloupec: Obsah webu + Ostatní vedle sebe v úzkém prostoru. */
+  /* Obsah + Ostatní jako dvě sloupce dle obsahu, vycentrované v prostředním
+     sloupci , bez velké díry uprostřed (sub-sloupce se neroztahují na 1fr). */
   .hub-footer__obsah-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-5) var(--space-5);
+    grid-template-columns: auto auto;
+    justify-content: center;
+    gap: var(--space-5) clamp(28px, 3.5vw, 60px);
   }
 
   .hub-footer__col p { margin: 0 0 6px; line-height: 1.5; font-size: var(--text-sm); color: rgba(255, 255, 255, 0.85); }
@@ -281,7 +279,7 @@ const sitemapMain = [
     overflow: hidden;
     background: var(--bg-muted);
     border: 1px solid var(--accent-rule);
-    margin-top: var(--space-3);
+    margin-top: 0;
     /* Isolation: isolate vytváří lokální stacking context, takže Leaflet
        interní z-indexy nepřebíjejí header/menu. */
     isolation: isolate;
