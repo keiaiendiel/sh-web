@@ -9,11 +9,42 @@ const org = orgEntry?.data;
 const buildDate = new Date().toLocaleDateString('cs-CZ', {
   day: 'numeric', month: 'numeric', year: 'numeric',
 });
+
+/* Tři rezervační CTA na celou šířku (nahrazují zrušený landing banner). */
+const reserveActions = [
+  { href: '/rezervace/?cesta=apartman',   label: 'Rezervovat apartmán' },
+  { href: '/rezervace/?cesta=luzko',      label: 'Rezervovat lůžko' },
+  { href: '/rezervace/?cesta=stipendium', label: 'Požádat o stipendium' },
+];
+
+/* Obsah webu , hlavní stránky (Rezervace tu nemusí být, řeší ji pruh nahoře). */
+const sitemapMain = [
+  { href: '/ubytovani/', label: 'Ubytování' },
+  { href: '/zazemi/',    label: 'Zázemí' },
+  { href: '/stipendia/', label: 'Stipendia' },
+  { href: '/doprava/',   label: 'Doprava' },
+  { href: '/galerie/',   label: 'Galerie' },
+  { href: '/cenik/',     label: 'Ceník' },
+  { href: '/novinky/',   label: 'Novinky' },
+  { href: '/kontakty/',  label: 'Kontakty' },
+];
 ---
 <footer class="hub-footer">
+  {/* === Rezervační pruh na celou šířku === */}
+  <div class="hub-footer__reserve" aria-label="Rezervace">
+    {reserveActions.map((a) => (
+      <a class="hub-footer__act-btn osa-nolink" href={withBase(a.href)}>
+        <span>{a.label}</span>
+        <Arrow dir="right" variant="chevron" size={16} weight={2.4} />
+      </a>
+    ))}
+  </div>
+
   <div class="hub-footer__inner">
+    {/* Adresa & mapa */}
     <div class="hub-footer__col hub-footer__col--brand">
       <p class="hub-footer__brand">Startovací Hub Klecany</p>
+      <p class="hub-footer__label">Adresa</p>
       <p class="hub-footer__address">
         Horní Kasárna<br />
         250 67 Klecany
@@ -25,8 +56,9 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       </p>
     </div>
 
+    {/* Kontakty */}
     <div class="hub-footer__col hub-footer__col--contact">
-      <p class="hub-footer__label">Kontakt</p>
+      <p class="hub-footer__label">Kontakty</p>
       <p class="hub-footer__contact-lede">Stavte se na prohlídku, nebo se zapojte do našich aktivit.</p>
       <p class="hub-footer__chip">
         <a href={withBase('/rezervace/')} class="hub-footer__chip-link">Domluvit prohlídku <Arrow dir="right" variant="chevron" size={14} weight={2.4} /></a>
@@ -39,32 +71,34 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
       </p>
     </div>
 
-    <div class="hub-footer__col hub-footer__col--links">
-      <p class="hub-footer__label">Odkazy</p>
-      <p><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a> <span class="hub-footer__hint">mateřský web OSA II</span></p>
-      <p><a href="https://vepde.com" rel="noopener">vepde.com</a> <span class="hub-footer__hint">záměr VPD pro investory</span></p>
-      <p><a href={withBase('/investori/')}>Podklady pro investory</a> <span class="hub-footer__hint">přístup na heslo</span></p>
-      <p><a href={withBase('/kontakty/')}>Kontakty</a></p>
-      <p><a href={withBase('/faq/')}>Časté otázky</a></p>
-      <p><a href={withBase('/gdpr/')}>Ochrana osobních údajů</a></p>
+    {/* Obsah webu , hlavní stránky */}
+    <div class="hub-footer__col hub-footer__col--sitemap">
+      <p class="hub-footer__label">Obsah webu</p>
+      <ul class="hub-footer__sitemap">
+        {sitemapMain.map((l) => (
+          <li><a href={withBase(l.href)}>{l.label}</a></li>
+        ))}
+      </ul>
     </div>
 
-    <div class="hub-footer__col hub-footer__col--actions">
-      <a class="hub-footer__act-btn" href={withBase('/rezervace/?cesta=apartman')}>
-        <span>Rezervovat apartmán</span><Arrow dir="right" variant="chevron" size={16} weight={2.4} />
-      </a>
-      <a class="hub-footer__act-btn" href={withBase('/rezervace/?cesta=luzko')}>
-        <span>Rezervovat lůžko</span><Arrow dir="right" variant="chevron" size={16} weight={2.4} />
-      </a>
-      <a class="hub-footer__act-btn" href={withBase('/rezervace/?cesta=stipendium')}>
-        <span>Požádat o stipendium</span><Arrow dir="right" variant="chevron" size={16} weight={2.4} />
-      </a>
-      <p class="hub-footer__reservation-note">
-        Nabídka rezervací je nezávazná, slouží k registraci zájmu.
-      </p>
-      <p class="hub-footer__status">V projektové přípravě</p>
-      <p class="hub-footer__updated">Aktualizováno {buildDate}</p>
+    {/* Ostatní , méně časté + externí odkazy */}
+    <div class="hub-footer__col hub-footer__col--ostatni">
+      <p class="hub-footer__label">Ostatní</p>
+      <ul class="hub-footer__sitemap hub-footer__sitemap--col">
+        <li><a href={withBase('/investori/')}>Podklady pro investory</a> <span class="hub-footer__hint">na heslo</span></li>
+        <li><a href={withBase('/faq/')}>Časté otázky</a></li>
+        <li><a href={withBase('/gdpr/')}>Ochrana osobních údajů</a></li>
+        <li><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a></li>
+        <li><a href="https://vepde.com" rel="noopener">vepde.com</a></li>
+      </ul>
     </div>
+  </div>
+
+  {/* Meta řádek */}
+  <div class="hub-footer__meta">
+    <p class="hub-footer__reservation-note">Nabídka rezervací je nezávazná, slouží k registraci zájmu.</p>
+    <p class="hub-footer__status">V projektové přípravě</p>
+    <p class="hub-footer__updated">Aktualizováno {buildDate}</p>
   </div>
 </footer>
 
@@ -151,38 +185,40 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
 
 
 <style>
-  /* Plum-deep inverted footer. 4-col grid, brand col span 2 na desktopu.
-     OSM map iframe s filter invert+desaturate aby zapadla do tmavého bg. */
-  /* Footer drží stejný brand-warm gradient pattern jako rezervace tile
-     a CtaBanner deep: subtle rose tint v rohu na plum-deep diagonál bg.
-     Sjednocuje dark surfaces napříč webem do jednoho vizuálního jazyka. */
+  /* Plum-deep inverted footer s brand-warm gradientem (sjednoceno s rezervace
+     tile, footer dark surfaces napříč webem). */
   .hub-footer {
     background:
       radial-gradient(ellipse at 88% 105%, hsl(calc(var(--hue) + 44) 30% 70% / 0.16) 0%, transparent 50%),
       linear-gradient(135deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 36% 17%) 100%);
     color: #fff;
     border-top: 1px solid var(--accent);
-    padding: var(--space-8) 0 var(--space-7);
+    padding: var(--space-7) 0 var(--space-6);
   }
-  /* Tři konverzní CTA , stacked v pravém sloupci patičky. */
-  /* Vyšší specificita než .hub-footer__col a (jinak cream text). Tmavý text
-     na rose, na hover bílé pozadí + tmavý text (jako Domluvit prohlídku). */
-  .hub-footer__col a.hub-footer__act-btn {
+
+  /* === Rezervační pruh (3 CTA na celou šířku) === */
+  .hub-footer__reserve {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto var(--space-7);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(10px, 1.4vw, 18px);
+  }
+  .hub-footer__act-btn {
     display: inline-flex; align-items: center; justify-content: space-between; gap: var(--space-3);
-    width: 100%;
-    padding: 12px 16px;
-    font: 700 var(--text-sm) / 1 var(--font-sans);
+    padding: clamp(15px, 1.6vw, 20px) clamp(18px, 1.8vw, 26px);
+    font: 700 var(--text-md) / 1.1 var(--font-sans);
     color: var(--plum-deep); background: var(--rose);
     border-radius: var(--radius-input); text-decoration: none !important;
-    text-decoration-color: transparent;
-    transition: background 180ms ease, transform 180ms ease;
+    transition: background 180ms var(--ease-quart), transform 180ms var(--ease-quart);
   }
-  .hub-footer__col a.hub-footer__act-btn:hover,
-  .hub-footer__col a.hub-footer__act-btn:focus-visible {
-    background: #fff; color: var(--plum-deep); transform: translateY(-1px); outline: none;
+  .hub-footer__act-btn:hover,
+  .hub-footer__act-btn:focus-visible {
+    background: #fff; color: var(--plum-deep); transform: translateY(-2px); outline: none;
   }
-  .hub-footer__col a.hub-footer__act-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-  .hub-footer__act-btn :global(svg) { transition: transform 180ms ease; color: var(--plum-deep); }
+  .hub-footer__act-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .hub-footer__act-btn :global(svg) { transition: transform 180ms var(--ease-quart); color: var(--plum-deep); flex-shrink: 0; }
   .hub-footer__act-btn:hover :global(svg) { transform: translateX(3px); }
 
   .hub-footer__inner {
@@ -190,7 +226,7 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     max-width: var(--container-wide);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1.6fr 1.1fr 1fr 1.2fr;
     gap: var(--space-7) var(--space-6);
   }
 
@@ -214,11 +250,11 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     border-radius: 2px;
   }
 
-  /* Column 1: Brand + Address + Map */
+  /* Brand + Adresa + Mapa */
   .hub-footer__brand {
     font-weight: 700;
     font-size: var(--text-xl);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4) !important;
     color: #fff;
     letter-spacing: var(--tracking-tight);
   }
@@ -226,8 +262,7 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: var(--space-4) !important;
   }
-  /* Footer mapa: sjednocený styling s /okoli/ embedem (.ok-map),
-     žádný filter/blend, marker + popup styly stejné. */
+  /* Footer mapa: sjednocený styling s /okoli/ embedem (.ok-map). */
   .hub-footer__map {
     position: relative;
     aspect-ratio: 16 / 9;
@@ -235,9 +270,9 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     overflow: hidden;
     background: var(--bg-muted);
     border: 1px solid var(--accent-rule);
-    margin-top: var(--space-5);
+    margin-top: var(--space-3);
     /* Isolation: isolate vytváří lokální stacking context, takže Leaflet
-       interní z-indexy (panes až 800) nepřebíjejí mobile drawer (z-index 29). */
+       interní z-indexy nepřebíjejí header/menu. */
     isolation: isolate;
   }
   .hub-footer__map :global(.leaflet-container) {
@@ -247,8 +282,6 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     font-family: var(--font-sans);
     z-index: 0;
   }
-  /* Mapa působila vybledle na tmavém footeru , jemně zesvětlit + dosytit
-     jen dlaždice (ne marker/popup). */
   .hub-footer__map :global(.leaflet-tile-pane) {
     filter: saturate(1.14) brightness(1.05);
   }
@@ -288,7 +321,6 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     color: var(--accent);
   }
 
-  /* Address line pod mapou (matchuje /okoli/ pattern) */
   .hub-footer__map-address {
     margin: var(--space-3) 0 0 !important;
     font: 500 var(--text-sm) / 1.5 var(--font-sans) !important;
@@ -299,7 +331,6 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     flex-wrap: wrap;
   }
   .hub-footer__map-address strong { color: #fff; font-weight: 600; }
-  .hub-footer__col a.hub-footer__map-address__link,
   .hub-footer__col .hub-footer__map-address a {
     color: var(--rose);
     text-decoration: none;
@@ -320,8 +351,9 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     margin-bottom: var(--space-3) !important;
     font-weight: 600;
   }
+  .hub-footer__label--mt { margin-top: var(--space-5) !important; }
 
-  /* Column 2: Contact + Operator */
+  /* Kontakty */
   .hub-footer__contact-lede {
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: var(--space-3) !important;
@@ -363,65 +395,46 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     outline: 2px solid #fff;
     outline-offset: 2px;
   }
-
   .hub-footer__hint { color: rgba(255, 255, 255, 0.55); font-size: var(--text-xs); margin-left: 4px; display: inline-block; }
 
-  /* Column 4: Actions (no label, just buttons + status + meta) */
-  .hub-footer__col--actions { display: flex; flex-direction: column; gap: var(--space-2); }
-  .hub-footer__action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2);
-    padding: 14px 18px;
-    min-height: 48px;
-    font: 600 var(--text-sm) / 1 var(--font-sans);
-    border-radius: var(--radius-input);
-    text-decoration: none !important;
-    transition: background 180ms ease, color 180ms ease, transform 180ms ease, border-color 180ms ease;
+  /* Obsah webu / Ostatní (sitemap odkazy) */
+  .hub-footer__sitemap {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px var(--space-4);
   }
-  .hub-footer__col a.hub-footer__action--primary {
-    color: var(--plum-deep);
-    background: var(--rose);
-    border: 1px solid var(--rose);
+  .hub-footer__sitemap--col { grid-template-columns: 1fr; }
+  .hub-footer__sitemap li { line-height: 1.4; }
+  .hub-footer__col .hub-footer__sitemap a {
+    font-size: var(--text-sm);
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
   }
-  .hub-footer__col a.hub-footer__action--primary:hover,
-  .hub-footer__col a.hub-footer__action--primary:focus-visible {
-    background: #fff;
-    color: var(--plum-deep);
-    border-color: #fff;
-    transform: translateY(-1px);
-    outline: none;
-  }
-  .hub-footer__col a.hub-footer__action--primary:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-  }
-  .hub-footer__action--soon {
-    color: rgba(255, 255, 255, 0.55);
-    background: transparent;
-    border: 1px dashed rgba(255, 255, 255, 0.28);
-    cursor: not-allowed;
-  }
-  .hub-footer__action-hint {
-    font-weight: 500;
-    font-size: var(--text-2xs);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    color: var(--rose);
-    margin-left: var(--space-2);
-  }
+  .hub-footer__col .hub-footer__sitemap a:hover,
+  .hub-footer__col .hub-footer__sitemap a:focus-visible { color: var(--rose); }
 
+  /* Meta řádek */
+  .hub-footer__meta {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: var(--space-7) auto 0;
+    padding-top: var(--space-5);
+    border-top: 1px solid hsl(0 0% 100% / 0.12);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3) var(--space-5);
+    flex-wrap: wrap;
+  }
   .hub-footer__reservation-note {
-    margin-top: var(--space-3) !important;
+    margin: 0 !important;
     font-size: var(--text-xs) !important;
     color: rgba(255, 255, 255, 0.55) !important;
     line-height: 1.5;
+    flex: 1 1 240px;
   }
-
   .hub-footer__status {
     display: inline-block;
-    margin-top: var(--space-4) !important;
+    margin: 0 !important;
     padding: 4px 8px;
     font: 600 var(--text-2xs) / 1 var(--font-sans);
     letter-spacing: var(--tracking-wider);
@@ -430,7 +443,6 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: var(--radius-input);
     background: rgba(255, 255, 255, 0.08);
-    align-self: flex-start;
   }
   .hub-footer__updated {
     font-size: var(--text-2xs) !important;
@@ -438,7 +450,7 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
     font-variant-numeric: tabular-nums;
-    margin: var(--space-2) 0 0 !important;
+    margin: 0 !important;
   }
 
   /* Responsive */
@@ -447,39 +459,31 @@ const buildDate = new Date().toLocaleDateString('cs-CZ', {
     .hub-footer__col--brand { grid-column: span 2; }
     .hub-footer__map { aspect-ratio: 21 / 9; }
   }
+  @media (max-width: 720px) {
+    .hub-footer__reserve { grid-template-columns: 1fr; }
+  }
   @media (max-width: 600px) {
-    .hub-footer__inner { grid-template-columns: 1fr 1fr; gap: var(--space-6) var(--space-5); }
-    .hub-footer__col--brand { grid-column: span 2; }
-    .hub-footer__col--actions { grid-column: span 2; }
+    .hub-footer__inner { grid-template-columns: 1fr; gap: var(--space-6); }
+    .hub-footer__col--brand { grid-column: auto; }
     .hub-footer__map { aspect-ratio: 21 / 9; }
     .hub-footer__col a.hub-footer__chip-link { padding: 12px 18px; min-height: 44px; }
     .hub-footer__col--contact,
-    .hub-footer__col--links { min-width: 0; }
-    .hub-footer__col--contact p,
-    .hub-footer__col--links p { overflow-wrap: anywhere; word-break: break-word; }
+    .hub-footer__col--sitemap,
+    .hub-footer__col--news { min-width: 0; }
+    .hub-footer__col p { overflow-wrap: anywhere; word-break: break-word; }
   }
 
-  /* Mobile: popup label „Horní kasárna Klecany" se na malé footer mapě
-     rozplácne přes půlku plochy. Shrink písma + paddingů, dolad i marker
-     velikost a popup min-width aby seděl. */
+  /* Mobile: popup label se na malé footer mapě rozplácne, shrink. */
   @media (max-width: 760px) {
-    .hub-footer__map :global(.ok-map-popup-wrap .leaflet-popup-content-wrapper) {
-      padding: 2px 4px;
-    }
-    .hub-footer__map :global(.ok-map-popup) {
-      padding: 4px 6px;
-      min-width: 0;
-      gap: 1px;
-    }
+    .hub-footer__map :global(.ok-map-popup-wrap .leaflet-popup-content-wrapper) { padding: 2px 4px; }
+    .hub-footer__map :global(.ok-map-popup) { padding: 4px 6px; min-width: 0; gap: 1px; }
     .hub-footer__map :global(.ok-map-popup strong) { font-size: 11px; }
     .hub-footer__map :global(.ok-map-popup__cta)   { font-size: 10px; }
-    .hub-footer__map :global(.leaflet-marker-icon svg) {
-      width: 22px !important; height: 30px !important;
-    }
+    .hub-footer__map :global(.leaflet-marker-icon svg) { width: 22px !important; height: 30px !important; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hub-footer__action, .hub-footer__col a, .hub-footer__col a.hub-footer__chip-link { transition: none; }
+    .hub-footer__act-btn, .hub-footer__col a, .hub-footer__col a.hub-footer__chip-link,
+    .hub-footer__act-btn :global(svg) { transition: none; }
   }
-
 </style>
