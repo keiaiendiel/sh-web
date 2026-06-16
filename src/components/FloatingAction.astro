@@ -1,113 +1,130 @@
 ---
 /*
- * FloatingAction , mobile-only floating arrow button bottom-right.
+ * FloatingAction , dvě floating tlačítka (glass-morph kruhy 48×48).
  *
- *   - Na landing (/): scroll-to-top, viditelný až po scrollu > 600 px.
- *   - Na ostatních stránkách: back to landing (link na /).
+ *   - fa-back  (vlevo dole):  „o úroveň výš" / zpět. JEN na podstránkách,
+ *                             vždy viditelný. Skrytý na landing (/).
+ *   - fa-top   (vpravo dole): scroll-to-top. Na VŠECH stránkách, viditelný
+ *                             až po scrollu (> 480 px).
  *
- * Styling sjednocený s landing .lp-hero__scroll-cue (glass-morph kruh bez
- * solid fillu, ikona dělá těžkou práci). Hidden on desktop (>= 1025 px).
- * Render do Base.astro takže existuje na každé stránce, JS rozhoduje mode
- * podle URL.
+ * Pravidlo (klient 16. 6. 2026): zpět = vždy vlevo, nahoru = vždy vpravo,
+ * aby byl směr jednoznačný napříč celým fraktálem. Landing tedy ukazuje jen
+ * šipku nahoru vpravo; podstránka navíc šipku zpět vlevo.
+ *
+ * Render do Base.astro (transition:persist) → existuje na každé stránce,
+ * JS rozhoduje viditelnost podle URL. Pozice respektuje safe-area insety
+ * (notch je na telefonu na šířku po stranách, ne nahoře/dole).
  */
 import { withBase } from '../utils/url';
 import Icon from './Icon.astro';
 
 const home = withBase('/');
 ---
-<a
-  id="floating-action"
-  class="floating-action"
-  href={home}
-  data-fa-home={home}
-  aria-label="O úroveň výš"
-  data-fa-mode="back"
-  hidden>
-  <span class="floating-action__icon" data-fa-icon="back" aria-hidden="true">
+<div class="floating-actions" data-fa-home={home}>
+  <a
+    id="fa-back"
+    class="floating-action floating-action--back"
+    href={home}
+    aria-label="O úroveň výš"
+    hidden>
     <Icon name="arrow-left" size={22} strokeWidth={2} />
-  </span>
-  <span class="floating-action__icon" data-fa-icon="top" aria-hidden="true" hidden>
+  </a>
+  <button
+    type="button"
+    id="fa-top"
+    class="floating-action floating-action--top"
+    aria-label="Skrolovat zpátky nahoru"
+    hidden>
     <Icon name="chevron-up" size={22} strokeWidth={2} />
-  </span>
-</a>
+  </button>
+</div>
 
 <script is:inline>
   (function () {
     if (window.__hubFaBound) return;
     window.__hubFaBound = true;
 
+    var SCROLL_SHOW = 480;
+    var moBound = false;
+
+    /* Scroll-to-top listener navázaný JEN jednou (button + window přežijí
+       client-side navigace díky transition:persist). */
+    function setupTop() {
+      var top = document.getElementById('fa-top');
+      if (!top || top.__bound) return;
+      top.__bound = true;
+      top.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      var onScroll = function () {
+        var t = document.getElementById('fa-top');
+        if (!t) return;
+        if (t.hasAttribute('data-fa-disabled')) { t.setAttribute('hidden', ''); return; }
+        if (window.scrollY > SCROLL_SHOW) t.removeAttribute('hidden');
+        else t.setAttribute('hidden', '');
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      top.__check = onScroll;
+    }
+
+    /* Glass tone (white ↔ plum) zrcadlí header is-stuck na obě tlačítka.
+       body[data-hero-tone="light"] z SubpageHero řeší zbytek přes CSS. */
+    function syncTone(wrap) {
+      var header = document.querySelector('.hub-header--overlay');
+      var els = wrap.querySelectorAll('.floating-action');
+      function apply() {
+        var light = !!(header && header.classList.contains('is-stuck'));
+        els.forEach(function (e) {
+          if (light) e.setAttribute('data-overlap', 'light');
+          else e.removeAttribute('data-overlap');
+        });
+      }
+      apply();
+      if (header && !moBound) {
+        moBound = true;
+        new MutationObserver(apply).observe(header, { attributes: true, attributeFilter: ['class'] });
+      }
+    }
+
     function bind() {
-      var el = document.getElementById('floating-action');
-      if (!el) return;
-      /* Home z neměnného data atributu (href se mezi navigacemi přepisuje
-         na parent / mizí v top mode, takže se z něj base číst nedá). */
-      var base = (el.getAttribute('data-fa-home') || '/').replace(/\/$/, '');
+      var wrap = document.querySelector('.floating-actions');
+      if (!wrap) return;
+
+      var base = (wrap.getAttribute('data-fa-home') || '/').replace(/\/$/, '');
       var path = window.location.pathname.replace(/\/$/, '');
       var isHome = path === base;
-      /* Rezervační formulář (5-step wizard) má vlastní bottom-fixed CTA bar
-         + sticky sidebar, floating action by se s nimi překrýval. Schováme. */
+      /* Rezervační wizard má vlastní bottom-fixed CTA bar + sticky sidebar,
+         floating tlačítka by kolidovala. Schováme obě. */
       var isRezervace = /\/rezervace$/.test(path);
+
+      var back = document.getElementById('fa-back');
+      var top = document.getElementById('fa-top');
+
+      setupTop();
+
       if (isRezervace) {
-        el.setAttribute('hidden', '');
-        el.setAttribute('data-fa-disabled', '');
+        if (back) back.setAttribute('hidden', '');
+        if (top) { top.setAttribute('hidden', ''); top.setAttribute('data-fa-disabled', ''); }
         return;
       }
+      if (top) top.removeAttribute('data-fa-disabled');
 
-      var iconBack = el.querySelector('[data-fa-icon="back"]');
-      var iconTop = el.querySelector('[data-fa-icon="top"]');
-
-      /* Mirror header's is-stuck onto the floating action so when the user has
-         scrolled past the dark hero (white content area below) we switch from
-         white glass to plum glass. Same trigger as the header sticky swap. */
-      var header = document.querySelector('.hub-header--overlay');
-      if (header) {
-        var syncOverlap = function () {
-          if (header.classList.contains('is-stuck')) el.setAttribute('data-overlap', 'light');
-          else el.removeAttribute('data-overlap');
-        };
-        syncOverlap();
-        var mo = new MutationObserver(syncOverlap);
-        mo.observe(header, { attributes: true, attributeFilter: ['class'] });
-      } else {
-        el.removeAttribute('data-overlap');
+      /* Zpět: jen na podstránkách, odkaz o úroveň výš, vždy viditelný. */
+      if (back) {
+        if (isHome) {
+          back.setAttribute('hidden', '');
+        } else {
+          var trimmed = window.location.pathname.replace(/\/$/, '');
+          var parent = trimmed.slice(0, trimmed.lastIndexOf('/') + 1) || (base + '/');
+          back.setAttribute('href', parent);
+          back.removeAttribute('hidden');
+        }
       }
 
-      if (isHome) {
-        /* Scroll-to-top mode: show after 600 px, click → smooth scroll to top. */
-        el.setAttribute('aria-label', 'Skrolovat zpátky nahoru');
-        el.setAttribute('data-fa-mode', 'top');
-        el.removeAttribute('href');
-        el.setAttribute('role', 'button');
-        el.setAttribute('tabindex', '0');
-        if (iconBack) iconBack.setAttribute('hidden', '');
-        if (iconTop) iconTop.removeAttribute('hidden');
+      /* Nahoru: viditelnost řídí scroll (na všech stránkách). */
+      if (top && top.__check) top.__check();
 
-        function check() {
-          if (window.scrollY > 600) el.removeAttribute('hidden');
-          else el.setAttribute('hidden', '');
-        }
-        function go(e) {
-          if (e && e.preventDefault) e.preventDefault();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        el.addEventListener('click', go);
-        el.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
-        });
-        window.addEventListener('scroll', check, { passive: true });
-        check();
-      } else {
-        /* Back mode , odkaz o úroveň výš (parent). Vždy viditelný (desktop i mobil). */
-        var trimmed = window.location.pathname.replace(/\/$/, '');
-        var parent = trimmed.slice(0, trimmed.lastIndexOf('/') + 1) || (base + '/');
-        el.setAttribute('href', parent);
-        el.setAttribute('aria-label', 'O úroveň výš');
-        el.setAttribute('role', 'link');
-        el.removeAttribute('tabindex');
-        if (iconBack) iconBack.removeAttribute('hidden');
-        if (iconTop) iconTop.setAttribute('hidden', '');
-        el.removeAttribute('hidden');
-      }
+      syncTone(wrap);
     }
 
     document.addEventListener('astro:page-load', bind);
@@ -121,10 +138,16 @@ const home = withBase('/');
      + plum-deep border. body[data-hero-tone] (z SubpageHero) řídí který. */
   .floating-action {
     position: fixed;
-    bottom: clamp(20px, 5vw, 32px);
-    right: clamp(20px, 5vw, 32px);
+    /* Safe-area: na telefonu na šířku je notch po stranách, proto max() s
+       env() insetem (žádný efekt tam kde inset = 0). */
+    bottom: max(clamp(20px, 5vw, 32px), env(safe-area-inset-bottom, 0px));
     width: 48px;
     height: 48px;
+    margin: 0;
+    padding: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -144,13 +167,11 @@ const home = withBase('/');
       color 220ms cubic-bezier(0.32, 0.72, 0, 1),
       opacity 280ms cubic-bezier(0.32, 0.72, 0, 1);
   }
-  .floating-action__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 0;
-  }
-  .floating-action__icon[hidden] { display: none; }
+  /* Nahoru = vždy vpravo. Zpět = vždy vlevo. */
+  .floating-action--top  { right: max(clamp(20px, 5vw, 32px), env(safe-area-inset-right, 0px)); }
+  .floating-action--back { left:  max(clamp(20px, 5vw, 32px), env(safe-area-inset-left, 0px)); }
+
+  .floating-action :global(svg) { display: block; }
 
   /* Light hero (cream / rose): plum-deep accent místo bílé */
   :global(body[data-hero-tone="light"]) .floating-action,
@@ -160,9 +181,8 @@ const home = withBase('/');
     color: var(--plum-deep);
   }
 
-  /* Viditelné na desktopu i mobilu. Back mode: vždy (link o úroveň výš).
-     Top mode (landing): až po scrollu > 600 px přes JS, s pop animací. */
-  .floating-action[data-fa-mode="top"]:not([hidden]) {
+  /* Scroll-to-top pop při objevení. */
+  .floating-action--top:not([hidden]) {
     animation: floating-action-pop 360ms cubic-bezier(0.32, 0.72, 0, 1);
   }
   .floating-action[hidden] {
@@ -191,6 +211,18 @@ const home = withBase('/');
   .floating-action:focus-visible {
     outline: 2px solid var(--rose);
     outline-offset: 4px;
+  }
+
+  /* Telefon na šířku (nízký viewport): menší kruhy, blíž k rohům, ať
+     nepřekrývají obsah na úzkém pruhu výšky. */
+  @media (orientation: landscape) and (max-height: 480px) {
+    .floating-action {
+      width: 42px;
+      height: 42px;
+      bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    }
+    .floating-action--top  { right: max(12px, env(safe-area-inset-right, 0px)); }
+    .floating-action--back { left:  max(12px, env(safe-area-inset-left, 0px)); }
   }
 
   @keyframes floating-action-pop {

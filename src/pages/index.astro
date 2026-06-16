@@ -532,6 +532,30 @@ const tiles = [
   @media (max-width: 540px) {
     .lp-hero__quick-btn { padding: 11px 16px; font-size: 0.875rem; }
   }
+  /* Telefon na šířku (nízký viewport): hero content se nevejde do 100dvh,
+     pokud CTA pruh visí absolutně u spodní hrany přes střed s titulkem.
+     Vrátíme pilulky do toku pod lede, schováme scroll-cue (není kam scrollovat
+     gestem na pár set px) a necháme hero přirozeně narůst + odscrollovat. */
+  @media (orientation: landscape) and (max-height: 600px) {
+    .lp-hero {
+      min-height: 100dvh;
+      justify-content: center;
+      padding: calc(68px + var(--space-4)) 0 var(--space-5);
+    }
+    .lp-hero__inner { transform: none; }
+    .lp-hero__quick {
+      position: static;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      margin: var(--space-4) auto 0;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 10px;
+    }
+    .lp-hero__quick-btn { padding: 11px 20px; font-size: 0.9375rem; }
+    .lp-hero__scroll-cue { display: none; }
+  }
   /* 5 slidů jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
      celé fotky doleva. Sousední slide zároveň zprava vplouvá dovnitř,
      takže přechod je jeden plynulý sweep bez cross-fade.
