@@ -16,6 +16,7 @@ type Item = {
   href: string;
   variant: Variant;
   ribbonPath?: string;
+  ribbonWidth?: number;
 };
 
 interface Props {
@@ -50,7 +51,7 @@ const defaultThickness: Record<Variant, number> = {
           <svg viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
             <path
               d={it.ribbonPath ?? defaultRibbon[it.variant]}
-              stroke-width={defaultThickness[it.variant]}
+              stroke-width={it.ribbonWidth ?? defaultThickness[it.variant]}
             />
           </svg>
         </span>

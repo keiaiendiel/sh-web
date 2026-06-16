@@ -40,8 +40,10 @@ const sitemapMain = [
     ))}
   </div>
 
+  {/* Tři sloupce zarovnané pod tři rezervační tlačítka:
+      Adresa & mapa | Obsah + Ostatní | Kontakty. */}
   <div class="hub-footer__inner">
-    {/* Adresa & mapa */}
+    {/* Sloupec 1 (pod „Rezervovat apartmán"): Adresa & mapa */}
     <div class="hub-footer__col hub-footer__col--brand">
       <p class="hub-footer__brand">Startovací Hub Klecany</p>
       <p class="hub-footer__label">Adresa</p>
@@ -56,7 +58,31 @@ const sitemapMain = [
       </p>
     </div>
 
-    {/* Kontakty */}
+    {/* Sloupec 2 (pod „Rezervovat lůžko"): Obsah webu + Ostatní */}
+    <div class="hub-footer__col hub-footer__col--obsah">
+      <div class="hub-footer__obsah-grid">
+        <div>
+          <p class="hub-footer__label">Obsah webu</p>
+          <ul class="hub-footer__sitemap hub-footer__sitemap--col">
+            {sitemapMain.map((l) => (
+              <li><a href={withBase(l.href)}>{l.label}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p class="hub-footer__label">Ostatní</p>
+          <ul class="hub-footer__sitemap hub-footer__sitemap--col">
+            <li><a href={withBase('/investori/')}>Podklady pro investory</a></li>
+            <li><a href={withBase('/faq/')}>Časté otázky</a></li>
+            <li><a href={withBase('/gdpr/')}>Ochrana osobních údajů</a></li>
+            <li><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a></li>
+            <li><a href="https://vepde.com" rel="noopener">vepde.com</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {/* Sloupec 3 (pod „Požádat o stipendium"): Kontakty */}
     <div class="hub-footer__col hub-footer__col--contact">
       <p class="hub-footer__label">Kontakty</p>
       <p class="hub-footer__contact-lede">Stavte se na prohlídku, nebo se zapojte do našich aktivit.</p>
@@ -69,28 +95,6 @@ const sitemapMain = [
         Provozuje Startovací Hub Klecany, Občanské sdružení Alternativa II, z.s.<br />
         IČO {org?.ico ?? 'bude doplněno'}. Bydlení ve správě stavebně bytového družstva Altstav.
       </p>
-    </div>
-
-    {/* Obsah webu , hlavní stránky */}
-    <div class="hub-footer__col hub-footer__col--sitemap">
-      <p class="hub-footer__label">Obsah webu</p>
-      <ul class="hub-footer__sitemap">
-        {sitemapMain.map((l) => (
-          <li><a href={withBase(l.href)}>{l.label}</a></li>
-        ))}
-      </ul>
-    </div>
-
-    {/* Ostatní , méně časté + externí odkazy */}
-    <div class="hub-footer__col hub-footer__col--ostatni">
-      <p class="hub-footer__label">Ostatní</p>
-      <ul class="hub-footer__sitemap hub-footer__sitemap--col">
-        <li><a href={withBase('/investori/')}>Podklady pro investory</a> <span class="hub-footer__hint">na heslo</span></li>
-        <li><a href={withBase('/faq/')}>Časté otázky</a></li>
-        <li><a href={withBase('/gdpr/')}>Ochrana osobních údajů</a></li>
-        <li><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a></li>
-        <li><a href="https://vepde.com" rel="noopener">vepde.com</a></li>
-      </ul>
     </div>
   </div>
 
@@ -221,13 +225,20 @@ const sitemapMain = [
   .hub-footer__act-btn :global(svg) { transition: transform 180ms var(--ease-quart); color: var(--plum-deep); flex-shrink: 0; }
   .hub-footer__act-btn:hover :global(svg) { transform: translateX(3px); }
 
+  /* Tři sloupce zarovnané pod tři rezervační tlačítka (stejný grid jako reserve). */
   .hub-footer__inner {
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.6fr 1.1fr 1fr 1.2fr;
-    gap: var(--space-7) var(--space-6);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-7) clamp(10px, 1.4vw, 18px);
+  }
+  /* Prostřední sloupec: Obsah webu + Ostatní vedle sebe v úzkém prostoru. */
+  .hub-footer__obsah-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5) var(--space-5);
   }
 
   .hub-footer__col p { margin: 0 0 6px; line-height: 1.5; font-size: var(--text-sm); color: rgba(255, 255, 255, 0.85); }
@@ -404,10 +415,10 @@ const sitemapMain = [
     gap: 8px var(--space-4);
   }
   .hub-footer__sitemap--col { grid-template-columns: 1fr; }
-  .hub-footer__sitemap li { line-height: 1.4; }
+  .hub-footer__sitemap li { line-height: 1.5; }
+  /* Odkazy podtržené (signál, že někam vedou) , dědí z .hub-footer__col a. */
   .hub-footer__col .hub-footer__sitemap a {
     font-size: var(--text-sm);
-    text-decoration: none;
     color: rgba(255, 255, 255, 0.85);
   }
   .hub-footer__col .hub-footer__sitemap a:hover,
@@ -454,22 +465,21 @@ const sitemapMain = [
   }
 
   /* Responsive */
-  @media (max-width: 1024px) {
-    .hub-footer__inner { grid-template-columns: 1fr 1fr; }
-    .hub-footer__col--brand { grid-column: span 2; }
+  /* Užší prostředek , Obsah + Ostatní pod sebe. */
+  @media (max-width: 1023px) {
+    .hub-footer__obsah-grid { grid-template-columns: 1fr; gap: var(--space-5); }
+  }
+  /* Tablet portrait a níž , vše do jednoho sloupce (i rezervační pruh). */
+  @media (max-width: 860px) {
+    .hub-footer__reserve,
+    .hub-footer__inner { grid-template-columns: 1fr; }
+    .hub-footer__inner { gap: var(--space-6); }
+    .hub-footer__obsah-grid { grid-template-columns: 1fr 1fr; }
     .hub-footer__map { aspect-ratio: 21 / 9; }
   }
-  @media (max-width: 720px) {
-    .hub-footer__reserve { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 600px) {
-    .hub-footer__inner { grid-template-columns: 1fr; gap: var(--space-6); }
-    .hub-footer__col--brand { grid-column: auto; }
-    .hub-footer__map { aspect-ratio: 21 / 9; }
+  @media (max-width: 560px) {
+    .hub-footer__obsah-grid { grid-template-columns: 1fr; }
     .hub-footer__col a.hub-footer__chip-link { padding: 12px 18px; min-height: 44px; }
-    .hub-footer__col--contact,
-    .hub-footer__col--sitemap,
-    .hub-footer__col--news { min-width: 0; }
     .hub-footer__col p { overflow-wrap: anywhere; word-break: break-word; }
   }
 

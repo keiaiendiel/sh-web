@@ -361,8 +361,10 @@ const tiles = [
   <CrossLinkPair
     sectionLabel="Pokračujte na ubytování a zázemí"
     items={[
-      { eyebrow: 'Living', title: 'Apartmány, pokoje a kapsle', href: '/ubytovani/', variant: 'cream' },
-      { eyebrow: 'Zázemí', title: 'Coworking, restaurace, wellness', href: '/zazemi/', variant: 'rose' },
+      { eyebrow: 'Living', title: 'Apartmány, pokoje a kapsle', href: '/ubytovani/', variant: 'cream',
+        ribbonPath: 'M 600 360 C 780 250, 1000 420, 1180 300 C 1340 200, 1460 360, 1540 280' },
+      { eyebrow: 'Zázemí', title: 'Coworking, restaurace, wellness', href: '/zazemi/', variant: 'rose', ribbonWidth: 30,
+        ribbonPath: 'M 140 380 C 420 220, 700 460, 980 320 C 1220 200, 1420 420, 1560 300' },
     ]}
   />
 
@@ -522,7 +524,8 @@ const tiles = [
       gap: clamp(16px, 3vw, 48px);
     }
     .lp-hero__quick-btn {
-      padding: 14px 24px;
+      /* o ~10 % širší (klient 16. 6. 2026) , přes vyšší horizontální padding. */
+      padding: 14px 33px;
       font-size: clamp(1rem, 1.1vw, 1.125rem);
     }
   }
