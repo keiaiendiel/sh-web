@@ -17,6 +17,15 @@
   .section--loose { padding: var(--space-8) 0; }
 }
 
+/* Telefon na šířku (nízký viewport): hustší vertikální rytmus + nižší hero,
+   ať se na ~390 px výšky vejde víc obsahu a web působí spíš jako desktop. */
+@media (orientation: landscape) and (max-height: 600px) {
+  .section        { padding: var(--space-6) 0; }
+  .section--tight { padding: var(--space-5) 0; }
+  .section--loose { padding: var(--space-7) 0; }
+  .sec-hero       { min-height: auto; padding: var(--space-7) 0 var(--space-6); }
+}
+
 /* ---------- page header (eyebrow + H1 + lede) ---------- */
 .osa-page-head {
   display: grid;

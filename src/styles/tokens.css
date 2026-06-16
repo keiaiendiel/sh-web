@@ -227,14 +227,16 @@
   --container:      1200px;
   --container-wide: 1480px;
   /* Gutter škáluje: 20 px na malých obrazovkách, max 80 px na FullHD+,
-     aby obsah vždy dýchal několik set pixelů od kraje. */
-  --gutter:         clamp(20px, 4vw, 80px);
+     aby obsah vždy dýchal několik set pixelů od kraje. Na telefonu na šířku
+     (viewport-fit=cover) drží obsah mimo notch přes env() safe-area insety;
+     pozadí jdou edge-to-edge, jen text/CTA se odsadí. */
+  --gutter:         max(clamp(20px, 4vw, 80px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
 }
 
 /* Mobile: edge-to-content padding stahujeme na 16 px.
    Standardní mobilní jednotka, dýchavinu drží, obsah dostane víc šířky. */
 @media (max-width: 640px) {
-  :root { --gutter: 16px; }
+  :root { --gutter: max(16px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px)); }
 }
 
 /* =============================================================================

@@ -200,7 +200,8 @@ const isHome = current === withBase('/');
     position: relative; z-index: 3;
     display: flex; align-items: center; gap: var(--space-5);
     min-height: var(--hub-bar-h);
-    padding: 12px 0;
+    /* viewport-fit=cover → lišta musí uhnout notchi (portrait: nahoře). */
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 0 12px;
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: 0 auto;
@@ -303,7 +304,7 @@ const isHome = current === withBase('/');
     min-height: 100%;
     display: flex; flex-direction: column;
     gap: clamp(var(--space-5), 4vh, var(--space-7));
-    padding: calc(var(--hub-bar-h) + clamp(var(--space-3), 3vh, var(--space-5))) 0 calc(clamp(var(--space-6), 6vh, var(--space-8)) + env(safe-area-inset-bottom, 0px));
+    padding: calc(var(--hub-bar-h) + clamp(var(--space-3), 3vh, var(--space-5)) + env(safe-area-inset-top, 0px)) 0 calc(clamp(var(--space-6), 6vh, var(--space-8)) + env(safe-area-inset-bottom, 0px));
   }
   .hub-menu__brand { display: inline-flex; align-items: center; color: #fff; line-height: 0; align-self: flex-start; }
   :global(.hub-menu__logo) { display: block; height: clamp(22px, 2.6vw, 30px); width: auto; }

@@ -273,6 +273,12 @@ const galleryImages = media.map((m) =>
     .zz-section__title { font-size: clamp(1.625rem, 7vw, 2.25rem); }
   }
 
+  /* Telefon na šířku (nízký viewport): hustší vertikální rytmus, dvousloupcový
+     zig-zag zůstává (desktop feel), jen se stáhnou mezery. */
+  @media (orientation: landscape) and (max-height: 600px) {
+    .zz-section { padding: var(--space-6) 0; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .zz-btn, .zz-btn__arrow { transition: none; }
     .zz-section__ribbon[data-ribbon-reveal] path,

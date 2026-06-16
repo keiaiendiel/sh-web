@@ -290,6 +290,13 @@ const titleId = ariaId ? `${ariaId}-title` : undefined;
     .subpage-hero__title { font-size: clamp(1.875rem, 8vw, 2.5rem); }
   }
 
+  /* Telefon na šířku: hero nesmí sníst celou výšku. Titul škáluj podle vh
+     (desktop clamp je výškově slepý → na 390 px sní celý viewport). */
+  @media (orientation: landscape) and (max-height: 600px) {
+    .subpage-hero { min-height: clamp(180px, 46vh, 280px); padding: var(--space-6) 0 var(--space-5); }
+    .subpage-hero__title { font-size: clamp(1.5rem, 7.5vh, 2.5rem); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .subpage-hero__bg { transition: none; }
     .subpage-hero__bg[data-ribbon-reveal] path,
