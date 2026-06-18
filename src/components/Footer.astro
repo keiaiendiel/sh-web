@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 import { withBase } from '../utils/url';
 import Arrow from './Arrow.astro';
+import Icon from './Icon.astro';
 
 const orgEntry = await getEntry('org', 'identity');
 const org = orgEntry?.data;
@@ -54,27 +55,17 @@ const sitemapMain = [
       </p>
     </div>
 
-    {/* Sloupec 2 (pod „Rezervovat lůžko"): Obsah webu + Ostatní */}
+    {/* Sloupec 2 (pod „Rezervovat lůžko"): dva hlavní odkazy , Pro investory + Obsah (otevře hamburger menu). */}
     <div class="hub-footer__col hub-footer__col--obsah">
-      <div class="hub-footer__obsah-grid">
-        <div>
-          <p class="hub-footer__label">Obsah webu</p>
-          <ul class="hub-footer__sitemap hub-footer__sitemap--col">
-            {sitemapMain.map((l) => (
-              <li><a href={withBase(l.href)}>{l.label}</a></li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p class="hub-footer__label">Ostatní</p>
-          <ul class="hub-footer__sitemap hub-footer__sitemap--col">
-            <li><a href={withBase('/investori/')}>Podklady pro investory</a></li>
-            <li><a href={withBase('/faq/')}>Časté otázky</a></li>
-            <li><a href={withBase('/gdpr/')}>Ochrana osobních údajů</a></li>
-            <li><a href="https://www.alternativa2.info/" rel="noopener">alternativa2.info</a></li>
-            <li><a href="https://vepde.com" rel="noopener">vepde.com</a></li>
-          </ul>
-        </div>
+      <div class="hub-footer__nav-btns">
+        <a class="hub-footer__nav-btn osa-nolink" href={withBase('/investori/')}>
+          <span>Pro investory</span>
+          <Arrow dir="right" variant="chevron" size={16} weight={2.4} />
+        </a>
+        <button type="button" class="hub-footer__nav-btn" data-open-menu aria-label="Otevřít obsah webu">
+          <span>Obsah</span>
+          <Icon name="menu" size={18} />
+        </button>
       </div>
     </div>
 
@@ -100,6 +91,24 @@ const sitemapMain = [
     <p class="hub-footer__updated">Poslední aktualizace webu proběhla {buildDate}</p>
   </div>
 </footer>
+
+<script is:inline>
+  /* Footer „Obsah" tlačítko otevře hlavní hamburger menu (klikne na burger v headeru). */
+  (function () {
+    function bind() {
+      document.querySelectorAll('[data-open-menu]').forEach(function (btn) {
+        if (btn.dataset.openBound) return;
+        btn.dataset.openBound = '1';
+        btn.addEventListener('click', function () {
+          var burger = document.querySelector('.hub-header__burger');
+          if (burger) burger.click();
+        });
+      });
+    }
+    document.addEventListener('astro:page-load', bind);
+    bind();
+  }());
+</script>
 
 <script is:inline>
   /* Footer map: lazy init až při scrollu k patičce. Reusuje sdílený
@@ -238,6 +247,38 @@ const sitemapMain = [
     justify-content: center;
     gap: var(--space-5) clamp(28px, 3.5vw, 60px);
   }
+
+  /* Sloupec 2: dva hlavní odkazy (Pro investory + Obsah). */
+  .hub-footer__nav-btns {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .hub-footer__nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 12px 20px;
+    font: 700 var(--text-md) / 1 var(--font-sans);
+    color: var(--cream);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-input);
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+  .hub-footer__nav-btn:hover,
+  .hub-footer__nav-btn:focus-visible {
+    background: var(--rose);
+    color: var(--plum-deep);
+    border-color: var(--rose);
+    transform: translateY(-1px);
+    outline: none;
+  }
+  .hub-footer__nav-btn:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+  .hub-footer__nav-btn :global(svg) { flex-shrink: 0; }
 
   .hub-footer__col p { margin: 0 0 6px; line-height: 1.5; font-size: var(--text-sm); color: rgba(255, 255, 255, 0.85); }
   .hub-footer__col a {
