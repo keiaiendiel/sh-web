@@ -47,9 +47,10 @@ const sitemapMain = [
         Brand i plná adresa vypuštěny , adresa je čitelná přímo v mapě. */}
     <div class="hub-footer__col hub-footer__col--brand">
       <div class="hub-footer__map" data-map-frame role="application" aria-label="Mapa Hubu Klecany"></div>
+      <p class="hub-footer__map-intro">Kampus projektu Startovací Hub naleznete v rozvojovém území na adrese:</p>
       <p class="hub-footer__map-address">
-        <strong>Horní kasárna Klecany</strong>
-        <a href="https://maps.app.goo.gl/vCF6VbW7Z49sggau6" target="_blank" rel="noopener">Otevřít v Mapách <Arrow dir="right" variant="chevron" size={13} weight={2.4} /></a>
+        <strong>Dolní Kasárna 798, 250 67 Klecany (Praha-sever)</strong>
+        <a href="https://www.google.com/maps?q=Dolní+Kasárna+798,+250+67+Klecany" target="_blank" rel="noopener">Otevřít v Mapách <Arrow dir="right" variant="chevron" size={13} weight={2.4} /></a>
       </p>
     </div>
 
@@ -107,7 +108,7 @@ const sitemapMain = [
     function init(el) {
       if (el.dataset.mapBound) return;
       el.dataset.mapBound = '1';
-      var center = [50.181447, 14.424094];
+      var center = [50.179823, 14.406268];
       /* Mobile: nižší zoom (14) pro širší kontext, popup label se na malé
          ploše neúměrně rve. Desktop: zoom 16, plná detail kasárna. */
       var isMobile = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
@@ -130,10 +131,10 @@ const sitemapMain = [
           '</svg>',
         className: '', iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -42],
       });
-      var gmaps = 'https://maps.app.goo.gl/vCF6VbW7Z49sggau6';
+      var gmaps = 'https://www.google.com/maps?q=Dolní+Kasárna+798,+250+67+Klecany';
       var popupHtml =
         '<a href="' + gmaps + '" target="_blank" rel="noopener" class="ok-map-popup">' +
-          '<strong>Horní kasárna Klecany</strong>' +
+          '<strong>Dolní Kasárna 798, Klecany</strong>' +
           '<span class="ok-map-popup__cta">Otevřít v Mapách →</span>' +
         '</a>';
       L.marker(center, { icon: icon })
@@ -329,8 +330,13 @@ const sitemapMain = [
     color: var(--accent);
   }
 
-  .hub-footer__map-address {
+  .hub-footer__map-intro {
     margin: var(--space-3) 0 0 !important;
+    font: 500 var(--text-sm) / 1.5 var(--font-sans) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+  .hub-footer__map-address {
+    margin: var(--space-2) 0 0 !important;
     font: 500 var(--text-sm) / 1.5 var(--font-sans) !important;
     color: rgba(255, 255, 255, 0.85) !important;
     display: flex !important;
