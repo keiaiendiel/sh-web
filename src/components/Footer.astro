@@ -80,24 +80,23 @@ const sitemapMain = [
     {/* Sloupec 3 (pod „Požádat o stipendium"): Kontakty */}
     <div class="hub-footer__col hub-footer__col--contact">
       <p class="hub-footer__label">Kontakty</p>
-      <p class="hub-footer__contact-lede">Stavte se na prohlídku, nebo se zapojte do našich aktivit.</p>
-      <p class="hub-footer__chip">
-        <a href={withBase('/rezervace/')} class="hub-footer__chip-link">Domluvit prohlídku <Arrow dir="right" variant="chevron" size={14} weight={2.4} /></a>
-      </p>
       <p class="hub-footer__contact-line"><a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a></p>
       {org?.predseda?.phone && <p class="hub-footer__contact-line"><a href={`tel:${org.predseda.phone.replace(/\s/g,'')}`}>{org.predseda.phone}</a></p>}
       <p class="hub-footer__operator">
-        Provozuje Startovací Hub Klecany, Občanské sdružení Alternativa II, z.s.<br />
-        IČO {org?.ico ?? 'bude doplněno'}. Bydlení ve správě stavebně bytového družstva Altstav.
+        Projekt Startovací Hub je realizován pod záštitou Občanského sdružení Alternativa II a partnerských organizací.
       </p>
     </div>
   </div>
 
   {/* Meta řádek */}
   <div class="hub-footer__meta">
+    {/* Skryto na přání klienta 2026-06-18. POZN.: „V projektové přípravě" a věta
+        o nezávaznosti rezervací byly dle CLAUDE.md site-wide právní neutralizace
+        (vábivá reklama dle ZOOS). Ponecháno zakomentované pro případné obnovení.
     <p class="hub-footer__reservation-note">Nabídka rezervací je nezávazná, slouží k registraci zájmu.</p>
     <p class="hub-footer__status">V projektové přípravě</p>
-    <p class="hub-footer__updated">Aktualizováno {buildDate}</p>
+    */}
+    <p class="hub-footer__updated">Poslední aktualizace webu proběhla {buildDate}</p>
   </div>
 </footer>
 
