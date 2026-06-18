@@ -267,6 +267,9 @@ const tiles = [
   {/* Tile grid POD hero (3×2). Pět scroll-anchor dlaždic + Rezervace tile
       jako šestá. Každá dlaždice má velký ribbon arc jako pozadí (peeká z
       pod typo), per spec § 04 banner influence (plakátovější vibe). */}
+  {/* DOČASNĚ SKRYTO 2026-06-18 (přání klienta): celý rozcestník 6 dlaždic pod
+      hero je zakomentovaný kvůli snadnému obnovení. Odkomentovat = smazat tento
+      úvodní JSX-komentář a jeho uzavírací značku umístěnou hned za </section>.
   <section class="lp-tiles" id="lp-jumps" aria-label="Skok do sekcí">
     <div class="lp-tiles__grid">
       {tiles.map((t) => (
@@ -302,6 +305,7 @@ const tiles = [
       </a>
     </div>
   </section>
+  */}
 
   {/* ============ ZIG-ZAG SEKCE (5 řad, one-pager) ============ */}
   <div class="lp-sections">
@@ -334,11 +338,15 @@ const tiles = [
             </div>
           </div>
 
+          {/* DOČASNĚ SKRYTO 2026-06-18 (přání klienta): pruh „Vždy v ceně bydlení"
+              (ResidentBenefits, benefit chipy s ikonami a textem, co je zahrnuto
+              v ceně bydlení). Ponecháno zakomentované pro pozdější obnovení.
           {sec.id === 'ubytovani' && (
             <div class="lp-section__benefits">
               <ResidentBenefits eyebrow={false} />
             </div>
           )}
+          */}
 
         </section>
       </>
