@@ -493,4 +493,7 @@ textarea:focus-visible {
     pointer-events: none;
     z-index: 5;
   }
+  /* První lp-sekce sedí těsně pod hero (rozcestník je skrytý) — horní divider
+     ribbon by koukal pod video, proto ho u první sekce vypneme. */
+  .lp-sections > .lp-section:first-of-type::before { display: none; }
 }

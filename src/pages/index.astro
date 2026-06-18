@@ -75,12 +75,11 @@ type Section = {
 const sections: Section[] = [
   {
     id: 'ubytovani',
-    eyebrow: 'Living',
+    eyebrow: 'Ubytování',
     title: 'Privátní apartmán, nebo sdílený pokoj?',
     lede: 'Šest formátů sdílených pokojů od otevřeného lůžka po uzamykatelnou kapsli a pět privátních apartmánů 1+kk až 5+kk. V ceně energie, internet, coworkingový sál a pět jízd kyvadlové dopravy MyShelter k metru měsíčně.',
     ctas: [
-      { href: '/ubytovani/sdilene-pokoje/', label: 'Sdílené pokoje' },
-      { href: '/ubytovani/privatni/', label: 'Privátní apartmány' },
+      { href: '/ubytovani/', label: 'Více o ubytování' },
     ],
     ribbonPath: 'M -80 480 C 120 320, 320 240, 540 360 S 940 520, 1120 380 S 1400 280, 1560 360',
     gallery: [
@@ -319,7 +318,7 @@ const tiles = [
           </span>
           <div class="lp-section__inner">
             <div class="lp-section__text" data-reveal>
-              <p class="lp-section__eyebrow">{sec.eyebrow}</p>
+              {/* eyebrow dočasně skryt (klient 2026-06-18): <p class="lp-section__eyebrow">{sec.eyebrow}</p> */}
               <h2 class="lp-section__title" id={`${sec.id}-title`}>{sec.title}</h2>
               <p class="lp-section__lede">{sec.lede}</p>
               {sec.ctas.length > 0 && (
@@ -357,7 +356,6 @@ const tiles = [
   <section class="lp-gallery" id="galerie">
     <div class="lp-gallery__inner">
       <PhotoGrid
-        eyebrow="Galerie"
         heading="Podívejte se dovnitř"
         images={landingPhotos}
         columns={4}
@@ -374,7 +372,7 @@ const tiles = [
   <CrossLinkPair
     sectionLabel="Pokračujte na ubytování a zázemí"
     items={[
-      { eyebrow: 'Living', title: 'Apartmány, pokoje a kapsle', href: '/ubytovani/', variant: 'cream',
+      { eyebrow: 'Ubytování', title: 'Apartmány, pokoje a kapsle', href: '/ubytovani/', variant: 'cream',
         ribbonPath: 'M 600 360 C 780 250, 1000 420, 1180 300 C 1340 200, 1460 360, 1540 280' },
       { eyebrow: 'Zázemí', title: 'Coworking, restaurace, wellness', href: '/zazemi/', variant: 'rose', ribbonWidth: 30,
         ribbonPath: 'M 140 380 C 420 220, 700 460, 980 320 C 1220 200, 1420 420, 1560 300' },
