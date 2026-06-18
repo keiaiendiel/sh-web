@@ -356,7 +356,7 @@ const tiles = [
   <section class="lp-gallery" id="galerie">
     <div class="lp-gallery__inner">
       <PhotoGrid
-        heading="Podívejte se dovnitř"
+        heading="Galerie"
         images={landingPhotos}
         columns={4}
         aspect="4 / 3"
@@ -1196,19 +1196,9 @@ const tiles = [
     color: var(--accent-on);
     outline: none;
   }
-  /* Living (Sdílené pokoje / Privátní apartmány): negativ , plně vybarvené plum,
-     na hover se převrátí na bílé pozadí s plum outlinem (opak ostatních sekcí). */
-  #ubytovani .lp-section__cta {
-    background: var(--accent);
-    color: var(--accent-on);
-    border-color: var(--accent);
-  }
-  #ubytovani .lp-section__cta:hover,
-  #ubytovani .lp-section__cta:focus-visible {
-    background: #fff;
-    color: var(--accent);
-    border-color: var(--accent);
-  }
+  /* Pravidlo: detail/navigace = jen tah + plum text (default .lp-section__cta);
+     CTA akce = fill + bílé písmo (rezervační pruh). Ubytování CTA „Více
+     o ubytování" je detail, takže žádný solid override , drží default outline. */
   .lp-section__cta-arrow {
     display: inline-flex;
     align-items: center;

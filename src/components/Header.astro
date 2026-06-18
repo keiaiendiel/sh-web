@@ -84,7 +84,6 @@ const isHome = current === withBase('/');
             style={`--i:${i}`}
             aria-current={isActive(item.path) ? 'page' : undefined}>
             <span class="hub-menu__link-text">{item.label}</span>
-            <span class="hub-menu__link-arrow" aria-hidden="true"><Arrow dir="right" variant="chevron" size={22} weight={2.2} /></span>
           </a>
         ))}
       </nav>
@@ -330,18 +329,9 @@ const isHome = current === withBase('/');
     padding: clamp(2px, 0.5vh, 6px) 0;
     transition: color 200ms var(--ease-quart), transform 320ms var(--ease-quart), opacity 320ms var(--ease-quart);
   }
-  .hub-menu__link-arrow {
-    display: inline-flex; align-items: center;
-    opacity: 0; transform: translateX(-8px);
-    color: var(--rose);
-    transition: opacity 240ms var(--ease-quart), transform 320ms var(--ease-quart);
-  }
   .hub-menu__link:hover,
-  .hub-menu__link:focus-visible { color: var(--rose); outline: none; transform: none; }
-  .hub-menu__link:hover .hub-menu__link-arrow,
-  .hub-menu__link:focus-visible .hub-menu__link-arrow { opacity: 1; transform: none; }
+  .hub-menu__link:focus-visible { color: var(--rose); outline: none; }
   .hub-menu__link[aria-current='page'] { color: var(--rose); }
-  .hub-menu__link[aria-current='page'] .hub-menu__link-arrow { opacity: 1; transform: none; }
   .hub-menu__link:focus-visible .hub-menu__link-text {
     text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px;
   }
