@@ -17,8 +17,8 @@ type NavLink = { path: string; label: string };
 
 const nav: NavLink[] = [
   { path: '/ubytovani/', label: 'Ubytování' },
-  { path: '/zazemi/',    label: 'Zázemí' },
   { path: '/stipendia/', label: 'Stipendia' },
+  { path: '/zazemi/',    label: 'Zázemí' },
   { path: '/doprava/',   label: 'Doprava' },
   { path: '/galerie/',   label: 'Galerie' },
   { path: '/cenik/',     label: 'Ceník' },
@@ -70,6 +70,12 @@ const isHome = current === withBase('/');
         <BrandLogo class="hub-menu__logo" />
       </a>
 
+      {/* Rezervace hned pod logem */}
+      <a href={withBase('/rezervace/')} class="hub-menu__reserve-btn osa-nolink" aria-current={reservationActive ? 'page' : undefined}>
+        <span>Rezervace</span>
+        <Arrow dir="right" variant="chevron" size={18} weight={2.4} />
+      </a>
+
       <nav class="hub-menu__nav" aria-label="Hlavní navigace">
         {nav.map((item, i) => (
           <a
@@ -83,14 +89,15 @@ const isHome = current === withBase('/');
         ))}
       </nav>
 
+      {/* Účet (stuby, auth backend = fáze 2) */}
       <div class="hub-menu__foot">
-        <a href={withBase('/rezervace/')} class="hub-menu__reserve-btn osa-nolink" aria-current={reservationActive ? 'page' : undefined}>
-          <span>Rezervace</span>
-          <Arrow dir="right" variant="chevron" size={18} weight={2.4} />
-        </a>
-        <button type="button" class="hub-menu__acct" data-placeholder aria-label="Přihlásit se (připravujeme)">
-          <Icon name="log-in" size={18} />
-          <span>Přihlásit se</span>
+        <button type="button" class="hub-menu__acct" data-placeholder aria-label="Přihlásit se / Odhlásit se (připravujeme)">
+          <Icon name="user" size={18} />
+          <span>Přihlásit se / Odhlásit se</span>
+        </button>
+        <button type="button" class="hub-menu__acct" data-placeholder aria-label="Přepnout účet (připravujeme)">
+          <Icon name="repeat" size={18} />
+          <span>Přepnout účet</span>
         </button>
       </div>
     </div>
@@ -306,11 +313,11 @@ const isHome = current === withBase('/');
     gap: clamp(var(--space-5), 4vh, var(--space-7));
     padding: calc(var(--hub-bar-h) + clamp(var(--space-3), 3vh, var(--space-5)) + env(safe-area-inset-top, 0px)) 0 calc(clamp(var(--space-6), 6vh, var(--space-8)) + env(safe-area-inset-bottom, 0px));
   }
-  .hub-menu__brand { display: inline-flex; align-items: center; color: #fff; line-height: 0; align-self: flex-start; }
+  .hub-menu__brand { display: inline-flex; align-items: center; color: #fff; line-height: 0; align-self: center; }
   :global(.hub-menu__logo) { display: block; height: clamp(22px, 2.6vw, 30px); width: auto; }
 
   .hub-menu__nav {
-    display: flex; flex-direction: column; align-items: flex-start;
+    display: flex; flex-direction: column; align-items: center;
     gap: clamp(2px, 1.2vh, 12px);
     flex: 1 1 auto; justify-content: center;
     width: 100%;
@@ -330,7 +337,7 @@ const isHome = current === withBase('/');
     transition: opacity 240ms var(--ease-quart), transform 320ms var(--ease-quart);
   }
   .hub-menu__link:hover,
-  .hub-menu__link:focus-visible { color: var(--rose); outline: none; transform: translateX(6px); }
+  .hub-menu__link:focus-visible { color: var(--rose); outline: none; transform: none; }
   .hub-menu__link:hover .hub-menu__link-arrow,
   .hub-menu__link:focus-visible .hub-menu__link-arrow { opacity: 1; transform: none; }
   .hub-menu__link[aria-current='page'] { color: var(--rose); }
@@ -348,11 +355,12 @@ const isHome = current === withBase('/');
   }
 
   .hub-menu__foot {
-    display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap;
+    display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
     padding-top: clamp(var(--space-4), 3vh, var(--space-6));
     border-top: 1px solid hsl(0 0% 100% / 0.14);
   }
   .hub-menu__reserve-btn {
+    align-self: center;
     display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
     font: 700 var(--text-md) / 1 var(--font-sans);
     padding: var(--space-3) var(--space-6);
