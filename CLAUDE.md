@@ -61,7 +61,7 @@ Staré bespoke stránky (`/coworking/`, `/komunita/`, `/okoli/`, `/kapsle/`) + m
 - **Voice:** komunita + kreativa + pragmatic value. Lowercase „vy/váš", bez „ty" formy.
 - **Hook:** hero H1 „Coliving & coworking / na prahu metropole." (s <br>), lede „MyShelter · Žijte, milujte & tvořte!" (oddělovač středová tečka, NE pomlčka , en-dash je lint-banned). Energie a internet v ceně, 15 min od metra , v body textu, ne v hero.
 - **Konverzní funnel:** hero (3 CTA v pořadí apartmán → lůžko → stipendium) → srovnávací tabulky / zig-zag → `/rezervace/` → telefon do 24 h → post-submit dotazník doplňků.
-- **Menu pořadí:** Ubytování, Zázemí, Stipendia, Doprava, Galerie, Ceník, Novinky (Stipendia PŘED Dopravou, dle tabulky). Header CTA jednotně „Rezervace" (preference klienta, desktop i mobil).
+- **Menu pořadí:** Ubytování, Zázemí, Stipendia, Doprava, Galerie, Ceník, Novinky (Stipendia PŘED Dopravou, dle tabulky). Header CTA jednotně „Rezervovat" (sloveso, desktop i mobil) , pill v liště, tlačítko v menu i ghost CTA na /druzstvo/. Eyebrow labely na CtaBanner, breadcrumbs a 404 nav zůstávají „Rezervace" (názvy/štítky, ne tlačítka).
 
 ## Pricing
 
