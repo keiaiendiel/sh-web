@@ -307,7 +307,7 @@ const isHome = current === withBase('/');
   }
   .hub-menu__inner {
     width: calc(100% - 2 * var(--gutter)); max-width: var(--container-wide); margin: 0 auto;
-    min-height: 100%;
+    min-height: 100dvh;
     display: flex; flex-direction: column;
     gap: clamp(var(--space-5), 4vh, var(--space-7));
     padding: calc(var(--hub-bar-h) + clamp(var(--space-3), 3vh, var(--space-5)) + env(safe-area-inset-top, 0px)) 0 calc(clamp(var(--space-6), 6vh, var(--space-8)) + env(safe-area-inset-bottom, 0px));
@@ -373,6 +373,19 @@ const isHome = current === withBase('/');
 
   @media (max-width: 380px) {
     :global(.hub-header__logo) { height: 16px; }
+  }
+
+  /* Desktop: menu vyplní výšku okna a nesmí scrollovat. Odkazy škálujeme i
+     podle výšky (vh), ne jen šířky, ať se 7 položek + patička vejdou s rezervou
+     dole (nav flex-grow centruje, patička sedí nad spodním paddingem). */
+  @media (min-width: 768px) {
+    .hub-menu__inner { gap: clamp(var(--space-3), 2vh, var(--space-5)); }
+    .hub-menu__nav { gap: clamp(2px, 0.8vh, 10px); }
+    .hub-menu__link {
+      font-size: clamp(1.5rem, min(4vw, 3.2vh), 2.75rem);
+      padding-block: clamp(2px, 0.4vh, 5px);
+    }
+    .hub-menu__foot { padding-top: clamp(var(--space-4), 2.2vh, var(--space-5)); }
   }
 
   /* Telefon na šířku (nízký viewport): celoobrazovkové menu má obří odkazy
