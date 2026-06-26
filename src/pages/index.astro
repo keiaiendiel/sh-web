@@ -125,15 +125,15 @@ const sections: Section[] = [
     ribbonPath: 'M -60 420 C 160 540, 380 260, 600 400 S 960 520, 1140 380 S 1380 240, 1560 380',
     gallery: [
       { src: withBase('/images/hub/stipendia/01-atelier.jpg'), alt: 'Ateliér s rezidentem-tvůrcem v práci, denní světlo, velký stůl.' },
-      { src: withBase('/images/hub/stipendia/02-rezident.jpg'), alt: 'Rezident u rozdělané práce, soustředění v denním světle.' },
       { src: withBase('/images/hub/stipendia/03-rezidenti.jpg'), alt: 'Skupina rezidentů u společného stolu, plánování nebo večeře.' },
     ],
   },
 ];
 
-/* Dvě karty pod sekcí Ubytování , fotky nahoře, text (nadpis + Zjistit více)
-   pod nimi. Vlevo Privátní apartmány, vpravo Sdílené pokoje. Galerie jsou
-   swipe (Gallery), fotky recyklované ze stránky /ubytovani/. */
+/* Dvě karty pod úvodem sekce Ubytování, dva sloupce vedle sebe: scroll
+   galerie (Gallery) nahoře, pod ní rámované tělo s nadpisem, popisem a
+   tlačítkem Zjistit více. Vlevo Privátní apartmány, vpravo Sdílené pokoje.
+   Velká slide gallery sekce je u Ubytování skrytá (úvod je na celou šířku). */
 const ubytovaniCards = [
   {
     title: 'Privátní apartmány',
@@ -329,7 +329,7 @@ const tiles = [
   <div class="lp-sections">
     {sections.map((sec) => (
       <>
-        <section class="lp-section" id={sec.id} aria-labelledby={`${sec.id}-title`}>
+        <section class={`lp-section${sec.id === 'ubytovani' ? ' lp-section--intro' : ''}`} id={sec.id} aria-labelledby={`${sec.id}-title`}>
           <span class="lp-section__ribbon" aria-hidden="true" data-ribbon-reveal>
             <svg viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid slice">
               <path d={sec.ribbonPath} vector-effect="non-scaling-stroke" />
@@ -351,9 +351,11 @@ const tiles = [
                 </div>
               )}
             </div>
-            <div class="lp-section__media" data-reveal data-reveal-delay="1">
-              <Gallery images={sec.gallery} ariaLabel={sec.eyebrow} aspectRatio="4 / 3" />
-            </div>
+            {sec.id !== 'ubytovani' && (
+              <div class="lp-section__media" data-reveal data-reveal-delay="1">
+                <Gallery images={sec.gallery} ariaLabel={sec.eyebrow} aspectRatio="4 / 3" />
+              </div>
+            )}
           </div>
 
           {/* DOČASNĚ SKRYTO 2026-06-18 (přání klienta): pruh „Vždy v ceně bydlení"
@@ -366,9 +368,11 @@ const tiles = [
           )}
           */}
 
-        </section>
-
-        {/* Dvě karty hned pod sekcí Ubytování: fotky nahoře, text pod nimi. */}
+        {/* Dvě karty UVNITŘ sekce Ubytování (ať ribbon i pozadí přecházejí přes
+            ně, žádná dělící čára mezi úvodem a kartami), dva sloupce: scroll
+            galerie nahoře, pod ní rámované tělo s nadpisem, popisem a tlačítkem
+            Zjistit více. Pravá karta (Sdílené pokoje) je posazená výš (offset),
+            aby vyrovnala prázdno vedle úvodního textu bez obrázku. */}
         {sec.id === 'ubytovani' && (
           <div class="lp-ucards">
             {ubytovaniCards.map((card) => (
@@ -377,7 +381,7 @@ const tiles = [
                   <Gallery images={card.gallery} ariaLabel={card.title} aspectRatio="4 / 3" />
                 </div>
                 <div class="lp-ucard__body">
-                  <h3 class="lp-ucard__title">{card.title}</h3>
+                  <h3 class="lp-ucard__title"><a class="lp-ucard__title-link osa-nolink" href={withBase(card.href)}>{card.title}</a></h3>
                   <p class="lp-ucard__text">{card.text}</p>
                   <a class="lp-ucard__cta osa-nolink" href={withBase(card.href)} aria-label={card.aria}>
                     <span class="lp-ucard__cta-label">Zjistit více</span>
@@ -388,6 +392,8 @@ const tiles = [
             ))}
           </div>
         )}
+
+        </section>
       </>
     ))}
   </div>
@@ -499,7 +505,7 @@ const tiles = [
   .lp-hero__quick-text { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 4px; }
   .lp-hero__quick-label { line-height: 1.1; }
   .lp-hero__quick-note {
-    font: 500 var(--text-xs) / 1.3 var(--font-sans);
+    font: 500 var(--text-sm) / 1.3 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     color: rgba(255, 255, 255, 0.74);
     transition: color 220ms var(--ease-quart);
@@ -555,8 +561,9 @@ const tiles = [
       margin-top: var(--space-7);
     }
     .lp-hero__quick-btn {
-      padding: 18px 42px;
-      font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
+      /* Tlačítka zvětšena ~20 % (text i padding), ať nejsou stlačená. */
+      padding: 22px 50px;
+      font-size: clamp(1.275rem, 1.44vw, 1.5rem);
     }
   }
   @media (max-width: 540px) {
@@ -649,24 +656,27 @@ const tiles = [
     text-align: center;
   }
   .lp-hero__title {
-    margin: 0 0 var(--space-4);
+    /* Menší mezera pod logem , lede „your perfect..." sedí blíž k logu. */
+    margin: 0 0 var(--space-2);
     line-height: 0;
   }
   :global(.lp-hero__logo) {
-    /* Velký centrovaný wordmark. Výška laditelná za běhu. */
+    /* Velký centrovaný wordmark. Výška laditelná za běhu. Zmenšeno ~20 %, pak
+       o dalších 8 % (2026-06-26), aby šířka loga seděla na šířku lede textu. */
     display: block;
     margin: 0 auto;
-    height: clamp(2.6rem, 4.6vw, 4.5rem);
+    height: clamp(1.91rem, 3.39vw, 3.31rem);
     width: auto;
     max-width: 100%;
     color: #fff;
   }
   .lp-hero__lede {
-    font: 500 clamp(1rem, 1.3vw, 1.3rem) / 1.4 var(--font-sans);
+    /* Podnadpis zvětšen ~20 % (2026-06-26). */
+    font: 500 clamp(1.2rem, 1.56vw, 1.55rem) / 1.4 var(--font-sans);
     letter-spacing: var(--tracking-wide);
     margin: 0 auto;
     color: rgba(255,255,255,0.92);
-    max-width: 40ch;
+    max-width: 44ch;
   }
 
   /* === SCROLL CUE === */
@@ -1085,10 +1095,10 @@ const tiles = [
     position: relative;
     padding: var(--space-8) 0;
     scroll-margin-top: 80px;
-    border-bottom: 1px solid var(--border-muted);
     overflow: hidden;
   }
-  .lp-section:last-child { border-bottom: 0; }
+  /* Žádné dělící čáry mezi sekcemi , liché/sudé sekce odděluje střídání
+     pozadí (sudé dostanou --bg-muted), to vizuálně stačí. */
   .lp-section:nth-of-type(even) {
     background: var(--bg-muted);
   }
@@ -1229,19 +1239,33 @@ const tiles = [
   }
   .lp-section__media { min-width: 0; }
 
-  /* ============ KARTY POD SEKCÍ UBYTOVÁNÍ ============ */
-  /* Dvě karty (Privátní apartmány, Sdílené pokoje): fotky nahoře (swipe
-     Gallery), text s nadpisem a CTA pod nimi. Dva sloupce, na mobilu pod sebe. */
+  /* Sekce Ubytování: úvodní text je na celou šířku (bez pravé galerie),
+     karty jdou pod ním ve dvou sloupcích. */
+  .lp-section--intro .lp-section__inner { grid-template-columns: 1fr; }
+
+  /* ============ KARTY POD ÚVODEM UBYTOVÁNÍ ============ */
+  /* Dva sloupce (Privátní apartmány, Sdílené pokoje): scroll galerie nahoře,
+     pod ní rámované tělo s nadpisem, popisem a tlačítkem Zjistit více. Celá
+     karta reaguje na hover (lift + plum rámeček), tlačítko se vyplní. Vychází
+     z archivní RoomCard estetiky (starší verze webu). */
   .lp-ucards {
+    /* Posun po výšce pravé karty (Sdílené pokoje), laditelný. */
+    --ucard-rise: 200px;
     position: relative;
     z-index: 2;
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: calc(-1 * var(--space-4)) auto 0;
-    padding-bottom: var(--space-8);
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
     gap: clamp(20px, 3vw, 40px);
+  }
+  /* Pravá karta posazená výš, aby vyplnila prázdno vedle úvodního textu
+     (ten nemá vedle sebe obrázek). margin-top, ne transform , aby nekolidoval
+     s hover liftem karty. */
+  .lp-ucard:nth-child(2) {
+    margin-top: calc(-1 * var(--ucard-rise));
   }
   .lp-ucard {
     display: flex;
@@ -1250,6 +1274,15 @@ const tiles = [
     border: 1px solid var(--border-muted);
     border-radius: var(--radius-card, 16px);
     overflow: hidden;
+    transition: border-color 220ms var(--ease-quart),
+                transform 220ms var(--ease-quart),
+                box-shadow 220ms var(--ease-quart);
+  }
+  .lp-ucard:hover,
+  .lp-ucard:focus-within {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 34px rgba(90, 42, 95, 0.13);
   }
   .lp-ucard__media { min-width: 0; }
   .lp-ucard__body {
@@ -1257,44 +1290,66 @@ const tiles = [
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-    padding: var(--space-5) var(--space-5) var(--space-6);
+    padding: clamp(20px, 2vw, 28px);
   }
   .lp-ucard__title {
     margin: 0;
-    font: 600 var(--text-xl) / 1.15 var(--font-sans);
+    font: 600 clamp(1.3rem, 1.9vw, 1.7rem) / 1.15 var(--font-sans);
     letter-spacing: var(--tracking-tight);
     color: var(--fg);
   }
+  .lp-ucard__title-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+  .lp-ucard:hover .lp-ucard__title-link,
+  .lp-ucard__title-link:focus-visible { color: var(--accent); }
+  .lp-ucard__title-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
   .lp-ucard__text {
     margin: 0;
-    font-size: var(--text-sm);
-    line-height: 1.5;
-    color: var(--fg-muted);
+    font: 400 var(--text-md) / 1.55 var(--font-sans);
+    color: var(--fg-soft, var(--fg));
   }
   .lp-ucard__cta {
     margin-top: auto;
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 8px;
+    padding: 11px 18px;
     font: 700 var(--text-sm) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wide);
+    border-radius: var(--radius-input);
+    border: 1px solid var(--accent);
     color: var(--accent);
+    background: transparent;
     text-decoration: none;
+    transition: background 200ms ease, color 200ms ease;
   }
-  .lp-ucard__cta:hover,
-  .lp-ucard__cta:focus-visible { outline: none; }
+  .lp-ucard:hover .lp-ucard__cta,
   .lp-ucard__cta:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 2px;
+    background: var(--accent);
+    color: var(--accent-on);
+    outline: none;
   }
-  .lp-ucard__cta :global(svg) { transition: transform 180ms var(--ease-quart); }
-  .lp-ucard__cta:hover :global(svg) { transform: translateX(3px); }
+  .lp-ucard__cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .lp-ucard__cta-arrow {
+    display: inline-flex;
+    align-items: center;
+    transition: transform 200ms var(--ease-quart);
+  }
+  .lp-ucard:hover .lp-ucard__cta-arrow,
+  .lp-ucard__cta:focus-visible .lp-ucard__cta-arrow { transform: translateX(3px); }
   @media (max-width: 680px) {
     .lp-ucards { grid-template-columns: 1fr; }
+    .lp-ucard:nth-child(2) { margin-top: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .lp-ucard__cta :global(svg) { transition: none; }
+    .lp-ucard,
+    .lp-ucard__title-link,
+    .lp-ucard__cta,
+    .lp-ucard__cta-arrow { transition: none; }
   }
 
   @media (max-width: 760px) {

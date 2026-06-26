@@ -22,8 +22,8 @@ const sections = apartmany.map((e) => {
       { label: 'Anchor cena', note: 'za celý byt a měsíc', price: d.cena.anchor, priceNote: d.cena.perOsoba },
     ],
     actions: [
-      { label: 'Detail', href: `/ubytovani/privatni/${d.slug}/`, kind: 'detail' as const },
-      { label: 'Rezervovat', href: `/rezervace/?typ=${d.slug}`, kind: 'reserve' as const },
+      { label: 'Zjistit více', href: `/ubytovani/privatni/${d.slug}/`, kind: 'detail' as const },
+      { label: 'Pronajmout', href: `/rezervace/?typ=${d.slug}`, kind: 'reserve' as const },
     ],
     media: (d.gallery ?? []).map((g) => ({ src: g.src, placeholder: g.placeholder, alt: g.alt })),
   };

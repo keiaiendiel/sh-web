@@ -38,7 +38,7 @@ const shuttleSection = {
   jumpLabel: 'Kyvadlová doprava',
   title: 'Zastávka kyvadlové dopravy MyShelter',
   lede: 'Kyvadlová doprava MyShelter jezdí nonstop a odveze vás k metru Kobylisy i k přívozu na vlak do centra Prahy. Zastávka stojí přímo v areálu, pět jízd měsíčně máte v ceně bydlení.',
-  actions: [{ label: 'Doprava', href: '/doprava/', kind: 'detail' as const }],
+  actions: [{ label: 'Zjistit více', href: '/doprava/', kind: 'detail' as const }],
   media: [{ src: '/images/hub/doprava/hub-shuttle-zastavka.jpg', alt: 'Zastávka kyvadlové dopravy MyShelter v areálu' }],
 };
 
@@ -51,7 +51,7 @@ const sections = [
       jumpLabel: name,
       title: name,
       lede: c.data.intro.lede,
-      actions: [{ label: 'Zobrazit', href: `/zazemi/${c.id}/`, kind: 'detail' as const }],
+      actions: [{ label: 'Zjistit více', href: `/zazemi/${c.id}/`, kind: 'detail' as const }],
       media: [repImage(c.data)],
     };
   }),

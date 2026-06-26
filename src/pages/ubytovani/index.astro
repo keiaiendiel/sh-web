@@ -48,8 +48,8 @@ const sections = [
     title: 'Sdílené pokoje',
     lede: 'Platíte za lůžko nebo kapsli, ne za celý byt. Koupelnu a kuchyň sdílíte s ostatními rezidenty. Šest formátů od otevřeného lůžka po uzamykatelnou kapsli, seřazené od nejnižší ceny.',
     actions: [
-      { label: 'Sdílené pokoje', href: '/ubytovani/sdilene-pokoje/', kind: 'detail' as const },
-      { label: 'Rezervovat lůžko', href: '/rezervace/?cesta=luzko', kind: 'reserve' as const },
+      { label: 'Zjistit více', href: '/ubytovani/sdilene-pokoje/', kind: 'detail' as const },
+      { label: 'Pronajmout', href: '/rezervace/?cesta=luzko', kind: 'reserve' as const },
     ],
     media: [
       { src: '/images/hub/ubytovani/coliving/pokoj-basic-01.jpg', alt: 'Sdílený pokoj se světlým dubovým nábytkem' },
@@ -65,8 +65,8 @@ const sections = [
     title: 'Privátní apartmány',
     lede: 'Celý byt jen pro vás, nejvyšší míra soukromí v Hubu: vlastní koupelna, kuchyň i vchod. Pět velikostí od 1+kk až po 5+kk pro skupinu až patnácti. Cena platí za celý byt, takže čím víc vás bude, tím nižší nájem na osobu.',
     actions: [
-      { label: 'Privátní apartmány', href: '/ubytovani/privatni/', kind: 'detail' as const },
-      { label: 'Rezervovat apartmán', href: '/rezervace/?cesta=apartman', kind: 'reserve' as const },
+      { label: 'Zjistit více', href: '/ubytovani/privatni/', kind: 'detail' as const },
+      { label: 'Pronajmout', href: '/rezervace/?cesta=apartman', kind: 'reserve' as const },
     ],
     media: [
       { src: '/images/hub/ubytovani/02-1kk.jpg', alt: 'Privátní apartmán 1+kk' },
@@ -80,7 +80,7 @@ const sections = [
     ? [{
         id: 'zazemi', jumpLabel: 'Ubytovací zázemí', title: zazemiItem.name, lede: zazemiItem.lede,
         blocks: zazemiItem.blocks ?? [],
-        actions: [{ label: 'Zázemí areálu', href: '/zazemi/', kind: 'detail' as const }],
+        actions: [{ label: 'Zjistit více', href: '/zazemi/', kind: 'detail' as const }],
         media: [{ placeholder: 'Foto ubytovacího zázemí: kočárkárna, sklepní kóje, parkovací místa, prádelna a sauna v budově apartmánů', alt: 'Ubytovací zázemí' }],
       }]
     : []),

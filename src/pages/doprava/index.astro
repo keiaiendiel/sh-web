@@ -12,7 +12,7 @@ const sections = data.items.map((it) => ({
   jumpLabel: it.name,
   title: it.name,
   lede: it.lede,
-  actions: [{ label: 'Detail', href: `/doprava/${it.slug}/`, kind: 'detail' as const }],
+  actions: [{ label: 'Zjistit více', href: `/doprava/${it.slug}/`, kind: 'detail' as const }],
   media: it.images ?? [],
 }));
 ---

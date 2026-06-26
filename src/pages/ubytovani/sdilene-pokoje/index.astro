@@ -29,8 +29,8 @@ const sections = varianty.map((e) => {
       },
     ],
     actions: [
-      { label: 'Detail', href: `/ubytovani/sdilene-pokoje/${d.slug}/`, kind: 'detail' as const },
-      { label: 'Rezervovat', href: `/rezervace/?typ=${d.slug}`, kind: 'reserve' as const },
+      { label: 'Zjistit více', href: `/ubytovani/sdilene-pokoje/${d.slug}/`, kind: 'detail' as const },
+      { label: 'Pronajmout', href: `/rezervace/?typ=${d.slug}`, kind: 'reserve' as const },
     ],
     media: (d.gallery ?? []).map((g) => ({ src: g.src, placeholder: g.placeholder, alt: g.alt })),
   };
