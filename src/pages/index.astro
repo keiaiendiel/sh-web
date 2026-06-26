@@ -369,10 +369,9 @@ const tiles = [
           */}
 
         {/* Dvě karty UVNITŘ sekce Ubytování (ať ribbon i pozadí přecházejí přes
-            ně, žádná dělící čára mezi úvodem a kartami), dva sloupce: scroll
-            galerie nahoře, pod ní rámované tělo s nadpisem, popisem a tlačítkem
-            Zjistit více. Pravá karta (Sdílené pokoje) je posazená výš (offset),
-            aby vyrovnala prázdno vedle úvodního textu bez obrázku. */}
+            ně, žádná dělící čára mezi úvodem a kartami), dva sloupce v rovině
+            pod úvodním textem: scroll galerie nahoře, pod ní rámované tělo
+            s nadpisem, popisem a tlačítkem Zjistit více. */}
         {sec.id === 'ubytovani' && (
           <div class="lp-ucards">
             {ubytovaniCards.map((card) => (
@@ -1249,23 +1248,15 @@ const tiles = [
      karta reaguje na hover (lift + plum rámeček), tlačítko se vyplní. Vychází
      z archivní RoomCard estetiky (starší verze webu). */
   .lp-ucards {
-    /* Posun po výšce pravé karty (Sdílené pokoje), laditelný. */
-    --ucard-rise: 200px;
     position: relative;
     z-index: 2;
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
-    margin: calc(-1 * var(--space-4)) auto 0;
+    /* Kladná mezera nad kartami, ať nepřekrývají CTA „Zjistit více" pod úvodem. */
+    margin: var(--space-5) auto 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
     gap: clamp(20px, 3vw, 40px);
-  }
-  /* Pravá karta posazená výš, aby vyplnila prázdno vedle úvodního textu
-     (ten nemá vedle sebe obrázek). margin-top, ne transform , aby nekolidoval
-     s hover liftem karty. */
-  .lp-ucard:nth-child(2) {
-    margin-top: calc(-1 * var(--ucard-rise));
   }
   .lp-ucard {
     display: flex;
@@ -1343,7 +1334,6 @@ const tiles = [
   .lp-ucard__cta:focus-visible .lp-ucard__cta-arrow { transform: translateX(3px); }
   @media (max-width: 680px) {
     .lp-ucards { grid-template-columns: 1fr; }
-    .lp-ucard:nth-child(2) { margin-top: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     .lp-ucard,
