@@ -1,0 +1,147 @@
+---
+/*
+ * StrukturaNode , rekurzivní renderer jednoho uzlu stromu „Struktura webu".
+ * Importuje sám sebe (Self) pro vykreslení potomků do libovolné hloubky.
+ * Data tečou z src/data/struktura-webu.json. Status ikona z Icon.astro
+ * (check / clock / lock). Skupinový uzel bez href se vykreslí jako text,
+ * uzel s href jako odkaz.
+ */
+import Icon from './Icon.astro';
+import Self from './StrukturaNode.astro';
+import { withBase } from '../utils/url';
+
+type Status = 'live' | 'prep' | 'locked';
+interface TreeNode {
+  label: string;
+  href?: string;
+  status: Status;
+  children?: TreeNode[];
+}
+interface Props {
+  node: TreeNode;
+}
+
+const { node } = Astro.props;
+
+const statusMeta: Record<Status, { icon: string; label: string }> = {
+  live: { icon: 'check', label: 'v provozu' },
+  prep: { icon: 'clock', label: 'v přípravě' },
+  locked: { icon: 'lock', label: 'na heslo' },
+};
+const meta = statusMeta[node.status];
+const children = node.children ?? [];
+const hasChildren = children.length > 0;
+---
+<li class="snode">
+  <div class={`snode__row ${hasChildren ? 'snode__row--section' : ''}`}>
+    <span
+      class={`snode__status snode__status--${node.status}`}
+      title={meta.label}
+      aria-label={meta.label}
+    >
+      <Icon name={meta.icon} size={15} strokeWidth={2.25} />
+    </span>
+    {node.href ? (
+      <a class="snode__link" href={withBase(node.href)}>
+        <span class="snode__label">{node.label}</span>
+        <span class="snode__path">{node.href}</span>
+      </a>
+    ) : (
+      <span class="snode__link snode__link--group">
+        <span class="snode__label">{node.label}</span>
+      </span>
+    )}
+  </div>
+  {hasChildren && (
+    <ul class="snode__children">
+      {children.map((child) => <Self node={child} />)}
+    </ul>
+  )}
+</li>
+
+<style>
+  .snode {
+    position: relative;
+  }
+  .snode__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 5px 0;
+  }
+  .snode__status {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    flex: none;
+    border-radius: 50%;
+  }
+  .snode__status--live {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--accent-rule);
+  }
+  .snode__status--prep {
+    background: var(--rose);
+    color: var(--plum-deep);
+  }
+  .snode__status--locked {
+    background: var(--bg-muted);
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+  }
+
+  .snode__link {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    color: var(--fg);
+    text-decoration: none;
+    border-radius: var(--radius-input);
+  }
+  .snode__label {
+    font: 500 var(--text-md) / 1.3 var(--font-sans);
+  }
+  .snode__row--section .snode__label {
+    font-weight: 600;
+    font-size: var(--text-lg);
+  }
+  .snode__link--group .snode__label {
+    color: var(--accent);
+  }
+  .snode__path {
+    font: 400 var(--text-xs) / 1 var(--font-mono);
+    color: var(--fg-subtle);
+    letter-spacing: var(--tracking-normal);
+  }
+  a.snode__link:hover .snode__label,
+  a.snode__link:focus-visible .snode__label {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+  }
+  a.snode__link:focus-visible {
+    outline: 2px solid var(--ring-focus, var(--accent));
+    outline-offset: 3px;
+  }
+
+  /* Odsazení potomků + svislá plum vodicí linka stromu. */
+  .snode__children {
+    margin-left: 12px;
+    padding-left: 22px;
+    border-left: 1px solid var(--accent-rule);
+  }
+
+  @media (max-width: 560px) {
+    .snode__children {
+      margin-left: 8px;
+      padding-left: 14px;
+    }
+    .snode__path {
+      display: none;
+    }
+  }
+</style>

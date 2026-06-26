@@ -1,0 +1,71 @@
+[
+  {
+    "label": "Úvod",
+    "href": "/",
+    "status": "live"
+  },
+  {
+    "label": "Ubytování",
+    "href": "/ubytovani/",
+    "status": "live",
+    "children": [
+      {
+        "label": "Privátní apartmány",
+        "href": "/ubytovani/privatni/",
+        "status": "live",
+        "children": [
+          { "label": "Apartmán 1+kk", "href": "/ubytovani/privatni/1kk/", "status": "live" },
+          { "label": "Apartmán 2+kk", "href": "/ubytovani/privatni/2kk/", "status": "live" },
+          { "label": "Apartmán 3+kk", "href": "/ubytovani/privatni/3kk/", "status": "live" },
+          { "label": "Apartmán 4+kk", "href": "/ubytovani/privatni/4kk/", "status": "live" },
+          { "label": "Apartmán 5+kk", "href": "/ubytovani/privatni/5kk/", "status": "live" }
+        ]
+      },
+      {
+        "label": "Sdílené pokoje",
+        "href": "/ubytovani/sdilene-pokoje/",
+        "status": "live",
+        "children": [
+          { "label": "Lůžko ve sdíleném pokoji, základní soukromí", "href": "/ubytovani/sdilene-pokoje/pokoj-basic/", "status": "live" },
+          { "label": "Dvojlůžko ve sdíleném pokoji, základní soukromí", "href": "/ubytovani/sdilene-pokoje/dvojluzko-basic/", "status": "prep" },
+          { "label": "Lůžko ve sdíleném pokoji, zvýšené soukromí", "href": "/ubytovani/sdilene-pokoje/pokoj-privacy/", "status": "live" },
+          { "label": "Dvojlůžko ve sdíleném pokoji, zvýšené soukromí", "href": "/ubytovani/sdilene-pokoje/dvouluzko/", "status": "live" },
+          { "label": "Kapslové lůžko, vysoké soukromí", "href": "/ubytovani/sdilene-pokoje/kapsle-single/", "status": "live" },
+          { "label": "Kapslové dvojlůžko, vysoké soukromí", "href": "/ubytovani/sdilene-pokoje/kapsle-double/", "status": "live" }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "Zázemí",
+    "href": "/zazemi/",
+    "status": "live",
+    "children": [
+      { "label": "Gastronomie", "href": "/zazemi/gastronomie/", "status": "live" },
+      { "label": "Wellness", "href": "/zazemi/wellness/", "status": "live" },
+      { "label": "Coworking", "href": "/zazemi/coworking/", "status": "live" },
+      { "label": "Komunita", "href": "/zazemi/komunita/", "status": "live" },
+      { "label": "Ostatní", "href": "/zazemi/ostatni/", "status": "live" },
+      { "label": "Okolí", "href": "/zazemi/okoli/", "status": "prep" }
+    ]
+  },
+  {
+    "label": "Doprava",
+    "href": "/doprava/",
+    "status": "live",
+    "children": [
+      { "label": "Sdílená mobilita", "href": "/doprava/sdilena-mobilita/", "status": "live" },
+      { "label": "Privátní mobilita", "href": "/doprava/privatni-mobilita/", "status": "live" }
+    ]
+  },
+  { "label": "Stipendia", "href": "/stipendia/", "status": "live" },
+  { "label": "Galerie", "href": "/galerie/", "status": "live" },
+  { "label": "Ceník", "href": "/cenik/", "status": "live" },
+  { "label": "Novinky", "href": "/novinky/", "status": "live" },
+  { "label": "Rezervace", "href": "/rezervace/", "status": "live" },
+  { "label": "Kontakty", "href": "/kontakty/", "status": "live" },
+  { "label": "FAQ", "href": "/faq/", "status": "live" },
+  { "label": "Metodika srovnání", "status": "prep" },
+  { "label": "GDPR", "href": "/gdpr/", "status": "live" },
+  { "label": "Pro investory", "href": "/investori/", "status": "locked" }
+]

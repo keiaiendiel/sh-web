@@ -1,32 +1,195 @@
 ---
 import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
 import { withBase } from '../utils/url';
+
+// Jeden ručně tuněný Bezier přes celou šířku viewBoxu (jemná S-vlna za obsahem),
+// stejný princip jako ribbon v CtaBanner. Na tmavém pozadí stroke v rose.
+const ribbonPath =
+  'M -80 392 C 320 232, 700 540, 1050 372 C 1400 204, 1780 520, 2180 348';
 ---
-<Base title="Stránka nenalezena · Startovací Hub Klecany" description="Hledaný obsah neexistuje. Zkuste se vrátit na úvod.">
-  <section class="hub-404">
-    <div>
+<Base
+  headerVariant="dark"
+  title="Stránka nenalezena · Startovací Hub Klecany"
+  description="Tahle stránka je zatím ve výrobě, pracujeme na ní.">
+  <section class="hub-404" data-ribbon-reveal>
+    <span class="hub-404__bg" aria-hidden="true">
+      <svg viewBox="0 0 2100 700" preserveAspectRatio="xMidYMid slice">
+        <path d={ribbonPath} />
+      </svg>
+    </span>
+
+    <div class="hub-404__inner">
       <p class="hub-404__code">404</p>
-      <h1>Stránka nenalezena</h1>
-      <p class="hub-404__lead">Stránku, kterou hledáte, jsme nenašli. Zkuste úvod nebo některou ze tří hlavních sekcí níže.</p>
+
+      <h1 class="hub-404__title">Tahle stránka je ve výrobě</h1>
+      <p class="hub-404__lead">Pracujeme na ní, brzy bude hotová.</p>
+
+      <a class="hub-404__cta osa-nolink" href={withBase('/')}>
+        Přejít na úvod
+        <Arrow dir="right" variant="chevron" size={18} weight={2.4} />
+      </a>
+
       <p class="hub-404__nav">
-        <a href={withBase('/')}>Úvod</a>
-        <span aria-hidden="true">·</span>
         <a href={withBase('/ubytovani/')}>Ubytování</a>
         <span aria-hidden="true">·</span>
         <a href={withBase('/rezervace/')}>Rezervace</a>
         <span aria-hidden="true">·</span>
-        <a href={withBase('/faq/')}>FAQ</a>
+        <a href={withBase('/struktura-webu/')}>Struktura webu</a>
       </p>
     </div>
   </section>
 </Base>
 
 <style>
-  .hub-404 { min-height: 60vh; display: grid; place-items: center; padding: 96px 24px; text-align: center; }
-  .hub-404__code { font-size: clamp(96px, 12vw, 200px); font-weight: 700; line-height: 1; margin: 0; color: var(--accent); letter-spacing: -0.02em; }
-  .hub-404 h1 { font-size: clamp(28px, 3vw, 44px); font-weight: 700; margin: 16px 0 8px; }
-  .hub-404__lead { font-size: 17px; color: var(--fg-muted, #4a4a4a); margin: 0 auto 24px; max-width: 480px; line-height: 1.55; }
-  .hub-404__nav { font-size: 16px; }
-  .hub-404__nav a { color: var(--accent); font-weight: 600; text-decoration: none; margin: 0 12px; }
-  .hub-404__nav a:hover { text-decoration: underline; }
+  /* ---------- sekce: tmavý plum-deep gradient + výrazný rose ribbon ---------- */
+  .hub-404 {
+    position: relative;
+    overflow: hidden;
+    min-height: 78vh;
+    display: grid;
+    place-items: center;
+    padding: clamp(56px, 9vw, 128px) var(--gutter);
+    text-align: center;
+    color: #fff;
+    /* Plum-deep základ s teplou rose září shora (sjednoceno s patičkou a deep bannery). */
+    background:
+      radial-gradient(circle at 50% -8%, hsl(calc(var(--hue) + 44) 34% 64% / 0.30) 0%, transparent 58%),
+      linear-gradient(160deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 37% 19%) 100%);
+  }
+
+  /* ---------- ribbon (stejný mechanismus jako CtaBanner) ---------- */
+  .hub-404__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  .hub-404__bg svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+  .hub-404__bg path {
+    fill: none;
+    stroke: var(--rose);
+    stroke-width: 26;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hub-404[data-ribbon-reveal] .hub-404__bg path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+  /* Po snake-draw reveal navazuje breathing infinite loop. */
+  .hub-404[data-ribbon-reveal].is-revealed .hub-404__bg path {
+    animation:
+      ribbon-snake-draw 2.6s var(--ease-snake) forwards,
+      ribbon-breathe 7s ease-in-out 2.6s infinite;
+  }
+
+  /* ---------- centrovaný obsah nad pozadím ---------- */
+  .hub-404__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 560px;
+  }
+
+  /* ---------- číslo 404: solidní rose, bez obrysu ---------- */
+  .hub-404__code {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(120px, 23vw, 256px);
+    line-height: 0.92;
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    color: var(--rose);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  /* ---------- text ---------- */
+  .hub-404__title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3vw + 0.75rem, var(--text-3xl));
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-tight);
+    color: #fff;
+    margin: var(--space-3) 0 var(--space-2);
+    text-wrap: balance;
+  }
+  .hub-404__lead {
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 255, 0.74);
+    line-height: var(--lh-relaxed);
+    max-width: 44ch;
+    margin: 0 auto var(--space-6);
+    text-wrap: pretty;
+  }
+
+  /* ---------- CTA: rose plocha na tmavém pozadí ---------- */
+  .hub-404__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 26px;
+    font: 700 var(--text-md) / 1 var(--font-sans);
+    color: var(--plum-deep);
+    background: var(--rose);
+    border-radius: var(--radius-input);
+    text-decoration: none;
+    transition: background 180ms var(--ease-quart), transform 180ms var(--ease-quart);
+  }
+  .hub-404__cta:hover,
+  .hub-404__cta:focus-visible { background: #fff; color: var(--plum-deep); transform: translateY(-2px); outline: none; }
+  .hub-404__cta:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .hub-404__cta :global(svg) { transition: transform 180ms var(--ease-quart); flex-shrink: 0; }
+  .hub-404__cta:hover :global(svg) { transform: translateX(3px); }
+
+  /* ---------- vedlejší odkazy ---------- */
+  .hub-404__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    margin: var(--space-6) 0 0;
+    font-size: var(--text-md);
+  }
+  .hub-404__nav a {
+    color: var(--rose);
+    font-weight: 600;
+    text-decoration: none;
+    text-underline-offset: 3px;
+  }
+  .hub-404__nav a:hover { color: #fff; text-decoration: underline; }
+  .hub-404__nav span { color: rgba(255, 255, 255, 0.4); }
+
+  /* ---------- reduced motion: žádné kreslení ani breathing ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .hub-404[data-ribbon-reveal] .hub-404__bg path,
+    .hub-404[data-ribbon-reveal].is-revealed .hub-404__bg path {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .hub-404__cta { transition: none; }
+  }
+</style>
+
+<style is:global>
+  /* Celá 404 je tmavá. Přebíjí default světlé pozadí html i body a také
+     zděděný body[data-hero-tone="light"] z předchozí stránky (body persistuje
+     přes ClientRouter), aby pozadí nezůstalo/neproblikalo světlé. :has je živé,
+     takže po odchodu z 404 se vše vrátí do normálu. */
+  html:has(.hub-404),
+  body:has(.hub-404) { background: var(--plum-deep) !important; }
+
+  /* Hlavička na 404 bez pozadí , jen světlé logo, Pronajmout a hamburger nad tmavou plochou. */
+  body:has(.hub-404) .hub-header { background: transparent !important; border-bottom-color: transparent !important; }
 </style>

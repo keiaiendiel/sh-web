@@ -14,7 +14,7 @@
       "blocks": [
         {
           "subtitle": "Hlavní konverzní CTA",
-          "text": "Rezervovat apartmán, Rezervovat lůžko, Požádat o stipendium (vedou na /rezervace/ s prefillem ?cesta=)"
+          "text": "Pronajmout apartmán (popisek: privátní apartmány 1+kk až 5+kk), Pronajmout lůžko (popisek: sdílené pokoje od dvou lůžek). Vedou na /rezervace/ s prefillem ?cesta=. Stipendium z hero CTA odstraněno."
         }
       ],
       "images": [

@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import UnderConstruction from '../components/UnderConstruction.astro';
+
+/* Drop-in stránka pro nedokončené routy. Kdykoli něco není hotové, nasměruj sem
+   (nebo použij komponentu UnderConstruction přímo). noindex, ať se placeholder
+   nedostane do indexu. */
+---
+<Base
+  title="Ve výrobě · Startovací Hub Klecany"
+  description="Tuto část webu právě připravujeme. Mezitím se podívejte na úvod nebo na strukturu webu."
+  noindex={true}
+>
+  <UnderConstruction />
+</Base>

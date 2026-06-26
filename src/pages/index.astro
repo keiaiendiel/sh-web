@@ -4,8 +4,6 @@ import Gallery from '../components/Gallery.astro';
 import Icon from '../components/Icon.astro';
 import Arrow from '../components/Arrow.astro';
 import BrandLogo from '../components/BrandLogo.astro';
-import PhotoGrid from '../components/PhotoGrid.astro';
-import Lightbox from '../components/Lightbox.astro';
 import ResidentBenefits from '../components/ResidentBenefits.astro';
 import CrossLinkPair from '../components/CrossLinkPair.astro';
 import { withBase } from '../utils/url';
@@ -58,7 +56,7 @@ const heroSlides = [
 type GalleryItem =
   | { src: string; alt: string }
   | { placeholder: string; alt: string };
-type SectionCta = { href: string; label: string };
+type SectionCta = { href: string; label: string; aria?: string };
 type Section = {
   id: string;
   eyebrow: string;
@@ -79,7 +77,7 @@ const sections: Section[] = [
     title: 'Privátní apartmán, nebo sdílený pokoj?',
     lede: 'Šest formátů sdílených pokojů od otevřeného lůžka po uzamykatelnou kapsli a pět privátních apartmánů 1+kk až 5+kk. V ceně energie, internet, coworkingový sál a pět jízd kyvadlové dopravy MyShelter k metru měsíčně.',
     ctas: [
-      { href: '/ubytovani/', label: 'Více o ubytování' },
+      { href: '/ubytovani/', label: 'Zjistit více', aria: 'Zjistit více o ubytování' },
     ],
     ribbonPath: 'M -80 480 C 120 320, 320 240, 540 360 S 940 520, 1120 380 S 1400 280, 1560 360',
     gallery: [
@@ -91,24 +89,11 @@ const sections: Section[] = [
     ],
   },
   {
-    id: 'stipendia',
-    eyebrow: 'Stipendia',
-    title: 'Bydlení a tvorba za přínos komunitě.',
-    lede: 'Pobytové stipendium pro lidi s projektem a projektové stipendium na materiál a dílenský čas. Bydlení nebo zvýhodněná cena za konkrétní vstup do života Hubu. Při registraci zaškrtnete zájem a ozveme se s podmínkami.',
-    ctas: [{ href: '/stipendia/', label: 'Pobytová a projektová stipendia' }],
-    ribbonPath: 'M -60 420 C 160 540, 380 260, 600 400 S 960 520, 1140 380 S 1380 240, 1560 380',
-    gallery: [
-      { src: withBase('/images/hub/stipendia/01-atelier.jpg'), alt: 'Ateliér s rezidentem-tvůrcem v práci, denní světlo, velký stůl.' },
-      { src: withBase('/images/hub/stipendia/02-rezident.jpg'), alt: 'Rezident u rozdělané práce, soustředění v denním světle.' },
-      { src: withBase('/images/hub/stipendia/03-rezidenti.jpg'), alt: 'Skupina rezidentů u společného stolu, plánování nebo večeře.' },
-    ],
-  },
-  {
     id: 'zazemi',
     eyebrow: 'Zázemí',
     title: 'Coworking, restaurace, wellness, bazén.',
     lede: 'Coworkingový sál s dílnami a zasedačkami, kantýna, pekárna a restaurace, venkovní bazén a sauny. Většina zázemí je pro ubytované v ceně nebo za zvýhodněnou sazbu, část otevřená i návštěvníkům.',
-    ctas: [{ href: '/zazemi/', label: 'Celé zázemí Hubu' }],
+    ctas: [{ href: '/zazemi/', label: 'Zjistit více', aria: 'Zjistit více o zázemí' }],
     ribbonPath: 'M -60 380 C 180 460, 360 220, 580 380 S 960 540, 1140 360 S 1380 220, 1560 360',
     gallery: [
       { src: withBase('/images/hub/coworking/cowork-interier-sal-c.jpg'), alt: 'Coworkingový sál v budově C s pódiem a kuchyňským koutem.' },
@@ -120,9 +105,9 @@ const sections: Section[] = [
   {
     id: 'doprava',
     eyebrow: 'Doprava',
-    title: 'Na prahu metropole.',
+    title: '15 minut na metro.',
     lede: 'Kyvadlová doprava MyShelter k metru Kobylisy a k přívozu Klecánky, MHD linka 374 minutu od areálu, půjčovna elektrovozidel a sdílené taxi. Pět jízd kyvadlovky a jednu jízdu taxi máte měsíčně v ceně.',
-    ctas: [{ href: '/doprava/', label: 'Dopravní dostupnost' }],
+    ctas: [{ href: '/doprava/', label: 'Zjistit více', aria: 'Zjistit více o dopravě' }],
     ribbonPath: 'M -80 460 C 180 300, 380 460, 600 340 S 980 460, 1160 380 S 1380 280, 1560 380',
     gallery: [
       { src: withBase('/images/hub/doprava/hub-shuttle-zastavka.jpg'), alt: 'Zastávka kyvadlové dopravy MyShelter k metru Kobylisy.' },
@@ -131,19 +116,51 @@ const sections: Section[] = [
       { src: withBase('/images/hub/okoli/04-topview-update.jpg'), alt: 'Letecký pohled na areál Horních kasáren a obec Klecany.' },
     ],
   },
+  {
+    id: 'stipendia',
+    eyebrow: 'Stipendia',
+    title: 'Bydlení a tvorba za přínos komunitě.',
+    lede: 'Pobytové stipendium pro lidi s projektem a projektové stipendium na materiál a dílenský čas. Bydlení nebo zvýhodněná cena za konkrétní vstup do života Hubu. Při registraci zaškrtnete zájem a ozveme se s podmínkami.',
+    ctas: [{ href: '/stipendia/', label: 'Zjistit více', aria: 'Zjistit více o stipendiích' }],
+    ribbonPath: 'M -60 420 C 160 540, 380 260, 600 400 S 960 520, 1140 380 S 1380 240, 1560 380',
+    gallery: [
+      { src: withBase('/images/hub/stipendia/01-atelier.jpg'), alt: 'Ateliér s rezidentem-tvůrcem v práci, denní světlo, velký stůl.' },
+      { src: withBase('/images/hub/stipendia/02-rezident.jpg'), alt: 'Rezident u rozdělané práce, soustředění v denním světle.' },
+      { src: withBase('/images/hub/stipendia/03-rezidenti.jpg'), alt: 'Skupina rezidentů u společného stolu, plánování nebo večeře.' },
+    ],
+  },
 ];
 
-/* Landing galerie teaser , reálná foto-mřížka (ne zig-zag). 4×2 fotky, hover
-   zoom, klik → lightbox. Pod zig-zag sekcemi, nad finálním CTA. */
-const landingPhotos = [
-  { src: '/images/hub/ubytovani/03-ext.jpg', alt: 'Privátní apartmány v parteru za soumraku' },
-  { src: '/images/hub/ubytovani/coliving/kapsle-single-01.jpg', alt: 'Uzamykatelná kapsle' },
-  { src: '/images/hub/coworking/cowork-interier-sal-c.jpg', alt: 'Coworkingový sál' },
-  { src: '/images/hub/komunita/wellness-01-bazen.jpg', alt: 'Venkovní bazén' },
-  { src: '/images/hub/komunita/gastro/01-kantyna.jpg', alt: 'Kantýna' },
-  { src: '/images/hub/komunita/05-komunitni-zahrady.jpg', alt: 'Komunitní zahrádky' },
-  { src: '/images/hub/doprava/cyklostezka.jpg', alt: 'Cyklostezka podél Vltavy' },
-  { src: '/images/hub/okoli/04-topview-update.jpg', alt: 'Letecký pohled na areál' },
+/* Dvě karty pod sekcí Ubytování , fotky nahoře, text (nadpis + Zjistit více)
+   pod nimi. Vlevo Privátní apartmány, vpravo Sdílené pokoje. Galerie jsou
+   swipe (Gallery), fotky recyklované ze stránky /ubytovani/. */
+const ubytovaniCards = [
+  {
+    title: 'Privátní apartmány',
+    text: 'Celý byt jen pro vás, od 1+kk po 5+kk pro skupinu až patnácti. Vlastní koupelna, kuchyň i vchod.',
+    href: '/ubytovani/privatni/',
+    aria: 'Zjistit více o privátních apartmánech',
+    gallery: [
+      { src: withBase('/images/hub/ubytovani/02-1kk.jpg'), alt: 'Privátní apartmán 1+kk, sklápěcí postel, kuchyňský kout a pracovní stůl.' },
+      { src: withBase('/images/hub/ubytovani/privatni/2kk-01.jpg'), alt: 'Privátní apartmán 2+kk, obývací pokoj s otevřenou kuchyní.' },
+      { src: withBase('/images/hub/ubytovani/privatni/3kk-01.jpg'), alt: 'Privátní apartmán 3+kk, prostorný obytný prostor pro skupinu.' },
+      { src: withBase('/images/hub/ubytovani/05-4kk-family.jpg'), alt: 'Privátní apartmán 4+kk: rodina v obývacím pokoji, dlouhý jídelní stůl.' },
+      { src: withBase('/images/hub/ubytovani/privatni/5kk-01.jpg'), alt: 'Privátní apartmán 5+kk pro větší skupinu.' },
+    ],
+  },
+  {
+    title: 'Sdílené pokoje',
+    text: 'Lůžko nebo kapsle, ne celý byt. Šest formátů ve třech stupních soukromí, koupelnu a kuchyň sdílíte.',
+    href: '/ubytovani/sdilene-pokoje/',
+    aria: 'Zjistit více o sdílených pokojích',
+    gallery: [
+      { src: withBase('/images/hub/ubytovani/coliving/pokoj-basic-01.jpg'), alt: 'Sdílený pokoj se dvěma lůžky, pracovními stoly a světlým dubovým nábytkem.' },
+      { src: withBase('/images/hub/ubytovani/coliving/pokoj-privacy-01.jpg'), alt: 'Lůžkové boxy s posuvnými dveřmi, zvýšená míra soukromí.' },
+      { src: withBase('/images/hub/ubytovani/coliving/dvouluzko-01.jpg'), alt: 'Dvojlůžko ve sdíleném pokoji se zvýšenou mírou soukromí.' },
+      { src: withBase('/images/hub/ubytovani/coliving/kapsle-single-01.jpg'), alt: 'Privátní uzamykatelná kapsle, dřevěné obložení a tlumené světlo.' },
+      { src: withBase('/images/hub/ubytovani/coliving/kapsle-double-01.jpg'), alt: 'Kapslové dvojlůžko s vysokou mírou soukromí.' },
+    ],
+  },
 ];
 
 /* === RIBBON TILES (pod hero) ===
@@ -208,24 +225,26 @@ const tiles = [
         <BrandLogo class="lp-hero__logo" />
         <span class="sr-only">Startovací Hub</span>
       </h1>
-      <p class="lp-hero__lede">your living &amp; coworking space</p>
+      <p class="lp-hero__lede">your perfect living &amp; working space</p>
     </div>
 
-    {/* Tři rychlá CTA do rezervačního formuláře s předvyplněnou cestou, spojené
-        do segmentového skleněného pruhu. Desktop: full-width pruh u spodního
-        okraje hero (3 segmenty vedle sebe). Mobil: in-flow sloupec pod textem.
-        Sekvenční delight animace highlightuje segment 1→2→3→scroll-cue→dokola. */}
-    <div class="lp-hero__quick" role="group" aria-label="Rychlá rezervace">
+    {/* Dvě rychlá CTA do rezervačního formuláře s předvyplněnou cestou, spojená
+        do segmentového skleněného pruhu. Desktop: centrovaná dvojice u spodního
+        okraje hero. Mobil: in-flow sloupec pod textem. Pod každým tlačítkem
+        drobný popisek formátu. */}
+    <div class="lp-hero__quick" role="group" aria-label="Rychlý pronájem">
       <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=apartman')}>
-        <span class="lp-hero__quick-label">Rezervovat apartmán</span>
+        <span class="lp-hero__quick-text">
+          <span class="lp-hero__quick-label">Pronajmout apartmán</span>
+          <span class="lp-hero__quick-note">privátní apartmány 1+kk až 5+kk</span>
+        </span>
         <span class="lp-hero__quick-arrow" aria-hidden="true"><Arrow dir="right" variant="chevron" size={16} weight={2.4} /></span>
       </a>
       <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=luzko')}>
-        <span class="lp-hero__quick-label">Rezervovat lůžko</span>
-        <span class="lp-hero__quick-arrow" aria-hidden="true"><Arrow dir="right" variant="chevron" size={16} weight={2.4} /></span>
-      </a>
-      <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=stipendium')}>
-        <span class="lp-hero__quick-label">Požádat o&nbsp;stipendium</span>
+        <span class="lp-hero__quick-text">
+          <span class="lp-hero__quick-label">Pronajmout lůžko</span>
+          <span class="lp-hero__quick-note">sdílené pokoje od dvou lůžek</span>
+        </span>
         <span class="lp-hero__quick-arrow" aria-hidden="true"><Arrow dir="right" variant="chevron" size={16} weight={2.4} /></span>
       </a>
     </div>
@@ -324,7 +343,7 @@ const tiles = [
               {sec.ctas.length > 0 && (
                 <div class="lp-section__ctas">
                   {sec.ctas.map((cta) => (
-                    <a class="lp-section__cta osa-nolink" href={withBase(cta.href)}>
+                    <a class="lp-section__cta osa-nolink" href={withBase(cta.href)} aria-label={cta.aria}>
                       <span class="lp-section__cta-label">{cta.label}</span>
                       <span class="lp-section__cta-arrow" aria-hidden="true"><Arrow dir="right" variant="chevron" size={16} weight={2.4} /></span>
                     </a>
@@ -348,24 +367,30 @@ const tiles = [
           */}
 
         </section>
+
+        {/* Dvě karty hned pod sekcí Ubytování: fotky nahoře, text pod nimi. */}
+        {sec.id === 'ubytovani' && (
+          <div class="lp-ucards">
+            {ubytovaniCards.map((card) => (
+              <article class="lp-ucard" data-reveal>
+                <div class="lp-ucard__media">
+                  <Gallery images={card.gallery} ariaLabel={card.title} aspectRatio="4 / 3" />
+                </div>
+                <div class="lp-ucard__body">
+                  <h3 class="lp-ucard__title">{card.title}</h3>
+                  <p class="lp-ucard__text">{card.text}</p>
+                  <a class="lp-ucard__cta osa-nolink" href={withBase(card.href)} aria-label={card.aria}>
+                    <span class="lp-ucard__cta-label">Zjistit více</span>
+                    <span class="lp-ucard__cta-arrow" aria-hidden="true"><Arrow dir="right" variant="chevron" size={16} weight={2.4} /></span>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </>
     ))}
   </div>
-
-  {/* ============ GALERIE TEASER (reálná foto-mřížka) ============ */}
-  <section class="lp-gallery" id="galerie">
-    <div class="lp-gallery__inner">
-      <PhotoGrid
-        heading="Galerie"
-        images={landingPhotos}
-        columns={4}
-        aspect="4 / 3"
-        group="lp-gallery"
-        moreHref="/galerie/"
-        moreLabel="Zobrazit více fotografií"
-      />
-    </div>
-  </section>
 
   {/* Reklamní cross-link karty pod galerií , prolink do produktu (ne rezervace).
       Finální CTA banner odstraněn 16. 6. 2026, rezervaci řeší pruh v patičce. */}
@@ -380,23 +405,7 @@ const tiles = [
     ]}
   />
   */}
-
-  <Lightbox />
 </Base>
-
-<style>
-  .lp-gallery { background: var(--bg); padding: var(--space-8) 0 var(--space-7); scroll-margin-top: 80px; }
-  .lp-gallery__inner {
-    width: calc(100% - 2 * var(--gutter));
-    max-width: var(--container-wide);
-    margin: 0 auto;
-  }
-  /* Landing teaser: fotky těsněji u sebe (cca poloviční gap oproti
-     defaultu PhotoGridu), působí jako kompaktní mozaika. */
-  .lp-gallery__inner :global(.pg__grid) {
-    gap: clamp(5px, 0.7vw, 9px);
-  }
-</style>
 
 <style>
   /* ============ HERO ROTATION ============ */
@@ -455,21 +464,25 @@ const tiles = [
   .lp-hero[data-hero-mode="video"] {
     background-image: none;
   }
-  /* Tři rychlá CTA, samostatné skleněné pilulky (šířka dle obsahu). Mobil:
-     in-flow pod podtitulem (wrap). Desktop (níž): pruh u spodní hrany hero. */
+  /* Dvě rychlá CTA, samostatné skleněné pilulky (šířka dle obsahu). Mobil:
+     in-flow pod podtitulem (sloupec). Desktop (níž): centrovaná dvojice
+     u spodní hrany hero. */
   .lp-hero__quick {
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: var(--space-5) auto 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    justify-content: center;
+    gap: clamp(20px, 3vw, 44px);
   }
   .lp-hero__quick-btn {
     position: relative;
     display: inline-flex;
+    flex-direction: row;
     align-items: center;
-    gap: 9px;
+    justify-content: space-between;
+    gap: 16px;
     padding: 12px 20px;
     font: 700 var(--text-sm) / 1.1 var(--font-sans);
     letter-spacing: var(--tracking-tight);
@@ -483,7 +496,14 @@ const tiles = [
     transition: background 220ms var(--ease-quart), color 220ms var(--ease-quart),
       border-color 220ms var(--ease-quart), transform 220ms var(--ease-quart);
   }
+  .lp-hero__quick-text { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 4px; }
   .lp-hero__quick-label { line-height: 1.1; }
+  .lp-hero__quick-note {
+    font: 500 var(--text-xs) / 1.3 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    color: rgba(255, 255, 255, 0.74);
+    transition: color 220ms var(--ease-quart);
+  }
   .lp-hero__quick-arrow { display: inline-flex; align-items: center; color: inherit; flex-shrink: 0; transition: transform 220ms var(--ease-quart); }
   .lp-hero__quick-btn:hover,
   .lp-hero__quick-btn:focus-visible {
@@ -494,6 +514,8 @@ const tiles = [
     outline: none;
   }
   .lp-hero__quick-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .lp-hero__quick-btn:hover .lp-hero__quick-note,
+  .lp-hero__quick-btn:focus-visible .lp-hero__quick-note { color: var(--accent); }
   .lp-hero__quick-btn:hover .lp-hero__quick-arrow,
   .lp-hero__quick-btn:focus-visible .lp-hero__quick-arrow { transform: translateX(3px); }
 
@@ -522,27 +544,23 @@ const tiles = [
     0%, 4%, 25%, 100% { transform: translateX(0); }
     13% { transform: translateX(4px); }
   }
-  /* Desktop: pruh u spodní hrany hero, hned nad scroll šipkou. Jedno tlačítko
-     vlevo, jedno uprostřed, jedno vpravo (space-between), šířka dle obsahu. */
+  /* Desktop: centrovaná dvojice tlačítek u spodní hrany hero, hned nad scroll
+     šipkou. Šířka dle obsahu, mezi nimi sevřená mezera. */
+  /* Desktop: vše centrované v jednom sloupci (logo , podtitul , velká tlačítka).
+     Tlačítka zůstávají v toku pod podtitulem, celá skupina je svisle na střed. */
   @media (min-width: 769px) {
-    .lp-hero__inner { transform: translateY(-2vh); }
     .lp-hero__quick {
-      position: absolute;
-      left: var(--gutter);
-      right: var(--gutter);
-      bottom: clamp(96px, 12vh, 140px);
-      margin: 0 auto;
       flex-wrap: nowrap;
-      justify-content: space-between;
-      gap: clamp(16px, 3vw, 48px);
+      gap: clamp(24px, 4vw, 56px);
+      margin-top: var(--space-7);
     }
     .lp-hero__quick-btn {
-      /* o ~10 % širší (klient 16. 6. 2026) , přes vyšší horizontální padding. */
-      padding: 14px 33px;
-      font-size: clamp(1rem, 1.1vw, 1.125rem);
+      padding: 18px 42px;
+      font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
     }
   }
   @media (max-width: 540px) {
+    .lp-hero__quick { flex-direction: column; align-items: stretch; gap: 10px; }
     .lp-hero__quick-btn { padding: 11px 16px; font-size: 0.875rem; }
   }
   /* Telefon na šířku (nízký viewport): hero content se nevejde do 100dvh,
@@ -628,30 +646,27 @@ const tiles = [
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: 0 auto;
-    text-align: left;
+    text-align: center;
   }
   .lp-hero__title {
-    margin: 0 0 var(--space-3);
-    /* Logo lehce doleva, ať trapézový glyf (taženo vlevo dolů) opticky lícuje
-       s podtitulem pod ním. Hodnota je laditelná za běhu. */
-    margin-left: clamp(-0.4rem, -0.4vw, -0.15rem);
+    margin: 0 0 var(--space-4);
     line-height: 0;
   }
   :global(.lp-hero__logo) {
-    /* Šířka loga ≈ šířka podtitulu „your living & coworking space".
-       Wordmark má poměr ~7.3:1, podtitul ~1.9× výška fontu. */
+    /* Velký centrovaný wordmark. Výška laditelná za běhu. */
     display: block;
-    height: clamp(2.1rem, 3.15vw, 3.15rem);
+    margin: 0 auto;
+    height: clamp(2.6rem, 4.6vw, 4.5rem);
     width: auto;
     max-width: 100%;
     color: #fff;
   }
   .lp-hero__lede {
-    font: 500 clamp(1.0625rem, 1.5vw, 1.5rem) / 1.4 var(--font-sans);
+    font: 500 clamp(1rem, 1.3vw, 1.3rem) / 1.4 var(--font-sans);
     letter-spacing: var(--tracking-wide);
-    margin: 0;
+    margin: 0 auto;
     color: rgba(255,255,255,0.92);
-    max-width: 36ch;
+    max-width: 40ch;
   }
 
   /* === SCROLL CUE === */
@@ -1213,6 +1228,74 @@ const tiles = [
     transform: translateX(2px);
   }
   .lp-section__media { min-width: 0; }
+
+  /* ============ KARTY POD SEKCÍ UBYTOVÁNÍ ============ */
+  /* Dvě karty (Privátní apartmány, Sdílené pokoje): fotky nahoře (swipe
+     Gallery), text s nadpisem a CTA pod nimi. Dva sloupce, na mobilu pod sebe. */
+  .lp-ucards {
+    position: relative;
+    z-index: 2;
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: calc(-1 * var(--space-4)) auto 0;
+    padding-bottom: var(--space-8);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 40px);
+  }
+  .lp-ucard {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card, 16px);
+    overflow: hidden;
+  }
+  .lp-ucard__media { min-width: 0; }
+  .lp-ucard__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-5) var(--space-6);
+  }
+  .lp-ucard__title {
+    margin: 0;
+    font: 600 var(--text-xl) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    color: var(--fg);
+  }
+  .lp-ucard__text {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--fg-muted);
+  }
+  .lp-ucard__cta {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font: 700 var(--text-sm) / 1 var(--font-sans);
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .lp-ucard__cta:hover,
+  .lp-ucard__cta:focus-visible { outline: none; }
+  .lp-ucard__cta:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .lp-ucard__cta :global(svg) { transition: transform 180ms var(--ease-quart); }
+  .lp-ucard__cta:hover :global(svg) { transform: translateX(3px); }
+  @media (max-width: 680px) {
+    .lp-ucards { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lp-ucard__cta :global(svg) { transition: none; }
+  }
 
   @media (max-width: 760px) {
     /* Na mobilu uvolnit overflow, aby mobile section divider (z kit.css)

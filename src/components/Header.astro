@@ -46,7 +46,7 @@ const isHome = current === withBase('/');
       <a
         href={withBase('/rezervace/')}
         class="hub-header__cta osa-nolink"
-        aria-current={reservationActive ? 'page' : undefined}>Rezervovat</a>
+        aria-current={reservationActive ? 'page' : undefined}>Pronajmout</a>
 
       <button
         class="hub-header__burger"
@@ -72,7 +72,7 @@ const isHome = current === withBase('/');
 
       {/* Rezervace hned pod logem */}
       <a href={withBase('/rezervace/')} class="hub-menu__reserve-btn osa-nolink" aria-current={reservationActive ? 'page' : undefined}>
-        <span>Rezervovat</span>
+        <span>Pronajmout</span>
         <Arrow dir="right" variant="chevron" size={18} weight={2.4} />
       </a>
 

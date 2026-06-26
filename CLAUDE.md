@@ -194,6 +194,24 @@ git push origin master
 
 Prefixy: `feat(hub):`, `fix(hub):`, `refactor(hub):`, `docs(hub):`, `content(hub):`, `style(hub):`, `ci(hub):`, `chore(hub):`.
 
+### Verzované deploye (od 2026-06-26)
+
+Web je na GitHub Pages, zdroj = větev **`gh-pages`** (ne build_type workflow). Na ní žije:
+
+- `/sh-web/` , hlavní (root) verze
+- `/sh-web/v002/`, `/sh-web/v003/`, ... , **verzované snapshoty**, každý pod svým číslem
+
+Klient pracuje po verzích a říká, do kterého **čísla** ("002", "003", ...) chce nasadit (verze = git větev `vNNN` + složka `/sh-web/vNNN/`). Base se při buildu řídí přes `SITE_BASE` (`astro.config.mjs`: `base: process.env.SITE_BASE ?? '/sh-web/'`).
+
+Nasazení dělá `scripts/deploy-version.sh` (buildne aktuální checkout a nahraje ho do `gh-pages`):
+
+```bash
+scripts/deploy-version.sh 003     # aktuální checkout → /sh-web/v003/
+scripts/deploy-version.sh root    # aktuální checkout → /sh-web/  (přepíše root, použij vědomě)
+```
+
+`root` schválně NEpřepisuje existující `vNNN/` složky (jen kořenové soubory), takže verze zůstávají. Pozn.: starý `deploy-pages.yml` (build_type workflow) je tím obejitý; nech ho běžet jen ručně, ať na push do master nepadá. Hardcoded cesty `/sh-web/images/` a `/sh-web/fonts/` (hero fallback, fonty) se u verzí načítají z rootu , na stejné doméně to funguje, ale není to čistě izolované (open loop).
+
 ## Open loops
 
 - **Ceny k ověření** — sjednotit MDX vs historickou tabulku (viz Pricing); cena `dvojluzko-basic` (orientační); ověřit coworking tarify a doplňky v ceníku; **orientační ceny doplňků v post-submit dotazníku** (úklid 300/800/1400, prádlo 200/350, praní 600, donáška 500/900, zahrádka 150/300, sklad 400/900, jízdy 500/900 Kč) jsou navržené na míru, klient potvrdí.

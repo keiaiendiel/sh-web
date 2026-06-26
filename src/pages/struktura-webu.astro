@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import StrukturaNode from '../components/StrukturaNode.astro';
+import tree from '../data/struktura-webu.json';
+
+const legend = [
+  { status: 'live', icon: 'check', label: 'v provozu' },
+  { status: 'prep', icon: 'clock', label: 'v přípravě' },
+  { status: 'locked', icon: 'lock', label: 'na heslo' },
+];
+---
+<Base
+  title="Struktura webu · Startovací Hub Klecany"
+  description="Mapa všech veřejných stránek webu Startovacího Hubu Klecany. Klikací strom: ubytování, zázemí, doprava, stipendia, ceník a další.">
+  <article class="page-stub">
+    <p class="page-stub__eyebrow">Mapa webu</p>
+    <h1>Struktura webu.</h1>
+    <p class="page-stub__lede">
+      Přehled všech veřejných stránek webu. Každá položka vede přímo na danou stránku,
+      odsazení ukazuje, jak jsou stránky vnořené. Ikona u položky říká, v jakém je stavu.
+    </p>
+  </article>
+
+  <section class="sec-block">
+    <div class="sec-block__inner sec-block__inner--narrow">
+      <header class="sec-block__head">
+        <p class="sec-block__eyebrow">Legenda</p>
+        <h2 class="sec-block__title">Co znamenají ikony.</h2>
+      </header>
+
+      <ul class="legend">
+        {legend.map((item) => (
+          <li class="legend__item">
+            <span class={`legend__chip legend__chip--${item.status}`} aria-hidden="true">
+              <Icon name={item.icon} size={15} strokeWidth={2.25} />
+            </span>
+            <span class="legend__label">{item.label}</span>
+          </li>
+        ))}
+      </ul>
+
+      <nav class="strom" aria-label="Struktura webu">
+        <ul class="strom__root">
+          {tree.map((node) => <StrukturaNode node={node} />)}
+        </ul>
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-6);
+    margin: 0 0 var(--space-7);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    background: var(--bg-elevated, var(--bg));
+  }
+  .legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font: 500 var(--text-sm) / 1 var(--font-sans);
+    color: var(--fg-muted);
+  }
+  .legend__chip {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    flex: none;
+    border-radius: 50%;
+  }
+  .legend__chip--live {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--accent-rule);
+  }
+  .legend__chip--prep {
+    background: var(--rose);
+    color: var(--plum-deep);
+  }
+  .legend__chip--locked {
+    background: var(--bg-muted);
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+  }
+
+  .strom__root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+</style>

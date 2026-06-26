@@ -1,0 +1,250 @@
+---
+/*
+ * UnderConstruction , samostatný grafický „v přípravě" povrch pro nedokončené
+ * části webu. Bohatší než /404/ (klient povolil „více grafické"): vlastní
+ * on-brand SVG ilustrace jeřábu, který staví dům z kostek nad modrotiskovým
+ * rastrem, plus dílek visící na laně (jemné kývání), modrotisková kóta
+ * (rotující) a vyznačené místo dalšího dílku (pulzuje). Veškerý pohyb respektuje
+ * prefers-reduced-motion. Šipky/ikony jdou přes Arrow.astro a Icon.astro, nikdy
+ * přes glyf.
+ *
+ *   title      , nadpis (default „Tuto část ještě stavíme")
+ *   message    , přátelská věta pod nadpisem
+ *   backHref   , volitelný odkaz „zpět" (vykreslí ghost tlačítko se šipkou vlevo)
+ *   backLabel  , text odkazu zpět (default „Zpět")
+ *   homeHref   , primární akce (default '/'),  homeLabel default „Úvod"
+ *   mapHref    , sekundární akce (default '/struktura-webu/'), mapLabel default „Struktura webu"
+ */
+import Arrow from './Arrow.astro';
+import Icon from './Icon.astro';
+import { withBase } from '../utils/url';
+
+interface Props {
+  title?: string;
+  message?: string;
+  backHref?: string;
+  backLabel?: string;
+  homeHref?: string;
+  homeLabel?: string;
+  mapHref?: string;
+  mapLabel?: string;
+}
+
+const {
+  title = 'Tuto část ještě stavíme',
+  message = 'Na téhle stránce právě pracujeme. Obsah sem doplníme, jakmile bude připravený. Než se tak stane, mrkněte na úvod nebo si projděte strukturu webu.',
+  backHref,
+  backLabel = 'Zpět',
+  homeHref = '/',
+  homeLabel = 'Úvod',
+  mapHref = '/struktura-webu/',
+  mapLabel = 'Struktura webu',
+} = Astro.props;
+
+// Interní cesty (začínají '/') projdou base-path helperem; absolutní URL necháme být.
+const toHref = (h: string) => (h.startsWith('/') ? withBase(h) : h);
+---
+<section class="uc">
+  <div class="uc__inner">
+    <div class="uc__art">
+      <svg viewBox="0 0 280 220" role="img" aria-label="Jeřáb staví dům z kostek" focusable="false">
+        {/* modrotiskové pozadí */}
+        <rect class="uc-sky" x="8" y="8" width="264" height="176" rx="14" />
+        <rect class="uc-ground" x="8" y="178" width="264" height="6" rx="3" />
+
+        {/* rotující kóta / registrační značka (modrotisk) */}
+        <g class="uc-dial">
+          <circle class="uc-dial-ring" cx="236" cy="42" r="15" />
+        </g>
+        <g class="uc-crosshair">
+          <line x1="236" y1="34" x2="236" y2="50" />
+          <line x1="228" y1="42" x2="244" y2="42" />
+        </g>
+
+        {/* jeřáb , příhradová věž, výložník, táhla */}
+        <g class="uc-line">
+          <path d="M44 178 L56 158 L74 158 L86 178" />
+          <line x1="56" y1="158" x2="56" y2="60" />
+          <line x1="74" y1="158" x2="74" y2="60" />
+          <path d="M56 158 L74 138 L56 118 L74 98 L56 78 L74 60" />
+          <path d="M56 60 L65 40 L74 60" />
+          <line x1="65" y1="62" x2="206" y2="62" />
+          <line x1="65" y1="52" x2="200" y2="52" />
+          <path d="M70 62 L80 52 L92 62 L104 52 L116 62 L128 52 L140 62 L152 52 L164 62 L176 52 L188 62 L200 52" />
+          <line x1="206" y1="62" x2="200" y2="52" />
+          <line x1="65" y1="41" x2="200" y2="52" />
+          <line x1="65" y1="62" x2="34" y2="62" />
+          <line x1="65" y1="52" x2="38" y2="58" />
+          <line x1="65" y1="41" x2="38" y2="57" />
+        </g>
+        {/* protizávaží */}
+        <rect class="uc-weight" x="24" y="55" width="14" height="15" rx="2" />
+        {/* pojezd na výložníku */}
+        <rect class="uc-trolley" x="170" y="57" width="14" height="6" rx="1" />
+
+        {/* hotové kostky stavby */}
+        <g class="uc-blocks">
+          <rect class="uc-block" x="150" y="156" width="26" height="22" rx="2" />
+          <rect class="uc-block uc-block--rose" x="178" y="156" width="26" height="22" rx="2" />
+          <rect class="uc-block" x="164" y="134" width="26" height="22" rx="2" />
+        </g>
+        {/* vyznačené místo dalšího dílku */}
+        <rect class="uc-ghost" x="164" y="112" width="26" height="22" rx="2" />
+
+        {/* dílek na laně , kývá se kolem horního úchytu */}
+        <g class="uc-load">
+          <line class="uc-cable" x1="177" y1="63" x2="177" y2="78" />
+          <path class="uc-hook" d="M177 78 q5 3 1 7" />
+          <rect class="uc-load-block" x="163" y="80" width="28" height="24" rx="2" />
+        </g>
+      </svg>
+    </div>
+
+    <p class="uc__badge"><Icon name="hard-hat" size={15} strokeWidth={2} /> V projektové přípravě</p>
+    <h1 class="osa-h1 uc__title">{title}</h1>
+    <p class="uc__msg">{message}</p>
+
+    <div class="uc__actions">
+      {backHref && (
+        <a class="btn btn--ghost uc__back" href={toHref(backHref)}>
+          <Arrow dir="left" size={18} /> {backLabel}
+        </a>
+      )}
+      <a class="btn btn--primary" href={toHref(homeHref)}>
+        {homeLabel} <Arrow dir="right" size={18} />
+      </a>
+      <a class="btn" href={toHref(mapHref)}>
+        <Icon name="map" size={16} strokeWidth={2} /> {mapLabel}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .uc {
+    display: grid;
+    place-items: center;
+    min-height: 72vh;
+    padding: var(--space-9) var(--gutter);
+    position: relative;
+    /* jemný modrotiskový rastr v pozadí, ladí s ilustrací */
+    background:
+      repeating-linear-gradient(0deg, transparent 0 31px, var(--accent-soft) 31px 32px),
+      repeating-linear-gradient(90deg, transparent 0 31px, var(--accent-soft) 31px 32px),
+      var(--bg);
+  }
+
+  .uc__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    background: var(--cream);
+    border: 1px solid var(--accent-rule);
+    border-radius: var(--radius-input);
+    box-shadow: var(--shadow-card);
+    padding: clamp(28px, 5vw, 56px);
+  }
+
+  .uc__art {
+    width: min(320px, 80%);
+    margin: 0 auto var(--space-5);
+  }
+  .uc__art svg { width: 100%; height: auto; display: block; }
+
+  /* ---- ilustrace , barvy z brand tokenů ---- */
+  .uc-sky { fill: var(--accent-soft); }
+  .uc-ground { fill: var(--accent); opacity: 0.85; }
+
+  .uc-line line,
+  .uc-line path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .uc-trolley { fill: var(--accent); }
+  .uc-weight { fill: var(--rose); stroke: var(--accent); stroke-width: 2; }
+
+  .uc-block { fill: var(--cream); stroke: var(--accent); stroke-width: 2; }
+  .uc-block--rose { fill: var(--rose); }
+
+  .uc-ghost {
+    fill: none;
+    stroke: var(--rose);
+    stroke-width: 2;
+    stroke-dasharray: 4 4;
+    opacity: 0.4;
+  }
+
+  .uc-cable { stroke: var(--accent); stroke-width: 1.5; }
+  .uc-hook { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; }
+  .uc-load-block { fill: var(--rose); stroke: var(--accent); stroke-width: 2; }
+
+  .uc-dial-ring {
+    fill: none;
+    stroke: var(--rose);
+    stroke-width: 2;
+    stroke-dasharray: 5 6;
+    stroke-linecap: round;
+  }
+  .uc-crosshair line { stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; }
+
+  /* pivoty pro animace , drží i bez pohybu (reduced motion) */
+  .uc-load { transform-box: fill-box; transform-origin: top center; }
+  .uc-dial { transform-box: fill-box; transform-origin: center; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .uc-load { animation: uc-sway 4.8s ease-in-out infinite; }
+    .uc-dial { animation: uc-spin 24s linear infinite; }
+    .uc-ghost { animation: uc-pulse 3s ease-in-out infinite; }
+  }
+
+  @keyframes uc-sway {
+    0%, 100% { transform: rotate(-3.5deg); }
+    50%      { transform: rotate(3.5deg); }
+  }
+  @keyframes uc-spin { to { transform: rotate(360deg); } }
+  @keyframes uc-pulse {
+    0%, 100% { opacity: 0.35; }
+    50%      { opacity: 0.9; }
+  }
+
+  /* ---- badge + texty ---- */
+  .uc__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4);
+    padding: 6px 12px;
+    border: 1px solid var(--accent-rule);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font: 700 var(--text-2xs) / 1 var(--font-sans);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .uc__title { margin: 0 0 var(--space-3); }
+
+  .uc__msg {
+    margin: 0 auto var(--space-6);
+    max-width: 46ch;
+    color: var(--fg-muted);
+    font-size: var(--text-lg);
+    line-height: var(--lh-relaxed);
+  }
+
+  .uc__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+  }
+  /* ghost odkaz „zpět" na cream povrchu , plum text místo defaultního inverzu */
+  .uc__back { color: var(--accent); }
+  .uc__back:hover { color: var(--accent); opacity: 0.7; }
+</style>
