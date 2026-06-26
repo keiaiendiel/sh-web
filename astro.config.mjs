@@ -11,7 +11,9 @@ import sitemap from '@astrojs/sitemap';
 // replace from /sh-web/fonts/ to /fonts/.
 export default defineConfig({
   site: 'https://keiaiendiel.github.io',
-  base: '/sh-web/',
+  // base lze přepsat přes SITE_BASE pro verzované deploye, např.
+  // SITE_BASE=/sh-web/v001/ pnpm build → web poběží na /sh-web/v001/.
+  base: process.env.SITE_BASE ?? '/sh-web/',
   trailingSlash: 'always',
   output: 'static',
   compressHTML: true,
