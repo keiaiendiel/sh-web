@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="cs" class="inv-wait"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex, nofollow"><meta name="description" content="Podklady pro investory, záměr VPD. Přístup jen pro přihlášené."><link rel="icon" type="image/svg+xml" href="/sh-web/favicon.svg"><title>Scénář S1 base , podklady pro investory VPD1</title><script>(function(){const allow = ["64c1aed35fd6473edc30068e00016bb8e1950939cbc4624c95b0552ba819066c"];
+const key = "vpd1-auth";
+const loginUrl = "/sh-web/investori/";
+
+        /* Synchronně před vykreslením: bez platného otisku ven na login. */
+        (function () {
+          var ok = false;
+          try { ok = allow.indexOf(localStorage.getItem(key)) !== -1; } catch (e) {}
+          if (!ok) {
+            location.replace(loginUrl + '?next=' + encodeURIComponent(location.pathname + location.hash));
+          } else {
+            document.documentElement.classList.remove('inv-wait');
+          }
+        })();
+      })();</script><style>html.inv-wait body { visibility: hidden; }</style><script>
+      /* Reveal-on-scroll jen tam, kde to dává smysl a kde to nezablikne:
+         synchronně v <head> zapneme skrytý výchozí stav, observer (na konci
+         body) ho po vstupu do viewportu odhalí. Bez JS / s reduced-motion
+         zůstává obsah rovnou viditelný. */
+      (function () {
+        try {
+          var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!rm && 'IntersectionObserver' in window) {
+            document.documentElement.classList.add('inv-anim');
+          }
+        } catch (e) {}
+      })();
+    </script><link rel="stylesheet" href="/sh-web/_astro/Icon.BoTq6ppt.css">
+<link rel="stylesheet" href="/sh-web/_astro/InvestorPage.CAx3e_9n.css">
+<style>.s1-cols[data-astro-cid-dxltuyqe]{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-4)}.s1-acts[data-astro-cid-dxltuyqe]{display:grid;gap:var(--space-3);margin:0;padding:0;list-style:none;counter-reset:act}.s1-act[data-astro-cid-dxltuyqe]{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:var(--space-5)}.s1-act__marketing[data-astro-cid-dxltuyqe]{border-left:3px solid var(--accent-rule);padding-left:var(--space-4)}.s1-act__label[data-astro-cid-dxltuyqe]{font:600 var(--text-2xs) / 1.3 var(--font-sans);letter-spacing:var(--tracking-wider);text-transform:uppercase;color:var(--accent);margin:0 0 var(--space-2)}.s1-pending[data-astro-cid-dxltuyqe]{margin-top:var(--space-5);padding:var(--space-5);border:1px dashed var(--k-30);border-radius:var(--radius-input);background:hsl(var(--hue) 14% 97%)}.s1-pending__title[data-astro-cid-dxltuyqe]{font:700 var(--text-md) / var(--lh-snug) var(--font-sans);color:var(--fg);margin:0 0 var(--space-2)}@media(max-width:820px){.s1-act[data-astro-cid-dxltuyqe]{grid-template-columns:1fr;gap:var(--space-3)}}
+.lightbox[data-astro-cid-gixpweiw]{position:fixed;inset:0;z-index:300;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(8px,2vw,24px);padding:clamp(16px,4vw,48px);background:hsl(var(--hue) 41% 8% / .92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .24s var(--ease-quart)}.lightbox[data-astro-cid-gixpweiw][hidden]{display:none}.lightbox[data-astro-cid-gixpweiw].is-open{opacity:1}.lightbox__figure[data-astro-cid-gixpweiw]{grid-column:2;margin:0;display:flex;flex-direction:column;align-items:center;gap:var(--space-3);max-height:100%;min-width:0}.lightbox__img[data-astro-cid-gixpweiw]{max-width:100%;max-height:calc(100dvh - 140px);object-fit:contain;border-radius:var(--radius-input);box-shadow:0 24px 80px hsl(var(--hue) 41% 5% / .6);transform:scale(.96);transition:transform .32s var(--ease-quart)}.lightbox[data-astro-cid-gixpweiw].is-open .lightbox__img[data-astro-cid-gixpweiw]{transform:scale(1)}.lightbox__caption[data-astro-cid-gixpweiw]{font:500 var(--text-sm) / 1.5 var(--font-sans);color:#ffffffd1;text-align:center;max-width:60ch}.lightbox__close[data-astro-cid-gixpweiw]{position:absolute;top:clamp(12px,3vw,28px);right:clamp(12px,3vw,28px);z-index:2}.lightbox__close[data-astro-cid-gixpweiw],.lightbox__nav[data-astro-cid-gixpweiw]{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.32);background:#ffffff14;color:#fff;cursor:pointer;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:background .2s var(--ease-quart),border-color .2s var(--ease-quart),transform .2s var(--ease-quart)}.lightbox__nav--prev[data-astro-cid-gixpweiw]{grid-column:1}.lightbox__nav--next[data-astro-cid-gixpweiw]{grid-column:3}.lightbox__close[data-astro-cid-gixpweiw]:hover,.lightbox__nav[data-astro-cid-gixpweiw]:hover{background:#ffffff2e;border-color:#fff;transform:scale(1.06)}.lightbox__close[data-astro-cid-gixpweiw]:focus-visible,.lightbox__nav[data-astro-cid-gixpweiw]:focus-visible{outline:2px solid #fff;outline-offset:3px}@media(max-width:640px){.lightbox__nav[data-astro-cid-gixpweiw]{width:40px;height:40px}.lightbox__img[data-astro-cid-gixpweiw]{max-height:calc(100dvh - 180px)}}@media(prefers-reduced-motion:reduce){.lightbox[data-astro-cid-gixpweiw],.lightbox__img[data-astro-cid-gixpweiw],.lightbox__close[data-astro-cid-gixpweiw],.lightbox__nav[data-astro-cid-gixpweiw]{transition:none}}
+</style></head> <body class="inv-body"> <header class="inv-top"> <div class="inv-top__inner"> <a class="inv-top__brand" href="/sh-web/investori/zamer/"> <strong>VPD1</strong> <span>Podklady pro investory</span> </a> <nav class="inv-top__nav" aria-label="Sekce podkladů"> <a href="/sh-web/investori/zamer/">Investiční záměr</a><a href="/sh-web/investori/udaje-a-vypocty/">Údaje &amp; výpočty</a><a href="/sh-web/investori/scenare/" aria-current="page">Scénáře</a> <button type="button" class="inv-top__logout" data-inv-logout>Odhlásit se</button> </nav> </div> </header> <main class="inv-main" id="main">  <div class="inv-shell" data-astro-cid-dxltuyqe> <header class="inv-hero" data-astro-cid-dxltuyqe> <p class="inv-hero__eyebrow" data-no-typograf data-astro-cid-dxltuyqe>VPD1 · základní scénář</p> <h1 class="inv-hero__title" data-no-typograf data-astro-cid-dxltuyqe>Investičně-realizační scénář S1 base</h1> <p class="inv-hero__sub" data-no-typograf data-astro-cid-dxltuyqe>k transformaci areálu Horních kasáren v Klecanech u Prahy (dále jen &quot;Areál&quot;)</p> <div class="inv-hero__meta" data-astro-cid-dxltuyqe> <span class="inv-chip inv-chip--accent" data-no-typograf data-astro-cid-dxltuyqe>[PRACOVNÍ VERZE 2p8iaz5 z 30. 4. 2026]</span> </div> <nav class="inv-jumps" aria-label="Sekce na stránce" data-astro-cid-dxltuyqe> <a href="#informace" data-astro-cid-dxltuyqe>Základní informace</a> <a href="#projekt" data-astro-cid-dxltuyqe>Projekt Startovací hub</a> <a href="#dejstvi" data-astro-cid-dxltuyqe>Dějství scénáře</a> <a href="#model" data-astro-cid-dxltuyqe>Ekonometrický model</a> </nav> </header> <section class="inv-section" id="informace" data-astro-cid-dxltuyqe> <div class="inv-section__head" data-astro-cid-dxltuyqe> <h2 class="inv-section__title" data-no-typograf data-astro-cid-dxltuyqe>Základní informace ke scénáři S1 base</h2> </div> <div class="inv-card" data-astro-cid-dxltuyqe> <div class="inv-facts" data-astro-cid-dxltuyqe> <div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Scénář je sestaven k investičnímu záměru:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>VPD1</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Pojmenování scénáře:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>Základní scénář</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Zkratka scénáře:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>S1</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Varianta scénáře:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>base</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Podkladové aktivum:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>Areál</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Cíl scénáře:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>transformace Areálu</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Scénář obsahuje:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>tři developerské fáze</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>1. developerská fáze se uskuteční pro potřeby projektu:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>Startovací hub</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Odkup Areálu se uskuteční:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>≈ uprostřed 1. fáze</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>V rámci 1. dějství dojde k uskutečnění:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>komplexní rekonstrukce</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Stávající budovy v Areálu, které tvoří předmět 1. fáze:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>A1 až A6 + C</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>HPP, které jsou předmětem 1. fáze:</p> <p class="inv-facts__value" data-no-typograf data-astro-cid-dxltuyqe>10 837 m² HPP</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Stavební pozemky tvořící Areál, které budou 1. fází zatíženy:</p> <p class="inv-facts__value" data-no-typograf data-astro-cid-dxltuyqe>16 496 m²</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Stavební pozemky tvořící Areál, které nebudou 1. fází zatíženy:</p> <p class="inv-facts__value" data-no-typograf data-astro-cid-dxltuyqe>60 714 m²</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Obsah 1. developerské fáze ve vztahu k Areálu:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>odkup &amp; rekonstrukce</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Obsah 2. developerské fáze ve vztahu k Areálu:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>provoz &amp; lobbing</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Obsah 3. developerské fáze ve vztahu k Areálu:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>výstavba nové čtvrti</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Ke scénáři je sestaven ekonometrický model:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>S1 base</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Současné ceny jsou v příslušném ekonometrickém modelu odhadnuty a stanoveny k:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>18. 1. 2026</p> </div><div class="inv-facts__row" data-astro-cid-dxltuyqe> <p class="inv-facts__label" data-astro-cid-dxltuyqe>Poslední aktualizace scénáře se uskutečila:</p> <p class="inv-facts__value inv-facts__value--text" data-no-typograf data-astro-cid-dxltuyqe>30. 4. 2026</p> </div> </div> </div> </section> <section class="inv-section" id="projekt" data-astro-cid-dxltuyqe> <div class="inv-section__head" data-astro-cid-dxltuyqe> <h2 class="inv-section__title" data-no-typograf data-astro-cid-dxltuyqe>Projekt Startovací hub</h2> </div> <div class="inv-card" style="margin-bottom: var(--space-4);" data-astro-cid-dxltuyqe> <p class="inv-prose" data-no-typograf data-astro-cid-dxltuyqe>Projekt Startovací hub (dále též i jen „Projekt“) lze v rámci investičního záměru VPD1 popsat jako kampus zaměřený primárně na uspokojování potřeb pracujících studentů či začínajících mladých kreativců, podnikatelů a živnostníků.
+
+Jádro Projektu tvoří coworkingový sál a 331 startovacích a kompletně vybavených byto-kanceláří 1+kk o ploše cca 21 m² v lokalitě Praha-západ uzpůsobených pro dlouhodobé i krátkodobé ubytovávání osob z příslušných cílových skupin.
+
+Projekt počítá s aktivním operátorem (osa2.cz), který bude za pomoci ubytovaných osob tvořit bohatý networkingový program zahrnující
+například pravidelné přednášky, kurzy, besedy, prezentace, sportovní a kulturní akce, společenská setkání či pre-seed-angel-investorské dny.
+
+Projekt je ucelený ekosystém, jehož provozní ekonomika se opírá primárně o příjmy z ubytovávání osob (colivingu), a jehož atraktivitu u cílových skupin
+zajišťuje zejména zázemí naplňující potřeby příslušných skupin a bohatý společenský, kulturní, sportovní a vzdělávací program, který zde bude
+produkován za pomoci DIY metod OSA II.</p> </div> <div class="s1-cols" data-astro-cid-dxltuyqe> <div class="inv-card" data-astro-cid-dxltuyqe> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Projekt Startovací hub by měl ve prospěch ubytovaných osob fungovat jako:
+
+   •    vysokoškolské koleje (např. the-fizz.com) bez vazby na konkrétní školu;
+   •    svobodná podnikatelská škola se zaměřením na pracující studenty 18+;
+   •    internátní škola (např. opengate.cz) bez oficiálních vychovatelů, učitelů a osnov;
+   •    sdílené pracovní prostředí (např. impacthub.cz; scottweber.cz);
+   •    projektový generátor, inkubátor i akcelerátor (např. ycombinator.com);
+   •    volnočasový či podnikatelský klub (např. businessclub.cz; eccentricclub.cz);
+   •    zázemí poskytující virtuální sídla i bydliště (např. simplyoffice.cz);
+   •    back-office zajišťující administrativní a provozní podporu ubytovaných osob;
+   •    vzdělávací instituce zaměřená na osobní seberozvoj a sebevzdělávání;
+   •    tinder zajišťující každodenní setkávání a poznávání lidí mimo virtuální prostředí;
+   •    bytové družstvo připravující pro své členy dostupné rodinné bydlení.</p> </div> <div class="inv-card" data-astro-cid-dxltuyqe> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Projekt Startovací hub by měl ve prospěch developera fungovat jako:
+
+   •    způsob, jak dosáhnout nejvyšší návratnosti na vlastní kapitál;
+   •    metoda, jak uspíšit realizaci dalších developerských fází v příslušné lokalitě;
+   •    generátor osob ochotných aktivně podporovat rozvoj příslušné lokality;
+   •    generátor osob ochotných aktivně v rámci voleb hlasovat pro rozvoj příslušné lokality;
+   •    generátor osob připravených si najímat developerské produkty v příslušné lokalitě;
+   •    generátor osob připravených kupovat developerské produkty v příslušné lokalitě;
+   •    generátor osob připravených investovat do nabídnutých investičních produktů;
+   •    generátor politické podpory nezbytné pro dynamický rozvoj příslušné lokality;
+   •    zárodek schopný svými vlastnostmi uspíšit vznik budoucí městské čtvrti;
+   •    zárodek schopný vytvořit z příslušné lokality evropské „Silicon Valley“;
+   •    zárodek schopný proměnit okolní pozemky v novou metropoli.</p> </div> </div> </section> <section class="inv-section" id="dejstvi" data-astro-cid-dxltuyqe> <div class="inv-section__head" data-astro-cid-dxltuyqe> <h2 class="inv-section__title" data-no-typograf data-astro-cid-dxltuyqe>Scénář S1 base</h2> </div> <ol class="s1-acts" data-astro-cid-dxltuyqe> <li class="inv-card s1-act" data-astro-cid-dxltuyqe> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Prolog:                Výběr vhodného strategického partnera, který dokáže zajistit finanční krytí nezbytné pro bezpečné uskutečnění záměru.</p> <aside class="s1-act__marketing" data-astro-cid-dxltuyqe> <p class="s1-act__label" data-no-typograf data-astro-cid-dxltuyqe>Marketingová komunikace</p> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Příprava podkladů pro partnery, kteří by mohli mít zájem podílet se na financování záměru, dohoda o spolupráci a start spolupráce.</p> </aside> </li><li class="inv-card s1-act" data-astro-cid-dxltuyqe> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>1. developerská fáze začíná objednávkou podkladů potřebných pro získání stavebního povolení na rekonstrukci stávajících staveb pro potřeby projektu Startovací hub; pokračuje získáním stavebního povolení, po jehož získání dojde k odkupu Areálu; a končí kolaudací zrekonstruovaných staveb.</p> <aside class="s1-act__marketing" data-astro-cid-dxltuyqe> <p class="s1-act__label" data-no-typograf data-astro-cid-dxltuyqe>Marketingová komunikace</p> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Spuštění kampaně s cílem zajistit pozitivní vnímání záměru a projektu u všech cílových skupin – tj. například u kreativců, studentů, začínajících podnikatelů, drobných investorů, mediálních partnerů, místní veřejnosti a zastupců státní správy i samosprávy.</p> </aside> </li><li class="inv-card s1-act" data-astro-cid-dxltuyqe> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>2. developerská fáze začíná zahájením provozu jednotek vybudovaných v prvním dějství pro potřeby projektu Startovací hub; pokračuje vyjednáním a uzavřením plánovací smlouvy s Městem; a končí nabytím účinnosti nového územního plánu přijatého na základě vyjednané plánovací smlouvy.</p> <aside class="s1-act__marketing" data-astro-cid-dxltuyqe> <p class="s1-act__label" data-no-typograf data-astro-cid-dxltuyqe>Marketingová komunikace</p> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Rozšíření kampaně o sportovní, kulturní, vzdělávací a společenské aktivity přímo v Areálu s cílem vybudovat z klientů Projektu aktivní komunitu schopnou s podporou Projektu efektivně prosazovat své zájmy spojené s transformací Areálu a rozvojem příslušné lokality.</p> </aside> </li><li class="inv-card s1-act" data-astro-cid-dxltuyqe> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>3. developerská fáze začíná objednávkou podkladů u vybraných architektonických studií nezbytných pro povolení transformace celého Areálu na plnohodnotnou městskou čtvrť ze strany příslušných úřadů; pokračuje získáním povolení k příslušné transformaci; a končí dokončením této transformace.</p> <aside class="s1-act__marketing" data-astro-cid-dxltuyqe> <p class="s1-act__label" data-no-typograf data-astro-cid-dxltuyqe>Marketingová komunikace</p> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Zacílení kampaně na propagaci konkrétních produktů, které se budou v rámci transformace Areálu doručovat na trh – tj. například na produkty uspokojující poptávku po dostupném rodinném bydlení nájemního, družstevního či vlastnického charakteru.</p> </aside> </li><li class="inv-card s1-act" data-astro-cid-dxltuyqe> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Epilog:               Management kapitálu vzniklého předchozí činností v souladu se zájmy investorů a dohodnutým postupem.</p> <aside class="s1-act__marketing" data-astro-cid-dxltuyqe> <p class="s1-act__label" data-no-typograf data-astro-cid-dxltuyqe>Marketingová komunikace</p> <p class="inv-prose inv-prose--sm" data-no-typograf data-astro-cid-dxltuyqe>Pokračování kampaně se zaměřením na rozvoj vybudované komunity a nových developerských příležitostí v lokalitě Areálu i mimo ni.</p> </aside> </li> </ol> <p class="inv-note" data-no-typograf data-astro-cid-dxltuyqe>*Pokud je použito slovní spojení &quot;odkup Areálu&quot; či &quot;kupní cena Areálu&quot;, je tím myšlen odkup 100 % obchodního podílu ve společnosti FTV Klecany s.r.o., resp. kupní cena za tento podíl.</p> </section> <section class="inv-section" id="model" data-astro-cid-dxltuyqe> <div class="inv-section__head" data-astro-cid-dxltuyqe> <h2 class="inv-section__title" data-no-typograf data-astro-cid-dxltuyqe>Ekonometrický model S1 base</h2> <p class="inv-section__sub" data-no-typograf data-astro-cid-dxltuyqe>Základní informace k modelu S1 base</p> </div> <div class="inv-card" style="margin-bottom: var(--space-4);" data-astro-cid-dxltuyqe> <p class="inv-prose" data-no-typograf data-astro-cid-dxltuyqe>Ekonometrický model ke scénáři S1 base (dále též i jen &quot;model&quot;) je účelovým zjednodušením reality. 
+
+Všechny výstupy modelu, tj. například Gross Yield, Gross Profit, Project ROI, Project IRR či Equity IRR, naznačují hospodářský potenciál záměru VPD1 s ohledem na uvedené limity modelu, zvolená zjednodušení a zadané vstupní parametry.
+
+Veškeré parametry modelu, které jsou autorem modelu nastaveny jako výchozí, předpokládají: (1) precizní projektové řízení, (2) kvalitní marketingovou komunikaci a (3) realizaci scénáře bez komplikací na kritické cestě, přičemž třetí předpoklad je podmíněn úspěšným naplním prvních dvou předpokladů.</p> </div> <h3 class="inv-sub" data-no-typograf data-astro-cid-dxltuyqe>Základní struktura modelu S1 base</h3> <div class="inv-table-wrap" data-astro-cid-dxltuyqe> <table class="inv-table" data-astro-cid-dxltuyqe> <thead data-astro-cid-dxltuyqe> <tr data-astro-cid-dxltuyqe> <th data-astro-cid-dxltuyqe>Dějství</th> <th data-no-typograf data-astro-cid-dxltuyqe>Obsah dějství</th> <th data-no-typograf data-astro-cid-dxltuyqe>Délka realizace</th> </tr> </thead> <tbody data-astro-cid-dxltuyqe> <tr data-astro-cid-dxltuyqe> <td class="txt" data-no-typograf style="white-space: pre-line;" data-astro-cid-dxltuyqe>Prolog:                                              výběr vhodného strategického partnera, který dokáže zajistit finanční krytí nezbytné pro bezpečné uskutečnění záměru</td> <td data-no-typograf data-astro-cid-dxltuyqe>příprava (nyní probíhá)</td> <td data-no-typograf data-astro-cid-dxltuyqe>-</td> </tr><tr data-astro-cid-dxltuyqe> <td class="txt" data-no-typograf style="white-space: pre-line;" data-astro-cid-dxltuyqe>1. developerská fáze:           odkup Areálu a následná rekonstrukce části areálových budov pro potřeby projektu Startovací hub</td> <td data-no-typograf data-astro-cid-dxltuyqe>odkup &amp; rekonstrukce</td> <td data-no-typograf data-astro-cid-dxltuyqe>2,53 let / 926 dní</td> </tr><tr data-astro-cid-dxltuyqe> <td class="txt" data-no-typograf style="white-space: pre-line;" data-astro-cid-dxltuyqe>2. developerská fáze:           management zrekonstruovaných budov vzniklých pro potřeby projektu Startovací hub s cílem podporovat transformaci Areálu</td> <td data-no-typograf data-astro-cid-dxltuyqe>provoz &amp; lobbing</td> <td data-no-typograf data-astro-cid-dxltuyqe>2,00 let / 730 dní</td> </tr><tr data-astro-cid-dxltuyqe> <td class="txt" data-no-typograf style="white-space: pre-line;" data-astro-cid-dxltuyqe>3. developerská fáze:           budování moderní městské čtvrti na pozemcích v Areálu prosazené za opomoci podpory projektu Startovací hub</td> <td data-no-typograf data-astro-cid-dxltuyqe>výstavba nové čtvrti</td> <td data-no-typograf data-astro-cid-dxltuyqe>2,30 let / 838 dní</td> </tr><tr data-astro-cid-dxltuyqe> <td class="txt" data-no-typograf style="white-space: pre-line;" data-astro-cid-dxltuyqe>Epilog:                                              management kapitálu vzniklý předchozí činností v souladu se zájmy investorů a dohodnutými cíli.</td> <td data-no-typograf data-astro-cid-dxltuyqe>reflexe (exit či expanze)</td> <td data-no-typograf data-astro-cid-dxltuyqe>Celkem: 6,83 let</td> </tr> </tbody> </table> </div> <div class="s1-pending" data-astro-cid-dxltuyqe> <p class="s1-pending__title" data-astro-cid-dxltuyqe>Kompletní ekonometrický model převádíme do webové podoby.</p> <p class="inv-prose inv-prose--sm" data-astro-cid-dxltuyqe>
+Gross Yield, Gross Profit, Project ROI, Project IRR a Equity IRR po
+          jednotlivých dějstvích, včetně CAPEX a OPEX rozpadů a editovatelných
+          vstupních parametrů se živým přepočtem. Do té doby model najdete
+          v listu „S1 (base)" zdrojové tabulky.
+</p> </div> </section> <div class="inv-actions" data-astro-cid-dxltuyqe> <a class="inv-btn inv-btn--ghost" href="/sh-web/investori/scenare/" data-astro-cid-dxltuyqe>Zpět na scénáře</a> <a class="inv-btn inv-btn--ghost" href="/sh-web/investori/udaje-a-vypocty/" data-astro-cid-dxltuyqe>Základní údaje &amp; výpočty</a> </div> </div>  </main> <footer class="inv-footer"> <div class="inv-footer__inner"> <span class="inv-footer__badge" data-no-typograf>[PRACOVNÍ VERZE 2p8iaz5 z 12. 6. 2026]</span> <span>aktualizace č. 2026-06-12-2p8iaz5</span> <span class="inv-footer__spacer"></span> <span>Podklady pro jednání o spolupráci, nejde o veřejnou nabídku.</span> <a href="/sh-web/">startovacihub.cz</a> </div> </footer> <script>(function(){const key = "vpd1-auth";
+const loginUrl = "/sh-web/investori/";
+
+        (function () {
+          var btn = document.querySelector('[data-inv-logout]');
+          if (!btn) return;
+          btn.addEventListener('click', function () {
+            try { localStorage.removeItem(key); } catch (e) {}
+            location.href = loginUrl;
+          });
+        })();
+      })();</script> <script>
+      (function () {
+        if (!document.documentElement.classList.contains('inv-anim')) return;
+        var els = document.querySelectorAll('.inv-hero, .inv-section');
+        if (!els.length || !('IntersectionObserver' in window)) {
+          document.documentElement.classList.remove('inv-anim');
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+        els.forEach(function (el) { io.observe(el); });
+      })();
+    </script> <div class="lightbox" data-lightbox-root hidden data-astro-cid-gixpweiw> <button class="lightbox__close" type="button" data-lb-close aria-label="Zavřít náhled" data-astro-cid-gixpweiw> <svg
+  xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor" stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M18 6 6 18" />
+  <path d="m6 6 12 12" />
+</svg> </button> <button class="lightbox__nav lightbox__nav--prev" type="button" data-lb-prev aria-label="Předchozí fotka" data-astro-cid-gixpweiw> <svg
+  xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor" stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m15 18-6-6 6-6" />
+</svg> </button> <figure class="lightbox__figure" data-lb-stop data-astro-cid-gixpweiw> <img class="lightbox__img" data-lb-img alt="" data-astro-cid-gixpweiw> <figcaption class="lightbox__caption" data-lb-caption data-astro-cid-gixpweiw></figcaption> </figure> <button class="lightbox__nav lightbox__nav--next" type="button" data-lb-next aria-label="Další fotka" data-astro-cid-gixpweiw> <svg
+  xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor" stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg> </button> </div> <script>
+  (function () {
+    if (window.__hubLightboxBound) return;
+    window.__hubLightboxBound = true;
+
+    var group = [];
+    var index = 0;
+
+    function bind() {
+      var root = document.querySelector('[data-lightbox-root]');
+      if (!root || root.dataset.lbBound === '1') {
+        attachTriggers();
+        return;
+      }
+      root.dataset.lbBound = '1';
+      var img = root.querySelector('[data-lb-img]');
+      var caption = root.querySelector('[data-lb-caption]');
+
+      function render() {
+        var item = group[index];
+        if (!item) return;
+        img.src = item.src;
+        img.alt = item.alt || '';
+        caption.textContent = item.alt || '';
+        var prev = root.querySelector('[data-lb-prev]');
+        var next = root.querySelector('[data-lb-next]');
+        var multi = group.length > 1;
+        prev.style.display = multi ? '' : 'none';
+        next.style.display = multi ? '' : 'none';
+      }
+      function open() {
+        root.hidden = false;
+        void root.offsetWidth;
+        root.classList.add('is-open');
+        document.documentElement.classList.add('osa-nav-lock');
+        render();
+      }
+      function close() {
+        root.classList.remove('is-open');
+        document.documentElement.classList.remove('osa-nav-lock');
+        setTimeout(function () { if (!root.classList.contains('is-open')) root.hidden = true; }, 240);
+      }
+      function step(d) { index = (index + d + group.length) % group.length; render(); }
+
+      window.__hubLightboxOpen = function (g, i) { group = g; index = i; open(); };
+
+      root.addEventListener('click', function (e) {
+        if (e.target.closest('[data-lb-close]')) { close(); return; }
+        if (e.target.closest('[data-lb-prev]')) { step(-1); return; }
+        if (e.target.closest('[data-lb-next]')) { step(1); return; }
+        if (!e.target.closest('[data-lb-stop]')) { close(); }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (root.hidden) return;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') step(-1);
+        else if (e.key === 'ArrowRight') step(1);
+      });
+      attachTriggers();
+    }
+
+    function attachTriggers() {
+      var triggers = document.querySelectorAll('[data-lb]:not([data-lb-trig])');
+      triggers.forEach(function (t) {
+        t.dataset.lbTrig = '1';
+        t.addEventListener('click', function (e) {
+          e.preventDefault();
+          var grpName = t.getAttribute('data-lb-group') || 'default';
+          var members = [].slice.call(document.querySelectorAll('[data-lb][data-lb-group="' + grpName + '"]'));
+          var g = members.map(function (m) {
+            return { src: m.getAttribute('data-lb-src'), alt: m.getAttribute('data-lb-alt') || '' };
+          });
+          var i = members.indexOf(t);
+          if (window.__hubLightboxOpen) window.__hubLightboxOpen(g, i < 0 ? 0 : i);
+        });
+      });
+    }
+
+    document.addEventListener('astro:page-load', bind);
+  }());
+</script> <script>
+      (function () {
+        /* 1) Zvětšitelné obrázky: označíme všechny investorské figury a zóny
+              atributy data-lb a probudíme sdílený Lightbox (na pod-webu není
+              ViewTransitions, takže bind ručně vyvoláme astro:page-load). */
+        function tag(el, src, alt, group) {
+          if (!el || el.hasAttribute('data-lb')) return;
+          el.setAttribute('data-lb', '');
+          el.setAttribute('data-lb-src', src);
+          el.setAttribute('data-lb-alt', alt || '');
+          el.setAttribute('data-lb-group', group);
+          el.classList.add('is-zoomable');
+        }
+        document.querySelectorAll('.inv-figure').forEach(function (fig) {
+          var img = fig.querySelector('img'); if (!img) return;
+          var cap = fig.querySelector('figcaption');
+          var grp = (fig.closest('.inv-section') && fig.closest('.inv-section').id) || 'inv';
+          tag(fig, img.src, img.getAttribute('alt') || (cap ? cap.textContent.trim() : ''), grp);
+        });
+        document.querySelectorAll('.inv-zone__img').forEach(function (img) {
+          var grp = (img.closest('.inv-section') && img.closest('.inv-section').id) || 'inv';
+          tag(img, img.src, img.getAttribute('alt') || '', grp);
+        });
+        try { document.dispatchEvent(new Event('astro:page-load')); } catch (e) {}
+
+        /* 2) Vodorovný scroll široké tabulky: rámeček se šipkami + okrajové stíny,
+              aktivní jen když tabulka přetéká. */
+        function arrow(dir) {
+          var pts = dir === 'prev' ? '15 18 9 12 15 6' : '9 18 15 12 9 6';
+          return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="' + pts + '"/></svg>';
+        }
+        document.querySelectorAll('.inv-table-wrap').forEach(function (wrap) {
+          if (wrap.closest('.inv-tscroll')) return;
+          var box = document.createElement('div');
+          box.className = 'inv-tscroll';
+          wrap.parentNode.insertBefore(box, wrap);
+          box.appendChild(wrap);
+          function mk(dir, label) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'inv-tscroll__btn inv-tscroll__btn--' + dir;
+            b.setAttribute('aria-label', label);
+            b.innerHTML = arrow(dir);
+            return b;
+          }
+          var prev = mk('prev', 'Posunout tabulku vlevo');
+          var next = mk('next', 'Posunout tabulku vpravo');
+          box.appendChild(prev);
+          box.appendChild(next);
+          function update() {
+            var max = wrap.scrollWidth - wrap.clientWidth;
+            var x = wrap.scrollLeft;
+            box.classList.toggle('is-scrollable', max > 4);
+            box.classList.toggle('at-start', x <= 2);
+            box.classList.toggle('at-end', x >= max - 2);
+          }
+          prev.addEventListener('click', function () { wrap.scrollBy({ left: -Math.round(wrap.clientWidth * 0.8), behavior: 'smooth' }); });
+          next.addEventListener('click', function () { wrap.scrollBy({ left: Math.round(wrap.clientWidth * 0.8), behavior: 'smooth' }); });
+          wrap.addEventListener('scroll', update, { passive: true });
+          window.addEventListener('resize', update);
+          update();
+        });
+      })();
+    </script> </body> </html>
