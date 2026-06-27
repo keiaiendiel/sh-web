@@ -32,8 +32,14 @@ const isActive = (path: string) => {
 };
 const reservationActive = isActive('/rezervace/');
 const isHome = current === withBase('/');
+
+/* Logo + Pronajmout se v liště skrývají JEN na landing page hero (ten má vlastní
+   velké centrované logo). Na ostatních overlay podstránkách zůstávají vidět,
+   barevně laděné dle hero tónu (jako hamburger), a po scrollu se pod ně posune
+   neprůhledný fill lišty (is-stuck). */
+const collapseBrand = variant === 'overlay' && isHome;
 ---
-<header class:list={['hub-header', { 'hub-header--dark': variant === 'dark', 'hub-header--overlay': variant === 'overlay' }]} data-variant={variant}>
+<header class:list={['hub-header', { 'hub-header--dark': variant === 'dark', 'hub-header--overlay': variant === 'overlay', 'hub-header--collapse': collapseBrand }]} data-variant={variant}>
   <div class="hub-header__bar">
     <a
       href={withBase('/')}
@@ -225,7 +231,8 @@ const isHome = current === withBase('/');
     position: relative; z-index: 2; margin-left: auto;
   }
 
-  /* CTA pill , Rezervace. Viditelné jen v plné liště (stuck / ne-overlay). */
+  /* CTA pill , Rezervace. Viditelné v plné liště i na overlay podstránkách
+     (skryté jen na landing hero a při otevřeném menu). */
   .hub-header__cta {
     position: relative; isolation: isolate; overflow: hidden;
     font: 700 var(--text-sm) / 1 var(--font-sans);
@@ -252,15 +259,22 @@ const isHome = current === withBase('/');
   .hub-header--overlay.is-stuck .hub-header__cta::after { background: var(--accent); }
   .hub-header--overlay.is-stuck .hub-header__cta:hover,
   .hub-header--overlay.is-stuck .hub-header__cta[aria-current='page'] { color: #fff; }
+  /* Overlay nad hero na podstránkách (ne landing): CTA bílá na tmavém tónu,
+     hover ji vyplní bílou + plum text. Světlý tón (cream/rose) řeší global
+     pravidlo v SubpageHero (accent fill + bílý text). */
+  .hub-header--overlay:not(.is-stuck) .hub-header__cta::after { background: #fff; }
+  .hub-header--overlay:not(.is-stuck) .hub-header__cta:hover,
+  .hub-header--overlay:not(.is-stuck) .hub-header__cta[aria-current='page'] { color: var(--plum-deep); }
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta { color: var(--accent); border-color: var(--accent); }
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta::after { background: var(--accent); }
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta:hover,
   .hub-header:not(.hub-header--dark):not(.hub-header--overlay) .hub-header__cta[aria-current='page'] { color: #fff; }
 
-  /* Skrytí loga + Rezervace nad hero (overlay bez stuck) a vždy při otevřeném
-     menu (menu má vlastní logo i Rezervace). Lišta = jen hamburger. */
-  .hub-header--overlay:not(.is-stuck) .hub-header__brand,
-  .hub-header--overlay:not(.is-stuck) .hub-header__cta,
+  /* Skrytí loga + Rezervace , JEN na landing hero (collapse) než se přiscrolluje,
+     a vždy při otevřeném menu (menu má vlastní logo i Rezervace). Na ostatních
+     overlay podstránkách lišta logo + CTA ukazuje hned. */
+  .hub-header--collapse:not(.is-stuck) .hub-header__brand,
+  .hub-header--collapse:not(.is-stuck) .hub-header__cta,
   .hub-header.is-menu-open .hub-header__brand,
   .hub-header.is-menu-open .hub-header__cta {
     opacity: 0; visibility: hidden; transform: translateY(-4px); pointer-events: none;
