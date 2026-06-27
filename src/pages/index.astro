@@ -473,10 +473,16 @@ const tiles = [
      tlačítko, jako eyebrow NAD pilulkou (menší písmo). Hover = jednoduché
      čisté zvýraznění (pilulka se projasní na téměř bílou, text zfialoví,
      šipka se posune). Žádný glow, žádné smyčkové animace. */
+  /* Skupina tlačítek ukotvená u spodní hrany hero, hned nad scroll šipkou.
+     Logo + claim zůstávají vertikálně na středu (jediný in-flow obsah). */
   .lp-hero__quick {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(92px, 12vh, 128px);
+    transform: translateX(-50%);
+    z-index: 1;
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
-    margin: var(--space-5) auto 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -542,7 +548,6 @@ const tiles = [
     .lp-hero__quick {
       flex-wrap: nowrap;
       gap: clamp(28px, 4vw, 56px);
-      margin-top: var(--space-7);
     }
     .lp-hero__quick-item { gap: 14px; }
     /* Pod-text na desktopu mírně větší. */
@@ -570,6 +575,7 @@ const tiles = [
       left: auto;
       right: auto;
       bottom: auto;
+      transform: none;
       margin: var(--space-4) auto 0;
       flex-wrap: wrap;
       justify-content: center;
@@ -626,9 +632,10 @@ const tiles = [
       ),
       linear-gradient(
         to top,
-        rgba(0,0,0,0.6) 0%,
-        rgba(0,0,0,0.3) 35%,
-        rgba(0,0,0,0) 70%
+        rgba(0,0,0,0.80) 0%,
+        rgba(0,0,0,0.58) 22%,
+        rgba(0,0,0,0.28) 48%,
+        rgba(0,0,0,0) 78%
       );
     z-index: -1;
   }
