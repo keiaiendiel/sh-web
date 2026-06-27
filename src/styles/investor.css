@@ -64,17 +64,11 @@
   white-space: nowrap;
   align-self: center;
 }
-.inv-top__brand strong {
-  font: 700 var(--text-lg) / 1 var(--font-sans);
-  letter-spacing: 0.04em;
-}
 .inv-top__brand span {
-  font: 500 var(--text-2xs) / 1 var(--font-sans);
+  font: 600 var(--text-sm) / 1 var(--font-sans);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
-  color: var(--rose);
-  padding-left: 12px;
-  border-left: 1px solid hsl(var(--hue) 24% 40%);
+  color: #fff;
 }
 .inv-top__nav {
   display: flex;

@@ -1,7 +1,7 @@
 ---
 /*
  * /investori/ , přihlášení do podkladů pro investory.
- * Klientská kontrola: SHA-256("email:heslo") proti allowlistu.
+ * Klientská kontrola: SHA-256(heslo) proti allowlistu (jen heslo, bez e-mailu).
  * Po úspěchu uloží otisk do localStorage a přesměruje na ?next=
  * (default Investiční záměr).
  */
@@ -12,24 +12,20 @@ import { INVESTOR_ACCESS, INVESTOR_AUTH_KEY } from '../../utils/investorAuth';
 const defaultNext = withBase('/investori/zamer/');
 const basePrefix = withBase('/');
 ---
-<InvestorPage title="Přihlášení , podklady pro investory VPD1" gate={false}>
+<InvestorPage title="Přihlášení , podklady pro investory" gate={false}>
   <div class="inv-login">
     <div class="inv-login__card">
-      <p class="inv-login__eyebrow" data-no-typograf>Záměr VPD1 · Klecany</p>
       <h1 class="inv-login__title">Podklady pro investory</h1>
       <p class="inv-login__lede">
-        Detailní informace k investičnímu záměru jsou určené pro jednání
-        s partnery. Přihlaste se účtem, který jste od nás dostali.
+        Podklady pro investory jsou přístupné pouze po zadání příslušného hesla.
       </p>
       <p class="inv-login__error" data-login-error role="alert">
-        Tohle nesedí. Zkontrolujte e-mail i heslo a zkuste to znovu.
+        Nesprávné heslo. Zkuste to znovu.
       </p>
       <form data-login-form novalidate>
-        <label for="inv-email">E-mail</label>
-        <input id="inv-email" name="email" type="email" autocomplete="username" required autofocus />
         <label for="inv-pass">Heslo</label>
-        <input id="inv-pass" name="password" type="password" autocomplete="current-password" required />
-        <button type="submit" class="inv-btn">Přihlásit se</button>
+        <input id="inv-pass" name="password" type="password" autocomplete="current-password" required autofocus />
+        <button type="submit" class="inv-btn">Zadat heslo</button>
       </form>
       <p class="inv-login__hint">
         Nemáte přístup? Napište na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>.
@@ -68,9 +64,8 @@ const basePrefix = withBase('/');
 
       form.addEventListener('submit', function (ev) {
         ev.preventDefault();
-        var email = form.email.value.trim().toLowerCase();
         var pass = form.password.value;
-        sha256hex(email + ':' + pass).then(function (hash) {
+        sha256hex(pass).then(function (hash) {
           if (allow.indexOf(hash) !== -1) {
             try { localStorage.setItem(key, hash); } catch (e) {}
             location.href = nextUrl();
