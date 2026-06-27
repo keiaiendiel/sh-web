@@ -233,20 +233,20 @@ const tiles = [
         okraje hero. Mobil: in-flow sloupec pod textem. Pod každým tlačítkem
         drobný popisek formátu. */}
     <div class="lp-hero__quick" role="group" aria-label="Rychlý pronájem">
-      <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=apartman')}>
-        <span class="lp-hero__quick-text">
+      <div class="lp-hero__quick-item">
+        <span class="lp-hero__quick-note">privátní apartmány 1+kk až 5+kk</span>
+        <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=apartman')}>
           <span class="lp-hero__quick-label">Pronajmout apartmán</span>
-          <span class="lp-hero__quick-note">privátní apartmány 1+kk až 5+kk</span>
-        </span>
-        <span class="lp-hero__quick-arrow" aria-hidden="true"><Arrow dir="right" variant="chevron" size={16} weight={2.4} /></span>
-      </a>
-      <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=luzko')}>
-        <span class="lp-hero__quick-text">
+          <span class="lp-hero__quick-icon" aria-hidden="true"><Arrow dir="right" variant="chevron" size={18} weight={2.6} /></span>
+        </a>
+      </div>
+      <div class="lp-hero__quick-item">
+        <span class="lp-hero__quick-note">sdílené pokoje od dvou lůžek</span>
+        <a class="lp-hero__quick-btn osa-nolink" href={withBase('/rezervace/?cesta=luzko')}>
           <span class="lp-hero__quick-label">Pronajmout lůžko</span>
-          <span class="lp-hero__quick-note">sdílené pokoje od dvou lůžek</span>
-        </span>
-        <span class="lp-hero__quick-arrow" aria-hidden="true"><Arrow dir="right" variant="chevron" size={16} weight={2.4} /></span>
-      </a>
+          <span class="lp-hero__quick-icon" aria-hidden="true"><Arrow dir="right" variant="chevron" size={18} weight={2.6} /></span>
+        </a>
+      </div>
     </div>
 
     {/* Scroll cue: kruhový button s chevron-down, jemně poskakuje + pulsing ring,
@@ -469,9 +469,10 @@ const tiles = [
   .lp-hero[data-hero-mode="video"] {
     background-image: none;
   }
-  /* Dvě rychlá CTA, samostatné skleněné pilulky (šířka dle obsahu). Mobil:
-     in-flow pod podtitulem (sloupec). Desktop (níž): centrovaná dvojice
-     u spodní hrany hero. */
+  /* Dvě rychlá CTA jako liquid-glass pilulky. Formátový popisek bydlí MIMO
+     tlačítko, jako eyebrow NAD pilulkou (menší písmo). Hover = jednoduché
+     čisté zvýraznění (pilulka se projasní na téměř bílou, text zfialoví,
+     šipka se posune). Žádný glow, žádné smyčkové animace. */
   .lp-hero__quick {
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
@@ -481,74 +482,58 @@ const tiles = [
     justify-content: center;
     gap: clamp(20px, 3vw, 44px);
   }
+  .lp-hero__quick-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .lp-hero__quick-note {
+    font: 600 var(--text-xs) / 1 var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.82);
+    transition: color 200ms var(--ease-quart);
+  }
   .lp-hero__quick-btn {
     position: relative;
     display: inline-flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 12px 20px;
-    font: 700 var(--text-sm) / 1.1 var(--font-sans);
-    letter-spacing: var(--tracking-tight);
+    gap: 14px;
+    padding: 18px 34px;
+    border-radius: 999px;
     color: #fff;
     text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: var(--radius-input);
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: background 220ms var(--ease-quart), color 220ms var(--ease-quart),
-      border-color 220ms var(--ease-quart), transform 220ms var(--ease-quart);
-  }
-  .lp-hero__quick-text { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 4px; }
-  .lp-hero__quick-label { line-height: 1.1; }
-  .lp-hero__quick-note {
-    font: 500 var(--text-sm) / 1.3 var(--font-sans);
+    font: 700 var(--text-lg) / 1 var(--font-sans);
     letter-spacing: var(--tracking-tight);
-    color: rgba(255, 255, 255, 0.74);
-    transition: color 220ms var(--ease-quart);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    background: linear-gradient(150deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.10));
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    box-shadow: 0 1px 0 0 rgba(255,255,255,0.45) inset, 0 12px 28px -14px rgba(0,0,0,0.55);
+    transition: background 200ms var(--ease-quart),
+      border-color 200ms var(--ease-quart),
+      color 200ms var(--ease-quart),
+      transform 200ms var(--ease-quart);
   }
-  .lp-hero__quick-arrow { display: inline-flex; align-items: center; color: inherit; flex-shrink: 0; transition: transform 220ms var(--ease-quart); }
+  .lp-hero__quick-label { white-space: nowrap; }
+  .lp-hero__quick-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: transform 200ms var(--ease-quart);
+  }
   .lp-hero__quick-btn:hover,
   .lp-hero__quick-btn:focus-visible {
-    background: #fff;
-    color: var(--plum-deep);
+    background: rgba(255, 255, 255, 0.94);
     border-color: #fff;
-    transform: translateY(-1px);
+    color: var(--plum-deep);
+    transform: translateY(-2px);
     outline: none;
   }
-  .lp-hero__quick-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-  .lp-hero__quick-btn:hover .lp-hero__quick-note,
-  .lp-hero__quick-btn:focus-visible .lp-hero__quick-note { color: var(--accent); }
-  .lp-hero__quick-btn:hover .lp-hero__quick-arrow,
-  .lp-hero__quick-btn:focus-visible .lp-hero__quick-arrow { transform: translateX(3px); }
-
-  /* Sekvenční delight: rozsvítí se VLASTNÍ outline tlačítka (jeho border +
-     jemný glow, žádný vnitřní obdélník), pomalu, v pořadí
-     1 → 2 → 3 → scroll-cue → dokola (cyklus 8 s). */
-  .lp-hero__quick-btn:nth-child(1) { animation: lp-seq-glow 8s var(--ease-quart) infinite 0s; }
-  .lp-hero__quick-btn:nth-child(2) { animation: lp-seq-glow 8s var(--ease-quart) infinite 2s; }
-  .lp-hero__quick-btn:nth-child(3) { animation: lp-seq-glow 8s var(--ease-quart) infinite 4s; }
-  .lp-hero__quick-btn:nth-child(1) .lp-hero__quick-arrow { animation: lp-seq-arrow 8s var(--ease-quart) infinite 0s; }
-  .lp-hero__quick-btn:nth-child(2) .lp-hero__quick-arrow { animation: lp-seq-arrow 8s var(--ease-quart) infinite 2s; }
-  .lp-hero__quick-btn:nth-child(3) .lp-hero__quick-arrow { animation: lp-seq-arrow 8s var(--ease-quart) infinite 4s; }
-  /* Při interakci sekvenci nech být, hover/focus si řídí stav sám. */
-  .lp-hero__quick-btn:hover,
-  .lp-hero__quick-btn:focus-visible,
-  .lp-hero__quick-btn:hover .lp-hero__quick-arrow,
-  .lp-hero__quick-btn:focus-visible .lp-hero__quick-arrow { animation: none; }
-
-  @keyframes lp-seq-glow {
-    0%, 100% { border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-    7%   { border-color: rgba(255, 255, 255, 1); box-shadow: 0 0 18px 0 rgba(255, 255, 255, 0.30); }
-    18%  { border-color: rgba(255, 255, 255, 1); box-shadow: 0 0 14px 0 rgba(255, 255, 255, 0.20); }
-    25%  { border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-  }
-  @keyframes lp-seq-arrow {
-    0%, 4%, 25%, 100% { transform: translateX(0); }
-    13% { transform: translateX(4px); }
-  }
+  .lp-hero__quick-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .lp-hero__quick-btn:hover .lp-hero__quick-icon,
+  .lp-hero__quick-btn:focus-visible .lp-hero__quick-icon { transform: translateX(4px); }
   /* Desktop: centrovaná dvojice tlačítek u spodní hrany hero, hned nad scroll
      šipkou. Šířka dle obsahu, mezi nimi sevřená mezera. */
   /* Desktop: vše centrované v jednom sloupci (logo , podtitul , velká tlačítka).
@@ -556,18 +541,18 @@ const tiles = [
   @media (min-width: 769px) {
     .lp-hero__quick {
       flex-wrap: nowrap;
-      gap: clamp(24px, 4vw, 56px);
+      gap: clamp(28px, 4vw, 56px);
       margin-top: var(--space-7);
     }
-    .lp-hero__quick-btn {
-      /* Tlačítka zvětšena ~20 % (text i padding), ať nejsou stlačená. */
-      padding: 22px 50px;
-      font-size: clamp(1.275rem, 1.44vw, 1.5rem);
-    }
+    .lp-hero__quick-item { gap: 14px; }
+    /* Pod-text na desktopu mírně větší. */
+    .lp-hero__quick-note { font-size: var(--text-sm); letter-spacing: 0.16em; }
+    .lp-hero__quick-btn { padding: 22px 48px; font-size: clamp(1.275rem, 1.44vw, 1.5rem); }
   }
   @media (max-width: 540px) {
-    .lp-hero__quick { flex-direction: column; align-items: stretch; gap: 10px; }
-    .lp-hero__quick-btn { padding: 11px 16px; font-size: 0.875rem; }
+    .lp-hero__quick { flex-direction: column; align-items: center; gap: 18px; }
+    .lp-hero__quick-item { width: 100%; max-width: 340px; }
+    .lp-hero__quick-btn { width: 100%; justify-content: center; }
   }
   /* Telefon na šířku (nízký viewport): hero content se nevejde do 100dvh,
      pokud CTA pruh visí absolutně u spodní hrany přes střed s titulkem.
@@ -587,10 +572,10 @@ const tiles = [
       bottom: auto;
       margin: var(--space-4) auto 0;
       flex-wrap: wrap;
-      justify-content: flex-start;
-      gap: 10px;
+      justify-content: center;
+      gap: 12px;
     }
-    .lp-hero__quick-btn { padding: 11px 20px; font-size: 0.9375rem; }
+    .lp-hero__quick-btn { padding: 12px 24px; font-size: var(--text-md); }
   }
   /* 5 slidů jako horizontal carousel: 4 s nehybný hold, pak 1 s swipe
      celé fotky doleva. Sousední slide zároveň zprava vplouvá dovnitř,
@@ -745,7 +730,7 @@ const tiles = [
     .lp-hero__scroll-cue :global(svg),
     .lp-hero__scroll-cue::before { animation: none; }
     .lp-hero__scroll-cue::before { opacity: 0; }
-    .lp-hero__quick-btn, .lp-hero__quick-arrow { animation: none; }
+    .lp-hero__quick-icon { transition: none; }
   }
 
   /* ============ TILE GRID (3×2, pod hero) ============
