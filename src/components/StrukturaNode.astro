@@ -44,7 +44,6 @@ const hasChildren = children.length > 0;
     {node.href ? (
       <a class="snode__link" href={withBase(node.href)}>
         <span class="snode__label">{node.label}</span>
-        <span class="snode__path">{node.href}</span>
       </a>
     ) : (
       <span class="snode__link snode__link--group">
@@ -111,11 +110,6 @@ const hasChildren = children.length > 0;
   .snode__link--group .snode__label {
     color: var(--accent);
   }
-  .snode__path {
-    font: 400 var(--text-xs) / 1 var(--font-mono);
-    color: var(--fg-subtle);
-    letter-spacing: var(--tracking-normal);
-  }
   a.snode__link:hover .snode__label,
   a.snode__link:focus-visible .snode__label {
     color: var(--accent);
@@ -139,9 +133,6 @@ const hasChildren = children.length > 0;
     .snode__children {
       margin-left: 8px;
       padding-left: 14px;
-    }
-    .snode__path {
-      display: none;
     }
   }
 </style>
