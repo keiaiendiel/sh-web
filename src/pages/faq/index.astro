@@ -1,22 +1,26 @@
 ---
 import Base from '../../layouts/Base.astro';
+import SubpageHero from '../../components/SubpageHero.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
-import { withBase } from '../../utils/url';
 import { getCollection } from 'astro:content';
 
 const faq = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.order);
+
+const heroRibbon = 'M 120 720 C 520 420, 980 860, 1380 540 C 1700 300, 1980 560, 2060 420';
 ---
 <Base
   title="Časté otázky · Startovací Hub Klecany"
-  description="Co je Hub, kdy se mohu nastěhovat, co je v ceně bydlení, jak se sem dostanu z Prahy, jak funguje stipendium, mazlíčci, registrace sídla OSVČ.">
-  <article class="page-stub">
-    <p class="page-stub__eyebrow">FAQ</p>
-    <h1>Deset nejčastějších otázek.</h1>
-    <p class="page-stub__lede">
-      Otázky, které dostáváme nejčastěji. Když něco chybí, napište na <a href="mailto:vpd@osa2.cz">vpd@osa2.cz</a>
-      nebo to dejte do poznámky při <a href={withBase('/rezervace/')}>registraci zájmu</a>.
-    </p>
-  </article>
+  description="Co je Hub, kdy se mohu nastěhovat, co je v ceně bydlení, jak se sem dostanu z Prahy, jak funguje stipendium, mazlíčci, registrace sídla OSVČ."
+  headerVariant="overlay">
+
+  <SubpageHero
+    eyebrow="FAQ"
+    title="Časté <em>otázky</em>"
+    sub="Otázky, které dostáváme nejčastěji. Když něco chybí, napište na vpd@osa2.cz nebo to dejte do poznámky při registraci zájmu."
+    variant="cream"
+    ribbonPath={heroRibbon}
+    ariaId="faq"
+  />
 
   <section class="sec-block">
     <div class="sec-block__inner">

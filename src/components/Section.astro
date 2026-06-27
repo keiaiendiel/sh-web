@@ -142,6 +142,8 @@ const galleryImages = media.map((m) =>
     isolation: isolate;
     padding: var(--space-8) 0;
     background: var(--bg);
+    /* Odskok pod fixed header při skoku na #kotvu (deep-link ze struktury webu). */
+    scroll-margin-top: 84px;
   }
   .zz-section--muted { background: var(--bg-muted); }
   .zz-section__ribbon {

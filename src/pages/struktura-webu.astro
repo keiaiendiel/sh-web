@@ -1,26 +1,82 @@
 ---
 import Base from '../layouts/Base.astro';
+import SubpageHero from '../components/SubpageHero.astro';
 import Icon from '../components/Icon.astro';
 import StrukturaNode from '../components/StrukturaNode.astro';
-import tree from '../data/struktura-webu.json';
+import baseTree from '../data/struktura-webu.json';
+import dopravaData from '../data/doprava.json';
+import { getCollection } from 'astro:content';
+
+const heroRibbon = 'M 120 720 C 520 420, 980 860, 1380 540 C 1700 300, 1980 560, 2060 420';
 
 const legend = [
   { status: 'live', icon: 'check', label: 'v provozu' },
   { status: 'prep', icon: 'clock', label: 'v přípravě' },
   { status: 'locked', icon: 'lock', label: 'na heslo' },
 ];
+
+const stripTags = (s) => (s ?? '').replace(/<[^>]+>/g, '');
+const slugFromHref = (href, prefix) => (href ?? '').replace(prefix, '').replace(/\/$/, '');
+
+/* Zázemí: ke každé kategorii dogeneruj jednotlivé provozy jako děti, každý
+   deep-link na #slug sekce na L2 stránce kategorie. Data-driven z kolekce
+   `zazemi`, aby se strom držel v synchronu s obsahem. */
+const zazemiCats = await getCollection('zazemi');
+const zazemiItems = Object.fromEntries(zazemiCats.map((c) => [c.id, c.data.items ?? []]));
+
+/* Strom rozšířený o hloubku 3 (obsah pod kategoriemi zázemí a větvemi dopravy). */
+const tree = baseTree.map((node) => {
+  if (node.href === '/zazemi/') {
+    return {
+      ...node,
+      children: (node.children ?? []).map((cat) => {
+        const catId = slugFromHref(cat.href, '/zazemi/');
+        const items = zazemiItems[catId] ?? [];
+        return {
+          ...cat,
+          children: items.map((it) => ({
+            label: it.name,
+            href: `/zazemi/${catId}/#${it.slug}`,
+            status: 'live',
+          })),
+        };
+      }),
+    };
+  }
+  if (node.href === '/doprava/') {
+    return {
+      ...node,
+      children: (node.children ?? []).map((branch) => {
+        const branchSlug = slugFromHref(branch.href, '/doprava/');
+        const item = dopravaData.items.find((i) => i.slug === branchSlug);
+        const sections = item?.sections ?? [];
+        return {
+          ...branch,
+          children: sections.map((s) => ({
+            label: stripTags(s.title),
+            href: `/doprava/${branchSlug}/#${s.id}`,
+            status: 'live',
+          })),
+        };
+      }),
+    };
+  }
+  return node;
+});
 ---
 <Base
   title="Struktura webu · Startovací Hub Klecany"
-  description="Mapa všech veřejných stránek webu Startovacího Hubu Klecany. Klikací strom: ubytování, zázemí, doprava, stipendia, ceník a další.">
-  <article class="page-stub">
-    <p class="page-stub__eyebrow">Mapa webu</p>
-    <h1>Struktura webu.</h1>
-    <p class="page-stub__lede">
-      Přehled všech veřejných stránek webu. Každá položka vede přímo na danou stránku,
-      odsazení ukazuje, jak jsou stránky vnořené. Ikona u položky říká, v jakém je stavu.
-    </p>
-  </article>
+  description="Mapa všech veřejných stránek webu Startovacího Hubu Klecany i jejich obsahu. Klikací strom: ubytování, zázemí, doprava, stipendia, ceník a další."
+  headerVariant="overlay">
+
+  <SubpageHero
+    eyebrow="Mapa webu"
+    title="Struktura <em>webu</em>"
+    sub="Přehled všech veřejných stránek a jejich obsahu. Každá položka vede přímo na danou stránku nebo sekci, odsazení ukazuje vnoření. Ikona u položky říká, v jakém je stavu."
+    variant="ink"
+    ribbonPath={heroRibbon}
+    ariaId="struktura"
+  />
 
   <section class="sec-block">
     <div class="sec-block__inner sec-block__inner--narrow">
