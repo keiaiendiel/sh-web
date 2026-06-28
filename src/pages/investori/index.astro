@@ -19,12 +19,11 @@ const basePrefix = withBase('/');
       <p class="inv-login__lede">
         Podklady pro investory jsou přístupné pouze po zadání příslušného hesla.
       </p>
-      <p class="inv-login__error" data-login-error role="alert">
+      <p class="inv-login__error" id="inv-err" data-login-error role="alert">
         Nesprávné heslo. Zkuste to znovu.
       </p>
       <form data-login-form novalidate>
-        <label for="inv-pass">Heslo</label>
-        <input id="inv-pass" name="password" type="password" autocomplete="current-password" required autofocus />
+        <input id="inv-pass" name="password" type="password" autocomplete="current-password" aria-label="Heslo" aria-describedby="inv-err" placeholder="Heslo" required autofocus />
         <button type="submit" class="inv-btn">Zadat heslo</button>
       </form>
       <p class="inv-login__hint">

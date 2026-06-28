@@ -20,9 +20,12 @@ interface Props {
   title: string;
   active?: 'zamer' | 'vypocty' | 'scenare' | 'poznamky' | 'smlouvy';
   gate?: boolean;
+  /* Záměr (.vz vzhled zrcadla) nese vlastní spodní verzi (.vzver), proto si
+     na něm sdílenou plum patičku potlačíme. */
+  bareFooter?: boolean;
 }
 
-const { title, active, gate = true } = Astro.props;
+const { title, active, gate = true, bareFooter = false } = Astro.props;
 
 const loginUrl = withBase('/investori/');
 /* Menu: jen tři hlavní oddíly. „Koncept smlouvy" a „Poznámky" jsou z menu
@@ -94,15 +97,17 @@ const nav = [
       <slot />
     </main>
 
-    <footer class="inv-footer">
-      <div class="inv-footer__inner">
-        <span class="inv-footer__badge" data-no-typograf>{meta.badge}</span>
-        <span>{meta.aktualizace}</span>
-        <span class="inv-footer__spacer"></span>
-        <span>Podklady pro jednání o spolupráci, nejde o veřejnou nabídku.</span>
-        <a href={withBase('/')}>startovacihub.cz</a>
-      </div>
-    </footer>
+    {!bareFooter && (
+      <footer class="inv-footer">
+        <div class="inv-footer__inner">
+          <span class="inv-footer__badge" data-no-typograf>{meta.badge}</span>
+          <span>{meta.aktualizace}</span>
+          <span class="inv-footer__spacer"></span>
+          <span>Podklady pro jednání o spolupráci, nejde o veřejnou nabídku.</span>
+          <a href={withBase('/')}>startovacihub.cz</a>
+        </div>
+      </footer>
+    )}
 
     {gate && (
       <script is:inline define:vars={{ key: INVESTOR_AUTH_KEY, loginUrl }}>
