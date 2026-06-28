@@ -72,6 +72,17 @@ const categories = [
     ],
   },
 ];
+
+/* Chip „skoky" v banneru , jeden na kategorii, href = #<group>. Kratší labely
+   než nadpisy mřížek. Cílové sekce nesou stejné id (viz .gal-anchor níže). */
+const GALLERY_JUMPS = [
+  { href: '#g-privatni',  label: 'Apartmány' },
+  { href: '#g-sdilene',   label: 'Sdílené pokoje' },
+  { href: '#g-coliving',  label: 'Co-living' },
+  { href: '#g-coworking', label: 'Coworking' },
+  { href: '#g-mobilita',  label: 'Doprava' },
+  { href: '#g-okoli',     label: 'Okolí' },
+];
 ---
 <Base
   title="Galerie · Startovací Hub Klecany"
@@ -81,24 +92,26 @@ const categories = [
   <SubpageHero
     eyebrow="Galerie"
     title="Podívejte se <em>dovnitř</em>"
-    sub="Ubytování, coworking, gastronomie, wellness i okolí areálu. Část fotek jsou vizualizace, reálné snímky průběžně doplňujeme."
     variant="deep"
     ribbonPath="M 120 720 C 520 420, 980 860, 1380 540 C 1700 300, 1980 560, 2060 420"
     ariaId="galerie"
+    jumps={GALLERY_JUMPS}
   />
 
   <div class="gal-wrap">
     {categories.map((c) => (
-      <PhotoGrid
-        eyebrow="Galerie"
-        heading={c.heading}
-        images={c.images}
-        columns={2}
-        aspect="16 / 10"
-        group={c.group}
-        moreHref={c.more}
-        moreLabel="Více v sekci"
-      />
+      <div id={c.group} class="gal-anchor">
+        <PhotoGrid
+          eyebrow="Galerie"
+          heading={c.heading}
+          images={c.images}
+          columns={2}
+          aspect="16 / 10"
+          group={c.group}
+          moreHref={c.more}
+          moreLabel="Více v sekci"
+        />
+      </div>
     ))}
   </div>
 
@@ -129,4 +142,7 @@ const categories = [
     flex-direction: column;
     gap: var(--space-8);
   }
+  /* Kotva pro chip „skoky" z banneru , odsazení o výšku fixní lišty, ať cílová
+     sekce neskončí schovaná pod headerem (shodně se Section.astro). */
+  .gal-anchor { scroll-margin-top: 84px; }
 </style>

@@ -32,11 +32,12 @@ const POLYGONS: Record<string, string[]> = {
   ],
 };
 
-// Barvy legendy ladí s barvami zákresu v bitmapě.
+// Barvy legendy ladí s barvami zákresu v bitmapě, jen jemně desaturované do
+// pastelovějšího tónu (2026-06-28), aby swatche v legendě nebyly tak křiklavé.
 const COLORS: Record<string, string> = {
-  areal: '#2fc6c0',
-  jadro: '#ddd23e',
-  zazemi: '#56b65c',
+  areal: '#5cb8b3',
+  jadro: '#d4cd72',
+  zazemi: '#74b079',
 };
 ---
 <div class="amap" data-amap>

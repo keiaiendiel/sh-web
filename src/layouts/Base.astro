@@ -150,6 +150,9 @@ const breadcrumbJsonLd = crumbs.length > 1
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    {/* Vypnout iOS „tap-to-call" auto-detekci čísel (m², Kč na investorských
+        stránkách). Explicitní tel: odkazy fungují dál. */}
+    <meta name="format-detection" content="telephone=no" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
