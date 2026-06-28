@@ -1,0 +1,362 @@
+[
+  {
+    "title": "Ubytování",
+    "id": "g-ubytovani",
+    "groups": [
+      {
+        "title": "Apartmány",
+        "id": "g-apartmany",
+        "images": [
+          {
+            "src": "/images/galerie/ubytovani/apartmany-01-01-1kk.jpg",
+            "alt": "Apartmán, apartmán 1+kk"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-02-02-1kk-kuchyn.jpg",
+            "alt": "Apartmán, kuchyň"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-03-01-2kk.jpg",
+            "alt": "Apartmán, apartmán 2+kk"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-04-02-2kk.jpg",
+            "alt": "Apartmán, apartmán 2+kk"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-05-03-detail-2kk-kuchyn.jpg",
+            "alt": "Apartmán, kuchyň"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-06-01-3kk.jpg",
+            "alt": "Apartmán, apartmán 3+kk"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-07-01-5kk.jpg",
+            "alt": "Apartmán, apartmán 5+kk"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-08-01-5kk.jpg",
+            "alt": "Apartmán, apartmán 5+kk"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-09-04-wc.jpg",
+            "alt": "Apartmán, WC"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-10-05-koupelna.jpg",
+            "alt": "Apartmán, koupelna"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-11-08-chodba.jpg",
+            "alt": "Apartmán, chodba"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-12-apartman-01.jpg",
+            "alt": "Apartmán, vizualizace"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-13-02-1kk.jpg",
+            "alt": "Apartmán, apartmán 1+kk"
+          },
+          {
+            "src": "/images/galerie/ubytovani/apartmany-14-4kk-update-family.jpg",
+            "alt": "Apartmán, apartmán 4+kk"
+          }
+        ]
+      },
+      {
+        "title": "Sdílené pokoje, co-living",
+        "id": "g-sdilene-pokoje-co-living",
+        "images": [
+          {
+            "src": "/images/galerie/ubytovani/coliving-01-1kapsle-detail-2.jpg",
+            "alt": "Sdílený pokoj, kapsle"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-02-1kapsle-detail.jpg",
+            "alt": "Sdílený pokoj, kapsle"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-03-coliving-bathroom-update.jpg",
+            "alt": "Sdílený pokoj, vizualizace"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-04-coliving-kitchen-update.jpg",
+            "alt": "Sdílený pokoj, vizualizace"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-05-2kapsle-detail.jpg",
+            "alt": "Sdílený pokoj, kapsle"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-06-01-room-base-4.jpg",
+            "alt": "Sdílený pokoj, vizualizace"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-07-02-room-base-3.jpg",
+            "alt": "Sdílený pokoj, vizualizace"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-08-03-room-base-3.jpg",
+            "alt": "Sdílený pokoj, vizualizace"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-09-01-luzko-privacy-sliding-doors-closed.jpg",
+            "alt": "Sdílený pokoj, lůžko"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-10-01-luzko-privacy-sliding-doors.jpg",
+            "alt": "Sdílený pokoj, lůžko"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-11-01-luzko-privacy.jpg",
+            "alt": "Sdílený pokoj, lůžko"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-12-02-luzko-privacy-detail.jpg",
+            "alt": "Sdílený pokoj, lůžko"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-13-03-luzko-privacy-inside.jpg",
+            "alt": "Sdílený pokoj, lůžko"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-14-sdilene-01.jpg",
+            "alt": "Sdílený pokoj, vizualizace"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-15-kapsle-wide.jpg",
+            "alt": "Sdílený pokoj, kapsle"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-16-01-kapsle.jpg",
+            "alt": "Sdílený pokoj, kapsle"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-17-03-ext.jpg",
+            "alt": "Sdílený pokoj, vizualizace"
+          },
+          {
+            "src": "/images/galerie/ubytovani/coliving-18-04-int.jpg",
+            "alt": "Sdílený pokoj, vizualizace"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Zázemí",
+    "id": "g-zazemi",
+    "groups": [
+      {
+        "title": "Komunita",
+        "id": "g-komunita",
+        "images": [
+          {
+            "src": "/images/galerie/zazemi/komunita-01-01-kantyna.jpg",
+            "alt": "Komunita, kantýna"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-02-02-minipivovar-new.jpg",
+            "alt": "Komunita, minipivovar"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-03-03-kantyna-busy.jpg",
+            "alt": "Komunita, kantýna"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-04-04-pekarna.jpg",
+            "alt": "Komunita, pekárna"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-05-05-restaurace.jpg",
+            "alt": "Komunita, restaurace"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-06-klubovna.jpg",
+            "alt": "Komunita, klubovna"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-07-01-komunitni-zahrady.jpg",
+            "alt": "Komunita, komunitní zahrady"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-08-02-grilovaci-misto.jpg",
+            "alt": "Komunita, grilovací místo"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-09-01-bazen.jpg",
+            "alt": "Komunita, bazén"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-10-02-sauna-update.jpg",
+            "alt": "Komunita, sauna"
+          },
+          {
+            "src": "/images/galerie/zazemi/komunita-11-03-bazen-vecer.jpg",
+            "alt": "Komunita, bazén"
+          }
+        ]
+      },
+      {
+        "title": "Coworking",
+        "id": "g-coworking",
+        "images": [
+          {
+            "src": "/images/galerie/zazemi/coworking-01-cowork-exterier-c-busy.jpg",
+            "alt": "Coworking, exteriér"
+          },
+          {
+            "src": "/images/galerie/zazemi/coworking-02-cowork-exterier-c-evening.jpg",
+            "alt": "Coworking, exteriér"
+          },
+          {
+            "src": "/images/galerie/zazemi/coworking-03-cowork-interier-pro4-busy.jpg",
+            "alt": "Coworking, vizualizace"
+          },
+          {
+            "src": "/images/galerie/zazemi/coworking-04-cowork-interier-pro4.jpg",
+            "alt": "Coworking, vizualizace"
+          },
+          {
+            "src": "/images/galerie/zazemi/coworking-05-cowork-interier-sal-c-update2.jpg",
+            "alt": "Coworking, coworkingový sál"
+          },
+          {
+            "src": "/images/galerie/zazemi/coworking-06-cowork-interier-vlastni-stul-1.jpg",
+            "alt": "Coworking, vizualizace"
+          },
+          {
+            "src": "/images/galerie/zazemi/coworking-07-cowork-interior-dilna.jpg",
+            "alt": "Coworking, dílna"
+          },
+          {
+            "src": "/images/galerie/zazemi/coworking-08-cowork-interior-zasedacka.jpg",
+            "alt": "Coworking, zasedací místnost"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Doprava",
+    "id": "g-doprava",
+    "groups": [
+      {
+        "title": null,
+        "id": "g-doprava-grid",
+        "images": [
+          {
+            "src": "/images/galerie/doprava/doprava-01-cyklostezka.jpg",
+            "alt": "Doprava, cyklostezka"
+          },
+          {
+            "src": "/images/galerie/doprava/doprava-02-doparava.jpg",
+            "alt": "Doprava, vizualizace"
+          },
+          {
+            "src": "/images/galerie/doprava/doprava-03-dostupnost.jpg",
+            "alt": "Doprava, dostupnost areálu"
+          },
+          {
+            "src": "/images/galerie/doprava/doprava-04-hero-dostupnost.jpg",
+            "alt": "Doprava, dostupnost areálu"
+          },
+          {
+            "src": "/images/galerie/doprava/doprava-05-zastavka.jpg",
+            "alt": "Doprava, zastávka kyvadlové dopravy"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Okolí",
+    "id": "g-okoli",
+    "groups": [
+      {
+        "title": null,
+        "id": "g-okoli-grid",
+        "images": [
+          {
+            "src": "/images/galerie/okoli/okoli-01-4.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-02-a-1.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-03-a-2-4.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-04-a-2.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-05-a-c-2-1.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-06-a-row-3.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-07-a-row.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-08-a7-1.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-09-a8.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-10-aa1-1.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-11-areal-vstup.jpg",
+            "alt": "Areál a okolí, vstup do areálu"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-12-b1.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-13-b2-1.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-14-bazen.jpg",
+            "alt": "Areál a okolí, bazén"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-15-coworking-exterier.jpg",
+            "alt": "Areál a okolí, exteriér"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-16-d1.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-17-e-f.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-18-t1.jpg",
+            "alt": "Areál a okolí, vizualizace"
+          },
+          {
+            "src": "/images/galerie/okoli/okoli-19-zastavka1.jpg",
+            "alt": "Areál a okolí, zastávka kyvadlové dopravy"
+          }
+        ]
+      }
+    ]
+  }
+]

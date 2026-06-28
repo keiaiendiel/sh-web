@@ -1,7 +1,8 @@
 ---
 /*
- * Galerie , reálná foto-mřížka (ne zig-zag). Každá kategorie: nadpis + dva
- * obdélníky vedle sebe (desktop), klik otevře lightbox.
+ * Galerie , reálná foto-mřížka sjednocená s ručním zrcadlem: 4 kategorie
+ * (Ubytování, Zázemí, Doprava, Okolí) s podsekcemi, střídavě tónované sekce,
+ * 3sloupcová mřížka + lightbox. Data (75 fotek) v src/data/galerie.json.
  */
 import Base from '../../layouts/Base.astro';
 import SubpageHero from '../../components/SubpageHero.astro';
@@ -9,80 +10,16 @@ import PhotoGrid from '../../components/PhotoGrid.astro';
 import Lightbox from '../../components/Lightbox.astro';
 import CtaBanner from '../../components/CtaBanner.astro';
 import CrossLinkPair from '../../components/CrossLinkPair.astro';
+import categories from '../../data/galerie.json';
 
-/* Šest kategorií dle klientské tabulky Koncept webu: Privátní apartmány,
-   Sdílené pokoje, Co-livingové zázemí, Co-workingové zázemí, Sdílená mobilita,
-   Okolí areálu. Coliving je zastřešující pojem kampusu (gastro, wellness,
-   komunita), co-working kryje práci a dílny. */
-const categories = [
-  {
-    heading: 'Privátní apartmány', group: 'g-privatni', more: '/ubytovani/privatni/',
-    images: [
-      { src: '/images/hub/ubytovani/02-1kk.jpg', alt: 'Privátní apartmán 1+kk' },
-      { src: '/images/hub/ubytovani/04-int.jpg', alt: 'Interiér apartmánu' },
-      { src: '/images/hub/ubytovani/05-4kk-family.jpg', alt: 'Větší apartmán pro skupinu' },
-      { src: '/images/hub/ubytovani/03-ext.jpg', alt: 'Exteriér obytné budovy za soumraku' },
-    ],
-  },
-  {
-    heading: 'Sdílené pokoje', group: 'g-sdilene', more: '/ubytovani/sdilene-pokoje/',
-    images: [
-      { src: '/images/hub/ubytovani/coliving/pokoj-basic-01.jpg', alt: 'Sdílený pokoj se základní mírou soukromí' },
-      { src: '/images/hub/ubytovani/coliving/pokoj-privacy-01.jpg', alt: 'Lůžkové boxy s posuvnými dveřmi' },
-      { src: '/images/hub/ubytovani/coliving/kapsle-single-01.jpg', alt: 'Uzamykatelná kapsle' },
-      { src: '/images/hub/ubytovani/coliving/kapsle-double-01.jpg', alt: 'Kapslové dvojlůžko' },
-    ],
-  },
-  {
-    heading: 'Co-livingové zázemí', group: 'g-coliving', more: '/zazemi/',
-    images: [
-      { src: '/images/hub/komunita/gastro/01-kantyna.jpg', alt: 'Kantýna v kuchyňském bloku B' },
-      { src: '/images/hub/komunita/wellness-01-bazen.jpg', alt: 'Venkovní bazén' },
-      { src: '/images/hub/komunita/wellness-02-sauna.jpg', alt: 'Sauna' },
-      { src: '/images/hub/komunita/gastro/04-pekarna.jpg', alt: 'Pekárna' },
-      { src: '/images/hub/komunita/05-komunitni-zahrady.jpg', alt: 'Komunitní zahrádky' },
-      { src: '/images/hub/komunita/04-klubovna.jpg', alt: 'Společenský sál a klubovna' },
-    ],
-  },
-  {
-    heading: 'Co-workingové zázemí', group: 'g-coworking', more: '/zazemi/coworking/',
-    images: [
-      { src: '/images/hub/coworking/cowork-interier-sal-c.jpg', alt: 'Coworkingový sál' },
-      { src: '/images/hub/coworking/02-cowork-interier-vlastni-stul.jpg', alt: 'Sdílené pracovní stoly' },
-      { src: '/images/hub/coworking/03-cowork-interior-zasedacka.jpg', alt: 'Zasedací místnost' },
-      { src: '/images/hub/coworking/cowork-interior-dilna.jpg', alt: 'Dílna' },
-    ],
-  },
-  {
-    heading: 'Sdílená mobilita', group: 'g-mobilita', more: '/doprava/sdilena-mobilita/',
-    images: [
-      { src: '/images/hub/doprava/hub-shuttle-zastavka.jpg', alt: 'Zastávka kyvadlové dopravy MyShelter v areálu' },
-      { src: '/images/hub/doprava/cyklostezka.jpg', alt: 'Cyklostezka EuroVelo 7 podél Vltavy' },
-      { src: '/images/hub/okoli/01-areal-dostupnost.jpg', alt: 'Mapa dostupnosti areálu' },
-      { src: '/images/hub/okoli/04-topview-update.jpg', alt: 'Letecký pohled na areál a okolí' },
-    ],
-  },
-  {
-    heading: 'Okolí areálu', group: 'g-okoli', more: '/zazemi/okoli/',
-    images: [
-      { src: '/images/hub/okoli/02-cyklostezka.jpg', alt: 'Údolí Vltavy pod Klecanami' },
-      { src: '/images/hub/okoli/03-exterier-1.jpg', alt: 'Exteriér areálu' },
-      { src: '/images/hub/areal/areal-entry.jpg', alt: 'Vstup do areálu' },
-      { src: '/images/hub/komunita/venkovni-01-zahrady.jpg', alt: 'Komunitní park' },
-    ],
-  },
-];
+type Img = { src: string; alt: string };
+type Group = { title: string | null; id: string; images: Img[] };
+type Category = { title: string; id: string; groups: Group[] };
 
-/* Chip „skoky" v banneru , jeden na kategorii, href = #<group>. Kratší labely
-   než nadpisy mřížek. Cílové sekce nesou stejné id (viz .gal-anchor níže). */
-const GALLERY_JUMPS = [
-  { href: '#g-privatni',  label: 'Apartmány' },
-  { href: '#g-sdilene',   label: 'Sdílené pokoje' },
-  { href: '#g-coliving',  label: 'Co-living' },
-  { href: '#g-coworking', label: 'Coworking' },
-  { href: '#g-mobilita',  label: 'Doprava' },
-  { href: '#g-okoli',     label: 'Okolí' },
-];
+const cats = categories as Category[];
+
+/* Chip „skoky" v banneru , jeden na hlavní kategorii (href = #<id>). */
+const GALLERY_JUMPS = cats.map((c) => ({ href: `#${c.id}`, label: c.title }));
 ---
 <Base
   title="Galerie · Startovací Hub Klecany"
@@ -98,20 +35,22 @@ const GALLERY_JUMPS = [
     jumps={GALLERY_JUMPS}
   />
 
-  <div class="gal-wrap">
-    {categories.map((c) => (
-      <div id={c.group} class="gal-anchor">
-        <PhotoGrid
-          eyebrow="Galerie"
-          heading={c.heading}
-          images={c.images}
-          columns={2}
-          aspect="16 / 10"
-          group={c.group}
-          moreHref={c.more}
-          moreLabel="Více v sekci"
-        />
-      </div>
+  <div class="gal">
+    {cats.map((c) => (
+      <section class="gal-sec" id={c.id} aria-label={c.title}>
+        <div class="gal-sec__inner">
+          <h2 class="gal-sec__title">{c.title}</h2>
+          {c.groups.map((g) => (
+            <PhotoGrid
+              heading={g.title ?? undefined}
+              images={g.images}
+              columns={3}
+              aspect="4 / 3"
+              group={g.id}
+            />
+          ))}
+        </div>
+      </section>
     ))}
   </div>
 
@@ -133,16 +72,28 @@ const GALLERY_JUMPS = [
 </Base>
 
 <style>
-  .gal-wrap {
+  .gal { width: 100%; }
+  /* Hlavní kategorie = celá-šířková sekce se střídavým tónem (jako zrcadlo). */
+  .gal-sec {
+    padding: clamp(32px, 5vw, 60px) 0;
+    border-bottom: 1px solid var(--border-muted);
+    /* odsazení kvůli fixní liště při skoku z chip */
+    scroll-margin-top: 84px;
+  }
+  .gal-sec:nth-of-type(even) { background: var(--bg-muted); }
+  .gal-sec:last-of-type { border-bottom: 0; }
+  .gal-sec__inner {
     width: calc(100% - 2 * var(--gutter));
     max-width: var(--container-wide);
     margin: 0 auto;
-    padding: var(--space-8) 0;
     display: flex;
     flex-direction: column;
-    gap: var(--space-8);
+    gap: var(--space-7);
   }
-  /* Kotva pro chip „skoky" z banneru , odsazení o výšku fixní lišty, ať cílová
-     sekce neskončí schovaná pod headerem (shodně se Section.astro). */
-  .gal-anchor { scroll-margin-top: 84px; }
+  .gal-sec__title {
+    font: 600 clamp(1.6rem, 3vw, 2.4rem) / 1.15 var(--font-sans);
+    letter-spacing: var(--tracking-tight);
+    margin: 0;
+    color: var(--fg);
+  }
 </style>
