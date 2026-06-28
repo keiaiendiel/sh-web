@@ -193,6 +193,9 @@ const restSekce = zamer.sekce.filter((s: any) => s.id !== 'aktivum');
 
   /* sekce */
   .vz .sec { margin: 0; }
+  /* Trochu vzduchu mezi sekcemi , odsadí sechead další sekce od předchozí
+     (zejm. od poznámky pod čarou). */
+  .vz .sec + .sec { margin-top: clamp(22px, 3.5vw, 34px); }
   .vz .sechead {
     margin: 0; background: var(--tint);
     border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
