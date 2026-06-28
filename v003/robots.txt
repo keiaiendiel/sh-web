@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Druzstvo stranka je noindex (manualni nasmerovani), navic vyloucena pro
+# konzistenci s meta robots.
+Disallow: /sh-web/druzstvo/
+
+# Rezervace s utm parametry, aby search engines ignorovaly varianty.
+Disallow: /sh-web/rezervace/?
+
+# Podklady pro investory: privatni sekce za prihlasenim, noindex + vylouceno.
+Disallow: /sh-web/investori/
+
+Sitemap: https://keiaiendiel.github.io/sh-web/sitemap-index.xml
