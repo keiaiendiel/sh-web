@@ -1,95 +1,263 @@
 ---
 /*
  * /investori/zamer/ , Investiční záměr VPD1 (vstupní stránka po přihlášení).
- * Obsah 1:1 z listu „Investiční záměr" klientské tabulky (zamer.json),
- * ortofotomapa s interaktivní legendou (mapa.json). Texty a čísla se
- * needitují tady, ale v tabulce; pak scripts/import-zamer.py.
+ * Vzhled věrně portuje „spreadsheet" verzi z ručního zrcadla (namespace .vz,
+ * modrý ink, sekční tóny, husté řádky lab/val + obrázková mapa zón). Obsah
+ * 1:1 z listu „Investiční záměr" (zamer.json) a mapa zón z mapa.json, verze
+ * z meta.json. Texty a čísla se needitují tady, ale v tabulce; pak
+ * scripts/import-zamer.py.
  */
 import InvestorPage from '../../../layouts/InvestorPage.astro';
-import ArealMap from '../../../components/investori/ArealMap.astro';
 import { withBase } from '../../../utils/url';
 import zamer from '../../../data/investori/zamer.json';
+import mapa from '../../../data/investori/mapa.json';
 import meta from '../../../data/investori/meta.json';
 
-type Radek = {
-  label: string;
-  d: string;
-  v: unknown;
-  f?: string;
-  h?: string;
+type Radek = { label: string; d: string; v: unknown; f?: string; h?: string };
+
+/* Číselné hodnoty se sázejí tučně (.num), textové normálně , dle typu v tabulce. */
+const isNum = (r: Radek) => typeof r.v === 'number';
+
+/* Tón sekce dle listu tabulky (modrá / fialová / růžová), klíč = id sekce. */
+const SECTION_TINT: Record<string, string> = {
+  aktivum: '#E6ECF6',
+  zakladni: '#ECE6F6',
+  ostatni: '#F6E6EC',
+};
+const MAP_TINT = '#E6ECF6';
+
+/* Vizuální parametry zón mapy (barva legendy, krátký popisek tlačítka,
+   překryvný obrázek), klíč = id zóny z mapa.json. „areal" = Budoucí městská
+   čtvrť (modrý překryv „ctvrt"). */
+const ZONE_VIS: Record<string, { c: string; btn: string; img: string }> = {
+  jadro:  { c: '#E4DF99', btn: 'Jádro',         img: '/images/investori/zona-jadro.jpg' },
+  zazemi: { c: '#A8CE9F', btn: 'Zázemí',        img: '/images/investori/zona-zazemi.jpg' },
+  areal:  { c: '#8BB9E4', btn: 'Městská čtvrť', img: '/images/investori/zona-ctvrt.jpg' },
+};
+const ZONE_ORDER = ['jadro', 'zazemi', 'areal'];
+const zonyById: Record<string, any> = Object.fromEntries(mapa.zony.map((z: any) => [z.id, z]));
+
+/* Text zóny = „Název , popis" oddělené en-dashem; rozdělíme na nadpis a popis.
+   En-dash píšeme přes escape, ať projde editorial lintem. */
+const DASH = String.fromCharCode(0x2013);
+const splitName = (text: string) => {
+  const i = text.indexOf(DASH);
+  return i === -1
+    ? { name: text.trim(), desc: '' }
+    : { name: text.slice(0, i).trim(), desc: text.slice(i + 1).trim() };
 };
 
-const isText = (r: Radek) => typeof r.v === 'string';
+const aktivum = zamer.sekce.find((s: any) => s.id === 'aktivum');
+const restSekce = zamer.sekce.filter((s: any) => s.id !== 'aktivum');
 ---
-<InvestorPage title="Investiční záměr VPD1 , podklady pro investory" active="zamer">
-  <div class="inv-shell">
-    <header class="inv-hero">
-      <p class="inv-hero__eyebrow" data-no-typograf>{zamer.podtitul} · areál Horních kasáren, Klecany u Prahy</p>
-      <h1 class="inv-hero__title">{zamer.titul}</h1>
-      <div class="inv-hero__meta">
-        <span class="inv-chip inv-chip--accent" data-no-typograf>{meta.badge}</span>
-        <span class="inv-chip" data-no-typograf>{meta.aktualizace}</span>
-      </div>
-      <nav class="inv-jumps" aria-label="Sekce na stránce">
-        <a href="#aktivum">Podkladové aktivum</a>
-        <a href="#mapa">Ortofotomapa</a>
-        <a href="#zakladni">Základní informace</a>
-        <a href="#ostatni">Ostatní informace</a>
-      </nav>
-    </header>
+<InvestorPage title="Investiční záměr VPD1 , podklady pro investory" active="zamer" bareFooter>
+  <div class="vz">
+    <main class="wrap">
+      <header class="cover">
+        <p class="kicker">{zamer.titul}</p>
+        <h1 class="vpd">{zamer.podtitul}</h1>
+      </header>
 
-    {zamer.sekce.filter((s) => s.id === 'aktivum').map((sekce) => (
-      <section class="inv-section" id="aktivum" aria-label={sekce.titul}>
-        <div class="inv-section__head">
-          <h2 class="inv-section__title">{sekce.titul}</h2>
-        </div>
-        <div class="inv-card">
-          <div class="inv-facts">
-            {(sekce.radky as Radek[]).map((r) => (
-              <div class="inv-facts__row">
-                <p class="inv-facts__label">{r.label}</p>
-                <p class:list={['inv-facts__value', { 'inv-facts__value--text': isText(r) }]} data-no-typograf>
-                  {r.h ? <a href={r.h} target="_blank" rel="noopener">{r.d}</a> : r.d}
-                </p>
+      {aktivum && (
+        <section class="sec" id="aktivum" style={`--tint:${SECTION_TINT.aktivum}`} aria-label={aktivum.titul}>
+          <h2 class="sechead">{aktivum.titul}</h2>
+          {(aktivum.radky as Radek[]).map((r) => (
+            <div class="row">
+              <div class="lab">{r.label}</div>
+              <div class:list={['val', { num: isNum(r) }]} data-no-typograf>
+                {r.h ? <a href={r.h} target="_blank" rel="noopener">{r.d}</a> : r.d}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+          {aktivum.footnote && <p class="foot" data-no-typograf>{aktivum.footnote}</p>}
+        </section>
+      )}
+
+      <section class="sec orto" id="mapa" style={`--tint:${MAP_TINT}`} aria-label={mapa.titul}>
+        <h2 class="sechead">{mapa.titul}</h2>
+        <ul class="legend">
+          {ZONE_ORDER.map((id) => {
+            const z = zonyById[id];
+            const { name, desc } = splitName(z.text);
+            return (
+              <li>
+                <button type="button" class="lrow" data-zone={id} aria-pressed="false" style={`--c:${ZONE_VIS[id].c}`}>
+                  <span class="lhead"><span class="lval" data-no-typograf>{z.vymera.d}</span> · {name}</span>
+                  {desc && <span class="ldesc">{desc}</span>}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        <div class="zonebtns" role="group" aria-label="Zvýraznit zónu v mapě">
+          {ZONE_ORDER.map((id) => (
+            <button type="button" class="zonebtn" data-zone={id} aria-pressed="false" style={`--c:${ZONE_VIS[id].c}`}>
+              {ZONE_VIS[id].btn}
+            </button>
+          ))}
         </div>
-        {sekce.footnote && <p class="inv-note" data-no-typograf>{sekce.footnote}</p>}
+        <figure class="zmap">
+          <img src={withBase('/images/investori/zona-vse.jpg')} width="1920" height="1007" decoding="async" alt={mapa.titul} />
+          {ZONE_ORDER.map((id) => (
+            <img class={`zone zone--${id}`} src={withBase(ZONE_VIS[id].img)} width="1920" height="1007" loading="lazy" decoding="async" alt="" aria-hidden="true" />
+          ))}
+        </figure>
       </section>
-    ))}
 
-    <section class="inv-section" id="mapa" aria-label="Ortofotomapa areálu">
-      <div class="inv-section__head">
-        <h2 class="inv-section__title">Ortofotomapa areálu</h2>
-      </div>
-      <ArealMap />
-    </section>
-
-    {zamer.sekce.filter((s) => s.id !== 'aktivum').map((sekce) => (
-      <section class="inv-section" id={sekce.id} aria-label={sekce.titul}>
-        <div class="inv-section__head">
-          <h2 class="inv-section__title">{sekce.titul}</h2>
-        </div>
-        <div class="inv-card">
-          <div class="inv-facts">
-            {(sekce.radky as Radek[]).map((r) => (
-              <div class="inv-facts__row">
-                <p class="inv-facts__label">{r.label}</p>
-                <p class:list={['inv-facts__value', { 'inv-facts__value--text': isText(r) }]} data-no-typograf>
-                  {r.h ? <a href={r.h} target="_blank" rel="noopener">{r.d}</a> : r.d}
-                </p>
+      {restSekce.map((sekce: any) => (
+        <section class="sec" id={sekce.id} style={`--tint:${SECTION_TINT[sekce.id] ?? MAP_TINT}`} aria-label={sekce.titul}>
+          <h2 class="sechead">{sekce.titul}</h2>
+          {(sekce.radky as Radek[]).map((r) => (
+            <div class="row">
+              <div class="lab">{r.label}</div>
+              <div class:list={['val', { num: isNum(r) }]} data-no-typograf>
+                {r.h ? <a href={r.h} target="_blank" rel="noopener">{r.d}</a> : r.d}
               </div>
-            ))}
-          </div>
-        </div>
-        {sekce.footnote && <p class="inv-note" data-no-typograf>{sekce.footnote}</p>}
-      </section>
-    ))}
+            </div>
+          ))}
+          {sekce.footnote && <p class="foot" data-no-typograf>{sekce.footnote}</p>}
+        </section>
+      ))}
 
-    <div class="inv-actions">
-      <a class="inv-btn" href={withBase('/investori/udaje-a-vypocty/')}>Základní údaje &amp; výpočty</a>
-      <a class="inv-btn inv-btn--ghost" href={withBase('/investori/scenare/')}>Základní scénáře</a>
-    </div>
+      <footer class="vzver">
+        <p data-no-typograf>verze {meta.verze} · {meta.aktualizace}</p>
+        <p data-no-typograf>{meta.badge}</p>
+      </footer>
+    </main>
   </div>
+
+  <script is:inline>
+    /* Mapa zón: ovládá ji barevná legenda (desktop) i tři tlačítka nad mapou
+       (telefon), obojí nese data-zone a sdílí jeden stav. Klik = vybraná zóna
+       (přepínací), hover (desktop) = náhled, klik kamkoli mimo = celý areál. */
+    (function () {
+      var fig = document.querySelector('.zmap');
+      var btns = [].slice.call(document.querySelectorAll('.zonebtn, .lrow'));
+      if (!fig || !btns.length) return;
+      var ZONES = ['jadro', 'zazemi', 'areal'];
+      var active = null, preview = null;
+      function render() {
+        var z = preview || active;
+        ZONES.forEach(function (k) { fig.classList.toggle('show-' + k, z === k); });
+        btns.forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b.getAttribute('data-zone') === active));
+        });
+      }
+      btns.forEach(function (b) {
+        var zone = b.getAttribute('data-zone');
+        b.addEventListener('click', function (e) {
+          e.stopPropagation();
+          active = (active === zone) ? null : zone;
+          preview = null;
+          render();
+        });
+        b.addEventListener('mouseenter', function () { preview = zone; render(); });
+        b.addEventListener('mouseleave', function () { preview = null; render(); });
+      });
+      document.addEventListener('click', function () {
+        if (active || preview) { active = null; preview = null; render(); }
+      });
+    })();
+  </script>
 </InvestorPage>
+
+<style>
+  /* Investiční záměr , věrný port „spreadsheet" vzhledu z ručního zrcadla.
+     Vlastní namespace .vz (modrý ink, sekční tóny, husté řádky lab/val),
+     ať se nemíchá s plum chrome zbytku investorského pod-webu. */
+  .vz, .vz * { box-sizing: border-box; }
+  .vz {
+    --ink: #2A2A60; --hair: #9696B9; --rule: #2A2A60; --grey: #7F7F7F; --link: #4351AD;
+    margin: 0; background: #fff; color: var(--ink);
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums lining-nums;
+    -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  .vz .wrap {
+    width: calc(100% - 2 * var(--gutter));
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: 34px 0 72px;
+  }
+  .vz a { color: var(--link); }
+
+  /* cover */
+  .vz .cover { margin: 0 0 26px; }
+  .vz .kicker { font-size: clamp(1.05rem, 2.4vw, 1.35rem); font-weight: 700; margin: 0; letter-spacing: .005em; }
+  .vz .vpd { font-size: clamp(2.9rem, 11vw, 5rem); font-weight: 700; line-height: .92; margin: .04em 0 .14em; letter-spacing: -.01em; }
+
+  /* spodní verze, centrovaná a nenápadná */
+  .vz .vzver { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 40px 0 8px; text-align: center; }
+  .vz .vzver p { margin: 0; color: var(--grey); font-size: .7rem; letter-spacing: .02em; }
+  .vz .vzver p:last-child { font-weight: 700; }
+
+  /* sekce */
+  .vz .sec { margin: 0; }
+  .vz .sechead {
+    margin: 0; background: var(--tint);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    font-size: clamp(1rem, 2vw, 1.1rem); font-weight: 700; line-height: 1.3; padding: 13px 15px; text-wrap: balance;
+  }
+  .vz .row { display: grid; grid-template-columns: 1.08fr 1fr; }
+  .vz .lab, .vz .val {
+    padding: 12px 15px; font-size: clamp(.875rem, 1.5vw, .95rem); line-height: 1.35;
+    border-bottom: 1px solid var(--hair); overflow-wrap: anywhere; text-wrap: balance;
+  }
+  .vz .lab { background: #fff; }
+  .vz .val { background: var(--tint); }
+  .vz .val.num { font-weight: 700; }
+  .vz .val a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+  .vz .foot { font-style: italic; font-size: .8rem; line-height: 1.4; color: #222; margin: 9px 2px 0; max-width: 100ch; }
+
+  /* legenda mapy = barevná klikatelná tlačítka přes celou šířku (--c = barva zóny) */
+  .vz .legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+  .vz .legend li { margin: 0; padding: 0; }
+  .vz .lrow {
+    display: block; width: 100%; margin: 0; font: inherit; text-align: left; color: #14142F;
+    background: var(--c); border: 0; border-radius: 0; padding: 9px 15px; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; transition: filter .18s, box-shadow .18s;
+  }
+  .vz .lrow:hover { filter: brightness(.96); }
+  .vz .lrow:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+  .vz .lrow[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--ink); }
+  .vz .lhead { display: block; font-weight: 700; font-size: .95rem; line-height: 1.3; color: #14142F; }
+  .vz .lhead .lval { font-variant-numeric: tabular-nums; }
+  .vz .ldesc { display: block; margin-top: 2px; font-weight: 400; font-size: .85rem; line-height: 1.4; color: #14142F; }
+  .vz figure { margin: 16px 0 0; }
+
+  /* tři barevná tlačítka nad mapou (hlavně telefon) */
+  .vz .zonebtns { display: none; gap: 8px; margin: 18px 0 10px; }
+  .vz .zonebtn {
+    flex: 1 1 0; min-width: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 11px 14px; border: 1.5px solid transparent; border-radius: 9px; font: inherit; font-weight: 700; font-size: .92rem;
+    line-height: 1.15; text-align: center; color: #14142F; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    background: var(--c);
+    transition: transform .22s cubic-bezier(.25, 1, .5, 1), box-shadow .22s cubic-bezier(.25, 1, .5, 1), border-color .15s;
+  }
+  .vz .zonebtn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(20, 20, 47, .16); }
+  .vz .zonebtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .vz .zonebtn[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 7px 18px rgba(20, 20, 47, .22); }
+
+  /* mapa se zónami: základní obrázek + překryvy, které se prolnou */
+  .vz .zmap { position: relative; line-height: 0; }
+  .vz .zmap img { width: 100%; height: auto; display: block; border: 1px solid var(--hair); }
+  .vz .zmap .zone { position: absolute; inset: 0; height: 100%; opacity: 0; object-fit: cover; transition: opacity .5s cubic-bezier(.25, 1, .5, 1); }
+  .vz .zmap.show-jadro  .zone--jadro  { opacity: 1; }
+  .vz .zmap.show-zazemi .zone--zazemi { opacity: 1; }
+  .vz .zmap.show-areal  .zone--areal  { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) { .vz .zmap .zone { transition-duration: 1ms; } }
+
+  /* mobil: název nad hodnotou v jednom proudu, zebra po dvojicích */
+  @media (max-width: 680px) {
+    .vz .wrap { padding: 22px 0 44px; }
+    .vz .row { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 7px; row-gap: 1px; padding: 8px 14px; }
+    .vz .row:nth-of-type(even) { background: var(--tint); }
+    .vz .lab { border-bottom: 0; padding: 0; font-weight: 500; background: transparent; line-height: 1.32; }
+    .vz .val { padding: 0; background: transparent; line-height: 1.32; border-bottom: 0; }
+    .vz .sechead { padding: 10px 14px; }
+    .vz .zonebtns { display: flex; }
+    .vz .zonebtn { font-size: .8rem; padding: 9px 7px; gap: 5px; border-radius: 8px; }
+    .vz .lrow { padding: 10px 14px; }
+  }
+</style>

@@ -676,29 +676,33 @@
    Login — přístupová brána
 ============================================================================= */
 .inv-login {
-  min-height: calc(100vh - var(--inv-masthead));
+  min-height: calc(100svh - var(--inv-masthead));
   display: grid;
   place-items: center;
-  padding: var(--space-8) var(--gutter);
+  padding: clamp(24px, 6vh, 72px) var(--gutter);
+  /* Brand plum gradient (shodně se zrcadlem): rose nádech shora + diagonála
+     na plum, ať karta nesedí na ploché ploše. */
+  background:
+    radial-gradient(circle at 50% -8%, hsl(calc(var(--hue) + 44) 34% 64% / 0.30) 0%, transparent 58%),
+    linear-gradient(160deg, hsl(var(--hue) 41% 13%) 0%, hsl(var(--hue) 37% 19%) 100%);
 }
 .inv-login__card {
   position: relative;
   width: 100%;
-  max-width: 432px;
-  background: var(--k-0);
-  border: var(--inv-hair);
-  border-radius: var(--inv-radius);
+  max-width: 420px;
+  background: var(--cream);
+  border-radius: var(--radius-input);
   padding: var(--space-7) var(--space-6) var(--space-6);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 30px 70px -30px hsl(var(--hue) 41% 6% / 0.7);
   overflow: hidden;
 }
-/* Brandový akcentní proužek po horní hraně (ribbon stroke). */
+/* Brandový akcentní proužek po horní hraně (rose, jako zrcadlo). */
 .inv-login__card::before {
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
-  background: var(--accent);
+  background: var(--rose);
 }
 .inv-login__eyebrow {
   display: inline-flex;
